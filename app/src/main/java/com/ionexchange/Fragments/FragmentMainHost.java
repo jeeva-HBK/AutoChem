@@ -1,6 +1,7 @@
 package com.ionexchange.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,15 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Interface.DataReceiveCallback;
+import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentMainhostBinding;
 
-public class FragmentMainHost extends Fragment implements View.OnClickListener {
+public class FragmentMainHost extends Fragment implements View.OnClickListener, DataReceiveCallback {
     FragmentMainhostBinding mBinding;
     BaseActivity mActivity;
+    ApplicationClass mAppClass;
 
     @Nullable
     @Override
@@ -29,13 +33,16 @@ public class FragmentMainHost extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        mActivity = (BaseActivity) getActivity();
+        mAppClass = (ApplicationClass) getActivity().getApplication();
         mBinding.mainScreenBtn.setOnClickListener(this);
         mBinding.trendScreenBtn.setOnClickListener(this);
         mBinding.eventLogsScreenBtn.setOnClickListener(this);
         mBinding.configScreenBtn.setOnClickListener(this);
 
-        mActivity = (BaseActivity) getActivity();
+        sendData("1234#0#00#V.0.0.0#0#0");
+
+
         setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentMainscreen(), "Dashboard");
     }
 
@@ -104,4 +111,12 @@ public class FragmentMainHost extends Fragment implements View.OnClickListener {
         }
     }
 
+
+    public void sendData(String data) {
+        mAppClass.sendPacket(this, data);
+    }
+
+    @Override
+    public void OnDataReceive(String data) {
+    }
 }
