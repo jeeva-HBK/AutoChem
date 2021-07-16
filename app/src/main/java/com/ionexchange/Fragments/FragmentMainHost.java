@@ -1,7 +1,6 @@
 package com.ionexchange.Fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +39,7 @@ public class FragmentMainHost extends Fragment implements View.OnClickListener, 
         mBinding.eventLogsScreenBtn.setOnClickListener(this);
         mBinding.configScreenBtn.setOnClickListener(this);
 
-        sendData("1234#0#00#V.0.0.0#0#0");
-
+        sendData("1234#0#00#V.0.0.1#0#0");
 
         setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentMainscreen(), "Dashboard");
     }

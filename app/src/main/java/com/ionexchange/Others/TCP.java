@@ -109,7 +109,7 @@ public class TCP extends IntentService {
                     String message = new String(buffer).substring(0, charsRead);
                     if (!message.isEmpty()) {
                         intentMessage(message);
-                        Log.e(TAG, "Received -->  " + Packet);
+                        Log.e(TAG, "Received -->  " + message);
                     } else {
                         Log.d("Receive Error Message", message);
                     }

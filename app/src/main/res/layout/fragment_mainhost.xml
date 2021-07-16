@@ -41,7 +41,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/view2" />
 
-
         <View
             android:id="@+id/homeBigCircle"
             android:layout_width="60dp"

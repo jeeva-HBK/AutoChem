@@ -1,14 +1,321 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="item1_isVisible"
+            type="boolean" />
+
+        <variable
+            name="item2_isVisible"
+            type="boolean" />
+
+        <variable
+            name="selected"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Configuration"/>
+        app:layoutDescription="@xml/fragment_configuration_xml_constraintlayout_scene">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:id="@+id/view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <View
+            android:id="@+id/view4"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:background="@drawable/ic_half_circle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/view"
+            app:layout_constraintStart_toStartOf="@id/view"
+            app:layout_constraintTop_toTopOf="@+id/view"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <View
+            android:id="@+id/view5"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/drawer_setting_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/view4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.15" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_gear"
+            android:backgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/view5"
+            app:layout_constraintEnd_toEndOf="@+id/view5"
+            app:layout_constraintStart_toStartOf="@+id/view5"
+            app:layout_constraintTop_toTopOf="@+id/view5" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Configuration"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toTopOf="@+id/view"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintStart_toStartOf="@id/view"
+            app:layout_constraintTop_toTopOf="@+id/view" />
+
+        <!--ExpandedList-->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintBottom_toBottomOf="@id/view"
+            app:layout_constraintEnd_toEndOf="@id/view"
+            app:layout_constraintStart_toStartOf="@id/view"
+            app:layout_constraintTop_toBottomOf="@id/view5">
+
+            <LinearLayout
+                android:id="@+id/root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="true"
+                android:orientation="vertical">
+
+                <!--Item 1-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/set1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/root">
+
+                    <TextView
+                        android:id="@+id/headerText1"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="5dp"
+                        android:background="@{item1_isVisible ? @drawable/rectangle_white : @drawable/rectangle_blue }"
+                        android:drawableEnd="@{item1_isVisible ? @drawable/ic_arrow_drop_up : @drawable/ic_arrow_drop_down}"
+                        android:gravity="left|center"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="10dp"
+                        android:text="General"
+                        android:textColor="@{item1_isVisible ? @color/primary : @color/white }"
+                        android:textSize="20dp"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/ll1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"
+                        android:visibility="@{item1_isVisible ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintBottom_toBottomOf="@id/set1"
+                        app:layout_constraintTop_toBottomOf="@id/headerText1">
+
+                        <TextView
+                            android:id="@+id/h1_subtext1"
+                            style="@style/config_nav_textview"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@{selected.equals(String.valueOf(`1-1`)) ? @drawable/rectangle_green : @drawable/rectangle_blue }"
+                            android:text="- Unit IP Settings"
+                            android:textColor="@{selected.equals(String.valueOf(`1-1`)) ? @color/primary : @color/white }" />
+
+                        <TextView
+                            android:id="@+id/h1_subtext2"
+                            style="@style/config_nav_textview"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@{selected.equals(String.valueOf(`1-2`)) ? @drawable/rectangle_green : @drawable/rectangle_blue }"
+                            android:gravity="center"
+                            android:text="- Target IP Settings"
+                            android:textColor="@{selected.equals(String.valueOf(`1-2`)) ? @color/primary : @color/white }"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:id="@+id/h1_subtext3"
+                            style="@style/config_nav_textview"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@{selected.equals(String.valueOf(`1-3`)) ? @drawable/rectangle_green : @drawable/rectangle_blue }"
+                            android:gravity="center"
+                            android:text="- Common Settings"
+                            android:textColor="@{selected.equals(String.valueOf(`1-3`)) ? @color/primary : @color/white }"
+                            android:textSize="15dp" />
+
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!--Item 2-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/set2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/root">
+
+                    <TextView
+                        android:id="@+id/headerText2"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="5dp"
+                        android:background="@{item2_isVisible ? @drawable/rectangle_white : @drawable/rectangle_blue }"
+                        android:drawableEnd="@{item2_isVisible ? @drawable/ic_arrow_drop_up : @drawable/ic_arrow_drop_down}"
+                        android:gravity="left|center"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="10dp"
+                        android:text="I/O Settings"
+                        android:textColor="@{item2_isVisible ? @color/primary : @color/white }"
+                        android:textSize="20dp"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/ll2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"
+                        android:visibility="@{item2_isVisible ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintBottom_toBottomOf="@id/set2"
+                        app:layout_constraintTop_toBottomOf="@id/headerText2">
+
+                        <TextView
+                            android:id="@+id/h2_subtext1"
+                            style="@style/config_nav_textview"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@{selected.equals(String.valueOf(`2-1`)) ? @drawable/rectangle_green : @drawable/rectangle_blue }"
+                            android:text="- Input"
+                            android:textColor="@{selected.equals(String.valueOf(`2-1`)) ? @color/primary : @color/white }" />
+
+                        <TextView
+                            android:id="@+id/h2_subtext2"
+                            style="@style/config_nav_textview"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@{selected.equals(String.valueOf(`2-2`)) ? @drawable/rectangle_green : @drawable/rectangle_blue }"
+                            android:gravity="center"
+                            android:text="- Output"
+                            android:textColor="@{selected.equals(String.valueOf(`2-2`)) ? @color/primary : @color/white }"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:id="@+id/h2_subtext3"
+                            style="@style/config_nav_textview"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@{selected.equals(String.valueOf(`2-3`)) ? @drawable/rectangle_green : @drawable/rectangle_blue }"
+                            android:gravity="center"
+                            android:text="- Timmer"
+                            android:textColor="@{selected.equals(String.valueOf(`2-3`)) ? @color/primary : @color/white }"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:id="@+id/h2_subtext4"
+                            style="@style/config_nav_textview"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@{selected.equals(String.valueOf(`2-4`)) ? @drawable/rectangle_green : @drawable/rectangle_blue }"
+                            android:gravity="center"
+                            android:text="- Virtual"
+
+                            android:textColor="@{selected.equals(String.valueOf(`2-4`)) ? @color/primary : @color/white }"
+                            android:textSize="15dp" />
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/headerText3"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_margin="5dp"
+                    android:background="@{selected.equals(String.valueOf(`3-1`)) ? @drawable/rectangle_white : @drawable/rectangle_blue }"
+                    android:gravity="left|center"
+                    android:paddingStart="5dp"
+                    android:text="Home Screen"
+                    android:textColor="@{selected.equals(String.valueOf(`3-1`)) ? @color/primary : @color/white }"
+                    android:textSize="20dp" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <!--ExpandedList-->
+
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="20dp"
+            android:layout_height="100dp"
+            android:background="@drawable/swipe_boder"
+            app:layout_constraintBottom_toBottomOf="@id/view"
+            app:layout_constraintStart_toEndOf="@+id/view"
+            app:layout_constraintTop_toTopOf="@+id/view" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:rotation="270"
+            android:text="swipe"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/view3"
+            app:layout_constraintEnd_toEndOf="@+id/view3"
+            app:layout_constraintStart_toStartOf="@+id/view3"
+            app:layout_constraintTop_toTopOf="@+id/view3" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.18" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.27" />
+
+        <FrameLayout
+            android:id="@+id/configHost"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/view3"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+
+
 </layout>
