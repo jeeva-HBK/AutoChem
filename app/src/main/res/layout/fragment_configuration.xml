@@ -15,6 +15,10 @@
             type="boolean" />
 
         <variable
+            name="item3_isVisible"
+            type="boolean" />
+
+        <variable
             name="selected"
             type="String" />
     </data>
@@ -241,7 +245,7 @@
                             android:layout_height="40dp"
                             android:background="@{selected.equals(String.valueOf(`2-4`)) ? @drawable/rectangle_green : @drawable/rectangle_blue }"
                             android:gravity="center"
-                            android:text="- Virtual"
+                            android:text="- Virtual Sensor"
 
                             android:textColor="@{selected.equals(String.valueOf(`2-4`)) ? @color/primary : @color/white }"
                             android:textSize="15dp" />
@@ -255,19 +259,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_margin="5dp"
-                    android:background="@{selected.equals(String.valueOf(`3-1`)) ? @drawable/rectangle_white : @drawable/rectangle_blue }"
+                    android:background="@{item3_isVisible ? @drawable/rectangle_white : @drawable/rectangle_blue }"
                     android:gravity="left|center"
                     android:paddingStart="5dp"
                     android:text="Home Screen"
-                    android:textColor="@{selected.equals(String.valueOf(`3-1`)) ? @color/primary : @color/white }"
+                    android:textColor="@{item3_isVisible ? @color/primary : @color/white }"
                     android:textSize="20dp" />
 
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
-
         <!--ExpandedList-->
-
 
         <View
             android:id="@+id/view3"
@@ -284,7 +286,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             android:rotation="270"
-            android:text="swipe"
+            android:text="Swipe"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/view3"
             app:layout_constraintEnd_toEndOf="@+id/view3"
@@ -307,12 +309,12 @@
             app:layout_constraintGuide_percent="0.27" />
 
         <FrameLayout
-            android:id="@+id/configHost"
+            android:id="@+id/configRootHost"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/view3"
+            app:layout_constraintStart_toEndOf="@id/view"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.motion.widget.MotionLayout>

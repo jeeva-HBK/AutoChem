@@ -8,29 +8,30 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.ionexchange.Interface.DataReceiveCallback;
 
 import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
 
+/* Created by Jeeva on 13/07/2021 */
 public class ApplicationClass extends Application {
     private static final String TAG = "ApplicationClass";
 
-    // IP_ADDRESS_AND_PORT
-    public static String Packet,
-            mIPAddress = "192.168.1.103";
-    public static int mPortNumber = 6000;
+    /* Static Variables */
+    static String  mIPAddress = "192.168.1.103", Packet;
+    static int  mPortNumber = 6000;
 
     public static CountDownTimer packetTimeOut;
     Context mContext;
     public TCP tcp;
 
-    // DATA_RECEIVE
     DataReceiveCallback listener;
-
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -76,7 +77,6 @@ public class ApplicationClass extends Application {
 
             @Override
             public void onActivityResumed(@NonNull Activity activity) {
-
             }
 
             @Override
@@ -107,6 +107,7 @@ public class ApplicationClass extends Application {
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
         mContext.registerReceiver(receiver, intentFilter);
     }
+
     public void unregisterReceiver() {
         mContext.unregisterReceiver(receiver);
     }
@@ -139,4 +140,9 @@ public class ApplicationClass extends Application {
         mServiceIntent.putExtra("dataPacket", packet);
         mContext.startService(mServiceIntent);
     }
+
+    public void castFrag(FragmentManager parentFragmentManager, int host, Fragment fragment) {
+        parentFragmentManager.beginTransaction().replace(host, fragment).commit();
+    }
+
 }

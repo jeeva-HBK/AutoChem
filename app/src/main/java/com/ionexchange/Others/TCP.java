@@ -25,7 +25,8 @@ public class TCP extends IntentService {
     private static final String TAG = "TCP";
     public static Socket socketDevice = null;
     public static BufferedReader _inputSteam;
-    //PACKETS
+
+    /* START : END */
     public String startPacket = "{*", endPacket = "*}";
 
     public TCP() {
@@ -97,7 +98,7 @@ public class TCP extends IntentService {
             }
             intentMessage("pckError");
             Log.d("Send Message", "Packet Error");
-            close();
+            // close();
             return false;
         }
 
@@ -128,6 +129,7 @@ public class TCP extends IntentService {
                 Log.d("Receive Message", e1.getMessage());
                 Log.d("Receive Message", "restart");
             }
+            close();
         }
 
         public String framePacket(String packet) {
@@ -145,9 +147,7 @@ public class TCP extends IntentService {
                     _inputSteam = new BufferedReader(new InputStreamReader(socketDevice.getInputStream()));
                     socketDevice.setKeepAlive(true);
                     socketDevice.setSoLinger(true, 1);
-                    // intentMessage("Connected");
                     Log.e(TAG, "Device Connected");
-
                 }
                 return true;
             } catch (UnknownHostException e1) {
@@ -155,7 +155,6 @@ public class TCP extends IntentService {
                 Log.d("Communication", e1.getMessage());
                 socketDevice = null;
             } catch (IOException e1) {
-//               intentMessage("No Device");
                 intentMessage("FailedToConnect");
                 Log.d("Communication", e1.getMessage());
                 socketDevice = null;
@@ -171,7 +170,6 @@ public class TCP extends IntentService {
                     try {
                         socketDevice.close();
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                     socketDevice = null;

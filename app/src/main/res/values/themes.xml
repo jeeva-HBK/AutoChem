@@ -20,4 +20,20 @@
         <item name="android:textSize">15dp</item>
         <item name="android:layout_margin">5dp</item>
     </style>
+
+    <!--App AutoComplete TextView-->
+    <style name="appAutoTxt" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="endIconTint">@color/primary</item>
+        <item name="android:textColorHint">@color/primary</item>
+    </style>
+
+    <!--App EditText-->
+    <style name="appEdtTxt" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="endIconTint">@color/primary</item>
+        <item name="android:textColorHint">@color/primary</item>
+    </style>
 </resources>

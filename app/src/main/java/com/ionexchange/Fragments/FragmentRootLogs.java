@@ -14,7 +14,7 @@ import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentLogsBinding;
 
 
-public class FragmentLogs extends Fragment {
+public class FragmentRootLogs extends Fragment {
     FragmentLogsBinding mBinding;
 
     @Nullable

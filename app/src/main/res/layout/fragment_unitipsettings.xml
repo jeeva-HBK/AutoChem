@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@color/primary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Unit Ip Settings"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+
+
+        <!--Ip Address-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ip_unitip"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/gateway_unitip"
+            app:layout_constraintEnd_toStartOf="@+id/subNet_unitip"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="IP Address"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--SubNet Address-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/subNet_unitip"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:inputType="number"
+            app:layout_constraintBottom_toBottomOf="@+id/ip_unitip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/ip_unitip"
+            app:layout_constraintTop_toTopOf="@+id/ip_unitip">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Subnet Ip" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--GateWay Address-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/gateway_unitip"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/DNS1_unitip"
+            app:layout_constraintEnd_toEndOf="@+id/ip_unitip"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/ip_unitip"
+            app:layout_constraintTop_toBottomOf="@+id/ip_unitip">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Gateway Ip"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--PORT-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/port_unitip"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            app:layout_constraintBottom_toBottomOf="@+id/gateway_unitip"
+            app:layout_constraintEnd_toEndOf="@+id/subNet_unitip"
+            app:layout_constraintStart_toStartOf="@+id/subNet_unitip"
+            app:layout_constraintTop_toTopOf="@+id/gateway_unitip"
+            app:layout_constraintVertical_bias="0.3">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Port" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--DNS 1-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/DNS1_unitip"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/saveLayout_unitIp"
+            app:layout_constraintEnd_toEndOf="@+id/gateway_unitip"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/gateway_unitip"
+            app:layout_constraintTop_toBottomOf="@+id/gateway_unitip">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="DNS 1 Ip"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--DNS 2-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/DNS2_unitip"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            app:layout_constraintBottom_toBottomOf="@+id/DNS1_unitip"
+            app:layout_constraintEnd_toEndOf="@+id/port_unitip"
+            app:layout_constraintStart_toStartOf="@+id/port_unitip"
+            app:layout_constraintTop_toTopOf="@+id/DNS1_unitip">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="DNS 2 Ip" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--saveLayout-->
+        <LinearLayout
+            android:id="@+id/saveLayout_unitIp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/DNS1_unitip">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:text="Save"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/saveFab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_round_right"
+                app:maxImageSize="50dp" />
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

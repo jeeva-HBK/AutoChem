@@ -6,10 +6,14 @@
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
         motion:duration="1000">
-        <KeyFrameSet></KeyFrameSet>
+        <KeyFrameSet>
+
+        </KeyFrameSet>
         <OnSwipe
             motion:dragDirection="dragLeft"
             motion:touchAnchorId="@+id/view3" />
+
+        <OnClick motion:targetId="@+id/view3" />
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
@@ -58,7 +62,15 @@
             <Constraint
                 android:id="@+id/frameLayout3"
                 motion:layout_constraintEnd_toEndOf="parent" />
-        </ConstraintSet>
+        <Constraint
+            android:layout_height="0dp"
+            motion:layout_constraintStart_toStartOf="@+id/view3"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:id="@+id/configRootHost" />
+    </ConstraintSet>
 
 
     <ConstraintSet android:id="@+id/end">

@@ -1,6 +1,7 @@
 package com.ionexchange.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +12,20 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Interface.DataReceiveCallback;
+import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
-import com.ionexchange.databinding.FragmentMainscreenBinding;
+import com.ionexchange.databinding.FragmentTrendBinding;
 
-public class FragmentMainscreen extends Fragment {
-    FragmentMainscreenBinding mBinding;
+public class FragmentRootTrend extends Fragment implements DataReceiveCallback {
+    FragmentTrendBinding mBinding;
     BaseActivity mActivity;
+    ApplicationClass mAppclass;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_mainscreen, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_trend, container, false);
         return mBinding.getRoot();
     }
 
@@ -29,7 +33,13 @@ public class FragmentMainscreen extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mActivity = (BaseActivity) getActivity();
+        mAppclass = (ApplicationClass) getActivity().getApplication();
+        mActivity.changeToolBarVisib(View.VISIBLE);
+        mAppclass.sendPacket(this, "1234#0#01#192.168.1.100#255.255.255.0#192.168.1.1#8.8.8.8#4.4.4.4&05000");
+    }
 
-        mActivity.changeToolBarVisib(View.GONE);
+    @Override
+    public void OnDataReceive(String data) {
+        Log.e("TAG", "OnDataReceive: " + data);
     }
 }

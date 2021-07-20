@@ -17,11 +17,20 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentMainhostBinding;
 
+import static com.ionexchange.Others.PacketControl.ADMIN;
+import static com.ionexchange.Others.PacketControl.APP_VERSION;
+import static com.ionexchange.Others.PacketControl.CONNECT_COMMAND;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_connectPacket;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 public class FragmentMainHost extends Fragment implements View.OnClickListener, DataReceiveCallback {
     FragmentMainhostBinding mBinding;
     BaseActivity mActivity;
     ApplicationClass mAppClass;
 
+    private static final String TAG = "FragmentMainHost";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,9 +48,11 @@ public class FragmentMainHost extends Fragment implements View.OnClickListener, 
         mBinding.eventLogsScreenBtn.setOnClickListener(this);
         mBinding.configScreenBtn.setOnClickListener(this);
 
-        sendData("1234#0#00#V.0.0.1#0#0");
+        // mAppClass.sendPacket(this, "1234#0#00#V.0.0.1#0#0");
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_connectPacket + SPILT_CHAR + APP_VERSION + SPILT_CHAR + CONNECT_COMMAND + ADMIN);
 
-        setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentMainscreen(), "Dashboard");
+
+        setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentRootMainscreen(), "Dashboard");
     }
 
     private void castFrag(Fragment fragment) {
@@ -92,26 +103,21 @@ public class FragmentMainHost extends Fragment implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.main_screen_btn:
-                setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentMainscreen(), "Dashboard");
+                setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentRootMainscreen(), "Dashboard");
                 break;
 
             case R.id.trend_screen_btn:
-                setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle, mBinding.statisticsText, new FragmentTrend(), "Statistics");
+                setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle, mBinding.statisticsText, new FragmentRootTrend(), "Statistics");
                 break;
 
             case R.id.event_logs_screen_btn:
-                setNewState(mBinding.supportBigCircle, mBinding.supportMain, mBinding.supportSub, mBinding.supportSmallCircle, mBinding.supportText, new FragmentLogs(), "Events & Logs");
+                setNewState(mBinding.supportBigCircle, mBinding.supportMain, mBinding.supportSub, mBinding.supportSmallCircle, mBinding.supportText, new FragmentRootLogs(), "Events & Logs");
                 break;
 
             case R.id.config_screen_btn:
-                setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText, new FragmentConfiguration(), "Configuration");
+                setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText, new FragmentRootConfiguration(), "Configuration");
                 break;
         }
-    }
-
-
-    public void sendData(String data) {
-        mAppClass.sendPacket(this, data);
     }
 
     @Override

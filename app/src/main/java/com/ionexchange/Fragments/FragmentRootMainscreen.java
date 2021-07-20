@@ -12,16 +12,16 @@ import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.R;
-import com.ionexchange.databinding.FragmentTrendBinding;
+import com.ionexchange.databinding.FragmentMainscreenBinding;
 
-public class FragmentTrend extends Fragment {
-    FragmentTrendBinding mBinding;
+public class FragmentRootMainscreen extends Fragment {
+    FragmentMainscreenBinding mBinding;
     BaseActivity mActivity;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_trend, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_mainscreen, container, false);
         return mBinding.getRoot();
     }
 
@@ -30,6 +30,6 @@ public class FragmentTrend extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mActivity = (BaseActivity) getActivity();
 
-        mActivity.changeToolBarVisib(View.VISIBLE);
+        mActivity.changeToolBarVisib(View.GONE);
     }
 }
