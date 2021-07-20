@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,12 @@ import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentUnitipsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
+
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_panelIpConfig;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentUnitIpSettings extends Fragment implements DataReceiveCallback {
     FragmentUnitipsettingsBinding mBinding;
@@ -39,35 +46,57 @@ public class FragmentUnitIpSettings extends Fragment implements DataReceiveCallb
         mAppclass = (ApplicationClass) getActivity().getApplication();
         mActivity = (BaseActivity) getActivity();
 
-        mBinding.saveLayoutUnitIp.setOnClickListener(view1 -> {
-            mAppclass.sendPacket(this, formData());
-        });
+        mBinding.saveFab.setOnClickListener(this::writeData);
+        mBinding.saveLayoutUnitIp.setOnClickListener(this::writeData);
     }
 
     private String formData() {
-        /* String s = */
-        return "";
+        return DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_panelIpConfig + SPILT_CHAR
+                + toString(mBinding.ipUnitipEDT) + SPILT_CHAR + toString(mBinding.subNetUnitipEDT) + SPILT_CHAR + toString(mBinding.gatewayUnitipEDT) + SPILT_CHAR
+                + toString(mBinding.DNS1UnitipEDT) + SPILT_CHAR + toString(mBinding.DNS2UnitipEDT) + SPILT_CHAR + toString(mBinding.portUnitipEDT);
+    }
+
+    private String toString(EditText editText) {
+        return editText.getText().toString();
     }
 
     @Override
     public void OnDataReceive(String data) {
         if (data != null) {
-            handleData(data);
+            handleData(data.split("\\*")[1].split("#"));
         }
     }
 
-    private void handleData(String data) {
-
+    private void handleData(String[] splitData) {
+        // Read -> Response   --  {*01#0#192.168.1.100#255.255.255.0#192.168.1.1#8.8.8.8#4.4.4.4#05000*}
+        // Write -> Response  --  {*01#1*}
+        if (splitData[0].equals("01")) {
+            if (splitData[1].equals("0")) {
+                mBinding.ipUnitipEDT.setText(splitData[2]);
+                mBinding.subNetUnitipEDT.setText(splitData[3]);
+                mBinding.gatewayUnitipEDT.setText(splitData[4]);
+                mBinding.DNS1UnitipEDT.setText(splitData[5]);
+                mBinding.DNS2UnitipEDT.setText(splitData[6]);
+                mBinding.portUnitipEDT.setText(splitData[7]);
+            } else {
+                mAppclass.showSnackBar(getContext(), "Write Success");
+            }
+        } else {
+            Log.e(TAG, "handleData: Received Wrong Packet !");
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         readData();
-        // DEVICE_PASSWORD + SpiltChar + READ_PACKET + SpiltChar + PCK_panelIpConfig
     }
 
     private void readData() {
-        mAppclass.sendPacket(this, "1234#0#01#192.168.1.100#255.255.255.0#192.168.1.1#8.8.8.8#4.4.4.4&05000");
+        mAppclass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_panelIpConfig);
+    }
+
+    private void writeData(View view) {
+        mAppclass.sendPacket(this, formData());
     }
 }

@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentConfigurationBinding;
@@ -17,6 +18,7 @@ import com.ionexchange.databinding.FragmentConfigurationBinding;
 public class FragmentRootConfiguration extends Fragment implements View.OnClickListener {
     FragmentConfigurationBinding mBinding;
     ApplicationClass mAppClass;
+    BaseActivity mActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,6 +29,9 @@ public class FragmentRootConfiguration extends Fragment implements View.OnClickL
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        mActivity = (BaseActivity) getActivity();
+
+        mActivity.changeToolBarVisibility(View.GONE);
 
         mBinding.headerText1.setOnClickListener(this::newOnClick);
         mBinding.headerText2.setOnClickListener(this::newOnClick);

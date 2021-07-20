@@ -29,7 +29,6 @@ public class FragmentRootMainscreen extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mActivity = (BaseActivity) getActivity();
-
-        mActivity.changeToolBarVisib(View.GONE);
+        mActivity.changeToolBarVisibility(View.GONE);
     }
 }

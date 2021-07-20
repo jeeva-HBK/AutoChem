@@ -40,6 +40,7 @@
             app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ip_unitipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="IP Address"
@@ -53,7 +54,7 @@
             style="@style/appEdtTxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:inputType="number"
             app:layout_constraintBottom_toBottomOf="@+id/ip_unitip"
             app:layout_constraintEnd_toEndOf="parent"
@@ -62,9 +63,11 @@
             app:layout_constraintTop_toTopOf="@+id/ip_unitip">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/subNet_unitipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Subnet Ip" />
+                android:hint="Subnet Ip"
+                android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!--GateWay Address-->
@@ -80,6 +83,7 @@
             app:layout_constraintTop_toBottomOf="@+id/ip_unitip">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/gateway_unitipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Gateway Ip"
@@ -101,6 +105,7 @@
             app:layout_constraintVertical_bias="0.3">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/port_unitipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Port" />
@@ -120,6 +125,7 @@
             app:layout_constraintTop_toBottomOf="@+id/gateway_unitip">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/DNS1_unitipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="DNS 1 Ip"
@@ -140,9 +146,11 @@
             app:layout_constraintTop_toTopOf="@+id/DNS1_unitip">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/DNS2_unitipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="DNS 2 Ip" />
+                android:hint="DNS 2 Ip"
+                android:inputType="number" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

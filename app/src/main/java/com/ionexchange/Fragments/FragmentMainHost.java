@@ -47,8 +47,7 @@ public class FragmentMainHost extends Fragment implements View.OnClickListener, 
         mBinding.trendScreenBtn.setOnClickListener(this);
         mBinding.eventLogsScreenBtn.setOnClickListener(this);
         mBinding.configScreenBtn.setOnClickListener(this);
-
-        // mAppClass.sendPacket(this, "1234#0#00#V.0.0.1#0#0");
+        // Connect_Packet
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_connectPacket + SPILT_CHAR + APP_VERSION + SPILT_CHAR + CONNECT_COMMAND + ADMIN);
 
 
@@ -101,6 +100,7 @@ public class FragmentMainHost extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onClick(View v) {
+        mActivity.changeProgress(View.VISIBLE);
         switch (v.getId()) {
             case R.id.main_screen_btn:
                 setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentRootMainscreen(), "Dashboard");

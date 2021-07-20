@@ -24,7 +24,6 @@
 
         </RelativeLayout>
 
-
         <!--Server 1 Ip Address-->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/server1ip_targetip"
@@ -40,10 +39,12 @@
             app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/server1ip_targetipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Server 1 Ip"
-                android:inputType="number" />
+                android:inputType="number"
+                android:digits="0123456789."/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,6 +61,7 @@
             app:layout_constraintTop_toTopOf="@+id/server1ip_targetip">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/server1port_targetipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Server 1 Port"
@@ -80,6 +82,7 @@
             app:layout_constraintTop_toBottomOf="@+id/server1ip_targetip">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tabip_targetipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Tablet Ip"
@@ -100,6 +103,7 @@
             app:layout_constraintTop_toTopOf="@+id/tabip_targetip">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tabport_targetipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Tablet Port"

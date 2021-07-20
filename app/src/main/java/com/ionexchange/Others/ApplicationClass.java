@@ -6,16 +6,20 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.ionexchange.Interface.DataReceiveCallback;
+import com.ionexchange.R;
 
 import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
 
@@ -46,7 +50,6 @@ public class ApplicationClass extends Application {
                     if (data.contains("restart")) {
                         return;
                     }
-
                     listener.OnDataReceive(data);
                 }
             } catch (Exception e) {
@@ -143,6 +146,13 @@ public class ApplicationClass extends Application {
 
     public void castFrag(FragmentManager parentFragmentManager, int host, Fragment fragment) {
         parentFragmentManager.beginTransaction().replace(host, fragment).commit();
+    }
+
+    public void showSnackBar(Context context, String message) {
+        Snackbar snackbar = Snackbar.make(((Activity) context).findViewById(R.id.cod), message, Snackbar.LENGTH_SHORT);
+        TextView tv = (TextView) snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
+        tv.setTextColor(Color.WHITE);
+        snackbar.show();
     }
 
 }

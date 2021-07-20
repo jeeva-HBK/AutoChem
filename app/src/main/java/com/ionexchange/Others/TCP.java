@@ -26,7 +26,6 @@ public class TCP extends IntentService {
     public static Socket socketDevice = null;
     public static BufferedReader _inputSteam;
 
-    /* START : END */
     public String startPacket = "{*", endPacket = "*}";
 
     public TCP() {
@@ -110,7 +109,7 @@ public class TCP extends IntentService {
                     String message = new String(buffer).substring(0, charsRead);
                     if (!message.isEmpty()) {
                         intentMessage(message);
-                        Log.e(TAG, "Received -->  " + message);
+                        Log.e(TAG, "Received <--  " + message);
                     } else {
                         Log.d("Receive Error Message", message);
                     }

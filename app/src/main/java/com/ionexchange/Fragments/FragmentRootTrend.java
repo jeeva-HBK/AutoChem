@@ -34,7 +34,7 @@ public class FragmentRootTrend extends Fragment implements DataReceiveCallback {
         super.onViewCreated(view, savedInstanceState);
         mActivity = (BaseActivity) getActivity();
         mAppclass = (ApplicationClass) getActivity().getApplication();
-        mActivity.changeToolBarVisib(View.VISIBLE);
+        mActivity.changeToolBarVisibility(View.VISIBLE);
         mAppclass.sendPacket(this, "1234#0#01#192.168.1.100#255.255.255.0#192.168.1.1#8.8.8.8#4.4.4.4&05000");
     }
 
