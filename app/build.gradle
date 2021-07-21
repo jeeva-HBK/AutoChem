@@ -40,4 +40,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation 'org.jetbrains:annotations:16.0.2'
+
+    implementation 'com.airbnb.android:lottie:3.7.2'
 }

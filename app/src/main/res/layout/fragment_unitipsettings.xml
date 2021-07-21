@@ -44,6 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="IP Address"
+                android:digits="1234567890."
                 android:inputType="number" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -67,6 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Subnet Ip"
+                android:digits="1234567890."
                 android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,6 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Gateway Ip"
+                android:digits="1234567890."
                 android:inputType="number" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -108,6 +111,8 @@
                 android:id="@+id/port_unitipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:digits="1234567890."
+                android:inputType="number"
                 android:hint="Port" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -129,6 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="DNS 1 Ip"
+                android:digits="1234567890."
                 android:inputType="number" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -150,6 +156,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="DNS 2 Ip"
+                android:digits="1234567890."
                 android:inputType="number" />
 
         </com.google.android.material.textfield.TextInputLayout>

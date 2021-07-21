@@ -1,6 +1,7 @@
 package com.ionexchange.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,7 @@ public class FragmentMainHost extends Fragment implements View.OnClickListener, 
         mBinding.eventLogsScreenBtn.setOnClickListener(this);
         mBinding.configScreenBtn.setOnClickListener(this);
         // Connect_Packet
+
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_connectPacket + SPILT_CHAR + APP_VERSION + SPILT_CHAR + CONNECT_COMMAND + ADMIN);
 
 
@@ -100,7 +102,7 @@ public class FragmentMainHost extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onClick(View v) {
-        mActivity.changeProgress(View.VISIBLE);
+        // mActivity.changeProgress(View.VISIBLE);
         switch (v.getId()) {
             case R.id.main_screen_btn:
                 setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentRootMainscreen(), "Dashboard");
@@ -115,6 +117,7 @@ public class FragmentMainHost extends Fragment implements View.OnClickListener, 
                 break;
 
             case R.id.config_screen_btn:
+                mActivity.changeProgress(View.VISIBLE);
                 setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText, new FragmentRootConfiguration(), "Configuration");
                 break;
         }

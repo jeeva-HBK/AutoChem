@@ -15,6 +15,8 @@ import com.ionexchange.Fragments.FragmentMainHost;
 import com.ionexchange.R;
 import com.ionexchange.databinding.ActivityBaseBinding;
 
+
+
 public class BaseActivity extends AppCompatActivity {
     ActivityBaseBinding mBinding;
     private static final String TAG = "BaseActivity";
@@ -35,7 +37,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void changeProgress(int visibility) {
-        mBinding.ProgressBar.setVisibility(visibility);
+        mBinding.progressCircular.setVisibility(visibility);
     }
 
     // Exit Focus

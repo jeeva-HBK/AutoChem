@@ -86,7 +86,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Tablet Ip"
-                android:inputType="number" />
+                android:inputType="number"
+                android:digits="1234567890."/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

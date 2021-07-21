@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_target_ip;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
@@ -48,7 +50,29 @@ public class FragmentTargetIpSettings extends Fragment implements DataReceiveCal
     }
 
     private void writeData(View view) {
-        mAppClass.sendPacket(this, formData());
+        if (validateFields()) {
+            mAppClass.sendPacket(this, formData());
+        }
+    }
+
+    private boolean validateFields() {
+        if (isEmpty(mBinding.server1ipTargetipEDT)) {
+            return false;
+        } else if (isEmpty(mBinding.server1portTargetipEDT)) {
+            return false;
+        } else if (isEmpty(mBinding.server1portTargetipEDT)) {
+            return false;
+        } else if (isEmpty(mBinding.tabipTargetipEDT)) {
+            return false;
+        } else return !isEmpty(mBinding.tabportTargetipEDT);
+    }
+
+    private boolean isEmpty(EditText editText) {
+        if (editText == null || editText.getText().toString().equals("")) {
+            editText.setError("Field shouldn't empty !");
+            return true;
+        }
+        return false;
     }
 
     private String formData() {
@@ -79,16 +103,24 @@ public class FragmentTargetIpSettings extends Fragment implements DataReceiveCal
     }
 
     private void handleData(String[] splitData) {
-        // Read -> Response   --  {*02#0#1#192.168.1.102#05000#192.168.1.104#05050*}
-        // Write -> Response  --  {*02#1*}
-        if (splitData[0].equals("02")) {
-            if (splitData[1].equals("0")) {
-                mBinding.server1ipTargetipEDT.setText(splitData[3]);
-                mBinding.server1portTargetipEDT.setText(splitData[4]);
-                mBinding.tabipTargetipEDT.setText(splitData[5]);
-                mBinding.tabportTargetipEDT.setText(splitData[6]);
-            } else {
-                mAppClass.showSnackBar(getContext(), "Write Success");
+        // Read -> Response   --
+        // Write -> Response  --
+        if (splitData[1].equals("02")) {
+            if (splitData[0].equals("1")) {
+                if (splitData[2].equals(RES_SUCCESS)) {
+                    mBinding.server1ipTargetipEDT.setText(splitData[3]);
+                    mBinding.server1portTargetipEDT.setText(splitData[4]);
+                    mBinding.tabipTargetipEDT.setText(splitData[5]);
+                    mBinding.tabportTargetipEDT.setText(splitData[6]);
+                } else if (splitData[2].equals(RES_FAILED)) {
+                    mAppClass.showSnackBar(getContext(), "Read Failed");
+                }
+            } else if (splitData[0].equals("0")) {
+                if (splitData[2].equals(RES_SUCCESS)) {
+                    mAppClass.showSnackBar(getContext(), "Write Success");
+                } else if (splitData[2].equals(RES_FAILED)) {
+                    mAppClass.showSnackBar(getContext(), "Write Failed");
+                }
             }
         } else {
             Log.e(TAG, "handleData: Received Wrong Packet !");

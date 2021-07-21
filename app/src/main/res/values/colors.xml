@@ -18,4 +18,6 @@
     <color name="pageBg">#EEF4F8</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#F44336</color>
+    <color name="ash">#757575</color>
 </resources>
