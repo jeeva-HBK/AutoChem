@@ -189,7 +189,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:src="@drawable/ic_round_right"
-                app:maxImageSize="50dp" />
+                app:maxImageSize="50dp"
+                app:tint="@color/black"
+                android:background="@color/colorSecondary"
+                android:backgroundTint="@color/colorSecondary"/>
 
 
         </LinearLayout>

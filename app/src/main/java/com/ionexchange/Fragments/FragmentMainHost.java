@@ -117,7 +117,7 @@ public class FragmentMainHost extends Fragment implements View.OnClickListener, 
                 break;
 
             case R.id.config_screen_btn:
-                mActivity.changeProgress(View.VISIBLE);
+               // mActivity.changeProgress(View.VISIBLE);
                 setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText, new FragmentRootConfiguration(), "Configuration");
                 break;
         }

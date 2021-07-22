@@ -11,9 +11,9 @@
         </KeyFrameSet>
         <OnSwipe
             motion:dragDirection="dragLeft"
-            motion:touchAnchorId="@+id/view3" />
+            motion:touchAnchorId="@+id/view5" />
 
-        <OnClick motion:targetId="@+id/view3" />
+        <OnClick motion:targetId="@+id/view5" />
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
@@ -84,7 +84,6 @@
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintVertical_bias="1.0" />
-
 
         <Constraint
             android:id="@+id/textView"

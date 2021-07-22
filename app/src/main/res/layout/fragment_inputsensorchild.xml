@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/inputRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <!--Input Number-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputNumber_inputSettings"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/sensorType_inputSetting"
+            app:layout_constraintEnd_toEndOf="@+id/sensorType_inputSetting"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/sensorType_inputSetting"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputNumber_inputSettingsEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Input Number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Row 1 -->
+        <!--Sensor type-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sensorType_inputSetting"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/unit_inputSetting"
+            app:layout_constraintEnd_toStartOf="@+id/sensorActivation_inputSettings"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/inputLabel_inputSettings"
+            app:layout_constraintTop_toBottomOf="@+id/inputNumber_inputSettings">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sensor_inputSettingsEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Sensor Type" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--input Label-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLabel_inputSettings"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/sensorType_inputSetting"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/sensorType_inputSetting">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputLabel_inputSettingsEdt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Input Label" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Sensor Activation-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sensorActivation_inputSettings"
+            style="@style/appAutoTxt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/inputLabel_inputSettings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/sensorType_inputSetting"
+            app:layout_constraintTop_toTopOf="@+id/inputLabel_inputSettings">
+
+            <AutoCompleteTextView
+                android:id="@+id/sensorActivation_inputSettingsATXT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Sensor Activation" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Row 2 -->
+        <!--UNIT-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/unit_inputSetting"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/temperature_inputSetting"
+            app:layout_constraintEnd_toEndOf="@+id/sensorType_inputSetting"
+            app:layout_constraintStart_toStartOf="@+id/sensorType_inputSetting"
+            app:layout_constraintTop_toBottomOf="@+id/sensorType_inputSetting">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/unit_inputSettingEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Unit" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Buffer Type-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/bufferType_inputSetting"
+            style="@style/appAutoTxt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/unit_inputSetting"
+            app:layout_constraintEnd_toEndOf="@+id/inputLabel_inputSettings"
+            app:layout_constraintStart_toStartOf="@+id/inputLabel_inputSettings"
+            app:layout_constraintTop_toTopOf="@+id/unit_inputSetting">
+
+            <AutoCompleteTextView
+                android:id="@+id/bufferType_inputSettingATXT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Buffer Type" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Temp Linked-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tempLinked_inputSetting"
+            style="@style/appAutoTxt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/unit_inputSetting"
+            app:layout_constraintEnd_toEndOf="@+id/sensorActivation_inputSettings"
+            app:layout_constraintStart_toStartOf="@+id/sensorActivation_inputSettings"
+            app:layout_constraintTop_toTopOf="@+id/bufferType_inputSetting">
+
+            <AutoCompleteTextView
+                android:id="@+id/tempLinked_inputSettingATXT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Temperature Linked" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Row 3 -->
+        <!--Temperature Value-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/temperature_inputSetting"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/alarmLow_inputSetting"
+            app:layout_constraintEnd_toEndOf="@+id/unit_inputSetting"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/unit_inputSetting"
+            app:layout_constraintTop_toBottomOf="@+id/unit_inputSetting">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/temperature_inputSettingEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Temperature Value" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Smoothing Factor-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/smoothingFactor_inputSetting"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/bufferType_inputSetting"
+            app:layout_constraintStart_toStartOf="@+id/bufferType_inputSetting"
+            app:layout_constraintTop_toTopOf="@+id/temperature_inputSetting">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/smoothingFactor_inputSettingEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Smoothing Factor" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Calibration Required Alarm-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/calibrationRequired_inputSetting"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/tempLinked_inputSetting"
+            app:layout_constraintStart_toStartOf="@+id/tempLinked_inputSetting"
+            app:layout_constraintTop_toTopOf="@+id/smoothingFactor_inputSetting">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/calibrationRequired_inputSettingEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Calibration Required Alarm" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Row 4 -->
+        <!--Low Alarm-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/alarmLow_inputSetting"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/DeleteLayout_inputSettings"
+            app:layout_constraintEnd_toEndOf="@+id/temperature_inputSetting"
+            app:layout_constraintStart_toStartOf="@+id/temperature_inputSetting"
+            app:layout_constraintTop_toBottomOf="@+id/temperature_inputSetting">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/alarmLow_inputSettingEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Low Alarm" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--High Alarm-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/highLow_inputSetting"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/alarmLow_inputSetting"
+            app:layout_constraintEnd_toEndOf="@+id/smoothingFactor_inputSetting"
+            app:layout_constraintStart_toStartOf="@+id/smoothingFactor_inputSetting"
+            app:layout_constraintTop_toTopOf="@+id/alarmLow_inputSetting">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/highLow_inputSettingEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="High Alarm" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Required Calibration-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/resetCalibration_inputSetting"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/calibrationRequired_inputSetting"
+            app:layout_constraintStart_toStartOf="@+id/calibrationRequired_inputSetting"
+            app:layout_constraintTop_toTopOf="@+id/highLow_inputSetting">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/resetCalibration_inputSettingEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Reset Calibration" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--saveLayout-->
+        <LinearLayout
+            android:id="@+id/saveLayout_inputSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/DeleteLayout_inputSettings"
+            app:layout_constraintEnd_toEndOf="@+id/alarmLow_inputSetting"
+            app:layout_constraintStart_toStartOf="@+id/alarmLow_inputSetting"
+            app:layout_constraintTop_toTopOf="@+id/DeleteLayout_inputSettings">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:text="Save"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/saveFab_inputSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@color/colorSecondary"
+                android:backgroundTint="@color/colorSecondary"
+                android:src="@drawable/ic_round_right"
+                app:maxImageSize="50dp"
+                app:tint="@color/black" />
+
+
+        </LinearLayout>
+
+        <!--DeleteLayout-->
+        <LinearLayout
+            android:id="@+id/DeleteLayout_inputSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/highLow_inputSetting"
+            app:layout_constraintStart_toStartOf="@+id/highLow_inputSetting"
+            app:layout_constraintTop_toBottomOf="@+id/alarmLow_inputSetting">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:text="Delete"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/DeleteFab_inputSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@color/red"
+                android:backgroundTint="@color/red"
+                android:src="@drawable/ic_baseline_delete"
+                app:maxImageSize="35dp"
+                app:tint="@color/black" />
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

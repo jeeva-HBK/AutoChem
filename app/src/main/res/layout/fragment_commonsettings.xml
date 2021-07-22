@@ -67,12 +67,25 @@
                 android:id="@+id/siteLocation_commonSettingsEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:drawableEnd="@drawable/ic_baseline_my_location"
+
                 android:gravity="top"
                 android:hint="Site Location"
-                android:inputType="number" />
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <View
+            android:id="@+id/myLocation"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/ic_baseline_my_location"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/siteLocation_commonSettings"
+            app:layout_constraintEnd_toEndOf="@+id/siteLocation_commonSettings"
+            app:layout_constraintHorizontal_bias="0.948"
+            app:layout_constraintStart_toStartOf="@+id/siteLocation_commonSettings"
+            app:layout_constraintTop_toBottomOf="@+id/siteId_commonSettings"
+            app:layout_constraintVertical_bias="0.54" />
 
         <!--Site Password-->
         <com.google.android.material.textfield.TextInputLayout
@@ -118,15 +131,18 @@
             app:layout_constraintTop_toBottomOf="@+id/textView2">
 
             <RadioButton
+                android:id="@+id/enableCommonSettings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text=" Enable" />
 
             <RadioButton
+                android:id="@+id/disableCommonSettings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:checked="true"
                 android:text=" Disable" />
 
         </RadioGroup>
@@ -153,12 +169,15 @@
             app:layout_constraintTop_toBottomOf="@+id/textView3">
 
             <RadioButton
+                android:id="@+id/celsius"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:checked="true"
                 android:text=" Celsius" />
 
             <RadioButton
+                android:id="@+id/fahrenheit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -189,7 +208,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
@@ -201,104 +219,162 @@
             app:layout_constraintStart_toStartOf="@+id/linearLayout"
             app:layout_constraintTop_toBottomOf="@+id/alarmDelay_commonSettings" />
 
-        <!--saveLayout-->
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/saveLayout_unitIp"
             app:layout_constraintEnd_toEndOf="@+id/radioGroup2"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/alarmDelay_commonSettings"
             app:layout_constraintTop_toBottomOf="@+id/textView4">
 
-            <EditText
-                android:id="@+id/Hours"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/blue_editbox"
-                android:gravity="center"
-                android:hint="HH"
-                android:inputType="number"
-                android:textColorHint="@color/primary" />
+                android:layout_weight="1">
 
-            <EditText
-                android:id="@+id/MM"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/blue_editbox"
-                android:gravity="center"
-                android:hint="MM"
-                android:inputType="number"
-                android:textColorHint="@color/primary" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/Hours"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/blue_editbox"
+                    android:gravity="center"
+                    android:hint="HH"
+                    android:inputType="number"
+                    android:textColorHint="@color/primary" />
 
-            <EditText
-                android:id="@+id/SS"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/blue_editbox"
-                android:gravity="center"
-                android:hint="SS"
-                android:inputType="number"
-                android:textColorHint="@color/primary" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/NN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/blue_editbox"
-                android:gravity="center"
-                android:hint="N"
-                android:inputType="number"
-                android:textColorHint="@color/primary" />
 
-            <EditText
-                android:id="@+id/DD"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/blue_editbox"
-                android:gravity="center"
-                android:hint="DD"
-                android:inputType="number"
-                android:textColorHint="@color/primary" />
+                android:layout_weight="1">
 
-            <EditText
-                android:id="@+id/month"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/blue_editbox"
-                android:gravity="center"
-                android:hint="mm"
-                android:inputType="number"
-                android:textColorHint="@color/primary" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/MM"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/blue_editbox"
+                    android:gravity="center"
+                    android:hint="MM"
+                    android:inputType="number"
+                    android:textColorHint="@color/primary" />
 
-            <EditText
-                android:id="@+id/YYYY"
-                android:layout_width="wrap_content"
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/blue_editbox"
-                android:gravity="center"
-                android:hint="YYYY"
-                android:inputType="number"
-                android:textColorHint="@color/primary" />
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/SS"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/blue_editbox"
+                    android:gravity="center"
+                    android:hint="SS"
+                    android:inputType="number"
+                    android:textColorHint="@color/primary" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/NN"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/blue_editbox"
+                    android:gravity="center"
+                    android:hint="N"
+                    android:inputType="number"
+                    android:textColorHint="@color/primary" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/DD"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/blue_editbox"
+                    android:gravity="center"
+                    android:hint="DD"
+                    android:inputType="number"
+                    android:textColorHint="@color/primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/month"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/blue_editbox"
+
+                    android:hint="mm"
+                    android:inputType="number"
+                    android:textColorHint="@color/primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/YYYY"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/blue_editbox"
+                    android:gravity="center"
+                    android:hint="YYYY"
+                    android:inputType="number"
+                    android:textColorHint="@color/primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
         </LinearLayout>
 
+        <!--saveLayout-->
         <LinearLayout
             android:id="@+id/saveLayout_commonSettings"
             android:layout_width="wrap_content"
