@@ -1,7 +1,6 @@
 package com.ionexchange.Fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,13 +39,8 @@ public class FragmentInputSettings extends Fragment implements RvOnClick {
     }
 
     @Override
-    public void onClick(String pos) {
-        switch (pos) {
-            case "pH":
-                mBinding.inputsRv.setVisibility(View.GONE);
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorChild(pos)).commit();
-                Log.e(TAG, "onClick: ");
-                break;
-        }
+    public void onClick(String inputNumber) {
+        mBinding.inputsRv.setVisibility(View.GONE);
+        getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorChild(inputNumber)).commit();
     }
 }
