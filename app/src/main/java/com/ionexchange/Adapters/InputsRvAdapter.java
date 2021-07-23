@@ -43,12 +43,12 @@ public class InputsRvAdapter extends RecyclerView.Adapter<InputsRvAdapter.ViewHo
         return 16;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        View view;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        ConstraintLayout view;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            view = itemView.findViewById(R.id.rvView);
+            view = itemView.findViewById(R.id.rv_view);
         }
     }
 }
