@@ -15,7 +15,7 @@ import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentConfigurationBinding;
 
 
-public class FragmentRootConfiguration extends Fragment implements View.OnClickListener {
+public class FragmentConfiguration extends Fragment implements View.OnClickListener {
     FragmentConfigurationBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;

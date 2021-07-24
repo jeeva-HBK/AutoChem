@@ -73,13 +73,53 @@ public class FragmentInputSensorChild extends Fragment implements DataReceiveCal
     }
 
     private void save(View view) {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + toString(mBinding.inputNumberInputSettingsEDT) + SPILT_CHAR +
-                getPosition(toString(mBinding.sensorInputSettingsATXT), inputTypeArr) + SPILT_CHAR + getPosition(toString(mBinding.sensorActivationInputSettingsATXT), sensorActivationArr) + SPILT_CHAR +
-                toString(mBinding.inputLabelInputSettingsEdt) + SPILT_CHAR + getPosition(toString(mBinding.bufferTypeInputSettingATXT), bufferArr) + SPILT_CHAR +
-                getPosition(toString(mBinding.tempLinkedInputSettingATXT), tempLinkedArr) + SPILT_CHAR + toString(mBinding.temperatureInputSettingEDT) + SPILT_CHAR +
-                toString(mBinding.smoothingFactorInputSettingEDT) + SPILT_CHAR + toString(mBinding.alarmLowInputSettingEDT) + SPILT_CHAR +
-                toString(mBinding.alarmhighInputSettingEDT) + SPILT_CHAR + toString(mBinding.calibrationRequiredInputSettingATXT) + SPILT_CHAR +
-                getPosition(toString(mBinding.resetCalibrationInputSettingEDT), resetCalibrationArr));
+        if (validField()) {
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + toString(mBinding.inputNumberInputSettingsEDT) + SPILT_CHAR +
+                    getPosition(toString(mBinding.sensorInputSettingsATXT), inputTypeArr) + SPILT_CHAR + getPosition(toString(mBinding.sensorActivationInputSettingsATXT), sensorActivationArr) + SPILT_CHAR +
+                    toString(mBinding.inputLabelInputSettingsEdt) + SPILT_CHAR + getPosition(toString(mBinding.bufferTypeInputSettingATXT), bufferArr) + SPILT_CHAR +
+                    getPosition(toString(mBinding.tempLinkedInputSettingATXT), tempLinkedArr) + SPILT_CHAR + toString(mBinding.temperatureInputSettingEDT) + SPILT_CHAR +
+                    toString(mBinding.smoothingFactorInputSettingEDT) + SPILT_CHAR + toString(mBinding.alarmLowInputSettingEDT) + SPILT_CHAR +
+                    toString(mBinding.alarmhighInputSettingEDT) + SPILT_CHAR + toString(mBinding.calibrationRequiredInputSettingATXT) + SPILT_CHAR +
+                    getPosition(toString(mBinding.resetCalibrationInputSettingEDT), resetCalibrationArr));
+        }
+    }
+
+    private boolean validField() {
+        if (isEmpty(mBinding.inputNumberInputSettingsEDT)) {
+            return false;
+        } else if (isEmpty(mBinding.sensorInputSettingsATXT)) {
+            return false;
+        } else if (isEmpty(mBinding.sensorActivationInputSettingsATXT)) {
+            return false;
+        } else if (isEmpty(mBinding.tempLinkedInputSettingATXT)) {
+            return false;
+        } else if (isEmpty(mBinding.temperatureInputSettingEDT)) {
+            return false;
+        } else if (isEmpty(mBinding.smoothingFactorInputSettingEDT)) {
+            return false;
+        } else if (isEmpty(mBinding.alarmLowInputSettingEDT)) {
+            return false;
+        } else if (isEmpty(mBinding.alarmhighInputSettingEDT)) {
+            return false;
+        } else if (isEmpty(mBinding.calibrationRequiredInputSettingATXT)) {
+            return false;
+        } else return !isEmpty(mBinding.resetCalibrationInputSettingEDT);
+    }
+
+    private Boolean isEmpty(EditText editText) {
+        if (editText.getText() == null || editText.getText().toString().equals("")) {
+            editText.setError("Field shouldn't empty !");
+            return true;
+        }
+        return false;
+    }
+
+    private Boolean isEmpty(AutoCompleteTextView editText) {
+        if (editText.getText() == null || editText.getText().toString().equals("")) {
+            editText.setError("Field shouldn't empty !");
+            return true;
+        }
+        return false;
     }
 
     private int getPosition(String string, String[] strArr) {
@@ -97,7 +137,7 @@ public class FragmentInputSensorChild extends Fragment implements DataReceiveCal
 
     private void initSensor(String inputNo) {
         switch (inputNo) {
-            case "pH":
+            case "01":
                 mBinding.sensorActivationInputSettingsATXT.setAdapter(getAdapter(sensorActivationArr));
                 mBinding.sensorInputSettingsATXT.setAdapter(getAdapter(inputTypeArr));
                 mBinding.bufferTypeInputSettingATXT.setAdapter(getAdapter(bufferArr));
@@ -150,7 +190,7 @@ public class FragmentInputSensorChild extends Fragment implements DataReceiveCal
                     mBinding.alarmhighInputSettingEDT.setText(splitData[12]);
 
                     mBinding.calibrationRequiredInputSettingATXT.setText(splitData[13]);
-                  /*  if (splitData[13].equals("0")) {
+                    /*  if (splitData[13].equals("0")) {
                         mBinding.calibrationRequiredInputSettingATXT.setText(mBinding.calibrationRequiredInputSettingATXT.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
                     }
                     mBinding.calibrationRequiredInputSettingATXT.setAdapter(getAdapter(calibrationArr));*/

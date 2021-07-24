@@ -160,7 +160,7 @@ public class FragmentCommonSettings extends Fragment implements DataReceiveCallb
     }
 
     private Boolean isEmpty(EditText editText) {
-        if (editText == null || editText.getText().toString().equals("")) {
+        if (editText.getText() == null || editText.getText().toString().equals("")) {
             editText.setError("Field shouldn't empty !");
             return true;
         }

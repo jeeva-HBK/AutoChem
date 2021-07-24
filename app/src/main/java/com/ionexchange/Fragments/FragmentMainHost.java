@@ -1,7 +1,6 @@
 package com.ionexchange.Fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -118,7 +117,7 @@ public class FragmentMainHost extends Fragment implements View.OnClickListener, 
 
             case R.id.config_screen_btn:
                // mActivity.changeProgress(View.VISIBLE);
-                setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText, new FragmentRootConfiguration(), "Configuration");
+                setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText, new FragmentConfiguration(), "Configuration");
                 break;
         }
     }
