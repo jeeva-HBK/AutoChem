@@ -41,6 +41,16 @@ public class FragmentInputSettings extends Fragment implements RvOnClick {
     @Override
     public void onClick(String inputNumber) {
         mBinding.inputsRv.setVisibility(View.GONE);
-        getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorChild(inputNumber)).commit();
+        switch (inputNumber) {
+
+            case "0":
+                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorChild(inputNumber)).commit();
+                break;
+
+            case "1":
+                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentORP()).commit();
+                break;
+
+        }
     }
 }

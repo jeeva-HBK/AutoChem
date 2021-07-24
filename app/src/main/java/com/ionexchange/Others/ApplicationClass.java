@@ -26,6 +26,12 @@ import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
 public class ApplicationClass extends Application {
     private static final String TAG = "ApplicationClass";
 
+    public static String[] sensorActivationArr = {"ENABLE", "DISABLE"},
+            inputTypeArr = {"pH", "ORP", "Temp", "Flow/Water Meter", "Conductivity", "Toroidal", "Analog Input", "Tank Level", "Digital Sensor", "Modbus Sensor"},
+            bufferArr = {"Auto", "Manual"},
+            tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
+            resetCalibrationArr = {"No Reset", "Reset"};
+
     /* Static Variables */
     static String  mIPAddress = "192.168.1.103", Packet;
     static int  mPortNumber = 6000;

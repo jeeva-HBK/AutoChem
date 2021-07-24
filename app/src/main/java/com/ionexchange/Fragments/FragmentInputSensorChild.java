@@ -23,6 +23,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.ionexchange.Others.ApplicationClass.bufferArr;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
@@ -34,11 +39,7 @@ import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 public class FragmentInputSensorChild extends Fragment implements DataReceiveCallback {
     FragmentInputsensorchildBinding mBinding;
     ApplicationClass mAppClass;
-    String[] sensorActivationArr = {"ENABLE", "DISABLE"},
-            inputTypeArr = {"pH", "ORP", "Temp", "Flow/Water Meter", "Conductivity", "Toroidal", "Analog Input", "Tank Level", "Digital Sensor", "Modbus Sensor"},
-            bufferArr = {"Auto", "Manual"},
-            tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
-            resetCalibrationArr = {"No Reset", "Reset"};
+
     private static final String TAG = "FragmentInputSensor";
 
     String inputNumber;
@@ -136,19 +137,12 @@ public class FragmentInputSensorChild extends Fragment implements DataReceiveCal
     }
 
     private void initSensor(String inputNo) {
-        switch (inputNo) {
-            case "01":
                 mBinding.sensorActivationInputSettingsATXT.setAdapter(getAdapter(sensorActivationArr));
                 mBinding.sensorInputSettingsATXT.setAdapter(getAdapter(inputTypeArr));
                 mBinding.bufferTypeInputSettingATXT.setAdapter(getAdapter(bufferArr));
                 mBinding.tempLinkedInputSettingATXT.setAdapter(getAdapter(tempLinkedArr));
                 mBinding.resetCalibrationInputSettingEDT.setAdapter(getAdapter(resetCalibrationArr));
-                mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + inputNo);
-                break;
-            case "":
-
-                break;
-        }
+                mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "01");
     }
 
     public ArrayAdapter<String> getAdapter(String[] strArr) {

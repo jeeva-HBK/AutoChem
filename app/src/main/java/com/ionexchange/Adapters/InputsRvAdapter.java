@@ -33,7 +33,7 @@ public class InputsRvAdapter extends RecyclerView.Adapter<InputsRvAdapter.ViewHo
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rvOnClick.onClick("01");
+                rvOnClick.onClick(String.valueOf(position));
             }
         });
     }
