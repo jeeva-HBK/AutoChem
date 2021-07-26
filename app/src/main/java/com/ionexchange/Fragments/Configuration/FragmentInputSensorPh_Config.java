@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments;
+package com.ionexchange.Fragments.Configuration;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,7 +36,7 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
-public class FragmentInputSensorChild extends Fragment implements DataReceiveCallback {
+public class FragmentInputSensorPh_Config extends Fragment implements DataReceiveCallback {
     FragmentInputsensorchildBinding mBinding;
     ApplicationClass mAppClass;
 
@@ -44,7 +44,7 @@ public class FragmentInputSensorChild extends Fragment implements DataReceiveCal
 
     String inputNumber;
 
-    public FragmentInputSensorChild(String inputNumber) {
+    public FragmentInputSensorPh_Config(String inputNumber) {
         this.inputNumber = inputNumber;
     }
 

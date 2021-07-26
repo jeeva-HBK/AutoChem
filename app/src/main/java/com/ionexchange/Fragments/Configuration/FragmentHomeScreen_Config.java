@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments;
+package com.ionexchange.Fragments.Configuration;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,18 +11,18 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.R;
-import com.ionexchange.databinding.FragmentSensorconfigurationBinding;
+import com.ionexchange.databinding.FragmentHomescreenconfigurationBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FragmentVirtualSensorConfiguration extends Fragment {
-    FragmentSensorconfigurationBinding mBinding;
+public class FragmentHomeScreen_Config extends Fragment {
+    FragmentHomescreenconfigurationBinding mBinding;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_sensorconfiguration, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_homescreenconfiguration, container, false);
         return mBinding.getRoot();
     }
 

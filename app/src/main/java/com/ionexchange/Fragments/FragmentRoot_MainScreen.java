@@ -14,7 +14,7 @@ import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentMainscreenBinding;
 
-public class FragmentRootMainscreen extends Fragment {
+public class FragmentRoot_MainScreen extends Fragment {
     FragmentMainscreenBinding mBinding;
     BaseActivity mActivity;
 

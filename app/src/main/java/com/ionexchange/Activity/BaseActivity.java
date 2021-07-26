@@ -11,7 +11,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-import com.ionexchange.Fragments.FragmentMainHost;
+import com.ionexchange.Fragments.FragmentHostDashboard;
 import com.ionexchange.R;
 import com.ionexchange.databinding.ActivityBaseBinding;
 
@@ -25,7 +25,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_base);
-        getSupportFragmentManager().beginTransaction().replace(mBinding.baseFrameLayout.getId(), new FragmentMainHost()).commit();
+        getSupportFragmentManager().beginTransaction().replace(mBinding.baseFrameLayout.getId(), new FragmentHostDashboard()).commit();
     }
 
     public void changeActionBarText(String titile) {

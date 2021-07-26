@@ -33,7 +33,7 @@ public class ApplicationClass extends Application {
             resetCalibrationArr = {"No Reset", "Reset"};
 
     /* Static Variables */
-    static String  mIPAddress = "192.168.1.103", Packet;
+    static String mIPAddress = "192.168.1.103", Packet;
     static int  mPortNumber = 6000;
 
     public static CountDownTimer packetTimeOut;

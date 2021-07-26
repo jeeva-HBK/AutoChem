@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments;
+package com.ionexchange.Fragments.Configuration;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,7 +18,7 @@ import com.ionexchange.databinding.FragmentInputsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FragmentInputSettings extends Fragment implements RvOnClick {
+public class FragmentInputSensorList_Config extends Fragment implements RvOnClick {
     FragmentInputsettingsBinding mBinding;
     RvOnClick rvOnClick;
     private static final String TAG = "FragmentInputSettings";
@@ -44,11 +44,11 @@ public class FragmentInputSettings extends Fragment implements RvOnClick {
         switch (inputNumber) {
 
             case "0":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorChild(inputNumber)).commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorPh_Config(inputNumber)).commit();
                 break;
 
             case "1":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentORP()).commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorORP_Config()).commit();
                 break;
 
         }

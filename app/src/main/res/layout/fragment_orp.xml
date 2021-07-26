@@ -40,7 +40,7 @@
             style="@style/appEdtTxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="10dp"
             android:layout_marginEnd="5dp"
             app:layout_constraintBottom_toTopOf="@+id/orpSmoothingFactor_IS"
             app:layout_constraintEnd_toStartOf="@+id/orpSensorType_IS"

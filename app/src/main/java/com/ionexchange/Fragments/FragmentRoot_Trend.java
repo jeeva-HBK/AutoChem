@@ -17,7 +17,7 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentTrendBinding;
 
-public class FragmentRootTrend extends Fragment implements DataReceiveCallback {
+public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback {
     FragmentTrendBinding mBinding;
     BaseActivity mActivity;
     ApplicationClass mAppclass;

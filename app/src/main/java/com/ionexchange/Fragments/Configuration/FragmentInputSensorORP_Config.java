@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments;
+package com.ionexchange.Fragments.Configuration;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -34,7 +34,7 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
-public class FragmentORP extends Fragment implements DataReceiveCallback {
+public class FragmentInputSensorORP_Config extends Fragment implements DataReceiveCallback {
     FragmentOrpBinding mBinding;
     ApplicationClass mAppClass;
 
@@ -70,7 +70,6 @@ public class FragmentORP extends Fragment implements DataReceiveCallback {
                 getPosition(toString(mBinding.orpResetCalibrationISEDT), resetCalibrationArr)
         );
     }
-
 
     private int getPosition(String string, String[] strArr) {
         List list = Arrays.asList(strArr);

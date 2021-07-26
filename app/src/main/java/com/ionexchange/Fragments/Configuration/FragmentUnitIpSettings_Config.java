@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments;
+package com.ionexchange.Fragments.Configuration;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +29,7 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
-public class FragmentUnitIpSettings extends Fragment implements DataReceiveCallback {
+public class FragmentUnitIpSettings_Config extends Fragment implements DataReceiveCallback {
     FragmentUnitipsettingsBinding mBinding;
     ApplicationClass mAppclass;
     BaseActivity mActivity;

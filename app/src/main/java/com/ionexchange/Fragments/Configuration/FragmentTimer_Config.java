@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments;
+package com.ionexchange.Fragments.Configuration;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,18 +11,17 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.R;
-import com.ionexchange.databinding.FragmentOutputsettingsBinding;
+import com.ionexchange.databinding.FragmentTimmerconfigurationBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FragmentOutputSettings extends Fragment {
-    FragmentOutputsettingsBinding mBinding;
-
+public class FragmentTimer_Config extends Fragment {
+    FragmentTimmerconfigurationBinding mBinding;
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_outputsettings, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_timmerconfiguration, container, false);
         return mBinding.getRoot();
     }
 

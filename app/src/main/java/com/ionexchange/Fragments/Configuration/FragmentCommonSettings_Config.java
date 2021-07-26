@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments;
+package com.ionexchange.Fragments.Configuration;
 
 import android.content.IntentSender;
 import android.os.Bundle;
@@ -40,7 +40,7 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
-public class FragmentCommonSettings extends Fragment implements DataReceiveCallback {
+public class FragmentCommonSettings_Config extends Fragment implements DataReceiveCallback {
     FragmentCommonsettingsBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;
