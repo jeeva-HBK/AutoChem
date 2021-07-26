@@ -30,11 +30,12 @@ public class ApplicationClass extends Application {
             inputTypeArr = {"pH", "ORP", "Temp", "Flow/Water Meter", "Conductivity", "Toroidal", "Analog Input", "Tank Level", "Digital Sensor", "Modbus Sensor"},
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
-            resetCalibrationArr = {"No Reset", "Reset"};
+            resetCalibrationArr = {"No Reset", "Reset"},
+            unitArr = {" µS/cm", " mS/cm", "S/cm"};
 
     /* Static Variables */
-    static String mIPAddress = "192.168.1.103", Packet;
-    static int  mPortNumber = 6000;
+    static String mIPAddress = "192.168.1.104", Packet;
+    static int mPortNumber = 6000;
 
     public static CountDownTimer packetTimeOut;
     Context mContext;

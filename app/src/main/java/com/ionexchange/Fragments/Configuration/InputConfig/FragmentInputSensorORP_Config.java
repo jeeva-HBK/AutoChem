@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments.Configuration;
+package com.ionexchange.Fragments.Configuration.InputConfig;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
-import com.ionexchange.databinding.FragmentOrpBinding;
+import com.ionexchange.databinding.FragmentInputsensorOrpBinding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,14 +35,14 @@ import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentInputSensorORP_Config extends Fragment implements DataReceiveCallback {
-    FragmentOrpBinding mBinding;
+    FragmentInputsensorOrpBinding mBinding;
     ApplicationClass mAppClass;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_orp, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_inputsensor_orp, container, false);
         return mBinding.getRoot();
     }
 

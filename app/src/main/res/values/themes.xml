@@ -27,6 +27,8 @@
         <item name="boxStrokeColor">@color/primary</item>
         <item name="endIconTint">@color/primary</item>
         <item name="android:textColorHint">@color/primary</item>
+        <item name="android:clickable">false</item>
+        <item name="android:editable">false</item>
     </style>
 
     <!--App EditText-->

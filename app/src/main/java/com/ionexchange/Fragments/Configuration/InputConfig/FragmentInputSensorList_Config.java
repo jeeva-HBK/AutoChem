@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments.Configuration;
+package com.ionexchange.Fragments.Configuration.InputConfig;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -49,6 +49,9 @@ public class FragmentInputSensorList_Config extends Fragment implements RvOnClic
 
             case "1":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorORP_Config()).commit();
+                break;
+            case "2":
+                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorConductivity_Config()).commit();
                 break;
 
         }

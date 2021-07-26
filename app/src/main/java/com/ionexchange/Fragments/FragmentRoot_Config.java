@@ -10,13 +10,13 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
-import com.ionexchange.Fragments.Configuration.FragmentCommonSettings_Config;
+import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentCommonSettings_Config;
 import com.ionexchange.Fragments.Configuration.FragmentHomeScreen_Config;
-import com.ionexchange.Fragments.Configuration.FragmentInputSensorList_Config;
+import com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorList_Config;
 import com.ionexchange.Fragments.Configuration.FragmentOutputSettings_Config;
-import com.ionexchange.Fragments.Configuration.FragmentTargetIpSettings_Config;
+import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentTargetIpSettings_Config;
 import com.ionexchange.Fragments.Configuration.FragmentTimer_Config;
-import com.ionexchange.Fragments.Configuration.FragmentUnitIpSettings_Config;
+import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentUnitIpSettings_Config;
 import com.ionexchange.Fragments.Configuration.FragmentVirtualSensor_Config;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;

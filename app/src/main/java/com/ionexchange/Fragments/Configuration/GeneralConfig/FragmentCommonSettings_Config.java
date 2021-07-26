@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments.Configuration;
+package com.ionexchange.Fragments.Configuration.GeneralConfig;
 
 import android.content.IntentSender;
 import android.os.Bundle;
