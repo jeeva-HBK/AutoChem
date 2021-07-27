@@ -42,9 +42,11 @@
                 android:id="@+id/server1ip_targetipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:digits="0123456789."
                 android:hint="Server 1 Ip"
-                android:inputType="number"
-                android:digits="0123456789."/>
+                android:imeOptions="actionNext"
+                android:inputType="number|numberDecimal"
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -65,7 +67,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Server 1 Port"
-                android:inputType="number" />
+                android:maxLength="5"
+                android:imeOptions="actionNext"
+                android:inputType="number|numberDecimal"
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -85,9 +90,11 @@
                 android:id="@+id/tabip_targetipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:digits="1234567890."
                 android:hint="Tablet Ip"
-                android:inputType="number"
-                android:digits="1234567890."/>
+                android:imeOptions="actionNext"
+                android:inputType="number|numberDecimal"
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -108,7 +115,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Tablet Port"
-                android:inputType="number" />
+                android:maxLength="5"
+                android:imeOptions="actionDone"
+                android:inputType="number|numberDecimal"
+                android:maxLines="1"
+                />
 
         </com.google.android.material.textfield.TextInputLayout>
 

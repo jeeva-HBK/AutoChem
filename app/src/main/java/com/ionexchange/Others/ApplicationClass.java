@@ -121,6 +121,40 @@ public class ApplicationClass extends Application {
         mContext.unregisterReceiver(receiver);
     }
 
+
+    public String formDigits(int digits, String value) {
+        String finalDigits = null;
+        switch (digits) {
+            case 0:
+                // Return without Forming digits
+                finalDigits = (value).substring(value.length());
+                break;
+            case 1:
+                finalDigits = ("0" + value).substring(value.length());
+                break;
+            case 2:
+                finalDigits = ("00" + value).substring(value.length());
+                break;
+
+            case 3:
+                finalDigits = ("000" + value).substring(value.length());
+                break;
+
+            case 4:
+                finalDigits = ("0000" + value).substring(value.length());
+                break;
+
+            case 5:
+                finalDigits = ("00000" + value).substring(value.length());
+                break;
+
+            case 6:
+                finalDigits = ("000000" + value).substring(value.length());
+                break;
+        }
+        return finalDigits;
+    }
+
     public void sendPacket(final DataReceiveCallback listener, String packet) {
         tcp = new TCP();
         this.listener = listener;

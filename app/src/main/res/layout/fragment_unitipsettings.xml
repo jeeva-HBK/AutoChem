@@ -43,9 +43,11 @@
                 android:id="@+id/ip_unitipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:digits="1234567890"
                 android:hint="IP Address"
-                android:digits="1234567890."
-                android:inputType="number" />
+                android:imeOptions="actionNext"
+                android:inputType="number|numberDecimal"
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -67,9 +69,11 @@
                 android:id="@+id/subNet_unitipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Subnet Ip"
                 android:digits="1234567890."
-                android:inputType="number" />
+                android:hint="Subnet Ip"
+                android:imeOptions="actionNext"
+                android:inputType="number|numberDecimal"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!--GateWay Address-->
@@ -88,9 +92,11 @@
                 android:id="@+id/gateway_unitipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Gateway Ip"
                 android:digits="1234567890."
-                android:inputType="number" />
+                android:hint="Gateway Ip"
+                android:imeOptions="actionNext"
+                android:inputType="number|numberDecimal"
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -112,8 +118,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:digits="1234567890."
-                android:inputType="number"
-                android:hint="Port" />
+                android:hint="Port"
+                android:imeOptions="actionNext"
+                android:inputType="number|numberDecimal"
+                android:maxLength="5"
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -133,9 +142,12 @@
                 android:id="@+id/DNS1_unitipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="DNS 1 Ip"
                 android:digits="1234567890."
-                android:inputType="number" />
+                android:hint="DNS 1 Ip"
+                android:imeOptions="actionNext"
+                android:inputType="number|numberDecimal"
+                android:maxLength="8"
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -155,9 +167,12 @@
                 android:id="@+id/DNS2_unitipEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="DNS 2 Ip"
                 android:digits="1234567890."
-                android:inputType="number" />
+                android:hint="DNS 2 Ip"
+                android:imeOptions="actionDone"
+                android:inputType="number|numberDecimal"
+                android:maxLength="8"
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -188,11 +203,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:background="@color/colorSecondary"
+                android:backgroundTint="@color/colorSecondary"
                 android:src="@drawable/ic_round_right"
                 app:maxImageSize="50dp"
-                app:tint="@color/black"
-                android:background="@color/colorSecondary"
-                android:backgroundTint="@color/colorSecondary"/>
+                app:tint="@color/black" />
 
 
         </LinearLayout>

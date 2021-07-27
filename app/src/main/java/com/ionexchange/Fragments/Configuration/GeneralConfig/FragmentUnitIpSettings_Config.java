@@ -70,16 +70,31 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
 
     private boolean validateFields() {
         if (isEmpty(mBinding.ipUnitipEDT)) {
+            mBinding.ipUnitipEDT.requestFocus();
+            mAppclass.showSnackBar(getContext(), "Ip Address Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.subNetUnitipEDT)) {
+            mBinding.subNetUnitipEDT.requestFocus();
+            mAppclass.showSnackBar(getContext(), "Subnet Ip Address Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.gatewayUnitipEDT)) {
+            mBinding.gatewayUnitipEDT.requestFocus();
+            mAppclass.showSnackBar(getContext(), "Gateway Ip Address Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.portUnitipEDT)) {
+            mBinding.portUnitipEDT.requestFocus();
+            mAppclass.showSnackBar(getContext(), "Port Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.DNS1UnitipEDT)) {
+            mBinding.DNS1UnitipEDT.requestFocus();
+            mAppclass.showSnackBar(getContext(), "DNS 1 Ip Cannot be Empty");
             return false;
-        } else return !isEmpty(mBinding.DNS2UnitipEDT);
+        } else if (isEmpty(mBinding.DNS2UnitipEDT)) {
+            mBinding.DNS2UnitipEDT.requestFocus();
+            mAppclass.showSnackBar(getContext(), "DNS 2 Ip Cannot be Empty");
+            return false;
+        }
+        return true;
     }
 
     private Boolean isEmpty(TextInputEditText editText) {
@@ -140,4 +155,6 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
         }
         mActivity.changeProgress(View.GONE);
     }
+
+
 }

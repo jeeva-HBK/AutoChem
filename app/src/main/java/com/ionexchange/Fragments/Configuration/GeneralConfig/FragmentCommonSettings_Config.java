@@ -61,12 +61,7 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
         mActivity = (BaseActivity) getActivity();
         mBinding.saveLayoutCommonSettings.setOnClickListener(this::onCLick);
         mBinding.saveFabCommonSettings.setOnClickListener(this::onCLick);
-        mBinding.myLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getCurrentLocation();
-            }
-        });
+
     }
 
     private void getCurrentLocation() {
@@ -115,10 +110,10 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
 
     private void onCLick(View view) {
         if (validateFields()) {
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_GENERAL + SPILT_CHAR + toString(mBinding.siteIdCommonSettingsEDT) + SPILT_CHAR +
-                    toString(mBinding.siteNameCommonSettingsEDT) + SPILT_CHAR + toString(mBinding.sitePasswordCommonSettingsEDT) + SPILT_CHAR + getRadio(mBinding.radioGroup, mBinding.enableCommonSettings) + SPILT_CHAR + toString(mBinding.siteLocationCommonSettingsEDT) + SPILT_CHAR +
-                    toString(mBinding.alarmDelayCommonSettingsEDT) + SPILT_CHAR + getRadio(mBinding.radioGroup2, mBinding.fahrenheit) + SPILT_CHAR + toString(mBinding.Hours) + toString(mBinding.MM) + toString(mBinding.SS) + toString(mBinding.NN) + toString(mBinding.DD) +
-                    toString(mBinding.month) + toString(mBinding.YYYY));
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_GENERAL + SPILT_CHAR + toString(0, mBinding.siteIdCommonSettingsEDT) + SPILT_CHAR +
+                    toString(0, mBinding.siteNameCommonSettingsEDT) + SPILT_CHAR + toString(0, mBinding.sitePasswordCommonSettingsEDT) + SPILT_CHAR + getRadio(mBinding.radioGroup, mBinding.enableCommonSettings) + SPILT_CHAR + toString(0, mBinding.siteLocationCommonSettingsEDT) + SPILT_CHAR +
+                    toString(2, mBinding.alarmDelayCommonSettingsEDT) + SPILT_CHAR + getRadio(mBinding.radioGroup2, mBinding.fahrenheit) + SPILT_CHAR + toString(2, mBinding.Hours) + toString(2, mBinding.MM) + toString(2, mBinding.SS) + toString(1, mBinding.NN) + toString(2, mBinding.DD) +
+                    toString(2, mBinding.month) + toString(4, mBinding.YYYY));
         }
     }
 
@@ -129,34 +124,55 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
         return "0";
     }
 
-    public String toString(EditText editText) {
-        return editText.getText().toString();
+    public String toString(int digit, EditText editText) {
+        return mAppClass.formDigits(digit, editText.getText().toString());
     }
 
     private boolean validateFields() {
         if (isEmpty(mBinding.siteIdCommonSettingsEDT)) {
+            mAppClass.showSnackBar(getContext(), "Site Id Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.siteNameCommonSettingsEDT)) {
+            mAppClass.showSnackBar(getContext(), "Site Name  Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.siteLocationCommonSettingsEDT)) {
+            mAppClass.showSnackBar(getContext(), "Site Location  Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.sitePasswordCommonSettingsEDT)) {
+            mAppClass.showSnackBar(getContext(), "Site Password  Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.alarmDelayCommonSettingsEDT)) {
+            mAppClass.showSnackBar(getContext(), "AlarmDelay  Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.Hours)) {
+            mAppClass.showSnackBar(getContext(), "Hours  Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.MM)) {
+            mAppClass.showSnackBar(getContext(), "Minutes  Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.SS)) {
+            mAppClass.showSnackBar(getContext(), "Seconds  Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.NN)) {
+            mAppClass.showSnackBar(getContext(), "Day Of Week  Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.DD)) {
+            mAppClass.showSnackBar(getContext(), "Date Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.month)) {
+            mAppClass.showSnackBar(getContext(), "Month  Cannot be Empty");
             return false;
-        } else return !isEmpty(mBinding.YYYY);
+        } else if (mBinding.sitePasswordCommonSettingsEDT.getText().length() < 4) {
+            mAppClass.showSnackBar(getContext(), "Invalid Site Password ");
+            return false;
+        } else if (isEmpty(mBinding.YYYY)) {
+            mAppClass.showSnackBar(getContext(), "Year  Cannot be Empty");
+            return false;
+        } else if (mBinding.YYYY.getText().length() < 4) {
+            mAppClass.showSnackBar(getContext(), "Invalid Year");
+            return false;
+        }
+        return true;
     }
 
     private Boolean isEmpty(EditText editText) {
@@ -171,7 +187,7 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
     public void onResume() {
         super.onResume();
         readData();
-        loca();
+
     }
 
     private void loca() {
@@ -247,13 +263,14 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
                     } else if (splitData[9].equals("1")) {
                         mBinding.fahrenheit.setChecked(true);
                     }
-                    // FIXME: 22-07-2021 RTC
-                    mBinding.Hours.setText(splitData[10].substring(1,2));
+                    // FIXME: 22-07-2021 RTC --by silam
+                    mBinding.Hours.setText(splitData[10].substring(1, 2));
                     mBinding.MM.setText(splitData[10].substring(3, 4));
                     mBinding.SS.setText(splitData[10].substring(5, 6));
-                    mBinding.NN.setText(splitData[10].substring(7,8));
-                    mBinding.month.setText(splitData[10].substring(9, 10));
-                    mBinding.YYYY.setText(splitData[10].substring(10, 13));
+                    mBinding.NN.setText(splitData[10].substring(7));
+                    mBinding.DD.setText(splitData[10].substring(8, 9));
+                    mBinding.month.setText(splitData[10].substring(10, 11));
+                    mBinding.YYYY.setText(splitData[10].substring(12, 15));
 
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), String.valueOf(R.string.readFailed));

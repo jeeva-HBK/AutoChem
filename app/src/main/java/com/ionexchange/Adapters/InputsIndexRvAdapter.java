@@ -14,22 +14,22 @@ import com.ionexchange.R;
 
 import org.jetbrains.annotations.NotNull;
 
-public class InputsRvAdapter extends RecyclerView.Adapter<InputsRvAdapter.ViewHolder> {
+public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdapter.ViewHolder> {
     RvOnClick rvOnClick;
-    public InputsRvAdapter(RvOnClick rvOnClick) {
+    public InputsIndexRvAdapter(RvOnClick rvOnClick) {
         this.rvOnClick = rvOnClick;
     }
 
     @NonNull
     @NotNull
     @Override
-    public InputsRvAdapter.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+    public InputsIndexRvAdapter.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.input_rv_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull InputsRvAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull InputsIndexRvAdapter.ViewHolder holder, int position) {
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

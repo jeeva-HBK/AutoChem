@@ -15,7 +15,7 @@ import com.ionexchange.Fragments.Configuration.FragmentHomeScreen_Config;
 import com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorList_Config;
 import com.ionexchange.Fragments.Configuration.FragmentOutputSettings_Config;
 import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentTargetIpSettings_Config;
-import com.ionexchange.Fragments.Configuration.FragmentTimer_Config;
+import com.ionexchange.Fragments.Configuration.TimerConfig.FragmentTimer_Config;
 import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentUnitIpSettings_Config;
 import com.ionexchange.Fragments.Configuration.FragmentVirtualSensor_Config;
 import com.ionexchange.Others.ApplicationClass;

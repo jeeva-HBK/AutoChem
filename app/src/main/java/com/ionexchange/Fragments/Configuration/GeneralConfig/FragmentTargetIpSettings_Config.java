@@ -57,14 +57,19 @@ public class FragmentTargetIpSettings_Config extends Fragment implements DataRec
 
     private boolean validateFields() {
         if (isEmpty(mBinding.server1ipTargetipEDT)) {
+            mAppClass.showSnackBar(getContext(),"Server 1 Ip Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.server1portTargetipEDT)) {
+            mAppClass.showSnackBar(getContext(),"Server 1 Port Ip Cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.server1portTargetipEDT)) {
+        }  else if (isEmpty(mBinding.tabipTargetipEDT)) {
+            mAppClass.showSnackBar(getContext(),"Tablet Ip Port Ip Cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.tabipTargetipEDT)) {
+        } else if (!isEmpty(mBinding.tabportTargetipEDT)){
+            mAppClass.showSnackBar(getContext(),"Tablet Port Port Ip Cannot be Empty");
             return false;
-        } else return !isEmpty(mBinding.tabportTargetipEDT);
+        }
+        return true;
     }
 
     private boolean isEmpty(EditText editText) {

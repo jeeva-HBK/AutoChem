@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.ionexchange.Adapters.InputsRvAdapter;
+import com.ionexchange.Adapters.InputsIndexRvAdapter;
 import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsettingsBinding;
@@ -35,7 +35,7 @@ public class FragmentInputSensorList_Config extends Fragment implements RvOnClic
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mBinding.inputsRv.setLayoutManager(new GridLayoutManager(getContext(), 4));
-        mBinding.inputsRv.setAdapter(new InputsRvAdapter(rvOnClick = this));
+        mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(rvOnClick = this));
     }
 
     @Override
