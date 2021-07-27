@@ -7,8 +7,9 @@
         android:layout_height="match_parent">
 
         <View
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:id="@+id/backArrow"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:background="@drawable/ic_back"
             app:layout_constraintBottom_toBottomOf="@+id/inputNumber_inputSettings"
             app:layout_constraintStart_toStartOf="@+id/inputLabel_inputSettings"

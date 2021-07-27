@@ -46,12 +46,17 @@ public class FragmentInputSensorList_Config extends Fragment implements RvOnClic
             case "0":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorPh_Config(inputNumber)).commit();
                 break;
-
             case "1":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorORP_Config()).commit();
                 break;
             case "2":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorConductivity_Config()).commit();
+                break;
+            case "3":
+                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorToroidalConductivity_config()).commit();
+                break;
+            case "4":
+                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorTemp_config()).commit();
                 break;
 
         }

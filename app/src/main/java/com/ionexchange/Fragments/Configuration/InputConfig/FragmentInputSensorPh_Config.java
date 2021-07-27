@@ -67,6 +67,10 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
 
         mBinding.DeleteLayoutInputSettings.setOnClickListener(this::delete);
         mBinding.DeleteFabInputSettings.setOnClickListener(this::delete);
+
+        mBinding.backArrow.setOnClickListener(v ->{
+            mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+        });
     }
 
     private void delete(View view) {
@@ -142,6 +146,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                 mBinding.bufferTypeInputSettingATXT.setAdapter(getAdapter(bufferArr));
                 mBinding.tempLinkedInputSettingATXT.setAdapter(getAdapter(tempLinkedArr));
                 mBinding.resetCalibrationInputSettingEDT.setAdapter(getAdapter(resetCalibrationArr));
+
                 mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "01");
     }
 

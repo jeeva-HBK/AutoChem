@@ -57,6 +57,9 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
 
         mBinding.orpDeleteFabInputSettings.setOnClickListener(this::delete);
         mBinding.orpDeleteFabInputSettings.setOnClickListener(this::delete);
+        mBinding.backArrow.setOnClickListener(v ->{
+            mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+        });
     }
 
     private void delete(View view) {
@@ -64,7 +67,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     }
 
     private void save(View view) {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "02" + SPILT_CHAR + "ORP" +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "02" + SPILT_CHAR + toString(mBinding.orpInputLabelISEDT) +
                 getPosition(toString(mBinding.orpSensorActISEDT), sensorActivationArr) + SPILT_CHAR + toString(mBinding.orpInputLabelISEDT) + SPILT_CHAR + toString(mBinding.orpSmoothingFactorISEDT) + SPILT_CHAR +
                 toString(mBinding.orpalarmLowISEDT) + SPILT_CHAR + toString(mBinding.orpalarmHighISEDT) + SPILT_CHAR + toString(mBinding.orpCalibrationAlarmRequiredISEDT) + SPILT_CHAR +
                 getPosition(toString(mBinding.orpResetCalibrationISEDT), resetCalibrationArr)

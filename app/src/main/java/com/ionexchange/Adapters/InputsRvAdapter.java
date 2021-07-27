@@ -3,6 +3,7 @@ package com.ionexchange.Adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -16,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 public class InputsRvAdapter extends RecyclerView.Adapter<InputsRvAdapter.ViewHolder> {
     RvOnClick rvOnClick;
     public InputsRvAdapter(RvOnClick rvOnClick) {
-
         this.rvOnClick = rvOnClick;
     }
 
@@ -36,19 +36,23 @@ public class InputsRvAdapter extends RecyclerView.Adapter<InputsRvAdapter.ViewHo
                 rvOnClick.onClick(String.valueOf(position));
             }
         });
+        holder.inputNumber.setText(String.valueOf(position + 1));
     }
 
     @Override
     public int getItemCount() {
-        return 16;
+        return 44;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout view;
+        TextView inputType, inputNumber;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             view = itemView.findViewById(R.id.rv_view);
+            inputType = itemView.findViewById(R.id.typeTv);
+            inputNumber = itemView.findViewById(R.id.inputNumberRv);
         }
     }
 }

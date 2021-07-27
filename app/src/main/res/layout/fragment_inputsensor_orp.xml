@@ -9,13 +9,14 @@
         android:layout_height="match_parent"
         android:visibility="visible">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tool"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/primary"/>
-
+        <View
+            android:id="@+id/backArrow"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="@+id/orpInputNumber_IS"
+            app:layout_constraintStart_toStartOf="@+id/orpInputLabel_IS"
+            app:layout_constraintTop_toTopOf="@+id/orpInputNumber_IS" />
 
         <!--Input Number-->
         <com.google.android.material.textfield.TextInputLayout
@@ -27,7 +28,7 @@
             app:layout_constraintEnd_toEndOf="@+id/orpSensorType_IS"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/orpSensorType_IS"
-            app:layout_constraintTop_toBottomOf="@+id/tool">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/orpInputNumber_inputSettingsEDT"
