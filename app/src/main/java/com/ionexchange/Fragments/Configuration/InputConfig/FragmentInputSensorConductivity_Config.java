@@ -21,9 +21,6 @@ import com.ionexchange.databinding.FragmentInputsensorCondBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
@@ -82,8 +79,13 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     }
 
     private int getPosition(String string, String[] strArr) {
-        List list = Arrays.asList(strArr);
-        return list.indexOf(string);
+        int i;
+        for ( i = 0; i < strArr.length; i++) {
+            if (string.equals(strArr[i])){
+                return i;
+            }
+        }
+        return i;
     }
 
     private String toString(EditText editText) {

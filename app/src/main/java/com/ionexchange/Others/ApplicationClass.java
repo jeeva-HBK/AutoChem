@@ -31,10 +31,14 @@ public class ApplicationClass extends Application {
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},
-            unitArr = {" µS/cm", " mS/cm", "S/cm"};
+            unitArr = {" µS/cm", " mS/cm", "S/cm"},
+            // Flow Meter
+            flowMeterTypeArr = {"Analog Flow Meter", "Flow Meter Contactor", "Paddle Wheel", "Feed Monitor"},
+            flowUnitArr = {"Volume", "Gallons", "Litres", "Cubic Meters", "Millions of Gallons"},
+            scheduleReset = {"No Schedule Reset", "Daily", "Weekly", "Annually"};
 
     /* Static Variables */
-    static String mIPAddress = "192.168.1.104", Packet;
+    static String mIPAddress = "192.168.1.103", Packet;
     static int mPortNumber = 6000;
 
     public static CountDownTimer packetTimeOut;

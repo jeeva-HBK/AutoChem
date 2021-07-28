@@ -114,6 +114,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     @Override
     public void OnDataReceive(String data) {
         if (data != null) {
+
             handleResponse(data.split("\\*")[1].split("#"));
         }
     }

@@ -16,6 +16,7 @@ import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsettingsBinding;
 
+
 import org.jetbrains.annotations.NotNull;
 
 public class FragmentInputSensorList_Config extends Fragment implements RvOnClick {
@@ -57,6 +58,9 @@ public class FragmentInputSensorList_Config extends Fragment implements RvOnClic
                 break;
             case "4":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorTemp_config()).commit();
+                break;
+            case "5":
+                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorFlow_config()).commit();
                 break;
 
         }
