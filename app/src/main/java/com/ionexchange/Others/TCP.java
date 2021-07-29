@@ -13,6 +13,8 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.ionexchange.Others.ApplicationClass.Packet;
 import static com.ionexchange.Others.ApplicationClass.mIPAddress;
@@ -27,6 +29,8 @@ public class TCP extends IntentService {
     public static BufferedReader _inputSteam;
 
     public String startPacket = "{*", endPacket = "*}";
+
+    public boolean dataReceived = false;
 
     public TCP() {
         super("Test the service");
@@ -87,8 +91,17 @@ public class TCP extends IntentService {
                                 socketDevice.getOutputStream())), true);
 
                 out0.println(Packet);
-
+                dataReceived = false;
                 Log.e(TAG, "Sent -->  " + Packet);
+                int delay = 10000;// in ms
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    public void run() {
+                        if (!dataReceived) {
+                            intentMessage("Timeout");
+                        }
+                    }
+                }, delay);
 
                 return true;
             } catch (Exception e) {
@@ -109,6 +122,7 @@ public class TCP extends IntentService {
                     String message = new String(buffer).substring(0, charsRead);
                     if (!message.isEmpty()) {
                         intentMessage(message);
+                        dataReceived = true;
                         Log.e(TAG, "Received <--  " + message);
                     } else {
                         Log.d("Receive Error Message", message);

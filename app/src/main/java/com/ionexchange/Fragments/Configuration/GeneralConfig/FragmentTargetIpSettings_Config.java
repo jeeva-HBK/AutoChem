@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
@@ -30,6 +31,7 @@ import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 public class FragmentTargetIpSettings_Config extends Fragment implements DataReceiveCallback {
     FragmentTargetipsettingsBinding mBinding;
     ApplicationClass mAppClass;
+    BaseActivity mActivity;
     private static final String TAG = "FragmentTargetIpSetting";
 
     @Nullable
@@ -44,7 +46,7 @@ public class FragmentTargetIpSettings_Config extends Fragment implements DataRec
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
-
+        mActivity = (BaseActivity) getActivity();
         mBinding.saveFab.setOnClickListener(this::writeData);
         mBinding.saveLayoutUnitIp.setOnClickListener(this::writeData);
     }
@@ -57,16 +59,16 @@ public class FragmentTargetIpSettings_Config extends Fragment implements DataRec
 
     private boolean validateFields() {
         if (isEmpty(mBinding.server1ipTargetipEDT)) {
-            mAppClass.showSnackBar(getContext(),"Server 1 Ip Cannot be Empty");
+            mAppClass.showSnackBar(getContext(), "Server 1 Ip Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.server1portTargetipEDT)) {
-            mAppClass.showSnackBar(getContext(),"Server 1 Port Ip Cannot be Empty");
+            mAppClass.showSnackBar(getContext(), "Server 1 Port Ip Cannot be Empty");
             return false;
-        }  else if (isEmpty(mBinding.tabipTargetipEDT)) {
-            mAppClass.showSnackBar(getContext(),"Tablet Ip Port Ip Cannot be Empty");
+        } else if (isEmpty(mBinding.tabipTargetipEDT)) {
+            mAppClass.showSnackBar(getContext(), "Tablet Ip Port Ip Cannot be Empty");
             return false;
-        } else if (!isEmpty(mBinding.tabportTargetipEDT)){
-            mAppClass.showSnackBar(getContext(),"Tablet Port Port Ip Cannot be Empty");
+        } else if (isEmpty(mBinding.tabportTargetipEDT)) {
+            mAppClass.showSnackBar(getContext(), "Tablet Port Port Ip Cannot be Empty");
             return false;
         }
         return true;
@@ -81,6 +83,7 @@ public class FragmentTargetIpSettings_Config extends Fragment implements DataRec
     }
 
     private String formData() {
+        mActivity.showProgress();
         return DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_target_ip +
                 SPILT_CHAR + toString(mBinding.server1ipTargetipEDT) + SPILT_CHAR + toString(mBinding.server1portTargetipEDT)
                 + SPILT_CHAR + toString(mBinding.tabipTargetipEDT) + SPILT_CHAR + toString(mBinding.tabportTargetipEDT);
@@ -97,11 +100,25 @@ public class FragmentTargetIpSettings_Config extends Fragment implements DataRec
     }
 
     private void readData() {
+        mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_target_ip);
     }
 
     @Override
     public void OnDataReceive(String data) {
+        mActivity.dismissProgress();
+        if (data.equals("FailedToConnect")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("pckError")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("sendCatch")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("Timeout")) {
+            mAppClass.showSnackBar(getContext(), "TimeOut");
+        }
         if (data != null) {
             handleData(data.split("\\*")[1].split("#"));
         }

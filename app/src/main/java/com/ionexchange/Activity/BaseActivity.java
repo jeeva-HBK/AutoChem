@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -20,6 +21,7 @@ import com.ionexchange.databinding.ActivityBaseBinding;
 public class BaseActivity extends AppCompatActivity {
     ActivityBaseBinding mBinding;
     private static final String TAG = "BaseActivity";
+    boolean canGoBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class BaseActivity extends AppCompatActivity {
         }
         return super.dispatchTouchEvent(ev);
     }
+
     public static void hideKeyboard(Activity activity) {
         if (activity != null && activity.getWindow() != null && activity.getWindow().getDecorView() != null) {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -66,5 +69,22 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void showProgress() {
+        mBinding.progressCircular.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        canGoBack = false;
+    }
+
+    public void dismissProgress() {
+        mBinding.progressCircular.setVisibility(View.GONE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        canGoBack = true;
+    }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 
 }

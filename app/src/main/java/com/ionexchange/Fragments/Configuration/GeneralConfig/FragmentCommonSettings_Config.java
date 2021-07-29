@@ -226,11 +226,25 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
     }
 
     private void readData() {
+        mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_GENERAL);
     }
 
     @Override
     public void OnDataReceive(String data) {
+        mActivity.dismissProgress();
+        if (data.equals("FailedToConnect")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("pckError")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("sendCatch")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("Timeout")) {
+            mAppClass.showSnackBar(getContext(), "TimeOut");
+        }
         if (data != null) {
             handleResponce(data.split("\\*")[1].split("#"));
         }

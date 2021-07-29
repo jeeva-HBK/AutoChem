@@ -59,14 +59,7 @@
                     android:layout_centerHorizontal="true"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
-                    app:lottie_rawRes="@raw/lottie_progrss" />
-
-               <!-- <ProgressBar
-                    android:id="@+id/ProgressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="?android:attr/progressBarStyleLarge"
-                    android:progress="50" />-->
+                    app:lottie_rawRes="@raw/progress" />
 
             </RelativeLayout>
 

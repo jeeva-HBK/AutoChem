@@ -33,6 +33,7 @@
                 android:layout_height="match_parent"
                 android:digits="0123456789"
                 android:editable="false"
+                android:focusable="false"
                 android:hint="Input Number"
                 android:inputType="number"
                 android:maxLength="2"
@@ -60,6 +61,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Input Label"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -84,6 +87,8 @@
                 android:layout_height="match_parent"
                 android:clickable="false"
                 android:editable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:hint="Sensor Type" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -108,6 +113,8 @@
                 android:layout_height="match_parent"
                 android:clickable="false"
                 android:editable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:hint="Sensor Activation" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -130,6 +137,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Temperature Value"
+                android:imeOptions="actionNext"
+                android:inputType="number"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -150,6 +159,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Smoothing Factor"
+                android:imeOptions="actionNext"
+                android:inputType="number"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -169,6 +180,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Calibration Required Alarm"
+                android:imeOptions="actionNext"
+                android:inputType="number"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -191,6 +204,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Alarm Low"
+                android:imeOptions="actionNext"
+                android:inputType="number"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -210,6 +225,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Alarm High"
+                android:imeOptions="actionNext"
+                android:inputType="number"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -230,6 +247,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Reset Calibration"
+                android:imeOptions="actionDone"
+                android:inputType="number"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>

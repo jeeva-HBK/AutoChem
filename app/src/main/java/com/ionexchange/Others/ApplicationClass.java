@@ -32,10 +32,16 @@ public class ApplicationClass extends Application {
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},
             unitArr = {" µS/cm", " mS/cm", "S/cm"},
-            // Flow Meter
-            flowMeterTypeArr = {"Analog Flow Meter", "Flow Meter Contactor", "Paddle Wheel", "Feed Monitor"},
+    // Flow Meter
+    flowMeterTypeArr = {"Analog Flow Meter", "Flow Meter Contactor", "Paddle Wheel", "Feed Monitor"},
             flowUnitArr = {"Volume", "Gallons", "Litres", "Cubic Meters", "Millions of Gallons"},
-            scheduleResetArr = {"No Schedule Reset", "Daily", "Weekly", "Annually"};
+            scheduleResetArr = {"No Schedule Reset", "Daily", "Weekly", "Annually"},
+   //
+    digital_Arr = {"NC", "NO"},
+            modBusType = {"ST500", "CR300CS", "CR-300 CU", "ST-590", "ST-588", "ST-500 RO"},
+            modBusUnitArr = {"ppb", "ppm", "mpy"},
+            analogType = {"(4-20mA)", "(0 – 10V)"},
+            analogUnitArr = {"ma", "V"};
 
     /* Static Variables */
     static String mIPAddress = "192.168.1.103", Packet;

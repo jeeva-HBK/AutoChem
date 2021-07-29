@@ -14,15 +14,13 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorToraidalconductivityBinding;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
@@ -41,6 +39,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     private static final String TAG = "FragmentInputSensorCond";
     FragmentInputsensorToraidalconductivityBinding mBinding;
     ApplicationClass mAppClass;
+    BaseActivity mActivity;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -54,13 +53,13 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        mActivity = (BaseActivity) getActivity();
         initAdapters();
-
         mBinding.saveFabCondIS.setOnClickListener(this::save);
         mBinding.saveLayoutTorCondIS.setOnClickListener(this::save);
         mBinding.DeleteFabCondIS.setOnClickListener(this::delete);
         mBinding.DeleteLayoutTorCondIS.setOnClickListener(this::delete);
-        mBinding.backArrow.setOnClickListener(v ->{
+        mBinding.backArrow.setOnClickListener(v -> {
             mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
         });
     }
@@ -70,23 +69,41 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     }
 
     private void save(View view) {
-        // getPosition(toString(mBinding.sensorTypeCondISATXT), inputTypeArr)
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "04" + SPILT_CHAR +
-                toString(mBinding.inputNumberTorCondISEDT) + SPILT_CHAR + getPosition(toString(mBinding.sensorActivationTorCondISATXT), sensorActivationArr) + SPILT_CHAR +
-                toString(mBinding.inputLabelTorCondISEdt) + SPILT_CHAR + getPosition(toString(mBinding.tempLinkedTorCondISEdt), tempLinkedArr) + SPILT_CHAR + toString(mBinding.tempValueTorCondISEdt) + SPILT_CHAR +
-                getPosition(toString(mBinding.unitOfMeasureTorCondISEdt), unitArr) + SPILT_CHAR + toString(mBinding.tempCompTorCondISEdt) + SPILT_CHAR + toString(mBinding.tempCompFacTorCondISEdt) + SPILT_CHAR +
-                toString(mBinding.smoothingFactorTorConEDT) + SPILT_CHAR + toString(mBinding.alarmLowTorCondISEdt) + SPILT_CHAR + toString(mBinding.alarmHighTorCondISEdt) + SPILT_CHAR + toString(mBinding.calibRequiredAlarmTorCondISEdt) + SPILT_CHAR +
-                getPosition(toString(mBinding.resetCalibTorCondISEdt), resetCalibrationArr)
-        );
+        if (validation()) {
+            mActivity.showProgress();
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                    INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                    toString(2, mBinding.inputNumberTorCondISEDT) + SPILT_CHAR +
+                    getPosition(2, toString(mBinding.sensorTypeTorCondISATXT), inputTypeArr) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.sensorActivationTorCondISATXT), sensorActivationArr) + SPILT_CHAR +
+                    toString(0, mBinding.inputLabelTorCondISEdt) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.tempLinkedTorCondISEdt), tempLinkedArr) + SPILT_CHAR +
+                    toString(2, mBinding.tempValueTorCondISEdt) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.unitOfMeasureTorCondISEdt), unitArr) + SPILT_CHAR +
+                    toString(4, mBinding.tempCompTorCondISEdt) + SPILT_CHAR +
+                    toString(4, mBinding.tempCompFacTorCondISEdt) + SPILT_CHAR +
+                    toString(3, mBinding.smoothingFactorTorConEDT) + SPILT_CHAR +
+                    toString(6, mBinding.alarmLowTorCondISEdt) + SPILT_CHAR +
+                    toString(6, mBinding.alarmHighTorCondISEdt) + SPILT_CHAR +
+                    toString(3, mBinding.calibRequiredAlarmTorCondISEdt) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.resetCalibTorCondISEdt), resetCalibrationArr)
+            );
+        }
     }
 
-    private int getPosition(String string, String[] strArr) {
-        List list = Arrays.asList(strArr);
-        return list.indexOf(string);
+    private String getPosition(int digit, String string, String[] strArr) {
+        String j = null;
+        for (int i = 0; i < strArr.length; i++) {
+            if (string.equals(strArr[i])) {
+                j = String.valueOf(i);
+            }
+        }
+        return mAppClass.formDigits(digit, j);
     }
 
-    private String toString(EditText editText) {
-        return editText.getText().toString();
+
+    private String toString(int digits, EditText editText) {
+        return mAppClass.formDigits(digits, editText.getText().toString());
     }
 
     private String toString(AutoCompleteTextView editText) {
@@ -108,22 +125,35 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     @Override
     public void onResume() {
         super.onResume();
+        mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "04");
     }
 
     @Override
     public void OnDataReceive(String data) {
+        mActivity.dismissProgress();
+        if (data.equals("FailedToConnect")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("pckError")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("sendCatch")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("Timeout")) {
+            mAppClass.showSnackBar(getContext(), "TimeOut");
+        }
         if (data != null) {
-
             handleResponse(data.split("\\*")[1].split("#"));
         }
     }
 
     private void handleResponse(String[] spiltData) {
+        mActivity.dismissProgress();
         // read Res - {*1# 04# 0# | 03# 04# 0# CONCON# 1# 33# 1# 2345# 2371# 1500# 100# 120000# 220000# 300# 1*}
         // write Res -
         if (spiltData[1].equals(INPUT_SENSOR_CONFIG)) {
-
             if (spiltData[0].equals(READ_PACKET)) {
                 if (spiltData[2].equals(RES_SUCCESS)) {
                     mBinding.inputNumberTorCondISEDT.setText(spiltData[3]);
@@ -158,5 +188,39 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
             Log.e(TAG, "handleResponse: Wrong Packet");
         }
 
+    }
+
+    boolean validation() {
+        if (isEmpty(mBinding.smoothingFactorTorConEDT)) {
+            mAppClass.showSnackBar(getContext(), "Smoothing Factor Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.inputLabelTorCondISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Input Label Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.calibRequiredAlarmTorCondISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Calibration Alarm Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.tempCompFacTorCondISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Temperature Compensation Value Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.tempLinkedTorCondISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Temperature Linked  Value Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.alarmLowTorCondISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Alarm Low Factor Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.alarmHighTorCondISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Alarm High Factor Cannot be Empty");
+            return false;
+        }
+        return true;
+    }
+
+    private Boolean isEmpty(EditText editText) {
+        if (editText.getText() == null || editText.getText().toString().equals("")) {
+            editText.setError("Field shouldn't empty !");
+            return true;
+        }
+        return false;
     }
 }

@@ -34,9 +34,12 @@
                 android:id="@+id/orpInputNumber_inputSettingsEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clickable="false"
                 android:digits="0123456789"
                 android:editable="false"
+                android:focusable="false"
                 android:hint="Input Number"
+                android:imeOptions="actionNext"
                 android:inputType="number"
                 android:maxLength="2"
                 android:maxLines="1" />
@@ -63,6 +66,7 @@
                 android:layout_height="match_parent"
                 android:editable="false"
                 android:hint="Input Label"
+                android:imeOptions="actionNext"
                 android:inputType="textPersonName"
                 android:maxLength="20"
                 android:maxLines="1" />
@@ -87,7 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:editable="false"
-                android:hint="Sensor Type"/>
+                android:hint="Sensor Type" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -133,6 +137,7 @@
                 android:layout_height="match_parent"
                 android:editable="false"
                 android:hint="Smoothing Factor"
+                android:imeOptions="actionNext"
                 android:inputType="textPersonName"
                 android:maxLength="3"
                 android:maxLines="1" />
@@ -156,6 +161,7 @@
                 android:layout_height="match_parent"
                 android:editable="false"
                 android:hint="Calibration Alarm Required"
+                android:imeOptions="actionNext"
                 android:inputType="number"
                 android:maxLength="6"
                 android:maxLines="1" />
@@ -202,6 +208,7 @@
                 android:layout_height="match_parent"
                 android:editable="false"
                 android:hint="Alarm Low"
+                android:imeOptions="actionNext"
                 android:inputType="number"
                 android:maxLength="6"
                 android:maxLines="1" />
@@ -226,6 +233,7 @@
                 android:layout_height="match_parent"
                 android:editable="false"
                 android:hint="Alarm High"
+                android:imeOptions="actionDone"
                 android:inputType="number"
                 android:maxLength="6"
                 android:maxLines="1" />

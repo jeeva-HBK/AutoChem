@@ -14,15 +14,13 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorTempBinding;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
@@ -39,6 +37,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     private static final String TAG = "FragmentInputSensorTemp";
     FragmentInputsensorTempBinding mBinding;
     ApplicationClass mAppClass;
+    BaseActivity mActivity;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -52,13 +51,14 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        mActivity = (BaseActivity)getActivity();
         initAdapter();
         mBinding.saveFabCondIS.setOnClickListener(this::save);
         mBinding.saveLayoutTempIS.setOnClickListener(this::save);
 
         mBinding.DeleteFabCondIS.setOnClickListener(this::delete);
         mBinding.DeleteLayoutTempIS.setOnClickListener(this::delete);
-        mBinding.backArrow.setOnClickListener(v ->{
+        mBinding.backArrow.setOnClickListener(v -> {
             mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
         });
     }
@@ -69,11 +69,15 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
 
     // getPosition(toString(mBinding.sensorTypeTempISATXT), inputTypeArr)
     private void save(View view) {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + toString(mBinding.inputNumberTempISEDT) + SPILT_CHAR +
-                "02" + SPILT_CHAR + getPosition(toString(mBinding.sensorActivationTempISATXT), sensorActivationArr) + SPILT_CHAR +
-                toString(mBinding.inputLabelTempISEdt) + SPILT_CHAR + toString(mBinding.tempValueTempISEdt) + SPILT_CHAR + toString(mBinding.smoothingFactorTempISEdt) + SPILT_CHAR + toString(mBinding.alarmLowTempISEdt) + SPILT_CHAR +
-                toString(mBinding.alarmHighTempISEdt) + SPILT_CHAR + toString(mBinding.calibRequiredAlarmTempISEdt) + SPILT_CHAR + getPosition(toString(mBinding.resetCalibTempISEdt), resetCalibrationArr));
+        if (validation()) {
+            mActivity.showProgress();
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + toString(2, mBinding.inputNumberTempISEDT) + SPILT_CHAR +
+                    getPosition(2, toString(mBinding.sensorTypeTempISATXT), inputTypeArr) + SPILT_CHAR + getPosition(1, toString(mBinding.sensorActivationTempISATXT), sensorActivationArr) + SPILT_CHAR +
+                    toString(0, mBinding.inputLabelTempISEdt) + SPILT_CHAR + toString(2, mBinding.tempValueTempISEdt) + SPILT_CHAR + toString(3, mBinding.smoothingFactorTempISEdt) + SPILT_CHAR + toString(6, mBinding.alarmLowTempISEdt) + SPILT_CHAR +
+                    toString(6, mBinding.alarmHighTempISEdt) + SPILT_CHAR + toString(3, mBinding.calibRequiredAlarmTempISEdt) + SPILT_CHAR + getPosition(1, toString(mBinding.resetCalibTempISEdt), resetCalibrationArr));
+        }
     }
+
 
     private void initAdapter() {
         mBinding.sensorTypeTempISATXT.setAdapter(getAdapter(inputTypeArr));
@@ -85,13 +89,20 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         return new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, strArr);
     }
 
-    private int getPosition(String string, String[] strArr) {
-        List list = Arrays.asList(strArr);
-        return list.indexOf(string);
+
+    private String getPosition(int digit, String string, String[] strArr) {
+        String j = null;
+        for (int i = 0; i < strArr.length; i++) {
+            if (string.equals(strArr[i])) {
+                j = String.valueOf(i);
+            }
+        }
+        return mAppClass.formDigits(digit, j);
     }
 
-    private String toString(EditText editText) {
-        return editText.getText().toString();
+
+    private String toString(int digits, EditText editText) {
+        return mAppClass.formDigits(digits, editText.getText().toString());
     }
 
     private String toString(AutoCompleteTextView editText) {
@@ -101,11 +112,25 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     @Override
     public void onResume() {
         super.onResume();
+        mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "05");
     }
 
     @Override
     public void OnDataReceive(String data) {
+        mActivity.dismissProgress();
+        if (data.equals("FailedToConnect")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("pckError")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("sendCatch")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("Timeout")) {
+            mAppClass.showSnackBar(getContext(), "TimeOut");
+        }
         if (data != null) {
             handleResponse(data.split("\\*")[1].split("#"));
         }
@@ -141,5 +166,37 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         } else {
             Log.e(TAG, "handleResponse: WRONG_PACK");
         }
+    }
+
+
+    boolean validation() {
+        if (isEmpty(mBinding.smoothingFactorTempISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Smoothing Factor Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.inputLabelTempISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Input Label Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.calibRequiredAlarmTempISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Calibration Alarm Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.tempValueTempISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Temperature Value Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.alarmLowTempISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Alarm Low Factor Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.alarmHighTempISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Alarm High Factor Cannot be Empty");
+            return false;
+        }
+        return true;
+    }
+
+    private Boolean isEmpty(EditText editText) {
+        if (editText.getText() == null || editText.getText().toString().equals("")) {
+            editText.setError("Field shouldn't empty !");
+            return true;
+        }
+        return false;
     }
 }

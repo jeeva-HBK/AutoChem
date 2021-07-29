@@ -64,6 +64,7 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
     }
 
     private void readData() {
+        mActivity.showProgress();
         mAppclass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_panelIpConfig);
     }
 
@@ -112,6 +113,7 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
     }
 
     private String formData() {
+        mActivity.showProgress();
         return DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_panelIpConfig + SPILT_CHAR
                 + toString(mBinding.ipUnitipEDT) + SPILT_CHAR + toString(mBinding.subNetUnitipEDT) + SPILT_CHAR + toString(mBinding.gatewayUnitipEDT) + SPILT_CHAR
                 + toString(mBinding.DNS1UnitipEDT) + SPILT_CHAR + toString(mBinding.DNS2UnitipEDT) + SPILT_CHAR + toString(mBinding.portUnitipEDT);
@@ -119,9 +121,23 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
 
     @Override
     public void OnDataReceive(String data) {
+        mActivity.dismissProgress();
+        if (data.equals("FailedToConnect")) {
+            mAppclass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("pckError")) {
+            mAppclass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("sendCatch")) {
+            mAppclass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("Timeout")) {
+            mAppclass.showSnackBar(getContext(), "TimeOut");
+        }
         if (data != null) {
             handleData(data.split("\\*")[1].split("#"));
         }
+
     }
 
     private void handleData(String[] splitData) {

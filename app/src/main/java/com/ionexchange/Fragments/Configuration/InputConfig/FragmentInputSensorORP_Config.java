@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
@@ -37,6 +38,7 @@ import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 public class FragmentInputSensorORP_Config extends Fragment implements DataReceiveCallback {
     FragmentInputsensorOrpBinding mBinding;
     ApplicationClass mAppClass;
+    BaseActivity mActivity;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -50,6 +52,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        mActivity = (BaseActivity)getActivity();
         initAdapter();
 
         mBinding.orpsaveLayoutInputSettings.setOnClickListener(this::save);
@@ -57,7 +60,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
 
         mBinding.orpDeleteFabInputSettings.setOnClickListener(this::delete);
         mBinding.orpDeleteFabInputSettings.setOnClickListener(this::delete);
-        mBinding.backArrow.setOnClickListener(v ->{
+        mBinding.backArrow.setOnClickListener(v -> {
             mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
         });
     }
@@ -67,20 +70,35 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     }
 
     private void save(View view) {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "02" + SPILT_CHAR + toString(mBinding.orpInputLabelISEDT) +
-                getPosition(toString(mBinding.orpSensorActISEDT), sensorActivationArr) + SPILT_CHAR + toString(mBinding.orpInputLabelISEDT) + SPILT_CHAR + toString(mBinding.orpSmoothingFactorISEDT) + SPILT_CHAR +
-                toString(mBinding.orpalarmLowISEDT) + SPILT_CHAR + toString(mBinding.orpalarmHighISEDT) + SPILT_CHAR + toString(mBinding.orpCalibrationAlarmRequiredISEDT) + SPILT_CHAR +
-                getPosition(toString(mBinding.orpResetCalibrationISEDT), resetCalibrationArr)
-        );
+        if (validation()) {
+            mActivity.showProgress();
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                    INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                    toString(2, mBinding.orpInputNumberInputSettingsEDT) +SPILT_CHAR +
+                    getPosition(2,toString(mBinding.orpSensorTypeEDT), inputTypeArr) +SPILT_CHAR +
+                    getPosition(1,toString(mBinding.orpSensorActISEDT), sensorActivationArr) + SPILT_CHAR +
+                    toString(0, mBinding.orpInputLabelISEDT) + SPILT_CHAR +
+                    toString(3, mBinding.orpSmoothingFactorISEDT) + SPILT_CHAR +
+                    toString(6, mBinding.orpalarmLowISEDT) + SPILT_CHAR +
+                    toString(6, mBinding.orpalarmHighISEDT) + SPILT_CHAR +
+                    toString(3, mBinding.orpCalibrationAlarmRequiredISEDT) + SPILT_CHAR +
+                    getPosition(1,toString(mBinding.orpResetCalibrationISEDT), resetCalibrationArr)
+            );
+        }
     }
 
-    private int getPosition(String string, String[] strArr) {
-        List list = Arrays.asList(strArr);
-        return list.indexOf(string);
+    private String getPosition(int digit, String string, String[] strArr) {
+        String j = null;
+        for (int i = 0; i < strArr.length; i++) {
+            if (string.equals(strArr[i])) {
+                j = String.valueOf(i);
+            }
+        }
+        return mAppClass.formDigits(digit, j);
     }
 
-    private String toString(EditText editText) {
-        return editText.getText().toString();
+    private String toString(int digits, EditText editText) {
+        return mAppClass.formDigits(digits, editText.getText().toString());
     }
 
     private String toString(AutoCompleteTextView editText) {
@@ -100,11 +118,25 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     @Override
     public void onResume() {
         super.onResume();
+        mActivity.showProgress();;
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "02");
     }
 
     @Override
     public void OnDataReceive(String data) {
+        mActivity.dismissProgress();
+        if (data.equals("FailedToConnect")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("pckError")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("sendCatch")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("Timeout")) {
+            mAppClass.showSnackBar(getContext(), "TimeOut");
+        }
         if (data != null) {
             handleResponse(data.split("\\*")[1].split("#"));
         }
@@ -145,5 +177,35 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
             mAppClass.showSnackBar(getContext(), "Received Wrong Pack !");
         }
 
+    }
+
+
+    boolean validation() {
+        if (isEmpty(mBinding.orpSmoothingFactorISEDT)) {
+            mAppClass.showSnackBar(getContext(), "Smoothing Factor Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.orpInputNumberInputSettingsEDT)) {
+            mAppClass.showSnackBar(getContext(), "Input Label Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.orpCalibrationAlarmRequiredISEDT)) {
+            mAppClass.showSnackBar(getContext(), "Calibration Alarm Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.orpalarmLowISEDT)) {
+            mAppClass.showSnackBar(getContext(), "Alarm Low Factor Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.orpalarmHighISEDT)) {
+            mAppClass.showSnackBar(getContext(), "Alarm High Factor Cannot be Empty");
+            return false;
+        }
+        return true;
+    }
+
+
+    private Boolean isEmpty(EditText editText) {
+        if (editText.getText() == null || editText.getText().toString().equals("")) {
+            editText.setError("Field shouldn't empty !");
+            return true;
+        }
+        return false;
     }
 }

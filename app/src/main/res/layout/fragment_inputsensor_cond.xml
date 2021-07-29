@@ -34,6 +34,7 @@
                 android:digits="0123456789"
                 android:editable="false"
                 android:hint="Input Number"
+                android:imeOptions="actionNext"
                 android:inputType="number"
                 android:maxLength="2"
                 android:maxLines="1" />
@@ -60,6 +61,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Input Label"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:maxLength="6"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -83,6 +87,7 @@
                 android:layout_height="match_parent"
                 android:clickable="false"
                 android:editable="false"
+                android:focusable="false"
                 android:hint="Sensor Type" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -104,7 +109,9 @@
                 android:id="@+id/sensorActivation_condISATXT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clickable="false"
                 android:editable="false"
+                android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:hint="Sensor Activation" />
 
@@ -126,6 +133,9 @@
                 android:id="@+id/tempLinked_condISEdt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
                 android:hint="Temperature Linked"
                 android:maxLines="1" />
 
@@ -148,6 +158,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Temperature Value"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="2"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -167,6 +180,10 @@
                 android:id="@+id/unitOfMeasure_condISEdt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:hint="Unit"
                 android:maxLines="1" />
 
@@ -190,6 +207,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Cell Constant"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="4"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -210,6 +230,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Temp Compensation"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="4"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -230,6 +253,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Temp Compensation factor"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="4"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -252,6 +278,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Smoothing Factor"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="3"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -272,6 +301,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Calibration Required Alarm"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="3"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -291,6 +323,9 @@
                 android:id="@+id/resetCalib_condISEdt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
                 android:hint="Reset Calibration"
                 android:maxLines="1" />
 
@@ -314,6 +349,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Alarm Low"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="6"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -334,6 +372,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Alarm High"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:maxLength="6"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>

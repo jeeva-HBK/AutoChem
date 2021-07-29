@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
@@ -38,6 +39,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     private static final String TAG = "FragmentInputSensorCond";
     FragmentInputsensorCondBinding mBinding;
     ApplicationClass mAppClass;
+    BaseActivity mActivity;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -51,6 +53,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        mActivity = (BaseActivity) getActivity();
         initAdapters();
 
         mBinding.saveFabCondIS.setOnClickListener(this::save);
@@ -68,28 +71,72 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     }
 
     private void save(View view) {
-        // getPosition(toString(mBinding.sensorTypeCondISATXT), inputTypeArr)
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "04" + SPILT_CHAR +
-                toString(mBinding.inputNumberCondISEDT) + SPILT_CHAR + getPosition(toString(mBinding.sensorActivationCondISATXT), sensorActivationArr) + SPILT_CHAR +
-                toString(mBinding.inputLabelCondISEdt) + SPILT_CHAR + getPosition(toString(mBinding.tempLinkedCondISEdt), tempLinkedArr) + SPILT_CHAR + toString(mBinding.tempValueCondISEdt) + SPILT_CHAR +
-                getPosition(toString(mBinding.unitOfMeasureCondISEdt), unitArr) + SPILT_CHAR + toString(mBinding.tempCompCondISEdt) + SPILT_CHAR + toString(mBinding.tempCompFacCondISEdt) + SPILT_CHAR +
-                toString(mBinding.smoothingFactorCondISEdt) + SPILT_CHAR + toString(mBinding.alarmLowCondISEdt) + SPILT_CHAR + toString(mBinding.alarmHighCondISEdt) + SPILT_CHAR + toString(mBinding.calibRequiredAlarmCondISEdt) + SPILT_CHAR +
-                getPosition(toString(mBinding.resetCalibCondISEdt), resetCalibrationArr)
-        );
+        if (validation()) {
+            mActivity.showProgress();
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "04" + SPILT_CHAR +
+                    toString(2, mBinding.inputNumberCondISEDT) + SPILT_CHAR + getPosition(2, toString(mBinding.sensorActivationCondISATXT), sensorActivationArr) + SPILT_CHAR +
+                    toString(6, mBinding.inputLabelCondISEdt) + SPILT_CHAR + getPosition(1, toString(mBinding.tempLinkedCondISEdt), tempLinkedArr) + SPILT_CHAR + toString(2, mBinding.tempValueCondISEdt) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.unitOfMeasureCondISEdt), unitArr) + SPILT_CHAR + toString(4, mBinding.tempCompCondISEdt) + SPILT_CHAR + toString(4, mBinding.tempCompFacCondISEdt) + SPILT_CHAR +
+                    toString(3, mBinding.smoothingFactorCondISEdt) + SPILT_CHAR + toString(6, mBinding.alarmLowCondISEdt) + SPILT_CHAR + toString(6, mBinding.alarmHighCondISEdt) + SPILT_CHAR + toString(3, mBinding.calibRequiredAlarmCondISEdt) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.resetCalibCondISEdt), resetCalibrationArr)
+            );
+        }
+
     }
 
-    private int getPosition(String string, String[] strArr) {
-        int i;
-        for ( i = 0; i < strArr.length; i++) {
-            if (string.equals(strArr[i])){
-                return i;
+    boolean validation() {
+        if (isEmpty(mBinding.inputLabelCondISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Input Label Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.tempValueCondISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Temperature Value Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.cellConstantCondISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Cell Constant Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.tempCompCondISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Temperature Compensation Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.tempCompFacCondISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Temperature Compensation Factor Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.smoothingFactorCondISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Smoothing Factor Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.calibRequiredAlarmCondISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Calibration Required Alarm Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.alarmLowCondISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Alarm Low Factor Cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.alarmHighCondISEdt)) {
+            mAppClass.showSnackBar(getContext(), "Alarm High Factor Cannot be Empty");
+            return false;
+        }
+        return true;
+    }
+
+
+    private Boolean isEmpty(EditText editText) {
+        if (editText.getText() == null || editText.getText().toString().equals("")) {
+            editText.setError("Field shouldn't empty !");
+            return true;
+        }
+        return false;
+    }
+
+    private String getPosition(int digit, String string, String[] strArr) {
+        String j = null;
+        for (int i = 0; i < strArr.length; i++) {
+            if (string.equals(strArr[i])) {
+                j = String.valueOf(i);
             }
         }
-        return i;
+        return mAppClass.formDigits(digit, j);
     }
 
-    private String toString(EditText editText) {
-        return editText.getText().toString();
+    private String toString(int digits, EditText editText) {
+        return mAppClass.formDigits(digits, editText.getText().toString());
     }
 
     private String toString(AutoCompleteTextView editText) {
@@ -111,11 +158,25 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     @Override
     public void onResume() {
         super.onResume();
+        mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "03");
     }
 
     @Override
     public void OnDataReceive(String data) {
+        mActivity.dismissProgress();
+        if (data.equals("FailedToConnect")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("pckError")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("sendCatch")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("Timeout")) {
+            mAppClass.showSnackBar(getContext(), "TimeOut");
+        }
         if (data != null) {
             handleResponse(data.split("\\*")[1].split("#"));
         }

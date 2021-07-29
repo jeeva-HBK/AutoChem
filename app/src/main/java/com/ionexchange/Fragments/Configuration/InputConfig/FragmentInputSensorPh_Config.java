@@ -13,15 +13,13 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorPhBinding;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.bufferArr;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
@@ -39,7 +37,7 @@ import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 public class FragmentInputSensorPh_Config extends Fragment implements DataReceiveCallback {
     FragmentInputsensorPhBinding mBinding;
     ApplicationClass mAppClass;
-
+    BaseActivity mActivity;
     private static final String TAG = "FragmentInputSensor";
 
     String inputNumber;
@@ -59,7 +57,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        mActivity = (BaseActivity) getActivity();
         mAppClass = (ApplicationClass) getActivity().getApplication();
         initSensor(inputNumber);
         mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
@@ -68,7 +66,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         mBinding.DeleteLayoutInputSettings.setOnClickListener(this::delete);
         mBinding.DeleteFabInputSettings.setOnClickListener(this::delete);
 
-        mBinding.backArrow.setOnClickListener(v ->{
+        mBinding.backArrow.setOnClickListener(v -> {
             mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
         });
     }
@@ -79,36 +77,44 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
 
     private void save(View view) {
         if (validField()) {
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + toString(mBinding.inputNumberInputSettingsEDT) + SPILT_CHAR +
-                    getPosition(toString(mBinding.sensorInputSettingsATXT), inputTypeArr) + SPILT_CHAR + getPosition(toString(mBinding.sensorActivationInputSettingsATXT), sensorActivationArr) + SPILT_CHAR +
-                    toString(mBinding.inputLabelInputSettingsEdt) + SPILT_CHAR + getPosition(toString(mBinding.bufferTypeInputSettingATXT), bufferArr) + SPILT_CHAR +
-                    getPosition(toString(mBinding.tempLinkedInputSettingATXT), tempLinkedArr) + SPILT_CHAR + toString(mBinding.temperatureInputSettingEDT) + SPILT_CHAR +
-                    toString(mBinding.smoothingFactorInputSettingEDT) + SPILT_CHAR + toString(mBinding.alarmLowInputSettingEDT) + SPILT_CHAR +
-                    toString(mBinding.alarmhighInputSettingEDT) + SPILT_CHAR + toString(mBinding.calibrationRequiredInputSettingATXT) + SPILT_CHAR +
-                    getPosition(toString(mBinding.resetCalibrationInputSettingEDT), resetCalibrationArr));
+            mActivity.showProgress();
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                    toString(2, mBinding.inputNumberInputSettingsEDT) + SPILT_CHAR +
+                    getPosition(2, toString(mBinding.sensorInputSettingsATXT), inputTypeArr) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.sensorActivationInputSettingsATXT), sensorActivationArr) + SPILT_CHAR +
+                    toString(0, mBinding.inputLabelInputSettingsEdt) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.bufferTypeInputSettingATXT), bufferArr) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.tempLinkedInputSettingATXT), tempLinkedArr) + SPILT_CHAR +
+                    toString(2, mBinding.temperatureInputSettingEDT) + SPILT_CHAR +
+                    toString(3, mBinding.smoothingFactorInputSettingEDT) + SPILT_CHAR +
+                    toString(6, mBinding.alarmLowInputSettingEDT) + SPILT_CHAR +
+                    toString(6, mBinding.alarmhighInputSettingEDT) + SPILT_CHAR +
+                    toString(3, mBinding.calibrationRequiredInputSettingATXT) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.resetCalibrationInputSettingEDT), resetCalibrationArr));
         }
     }
 
     private boolean validField() {
         if (isEmpty(mBinding.inputNumberInputSettingsEDT)) {
+            mAppClass.showSnackBar(getContext(), "InputNumber cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.sensorInputSettingsATXT)) {
-            return false;
-        } else if (isEmpty(mBinding.sensorActivationInputSettingsATXT)) {
-            return false;
-        } else if (isEmpty(mBinding.tempLinkedInputSettingATXT)) {
+            mAppClass.showSnackBar(getContext(), "InputNumber cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.temperatureInputSettingEDT)) {
+            mAppClass.showSnackBar(getContext(), "Temperature value cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.smoothingFactorInputSettingEDT)) {
+            mAppClass.showSnackBar(getContext(), "smoothing factor cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.alarmLowInputSettingEDT)) {
+            mAppClass.showSnackBar(getContext(), "Alarm low cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.alarmhighInputSettingEDT)) {
+            mAppClass.showSnackBar(getContext(), "Alarm high cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.calibrationRequiredInputSettingATXT)) {
-            return false;
-        } else return !isEmpty(mBinding.resetCalibrationInputSettingEDT);
+        }
+        return true;
     }
 
     private Boolean isEmpty(EditText editText) {
@@ -127,13 +133,18 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         return false;
     }
 
-    private int getPosition(String string, String[] strArr) {
-        List list = Arrays.asList(strArr);
-        return list.indexOf(string);
+    private String getPosition(int digit, String string, String[] strArr) {
+        String j = null;
+        for (int i = 0; i < strArr.length; i++) {
+            if (string.equals(strArr[i])) {
+                j = String.valueOf(i);
+            }
+        }
+        return mAppClass.formDigits(digit, j);
     }
 
-    private String toString(EditText editText) {
-        return editText.getText().toString();
+    private String toString(int digits, EditText editText) {
+        return mAppClass.formDigits(digits, editText.getText().toString());
     }
 
     private String toString(AutoCompleteTextView editText) {
@@ -141,13 +152,13 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     }
 
     private void initSensor(String inputNo) {
-                mBinding.sensorActivationInputSettingsATXT.setAdapter(getAdapter(sensorActivationArr));
-                mBinding.sensorInputSettingsATXT.setAdapter(getAdapter(inputTypeArr));
-                mBinding.bufferTypeInputSettingATXT.setAdapter(getAdapter(bufferArr));
-                mBinding.tempLinkedInputSettingATXT.setAdapter(getAdapter(tempLinkedArr));
-                mBinding.resetCalibrationInputSettingEDT.setAdapter(getAdapter(resetCalibrationArr));
+        mBinding.sensorActivationInputSettingsATXT.setAdapter(getAdapter(sensorActivationArr));
+        mBinding.sensorInputSettingsATXT.setAdapter(getAdapter(inputTypeArr));
+        mBinding.bufferTypeInputSettingATXT.setAdapter(getAdapter(bufferArr));
+        mBinding.tempLinkedInputSettingATXT.setAdapter(getAdapter(tempLinkedArr));
+        mBinding.resetCalibrationInputSettingEDT.setAdapter(getAdapter(resetCalibrationArr));
 
-                mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "01");
+
     }
 
     public ArrayAdapter<String> getAdapter(String[] strArr) {
@@ -156,14 +167,34 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
 
     @Override
     public void OnDataReceive(String data) {
+        mActivity.dismissProgress();
+        if (data.equals("FailedToConnect")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("pckError")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("sendCatch")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        }
+        if (data.equals("Timeout")) {
+            mAppClass.showSnackBar(getContext(), "TimeOut");
+        }
         if (data != null) {
             handleResponce(data.split("\\*")[1].split("#"));
         }
     }
 
-    private void handleResponce(String[] splitData) {
-        // READ_RES - {* 1# 04# 0# 01# 0# 0# PHSensor# 0# 1# 33# 10# 400# 1300# 10# 0 *}
+    @Override
+    public void onResume() {
+        super.onResume();
+        mActivity.showProgress();
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "01");
+    }
 
+    private void handleResponce(String[] splitData) {
+        mActivity.dismissProgress();
+        // READ_RES - {* 1# 04# 0# 01# 0# 0# PHSensor# 0# 1# 33# 10# 400# 1300# 10# 0 *}
         if (splitData[1].equals("04")) {
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
@@ -203,7 +234,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             } else if (splitData[0].equals(WRITE_PACKET)) {
 
                 if (splitData[2].equals(RES_SUCCESS)) {
-
+                    mAppClass.showSnackBar(getContext(), "Write Success !");
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), "Write Failed !");
                 }
@@ -211,5 +242,8 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         } else {
             mAppClass.showSnackBar(getContext(), "Received Wrong Packet");
         }
+
+
+
     }
 }
