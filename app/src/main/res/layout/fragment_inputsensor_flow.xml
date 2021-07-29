@@ -275,7 +275,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/setFlowTotal_flowISEdt"
+                        android:id="@+id/setFlowTotal_contactor_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Set Flow Total"
@@ -297,7 +297,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/conTactorAlarmLow_flowISEdt"
+                        android:id="@+id/alarmLow_contactor_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alarm Low"
@@ -318,7 +318,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/conTactorAlarmHigh_flowISEdt"
+                        android:id="@+id/alarmHigh_contactor_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alarm High"
@@ -355,7 +355,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/rateUnit_flowISEdt"
+                        android:id="@+id/rateUnit_paddle_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Rate Unit"
@@ -423,7 +423,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/rateUnit_inputSettings">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/alarmLowPad_flowISEdt"
+                        android:id="@+id/alarmLowPaddle_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alarm Low"
@@ -445,7 +445,7 @@
                     app:layout_constraintTop_toTopOf="@+id/alarmLowPad_inputSettings">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/alarmHigh_flowISEdt"
+                        android:id="@+id/alarmHigh_paddle_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alarm High"
@@ -480,7 +480,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/totalAlarmMode_flowISEdt"
+                        android:id="@+id/totalAlarmMode_feed_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Total Alram Mode"
@@ -503,7 +503,7 @@
                     app:layout_constraintTop_toTopOf="@+id/rateUnitFeed_inputSettings">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/flowAlarmMode_flowISEdt"
+                        android:id="@+id/flowAlarmMode_feed_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Flow Alarm Mode"
@@ -526,7 +526,7 @@
                     app:layout_constraintTop_toTopOf="@+id/totalAlarmMode_inputSettings">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/flowAlarm_delay_ISEdt"
+                        android:id="@+id/flowAlarmDelay_feed_ISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Flow Alarm Delay"
@@ -548,7 +548,7 @@
                     app:layout_constraintTop_toTopOf="@+id/flowtotalAlarmMode_inputSettings">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/flowAlarmClear_flowISEdt"
+                        android:id="@+id/flowAlarmClear_feed_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Flow Alarm Clear"
@@ -571,7 +571,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/rateUnitFeed_inputSettings">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/outputRelayLinkFeed_flowISEdt"
+                        android:id="@+id/outputRelayLink_Feed_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Output Relay Link"
@@ -592,7 +592,7 @@
                     app:layout_constraintTop_toTopOf="@+id/outputRelayLinkFeed_inputSettings">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/outputRelayLink_flowISEdt"
+                        android:id="@+id/setFlowTotal_feed_isEDT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Set Flow Total"
@@ -613,7 +613,7 @@
                     app:layout_constraintTop_toTopOf="@+id/outputRelayLink_inputSettings">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/alarmLowFeed_flowISEdt"
+                        android:id="@+id/alarmLow_Feed_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alarm Low"
@@ -634,7 +634,7 @@
                     app:layout_constraintTop_toTopOf="@+id/alarmLowFeed_inputSettings">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/alarmLow_flowISEdt"
+                        android:id="@+id/alarmHigh_feed_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alarm High"
@@ -656,7 +656,7 @@
                     app:layout_constraintTop_toTopOf="@+id/alarmLowFeed_inputSettings">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/feed_rate_unit_inputSettings_edt"
+                        android:id="@+id/rateUnit_feed__inputSettings_edt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Rate Unit"
@@ -691,7 +691,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/rateUnitAnalog_flowISEdt"
+                        android:id="@+id/rateUnit_Analog_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Rate Unit"
@@ -714,7 +714,7 @@
                     app:layout_constraintTop_toTopOf="@+id/rateUnitAnalog_inputSettings">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/flowMeterMinAnalog_flowISEdt"
+                        android:id="@+id/flowMinAnalog_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Flow Meter Min"
@@ -737,7 +737,7 @@
                     app:layout_constraintTop_toTopOf="@+id/flowMeterMinAnalog_inputSettings">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/flowMeterMaxAnalog_flowISEdt"
+                        android:id="@+id/flowMaxAnalog_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Flow Meter Max"
@@ -805,7 +805,7 @@
                     app:layout_constraintTop_toTopOf="@+id/calibrationRequired_inputSettings">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/alarmLowAnalog_flowISEdt"
+                        android:id="@+id/alarmLow_Analog_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alarm Low"
@@ -851,7 +851,7 @@
                     app:layout_constraintTop_toTopOf="@+id/alarmLowAnalog_inputSettings">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/setFlowTotalAnalog_flowISEdt"
+                        android:id="@+id/setFlowTotal_Analog_flowISEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Set Flow Total"

@@ -35,7 +35,7 @@ public class ApplicationClass extends Application {
             // Flow Meter
             flowMeterTypeArr = {"Analog Flow Meter", "Flow Meter Contactor", "Paddle Wheel", "Feed Monitor"},
             flowUnitArr = {"Volume", "Gallons", "Litres", "Cubic Meters", "Millions of Gallons"},
-            scheduleReset = {"No Schedule Reset", "Daily", "Weekly", "Annually"};
+            scheduleResetArr = {"No Schedule Reset", "Daily", "Weekly", "Annually"};
 
     /* Static Variables */
     static String mIPAddress = "192.168.1.103", Packet;
