@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -13,7 +14,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/digital_input_sensor_label_til"
             app:layout_constraintEnd_toEndOf="@+id/digital_input_sensor_type_til"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/digital_input_sensor_type_til"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -36,10 +39,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/digital_input_sensor_open_message_til"
             app:layout_constraintEnd_toStartOf="@+id/digital_input_sensor_type_til"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/digital_input_number_til">
+            app:layout_constraintTop_toBottomOf="@+id/digital_input_number_til">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/digital_input_sensor_label_tie"
@@ -57,12 +61,11 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/digital_input_sensor_label_til"
             app:layout_constraintEnd_toStartOf="@+id/digital_input_sensor_sensor_activation_til"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/digital_input_sensor_label_til"
-            app:layout_constraintTop_toBottomOf="@id/digital_input_number_til">
+            app:layout_constraintTop_toTopOf="@+id/digital_input_sensor_label_til">
 
             <AutoCompleteTextView
                 android:id="@+id/digital_input_sensor_type_tie"
@@ -81,13 +84,12 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/digital_input_sensor_label_til"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/digital_input_sensor_type_til"
-            app:layout_constraintTop_toBottomOf="@id/digital_input_number_til">
+            app:layout_constraintTop_toTopOf="@+id/digital_input_sensor_type_til">
 
             <AutoCompleteTextView
                 android:id="@+id/digital_input_sensor_sensor_activation_tie"
@@ -107,10 +109,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/digital_input_sensor_total_time_til"
             app:layout_constraintEnd_toEndOf="@+id/digital_input_sensor_label_til"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/digital_input_sensor_label_til"
-            app:layout_constraintTop_toBottomOf="@id/digital_input_sensor_label_til">
+            app:layout_constraintTop_toBottomOf="@+id/digital_input_sensor_label_til">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/digital_input_sensor_open_message_tie"
@@ -128,11 +131,11 @@
             style="@style/appEdtTxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/digital_input_sensor_open_message_til"
             app:layout_constraintEnd_toEndOf="@+id/digital_input_sensor_type_til"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/digital_input_sensor_type_til"
-            app:layout_constraintTop_toBottomOf="@id/digital_input_sensor_label_til">
+            app:layout_constraintTop_toTopOf="@+id/digital_input_sensor_open_message_til">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/digital_input_sensor_close_message_tie"
@@ -150,21 +153,20 @@
             style="@style/appAutoTxt"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/digital_input_sensor_close_message_til"
             app:layout_constraintEnd_toEndOf="@+id/digital_input_sensor_sensor_activation_til"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/digital_input_sensor_sensor_activation_til"
-            app:layout_constraintTop_toBottomOf="@id/digital_input_sensor_label_til">
+            app:layout_constraintTop_toTopOf="@+id/digital_input_sensor_close_message_til">
 
             <AutoCompleteTextView
                 android:id="@+id/digital_input_sensor_inner_lock_act"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="InterLock"
                 android:clickable="false"
                 android:editable="false"
                 android:focusable="false"
+                android:hint="InterLock"
                 android:maxLength="15" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -174,9 +176,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/DeleteLayout_inputSettings"
             app:layout_constraintEnd_toEndOf="@+id/digital_input_sensor_open_message_til"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/digital_input_sensor_open_message_til"
-            app:layout_constraintTop_toBottomOf="@id/digital_input_sensor_open_message_til">
+            app:layout_constraintTop_toBottomOf="@+id/digital_input_sensor_open_message_til">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/digital_input_sensor_total_time_tie"
@@ -194,21 +198,20 @@
             style="@style/appAutoTxt"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/digital_input_sensor_total_time_til"
             app:layout_constraintEnd_toEndOf="@+id/digital_input_sensor_close_message_til"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/digital_input_sensor_close_message_til"
-            app:layout_constraintTop_toBottomOf="@+id/digital_input_sensor_close_message_til">
+            app:layout_constraintTop_toTopOf="@+id/digital_input_sensor_total_time_til">
 
             <AutoCompleteTextView
                 android:id="@+id/digital_input_sensor_alarm_act"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Alarm"
                 android:clickable="false"
                 android:editable="false"
-                android:focusable="false" />
+                android:focusable="false"
+                android:hint="Alarm" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -217,21 +220,20 @@
             style="@style/appAutoTxt"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/digital_input_sensor_total_time_til"
             app:layout_constraintEnd_toEndOf="@+id/digital_input_sensor_inner_lock_til"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/digital_input_sensor_inner_lock_til"
-            app:layout_constraintTop_toBottomOf="@+id/digital_input_sensor_close_message_til">
+            app:layout_constraintTop_toTopOf="@+id/digital_input_sensor_alarm_til">
 
             <AutoCompleteTextView
                 android:id="@+id/digital_input_sensor_reset_time_act"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Reset Time"
                 android:clickable="false"
                 android:editable="false"
                 android:focusable="false"
+                android:hint="Reset Time"
                 android:maxLength="15" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -243,8 +245,10 @@
             android:orientation="horizontal"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/view_dump"
-            app:layout_constraintTop_toBottomOf="@+id/digital_input_sensor_alarm_til">
+            app:layout_constraintEnd_toStartOf="@+id/saveLayout_inputSettings"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/digital_input_sensor_total_time_til">
 
             <TextView
                 android:layout_width="match_parent"
@@ -278,7 +282,8 @@
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/view_dump_1"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/DeleteLayout_inputSettings"
             app:layout_constraintTop_toBottomOf="@+id/digital_input_sensor_reset_time_til">
 
             <TextView

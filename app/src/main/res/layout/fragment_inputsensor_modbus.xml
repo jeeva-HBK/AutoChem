@@ -2,439 +2,435 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ScrollView
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mod_bus_input_number_til"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/mod_bus_input_label_til"
+            app:layout_constraintEnd_toEndOf="@+id/mod_bus_sensor_type_til"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/mod_bus_sensor_type_til"
+            app:layout_constraintTop_toTopOf="parent">
 
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mod_bus_input_number_til"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="@+id/mod_bus_sensor_type_til"
-                app:layout_constraintStart_toStartOf="@+id/mod_bus_sensor_type_til"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/mod_bus_input_number_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="false"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:hint="Input Number" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/mod_bus_input_number_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="Input Number" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mod_bus_input_label_til"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toStartOf="@id/mod_bus_sensor_type_til"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/mod_bus_input_number_til">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mod_bus_input_label_til"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/mod_bus_Min_value_til"
+            app:layout_constraintEnd_toStartOf="@id/mod_bus_sensor_type_til"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mod_bus_input_number_til">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/mod_bus_input_label_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Input Label"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPersonName" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mod_bus_sensor_type_til"
-                style="@style/appAutoTxt"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintBottom_toBottomOf="@+id/mod_bus_input_label_til"
-                app:layout_constraintEnd_toStartOf="@id/mod_bus_sensor_activation_til"
-                app:layout_constraintStart_toEndOf="@id/mod_bus_input_label_til"
-                app:layout_constraintTop_toBottomOf="@id/mod_bus_input_number_til">
-
-                <AutoCompleteTextView
-                    android:id="@+id/mod_bus_sensor_type_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="false"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:hint="SensorType" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/mod_bus_input_label_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Input Label"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mod_bus_sensor_activation_til"
-                style="@style/appAutoTxt"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintBottom_toBottomOf="@+id/mod_bus_input_label_til"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/mod_bus_sensor_type_til"
-                app:layout_constraintTop_toBottomOf="@id/mod_bus_input_number_til">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mod_bus_sensor_type_til"
+            style="@style/appAutoTxt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/mod_bus_input_label_til"
+            app:layout_constraintEnd_toStartOf="@id/mod_bus_sensor_activation_til"
+            app:layout_constraintStart_toEndOf="@id/mod_bus_input_label_til"
+            app:layout_constraintTop_toTopOf="@+id/mod_bus_input_label_til">
 
-                <AutoCompleteTextView
-                    android:id="@+id/mod_bus_sensor_activation_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="false"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:hint="SensorActivation" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <AutoCompleteTextView
+                android:id="@+id/mod_bus_sensor_type_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="SensorType" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mod_bus_Min_value_til"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="@+id/mod_bus_input_label_til"
-                app:layout_constraintStart_toStartOf="@+id/mod_bus_input_label_til"
-                app:layout_constraintTop_toBottomOf="@+id/mod_bus_input_label_til">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mod_bus_sensor_activation_til"
+            style="@style/appAutoTxt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/mod_bus_input_label_til"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mod_bus_sensor_type_til"
+            app:layout_constraintTop_toTopOf="@+id/mod_bus_sensor_type_til">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/mod_bus_Min_value_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Min Value"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="4"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mod_bus_max_value_til"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="@+id/mod_bus_sensor_type_til"
-                app:layout_constraintStart_toStartOf="@+id/mod_bus_sensor_type_til"
-                app:layout_constraintTop_toBottomOf="@+id/mod_bus_input_label_til">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/mod_bus_max_value_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Max Value"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="4"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mod_bus_type_til"
-                style="@style/appAutoTxt"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintBottom_toBottomOf="@+id/mod_bus_max_value_til"
-                app:layout_constraintEnd_toEndOf="@+id/mod_bus_sensor_activation_til"
-                app:layout_constraintStart_toStartOf="@+id/mod_bus_sensor_activation_til"
-                app:layout_constraintTop_toBottomOf="@+id/mod_bus_sensor_type_til">
-
-                <AutoCompleteTextView
-                    android:id="@+id/mod_bus_type_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="false"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:hint="ModbusType" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <AutoCompleteTextView
+                android:id="@+id/mod_bus_sensor_activation_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="SensorActivation" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mod_bus_alarm_low_til"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toStartOf="@+id/mod_bus_alarm_high_til"
-                app:layout_constraintStart_toStartOf="@+id/mod_bus_Min_value_til"
-                app:layout_constraintTop_toBottomOf="@+id/mod_bus_Min_value_til">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mod_bus_Min_value_til"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/mod_bus_alarm_low_til"
+            app:layout_constraintEnd_toEndOf="@+id/mod_bus_input_label_til"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/mod_bus_input_label_til"
+            app:layout_constraintTop_toBottomOf="@+id/mod_bus_input_label_til">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/mod_bus_alarm_low_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Alarm Low"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="6"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mod_bus_alarm_high_til"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toStartOf="@+id/mod_bus_diagnostic_sweep_til"
-                app:layout_constraintStart_toEndOf="@id/mod_bus_alarm_low_til"
-                app:layout_constraintTop_toBottomOf="@+id/mod_bus_Min_value_til">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/mod_bus_alarm_high_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Alarm High"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="6"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/mod_bus_Min_value_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Min Value"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="4"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mod_bus_diagnostic_sweep_til"
-                style="@style/appAutoTxt"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintBottom_toBottomOf="@+id/mod_bus_alarm_high_til"
-                app:layout_constraintEnd_toStartOf="@+id/mod_bus_time_til"
-                app:layout_constraintStart_toEndOf="@id/mod_bus_alarm_high_til"
-                app:layout_constraintTop_toBottomOf="@+id/mod_bus_Min_value_til">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mod_bus_max_value_til"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/mod_bus_sensor_type_til"
+            app:layout_constraintStart_toStartOf="@+id/mod_bus_sensor_type_til"
+            app:layout_constraintTop_toTopOf="@+id/mod_bus_Min_value_til">
 
-                <AutoCompleteTextView
-                    android:id="@+id/mod_bus_diagnostic_sweep_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="false"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:hint="Diagnostic sweep" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/mod_bus_max_value_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Max Value"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="4"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mod_bus_type_til"
+            style="@style/appAutoTxt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/mod_bus_max_value_til"
+            app:layout_constraintEnd_toEndOf="@+id/mod_bus_sensor_activation_til"
+            app:layout_constraintStart_toStartOf="@+id/mod_bus_sensor_activation_til"
+            app:layout_constraintTop_toTopOf="@+id/mod_bus_max_value_til">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mod_bus_time_til"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/mod_bus_diagnostic_sweep_til"
-                app:layout_constraintTop_toBottomOf="@+id/mod_bus_Min_value_til">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/mod_bus_time_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Time"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="6"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <AutoCompleteTextView
+                android:id="@+id/mod_bus_type_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="ModbusType" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mod_bus_smoothing_factor_til"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="@+id/mod_bus_alarm_low_til"
-                app:layout_constraintStart_toStartOf="@+id/mod_bus_Min_value_til"
-                app:layout_constraintTop_toBottomOf="@+id/mod_bus_alarm_low_til">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mod_bus_alarm_low_til"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/mod_bus_smoothing_factor_til"
+            app:layout_constraintEnd_toStartOf="@+id/mod_bus_alarm_high_til"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/mod_bus_Min_value_til"
+            app:layout_constraintTop_toBottomOf="@+id/mod_bus_Min_value_til">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/mod_bus_smoothing_factor_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Smoothing Factor"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mod_bus_unit_measurement_til"
-                style="@style/appAutoTxt"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintBottom_toBottomOf="@+id/mod_bus_smoothing_factor_til"
-                app:layout_constraintEnd_toEndOf="@+id/mod_bus_alarm_high_til"
-                app:layout_constraintStart_toStartOf="@+id/mod_bus_alarm_high_til"
-                app:layout_constraintTop_toBottomOf="@+id/mod_bus_alarm_low_til">
-
-                <AutoCompleteTextView
-                    android:id="@+id/mod_bus_unit_measurement_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="false"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:hint="Measurement Unit" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mod_bus_calibration_required_alarm_til"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="@+id/mod_bus_diagnostic_sweep_til"
-                app:layout_constraintStart_toStartOf="@+id/mod_bus_diagnostic_sweep_til"
-                app:layout_constraintTop_toBottomOf="@+id/mod_bus_alarm_low_til">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/mod_bus_calibration_required_alarm_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Calibration Required Alarm"
-                    android:imeOptions="actionDone"
-                    android:inputType="number"
-                    android:maxLength="4"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/mod_bus_alarm_low_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Alarm Low"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="6"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/mod_bus_reset_calibration_til"
-                style="@style/appAutoTxt"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="10dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mod_bus_alarm_high_til"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/mod_bus_diagnostic_sweep_til"
+            app:layout_constraintStart_toEndOf="@id/mod_bus_alarm_low_til"
+            app:layout_constraintTop_toTopOf="@+id/mod_bus_alarm_low_til">
 
-                app:layout_constraintBottom_toBottomOf="@+id/mod_bus_smoothing_factor_til"
-                app:layout_constraintEnd_toEndOf="@+id/mod_bus_time_til"
-                app:layout_constraintStart_toStartOf="@+id/mod_bus_time_til"
-                app:layout_constraintTop_toBottomOf="@+id/mod_bus_alarm_low_til">
-
-                <AutoCompleteTextView
-                    android:id="@+id/mod_bus_reset_calibration_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="false"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:hint="Reset Calibration" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/mod_bus_alarm_high_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Alarm High"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="6"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-            <LinearLayout
-                android:id="@+id/DeleteLayout_inputSettings"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mod_bus_diagnostic_sweep_til"
+            style="@style/appAutoTxt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/mod_bus_alarm_high_til"
+            app:layout_constraintEnd_toStartOf="@+id/mod_bus_time_til"
+            app:layout_constraintStart_toEndOf="@id/mod_bus_alarm_high_til"
+            app:layout_constraintTop_toTopOf="@+id/mod_bus_alarm_high_til">
+
+            <AutoCompleteTextView
+                android:id="@+id/mod_bus_diagnostic_sweep_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="Diagnostic sweep" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mod_bus_time_til"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mod_bus_diagnostic_sweep_til"
+            app:layout_constraintTop_toTopOf="@+id/mod_bus_diagnostic_sweep_til">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/mod_bus_time_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Time"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="6"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mod_bus_smoothing_factor_til"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/DeleteLayout_inputSettings"
+            app:layout_constraintEnd_toEndOf="@+id/mod_bus_alarm_low_til"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/mod_bus_Min_value_til"
+            app:layout_constraintTop_toBottomOf="@+id/mod_bus_alarm_low_til">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/mod_bus_smoothing_factor_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Smoothing Factor"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mod_bus_unit_measurement_til"
+            style="@style/appAutoTxt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/mod_bus_smoothing_factor_til"
+            app:layout_constraintEnd_toEndOf="@+id/mod_bus_alarm_high_til"
+            app:layout_constraintStart_toStartOf="@+id/mod_bus_alarm_high_til"
+            app:layout_constraintTop_toTopOf="@+id/mod_bus_smoothing_factor_til">
+
+            <AutoCompleteTextView
+                android:id="@+id/mod_bus_unit_measurement_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="Measurement Unit" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mod_bus_calibration_required_alarm_til"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/mod_bus_diagnostic_sweep_til"
+            app:layout_constraintStart_toStartOf="@+id/mod_bus_diagnostic_sweep_til"
+            app:layout_constraintTop_toTopOf="@+id/mod_bus_unit_measurement_til">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/mod_bus_calibration_required_alarm_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Calibration Required Alarm"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:maxLength="4"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mod_bus_reset_calibration_til"
+            style="@style/appAutoTxt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            app:layout_constraintBottom_toBottomOf="@+id/mod_bus_smoothing_factor_til"
+            app:layout_constraintEnd_toEndOf="@+id/mod_bus_time_til"
+            app:layout_constraintStart_toStartOf="@+id/mod_bus_time_til"
+            app:layout_constraintTop_toTopOf="@+id/mod_bus_calibration_required_alarm_til">
+
+            <AutoCompleteTextView
+                android:id="@+id/mod_bus_reset_calibration_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="Reset Calibration" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <LinearLayout
+            android:id="@+id/DeleteLayout_inputSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/saveLayout_inputSettings"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mod_bus_smoothing_factor_til">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:text="Delete"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/DeleteFab_inputSettings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/view_dump"
-                app:layout_constraintTop_toBottomOf="@+id/mod_bus_smoothing_factor_til">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
-                    android:gravity="center"
-                    android:text="Delete"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/DeleteFab_inputSettings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:background="@color/red"
-                    android:backgroundTint="@color/red"
-                    android:src="@drawable/ic_baseline_delete"
-                    app:maxImageSize="35dp"
-                    app:tint="@color/black" />
+                android:layout_margin="5dp"
+                android:background="@color/red"
+                android:backgroundTint="@color/red"
+                android:src="@drawable/ic_baseline_delete"
+                app:maxImageSize="35dp"
+                app:tint="@color/black" />
 
 
-            </LinearLayout>
+        </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/saveLayout_inputSettings"
+        <LinearLayout
+            android:id="@+id/saveLayout_inputSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/DeleteLayout_inputSettings"
+            app:layout_constraintTop_toBottomOf="@+id/mod_bus_smoothing_factor_til">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:text="Save"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/saveFab_inputSettings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/view_dump_1"
-                app:layout_constraintTop_toBottomOf="@+id/mod_bus_smoothing_factor_til">
+                android:layout_margin="5dp"
+                android:background="@color/colorSecondary"
+                android:backgroundTint="@color/colorSecondary"
+                android:src="@drawable/ic_round_right"
+                app:maxImageSize="50dp"
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
-                    android:gravity="center"
-                    android:text="Save"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/saveFab_inputSettings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:background="@color/colorSecondary"
-                    android:backgroundTint="@color/colorSecondary"
-                    android:src="@drawable/ic_round_right"
-                    app:maxImageSize="50dp"
-
-                    app:tint="@color/black" />
+                app:tint="@color/black" />
 
 
-            </LinearLayout>
+        </LinearLayout>
 
-            <View
-                android:id="@+id/view_dump"
-                android:layout_width="1dp"
-                android:layout_height="1dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.4"
-                app:layout_constraintStart_toStartOf="parent" />
+        <View
+            android:id="@+id/view_dump"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
-            <View
-                android:id="@+id/view_dump_1"
-                android:layout_width="1dp"
-                android:layout_height="1dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.7"
-                app:layout_constraintStart_toStartOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+        <View
+            android:id="@+id/view_dump_1"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.7"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

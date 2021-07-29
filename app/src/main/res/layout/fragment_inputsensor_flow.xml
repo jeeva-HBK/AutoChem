@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <data>
-
         <import type="android.view.View" />
-
         <variable
             name="flowMeterType"
             type="String" />
@@ -33,6 +30,7 @@
                 android:layout_height="match_parent"
                 android:digits="0123456789"
                 android:editable="false"
+                android:focusable="false"
                 android:hint="Input Number"
                 android:inputType="number"
                 android:maxLength="2"
@@ -60,6 +58,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Input Label"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -84,6 +84,7 @@
                 android:layout_height="match_parent"
                 android:clickable="false"
                 android:editable="false"
+                android:focusable="false"
                 android:hint="Sensor Type" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -107,6 +108,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:editable="false"
+                android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:hint="Sensor Activation" />
 
@@ -131,6 +133,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:editable="false"
+                android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:hint="Flow Unit" />
 
@@ -154,6 +157,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Totalizer Alarm"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="4"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -174,6 +180,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Reset Flow Total"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="4"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -193,7 +202,8 @@
                 android:id="@+id/scheduleReset_flowISEdt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Schdule Reset"
+                android:focusable="false"
+                android:hint="Scheduled Reset"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -257,6 +267,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Volume"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="6"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -279,6 +292,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Set Flow Total"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -301,6 +317,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alarm Low"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="6"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -322,6 +341,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alarm High"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="6"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -359,6 +381,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Rate Unit"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -382,6 +407,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="K Factor"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -404,6 +432,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Set Flow Total"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -427,6 +458,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alarm Low"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="6"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -449,6 +483,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alarm High"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="6"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -484,7 +521,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Total Alram Mode"
-                        android:maxLines="1" />
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="2" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -530,6 +570,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Flow Alarm Delay"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="2"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -552,6 +595,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Flow Alarm Clear"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="6"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -575,6 +621,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Output Relay Link"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="2"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -596,6 +645,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Set Flow Total"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -617,6 +669,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alarm Low"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="6"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -638,6 +693,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alarm High"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="6"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -660,6 +718,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Rate Unit"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -695,6 +756,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Rate Unit"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -718,6 +782,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Flow Meter Min"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -741,6 +808,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Flow Meter Max"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -763,6 +833,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Smoothing Factor"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="3"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -786,6 +859,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Calibration Required Alarm"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="3"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -809,6 +885,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alarm Low"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="6"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -832,6 +911,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alarm High"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="6"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -855,6 +937,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Set Flow Total"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
