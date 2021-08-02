@@ -32,19 +32,21 @@ public class ApplicationClass extends Application {
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},
             unitArr = {" µS/cm", " mS/cm", "S/cm"},
-    // Flow Meter
+
     flowMeterTypeArr = {"Analog Flow Meter", "Flow Meter Contactor", "Paddle Wheel", "Feed Monitor"},
             flowUnitArr = {"Volume", "Gallons", "Litres", "Cubic Meters", "Millions of Gallons"},
             scheduleResetArr = {"No Schedule Reset", "Daily", "Weekly", "Annually"},
-   //
-    digital_Arr = {"NC", "NO"},
-            modBusType = {"ST500", "CR300CS", "CR-300 CU", "ST-590", "ST-588", "ST-500 RO"},
+
+    digitalArr = {"NC", "NO"},
+            modBusTypeArr = {"ST500", "CR300CS", "CR-300 CU", "ST-590", "ST-588", "ST-500 RO"},
             modBusUnitArr = {"ppb", "ppm", "mpy"},
-            analogType = {"(4-20mA)", "(0 – 10V)"},
-            analogUnitArr = {"ma", "V"};
+            analogTypeArr = {"(4-20mA)", "(0 – 10V)"},
+            analogUnitArr = {"ma", "V"},
+
+    calculationArr = {"Difference", "Ratio", "Total", "% Difference"}, sensorsViArr = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45"};
 
     /* Static Variables */
-    static String mIPAddress = "192.168.1.103", Packet;
+    static String mIPAddress = "192.168.1.104", Packet;
     static int mPortNumber = 6000;
 
     public static CountDownTimer packetTimeOut;
@@ -137,7 +139,7 @@ public class ApplicationClass extends Application {
         switch (digits) {
             case 0:
                 // Return without Forming digits
-                finalDigits = (value).substring(value.length());
+                finalDigits = value;
                 break;
             case 1:
                 finalDigits = ("0" + value).substring(value.length());

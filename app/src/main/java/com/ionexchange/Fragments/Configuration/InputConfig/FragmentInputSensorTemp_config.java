@@ -55,7 +55,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         initAdapter();
         mBinding.saveFabCondIS.setOnClickListener(this::save);
         mBinding.saveLayoutTempIS.setOnClickListener(this::save);
-
+        // FIXME: 30-07-2021 virtual Input Configuration
         mBinding.DeleteFabCondIS.setOnClickListener(this::delete);
         mBinding.DeleteLayoutTempIS.setOnClickListener(this::delete);
         mBinding.backArrow.setOnClickListener(v -> {

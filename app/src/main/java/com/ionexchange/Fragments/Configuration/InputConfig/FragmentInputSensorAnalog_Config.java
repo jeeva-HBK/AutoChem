@@ -19,7 +19,7 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorAnalogBinding;
 
-import static com.ionexchange.Others.ApplicationClass.analogType;
+import static com.ionexchange.Others.ApplicationClass.analogTypeArr;
 import static com.ionexchange.Others.ApplicationClass.analogUnitArr;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
@@ -53,6 +53,13 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         initAdapter();
         mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
         mBinding.saveFabInputSettings.setOnClickListener(this::save);
+
+        mBinding.backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+            }
+        });
     }
 
     private void save(View view) {
@@ -62,7 +69,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                     INPUT_SENSOR_CONFIG + SPILT_CHAR +
                     toString(2, mBinding.analogInputNumberTie) + SPILT_CHAR +
                     getPosition(2, toString(mBinding.analogSensorTypeTie), inputTypeArr) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.analogTypeTie), analogType) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.analogTypeTie), analogTypeArr) + SPILT_CHAR +
                     getPosition(1, toString(mBinding.analogSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
                     toString(0, mBinding.analogInputLabelTie) + SPILT_CHAR +
                     getPosition(1, toString(mBinding.analogUnitMeasurementTie), analogUnitArr) + SPILT_CHAR +
@@ -73,7 +80,6 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                     toString(6, mBinding.analogHighLowTie) + SPILT_CHAR +
                     toString(3, mBinding.analogCalibrationRequiredAlarmTie) + SPILT_CHAR +
                     getPosition(1, toString(mBinding.analogResetCalibrationTie), resetCalibrationArr));
-
         }
 
     }
@@ -99,7 +105,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
     private void initAdapter() {
         mBinding.analogSensorTypeTie.setAdapter(getAdapter(inputTypeArr));
         mBinding.analogSensorActivationTie.setAdapter(getAdapter(sensorActivationArr));
-        mBinding.analogTypeTie.setAdapter(getAdapter(analogType));
+        mBinding.analogTypeTie.setAdapter(getAdapter(analogTypeArr));
         mBinding.analogUnitMeasurementTie.setAdapter(getAdapter(analogUnitArr));
         mBinding.analogResetCalibrationTie.setAdapter(getAdapter(resetCalibrationArr));
     }
@@ -133,7 +139,6 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         if (data != null) {
             handleResponse(data.split("\\*")[1].split("#"));
         }
-
     }
 
     private void handleResponse(String[] data) {

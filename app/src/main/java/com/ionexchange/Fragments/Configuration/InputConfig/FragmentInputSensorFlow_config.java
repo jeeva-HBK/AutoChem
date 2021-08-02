@@ -91,7 +91,6 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                     sendPaddleWheelPacket();
                 }
                 break;
-
             case 3:
                 if (validation3()) {
                     sendFeedMonitorPacket();

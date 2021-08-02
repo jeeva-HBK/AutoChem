@@ -3,21 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <import type="android.view.View" />
-
         <variable
             name="item1_isVisible"
             type="boolean" />
-
         <variable
             name="item2_isVisible"
             type="boolean" />
-
         <variable
             name="item3_isVisible"
             type="boolean" />
-
         <variable
             name="selected"
             type="String" />
@@ -28,6 +23,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutDescription="@xml/fragment_configuration_xml_constraintlayout_scene">
+
+        <FrameLayout
+            android:id="@+id/configRootHost"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/view"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/view"
@@ -307,15 +311,6 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.27" />
-
-        <FrameLayout
-            android:id="@+id/configRootHost"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/view"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 

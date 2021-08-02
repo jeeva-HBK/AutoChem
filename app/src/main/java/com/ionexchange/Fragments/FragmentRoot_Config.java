@@ -13,11 +13,11 @@ import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentCommonSettings_Config;
 import com.ionexchange.Fragments.Configuration.FragmentHomeScreen_Config;
 import com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorList_Config;
-import com.ionexchange.Fragments.Configuration.FragmentOutputSettings_Config;
+import com.ionexchange.Fragments.Configuration.OutputConfig.FragmentOutputSettings_Config;
 import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentTargetIpSettings_Config;
 import com.ionexchange.Fragments.Configuration.TimerConfig.FragmentTimer_Config;
 import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentUnitIpSettings_Config;
-import com.ionexchange.Fragments.Configuration.FragmentVirtualSensor_Config;
+import com.ionexchange.Fragments.Configuration.VirtualConfig.FragmentVirtualSensorList_Config;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentConfigurationBinding;
@@ -121,7 +121,7 @@ public class FragmentRoot_Config extends Fragment implements View.OnClickListene
                 break;
             case R.id.h2_subtext4:
                 mBinding.setSelected("2-4");
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentVirtualSensor_Config());
+                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentVirtualSensorList_Config());
                 break;
         }
     }

@@ -12,7 +12,7 @@ public class PacketControl {
             RES_SUCCESS = "0", RES_FAILED = "1";
 
     /* Packet Identifier */
-    public static String PCK_connectPacket = "00", PCK_panelIpConfig = "01", PCK_target_ip = "02", PCK_GENERAL = "03", INPUT_SENSOR_CONFIG = "04",
+    public static String PCK_connectPacket = "00", PCK_panelIpConfig = "01", PCK_target_ip = "02", PCK_GENERAL = "03", INPUT_SENSOR_CONFIG = "04", VIRTUAL_INPUT = "05",
 
     /* Connect Packet */
     APP_VERSION = BuildConfig.VERSION_NAME, CONNECT_COMMAND = "0", DISCONNECT_COMMAND = "1",

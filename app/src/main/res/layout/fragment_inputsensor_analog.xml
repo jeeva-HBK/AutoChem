@@ -7,6 +7,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <View
+            android:id="@+id/backArrow"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="@+id/analog_input_number_til"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/analog_input_number_til" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/analog_input_number_til"
             style="@style/appEdtTxt"

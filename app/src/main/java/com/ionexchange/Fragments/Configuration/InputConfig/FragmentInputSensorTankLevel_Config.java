@@ -19,7 +19,7 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputSensorTankLevelBinding;
 
-import static com.ionexchange.Others.ApplicationClass.digital_Arr;
+import static com.ionexchange.Others.ApplicationClass.digitalArr;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
@@ -52,6 +52,12 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
         mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
         mBinding.saveFabInputSettings.setOnClickListener(this::save);
 
+        mBinding.backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+            }
+        });
     }
 
     private void save(View view) {
@@ -65,8 +71,8 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                     toString(0, mBinding.tankLevelInputSensorLabelTie) + SPILT_CHAR +
                     toString(3, mBinding.tankLevelInputSensorOpenMessageTie) + SPILT_CHAR +
                     toString(6, mBinding.tankLevelInputSensorCloseMessageTie) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.tankLevelInputSensorInnerLockAct), digital_Arr) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.tankLevelInputSensorAlarmAct), digital_Arr) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.tankLevelInputSensorInnerLockAct), digitalArr) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.tankLevelInputSensorAlarmAct), digitalArr) + SPILT_CHAR +
                     toString(6, mBinding.tankLevelInputSensorTotalTimeTie) + SPILT_CHAR +
                     getPosition(1, toString(mBinding.tankLevelInputSensorResetTimeAct), resetCalibrationArr));
         }
@@ -94,8 +100,8 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
     private void initAdapter() {
         mBinding.tankLevelInputSensorTypeTie.setAdapter(getAdapter(inputTypeArr));
         mBinding.tankLevelInputSensorSensorActivationTie.setAdapter(getAdapter(sensorActivationArr));
-        mBinding.tankLevelInputSensorInnerLockAct.setAdapter(getAdapter(digital_Arr));
-        mBinding.tankLevelInputSensorAlarmAct.setAdapter(getAdapter(digital_Arr));
+        mBinding.tankLevelInputSensorInnerLockAct.setAdapter(getAdapter(digitalArr));
+        mBinding.tankLevelInputSensorAlarmAct.setAdapter(getAdapter(digitalArr));
         mBinding.tankLevelInputSensorResetTimeAct.setAdapter(getAdapter(resetCalibrationArr));
     }
 

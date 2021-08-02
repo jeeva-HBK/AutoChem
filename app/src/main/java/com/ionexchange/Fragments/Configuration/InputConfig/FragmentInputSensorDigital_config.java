@@ -19,7 +19,7 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorDigitalBinding;
 
-import static com.ionexchange.Others.ApplicationClass.digital_Arr;
+import static com.ionexchange.Others.ApplicationClass.digitalArr;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
@@ -53,6 +53,12 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
         mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
         mBinding.saveFabInputSettings.setOnClickListener(this::save);
 
+        mBinding.backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+            }
+        });
     }
 
     private void save(View view) {
@@ -66,8 +72,8 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
                     toString(0, mBinding.digitalInputSensorLabelTie) + SPILT_CHAR +
                     toString(3, mBinding.digitalInputSensorOpenMessageTie) + SPILT_CHAR +
                     toString(6, mBinding.digitalInputSensorCloseMessageTie) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.digitalInputSensorInnerLockAct), digital_Arr) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.digitalInputSensorAlarmAct), digital_Arr) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.digitalInputSensorInnerLockAct), digitalArr) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.digitalInputSensorAlarmAct), digitalArr) + SPILT_CHAR +
                     toString(6, mBinding.digitalInputSensorTotalTimeTie) + SPILT_CHAR +
                     getPosition(1, toString(mBinding.digitalInputSensorResetTimeAct), resetCalibrationArr));
         }
@@ -94,8 +100,8 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
     private void initAdapter() {
         mBinding.digitalInputSensorTypeTie.setAdapter(getAdapter(inputTypeArr));
         mBinding.digitalInputSensorSensorActivationTie.setAdapter(getAdapter(sensorActivationArr));
-        mBinding.digitalInputSensorInnerLockAct.setAdapter(getAdapter(digital_Arr));
-        mBinding.digitalInputSensorAlarmAct.setAdapter(getAdapter(digital_Arr));
+        mBinding.digitalInputSensorInnerLockAct.setAdapter(getAdapter(digitalArr));
+        mBinding.digitalInputSensorAlarmAct.setAdapter(getAdapter(digitalArr));
         mBinding.digitalInputSensorResetTimeAct.setAdapter(getAdapter(resetCalibrationArr));
     }
 

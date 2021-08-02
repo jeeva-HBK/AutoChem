@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/primary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp" />
+
+        </RelativeLayout>
+
+        <!--ROW 1-->
+        <!--Label-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/label_vi"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/sensor2Constant_vi"
+            app:layout_constraintEnd_toStartOf="@+id/sensorActivation_vi"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolBar">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/label_viEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Sensor Label"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Sensor Activation-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sensorActivation_vi"
+            style="@style/appAutoTxt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/label_vi"
+            app:layout_constraintEnd_toStartOf="@+id/calculation_vi"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/label_vi"
+            app:layout_constraintTop_toTopOf="@+id/label_vi">
+
+            <AutoCompleteTextView
+                android:id="@+id/sensorActivation_viEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="Sensor Activation"
+                android:imeOptions="actionNext" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Calculation-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/calculation_vi"
+            style="@style/appAutoTxt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/sensorActivation_vi"
+            app:layout_constraintEnd_toStartOf="@+id/smoothingFactor_vi"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/sensorActivation_vi"
+            app:layout_constraintTop_toTopOf="@+id/sensorActivation_vi">
+
+            <AutoCompleteTextView
+                android:id="@+id/calculation_viEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="Calculation"
+                android:imeOptions="actionNext" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Smoothing Factor -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/smoothingFactor_vi"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/calculation_vi"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/calculation_vi"
+            app:layout_constraintTop_toTopOf="@+id/calculation_vi">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/smoothingFactor_viEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Smoothing Factor"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- ROW 2 -->
+        <!--Sensor 1 Input Number-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sensor1_vi"
+            style="@style/appAutoTxt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/sensor1Constant_vi"
+            app:layout_constraintEnd_toEndOf="@+id/label_vi"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/label_vi"
+            app:layout_constraintTop_toTopOf="@+id/sensor1Constant_vi">
+
+            <AutoCompleteTextView
+                android:id="@+id/sensor1_viATXT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:completionThreshold="1"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="Sensor 1 Input Number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Sensor 1 Constant -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sensor1Constant_vi"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/sensor2_vi"
+            app:layout_constraintEnd_toEndOf="@+id/sensorActivation_vi"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/sensorActivation_vi"
+            app:layout_constraintTop_toTopOf="@+id/sensor2_vi">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sensor1Constant_viEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Sensor 1 Constant"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Sensor 2 Input Number-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sensor2_vi"
+            style="@style/appAutoTxt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/sensor2Constant_vi"
+            app:layout_constraintEnd_toEndOf="@+id/calculation_vi"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/calculation_vi"
+            app:layout_constraintTop_toTopOf="@+id/sensor2Constant_vi">
+
+            <AutoCompleteTextView
+                android:id="@+id/sensor2_viATXT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:completionThreshold="1"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="Sensor 2 Input Number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Sensor 2 Constant -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sensor2Constant_vi"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/lowRange_vi"
+            app:layout_constraintEnd_toEndOf="@+id/smoothingFactor_vi"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/smoothingFactor_vi"
+            app:layout_constraintTop_toBottomOf="@+id/label_vi">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sensor2Constant_viEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Sensor 2 Constant"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Row 3-->
+        <!--Low Range -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/lowRange_vi"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/DeleteLayout_inputSettings"
+            app:layout_constraintEnd_toEndOf="@+id/sensor1_vi"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/sensor1_vi"
+            app:layout_constraintTop_toBottomOf="@+id/sensor2Constant_vi">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/lowRange_viEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Low Range"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--High Range -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/highRange_vi"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/lowRange_vi"
+            app:layout_constraintEnd_toEndOf="@+id/sensor1Constant_vi"
+            app:layout_constraintStart_toStartOf="@+id/sensor1Constant_vi"
+            app:layout_constraintTop_toTopOf="@+id/lowRange_vi">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/highRange_viEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="High Range"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Low Alarm -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/lowAlarm_vi"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/highRange_vi"
+            app:layout_constraintEnd_toEndOf="@+id/sensor2_vi"
+            app:layout_constraintStart_toStartOf="@+id/sensor2_vi">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/lowAlarm_viEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Low Alarm"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--High Alarm -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/highAlarm_vi"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/lowAlarm_vi"
+            app:layout_constraintEnd_toEndOf="@+id/sensor2Constant_vi"
+            app:layout_constraintStart_toStartOf="@+id/sensor2Constant_vi">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/highAlarm_viEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="High Alarm"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--DELETE-->
+        <LinearLayout
+            android:id="@+id/DeleteLayout_inputSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/saveLayout_inputSettings"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lowRange_vi">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:text="Delete"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/DeleteFab_inputSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@color/red"
+                android:backgroundTint="@color/red"
+                android:src="@drawable/ic_baseline_delete"
+                app:maxImageSize="35dp"
+                app:tint="@color/black" />
+
+
+        </LinearLayout>
+
+        <!--SAVE-->
+        <LinearLayout
+            android:id="@+id/saveLayout_inputSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/DeleteLayout_inputSettings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/DeleteLayout_inputSettings"
+            app:layout_constraintTop_toTopOf="@+id/DeleteLayout_inputSettings">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:text="Save"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/saveFab_inputSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@color/colorSecondary"
+                android:backgroundTint="@color/colorSecondary"
+                android:src="@drawable/ic_round_right"
+                app:maxImageSize="50dp"
+                app:tint="@color/black" />
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

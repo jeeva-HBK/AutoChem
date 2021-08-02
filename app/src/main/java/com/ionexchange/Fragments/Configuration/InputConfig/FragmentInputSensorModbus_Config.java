@@ -20,7 +20,7 @@ import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorModbusBinding;
 
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.modBusType;
+import static com.ionexchange.Others.ApplicationClass.modBusTypeArr;
 import static com.ionexchange.Others.ApplicationClass.modBusUnitArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
@@ -53,6 +53,13 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
         initAdapter();
         mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
         mBinding.saveFabInputSettings.setOnClickListener(this::save);
+
+        mBinding.backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+            }
+        });
     }
 
     private void save(View view) {
@@ -62,7 +69,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                     INPUT_SENSOR_CONFIG + SPILT_CHAR +
                     toString(2, mBinding.modBusInputNumberTie) + SPILT_CHAR +
                     getPosition(2, toString(mBinding.modBusSensorTypeTie), inputTypeArr) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.modBusTypeTie), modBusType) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.modBusTypeTie), modBusTypeArr) + SPILT_CHAR +
                     getPosition(1, toString(mBinding.modBusSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
                     toString(0, mBinding.modBusInputLabelTie) + SPILT_CHAR +
                     getPosition(1, toString(mBinding.modBusUnitMeasurementTie), modBusUnitArr) + SPILT_CHAR +
@@ -99,7 +106,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
     private void initAdapter() {
         mBinding.modBusSensorTypeTie.setAdapter(getAdapter(inputTypeArr));
         mBinding.modBusSensorActivationTie.setAdapter(getAdapter(sensorActivationArr));
-        mBinding.modBusTypeTie.setAdapter(getAdapter(modBusType));
+        mBinding.modBusTypeTie.setAdapter(getAdapter(modBusTypeArr));
         mBinding.modBusUnitMeasurementTie.setAdapter(getAdapter(modBusUnitArr));
         mBinding.modBusDiagnosticSweepTie.setAdapter(getAdapter(sensorActivationArr));
         mBinding.modBusResetCalibrationTie.setAdapter(getAdapter(resetCalibrationArr));
