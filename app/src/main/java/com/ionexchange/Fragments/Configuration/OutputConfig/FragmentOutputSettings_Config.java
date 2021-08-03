@@ -12,14 +12,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ionexchange.Adapters.OutputIndexRvAdapter;
+import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentOutputsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FragmentOutputSettings_Config extends Fragment {
+public class FragmentOutputSettings_Config extends Fragment implements RvOnClick {
 
     FragmentOutputsettingsBinding mBinding;
+    RvOnClick rvOnClick;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -34,6 +36,22 @@ public class FragmentOutputSettings_Config extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mBinding.outputRv.setLayoutManager(new GridLayoutManager(getContext(), 4));
-        mBinding.outputRv.setAdapter(new OutputIndexRvAdapter());
+        mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(rvOnClick = this));
+
+
+    }
+
+
+    @Override
+    public void onClick(String sensorInputNo) {
+        mBinding.outputRv.setVisibility(View.GONE);
+
+        switch (sensorInputNo) {
+
+            case "01":
+                getParentFragmentManager().beginTransaction().replace(mBinding.outputHost.getId(), new FragmentOutput_Config());
+                break;
+
+        }
     }
 }

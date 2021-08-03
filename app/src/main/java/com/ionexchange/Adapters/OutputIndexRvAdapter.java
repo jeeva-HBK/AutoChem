@@ -7,11 +7,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.R;
 
 import org.jetbrains.annotations.NotNull;
 
 public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdapter.ViewHolder> {
+    RvOnClick rvOnClick;
+    public OutputIndexRvAdapter(RvOnClick rvOnClick) {
+        this.rvOnClick = rvOnClick;
+    }
+
     @NonNull
     @NotNull
     @Override
@@ -23,6 +29,12 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
     @Override
     public void onBindViewHolder(@NonNull @NotNull OutputIndexRvAdapter.ViewHolder holder, int position) {
 
+        holder.viewBase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            rvOnClick.onClick(String.valueOf(position));
+            }
+        });
     }
 
     @Override
@@ -31,8 +43,10 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        View viewBase;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
+            viewBase = itemView.findViewById(R.id.view_base);
         }
     }
 }

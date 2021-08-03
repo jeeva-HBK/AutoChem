@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,11 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.R;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
 
@@ -83,6 +89,7 @@ public class ApplicationClass extends Application {
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+
                 try {
                     mContext = activity;
                     registerReceiver();
