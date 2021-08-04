@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,11 +19,6 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.R;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
 
@@ -49,7 +43,11 @@ public class ApplicationClass extends Application {
             analogTypeArr = {"(4-20mA)", "(0 – 10V)"},
             analogUnitArr = {"ma", "V"},
 
-    calculationArr = {"Difference", "Ratio", "Total", "% Difference"}, sensorsViArr = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45"};
+    calculationArr = {"Difference", "Ratio", "Total", "% Difference"},
+            sensorsViArr = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45"},
+            interlockChannel = {"DI - 1", "DI - 2", "DI - 3", "DI - 4", "DI - 5", "DI - 6", "DI - 7", "DI - 8", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4", "Tank Level - 5", "Tank Level - 6", "Tank Level - 7", "Tank Level - 8"},
+            functionMode = {"Disable", "Inhibitor", "Sensor", "Analog"}, modeInhibitor = {"Continuous", "Bleed/Blow Down", "Water Meter/Biocide"},
+            modeSensor = {"On/Off", "PID", "Fuzzy"}, modeAnalog = {"Disable", "Probe", "Test", "Pump Status", "Dosing"}, linkBleedRelay = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16"};
 
     /* Static Variables */
     static String mIPAddress = "192.168.1.104", Packet;

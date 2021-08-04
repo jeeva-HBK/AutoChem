@@ -37,21 +37,12 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
 
         mBinding.outputRv.setLayoutManager(new GridLayoutManager(getContext(), 4));
         mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(rvOnClick = this));
-
-
     }
-
 
     @Override
     public void onClick(String sensorInputNo) {
         mBinding.outputRv.setVisibility(View.GONE);
-
-        switch (sensorInputNo) {
-
-            case "01":
-                getParentFragmentManager().beginTransaction().replace(mBinding.outputHost.getId(), new FragmentOutput_Config());
-                break;
-
-        }
+        mBinding.outputHost.setVisibility(View.VISIBLE);
+        getParentFragmentManager().beginTransaction().replace(mBinding.outputHost.getId(), new FragmentOutput_Config()).commit();
     }
 }
