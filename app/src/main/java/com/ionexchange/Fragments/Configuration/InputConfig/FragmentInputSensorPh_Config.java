@@ -87,8 +87,8 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                     getPosition(1, toString(mBinding.tempLinkedInputSettingATXT), tempLinkedArr) + SPILT_CHAR +
                     toString(2, mBinding.temperatureInputSettingEDT) + SPILT_CHAR +
                     toString(3, mBinding.smoothingFactorInputSettingEDT) + SPILT_CHAR +
-                    toString(6, mBinding.alarmLowInputSettingEDT) + SPILT_CHAR +
-                    toString(6, mBinding.alarmhighInputSettingEDT) + SPILT_CHAR +
+                    toStringSplit(4, 2,mBinding.alarmLowInputSettingEDT) + SPILT_CHAR +
+                    toStringSplit(4,2, mBinding.alarmhighInputSettingEDT) + SPILT_CHAR +
                     toString(3, mBinding.calibrationRequiredInputSettingATXT) + SPILT_CHAR +
                     getPosition(1, toString(mBinding.resetCalibrationInputSettingEDT), resetCalibrationArr));
         }
@@ -113,8 +113,20 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         } else if (isEmpty(mBinding.alarmhighInputSettingEDT)) {
             mAppClass.showSnackBar(getContext(), "Alarm high cannot be Empty");
             return false;
+        }else if (mBinding.alarmLowInputSettingEDT.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
+            return false;
+        } else if (mBinding.alarmhighInputSettingEDT.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
+            return false;
         }
         return true;
+    }
+    private String toStringSplit(int digits, int digitPoint, EditText editText) {
+        if(editText.getText().toString().split("\\.").length==1){
+            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
+        }
+        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
     }
 
     private Boolean isEmpty(EditText editText) {
@@ -216,8 +228,8 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
 
                     mBinding.temperatureInputSettingEDT.setText(splitData[9]);
                     mBinding.smoothingFactorInputSettingEDT.setText(splitData[10]);
-                    mBinding.alarmLowInputSettingEDT.setText(splitData[11]);
-                    mBinding.alarmhighInputSettingEDT.setText(splitData[12]);
+                    mBinding.alarmLowInputSettingEDT.setText(splitData[11].substring(0,4)+"."+splitData[11].substring(4,6));
+                    mBinding.alarmhighInputSettingEDT.setText(splitData[12].substring(0,4)+"."+splitData[12].substring(4,6));
 
                     mBinding.calibrationRequiredInputSettingATXT.setText(splitData[13]);
                     /*  if (splitData[13].equals("0")) {

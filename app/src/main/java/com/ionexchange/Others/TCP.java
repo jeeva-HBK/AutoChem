@@ -21,7 +21,8 @@ import static com.ionexchange.Others.ApplicationClass.mIPAddress;
 import static com.ionexchange.Others.ApplicationClass.mPortNumber;
 
 
-public class TCP extends IntentService {
+public class
+TCP extends IntentService {
 
     public static final String ACTION_MyIntentService = "com.ionExchange.RESPONSE";
     private static final String TAG = "TCP";

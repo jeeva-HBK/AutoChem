@@ -73,9 +73,16 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
             mActivity.showProgress();
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + toString(2, mBinding.inputNumberTempISEDT) + SPILT_CHAR +
                     getPosition(2, toString(mBinding.sensorTypeTempISATXT), inputTypeArr) + SPILT_CHAR + getPosition(1, toString(mBinding.sensorActivationTempISATXT), sensorActivationArr) + SPILT_CHAR +
-                    toString(0, mBinding.inputLabelTempISEdt) + SPILT_CHAR + toString(2, mBinding.tempValueTempISEdt) + SPILT_CHAR + toString(3, mBinding.smoothingFactorTempISEdt) + SPILT_CHAR + toString(6, mBinding.alarmLowTempISEdt) + SPILT_CHAR +
-                    toString(6, mBinding.alarmHighTempISEdt) + SPILT_CHAR + toString(3, mBinding.calibRequiredAlarmTempISEdt) + SPILT_CHAR + getPosition(1, toString(mBinding.resetCalibTempISEdt), resetCalibrationArr));
+                    toString(0, mBinding.inputLabelTempISEdt) + SPILT_CHAR + toString(2, mBinding.tempValueTempISEdt) + SPILT_CHAR + toString(3, mBinding.smoothingFactorTempISEdt) + SPILT_CHAR + toStringSplit(4,2, mBinding.alarmLowTempISEdt) + SPILT_CHAR +
+                    toStringSplit(4,2, mBinding.alarmHighTempISEdt) + SPILT_CHAR + toString(3, mBinding.calibRequiredAlarmTempISEdt) + SPILT_CHAR + getPosition(1, toString(mBinding.resetCalibTempISEdt), resetCalibrationArr));
         }
+    }
+
+    private String toStringSplit(int digits, int digitPoint, EditText editText) {
+        if(editText.getText().toString().split("\\.").length==1){
+            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
+        }
+        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
     }
 
 
@@ -148,8 +155,8 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
                     mBinding.inputLabelTempISEdt.setText(splitData[6]);
                     mBinding.tempValueTempISEdt.setText(splitData[7]);
                     mBinding.smoothingFactorTempISEdt.setText(splitData[8]);
-                    mBinding.alarmLowTempISEdt.setText(splitData[9]);
-                    mBinding.alarmHighTempISEdt.setText(splitData[10]);
+                    mBinding.alarmLowTempISEdt.setText(splitData[9].substring(0,4)+"."+splitData[9].substring(4,6));
+                    mBinding.alarmHighTempISEdt.setText(splitData[10].substring(0,4)+"."+splitData[10].substring(4,6));
                     mBinding.calibRequiredAlarmTempISEdt.setText(splitData[11]);
                     mBinding.resetCalibTempISEdt.setText(mBinding.resetCalibTempISEdt.getAdapter().getItem(Integer.parseInt(splitData[12])).toString());
                     initAdapter();
@@ -187,6 +194,12 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
             return false;
         } else if (isEmpty(mBinding.alarmHighTempISEdt)) {
             mAppClass.showSnackBar(getContext(), "Alarm High Factor Cannot be Empty");
+            return false;
+        }else if (mBinding.alarmLowTempISEdt.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
+            return false;
+        } else if (mBinding.alarmHighTempISEdt.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
             return false;
         }
         return true;

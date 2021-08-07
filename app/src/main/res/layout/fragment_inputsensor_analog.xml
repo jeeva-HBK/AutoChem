@@ -283,8 +283,8 @@
                 android:layout_height="match_parent"
                 android:hint="Low Alarm"
                 android:imeOptions="actionNext"
-                android:inputType="number"
-                android:maxLength="6"
+                android:inputType="numberDecimal"
+                android:maxLength="7"
                 android:maxLines="1">
 
             </com.google.android.material.textfield.TextInputEditText>
@@ -306,8 +306,8 @@
                 android:layout_height="match_parent"
                 android:hint="High Alarm"
                 android:imeOptions="actionDone"
-                android:inputType="number"
-                android:maxLength="6"
+                android:inputType="numberDecimal"
+                android:maxLength="7"
                 android:maxLines="1">
 
             </com.google.android.material.textfield.TextInputEditText>

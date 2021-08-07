@@ -66,15 +66,24 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
     }
 
     private void save(View view) {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + VIRTUAL_INPUT + SPILT_CHAR + "01" + SPILT_CHAR +
-                getPosition(0, toString(mBinding.sensorActivationViEDT), sensorActivationArr) + SPILT_CHAR + toString(0, mBinding.labelViEDT) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.sensor1ViATXT), sensorsViArr) + SPILT_CHAR + toString(4, mBinding.sensor1ConstantViEDT) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.sensor2ViATXT), sensorsViArr) + SPILT_CHAR + toString(4, mBinding.sensor2ConstantViEDT) + SPILT_CHAR +
-                toString(4, mBinding.lowRangeViEDT) + SPILT_CHAR + toString(4, mBinding.highRangeViEDT) + SPILT_CHAR +
-                toString(3, mBinding.smoothingFactorViEDT) + SPILT_CHAR +
-                toString(6, mBinding.lowAlarmViEDT) + SPILT_CHAR + toString(6, mBinding.highAlarmViEDT) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.calculationViEDT), calculationArr)
-        );
+        if (validField()) {
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + VIRTUAL_INPUT + SPILT_CHAR + "01" + SPILT_CHAR +
+                    getPosition(0, toString(mBinding.sensorActivationViEDT), sensorActivationArr) + SPILT_CHAR + toString(0, mBinding.labelViEDT) + SPILT_CHAR +
+                    getPosition(2, toString(mBinding.sensor1ViATXT), sensorsViArr) + SPILT_CHAR + toString(4, mBinding.sensor1ConstantViEDT) + SPILT_CHAR +
+                    getPosition(2, toString(mBinding.sensor2ViATXT), sensorsViArr) + SPILT_CHAR + toString(4, mBinding.sensor2ConstantViEDT) + SPILT_CHAR +
+                    toString(4, mBinding.lowRangeViEDT) + SPILT_CHAR + toString(4, mBinding.highRangeViEDT) + SPILT_CHAR +
+                    toString(3, mBinding.smoothingFactorViEDT) + SPILT_CHAR +
+                    toStringSplit(4, 2, mBinding.lowAlarmViEDT) + SPILT_CHAR + toStringSplit(4, 2, mBinding.highAlarmViEDT) + SPILT_CHAR +
+                    getPosition(0, toString(mBinding.calculationViEDT), calculationArr)
+            );
+        }
+    }
+
+    private String toStringSplit(int digits, int digitPoint, EditText editText) {
+        if (editText.getText().toString().split("\\.").length == 1) {
+            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
+        }
+        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
     }
 
     private void initAdapters() {
@@ -83,6 +92,48 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
         mBinding.sensor1ViATXT.setAdapter(getAdapter(sensorsViArr));
         mBinding.sensor2ViATXT.setAdapter(getAdapter(sensorsViArr));
     }
+
+
+    private Boolean isEmpty(EditText editText) {
+        if (editText.getText() == null || editText.getText().toString().equals("")) {
+            editText.setError("Field shouldn't empty !");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean validField() {
+        if (isEmpty(mBinding.smoothingFactorViEDT)) {
+            mAppClass.showSnackBar(getContext(), "smoothing factor cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.lowAlarmViEDT)) {
+            mAppClass.showSnackBar(getContext(), "Alarm low cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.highAlarmViEDT)) {
+            mAppClass.showSnackBar(getContext(), "Alarm high cannot be Empty");
+            return false;
+        } else if (mBinding.lowAlarmViEDT.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
+            return false;
+        } else if (mBinding.highAlarmViEDT.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
+            return false;
+        } else if (isEmpty(mBinding.lowRangeViEDT)) {
+            mAppClass.showSnackBar(getContext(), "low Range cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.highAlarmViEDT)) {
+            mAppClass.showSnackBar(getContext(), "high Range cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.sensor1ConstantViEDT)) {
+            mAppClass.showSnackBar(getContext(), "sensor constant 1 cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.sensor2ConstantViEDT)) {
+            mAppClass.showSnackBar(getContext(), "sensor constant 2 cannot be Empty");
+            return false;
+        }
+        return true;
+    }
+
 
     private String getPosition(int digit, String string, String[] strArr) {
         String j = null;
@@ -133,8 +184,8 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
                     mBinding.lowRangeViEDT.setText(spiltData[10]);
                     mBinding.highRangeViEDT.setText(spiltData[11]);
                     mBinding.smoothingFactorViEDT.setText(spiltData[12]);
-                    mBinding.lowAlarmViEDT.setText(spiltData[13]);
-                    mBinding.highAlarmViEDT.setText(spiltData[14]);
+                    mBinding.lowAlarmViEDT.setText(spiltData[13].substring(0,4)+"."+spiltData[13].substring(4,6));
+                    mBinding.highAlarmViEDT.setText(spiltData[14].substring(0,4)+"."+spiltData[14].substring(4,6));
                     mBinding.calculationViEDT.setText(mBinding.calculationViEDT.getAdapter().getItem(Integer.parseInt(spiltData[15])).toString());
 
                     initAdapters();

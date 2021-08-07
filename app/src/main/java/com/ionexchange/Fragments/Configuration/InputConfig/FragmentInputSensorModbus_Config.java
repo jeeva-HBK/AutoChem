@@ -77,12 +77,19 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                     toString(4, mBinding.modBusMaxValueTie) + SPILT_CHAR +
                     getPosition(1, toString(mBinding.modBusDiagnosticSweepTie), sensorActivationArr) + toString(6, mBinding.modBusTimeTie) + SPILT_CHAR +
                     toString(3, mBinding.modBusSmoothingFactorTie) + SPILT_CHAR +
-                    toString(6, mBinding.modBusAlarmLowTie) + SPILT_CHAR +
-                    toString(6, mBinding.modBusAlarmHighTie) + SPILT_CHAR +
+                    toStringSplit(4, 2, mBinding.modBusAlarmLowTie) + SPILT_CHAR +
+                    toStringSplit(4, 2, mBinding.modBusAlarmHighTie) + SPILT_CHAR +
                     toString(3, mBinding.modBusCalibrationRequiredAlarmTie) + SPILT_CHAR +
                     getPosition(1, toString(mBinding.modBusResetCalibrationTie), resetCalibrationArr));
 
         }
+    }
+
+    private String toStringSplit(int digits, int digitPoint, EditText editText) {
+        if (editText.getText().toString().split("\\.").length == 1) {
+            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
+        }
+        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
     }
 
     private String getPosition(int digit, String string, String[] strArr) {
@@ -202,7 +209,13 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
         } else if (isEmpty(mBinding.modBusAlarmHighTie)) {
             mAppClass.showSnackBar(getContext(), "Alarm High cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.modBusTimeTie)) {
+        } else if (mBinding.modBusAlarmLowTie.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
+            return false;
+        } else if (mBinding.modBusMaxValueTie.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
+            return false;
+        }else if (isEmpty(mBinding.modBusTimeTie)) {
             mAppClass.showSnackBar(getContext(), "Time cannot be Empty");
             return false;
         } else if (mBinding.modBusTimeTie.getText().toString().length() > 6) {

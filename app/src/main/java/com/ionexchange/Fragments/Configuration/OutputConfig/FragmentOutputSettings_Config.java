@@ -43,6 +43,7 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
     public void onClick(String sensorInputNo) {
         mBinding.outputRv.setVisibility(View.GONE);
         mBinding.outputHost.setVisibility(View.VISIBLE);
+        mBinding.view9.setVisibility(View.GONE);
         getParentFragmentManager().beginTransaction().replace(mBinding.outputHost.getId(), new FragmentOutput_Config()).commit();
     }
 }

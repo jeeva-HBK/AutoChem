@@ -37,6 +37,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
     FragmentInputsensorAnalogBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;
+    Integer LowAlarm;
 
     @Nullable
     @Override
@@ -76,8 +77,8 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                     toString(4, mBinding.analogMinValueTie) + SPILT_CHAR +
                     toString(4, mBinding.analogMaxValueTie) + SPILT_CHAR +
                     toString(3, mBinding.analogSmoothingFactorTie) + SPILT_CHAR +
-                    toString(6, mBinding.analogAlarmLowTie) + SPILT_CHAR +
-                    toString(6, mBinding.analogHighLowTie) + SPILT_CHAR +
+                    toStringSplit(4, 2, mBinding.analogAlarmLowTie) + SPILT_CHAR +
+                    toStringSplit(4, 2, mBinding.analogHighLowTie) + SPILT_CHAR +
                     toString(3, mBinding.analogCalibrationRequiredAlarmTie) + SPILT_CHAR +
                     getPosition(1, toString(mBinding.analogResetCalibrationTie), resetCalibrationArr));
         }
@@ -96,6 +97,13 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
 
     private String toString(int digits, EditText editText) {
         return mAppClass.formDigits(digits, editText.getText().toString());
+    }
+
+    private String toStringSplit(int digits, int digitPoint, EditText editText) {
+       if(editText.getText().toString().split("\\.").length==1){
+           return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
+       }
+        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
     }
 
     private String toString(AutoCompleteTextView editText) {
@@ -158,10 +166,11 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                     mBinding.analogMinValueTie.setText(data[9]);
                     mBinding.analogMaxValueTie.setText(data[10]);
                     mBinding.analogSmoothingFactorTie.setText(data[11]);
-                    mBinding.analogAlarmLowTie.setText(data[12]);
-                    mBinding.analogHighLowTie.setText(data[13]);
+                    mBinding.analogAlarmLowTie.setText(data[12].substring(0, 4) + "." + data[12].substring(4, 6));
+                    mBinding.analogHighLowTie.setText(data[13].substring(0, 4) + "." + data[13].substring(4, 6));
                     mBinding.analogCalibrationRequiredAlarmTie.setText(data[14]);
                     mBinding.analogResetCalibrationTie.setText(mBinding.analogResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[15])).toString());
+
                     initAdapter();
                 } else if (data[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), "READ FAILED");
@@ -194,6 +203,12 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
             return false;
         } else if (isEmpty(mBinding.analogAlarmLowTie)) {
             mAppClass.showSnackBar(getContext(), "Alarm low cannot be Empty");
+            return false;
+        } else if (mBinding.analogAlarmLowTie.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
+            return false;
+        } else if (mBinding.analogHighLowTie.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
             return false;
         } else if (isEmpty(mBinding.analogHighLowTie)) {
             mAppClass.showSnackBar(getContext(), "Alarm High cannot be Empty");

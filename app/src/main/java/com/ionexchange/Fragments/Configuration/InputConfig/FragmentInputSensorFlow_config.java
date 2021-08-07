@@ -136,6 +136,12 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else if (isEmpty(mBinding.alarmHighFeedFlowISEdt)) {
             mAppClass.showSnackBar(getContext(), "Calibartion Required cannot be Empty");
             return false;
+        } else if (mBinding.alarmLowFeedFlowISEdt.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
+            return false;
+        } else if (mBinding.alarmHighFeedFlowISEdt.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
+            return false;
         }
         return true;
     }
@@ -165,6 +171,12 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else if (isEmpty(mBinding.alarmHighPaddleFlowISEdt)) {
             mAppClass.showSnackBar(getContext(), "Calibartion Required cannot be Empty");
             return false;
+        } else if (mBinding.alarmHighContactorFlowISEdt.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
+            return false;
+        } else if (mBinding.alarmHighPaddleFlowISEdt.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
+            return false;
         }
         return true;
     }
@@ -193,6 +205,12 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
             return false;
         } else if (isEmpty(mBinding.calibrationRequiredFlowISEdt)) {
             mAppClass.showSnackBar(getContext(), "Calibartion Required cannot be Empty");
+            return false;
+        } else if (mBinding.alarmLowContactorFlowISEdt.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
+            return false;
+        } else if (mBinding.alarmHighContactorFlowISEdt.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
             return false;
         }
         return true;
@@ -232,6 +250,12 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
             return false;
         } else if (isEmpty(mBinding.calibrationRequiredFlowISEdt)) {
             mAppClass.showSnackBar(getContext(), "Calibartion Required cannot be Empty");
+            return false;
+        } else if (mBinding.alarmLowAnalogFlowISEdt.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
+            return false;
+        } else if (mBinding.alarmHighAnalogFlowISEdt.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
             return false;
         }
         return true;
@@ -273,8 +297,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 toString(4, mBinding.resetFlowTotalFlowISEdt) + SPILT_CHAR +
                 toString(4, mBinding.setFlowTotalFeedIsEDT) + SPILT_CHAR +
                 getPosition(toString(mBinding.scheduleResetFlowISEdt), scheduleResetArr) + SPILT_CHAR +
-                toString(6, mBinding.alarmLowFeedFlowISEdt) + SPILT_CHAR +
-                toString(6, mBinding.alarmHighFeedFlowISEdt));
+                toStringSplit(4, 2, mBinding.alarmLowFeedFlowISEdt) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.alarmHighFeedFlowISEdt));
     }
 
     private void sendPaddleWheelPacket() {
@@ -293,8 +317,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 toString(4, mBinding.resetFlowTotalFlowISEdt) + SPILT_CHAR +
                 toString(4, mBinding.setFlowTotalPaddleFlowISEdt) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.scheduleResetFlowISEdt), scheduleResetArr) + SPILT_CHAR +
-                toString(6, mBinding.alarmLowPaddleFlowISEdt) + SPILT_CHAR +
-                toString(6, mBinding.alarmHighPaddleFlowISEdt));
+                toStringSplit(4, 2, mBinding.alarmLowPaddleFlowISEdt) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.alarmHighPaddleFlowISEdt));
     }
 
     private void sendContactorPacket() {
@@ -312,8 +336,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 toString(4, mBinding.resetFlowTotalFlowISEdt) + SPILT_CHAR +
                 toString(4, mBinding.setFlowTotalContactorFlowISEdt) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.scheduleResetFlowISEdt), scheduleResetArr) + SPILT_CHAR +
-                toString(6, mBinding.alarmLowContactorFlowISEdt) + SPILT_CHAR +
-                toString(6, mBinding.alarmHighContactorFlowISEdt));
+                toStringSplit(4, 2, mBinding.alarmLowContactorFlowISEdt) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.alarmHighContactorFlowISEdt));
     }
 
     private void sendAnalogPacket() {
@@ -334,8 +358,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 toString(4, mBinding.resetFlowTotalFlowISEdt) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.scheduleResetFlowISEdt), scheduleResetArr) + SPILT_CHAR +
                 toString(4, mBinding.setFlowTotalAnalogFlowISEdt) + SPILT_CHAR +
-                toString(6, mBinding.alarmLowAnalogFlowISEdt) + SPILT_CHAR +
-                toString(6, mBinding.alarmHighAnalogFlowISEdt) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.alarmLowAnalogFlowISEdt) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.alarmHighAnalogFlowISEdt) + SPILT_CHAR +
                 toString(3, mBinding.calibrationRequiredFlowISEdt) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.resetCalibrationAnalogFlowISEdt), resetCalibrationArr));
     }
@@ -368,6 +392,12 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         return editText.getText().toString();
     }
 
+    private String toStringSplit(int digits, int digitPoint, EditText editText) {
+        if (editText.getText().toString().split("\\.").length == 1) {
+            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
+        }
+        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
+    }
 
     private void initAdapter() {
         mBinding.flowMeterTypeFlowISATXT.setAdapter(getAdapter(flowMeterTypeArr));
@@ -419,8 +449,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                         mBinding.totalizerAlarmFlowISEdt.setText(splitData[13]);
                         mBinding.resetFlowTotalFlowISEdt.setText(splitData[14]);
                         mBinding.scheduleResetFlowISEdt.setText(mBinding.scheduleResetFlowISEdt.getAdapter().getItem(Integer.parseInt(splitData[15])).toString());
-                        mBinding.alarmLowAnalogFlowISEdt.setText(splitData[17]);
-                        mBinding.alarmHighAnalogFlowISEdt.setText(splitData[18]);
+                        mBinding.alarmLowAnalogFlowISEdt.setText(splitData[17].substring(0, 4) + "." + splitData[17].substring(4, 6));
+                        mBinding.alarmHighAnalogFlowISEdt.setText(splitData[18].substring(0, 4) + "." + splitData[18].substring(4, 6));
 
                         mBinding.rateUnitAnalogFlowISEdt.setText(splitData[9]);
                         mBinding.flowMaxAnalogFlowISEdt.setText(splitData[10]);
@@ -436,8 +466,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                         mBinding.resetFlowTotalFlowISEdt.setText(splitData[11]);
                         mBinding.setFlowTotalContactorFlowISEdt.setText(splitData[12]);
                         mBinding.scheduleResetFlowISEdt.setText(mBinding.scheduleResetFlowISEdt.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
-                        mBinding.alarmLowContactorFlowISEdt.setText(splitData[14]);
-                        mBinding.alarmHighContactorFlowISEdt.setText(splitData[15]);
+                        mBinding.alarmLowContactorFlowISEdt.setText(splitData[14].substring(0, 4) + "." + splitData[14].substring(4, 6));
+                        mBinding.alarmHighContactorFlowISEdt.setText(splitData[15].substring(0, 4) + "." + splitData[15].substring(4, 6));
                         // Paddle wheel flow meter type
                     } else if (splitData[5].equals("2")) {
                         mBinding.rateUnitPaddleFlowISEdt.setText(splitData[9]);
@@ -446,8 +476,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                         mBinding.resetFlowTotalFlowISEdt.setText(splitData[12]);
                         mBinding.setFlowTotalPaddleFlowISEdt.setText(splitData[13]);
                         mBinding.scheduleResetFlowISEdt.setText(mBinding.scheduleResetFlowISEdt.getAdapter().getItem(Integer.parseInt(splitData[14])).toString());
-                        mBinding.alarmLowPaddleFlowISEdt.setText(splitData[15]);
-                        mBinding.alarmHighPaddleFlowISEdt.setText(splitData[16]);
+                        mBinding.alarmLowPaddleFlowISEdt.setText(splitData[15].substring(0, 4) + "." + splitData[15].substring(4, 6));
+                        mBinding.alarmHighPaddleFlowISEdt.setText(splitData[16].substring(0, 4) + "." + splitData[16].substring(4, 6));
                         // Feed Monitor type
                     } else if (splitData[5].equals("3")) {
                         mBinding.rateUnitFeedInputSettingsEdt.setText(splitData[9]);
@@ -460,8 +490,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                         mBinding.resetFlowTotalFlowISEdt.setText(splitData[16]);
                         mBinding.setFlowTotalFeedIsEDT.setText(splitData[17]);
                         mBinding.scheduleResetFlowISEdt.setText(mBinding.scheduleResetFlowISEdt.getAdapter().getItem(Integer.parseInt(splitData[18])).toString());
-                        mBinding.alarmLowFeedFlowISEdt.setText(splitData[19]);
-                        mBinding.alarmHighFeedFlowISEdt.setText(splitData[20]);
+                        mBinding.alarmLowFeedFlowISEdt.setText(splitData[19].substring(0, 4) + "." + splitData[19].substring(4, 6));
+                        mBinding.alarmHighFeedFlowISEdt.setText(splitData[20].substring(0, 4) + "." + splitData[20].substring(4, 6));
                     }
                     initAdapter();
                 } else if (splitData[2].equals(RES_FAILED)) {

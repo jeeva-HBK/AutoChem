@@ -83,8 +83,8 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                     toString(4, mBinding.tempCompTorCondISEdt) + SPILT_CHAR +
                     toString(4, mBinding.tempCompFacTorCondISEdt) + SPILT_CHAR +
                     toString(3, mBinding.smoothingFactorTorConEDT) + SPILT_CHAR +
-                    toString(6, mBinding.alarmLowTorCondISEdt) + SPILT_CHAR +
-                    toString(6, mBinding.alarmHighTorCondISEdt) + SPILT_CHAR +
+                    toStringSplit(4, 2, mBinding.alarmLowTorCondISEdt) + SPILT_CHAR +
+                    toStringSplit(4, 2, mBinding.alarmHighTorCondISEdt) + SPILT_CHAR +
                     toString(3, mBinding.calibRequiredAlarmTorCondISEdt) + SPILT_CHAR +
                     getPosition(1, toString(mBinding.resetCalibTorCondISEdt), resetCalibrationArr)
             );
@@ -120,6 +120,13 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
 
     public ArrayAdapter<String> getAdapter(String[] strArr) {
         return new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, strArr);
+    }
+
+    private String toStringSplit(int digits, int digitPoint, EditText editText) {
+        if (editText.getText().toString().split("\\.").length == 1) {
+            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
+        }
+        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
     }
 
     @Override
@@ -166,8 +173,8 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                     mBinding.tempCompTorCondISEdt.setText(spiltData[10]);
                     mBinding.tempCompFacTorCondISEdt.setText(spiltData[11]);
                     mBinding.smoothingFactorTorConEDT.setText(spiltData[12]);
-                    mBinding.alarmLowTorCondISEdt.setText(spiltData[13]);
-                    mBinding.alarmHighTorCondISEdt.setText(spiltData[14]);
+                    mBinding.alarmLowTorCondISEdt.setText(spiltData[13].substring(0, 4) + "." + spiltData[13].substring(4, 6));
+                    mBinding.alarmHighTorCondISEdt.setText(spiltData[14].substring(0, 4) + "." + spiltData[14].substring(4, 6));
                     mBinding.calibRequiredAlarmTorCondISEdt.setText(spiltData[15]);
                     mBinding.resetCalibTorCondISEdt.setText(mBinding.resetCalibTorCondISEdt.getAdapter().getItem(Integer.parseInt(spiltData[16])).toString());
 
@@ -211,6 +218,12 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
             return false;
         } else if (isEmpty(mBinding.alarmHighTorCondISEdt)) {
             mAppClass.showSnackBar(getContext(), "Alarm High Factor Cannot be Empty");
+            return false;
+        } else if (mBinding.alarmLowTorCondISEdt.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
+            return false;
+        } else if (mBinding.tempLinkedTorCondISEdt.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
             return false;
         }
         return true;

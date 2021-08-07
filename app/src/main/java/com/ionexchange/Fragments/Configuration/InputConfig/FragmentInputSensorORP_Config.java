@@ -21,9 +21,6 @@ import com.ionexchange.databinding.FragmentInputsensorOrpBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
@@ -52,7 +49,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
-        mActivity = (BaseActivity)getActivity();
+        mActivity = (BaseActivity) getActivity();
         initAdapter();
 
         mBinding.orpsaveLayoutInputSettings.setOnClickListener(this::save);
@@ -74,17 +71,24 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
             mActivity.showProgress();
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                     INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                    toString(2, mBinding.orpInputNumberInputSettingsEDT) +SPILT_CHAR +
-                    getPosition(2,toString(mBinding.orpSensorTypeEDT), inputTypeArr) +SPILT_CHAR +
-                    getPosition(1,toString(mBinding.orpSensorActISEDT), sensorActivationArr) + SPILT_CHAR +
+                    toString(2, mBinding.orpInputNumberInputSettingsEDT) + SPILT_CHAR +
+                    getPosition(2, toString(mBinding.orpSensorTypeEDT), inputTypeArr) + SPILT_CHAR +
+                    getPosition(1, toString(mBinding.orpSensorActISEDT), sensorActivationArr) + SPILT_CHAR +
                     toString(0, mBinding.orpInputLabelISEDT) + SPILT_CHAR +
                     toString(3, mBinding.orpSmoothingFactorISEDT) + SPILT_CHAR +
-                    toString(6, mBinding.orpalarmLowISEDT) + SPILT_CHAR +
-                    toString(6, mBinding.orpalarmHighISEDT) + SPILT_CHAR +
+                    toStringSplit(4, 2, mBinding.orpalarmLowISEDT) + SPILT_CHAR +
+                    toStringSplit(4, 2, mBinding.orpalarmHighISEDT) + SPILT_CHAR +
                     toString(3, mBinding.orpCalibrationAlarmRequiredISEDT) + SPILT_CHAR +
-                    getPosition(1,toString(mBinding.orpResetCalibrationISEDT), resetCalibrationArr)
+                    getPosition(1, toString(mBinding.orpResetCalibrationISEDT), resetCalibrationArr)
             );
         }
+    }
+
+    private String toStringSplit(int digits, int digitPoint, EditText editText) {
+        if (editText.getText().toString().split("\\.").length == 1) {
+            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
+        }
+        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
     }
 
     private String getPosition(int digit, String string, String[] strArr) {
@@ -118,7 +122,8 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     @Override
     public void onResume() {
         super.onResume();
-        mActivity.showProgress();;
+        mActivity.showProgress();
+        ;
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "02");
     }
 
@@ -195,6 +200,12 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
             return false;
         } else if (isEmpty(mBinding.orpalarmHighISEDT)) {
             mAppClass.showSnackBar(getContext(), "Alarm High Factor Cannot be Empty");
+            return false;
+        }else if (mBinding.orpalarmLowISEDT.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
+            return false;
+        } else if (mBinding.orpalarmHighISEDT.getText().toString().matches(".")) {
+            mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
             return false;
         }
         return true;

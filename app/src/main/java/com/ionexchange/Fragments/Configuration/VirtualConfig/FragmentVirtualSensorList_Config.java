@@ -40,6 +40,7 @@ public class FragmentVirtualSensorList_Config extends Fragment implements RvOnCl
     @Override
     public void onClick(String sensorInputNo) {
         mBinding.viRv.setVisibility(View.GONE);
+        mBinding.view8.setVisibility(View.GONE);
         getParentFragmentManager().beginTransaction().replace(mBinding.viHost.getId(), new FragmentVirtualSensor_config(sensorInputNo)).commit();
     }
 }

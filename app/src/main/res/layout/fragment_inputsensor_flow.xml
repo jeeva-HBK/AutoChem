@@ -318,8 +318,8 @@
                         android:layout_height="wrap_content"
                         android:hint="Alarm Low"
                         android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="6"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -342,8 +342,8 @@
                         android:layout_height="wrap_content"
                         android:hint="Alarm High"
                         android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="6"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -459,8 +459,8 @@
                         android:layout_height="wrap_content"
                         android:hint="Alarm Low"
                         android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="6"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -484,8 +484,8 @@
                         android:layout_height="wrap_content"
                         android:hint="Alarm High"
                         android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="6"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -670,7 +670,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Alarm Low"
                         android:imeOptions="actionNext"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:maxLength="6"
                         android:maxLines="1" />
 
@@ -694,7 +694,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Alarm High"
                         android:imeOptions="actionNext"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:maxLength="6"
                         android:maxLines="1" />
 
@@ -886,8 +886,8 @@
                         android:layout_height="wrap_content"
                         android:hint="Alarm Low"
                         android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="6"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -912,8 +912,8 @@
                         android:layout_height="wrap_content"
                         android:hint="Alarm High"
                         android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="6"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
