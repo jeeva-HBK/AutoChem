@@ -26,6 +26,8 @@ import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
 public class ApplicationClass extends Application {
     private static final String TAG = "ApplicationClass";
 
+
+
     public static String[] sensorActivationArr = {"ENABLE", "DISABLE"},
             inputTypeArr = {"pH", "ORP", "Temp", "Flow/Water Meter", "Conductivity", "Toroidal", "Analog Input", "Tank Level", "Digital Sensor", "Modbus Sensor"},
             bufferArr = {"Auto", "Manual"},
