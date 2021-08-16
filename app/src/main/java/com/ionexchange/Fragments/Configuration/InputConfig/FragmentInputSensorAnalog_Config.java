@@ -1,6 +1,7 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorAnalogBinding;
 
+import static android.content.ContentValues.TAG;
 import static com.ionexchange.Others.ApplicationClass.analogTypeArr;
 import static com.ionexchange.Others.ApplicationClass.analogUnitArr;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
@@ -38,6 +40,21 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
     ApplicationClass mAppClass;
     BaseActivity mActivity;
     Integer LowAlarm;
+    String inputNumber;
+    String sensorName;
+    int sensorStatus;
+
+    public FragmentInputSensorAnalog_Config(String inputNumber, int sensorStatus) {
+        this.inputNumber = inputNumber;
+        this.sensorStatus = sensorStatus;
+    }
+
+    public FragmentInputSensorAnalog_Config(String inputNumber, String sensorName, int sensorStatus) {
+        this.inputNumber = inputNumber;
+        this.sensorName = sensorName;
+        this.sensorStatus = sensorStatus;
+    }
+
 
     @Nullable
     @Override
@@ -54,6 +71,9 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         initAdapter();
         mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
         mBinding.saveFabInputSettings.setOnClickListener(this::save);
+        mBinding.deleteLayoutInputSettings.setOnClickListener(this::delete);
+        mBinding.DeleteFabInputSettings.setOnClickListener(this::delete);
+
 
         mBinding.backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,26 +83,36 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         });
     }
 
+    private void delete(View view) {
+        sendData(2);
+    }
+
+
     private void save(View view) {
         if (validField()) {
-            mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
-                    INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                    toString(2, mBinding.analogInputNumberTie) + SPILT_CHAR +
-                    getPosition(2, toString(mBinding.analogSensorTypeTie), inputTypeArr) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.analogTypeTie), analogTypeArr) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.analogSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
-                    toString(0, mBinding.analogInputLabelTie) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.analogUnitMeasurementTie), analogUnitArr) + SPILT_CHAR +
-                    toString(4, mBinding.analogMinValueTie) + SPILT_CHAR +
-                    toString(4, mBinding.analogMaxValueTie) + SPILT_CHAR +
-                    toString(3, mBinding.analogSmoothingFactorTie) + SPILT_CHAR +
-                    toStringSplit(4, 2, mBinding.analogAlarmLowTie) + SPILT_CHAR +
-                    toStringSplit(4, 2, mBinding.analogHighLowTie) + SPILT_CHAR +
-                    toString(3, mBinding.analogCalibrationRequiredAlarmTie) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.analogResetCalibrationTie), resetCalibrationArr));
+            sendData(sensorStatus);
         }
+    }
 
+
+    void sendData(int sensorStatus) {
+        mActivity.showProgress();
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                toString(2, mBinding.analogInputNumberTie) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.analogSensorTypeTie), inputTypeArr) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.analogTypeTie), analogTypeArr) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.analogSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
+                toString(0, mBinding.analogInputLabelTie) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.analogUnitMeasurementTie), analogUnitArr) + SPILT_CHAR +
+                toString(4, mBinding.analogMinValueTie) + SPILT_CHAR +
+                toString(4, mBinding.analogMaxValueTie) + SPILT_CHAR +
+                toString(3, mBinding.analogSmoothingFactorTie) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.analogAlarmLowTie) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.analogHighLowTie) + SPILT_CHAR +
+                toString(3, mBinding.analogCalibrationRequiredAlarmTie) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.analogResetCalibrationTie), resetCalibrationArr) + SPILT_CHAR +
+                sensorStatus);
     }
 
     private String getPosition(int digit, String string, String[] strArr) {
@@ -100,9 +130,9 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
     }
 
     private String toStringSplit(int digits, int digitPoint, EditText editText) {
-       if(editText.getText().toString().split("\\.").length==1){
-           return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
-       }
+        if (editText.getText().toString().split("\\.").length == 1) {
+            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
+        }
         return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
     }
 
@@ -125,8 +155,16 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
     @Override
     public void onResume() {
         super.onResume();
-        mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "19");
+
+        if (sensorName == null) {
+            mActivity.showProgress();
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "19");
+        } else {
+            mBinding.analogInputNumberTie.setText(inputNumber);
+            mBinding.analogSensorTypeTie.setText(sensorName);
+            mBinding.deleteLayoutInputSettings.setVisibility(View.INVISIBLE);
+            mBinding.saveTxt.setText("ADD");
+        }
     }
 
     @Override

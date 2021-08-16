@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--Radio_Group-->
+        <com.ionexchange.customClass.CustomRadioButton
+            android:id="@+id/relativeRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!--Row 1-->
+            <TableRow>
+
+                <RadioButton
+                    android:id="@+id/inputRb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_flat_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="SENSOR"
+                    android:textColor="@color/radio_flat_text_selector"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/analogRb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_flat_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="ANALOG"
+                    android:textColor="@color/radio_flat_text_selector"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/digitalRb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_flat_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="DIGITAL"
+                    android:textColor="@color/radio_flat_text_selector"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/flowMeterRb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_flat_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="FLOWMETER"
+                    android:textColor="@color/radio_flat_text_selector"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/modbusRb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_flat_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="MODBUS"
+                    android:textColor="@color/radio_flat_text_selector"
+                    android:textStyle="bold" />
+
+            </TableRow>
+
+            <!--Row 2-->
+            <TableRow>
+
+                <RadioButton
+                    android:id="@+id/generalRb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_flat_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="GENERAL"
+                    android:textColor="@color/radio_flat_text_selector"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/tankRb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_flat_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="TANK"
+                    android:textColor="@color/radio_flat_text_selector"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/virtualSensorRb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_flat_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="VIRTUAL SENSOR"
+                    android:textColor="@color/radio_flat_text_selector"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/outputRb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_flat_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="OUTPUT"
+                    android:textColor="@color/radio_flat_text_selector"
+                    android:textStyle="bold" />
+
+            </TableRow>
+
+        </com.ionexchange.customClass.CustomRadioButton>
+
+        <!--SensorList-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/selectSensorRv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/relativeRadioGroup"
+            app:layout_constraintStart_toStartOf="@+id/relativeRadioGroup"
+            app:layout_constraintTop_toBottomOf="@+id/relativeRadioGroup" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

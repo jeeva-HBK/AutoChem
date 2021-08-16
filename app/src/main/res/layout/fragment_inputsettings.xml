@@ -6,6 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!--ToolBar-->
         <View
             android:id="@+id/view8"
             android:layout_width="wrap_content"
@@ -14,12 +15,80 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!--ButtonLeft-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/leftArrow_is_btn"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
+            android:backgroundTint="@color/colorSecondary"
+            android:text=""
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_back"
+            app:iconGravity="textStart"
+            app:iconTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/rightArrow_is_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view8" />
+
+
+        <!--ADD SENSOR-->
+        <TextView
+            android:id="@+id/addsensor_is_btn"
+            style="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="15dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="ADD SENSOR"
+            android:textColor="@color/colorSecondary"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/rightArrow_is_btn"
+            app:layout_constraintEnd_toStartOf="@+id/help_is_btn"
+            app:layout_constraintTop_toTopOf="@+id/rightArrow_is_btn" />
+
+        <!--Button Help-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/help_is_btn"
+            android:layout_width="80dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="@color/colorSecondary"
+            android:text="HELP"
+            android:textColor="@color/black"
+            android:textSize="17dp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/view8"
+            app:layout_constraintEnd_toStartOf="@+id/rightArrow_is_btn"
+            app:layout_constraintTop_toTopOf="@+id/view8" />
+
+
+        <!--ButtonRight-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/rightArrow_is_btn"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="3dp"
+            android:backgroundTint="@color/colorSecondary"
+            android:text=""
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_back_right"
+            app:iconGravity="textStart"
+            app:iconTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/view8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view8" />
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/inputsRv"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="visible"
-            android:layout_marginStart="20dp"
+            android:layout_margin="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +98,7 @@
             android:id="@+id/inputHostFrame"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="20dp"
+            android:layout_margin="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

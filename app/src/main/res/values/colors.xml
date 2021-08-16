@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--App Colors-->
-    <color name="colorPrimary">#0097db</color>
+    <color name="colorPrimary">#0097DB</color>
     <color name="colorPrimaryVarient">#0069a9</color>
     <color name="colorSecondary">#ACE4C4</color>
     <color name="colorSecondaryVarient">#ACE4C4</color>
@@ -14,4 +14,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#F44336</color>
     <color name="ash">#757575</color>
+
 </resources>

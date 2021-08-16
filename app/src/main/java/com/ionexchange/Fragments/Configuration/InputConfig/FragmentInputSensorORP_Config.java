@@ -36,6 +36,21 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     FragmentInputsensorOrpBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;
+    String inputNumber;
+    String sensorName;
+    int sensorStatus;
+
+    public FragmentInputSensorORP_Config(String inputNumber, int sensorStatus) {
+        this.inputNumber = inputNumber;
+        this.sensorStatus = sensorStatus;
+    }
+
+    public FragmentInputSensorORP_Config(String inputNumber, String sensorName, int sensorStatus) {
+        this.inputNumber = inputNumber;
+        this.sensorName = sensorName;
+        this.sensorStatus = sensorStatus;
+    }
+
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -63,25 +78,30 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     }
 
     private void delete(View view) {
-
+        sendData(2);
     }
 
     private void save(View view) {
         if (validation()) {
-            mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
-                    INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                    toString(2, mBinding.orpInputNumberInputSettingsEDT) + SPILT_CHAR +
-                    getPosition(2, toString(mBinding.orpSensorTypeEDT), inputTypeArr) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.orpSensorActISEDT), sensorActivationArr) + SPILT_CHAR +
-                    toString(0, mBinding.orpInputLabelISEDT) + SPILT_CHAR +
-                    toString(3, mBinding.orpSmoothingFactorISEDT) + SPILT_CHAR +
-                    toStringSplit(4, 2, mBinding.orpalarmLowISEDT) + SPILT_CHAR +
-                    toStringSplit(4, 2, mBinding.orpalarmHighISEDT) + SPILT_CHAR +
-                    toString(3, mBinding.orpCalibrationAlarmRequiredISEDT) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.orpResetCalibrationISEDT), resetCalibrationArr)
-            );
+            sendData(sensorStatus);
         }
+    }
+
+    void sendData(int sensorStatus) {
+        mActivity.showProgress();
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                toString(2, mBinding.orpInputNumberInputSettingsEDT) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.orpSensorTypeEDT), inputTypeArr) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.orpSensorActISEDT), sensorActivationArr) + SPILT_CHAR +
+                toString(0, mBinding.orpInputLabelISEDT) + SPILT_CHAR +
+                toString(3, mBinding.orpSmoothingFactorISEDT) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.orpalarmLowISEDT) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.orpalarmHighISEDT) + SPILT_CHAR +
+                toString(3, mBinding.orpCalibrationAlarmRequiredISEDT) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.orpResetCalibrationISEDT), resetCalibrationArr) + SPILT_CHAR +
+                sensorStatus
+        );
     }
 
     private String toStringSplit(int digits, int digitPoint, EditText editText) {
@@ -122,9 +142,16 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     @Override
     public void onResume() {
         super.onResume();
-        mActivity.showProgress();
-        ;
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "02");
+        if (sensorName == null) {
+            mActivity.showProgress();
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "02");
+        } else {
+            mBinding.orpInputNumberInputSettingsEDT.setText(inputNumber);
+            mBinding.orpSensorTypeEDT.setText(sensorName);
+            mBinding.orpDeleteLayoutInputSettings.setVisibility(View.INVISIBLE);
+            mBinding.saveTxt.setText("ADD");
+        }
+
     }
 
     @Override
@@ -201,7 +228,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
         } else if (isEmpty(mBinding.orpalarmHighISEDT)) {
             mAppClass.showSnackBar(getContext(), "Alarm High Factor Cannot be Empty");
             return false;
-        }else if (mBinding.orpalarmLowISEDT.getText().toString().matches(".")) {
+        } else if (mBinding.orpalarmLowISEDT.getText().toString().matches(".")) {
             mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
             return false;
         } else if (mBinding.orpalarmHighISEDT.getText().toString().matches(".")) {

@@ -41,9 +41,18 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     private static final String TAG = "FragmentInputSensor";
 
     String inputNumber;
+    String sensorName;
+    int sensorStatus;
 
-    public FragmentInputSensorPh_Config(String inputNumber) {
+    public FragmentInputSensorPh_Config(String inputNumber, int sensorStatus) {
         this.inputNumber = inputNumber;
+        this.sensorStatus = sensorStatus;
+    }
+
+    public FragmentInputSensorPh_Config(String inputNumber, String sensorName, int sensorStatus) {
+        this.inputNumber = inputNumber;
+        this.sensorName = sensorName;
+        this.sensorStatus = sensorStatus;
     }
 
     @Nullable
@@ -72,26 +81,31 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     }
 
     private void delete(View view) {
-
+        sendData(2);
     }
 
     private void save(View view) {
         if (validField()) {
-            mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                    toString(2, mBinding.inputNumberInputSettingsEDT) + SPILT_CHAR +
-                    getPosition(2, toString(mBinding.sensorInputSettingsATXT), inputTypeArr) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.sensorActivationInputSettingsATXT), sensorActivationArr) + SPILT_CHAR +
-                    toString(0, mBinding.inputLabelInputSettingsEdt) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.bufferTypeInputSettingATXT), bufferArr) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.tempLinkedInputSettingATXT), tempLinkedArr) + SPILT_CHAR +
-                    toString(2, mBinding.temperatureInputSettingEDT) + SPILT_CHAR +
-                    toString(3, mBinding.smoothingFactorInputSettingEDT) + SPILT_CHAR +
-                    toStringSplit(4, 2,mBinding.alarmLowInputSettingEDT) + SPILT_CHAR +
-                    toStringSplit(4,2, mBinding.alarmhighInputSettingEDT) + SPILT_CHAR +
-                    toString(3, mBinding.calibrationRequiredInputSettingATXT) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.resetCalibrationInputSettingEDT), resetCalibrationArr));
+            sendData(sensorStatus);
         }
+    }
+
+    void sendData(int sensorStatus) {
+        mActivity.showProgress();
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                toString(2, mBinding.inputNumberInputSettingsEDT) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.sensorInputSettingsATXT), inputTypeArr) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.sensorActivationInputSettingsATXT), sensorActivationArr) + SPILT_CHAR +
+                toString(0, mBinding.inputLabelInputSettingsEdt) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.bufferTypeInputSettingATXT), bufferArr) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.tempLinkedInputSettingATXT), tempLinkedArr) + SPILT_CHAR +
+                toString(2, mBinding.temperatureInputSettingEDT) + SPILT_CHAR +
+                toString(3, mBinding.smoothingFactorInputSettingEDT) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.alarmLowInputSettingEDT) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.alarmhighInputSettingEDT) + SPILT_CHAR +
+                toString(3, mBinding.calibrationRequiredInputSettingATXT) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.resetCalibrationInputSettingEDT), resetCalibrationArr) + SPILT_CHAR +
+                sensorStatus);
     }
 
     private boolean validField() {
@@ -113,7 +127,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         } else if (isEmpty(mBinding.alarmhighInputSettingEDT)) {
             mAppClass.showSnackBar(getContext(), "Alarm high cannot be Empty");
             return false;
-        }else if (mBinding.alarmLowInputSettingEDT.getText().toString().matches(".")) {
+        } else if (mBinding.alarmLowInputSettingEDT.getText().toString().matches(".")) {
             mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
             return false;
         } else if (mBinding.alarmhighInputSettingEDT.getText().toString().matches(".")) {
@@ -122,8 +136,9 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         }
         return true;
     }
+
     private String toStringSplit(int digits, int digitPoint, EditText editText) {
-        if(editText.getText().toString().split("\\.").length==1){
+        if (editText.getText().toString().split("\\.").length == 1) {
             return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
         }
         return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
@@ -200,8 +215,16 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     @Override
     public void onResume() {
         super.onResume();
-        mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "01");
+        if (sensorName == null) {
+            mActivity.showProgress();
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "01");
+        } else {
+            mBinding.inputNumberInputSettingsEDT.setText(inputNumber);
+            mBinding.sensorInputSettingsATXT.setText(sensorName);
+            mBinding.DeleteLayoutInputSettings.setVisibility(View.INVISIBLE);
+            mBinding.saveTxt.setText("ADD");
+        }
+
     }
 
     private void handleResponce(String[] splitData) {
@@ -228,8 +251,8 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
 
                     mBinding.temperatureInputSettingEDT.setText(splitData[9]);
                     mBinding.smoothingFactorInputSettingEDT.setText(splitData[10]);
-                    mBinding.alarmLowInputSettingEDT.setText(splitData[11].substring(0,4)+"."+splitData[11].substring(4,6));
-                    mBinding.alarmhighInputSettingEDT.setText(splitData[12].substring(0,4)+"."+splitData[12].substring(4,6));
+                    mBinding.alarmLowInputSettingEDT.setText(splitData[11].substring(0, 4) + "." + splitData[11].substring(4, 6));
+                    mBinding.alarmhighInputSettingEDT.setText(splitData[12].substring(0, 4) + "." + splitData[12].substring(4, 6));
 
                     mBinding.calibrationRequiredInputSettingATXT.setText(splitData[13]);
                     /*  if (splitData[13].equals("0")) {
@@ -246,15 +269,14 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             } else if (splitData[0].equals(WRITE_PACKET)) {
 
                 if (splitData[2].equals(RES_SUCCESS)) {
-                    mAppClass.showSnackBar(getContext(), "Write Success !");
+                    mAppClass.showSnackBar(getContext(), "Operation Success !");
                 } else if (splitData[2].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), "Write Failed !");
+                    mAppClass.showSnackBar(getContext(), "Operation Failed !");
                 }
             }
         } else {
             mAppClass.showSnackBar(getContext(), "Received Wrong Packet");
         }
-
 
 
     }

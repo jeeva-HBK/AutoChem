@@ -22,13 +22,11 @@ import com.ionexchange.databinding.FragmentOutputConfigBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.ionexchange.Others.ApplicationClass.OutputBleedFlowRate;
 import static com.ionexchange.Others.ApplicationClass.bleedRelay;
 import static com.ionexchange.Others.ApplicationClass.doseTypeArr;
 import static com.ionexchange.Others.ApplicationClass.flowMeters;
 import static com.ionexchange.Others.ApplicationClass.functionMode;
 import static com.ionexchange.Others.ApplicationClass.inputSensors;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.interlockChannel;
 import static com.ionexchange.Others.ApplicationClass.linkBleedRelay;
 import static com.ionexchange.Others.ApplicationClass.modeAnalog;
@@ -379,11 +377,10 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
     private void enableWater() {
         mBinding.modeOsATXT.setText(mBinding.modeOsATXT.getAdapter().getItem(2).toString());
-        mBinding.setFunctionMode("layoutInhibitorWaterFlow");
+        mBinding.setFunctionMode(lInhibitorWaterFlow);
         mBinding.modeOsATXT.setAdapter(getAdapter(modeInhibitor));
         mBinding.bleedRelayTie.setAdapter(getAdapter(bleedRelay));
         mBinding.flowMeterInputWaterOsATXT.setAdapter(getAdapter(flowMeters));
-
     }
 
     private void enableBleed() {
@@ -765,5 +762,3 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         return true;
     }
 }
-
-

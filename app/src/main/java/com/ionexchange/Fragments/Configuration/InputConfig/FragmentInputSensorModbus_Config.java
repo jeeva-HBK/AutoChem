@@ -37,6 +37,20 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
     FragmentInputsensorModbusBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;
+    String inputNumber;
+    String sensorName;
+    int sensorStatus;
+
+    public FragmentInputSensorModbus_Config(String inputNumber,int sensorStatus) {
+        this.inputNumber = inputNumber;
+        this.sensorStatus = sensorStatus;
+    }
+
+    public FragmentInputSensorModbus_Config(String inputNumber, String sensorName,int sensorStatus) {
+        this.inputNumber = inputNumber;
+        this.sensorName = sensorName;
+        this.sensorStatus = sensorStatus;
+    }
 
     @Nullable
     @Override
@@ -80,7 +94,8 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                     toStringSplit(4, 2, mBinding.modBusAlarmLowTie) + SPILT_CHAR +
                     toStringSplit(4, 2, mBinding.modBusAlarmHighTie) + SPILT_CHAR +
                     toString(3, mBinding.modBusCalibrationRequiredAlarmTie) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.modBusResetCalibrationTie), resetCalibrationArr));
+                    getPosition(1, toString(mBinding.modBusResetCalibrationTie), resetCalibrationArr)+ SPILT_CHAR +
+                    sensorStatus);
 
         }
     }
@@ -126,8 +141,17 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
     @Override
     public void onResume() {
         super.onResume();
-        mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "18");
+        if (sensorName==null) {
+            mActivity.showProgress();
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "18");
+        }else {
+            mBinding.modBusInputNumberTie.setText(inputNumber);
+            mBinding.modBusSensorTypeTie.setText(sensorName);
+            mBinding.DeleteLayoutInputSettings.setVisibility(View.INVISIBLE);
+            mBinding.saveTxt.setText("ADD");
+        }
+
+
     }
 
     @Override

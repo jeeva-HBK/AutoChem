@@ -379,6 +379,18 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+
+        <View
+            android:id="@+id/view_lay"
+            android:layout_width="2dp"
+            android:layout_height="2dp"
+            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintTop_toBottomOf="@id/alarmHigh_inputSettings"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
         <!--saveLayout-->
         <LinearLayout
             android:id="@+id/saveLayout_condIS"
@@ -387,10 +399,11 @@
             android:orientation="horizontal"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/alarmHigh_inputSettings"
+            app:layout_constraintStart_toEndOf="@+id/view_lay"
             app:layout_constraintTop_toBottomOf="@+id/alarmHigh_inputSettings">
 
             <TextView
+                android:id="@+id/save_txt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="5dp"
@@ -421,8 +434,9 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/alarmLow_inputSettings"
+            app:layout_constraintEnd_toEndOf="@+id/view_lay"
             app:layout_constraintTop_toBottomOf="@+id/alarmLow_inputSettings">
 
             <TextView

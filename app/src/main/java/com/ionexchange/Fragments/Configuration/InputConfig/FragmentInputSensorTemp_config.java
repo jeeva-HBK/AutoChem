@@ -38,6 +38,20 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     FragmentInputsensorTempBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;
+    String inputNumber;
+    String sensorName;
+    int sensorStatus;
+
+    public FragmentInputSensorTemp_config(String inputNumber, int sensorStatus) {
+        this.inputNumber = inputNumber;
+        this.sensorStatus = sensorStatus;
+    }
+
+    public FragmentInputSensorTemp_config(String inputNumber, String sensorName, int sensorStatus) {
+        this.inputNumber = inputNumber;
+        this.sensorName = sensorName;
+        this.sensorStatus = sensorStatus;
+    }
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -51,7 +65,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
-        mActivity = (BaseActivity)getActivity();
+        mActivity = (BaseActivity) getActivity();
         initAdapter();
         mBinding.saveFabCondIS.setOnClickListener(this::save);
         mBinding.saveLayoutTempIS.setOnClickListener(this::save);
@@ -64,22 +78,33 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     }
 
     private void delete(View view) {
-
+        sendData(2);
     }
 
-    // getPosition(toString(mBinding.sensorTypeTempISATXT), inputTypeArr)
+
     private void save(View view) {
         if (validation()) {
-            mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + toString(2, mBinding.inputNumberTempISEDT) + SPILT_CHAR +
-                    getPosition(2, toString(mBinding.sensorTypeTempISATXT), inputTypeArr) + SPILT_CHAR + getPosition(1, toString(mBinding.sensorActivationTempISATXT), sensorActivationArr) + SPILT_CHAR +
-                    toString(0, mBinding.inputLabelTempISEdt) + SPILT_CHAR + toString(2, mBinding.tempValueTempISEdt) + SPILT_CHAR + toString(3, mBinding.smoothingFactorTempISEdt) + SPILT_CHAR + toStringSplit(4,2, mBinding.alarmLowTempISEdt) + SPILT_CHAR +
-                    toStringSplit(4,2, mBinding.alarmHighTempISEdt) + SPILT_CHAR + toString(3, mBinding.calibRequiredAlarmTempISEdt) + SPILT_CHAR + getPosition(1, toString(mBinding.resetCalibTempISEdt), resetCalibrationArr));
+            sendData(sensorStatus);
         }
     }
 
+    void sendData(int sensorStatus){
+        mActivity.showProgress();
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + toString(2, mBinding.inputNumberTempISEDT) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.sensorTypeTempISATXT), inputTypeArr) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.sensorActivationTempISATXT), sensorActivationArr) + SPILT_CHAR +
+                toString(0, mBinding.inputLabelTempISEdt) + SPILT_CHAR +
+                toString(2, mBinding.tempValueTempISEdt) + SPILT_CHAR +
+                toString(3, mBinding.smoothingFactorTempISEdt) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.alarmLowTempISEdt) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.alarmHighTempISEdt) + SPILT_CHAR +
+                toString(3, mBinding.calibRequiredAlarmTempISEdt) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.resetCalibTempISEdt), resetCalibrationArr) + SPILT_CHAR +
+                sensorStatus);
+    }
+
     private String toStringSplit(int digits, int digitPoint, EditText editText) {
-        if(editText.getText().toString().split("\\.").length==1){
+        if (editText.getText().toString().split("\\.").length == 1) {
             return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
         }
         return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
@@ -119,8 +144,17 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     @Override
     public void onResume() {
         super.onResume();
-        mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "05");
+        if (sensorName == null) {
+            mActivity.showProgress();
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "05");
+        } else {
+            mBinding.inputNumberTempISEDT.setText(inputNumber);
+            mBinding.sensorTypeTempISATXT.setText(sensorName);
+            mBinding.DeleteLayoutTempIS.setVisibility(View.INVISIBLE);
+            mBinding.saveTxt.setText("ADD");
+        }
+
+
     }
 
     @Override
@@ -144,7 +178,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     }
 
     private void handleResponse(String[] splitData) {
-        // Read RES - {*1# 04# 0# |05# 02# 1# TEMPPH# 33# 100# 120000# 240000# 320# 1*}
+        // Read RES - {1# 04# 0# |05# 02# 1# TEMPPH# 33# 100# 120000# 240000# 320# 1}
         // Write Res -
         if (splitData[1].equals(INPUT_SENSOR_CONFIG)) {
             if (splitData[0].equals(READ_PACKET)) {
@@ -155,8 +189,8 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
                     mBinding.inputLabelTempISEdt.setText(splitData[6]);
                     mBinding.tempValueTempISEdt.setText(splitData[7]);
                     mBinding.smoothingFactorTempISEdt.setText(splitData[8]);
-                    mBinding.alarmLowTempISEdt.setText(splitData[9].substring(0,4)+"."+splitData[9].substring(4,6));
-                    mBinding.alarmHighTempISEdt.setText(splitData[10].substring(0,4)+"."+splitData[10].substring(4,6));
+                    mBinding.alarmLowTempISEdt.setText(splitData[9].substring(0, 4) + "." + splitData[9].substring(4, 6));
+                    mBinding.alarmHighTempISEdt.setText(splitData[10].substring(0, 4) + "." + splitData[10].substring(4, 6));
                     mBinding.calibRequiredAlarmTempISEdt.setText(splitData[11]);
                     mBinding.resetCalibTempISEdt.setText(mBinding.resetCalibTempISEdt.getAdapter().getItem(Integer.parseInt(splitData[12])).toString());
                     initAdapter();
@@ -195,7 +229,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         } else if (isEmpty(mBinding.alarmHighTempISEdt)) {
             mAppClass.showSnackBar(getContext(), "Alarm High Factor Cannot be Empty");
             return false;
-        }else if (mBinding.alarmLowTempISEdt.getText().toString().matches(".")) {
+        } else if (mBinding.alarmLowTempISEdt.getText().toString().matches(".")) {
             mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
             return false;
         } else if (mBinding.alarmHighTempISEdt.getText().toString().matches(".")) {

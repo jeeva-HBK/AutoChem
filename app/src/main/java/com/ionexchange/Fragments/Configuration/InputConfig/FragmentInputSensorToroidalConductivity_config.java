@@ -40,6 +40,21 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     FragmentInputsensorToraidalconductivityBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;
+    int sensorStatus;
+    String inputNumber;
+    String sensorName;
+
+    public FragmentInputSensorToroidalConductivity_config(String inputNumber, int sensorStatus) {
+        this.inputNumber = inputNumber;
+        this.sensorStatus = sensorStatus;
+    }
+
+    public FragmentInputSensorToroidalConductivity_config(String inputNumber, String sensorName, int sensorStatus) {
+        this.inputNumber = inputNumber;
+        this.sensorName = sensorName;
+        this.sensorStatus = sensorStatus;
+    }
+
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -65,30 +80,35 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     }
 
     private void delete(View view) {
-
+        sendData(2);
     }
 
     private void save(View view) {
         if (validation()) {
-            mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
-                    INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                    toString(2, mBinding.inputNumberTorCondISEDT) + SPILT_CHAR +
-                    getPosition(2, toString(mBinding.sensorTypeTorCondISATXT), inputTypeArr) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.sensorActivationTorCondISATXT), sensorActivationArr) + SPILT_CHAR +
-                    toString(0, mBinding.inputLabelTorCondISEdt) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.tempLinkedTorCondISEdt), tempLinkedArr) + SPILT_CHAR +
-                    toString(2, mBinding.tempValueTorCondISEdt) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.unitOfMeasureTorCondISEdt), unitArr) + SPILT_CHAR +
-                    toString(4, mBinding.tempCompTorCondISEdt) + SPILT_CHAR +
-                    toString(4, mBinding.tempCompFacTorCondISEdt) + SPILT_CHAR +
-                    toString(3, mBinding.smoothingFactorTorConEDT) + SPILT_CHAR +
-                    toStringSplit(4, 2, mBinding.alarmLowTorCondISEdt) + SPILT_CHAR +
-                    toStringSplit(4, 2, mBinding.alarmHighTorCondISEdt) + SPILT_CHAR +
-                    toString(3, mBinding.calibRequiredAlarmTorCondISEdt) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.resetCalibTorCondISEdt), resetCalibrationArr)
-            );
+            sendData(sensorStatus);
         }
+    }
+
+    void sendData(int sensorStatus) {
+        mActivity.showProgress();
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                toString(2, mBinding.inputNumberTorCondISEDT) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.sensorTypeTorCondISATXT), inputTypeArr) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.sensorActivationTorCondISATXT), sensorActivationArr) + SPILT_CHAR +
+                toString(0, mBinding.inputLabelTorCondISEdt) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.tempLinkedTorCondISEdt), tempLinkedArr) + SPILT_CHAR +
+                toString(2, mBinding.tempValueTorCondISEdt) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.unitOfMeasureTorCondISEdt), unitArr) + SPILT_CHAR +
+                toString(4, mBinding.tempCompTorCondISEdt) + SPILT_CHAR +
+                toString(4, mBinding.tempCompFacTorCondISEdt) + SPILT_CHAR +
+                toString(3, mBinding.smoothingFactorTorConEDT) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.alarmLowTorCondISEdt) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.alarmHighTorCondISEdt) + SPILT_CHAR +
+                toString(3, mBinding.calibRequiredAlarmTorCondISEdt) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.resetCalibTorCondISEdt), resetCalibrationArr) + SPILT_CHAR +
+                sensorStatus
+        );
     }
 
     private String getPosition(int digit, String string, String[] strArr) {
@@ -132,8 +152,17 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     @Override
     public void onResume() {
         super.onResume();
-        mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "04");
+
+        if (sensorName == null) {
+            mActivity.showProgress();
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "04");
+        } else {
+            mBinding.inputNumberTorCondISEDT.setText(inputNumber);
+            mBinding.sensorTypeTorCondISATXT.setText(sensorName);
+            mBinding.DeleteLayoutTorCondIS.setVisibility(View.INVISIBLE);
+            mBinding.saveTxt.setText("ADD");
+        }
+
     }
 
     @Override

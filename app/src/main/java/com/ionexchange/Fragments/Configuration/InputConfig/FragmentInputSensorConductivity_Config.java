@@ -40,6 +40,20 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     FragmentInputsensorCondBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;
+    int sensorStatus;
+    String inputNumber;
+    String sensorName;
+
+    public FragmentInputSensorConductivity_Config(String inputNumber, int sensorStatus) {
+        this.inputNumber = inputNumber;
+        this.sensorStatus = sensorStatus;
+    }
+
+    public FragmentInputSensorConductivity_Config(String inputNumber, String sensorName, int sensorStatus) {
+        this.inputNumber = inputNumber;
+        this.sensorName = sensorName;
+        this.sensorStatus = sensorStatus;
+    }
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -67,21 +81,34 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     }
 
     private void delete(View view) {
-
+        sendData(2);
     }
 
     private void save(View view) {
         if (validation()) {
-            mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "04" + SPILT_CHAR +
-                    toString(2, mBinding.inputNumberCondISEDT) + SPILT_CHAR + getPosition(2, toString(mBinding.sensorActivationCondISATXT), sensorActivationArr) + SPILT_CHAR +
-                    toString(6, mBinding.inputLabelCondISEdt) + SPILT_CHAR + getPosition(1, toString(mBinding.tempLinkedCondISEdt), tempLinkedArr) + SPILT_CHAR + toString(2, mBinding.tempValueCondISEdt) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.unitOfMeasureCondISEdt), unitArr) + SPILT_CHAR + toString(4, mBinding.tempCompCondISEdt) + SPILT_CHAR + toString(4, mBinding.tempCompFacCondISEdt) + SPILT_CHAR +
-                    toString(3, mBinding.smoothingFactorCondISEdt) + SPILT_CHAR + toStringSplit(4, 2, mBinding.alarmLowCondISEdt) + SPILT_CHAR + toStringSplit(4, 2, mBinding.alarmHighCondISEdt) + SPILT_CHAR + toString(3, mBinding.calibRequiredAlarmCondISEdt) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.resetCalibCondISEdt), resetCalibrationArr)
-            );
+            sendData(sensorStatus);
         }
 
+    }
+
+    void sendData(int sensorStatus) {
+        mActivity.showProgress();
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "04" + SPILT_CHAR +
+                toString(2, mBinding.inputNumberCondISEDT) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.sensorActivationCondISATXT), sensorActivationArr) + SPILT_CHAR +
+                toString(6, mBinding.inputLabelCondISEdt) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.tempLinkedCondISEdt), tempLinkedArr) + SPILT_CHAR +
+                toString(2, mBinding.tempValueCondISEdt) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.unitOfMeasureCondISEdt), unitArr) + SPILT_CHAR +
+                toString(4, mBinding.tempCompCondISEdt) + SPILT_CHAR +
+                toString(4, mBinding.tempCompFacCondISEdt) + SPILT_CHAR +
+                toString(3, mBinding.smoothingFactorCondISEdt) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.alarmLowCondISEdt) +
+                SPILT_CHAR + toStringSplit(4, 2, mBinding.alarmHighCondISEdt) + SPILT_CHAR +
+                toString(3, mBinding.calibRequiredAlarmCondISEdt) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.resetCalibCondISEdt), resetCalibrationArr) + SPILT_CHAR +
+                sensorStatus
+        );
     }
 
     private String toStringSplit(int digits, int digitPoint, EditText editText) {
@@ -119,7 +146,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
         } else if (isEmpty(mBinding.alarmHighCondISEdt)) {
             mAppClass.showSnackBar(getContext(), "Alarm High Factor Cannot be Empty");
             return false;
-        }else if (mBinding.alarmLowCondISEdt.getText().toString().matches(".")) {
+        } else if (mBinding.alarmLowCondISEdt.getText().toString().matches(".")) {
             mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
             return false;
         } else if (mBinding.alarmHighCondISEdt.getText().toString().matches(".")) {
@@ -171,8 +198,18 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     @Override
     public void onResume() {
         super.onResume();
-        mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "03");
+
+        if (sensorName == null) {
+            mActivity.showProgress();
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "03");
+        } else {
+            mBinding.inputNumberCondISEDT.setText(inputNumber);
+            mBinding.sensorTypeCondISATXT.setText(sensorName);
+            mBinding.DeleteLayoutCondIS.setVisibility(View.INVISIBLE);
+            mBinding.saveTxt.setText("ADD");
+        }
+
+
     }
 
     @Override
