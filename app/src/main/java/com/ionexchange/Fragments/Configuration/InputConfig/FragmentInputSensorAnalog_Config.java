@@ -1,26 +1,5 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-
-import com.ionexchange.Activity.BaseActivity;
-import com.ionexchange.Interface.DataReceiveCallback;
-import com.ionexchange.Others.ApplicationClass;
-import com.ionexchange.R;
-import com.ionexchange.databinding.FragmentInputsensorAnalogBinding;
-
-import static android.content.ContentValues.TAG;
 import static com.ionexchange.Others.ApplicationClass.analogTypeArr;
 import static com.ionexchange.Others.ApplicationClass.analogUnitArr;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
@@ -34,6 +13,31 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+
+import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Interface.DataReceiveCallback;
+import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.R;
+import com.ionexchange.databinding.FragmentInputsensorAnalogBinding;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class FragmentInputSensorAnalog_Config extends Fragment implements DataReceiveCallback {
 
     FragmentInputsensorAnalogBinding mBinding;
@@ -43,6 +47,8 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
     String inputNumber;
     String sensorName;
     int sensorStatus;
+    WaterTreatmentDb db;
+    InputConfigurationDao dao;
 
     public FragmentInputSensorAnalog_Config(String inputNumber, int sensorStatus) {
         this.inputNumber = inputNumber;
@@ -68,6 +74,8 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
         mActivity = (BaseActivity) getActivity();
+        db = WaterTreatmentDb.getDatabase(getContext());
+        dao = db.inputConfigurationDao();
         initAdapter();
         mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
         mBinding.saveFabInputSettings.setOnClickListener(this::save);
@@ -215,8 +223,10 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                 }
             } else if (data[0].equals(WRITE_PACKET)) {
                 if (data[2].equals(RES_SUCCESS)) {
+                    analogEntity(1);
                     mAppClass.showSnackBar(getContext(), "WRITE SUCCESS");
                 } else if (data[2].equals(RES_FAILED)) {
+
                     mAppClass.showSnackBar(getContext(), "WRITE FAILED");
                 }
             }
@@ -277,5 +287,37 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
             return true;
         }
         return false;
+    }
+
+
+    public void updateToDb(List<InputConfigurationEntity> entryList) {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+        InputConfigurationDao dao = db.inputConfigurationDao();
+        dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
+    }
+
+    public void analogEntity(int flagValue) {
+        switch (flagValue) {
+            case 0:
+                InputConfigurationEntity entityDelete = new InputConfigurationEntity
+                        (Integer.parseInt(toString(2, mBinding.analogInputNumberTie)), "0", 0, "0", "0", "0", flagValue);
+                List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
+                entryListDelete.add(entityDelete);
+                updateToDb(entryListDelete);
+                break;
+
+            case 1:
+                InputConfigurationEntity entityUpdate = new InputConfigurationEntity
+                        (Integer.parseInt(toString(2, mBinding.analogInputNumberTie)),
+                                mBinding.analogSensorTypeTie.getText().toString(),
+                                0, toString(0, mBinding.analogInputLabelTie),
+                                toStringSplit(4, 2, mBinding.analogAlarmLowTie),
+                                toStringSplit(4, 2, mBinding.analogHighLowTie), flagValue);
+                List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
+                entryListUpdate.add(entityUpdate);
+                updateToDb(entryListUpdate);
+                break;
+        }
+
     }
 }

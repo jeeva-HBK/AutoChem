@@ -1,5 +1,18 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
+import static com.ionexchange.Others.ApplicationClass.unitArr;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +28,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
@@ -22,18 +38,8 @@ import com.ionexchange.databinding.FragmentInputsensorToraidalconductivityBindin
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
-import static com.ionexchange.Others.ApplicationClass.unitArr;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentInputSensorToroidalConductivity_config extends Fragment implements DataReceiveCallback {
     private static final String TAG = "FragmentInputSensorCond";
@@ -43,6 +49,8 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     int sensorStatus;
     String inputNumber;
     String sensorName;
+    WaterTreatmentDb db;
+    InputConfigurationDao dao;
 
     public FragmentInputSensorToroidalConductivity_config(String inputNumber, int sensorStatus) {
         this.inputNumber = inputNumber;
@@ -69,6 +77,8 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
         mActivity = (BaseActivity) getActivity();
+        db = WaterTreatmentDb.getDatabase(getContext());
+        dao = db.inputConfigurationDao();
         initAdapters();
         mBinding.saveFabCondIS.setOnClickListener(this::save);
         mBinding.saveLayoutTorCondIS.setOnClickListener(this::save);
@@ -264,5 +274,37 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
             return true;
         }
         return false;
+    }
+
+
+    public void updateToDb(List<InputConfigurationEntity> entryList) {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+        InputConfigurationDao dao = db.inputConfigurationDao();
+        dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
+    }
+
+    public void tankLevelEntity(int flagValue) {
+        switch (flagValue) {
+            case 0:
+                InputConfigurationEntity entityDelete = new InputConfigurationEntity
+                        (Integer.parseInt(toString(2, mBinding.inputNumberTorCondISEDT)), "0", 0, "0", "0", "0", flagValue);
+                List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
+                entryListDelete.add(entityDelete);
+                updateToDb(entryListDelete);
+                break;
+
+            case 1:
+                InputConfigurationEntity entityUpdate = new InputConfigurationEntity
+                        (Integer.parseInt(toString(2, mBinding.inputNumberTorCondISEDT)),
+                                mBinding.sensorTypeTorCondISATXT.getText().toString(),
+                                0, toString(0, mBinding.inputLabelTorCondISEdt),
+                                toStringSplit(4, 2, mBinding.alarmLowTorCondISEdt),
+                                toStringSplit(4, 2, mBinding.alarmHighTorCondISEdt), flagValue);
+                List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
+                entryListUpdate.add(entityUpdate);
+                updateToDb(entryListUpdate);
+                break;
+        }
+
     }
 }

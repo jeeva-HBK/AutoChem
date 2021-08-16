@@ -1,5 +1,16 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,23 +25,19 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorOrpBinding;
 
+
 import org.jetbrains.annotations.NotNull;
 
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentInputSensorORP_Config extends Fragment implements DataReceiveCallback {
     FragmentInputsensorOrpBinding mBinding;
@@ -39,6 +46,8 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     String inputNumber;
     String sensorName;
     int sensorStatus;
+    WaterTreatmentDb db;
+    InputConfigurationDao dao;
 
     public FragmentInputSensorORP_Config(String inputNumber, int sensorStatus) {
         this.inputNumber = inputNumber;
@@ -65,8 +74,9 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
         mActivity = (BaseActivity) getActivity();
+        db = WaterTreatmentDb.getDatabase(getContext());
+        dao = db.inputConfigurationDao();
         initAdapter();
-
         mBinding.orpsaveLayoutInputSettings.setOnClickListener(this::save);
         mBinding.orpsaveFabInputSettings.setOnClickListener(this::save);
 
@@ -188,8 +198,8 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
 
                     mBinding.orpInputLabelISEDT.setText(data[6]);
                     mBinding.orpSmoothingFactorISEDT.setText(data[7]);
-                    mBinding.orpalarmLowISEDT.setText(data[8]);
-                    mBinding.orpalarmHighISEDT.setText(data[9]);
+                    mBinding.orpalarmLowISEDT.setText(data[8].substring(0, 4) + "." + data[8].substring(4, 6));
+                    mBinding.orpalarmHighISEDT.setText(data[9].substring(0, 4) + "." + data[9].substring(4, 6));
                     mBinding.orpCalibrationAlarmRequiredISEDT.setText(data[10]);
 
                     mBinding.orpResetCalibrationISEDT.setText(mBinding.orpResetCalibrationISEDT.getAdapter().getItem(Integer.parseInt(data[11])).toString());
@@ -200,6 +210,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
                 }
             } else if (data[0].equals(WRITE_PACKET)) {
                 if (data[2].equals(RES_SUCCESS)) {
+                    orpEntity(1);
                     mAppClass.showSnackBar(getContext(), "WRITE SUCCESS");
                 } else if (data[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), "WRITE FAILED");
@@ -245,5 +256,36 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
             return true;
         }
         return false;
+    }
+
+    public void updateToDb(List<InputConfigurationEntity> entryList) {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+        InputConfigurationDao dao = db.inputConfigurationDao();
+        dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
+    }
+
+    public void orpEntity(int flagValue) {
+        switch (flagValue) {
+            case 0:
+                InputConfigurationEntity entityDelete = new InputConfigurationEntity
+                        (Integer.parseInt(toString(2, mBinding.orpInputNumberInputSettingsEDT)), "0", 0, "0", "0", "0", flagValue);
+                List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
+                entryListDelete.add(entityDelete);
+                updateToDb(entryListDelete);
+                break;
+
+            case 1:
+                InputConfigurationEntity entityUpdate = new InputConfigurationEntity
+                        (Integer.parseInt(toString(2, mBinding.orpInputNumberInputSettingsEDT)),
+                                mBinding.orpSensorTypeEDT.getText().toString(),
+                                0, toString(0, mBinding.orpInputLabelISEDT),
+                                toStringSplit(4, 2, mBinding.orpalarmLowISEDT),
+                                toStringSplit(4, 2, mBinding.orpalarmHighISEDT), flagValue);
+                List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
+                entryListUpdate.add(entityUpdate);
+                updateToDb(entryListUpdate);
+                break;
+        }
+
     }
 }

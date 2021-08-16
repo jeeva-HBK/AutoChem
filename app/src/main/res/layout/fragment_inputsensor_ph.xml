@@ -24,9 +24,9 @@
             style="@style/appEdtTxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toTopOf="@+id/inputLabel_inputSettings"
             app:layout_constraintEnd_toEndOf="@+id/sensorType_inputSetting"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/sensorType_inputSetting"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -53,6 +53,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             app:layout_constraintBottom_toBottomOf="@+id/inputLabel_inputSettings"
             app:layout_constraintEnd_toStartOf="@+id/sensorActivation_inputSettings"
             app:layout_constraintHorizontal_bias="0.5"
@@ -77,12 +78,11 @@
             style="@style/appEdtTxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             app:layout_constraintBottom_toTopOf="@+id/bufferType_inputSetting"
             app:layout_constraintEnd_toStartOf="@+id/sensorType_inputSetting"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toEndOf="@+id/DeleteLayout_inputSettings"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/inputNumber_inputSettings">
 
@@ -124,7 +124,7 @@
 
 
         <!-- Row 2 -->
-        <!--UNIT-->
+        <!--resetCalibration-->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/unit_inputSetting"
             style="@style/appAutoTxt"
@@ -152,7 +152,7 @@
             style="@style/appAutoTxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/smoothingFactor_inputSetting"
+            app:layout_constraintBottom_toTopOf="@+id/alarmLow_inputSetting"
             app:layout_constraintEnd_toEndOf="@+id/inputLabel_inputSettings"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/inputLabel_inputSettings"
@@ -195,10 +195,12 @@
             style="@style/appEdtTxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/smoothingFactor_inputSetting"
-            app:layout_constraintEnd_toEndOf="@+id/unit_inputSetting"
-            app:layout_constraintStart_toStartOf="@+id/unit_inputSetting"
-            app:layout_constraintTop_toTopOf="@+id/smoothingFactor_inputSetting">
+            android:layout_marginEnd="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/saveLayout_inputSettings"
+            app:layout_constraintEnd_toStartOf="@+id/smoothingFactor_inputSetting"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/alarmLow_inputSetting"
+            app:layout_constraintTop_toBottomOf="@+id/alarmLow_inputSetting">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/temperature_inputSettingEDT"
@@ -215,12 +217,14 @@
             android:id="@+id/smoothingFactor_inputSetting"
             style="@style/appEdtTxt"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/alarmLow_inputSetting"
-            app:layout_constraintEnd_toEndOf="@+id/bufferType_inputSetting"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/temperature_inputSetting"
+            app:layout_constraintEnd_toEndOf="@+id/calibrationRequired_inputSetting"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/bufferType_inputSetting"
-            app:layout_constraintTop_toBottomOf="@+id/bufferType_inputSetting">
+            app:layout_constraintStart_toEndOf="@+id/temperature_inputSetting"
+            app:layout_constraintTop_toTopOf="@+id/temperature_inputSetting">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/smoothingFactor_inputSettingEDT"
@@ -240,10 +244,10 @@
             style="@style/appEdtTxt"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/temperature_inputSetting"
+            app:layout_constraintBottom_toBottomOf="@+id/highLow_inputSetting"
             app:layout_constraintEnd_toEndOf="@+id/tempLinked_inputSetting"
             app:layout_constraintStart_toStartOf="@+id/tempLinked_inputSetting"
-            app:layout_constraintTop_toTopOf="@+id/temperature_inputSetting">
+            app:layout_constraintTop_toTopOf="@+id/highLow_inputSetting">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/calibrationRequiredInputSettingATXT"
@@ -257,7 +261,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <!-- Row 4 -->
         <!--Low Alarm-->
         <com.google.android.material.textfield.TextInputLayout
@@ -265,13 +268,11 @@
             style="@style/appEdtTxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/DeleteLayout_inputSettings"
-            app:layout_constraintEnd_toStartOf="@+id/highLow_inputSetting"
+            app:layout_constraintBottom_toTopOf="@+id/temperature_inputSetting"
+            app:layout_constraintEnd_toEndOf="@+id/bufferType_inputSetting"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/smoothingFactor_inputSetting">
+            app:layout_constraintStart_toStartOf="@+id/bufferType_inputSetting"
+            app:layout_constraintTop_toBottomOf="@+id/bufferType_inputSetting">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/alarmLow_inputSettingEDT"
@@ -279,7 +280,7 @@
                 android:layout_height="match_parent"
                 android:hint="Low Alarm"
                 android:imeOptions="actionNext"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:maxLength="6"
                 android:maxLines="1" />
 
@@ -290,13 +291,10 @@
             android:id="@+id/highLow_inputSetting"
             style="@style/appEdtTxt"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@+id/alarmLow_inputSetting"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/alarmLow_inputSetting"
+            app:layout_constraintEnd_toEndOf="@+id/unit_inputSetting"
+            app:layout_constraintStart_toStartOf="@+id/unit_inputSetting"
             app:layout_constraintTop_toTopOf="@+id/alarmLow_inputSetting">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -305,22 +303,11 @@
                 android:layout_height="match_parent"
                 android:hint="High Alarm"
                 android:imeOptions="actionNext"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:maxLength="6"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
-
-
-        <View
-            android:id="@+id/view_lay"
-            android:layout_width="2dp"
-            android:layout_height="2dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.4"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/highLow_inputSetting" />
 
 
         <!--saveLayout-->
@@ -331,9 +318,10 @@
             android:orientation="horizontal"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginLeft="5dp"
-            app:layout_constraintStart_toEndOf="@id/view_lay"
-            app:layout_constraintTop_toBottomOf="@+id/highLow_inputSetting">
+            app:layout_constraintEnd_toStartOf="@+id/DeleteLayout_inputSettings"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/temperature_inputSetting">
 
             <TextView
                 android:id="@+id/save_txt"
@@ -367,9 +355,10 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/view_lay"
-            app:layout_constraintTop_toBottomOf="@+id/alarmLow_inputSetting">
+            app:layout_constraintBottom_toBottomOf="@+id/saveLayout_inputSettings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/saveLayout_inputSettings">
 
             <TextView
                 android:layout_width="match_parent"

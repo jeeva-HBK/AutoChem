@@ -1,27 +1,5 @@
 package com.ionexchange.Fragments.Configuration.OutputConfig;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-
-import com.ionexchange.Interface.DataReceiveCallback;
-import com.ionexchange.Others.ApplicationClass;
-import com.ionexchange.R;
-import com.ionexchange.databinding.FragmentOutputConfigBinding;
-
-import org.jetbrains.annotations.NotNull;
-
 import static com.ionexchange.Others.ApplicationClass.bleedRelay;
 import static com.ionexchange.Others.ApplicationClass.doseTypeArr;
 import static com.ionexchange.Others.ApplicationClass.flowMeters;
@@ -40,9 +18,39 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+
+import com.ionexchange.Database.Dao.OutputConfigurationDao;
+import com.ionexchange.Database.Entity.OutputConfigurationEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Interface.DataReceiveCallback;
+import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.R;
+import com.ionexchange.databinding.FragmentOutputConfigBinding;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class FragmentOutput_Config extends Fragment implements DataReceiveCallback {
     FragmentOutputConfigBinding mBinding;
     ApplicationClass mAppClass;
+    WaterTreatmentDb db;
+    OutputConfigurationDao dao;
     String lInhibitorContinuous = "layoutInhibitorContinuous", lInhibitorBleed = "layoutInhibitorBleedDown", lInhibitorWaterFlow = "layoutInhibitorWaterFlow",
             lSensorOnOFF = "layoutSensorOnOff", lSensorPid = "layoutSensorPID", lAnalogMain = "layoutAnalogMain", lAnalogTest = "layoutAnalogTest", lAnalogDisable = "layoutAnalogDisable",
             currentFunctionMode = "";
@@ -60,6 +68,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        db = WaterTreatmentDb.getDatabase(getContext());
+        dao = db.outputConfigurationDao();
         initAdapter();
         enableInhibitorLayout();
         mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(1).toString());
@@ -264,7 +274,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 (Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.activateChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
                 getPosition(0, toString(mBinding.funtionModeOsATXT), functionMode) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.linkInputPidOsATXT),inputSensors) + SPILT_CHAR+
+                getPosition(2, toString(mBinding.linkInputPidOsATXT), inputSensors) + SPILT_CHAR +
 
                 getPosition(0, toString(mBinding.modeOsATXT), modeSensor) + SPILT_CHAR +
                 toString(6, mBinding.setPointPidOsATXT) + SPILT_CHAR +
@@ -760,5 +770,22 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         }
 
         return true;
+    }
+
+    public void updateToDb(List<OutputConfigurationEntity> entryList) {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+        OutputConfigurationDao dao = db.outputConfigurationDao();
+        dao.insert(entryList.toArray(new OutputConfigurationEntity[0]));
+    }
+
+    void outputConfigurationEntity() {
+        OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
+                (1, toString(0, mBinding.outputLabelOsEDT),
+                        mBinding.funtionModeOsATXT.getText().toString(),
+                        mBinding.modeOsATXT.getText().toString());
+        List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
+        entryListUpdate.add(entityUpdate);
+        updateToDb(entryListUpdate);
+
     }
 }

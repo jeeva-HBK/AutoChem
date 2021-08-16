@@ -1,5 +1,18 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Others.ApplicationClass.bufferArr;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +27,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
@@ -21,23 +37,15 @@ import com.ionexchange.databinding.FragmentInputsensorPhBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.ionexchange.Others.ApplicationClass.bufferArr;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentInputSensorPh_Config extends Fragment implements DataReceiveCallback {
     FragmentInputsensorPhBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;
+    WaterTreatmentDb db;
+    InputConfigurationDao dao;
     private static final String TAG = "FragmentInputSensor";
 
     String inputNumber;
@@ -68,6 +76,8 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         super.onViewCreated(view, savedInstanceState);
         mActivity = (BaseActivity) getActivity();
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        db = WaterTreatmentDb.getDatabase(getContext());
+        dao = db.inputConfigurationDao();
         initSensor(inputNumber);
         mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
         mBinding.saveFabInputSettings.setOnClickListener(this::save);
@@ -255,10 +265,6 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                     mBinding.alarmhighInputSettingEDT.setText(splitData[12].substring(0, 4) + "." + splitData[12].substring(4, 6));
 
                     mBinding.calibrationRequiredInputSettingATXT.setText(splitData[13]);
-                    /*  if (splitData[13].equals("0")) {
-                        mBinding.calibrationRequiredInputSettingATXT.setText(mBinding.calibrationRequiredInputSettingATXT.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
-                    }
-                    mBinding.calibrationRequiredInputSettingATXT.setAdapter(getAdapter(calibrationArr));*/
 
                     mBinding.resetCalibrationInputSettingEDT.setText(mBinding.resetCalibrationInputSettingEDT.getAdapter().getItem(Integer.parseInt(splitData[14])).toString());
                     mBinding.resetCalibrationInputSettingEDT.setAdapter(getAdapter(resetCalibrationArr));
@@ -270,6 +276,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
 
                 if (splitData[2].equals(RES_SUCCESS)) {
                     mAppClass.showSnackBar(getContext(), "Operation Success !");
+                    pHEntity(1);
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), "Operation Failed !");
                 }
@@ -278,6 +285,38 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             mAppClass.showSnackBar(getContext(), "Received Wrong Packet");
         }
 
+
+    }
+
+    public void updateToDb(List<InputConfigurationEntity> entryList) {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+        InputConfigurationDao dao = db.inputConfigurationDao();
+        dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
+    }
+
+    public void pHEntity(int flagValue) {
+        switch (flagValue) {
+            case 0:
+                InputConfigurationEntity entityDelete = new InputConfigurationEntity
+                        (Integer.parseInt(toString(2, mBinding.inputNumberInputSettingsEDT)),
+                                "0", 0, "0", "0", "0", flagValue);
+                List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
+                entryListDelete.add(entityDelete);
+                updateToDb(entryListDelete);
+                break;
+
+            case 1:
+                InputConfigurationEntity entityUpdate = new InputConfigurationEntity
+                        (Integer.parseInt(toString(2, mBinding.inputNumberInputSettingsEDT)),
+                                mBinding.sensorInputSettingsATXT.getText().toString(),
+                                0, toString(0, mBinding.inputLabelInputSettingsEdt),
+                                toStringSplit(4, 2, mBinding.alarmLowInputSettingEDT),
+                                toStringSplit(4, 2, mBinding.alarmhighInputSettingEDT), flagValue);
+                List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
+                entryListUpdate.add(entityUpdate);
+                updateToDb(entryListUpdate);
+                break;
+        }
 
     }
 }

@@ -15,6 +15,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
@@ -33,6 +36,9 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FragmentInputSensorTemp_config extends Fragment implements DataReceiveCallback {
     private static final String TAG = "FragmentInputSensorTemp";
     FragmentInputsensorTempBinding mBinding;
@@ -41,6 +47,8 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     String inputNumber;
     String sensorName;
     int sensorStatus;
+    WaterTreatmentDb db;
+    InputConfigurationDao dao;
 
     public FragmentInputSensorTemp_config(String inputNumber, int sensorStatus) {
         this.inputNumber = inputNumber;
@@ -66,6 +74,8 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
         mActivity = (BaseActivity) getActivity();
+        db = WaterTreatmentDb.getDatabase(getContext());
+        dao = db.inputConfigurationDao();
         initAdapter();
         mBinding.saveFabCondIS.setOnClickListener(this::save);
         mBinding.saveLayoutTempIS.setOnClickListener(this::save);
@@ -90,7 +100,8 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
 
     void sendData(int sensorStatus){
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + toString(2, mBinding.inputNumberTempISEDT) + SPILT_CHAR +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                toString(2, mBinding.inputNumberTempISEDT) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.sensorTypeTempISATXT), inputTypeArr) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.sensorActivationTempISATXT), sensorActivationArr) + SPILT_CHAR +
                 toString(0, mBinding.inputLabelTempISEdt) + SPILT_CHAR +
@@ -199,6 +210,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
                 }
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
+                    temperatureEntity(1);
                     mAppClass.showSnackBar(getContext(), " WRITE SUCESS");
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), " WRITE FAILED");
@@ -245,5 +257,37 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
             return true;
         }
         return false;
+    }
+
+
+    public void updateToDb(List<InputConfigurationEntity> entryList) {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+        InputConfigurationDao dao = db.inputConfigurationDao();
+        dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
+    }
+
+    public void temperatureEntity(int flagValue) {
+        switch (flagValue) {
+            case 0:
+                InputConfigurationEntity entityDelete = new InputConfigurationEntity
+                        (Integer.parseInt(toString(2, mBinding.inputNumberTempISEDT)), "0", 0, "0", "0", "0", flagValue);
+                List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
+                entryListDelete.add(entityDelete);
+                updateToDb(entryListDelete);
+                break;
+
+            case 1:
+                InputConfigurationEntity entityUpdate = new InputConfigurationEntity
+                        (Integer.parseInt(toString(2, mBinding.inputNumberTempISEDT)),
+                                mBinding.sensorTypeTempISATXT.getText().toString(),
+                                0, toString(0, mBinding.inputLabelTempISEdt),
+                                toStringSplit(4, 2, mBinding.alarmLowTempISEdt),
+                                toStringSplit(4, 2, mBinding.alarmHighTempISEdt), flagValue);
+                List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
+                entryListUpdate.add(entityUpdate);
+                updateToDb(entryListUpdate);
+                break;
+        }
+
     }
 }

@@ -1,6 +1,20 @@
 
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Others.ApplicationClass.flowMeterTypeArr;
+import static com.ionexchange.Others.ApplicationClass.flowUnitArr;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.scheduleResetArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +31,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
@@ -24,19 +41,8 @@ import com.ionexchange.databinding.FragmentInputsensorFlowBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.ionexchange.Others.ApplicationClass.flowMeterTypeArr;
-import static com.ionexchange.Others.ApplicationClass.flowUnitArr;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.scheduleResetArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentInputSensorFlow_config extends Fragment implements DataReceiveCallback {
     FragmentInputsensorFlowBinding mBinding;
@@ -46,6 +52,9 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     String inputNumber;
     String sensorName;
     int sensorStatus;
+    int packetId;
+    WaterTreatmentDb db;
+    InputConfigurationDao dao;
 
     public FragmentInputSensorFlow_config(String inputNumber, int sensorStatus) {
         this.inputNumber = inputNumber;
@@ -71,6 +80,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        db = WaterTreatmentDb.getDatabase(getContext());
+        dao = db.inputConfigurationDao();
         initAdapter();
         mActivity = (BaseActivity) getActivity();
         mBinding.flowMeterTypeFlowISATXT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -90,21 +101,25 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
             case 0:
                 if (validation()) {
                     sendAnalogPacket(2);
+                    packetId = 0;
                 }
                 break;
             case 1:
                 if (validation1()) {
                     sendContactorPacket(2);
+                    packetId = 1;
                 }
                 break;
             case 2:
                 if (validation2()) {
                     sendPaddleWheelPacket(2);
+                    packetId = 2;
                 }
                 break;
             case 3:
                 if (validation3()) {
                     sendFeedMonitorPacket(2);
+                    packetId = 3;
                 }
                 break;
         }
@@ -115,21 +130,25 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
             case 0:
                 if (validation()) {
                     sendAnalogPacket(sensorStatus);
+                    packetId = 0;
                 }
                 break;
             case 1:
                 if (validation1()) {
                     sendContactorPacket(sensorStatus);
+                    packetId = 1;
                 }
                 break;
             case 2:
                 if (validation2()) {
                     sendPaddleWheelPacket(sensorStatus);
+                    packetId = 2;
                 }
                 break;
             case 3:
                 if (validation3()) {
                     sendFeedMonitorPacket(sensorStatus);
+                    packetId = 3;
                 }
                 break;
         }
@@ -553,6 +572,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 }
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
+                    flowMeterEntity(1, packetId);
                     mAppClass.showSnackBar(getContext(), "Write Success");
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), "Write Failed");
@@ -561,5 +581,80 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else {
             Log.e(TAG, "handleResponse: Received Wrong Packet");
         }
+    }
+
+
+    public void updateToDb(List<InputConfigurationEntity> entryList) {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+        InputConfigurationDao dao = db.inputConfigurationDao();
+        dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
+    }
+
+    public void flowMeterEntity(int flagValue, int packetId) {
+        switch (flagValue) {
+            case 0:
+                InputConfigurationEntity entityDelete = new InputConfigurationEntity
+                        (Integer.parseInt(toString(2, mBinding.inputNumberFlowISEDT)),
+                                "0", 0, "0", "0",
+                                "0", flagValue);
+                List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
+                entryListDelete.add(entityDelete);
+                updateToDb(entryListDelete);
+                break;
+
+            case 1:
+                switch (packetId) {
+                    case 0:
+                        InputConfigurationEntity entityAnalogUpdate = new InputConfigurationEntity
+                                (Integer.parseInt(toString(2, mBinding.inputNumberFlowISEDT)),
+                                        mBinding.sensorTypeFlowISATXT.getText().toString(),
+                                        0, toString(0, mBinding.inputLabelFlowISEdt),
+                                        toStringSplit(4, 2, mBinding.alarmLowAnalogFlowISEdt),
+                                        toStringSplit(4, 2, mBinding.alarmHighAnalogFlowISEdt),
+                                        flagValue);
+                        List<InputConfigurationEntity> entryListAnalogUpdate = new ArrayList<>();
+                        entryListAnalogUpdate.add(entityAnalogUpdate);
+                        updateToDb(entryListAnalogUpdate);
+                        break;
+                    case 1:
+                        InputConfigurationEntity entityContactorUpdate = new InputConfigurationEntity
+                                (Integer.parseInt(toString(2, mBinding.inputNumberFlowISEDT)),
+                                        mBinding.sensorTypeFlowISATXT.getText().toString(),
+                                        0, toString(0, mBinding.inputLabelFlowISEdt),
+                                        toStringSplit(4, 2, mBinding.alarmLowContactorFlowISEdt),
+                                        toStringSplit(4, 2, mBinding.alarmHighContactorFlowISEdt),
+                                        flagValue);
+                        List<InputConfigurationEntity> entryListContactorUpdate = new ArrayList<>();
+                        entryListContactorUpdate.add(entityContactorUpdate);
+                        updateToDb(entryListContactorUpdate);
+                        break;
+                    case 2:
+                        InputConfigurationEntity entityPaddleWheelUpdate = new InputConfigurationEntity
+                                (Integer.parseInt(toString(2, mBinding.inputNumberFlowISEDT)),
+                                        mBinding.sensorTypeFlowISATXT.getText().toString(),
+                                        0, toString(0, mBinding.inputLabelFlowISEdt),
+                                        toStringSplit(4, 2, mBinding.alarmLowPaddleFlowISEdt),
+                                        toStringSplit(4, 2, mBinding.alarmHighAnalogFlowISEdt),
+                                        flagValue);
+                        List<InputConfigurationEntity> entryPaddleWheelUpdate = new ArrayList<>();
+                        entryPaddleWheelUpdate.add(entityPaddleWheelUpdate);
+                        updateToDb(entryPaddleWheelUpdate);
+                        break;
+                    case 3:
+                        InputConfigurationEntity entityFeedMonitorUpdate = new InputConfigurationEntity
+                                (Integer.parseInt(toString(2, mBinding.inputNumberFlowISEDT)),
+                                        mBinding.sensorTypeFlowISATXT.getText().toString(),
+                                        0, toString(0, mBinding.inputLabelFlowISEdt),
+                                        toStringSplit(4, 2, mBinding.alarmLowFeedFlowISEdt),
+                                        toStringSplit(4, 2, mBinding.alarmHighFeedFlowISEdt),
+                                        flagValue);
+                        List<InputConfigurationEntity> entryFeedMonitorUpdate = new ArrayList<>();
+                        entryFeedMonitorUpdate.add(entityFeedMonitorUpdate);
+                        updateToDb(entryFeedMonitorUpdate);
+                        break;
+                }
+                break;
+        }
+
     }
 }

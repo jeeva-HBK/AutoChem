@@ -209,7 +209,7 @@
                 android:editable="false"
                 android:hint="Alarm Low"
                 android:imeOptions="actionNext"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:maxLength="6"
                 android:maxLines="1" />
 
@@ -234,7 +234,7 @@
                 android:editable="false"
                 android:hint="Alarm High"
                 android:imeOptions="actionDone"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:maxLength="6"
                 android:maxLines="1" />
 

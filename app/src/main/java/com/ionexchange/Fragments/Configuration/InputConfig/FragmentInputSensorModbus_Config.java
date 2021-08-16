@@ -1,5 +1,18 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.modBusTypeArr;
+import static com.ionexchange.Others.ApplicationClass.modBusUnitArr;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,23 +27,16 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorModbusBinding;
 
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.modBusTypeArr;
-import static com.ionexchange.Others.ApplicationClass.modBusUnitArr;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentInputSensorModbus_Config extends Fragment implements DataReceiveCallback {
 
@@ -40,13 +46,15 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
     String inputNumber;
     String sensorName;
     int sensorStatus;
+    WaterTreatmentDb db;
+    InputConfigurationDao dao;
 
-    public FragmentInputSensorModbus_Config(String inputNumber,int sensorStatus) {
+    public FragmentInputSensorModbus_Config(String inputNumber, int sensorStatus) {
         this.inputNumber = inputNumber;
         this.sensorStatus = sensorStatus;
     }
 
-    public FragmentInputSensorModbus_Config(String inputNumber, String sensorName,int sensorStatus) {
+    public FragmentInputSensorModbus_Config(String inputNumber, String sensorName, int sensorStatus) {
         this.inputNumber = inputNumber;
         this.sensorName = sensorName;
         this.sensorStatus = sensorStatus;
@@ -64,6 +72,8 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
         mActivity = (BaseActivity) getActivity();
+        db = WaterTreatmentDb.getDatabase(getContext());
+        dao = db.inputConfigurationDao();
         initAdapter();
         mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
         mBinding.saveFabInputSettings.setOnClickListener(this::save);
@@ -94,7 +104,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                     toStringSplit(4, 2, mBinding.modBusAlarmLowTie) + SPILT_CHAR +
                     toStringSplit(4, 2, mBinding.modBusAlarmHighTie) + SPILT_CHAR +
                     toString(3, mBinding.modBusCalibrationRequiredAlarmTie) + SPILT_CHAR +
-                    getPosition(1, toString(mBinding.modBusResetCalibrationTie), resetCalibrationArr)+ SPILT_CHAR +
+                    getPosition(1, toString(mBinding.modBusResetCalibrationTie), resetCalibrationArr) + SPILT_CHAR +
                     sensorStatus);
 
         }
@@ -141,10 +151,10 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
     @Override
     public void onResume() {
         super.onResume();
-        if (sensorName==null) {
+        if (sensorName == null) {
             mActivity.showProgress();
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "18");
-        }else {
+        } else {
             mBinding.modBusInputNumberTie.setText(inputNumber);
             mBinding.modBusSensorTypeTie.setText(sensorName);
             mBinding.DeleteLayoutInputSettings.setVisibility(View.INVISIBLE);
@@ -204,6 +214,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                 }
             } else if (data[0].equals(WRITE_PACKET)) {
                 if (data[2].equals(RES_SUCCESS)) {
+                    modBusEntity(1);
                     mAppClass.showSnackBar(getContext(), "WRITE SUCCESS");
                 } else if (data[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), "WRITE FAILED");
@@ -239,7 +250,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
         } else if (mBinding.modBusMaxValueTie.getText().toString().matches(".")) {
             mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
             return false;
-        }else if (isEmpty(mBinding.modBusTimeTie)) {
+        } else if (isEmpty(mBinding.modBusTimeTie)) {
             mAppClass.showSnackBar(getContext(), "Time cannot be Empty");
             return false;
         } else if (mBinding.modBusTimeTie.getText().toString().length() > 6) {
@@ -271,5 +282,39 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
             return true;
         }
         return false;
+    }
+
+
+    public void updateToDb(List<InputConfigurationEntity> entryList) {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+        InputConfigurationDao dao = db.inputConfigurationDao();
+        dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
+    }
+
+    public void modBusEntity(int flagValue) {
+        switch (flagValue) {
+            case 0:
+                InputConfigurationEntity entityDelete = new InputConfigurationEntity
+                        (Integer.parseInt(toString(2, mBinding.modBusInputNumberTie)),
+                                "0", 0, "0", "0",
+                                "0", flagValue);
+                List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
+                entryListDelete.add(entityDelete);
+                updateToDb(entryListDelete);
+                break;
+
+            case 1:
+                InputConfigurationEntity entityUpdate = new InputConfigurationEntity
+                        (Integer.parseInt(toString(2, mBinding.modBusInputNumberTie)),
+                                mBinding.modBusSensorTypeTie.getText().toString(),
+                                0, toString(0, mBinding.modBusInputLabelTie),
+                                toStringSplit(4, 2, mBinding.modBusAlarmLowTie),
+                                toStringSplit(4, 2, mBinding.modBusAlarmHighTie), flagValue);
+                List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
+                entryListUpdate.add(entityUpdate);
+                updateToDb(entryListUpdate);
+                break;
+        }
+
     }
 }
