@@ -71,7 +71,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.outputConfigurationDao();
         initAdapter();
-        enableInhibitorLayout();
+        enableDisabled();
         mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(1).toString());
         initAdapter();
         mBinding.funtionModeOsATXT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -79,7 +79,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
                 switch (pos) {
                     case 0:
-                        mAppClass.showSnackBar(getContext(), "DISABLED");
+                       enableDisabled();
                         break;
                     case 1:
                         enableInhibitorLayout();
@@ -373,6 +373,11 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
     }
 
+    void enableDisabled(){
+        String [] empty={};
+        mBinding.modeOsATXT.setAdapter(getAdapter(empty));
+    }
+
     private void enablePID() {
         mBinding.setFunctionMode(lSensorPid);
         mBinding.modeOsATXT.setText(mBinding.modeOsATXT.getAdapter().getItem(1).toString());
@@ -587,8 +592,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
+                    outputConfigurationEntity();
                     mAppClass.showSnackBar(getContext(), "Read Success !");
-
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), "Write Failed !");
                 }
