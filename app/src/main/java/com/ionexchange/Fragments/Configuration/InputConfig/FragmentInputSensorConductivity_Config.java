@@ -1,5 +1,6 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Others.ApplicationClass.TemperatureCompensationType;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
@@ -51,6 +52,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     String sensorName;
     WaterTreatmentDb db;
     InputConfigurationDao dao;
+    int userManagement;
 
 
     public FragmentInputSensorConductivity_Config(String inputNumber, int sensorStatus) {
@@ -79,11 +81,13 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
         mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
+        userManagement = 3;
+        userManagement();
         initAdapters();
-        mBinding.saveFabCondIS.setOnClickListener(this::save);
-        mBinding.saveLayoutCondIS.setOnClickListener(this::save);
-        mBinding.DeleteFabCondIS.setOnClickListener(this::delete);
-        mBinding.DeleteLayoutCondIS.setOnClickListener(this::delete);
+        mBinding.saveFabInputSettings.setOnClickListener(this::save);
+        mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
+        mBinding.DeleteFabInputSettings.setOnClickListener(this::delete);
+        mBinding.DeleteLayoutInputSettings.setOnClickListener(this::delete);
 
         mBinding.backArrow.setOnClickListener(v -> {
             mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
@@ -91,19 +95,33 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     }
 
     private void delete(View view) {
-        sendData(2);
-    }
-
-    private void save(View view) {
         if (validation()) {
-            sendData(sensorStatus);
+            if (getPosition(1, toString(mBinding.tempCompensationAct), TemperatureCompensationType).equals("0")) {
+                sendDataLinearTemperature(2);
+            } else {
+                sendStandardNaClTemperature(2);
+            }
+
         }
 
     }
 
-    void sendData(int sensorStatus) {
+    private void save(View view) {
+        if (validation()) {
+            if (getPosition(1, toString(mBinding.tempCompensationAct), TemperatureCompensationType).equals("0")) {
+                sendDataLinearTemperature(sensorStatus);
+            } else {
+                sendStandardNaClTemperature(sensorStatus);
+            }
+
+        }
+
+    }
+
+    void sendDataLinearTemperature(int sensorStatus) {
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                INPUT_SENSOR_CONFIG + SPILT_CHAR +
                 toString(2, mBinding.inputNumberCondISEDT) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.sensorTypeCondISATXT), inputTypeArr) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.sensorActivationCondISATXT), sensorActivationArr) + SPILT_CHAR +
@@ -111,8 +129,31 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 getPosition(1, toString(mBinding.tempLinkedCondISEdt), tempLinkedArr) + SPILT_CHAR +
                 toString(2, mBinding.tempValueCondISEdt) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.unitOfMeasureCondISEdt), unitArr) + SPILT_CHAR +
-                toString(4, mBinding.tempCompCondISEdt) + SPILT_CHAR +
+                toString(4, mBinding.cellConstantCondISEdt) + SPILT_CHAR +
+                getPosition(0, toString(mBinding.tempCompensationAct), TemperatureCompensationType) + SPILT_CHAR +
                 toString(4, mBinding.tempCompFacCondISEdt) + SPILT_CHAR +
+                toString(3, mBinding.smoothingFactorCondISEdt) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.alarmLowCondISEdt) +
+                SPILT_CHAR + toStringSplit(4, 2, mBinding.alarmHighCondISEdt) + SPILT_CHAR +
+                toString(3, mBinding.calibRequiredAlarmCondISEdt) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.resetCalibCondISEdt), resetCalibrationArr) + SPILT_CHAR +
+                sensorStatus
+        );
+    }
+
+    void sendStandardNaClTemperature(int sensorStatus) {
+        mActivity.showProgress();
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                toString(2, mBinding.inputNumberCondISEDT) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.sensorTypeCondISATXT), inputTypeArr) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.sensorActivationCondISATXT), sensorActivationArr) + SPILT_CHAR +
+                toString(0, mBinding.inputLabelCondISEdt) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.tempLinkedCondISEdt), tempLinkedArr) + SPILT_CHAR +
+                toString(2, mBinding.tempValueCondISEdt) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.unitOfMeasureCondISEdt), unitArr) + SPILT_CHAR +
+                toString(4, mBinding.cellConstantCondISEdt) + SPILT_CHAR +
+                getPosition(0, toString(mBinding.tempCompensationAct), TemperatureCompensationType) + SPILT_CHAR +
                 toString(3, mBinding.smoothingFactorCondISEdt) + SPILT_CHAR +
                 toStringSplit(4, 2, mBinding.alarmLowCondISEdt) +
                 SPILT_CHAR + toStringSplit(4, 2, mBinding.alarmHighCondISEdt) + SPILT_CHAR +
@@ -138,9 +179,6 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
             return false;
         } else if (isEmpty(mBinding.cellConstantCondISEdt)) {
             mAppClass.showSnackBar(getContext(), "Cell Constant Cannot be Empty");
-            return false;
-        } else if (isEmpty(mBinding.tempCompCondISEdt)) {
-            mAppClass.showSnackBar(getContext(), "Temperature Compensation Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.tempCompFacCondISEdt)) {
             mAppClass.showSnackBar(getContext(), "Temperature Compensation Factor Cannot be Empty");
@@ -200,6 +238,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
         mBinding.tempLinkedCondISEdt.setAdapter(getAdapter(tempLinkedArr));
         mBinding.unitOfMeasureCondISEdt.setAdapter(getAdapter(unitArr));
         mBinding.resetCalibCondISEdt.setAdapter(getAdapter(resetCalibrationArr));
+        mBinding.tempCompensationAct.setAdapter(getAdapter(TemperatureCompensationType));
     }
 
     public ArrayAdapter<String> getAdapter(String[] strArr) {
@@ -216,7 +255,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
         } else {
             mBinding.inputNumberCondISEDT.setText(inputNumber);
             mBinding.sensorTypeCondISATXT.setText(sensorName);
-            mBinding.DeleteLayoutCondIS.setVisibility(View.INVISIBLE);
+            mBinding.DeleteLayoutInputSettings.setVisibility(View.INVISIBLE);
             mBinding.saveTxt.setText("ADD");
         }
 
@@ -258,16 +297,22 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                     mBinding.tempValueCondISEdt.setText(spiltData[8]);
                     mBinding.unitOfMeasureCondISEdt.setText(mBinding.unitOfMeasureCondISEdt.getAdapter().getItem(Integer.parseInt(spiltData[9])).toString());
                     mBinding.cellConstantCondISEdt.setText(spiltData[10]);
-                    mBinding.tempCompCondISEdt.setText(spiltData[11]);
-                    mBinding.tempCompFacCondISEdt.setText(spiltData[12]);
-                    mBinding.smoothingFactorCondISEdt.setText(spiltData[13]);
-                    mBinding.alarmLowCondISEdt.setText(spiltData[14].substring(0, 4) + "." + spiltData[14].substring(4, 6));
-                    mBinding.alarmHighCondISEdt.setText(spiltData[15].substring(0, 4) + "." + spiltData[15].substring(4, 6));
-                    mBinding.calibRequiredAlarmCondISEdt.setText(spiltData[16]);
-                    mBinding.resetCalibCondISEdt.setText(mBinding.resetCalibCondISEdt.getAdapter().getItem(Integer.parseInt(spiltData[17])).toString());
-
+                    mBinding.tempCompensationAct.setText(mBinding.tempCompensationAct.getAdapter().getItem(Integer.parseInt(spiltData[11])).toString());
+                    if (spiltData[11].equals("0")) {
+                        mBinding.tempCompFacCondISEdt.setText(spiltData[12]);
+                        mBinding.smoothingFactorCondISEdt.setText(spiltData[13]);
+                        mBinding.alarmLowCondISEdt.setText(spiltData[14].substring(0, 4) + "." + spiltData[14].substring(4, 6));
+                        mBinding.alarmHighCondISEdt.setText(spiltData[15].substring(0, 4) + "." + spiltData[15].substring(4, 6));
+                        mBinding.calibRequiredAlarmCondISEdt.setText(spiltData[16]);
+                        mBinding.resetCalibCondISEdt.setText(mBinding.resetCalibCondISEdt.getAdapter().getItem(Integer.parseInt(spiltData[17])).toString());
+                    } else {
+                        mBinding.smoothingFactorCondISEdt.setText(spiltData[12]);
+                        mBinding.alarmLowCondISEdt.setText(spiltData[13].substring(0, 4) + "." + spiltData[13].substring(4, 6));
+                        mBinding.alarmHighCondISEdt.setText(spiltData[14].substring(0, 4) + "." + spiltData[14].substring(4, 6));
+                        mBinding.calibRequiredAlarmCondISEdt.setText(spiltData[15]);
+                        mBinding.resetCalibCondISEdt.setText(mBinding.resetCalibCondISEdt.getAdapter().getItem(Integer.parseInt(spiltData[16])).toString());
+                    }
                     initAdapters();
-
                 } else if (spiltData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), "READ FAILED");
                 }
@@ -316,5 +361,40 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 break;
         }
 
+    }
+
+    void userManagement() {
+        switch (userManagement) {
+            case 1:
+                mBinding.inputLabelInputSettings.setEnabled(false);
+                mBinding.tempLinkedInputSettings.setEnabled(false);
+                mBinding.tempValueInputSettings.setEnabled(false);
+                mBinding.unitOfMeasureInputSettings.setEnabled(false);
+                mBinding.cellConstantInputSettings.setEnabled(false);
+                mBinding.alarmLowInputSettings.setEnabled(false);
+                mBinding.alarmHighInputSettings.setEnabled(false);
+                mBinding.calibRequiredAlarmInputSettings.setEnabled(false);
+                mBinding.resetCalibInputSettings.setEnabled(false);
+                mBinding.sensorActivationInputSettings.setVisibility(View.GONE);
+                mBinding.condRow5.setVisibility(View.GONE);
+                mBinding.conRow7.setVisibility(View.GONE);
+                break;
+
+            case 2:
+
+                //View
+                mBinding.cellConstantInputSettings.setEnabled(false);
+                mBinding.tempCompensationTil.setEnabled(false);
+                mBinding.tempCompFacInputSettings.setEnabled(false);
+                mBinding.smoothingFactorInputSettings.setEnabled(false);
+                mBinding.sensorActivationInputSettings.setVisibility(View.GONE);
+                mBinding.DeleteLayoutInputSettings.setVisibility(View.GONE);
+
+                break;
+
+            case 3:
+
+                break;
+        }
     }
 }

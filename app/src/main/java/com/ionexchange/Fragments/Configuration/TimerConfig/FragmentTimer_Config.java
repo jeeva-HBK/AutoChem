@@ -41,6 +41,11 @@ public class FragmentTimer_Config extends Fragment implements RvOnClick {
     }
 
     @Override
+    public void onClick(int sensorInputNo) {
+
+    }
+
+    @Override
     public void onClick(String sensorInputNo) {
         mBinding.frameTimer.setVisibility(View.VISIBLE);
         mBinding.timerRv.setVisibility(View.GONE);

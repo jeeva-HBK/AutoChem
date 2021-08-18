@@ -6,17 +6,25 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
+import com.ionexchange.Database.Dao.TimerConfigurationDao;
+import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
+import com.ionexchange.Database.Entity.TimerConfigurationEntity;
+import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 
 
-@Database(entities = {InputConfigurationEntity.class, OutputConfigurationEntity.class},
+@Database(entities = {InputConfigurationEntity.class, OutputConfigurationEntity.class,
+        VirtualConfigurationEntity.class, TimerConfigurationEntity.class},
         version = 2, exportSchema = false)
+@TypeConverters(Converters.class)
+
 public abstract class WaterTreatmentDb extends RoomDatabase {
 
     public static volatile WaterTreatmentDb INSTANCE;
@@ -45,6 +53,12 @@ public abstract class WaterTreatmentDb extends RoomDatabase {
     }
 
     public abstract InputConfigurationDao inputConfigurationDao();
+
     public abstract OutputConfigurationDao outputConfigurationDao();
+
+    public abstract VirtualConfigurationDao virtualConfigurationDao();
+
+    public abstract TimerConfigurationDao timerConfigurationDao();
+
 
 }

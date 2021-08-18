@@ -1,9 +1,13 @@
 package com.ionexchange.Fragments;
 
+import static com.ionexchange.Others.ApplicationClass.userType;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,5 +34,15 @@ public class FragmentRoot_MainScreen extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mActivity = (BaseActivity) getActivity();
         mActivity.changeToolBarVisibility(View.GONE);
+
+        mBinding.userTypeAct.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line,
+                new String[]{"None", "Basic", "Intermediate", "Advanced"}));
+
+        mBinding.userTypeAct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                userType = position;
+            }
+        });
     }
 }

@@ -3,14 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/add_input_sensor_dailog.xml" value="0.5" />
+        <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_configuration.xml" value="0.20416666666666666" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_inputsensor_analog.xml" value="0.1" />
-        <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_inputsensor_cond.xml" value="0.20416666666666666" />
+        <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_inputsensor_cond.xml" value="0.2" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_inputsensor_digital.xml" value="0.25" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_inputsensor_flow.xml" value="0.20416666666666666" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_inputsensor_orp.xml" value="0.20416666666666666" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_inputsensor_ph.xml" value="0.22" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_inputsensor_temp.xml" value="0.16822916666666668" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_inputsensor_toraidalconductivity.xml" value="0.20416666666666666" />
+        <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_mainscreen.xml" value="0.14" />
+        <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_outputsettings.xml" value="0.20416666666666666" />
+        <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/input_rv_item.xml" value="0.20416666666666666" />
+        <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/output_rv_item.xml" value="0.20416666666666666" />
+        <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/sumaeruda.xml" value="0.20416666666666666" />
+        <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/vi_rv_item.xml" value="0.2" />
       </map>
     </option>
   </component>

@@ -1,5 +1,8 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.sensorsViArr;
+
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,23 +19,29 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ionexchange.Adapters.InputsIndexRvAdapter;
-import com.ionexchange.Interface.RvOnClick;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Interface.InputRvOnClick;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.sensorsViArr;
+import java.util.ArrayList;
+import java.util.List;
 
-public class FragmentInputSensorList_Config extends Fragment implements RvOnClick, View.OnClickListener {
+public class FragmentInputSensorList_Config extends Fragment implements View.OnClickListener, InputRvOnClick {
     FragmentInputsettingsBinding mBinding;
-    RvOnClick rvOnClick;
-    private static final String TAG = "FragmentInputSettings";
+    List<InputConfigurationEntity> inputConfigurationEntityList;
     AutoCompleteTextView inputNumber;
     AutoCompleteTextView sensorName;
     ApplicationClass mAppClass;
+    WaterTreatmentDb dB;
+    InputConfigurationDao dao;
+    String[] inputHardwareNo;
+    private static final String TAG = "FragmentInputSettings";
 
 
     @Nullable
@@ -47,24 +56,39 @@ public class FragmentInputSensorList_Config extends Fragment implements RvOnClic
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        dB = WaterTreatmentDb.getDatabase(getContext());
+        dao = dB.inputConfigurationDao();
+        if (dao.getInputConfigurationEntityList().isEmpty()) {
+            for (int i = 1; i < 46; i++) {
+                InputConfigurationEntity entityUpdate = new InputConfigurationEntity
+                        (i, "N/A", 0, "N/A",
+                                "N/A", "N/A", 0);
+                List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
+                entryListUpdate.add(entityUpdate);
+                updateToDb(entryListUpdate);
+            }
+        }
+        inputConfigurationEntityList = dao.getInputConfigurationEntityFlagKeyList(1);
         mBinding.inputsRv.setLayoutManager(new GridLayoutManager(getContext(), 4));
-        mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(rvOnClick = this));
+        mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(this, inputConfigurationEntityList));
         mBinding.addsensorIsBtn.setOnClickListener(this);
     }
 
-    @Override
-    public void onClick(String inputNumber) {
-        frameLayout(inputNumber);
+    public void updateToDb(List<InputConfigurationEntity> entryList) {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+        InputConfigurationDao dao = db.inputConfigurationDao();
+        dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
     }
+
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addsensor_is_btn:
+
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
                 LayoutInflater inflater = this.getLayoutInflater();
                 View dialogView = inflater.inflate(R.layout.add_input_sensor_dailog, null);
-
                 dialogBuilder.setView(dialogView);
                 AlertDialog alertDialog = dialogBuilder.create();
                 inputNumber = dialogView.findViewById(R.id.add_input_number_dialog_act);
@@ -84,6 +108,9 @@ public class FragmentInputSensorList_Config extends Fragment implements RvOnClic
                     }
                 });
                 alertDialog.show();
+                int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.50);
+                int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.50);
+                alertDialog.getWindow().setLayout(width, height);
                 break;
         }
     }
@@ -93,38 +120,38 @@ public class FragmentInputSensorList_Config extends Fragment implements RvOnClic
     }
 
 
-    void frameLayout(String inputNumber) {
+    void frameLayout(String inputNumber, String sensorType) {
         mBinding.inputsRv.setVisibility(View.GONE);
         mBinding.view8.setVisibility(View.GONE);
-        switch (inputNumber) {
-            case "0":
+        switch (sensorType) {
+            case "pH":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorPh_Config(inputNumber, 1)).commit();
                 break;
-            case "1":
+            case "ORP":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorORP_Config(inputNumber, 1)).commit();
                 break;
-            case "2":
+            case "Conductivity":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorConductivity_Config(inputNumber, 1)).commit();
                 break;
-            case "3":
+            case "Toroidal":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorToroidalConductivity_config(inputNumber, 1)).commit();
                 break;
-            case "4":
+            case "Temp":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorTemp_config(inputNumber, 1)).commit();
                 break;
-            case "5":
+            case "Flow/Water Meter":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorFlow_config(inputNumber, 1)).commit();
                 break;
-            case "6":
+            case "Digital Sensor":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorDigital_config(inputNumber, 1)).commit();
                 break;
-            case "7":
+            case "Tank Level":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorTankLevel_Config(inputNumber, 1)).commit();
                 break;
-            case "8":
+            case "Modbus Sensor":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorModbus_Config(inputNumber, 1)).commit();
                 break;
-            case "9":
+            case "Analog Input":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorAnalog_Config(inputNumber, 1)).commit();
                 break;
         }
@@ -133,35 +160,35 @@ public class FragmentInputSensorList_Config extends Fragment implements RvOnClic
     void frameLayout(String inputNumber, String sensorName, String getSenorIndex) {
         mBinding.inputsRv.setVisibility(View.GONE);
         mBinding.view8.setVisibility(View.GONE);
-        switch (getSenorIndex) {
-            case "0":
+        switch (sensorName) {
+            case "pH":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorPh_Config(inputNumber, sensorName, 0)).commit();
                 break;
-            case "1":
+            case "ORP":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorORP_Config(inputNumber, sensorName, 0)).commit();
                 break;
-            case "2":
+            case "Conductivity":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorConductivity_Config(inputNumber, sensorName, 0)).commit();
                 break;
-            case "3":
+            case "Toroidal":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorToroidalConductivity_config(inputNumber, sensorName, 0)).commit();
                 break;
-            case "4":
+            case "Temp":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorTemp_config(inputNumber, sensorName, 0)).commit();
                 break;
-            case "5":
+            case "Flow/Water Meter":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorFlow_config(inputNumber, sensorName, 0)).commit();
                 break;
-            case "6":
+            case "Digital Sensor":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorDigital_config(inputNumber, sensorName, 0)).commit();
                 break;
-            case "7":
+            case "Tank Level":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorTankLevel_Config(inputNumber, sensorName, 0)).commit();
                 break;
-            case "8":
+            case "Modbus Sensor":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorModbus_Config(inputNumber, sensorName, 0)).commit();
                 break;
-            case "9":
+            case "Analog Input":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorAnalog_Config(inputNumber, sensorName, 0)).commit();
                 break;
         }
@@ -189,5 +216,10 @@ public class FragmentInputSensorList_Config extends Fragment implements RvOnClic
             }
         }
         return mAppClass.formDigits(digit, j);
+    }
+
+    @Override
+    public void onClick(String sensorInputNo, String sensorType) {
+        frameLayout(sensorInputNo, sensorType);
     }
 }

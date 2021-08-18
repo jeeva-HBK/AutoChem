@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <View
         android:id="@+id/view"
@@ -27,19 +27,19 @@
         style="@style/appAutoTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginLeft="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/add_sensor_dialog_btn"
-        app:layout_constraintEnd_toStartOf="@id/add_sensor_name_dialog_til"
         app:layout_constraintTop_toBottomOf="@id/view">
 
         <AutoCompleteTextView
             android:id="@+id/add_input_number_dialog_act"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:focusable="false"
             android:clickable="false"
             android:editable="false"
+            android:focusable="false"
             android:hint="Input Number" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -47,21 +47,19 @@
         android:id="@+id/add_sensor_name_dialog_til"
         style="@style/appAutoTxt"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/add_input_number_dialog_til"
-        app:layout_constraintStart_toEndOf="@+id/add_input_number_dialog_til"
-        app:layout_constraintTop_toTopOf="@id/add_input_number_dialog_til">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="@+id/add_input_number_dialog_til"
+        app:layout_constraintStart_toStartOf="@+id/add_input_number_dialog_til"
+        app:layout_constraintTop_toBottomOf="@+id/add_input_number_dialog_til">
 
         <AutoCompleteTextView
             android:id="@+id/add_sensor_name_dialog_act"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:focusable="false"
             android:clickable="false"
             android:editable="false"
+            android:focusable="false"
             android:hint="Sensor" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -71,9 +69,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/add_sensor_name_dialog_til"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/add_sensor_name_dialog_til"
+        app:layout_constraintStart_toStartOf="@+id/add_sensor_name_dialog_til"
+       app:layout_constraintTop_toBottomOf="@id/add_sensor_name_dialog_til"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

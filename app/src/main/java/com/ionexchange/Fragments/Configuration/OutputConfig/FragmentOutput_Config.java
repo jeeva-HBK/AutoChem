@@ -51,10 +51,16 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     ApplicationClass mAppClass;
     WaterTreatmentDb db;
     OutputConfigurationDao dao;
+    int sensorInputNo;
+
     String lInhibitorContinuous = "layoutInhibitorContinuous", lInhibitorBleed = "layoutInhibitorBleedDown", lInhibitorWaterFlow = "layoutInhibitorWaterFlow",
             lSensorOnOFF = "layoutSensorOnOff", lSensorPid = "layoutSensorPID", lAnalogMain = "layoutAnalogMain", lAnalogTest = "layoutAnalogTest", lAnalogDisable = "layoutAnalogDisable",
             currentFunctionMode = "";
     private static final String TAG = "FragmentOutput_Config";
+
+    public FragmentOutput_Config(int sensorInputNo) {
+        this.sensorInputNo = sensorInputNo;
+    }
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -69,6 +75,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
         db = WaterTreatmentDb.getDatabase(getContext());
+        Log.e(TAG, "onViewCreated: "+sensorInputNo );
         dao = db.outputConfigurationDao();
         initAdapter();
         enableDisabled();
@@ -79,7 +86,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
                 switch (pos) {
                     case 0:
-                       enableDisabled();
+                        enableDisabled();
                         break;
                     case 1:
                         enableInhibitorLayout();
@@ -228,7 +235,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
 
     private void sendAnalogTest() {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_OUTPUT_CONFIG + SPILT_CHAR + "01" + SPILT_CHAR +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                PCK_OUTPUT_CONFIG + SPILT_CHAR +toString(1, sensorInputNo) + SPILT_CHAR +
                 toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.activateChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
@@ -240,7 +248,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     }
 
     private void sendAnalogDisable() {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_OUTPUT_CONFIG + SPILT_CHAR + "01" + SPILT_CHAR +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                PCK_OUTPUT_CONFIG + SPILT_CHAR + toString(1, sensorInputNo) + SPILT_CHAR +
                 toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.activateChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
@@ -250,7 +259,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     }
 
     private void sendAnalogValue() {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_OUTPUT_CONFIG + SPILT_CHAR + "01" + SPILT_CHAR +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                PCK_OUTPUT_CONFIG + SPILT_CHAR + toString(1, sensorInputNo) + SPILT_CHAR +
                 toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.activateChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
@@ -269,13 +279,13 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
     private void sendPID() {
         // Sensor - PID
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_OUTPUT_CONFIG + SPILT_CHAR + "01" + SPILT_CHAR +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                PCK_OUTPUT_CONFIG + SPILT_CHAR +toString(1, sensorInputNo) + SPILT_CHAR +
                 toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.activateChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
                 getPosition(0, toString(mBinding.funtionModeOsATXT), functionMode) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.linkInputPidOsATXT), inputSensors) + SPILT_CHAR +
-
                 getPosition(0, toString(mBinding.modeOsATXT), modeSensor) + SPILT_CHAR +
                 toString(6, mBinding.setPointPidOsATXT) + SPILT_CHAR +
                 toString(6, mBinding.gainPidOsATXT) + SPILT_CHAR +
@@ -294,7 +304,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
     private void sendOnOFf() {
         // Sensor - On/Off
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_OUTPUT_CONFIG + SPILT_CHAR + "01" + SPILT_CHAR +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                PCK_OUTPUT_CONFIG + SPILT_CHAR + toString(1, sensorInputNo) + SPILT_CHAR +
                 toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.activateChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
@@ -312,7 +323,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
     private void sendWaterMeter() {
         // Water Meter / BioCide
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_OUTPUT_CONFIG + SPILT_CHAR + "01" + SPILT_CHAR +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                PCK_OUTPUT_CONFIG + SPILT_CHAR + toString(1, sensorInputNo) + SPILT_CHAR +
                 toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.activateChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
@@ -332,7 +344,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     private void sendBleedBlow() {
         // Bleed/Blown -
 
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_OUTPUT_CONFIG + SPILT_CHAR + "01" + SPILT_CHAR +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                PCK_OUTPUT_CONFIG + SPILT_CHAR + toString(1, sensorInputNo) + SPILT_CHAR +
                 toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.activateChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
@@ -351,7 +364,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         // Con - {*1234# 0# 06# 01# Output1# 30# 30# 1# 0# 125# 322# 212*}
 
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
-                PCK_OUTPUT_CONFIG + SPILT_CHAR + "01" + SPILT_CHAR +
+                PCK_OUTPUT_CONFIG + SPILT_CHAR + toString(1, sensorInputNo) + SPILT_CHAR +
                 toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.activateChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
@@ -373,8 +386,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
     }
 
-    void enableDisabled(){
-        String [] empty={};
+    void enableDisabled() {
+        String[] empty = {};
         mBinding.modeOsATXT.setAdapter(getAdapter(empty));
     }
 
@@ -452,6 +465,10 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         return mAppClass.formDigits(digits, editText.getText().toString());
     }
 
+    private String toString(int digits, int value) {
+        return mAppClass.formDigits(digits, String.valueOf(value));
+    }
+
     private String toString(AutoCompleteTextView editText) {
         return editText.getText().toString();
     }
@@ -469,7 +486,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     @Override
     public void onResume() {
         super.onResume();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_OUTPUT_CONFIG + SPILT_CHAR + "01");
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_OUTPUT_CONFIG + SPILT_CHAR +"01");
     }
 
     @Override
@@ -592,8 +609,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
-                    outputConfigurationEntity();
                     mAppClass.showSnackBar(getContext(), "Read Success !");
+                    outputConfigurationEntity();
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), "Write Failed !");
                 }
@@ -783,14 +800,15 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         dao.insert(entryList.toArray(new OutputConfigurationEntity[0]));
     }
 
-    void outputConfigurationEntity() {
+    public void outputConfigurationEntity() {
         OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
-                (1, toString(0, mBinding.outputLabelOsEDT),
+                (sensorInputNo, toString(0, mBinding.outputLabelOsEDT),
                         mBinding.funtionModeOsATXT.getText().toString(),
                         mBinding.modeOsATXT.getText().toString());
         List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(entityUpdate);
         updateToDb(entryListUpdate);
+
 
     }
 }

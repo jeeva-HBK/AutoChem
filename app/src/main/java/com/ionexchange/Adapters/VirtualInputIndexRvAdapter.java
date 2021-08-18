@@ -8,16 +8,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class VirtualInputIndexRvAdapter extends RecyclerView.Adapter<VirtualInputIndexRvAdapter.ViewHolder> {
     RvOnClick rvOnClick;
+    List<VirtualConfigurationEntity> virtualConfigurationEntityList;
 
-    public VirtualInputIndexRvAdapter(RvOnClick rvOnClick) {
+    public VirtualInputIndexRvAdapter(RvOnClick rvOnClick, List<VirtualConfigurationEntity> virtualConfigurationEntityList) {
         this.rvOnClick = rvOnClick;
+        this.virtualConfigurationEntityList = virtualConfigurationEntityList;
     }
 
     @NonNull
@@ -29,29 +34,37 @@ public class VirtualInputIndexRvAdapter extends RecyclerView.Adapter<VirtualInpu
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull VirtualInputIndexRvAdapter.ViewHolder holder, int position) {
-        holder.tv.setText("Virtual Input " + String.valueOf(position + 1));
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rvOnClick.onClick(String.valueOf(position));
-            }
-        });
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.hardwareNo.setText(virtualConfigurationEntityList.get(position).hardwareNo + "");
+        holder.label.setText(virtualConfigurationEntityList.get(position).inputLabel);
+        holder.low.setText(virtualConfigurationEntityList.get(position).subValueOne);
+        holder.high.setText(virtualConfigurationEntityList.get(position).subValueTwo);
     }
 
     @Override
     public int getItemCount() {
-        return 8;
+        return virtualConfigurationEntityList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv;
+        TextView tv, label, low, high, hardwareNo;
         View view;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             tv = itemView.findViewById(R.id.vite_header_txt);
             view = itemView.findViewById(R.id.view_base);
+            label = itemView.findViewById(R.id.input_label_value);
+            low = itemView.findViewById(R.id.low_alarm_value);
+            high = itemView.findViewById(R.id.high_alarm_value);
+            hardwareNo = itemView.findViewById(R.id.input_hardware_no);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    rvOnClick.onClick(Integer.parseInt(hardwareNo.getText().toString()));
+                }
+            });
         }
     }
 }

@@ -104,6 +104,11 @@ public class FragmentSelectSensors extends Fragment implements CompoundButton.On
     }
 
     @Override
+    public void onClick(int sensorInputNo) {
+
+    }
+
+    @Override
     public void onClick(String sensorInputNo) {
         fragment.dismiss();
     }

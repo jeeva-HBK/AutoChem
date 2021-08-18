@@ -1,16 +1,5 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,11 +22,22 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorOrpBinding;
 
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentInputSensorORP_Config extends Fragment implements DataReceiveCallback {
     FragmentInputsensorOrpBinding mBinding;
@@ -76,7 +76,39 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
         mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
+
+        switch (userType) {
+
+            case 1:
+                mBinding.orpRow4.setVisibility(View.GONE);
+                mBinding.orpRow5.setVisibility(View.GONE);
+
+                // Only View Access for
+                mBinding.orpInputNumber.setEnabled(false);
+                mBinding.orpInputLabel.setEnabled(false);
+                mBinding.orpSensorType.setEnabled(false);
+                mBinding.orpAlarmLow.setEnabled(false);
+                mBinding.orpAlarmHigh.setEnabled(false);
+                mBinding.orpCalibrationAlarmRequired.setEnabled(false);
+                mBinding.orpResetCalibration.setEnabled(false);
+                break;
+
+            case 2:
+                mBinding.orpSmoothingFactor.setEnabled(false);
+
+                mBinding.orpSensorAct.setVisibility(View.GONE);
+                mBinding.orpDeleteLayoutInputSettings.setVisibility(View.GONE);
+                break;
+
+            case 3:
+
+
+                break;
+        }
+
         initAdapter();
+
+
         mBinding.orpsaveLayoutInputSettings.setOnClickListener(this::save);
         mBinding.orpsaveFabInputSettings.setOnClickListener(this::save);
 

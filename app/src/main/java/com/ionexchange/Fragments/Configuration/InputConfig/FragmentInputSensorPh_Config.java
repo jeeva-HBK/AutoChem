@@ -1,18 +1,5 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
-import static com.ionexchange.Others.ApplicationClass.bufferArr;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +26,20 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ionexchange.Others.ApplicationClass.bufferArr;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentInputSensorPh_Config extends Fragment implements DataReceiveCallback {
     FragmentInputsensorPhBinding mBinding;
@@ -78,7 +79,67 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         mAppClass = (ApplicationClass) getActivity().getApplication();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
+
+        switch (userType) {
+            case 1:
+                mBinding.pHTemperatureSensorLinked.setVisibility(View.GONE);
+                mBinding.phRow5Isc.setVisibility(View.GONE);
+                mBinding.phRow6Isc.setVisibility(View.GONE);
+
+                // View Access only For
+                mBinding.pHInputNumber.setEnabled(false);
+                mBinding.pHInputNumber.setFocusableInTouchMode(false);
+
+                mBinding.pHInputLabel.setEnabled(false);
+                mBinding.pHInputLabel.setFocusableInTouchMode(false);
+
+                mBinding.pHSensorType.setEnabled(false);
+                mBinding.pHSensorType.setFocusableInTouchMode(false);
+
+                mBinding.pHBufferType.setEnabled(false);
+                mBinding.pHBufferType.setFocusableInTouchMode(false);
+
+                mBinding.pHCalibrationRequiredAlarm.setEnabled(false);
+                mBinding.pHCalibrationRequiredAlarm.setFocusableInTouchMode(false);
+
+                mBinding.pHLowAlarm.setEnabled(false);
+                mBinding.pHLowAlarm.setFocusableInTouchMode(false);
+
+                mBinding.pHHighAlarm.setEnabled(false);
+                mBinding.pHHighAlarm.setFocusableInTouchMode(false);
+
+                mBinding.pHDefaultTemperatureValue.setEnabled(false);
+                mBinding.pHDefaultTemperatureValue.setFocusableInTouchMode(false);
+
+                mBinding.pHResetCalibration.setEnabled(false);
+                mBinding.pHResetCalibration.setFocusableInTouchMode(false);
+
+                break;
+
+            case 2:
+                mBinding.pHInputNumber.setEnabled(false);
+                mBinding.pHInputNumber.setFocusableInTouchMode(false);
+
+                mBinding.pHSensorType.setEnabled(false);
+                mBinding.pHSensorType.setFocusableInTouchMode(false);
+
+                mBinding.pHTemperatureSensorLinked.setEnabled(false);
+                mBinding.pHTemperatureSensorLinked.setFocusableInTouchMode(false);
+
+                mBinding.pHSmoothingFactor.setEnabled(false);
+                mBinding.pHSmoothingFactor.setFocusableInTouchMode(false);
+
+                mBinding.pHSensorActivation.setVisibility(View.GONE);
+                mBinding.DeleteLayoutInputSettings.setVisibility(View.GONE);
+                break;
+
+            case 3:
+
+                break;
+        }
+
         initSensor(inputNumber);
+
         mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
         mBinding.saveFabInputSettings.setOnClickListener(this::save);
 
@@ -194,8 +255,6 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         mBinding.bufferTypeInputSettingATXT.setAdapter(getAdapter(bufferArr));
         mBinding.tempLinkedInputSettingATXT.setAdapter(getAdapter(tempLinkedArr));
         mBinding.resetCalibrationInputSettingEDT.setAdapter(getAdapter(resetCalibrationArr));
-
-
     }
 
     public ArrayAdapter<String> getAdapter(String[] strArr) {
