@@ -31,6 +31,7 @@ import java.util.List;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
@@ -76,12 +77,37 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
+
+        switch (userType) {
+            case 1:
+                mBinding.tempInputLabel.setEnabled(false);
+                mBinding.tempTempValue.setEnabled(false);
+                mBinding.tempLowAlarm.setEnabled(false);
+                mBinding.tempHighAlarm.setEnabled(false);
+                mBinding.tempCalibRequired.setEnabled(false);
+                mBinding.tempResetCalib.setEnabled(false);
+
+                mBinding.tempSensorActivation.setVisibility(View.GONE);
+                mBinding.tempSmoothingFactor.setVisibility(View.GONE);
+
+                mBinding.phRow5Isc.setVisibility(View.GONE);
+                break;
+
+            case 2:
+                mBinding.tempTempValue.setEnabled(false);
+                mBinding.tempSmoothingFactor.setEnabled(false);
+
+                mBinding.tempSensorActivation.setVisibility(View.GONE);
+                mBinding.tempDeleteLayout.setVisibility(View.GONE);
+                break;
+        }
+
         initAdapter();
-        mBinding.saveFabCondIS.setOnClickListener(this::save);
-        mBinding.saveLayoutTempIS.setOnClickListener(this::save);
+        mBinding.tempSaveFab.setOnClickListener(this::save);
+        mBinding.tempSaveLayout.setOnClickListener(this::save);
         // FIXME: 30-07-2021 virtual Input Configuration
-        mBinding.DeleteFabCondIS.setOnClickListener(this::delete);
-        mBinding.DeleteLayoutTempIS.setOnClickListener(this::delete);
+        mBinding.tempDeleteFab.setOnClickListener(this::delete);
+        mBinding.tempDeleteLayout.setOnClickListener(this::delete);
         mBinding.backArrow.setOnClickListener(v -> {
             mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
         });
@@ -161,7 +187,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         } else {
             mBinding.inputNumberTempISEDT.setText(inputNumber);
             mBinding.sensorTypeTempISATXT.setText(sensorName);
-            mBinding.DeleteLayoutTempIS.setVisibility(View.INVISIBLE);
+            mBinding.tempDeleteLayout.setVisibility(View.INVISIBLE);
             mBinding.saveTxt.setText("ADD");
         }
 
