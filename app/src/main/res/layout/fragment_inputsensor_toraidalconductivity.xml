@@ -8,438 +8,459 @@
 
         <View
             android:id="@+id/backArrow"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_margin="10dp"
             android:background="@drawable/ic_back"
-            app:layout_constraintBottom_toBottomOf="@+id/inputNumber_inputSettings"
-            app:layout_constraintStart_toStartOf="@+id/inputLabel_inputSettings"
-            app:layout_constraintTop_toTopOf="@+id/inputNumber_inputSettings" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!--Input Number-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/inputNumber_inputSettings"
-            style="@style/appEdtTxt"
+
+        <TableLayout
+            android:id="@+id/table_view"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/inputLabel_inputSettings"
-            app:layout_constraintEnd_toEndOf="@+id/sensorType_inputSetting"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/sensorType_inputSetting"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inputNumber_torCondISEDT"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:digits="0123456789"
-                android:editable="false"
-                android:focusable="false"
-                android:hint="Input Number"
-                android:inputType="number"
-                android:maxLength="2"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--Row 1-->
-        <!--input Label-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/inputLabel_inputSettings"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/tempValue_inputSettings"
-            app:layout_constraintEnd_toStartOf="@+id/sensorType_inputSetting"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inputNumber_inputSettings">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inputLabel_torCondISEdt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Input Label"
-                android:imeOptions="actionNext"
-                android:inputType="textPersonName"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--Sensor type-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/sensorType_inputSetting"
-            style="@style/appAutoTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            app:layout_constraintBottom_toBottomOf="@+id/inputLabel_inputSettings"
-            app:layout_constraintEnd_toStartOf="@+id/sensorActivation_inputSettings"
-            app:layout_constraintStart_toEndOf="@+id/inputLabel_inputSettings"
-            app:layout_constraintTop_toTopOf="@+id/inputLabel_inputSettings">
-
-            <AutoCompleteTextView
-                android:id="@+id/sensorType_torCondISATXT"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Sensor Type" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--Sensor Activation-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/sensorActivation_inputSettings"
-            style="@style/appAutoTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            app:layout_constraintBottom_toBottomOf="@+id/sensorType_inputSetting"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/sensorType_inputSetting"
-            app:layout_constraintTop_toTopOf="@+id/sensorType_inputSetting">
-
-            <AutoCompleteTextView
-                android:id="@+id/sensorActivation_torCondISATXT"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:editable="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Sensor Activation" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--Row 2-->
-        <!--Temp Linked-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tempLinked_inputSettings"
-            style="@style/appAutoTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tempValue_inputSettings"
-            app:layout_constraintEnd_toEndOf="@+id/inputLabel_inputSettings"
-            app:layout_constraintStart_toStartOf="@+id/inputLabel_inputSettings"
-            app:layout_constraintTop_toTopOf="@+id/tempValue_inputSettings">
-
-            <AutoCompleteTextView
-                android:id="@+id/tempLinked_torCondISEdt"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Temperature Linked"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--Temp Value-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tempValue_inputSettings"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/cellConstant_inputSettings"
-            app:layout_constraintEnd_toEndOf="@+id/sensorType_inputSetting"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/sensorType_inputSetting"
-            app:layout_constraintTop_toBottomOf="@+id/inputLabel_inputSettings">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tempValue_torCondISEdt"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Temperature Value"
-                android:imeOptions="actionNext"
-                android:inputType="number"
-                android:maxLength="2"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--Unit of Measurement-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/unitOfMeasure_inputSettings"
-            style="@style/appAutoTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tempValue_inputSettings"
-            app:layout_constraintEnd_toEndOf="@+id/sensorActivation_inputSettings"
-            app:layout_constraintStart_toStartOf="@+id/sensorActivation_inputSettings"
-            app:layout_constraintTop_toTopOf="@+id/tempValue_inputSettings">
-
-            <AutoCompleteTextView
-                android:id="@+id/unitOfMeasure_torCondISEdt"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Unit"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--Row 2-->
-        <!--Cell Constant-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/cellConstant_inputSettings"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/calibRequiredAlarm_inputSettings"
-            app:layout_constraintEnd_toEndOf="@+id/tempLinked_inputSettings"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/tempLinked_inputSettings"
-            app:layout_constraintTop_toBottomOf="@+id/tempValue_inputSettings">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/smoothingFactor_torConEDT"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Smoothing Factor"
-                android:imeOptions="actionNext"
-                android:inputType="number"
-                android:maxLength="3"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--Temperature Compensation-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tempComp_inputSettings"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/cellConstant_inputSettings"
-            app:layout_constraintEnd_toEndOf="@+id/tempValue_inputSettings"
-            app:layout_constraintStart_toStartOf="@+id/tempValue_inputSettings"
-            app:layout_constraintTop_toTopOf="@+id/cellConstant_inputSettings">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tempComp_torCondISEdt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Temp Compensation"
-                android:imeOptions="actionNext"
-                android:inputType="number"
-                android:maxLength="4"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--Temperature Compensation Factor-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tempCompFac_inputSettings"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/tempComp_inputSettings"
-            app:layout_constraintEnd_toEndOf="@+id/unitOfMeasure_inputSettings"
-            app:layout_constraintStart_toStartOf="@+id/unitOfMeasure_inputSettings"
-            app:layout_constraintTop_toTopOf="@+id/tempComp_inputSettings">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tempCompFac_torCondISEdt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Temp Compensation factor"
-                android:imeOptions="actionNext"
-                android:inputType="number"
-                android:maxLength="4"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--Row 3-->
-        <!--Calibration Required Alarm-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/calibRequiredAlarm_inputSettings"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/alarmLow_inputSettings"
-            app:layout_constraintEnd_toStartOf="@+id/resetCalib_inputSettings"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/cellConstant_inputSettings"
-            app:layout_constraintTop_toBottomOf="@+id/cellConstant_inputSettings">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/calibRequiredAlarm_torCondISEdt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Calibration Required Alarm"
-                android:imeOptions="actionNext"
-                android:inputType="number"
-                android:maxLength="3"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--Required Calibration-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/resetCalib_inputSettings"
-            style="@style/appAutoTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="5dp"
-            app:layout_constraintBottom_toBottomOf="@+id/calibRequiredAlarm_inputSettings"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/calibRequiredAlarm_inputSettings"
-            app:layout_constraintTop_toTopOf="@+id/calibRequiredAlarm_inputSettings">
-
-            <AutoCompleteTextView
-                android:id="@+id/resetCalib_torCondISEdt"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:hint="Reset Calibration"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--Low Alarm-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/alarmLow_inputSettings"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/DeleteLayout_torCondIS"
-            app:layout_constraintEnd_toStartOf="@+id/alarmHigh_inputSettings"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/cellConstant_inputSettings"
-            app:layout_constraintTop_toBottomOf="@+id/calibRequiredAlarm_inputSettings">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/alarmLow_torCondISEdt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Alarm Low"
-                android:imeOptions="actionNext"
-                android:inputType="numberDecimal"
-                android:maxLength="7"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--High Alarm-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/alarmHigh_inputSettings"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            app:layout_constraintEnd_toEndOf="@+id/resetCalib_inputSettings"
-            app:layout_constraintStart_toEndOf="@+id/alarmLow_inputSettings"
-            app:layout_constraintTop_toTopOf="@+id/alarmLow_inputSettings">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/alarmHigh_torCondISEdt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Alarm High"
-                android:imeOptions="actionDone"
-                android:inputType="numberDecimal"
-                android:maxLength="7"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <View
-            android:id="@+id/view_lay"
-            android:layout_width="2dp"
-            android:layout_height="2dp"
-            app:layout_constraintHorizontal_bias="0.4"
-            app:layout_constraintTop_toBottomOf="@id/alarmHigh_inputSettings"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-
-        <!--saveLayout-->
-        <LinearLayout
-            android:id="@+id/saveLayout_torCondIS"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/view_lay"
-            app:layout_constraintTop_toBottomOf="@+id/alarmHigh_inputSettings">
-
-            <TextView
-                android:id="@+id/save_txt"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
+            <!--Row-1-->
+            <TableRow
+                android:id="@+id/condRow1"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:text="Save"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:weightSum="3">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/saveFab_condIS"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@color/colorSecondary"
-                android:backgroundTint="@color/colorSecondary"
-                android:src="@drawable/ic_round_right"
-                app:maxImageSize="50dp"
-                app:tint="@color/black" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputNumber_inputSettings"
+                    style="@style/appEdtTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:enabled="false">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputNumber_torCondISEDT"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:digits="0123456789"
+                        android:editable="false"
+                        android:hint="Input Number"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:maxLines="1" />
 
-        </LinearLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <!--DeleteLayout-->
-        <LinearLayout
-            android:id="@+id/DeleteLayout_torCondIS"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="visible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/view_lay"
-            app:layout_constraintTop_toBottomOf="@+id/alarmLow_inputSettings">
+            </TableRow>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
+            <!--Row-2-->
+            <TableRow
+                android:id="@+id/condRow2"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:text="Delete"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:weightSum="3">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/DeleteFab_condIS"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@color/red"
-                android:backgroundTint="@color/red"
-                android:src="@drawable/ic_baseline_delete"
-                app:maxImageSize="35dp"
-                app:tint="@color/black" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLabel_inputSettings"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputLabel_torCondISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Input Label"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPersonName"
+                        android:maxLength="6"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
 
-        </LinearLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/sensorType_inputSetting"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:enabled="false">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/sensorType_torCondISATXT"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Sensor Type" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tempValue_inputSettings"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tempValue_torCondISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Temperature Value"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row-3-->
+            <TableRow
+                android:id="@+id/condRow3"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="3">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tempLinked_inputSettings"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/tempLinked_torCondISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Temperature Linked"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/smoothingFactor_inputSettings"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/smoothingFactor_torConEDT"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Smoothing Factor"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/resetCalib_inputSettings"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/resetCalib_torCondISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Reset Calibration"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </TableRow>
+
+            <!--Row-4-->
+            <TableRow
+                android:id="@+id/condRow4"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="3">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/alarmLow_inputSettings"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/alarmLow_torCondISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alarm Low"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/alarmHigh_inputSettings"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/alarmHigh_torCondISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alarm High"
+                        android:imeOptions="actionDone"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/calibRequiredAlarm_inputSettings"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/calibRequiredAlarm_torCondISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Calibration Required Alarm"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row-5-->
+            <TableRow
+                android:id="@+id/condRow5"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="3">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/temp_compensation_til"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/temp_compensation_act"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Compensation Type"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tempCompFac_inputSettings"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tempCompFac_torCondISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Temp Compensation factor"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </TableRow>
+
+            <!--Row-6-->
+            <TableRow
+                android:id="@+id/condRow6"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="3">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/unitOfMeasure_inputSettings"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/unitOfMeasure_torCondISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="Unit"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/sensorActivation_inputSettings"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="5dp"
+
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/sensorActivation_torCondISATXT"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="Sensor Activation" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 7-->
+            <TableRow
+                android:id="@+id/conRow7"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="3">
+
+                <!--saveLayout-->
+                <LinearLayout
+                    android:id="@+id/saveLayout_inputSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/save_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="center_vertical"
+                        android:text="Save"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/saveFab_inputSettings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@color/colorSecondary"
+                        android:backgroundTint="@color/colorSecondary"
+                        android:src="@drawable/ic_round_right"
+                        app:maxImageSize="50dp"
+                        app:tint="@color/black" />
+
+
+                </LinearLayout>
+
+                <!--DeleteLayout-->
+                <LinearLayout
+                    android:id="@+id/DeleteLayout_inputSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+
+                    android:gravity="center|left"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="center"
+                        android:text="Delete"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/DeleteFab_inputSettings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@color/red"
+                        android:backgroundTint="@color/red"
+                        android:src="@drawable/ic_baseline_delete"
+                        app:maxImageSize="35dp"
+                        app:tint="@color/black" />
+
+
+                </LinearLayout>
+
+            </TableRow>
+
+        </TableLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

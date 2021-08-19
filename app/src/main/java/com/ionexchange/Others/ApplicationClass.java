@@ -1,7 +1,5 @@
 package com.ionexchange.Others;
 
-import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
-
 import android.app.Activity;
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -22,6 +20,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.R;
 
+import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
+
 /* Created by Jeeva on 13/07/2021 */
 public class ApplicationClass extends Application {
     private static final String TAG = "ApplicationClass";
@@ -33,7 +33,7 @@ public class ApplicationClass extends Application {
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},
-            unitArr = {" µS/cm", " mS/cm", "S/cm"},
+            unitArr = {" µS/cm", " mS/cm", "S/cm"}, typeOfValueRead = {"None", "Fluorescence value", "Turbidity Value", "Corrosion rate", "Pitting rate", "Fluorescence value", "Tagged Polymer value"},
 
     flowMeterTypeArr = {"Analog Flow Meter", "Flow Meter Contactor", "Paddle Wheel", "Feed Monitor"},
             flowUnitArr = {"Volume", "Gallons", "Litres", "Cubic Meters", "Millions of Gallons"},

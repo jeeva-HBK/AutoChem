@@ -25,6 +25,9 @@ import com.ionexchange.databinding.FragmentInputsensorTempBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
@@ -35,9 +38,6 @@ import static com.ionexchange.Others.PacketControl.RES_FAILED;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FragmentInputSensorTemp_config extends Fragment implements DataReceiveCallback {
     private static final String TAG = "FragmentInputSensorTemp";
@@ -103,7 +103,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR +
                 toString(2, mBinding.inputNumberTempISEDT) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.sensorTypeTempISATXT), inputTypeArr) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.sensorActivationTempISATXT), sensorActivationArr) + SPILT_CHAR +
+                getPosition(0, toString(mBinding.sensorActivationTempISATXT), sensorActivationArr) + SPILT_CHAR +
                 toString(0, mBinding.inputLabelTempISEdt) + SPILT_CHAR +
                 toString(2, mBinding.tempValueTempISEdt) + SPILT_CHAR +
                 toString(3, mBinding.smoothingFactorTempISEdt) + SPILT_CHAR +
@@ -157,7 +157,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         super.onResume();
         if (sensorName == null) {
             mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "05");
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + inputNumber);
         } else {
             mBinding.inputNumberTempISEDT.setText(inputNumber);
             mBinding.sensorTypeTempISATXT.setText(sensorName);

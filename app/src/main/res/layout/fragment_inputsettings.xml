@@ -20,7 +20,7 @@
             android:id="@+id/leftArrow_is_btn"
             android:layout_width="100dp"
             android:layout_height="0dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="3dp"
             android:backgroundTint="@color/colorSecondary"
             android:text=""
             app:cornerRadius="10dp"
@@ -65,7 +65,6 @@
             app:layout_constraintEnd_toStartOf="@+id/rightArrow_is_btn"
             app:layout_constraintTop_toTopOf="@+id/view8" />
 
-
         <!--ButtonRight-->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/rightArrow_is_btn"
@@ -81,7 +80,6 @@
             app:layout_constraintBottom_toBottomOf="@+id/view8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/view8" />
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/inputsRv"

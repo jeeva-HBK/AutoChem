@@ -1,5 +1,6 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Others.ApplicationClass.TemperatureCompensationType;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
@@ -51,6 +52,8 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     String sensorName;
     WaterTreatmentDb db;
     InputConfigurationDao dao;
+    int userManagement;
+
 
     public FragmentInputSensorToroidalConductivity_config(String inputNumber, int sensorStatus) {
         this.inputNumber = inputNumber;
@@ -79,27 +82,42 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
         mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
+        userManagement = 3;
+        userManagement();
         initAdapters();
-        mBinding.saveFabCondIS.setOnClickListener(this::save);
-        mBinding.saveLayoutTorCondIS.setOnClickListener(this::save);
-        mBinding.DeleteFabCondIS.setOnClickListener(this::delete);
-        mBinding.DeleteLayoutTorCondIS.setOnClickListener(this::delete);
+
+        mBinding.saveFabInputSettings.setOnClickListener(this::save);
+        mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
+        mBinding.DeleteFabInputSettings.setOnClickListener(this::delete);
+        mBinding.DeleteLayoutInputSettings.setOnClickListener(this::delete);
         mBinding.backArrow.setOnClickListener(v -> {
             mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
         });
     }
 
     private void delete(View view) {
-        sendData(2);
+        if (validation()) {
+            if (getPosition(1, toString(mBinding.tempCompensationAct), TemperatureCompensationType).equals("0")) {
+                sendDataLinearTemperature(2);
+            } else {
+                sendStandardNaClTemperature(2);
+            }
+
+        }
     }
 
     private void save(View view) {
         if (validation()) {
-            sendData(sensorStatus);
+            if (getPosition(1, toString(mBinding.tempCompensationAct), TemperatureCompensationType).equals("0")) {
+                sendDataLinearTemperature(sensorStatus);
+            } else {
+                sendStandardNaClTemperature(sensorStatus);
+            }
+
         }
     }
 
-    void sendData(int sensorStatus) {
+    void sendDataLinearTemperature(int sensorStatus) {
         mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                 INPUT_SENSOR_CONFIG + SPILT_CHAR +
@@ -110,8 +128,30 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                 getPosition(1, toString(mBinding.tempLinkedTorCondISEdt), tempLinkedArr) + SPILT_CHAR +
                 toString(2, mBinding.tempValueTorCondISEdt) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.unitOfMeasureTorCondISEdt), unitArr) + SPILT_CHAR +
-                toString(4, mBinding.tempCompTorCondISEdt) + SPILT_CHAR +
+                getPosition(0, toString(mBinding.tempCompensationAct), TemperatureCompensationType) + SPILT_CHAR +
                 toString(4, mBinding.tempCompFacTorCondISEdt) + SPILT_CHAR +
+                toString(3, mBinding.smoothingFactorTorConEDT) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.alarmLowTorCondISEdt) + SPILT_CHAR +
+                toStringSplit(4, 2, mBinding.alarmHighTorCondISEdt) + SPILT_CHAR +
+                toString(3, mBinding.calibRequiredAlarmTorCondISEdt) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.resetCalibTorCondISEdt), resetCalibrationArr) + SPILT_CHAR +
+                sensorStatus
+        );
+    }
+
+
+    void sendStandardNaClTemperature(int sensorStatus) {
+        mActivity.showProgress();
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                toString(2, mBinding.inputNumberTorCondISEDT) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.sensorTypeTorCondISATXT), inputTypeArr) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.sensorActivationTorCondISATXT), sensorActivationArr) + SPILT_CHAR +
+                toString(0, mBinding.inputLabelTorCondISEdt) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.tempLinkedTorCondISEdt), tempLinkedArr) + SPILT_CHAR +
+                toString(2, mBinding.tempValueTorCondISEdt) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.unitOfMeasureTorCondISEdt), unitArr) + SPILT_CHAR +
+                getPosition(0, toString(mBinding.tempCompensationAct), TemperatureCompensationType) + SPILT_CHAR +
                 toString(3, mBinding.smoothingFactorTorConEDT) + SPILT_CHAR +
                 toStringSplit(4, 2, mBinding.alarmLowTorCondISEdt) + SPILT_CHAR +
                 toStringSplit(4, 2, mBinding.alarmHighTorCondISEdt) + SPILT_CHAR +
@@ -146,6 +186,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
         mBinding.tempLinkedTorCondISEdt.setAdapter(getAdapter(tempLinkedArr));
         mBinding.unitOfMeasureTorCondISEdt.setAdapter(getAdapter(unitArr));
         mBinding.resetCalibTorCondISEdt.setAdapter(getAdapter(resetCalibrationArr));
+        mBinding.tempCompensationAct.setAdapter(getAdapter(TemperatureCompensationType));
     }
 
     public ArrayAdapter<String> getAdapter(String[] strArr) {
@@ -169,7 +210,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
         } else {
             mBinding.inputNumberTorCondISEDT.setText(inputNumber);
             mBinding.sensorTypeTorCondISATXT.setText(sensorName);
-            mBinding.DeleteLayoutTorCondIS.setVisibility(View.INVISIBLE);
+            mBinding.DeleteLayoutInputSettings.setVisibility(View.INVISIBLE);
             mBinding.saveTxt.setText("ADD");
         }
 
@@ -209,13 +250,22 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                     mBinding.tempLinkedTorCondISEdt.setText(mBinding.tempLinkedTorCondISEdt.getAdapter().getItem(Integer.parseInt(spiltData[7])).toString());
                     mBinding.tempValueTorCondISEdt.setText(spiltData[8]);
                     mBinding.unitOfMeasureTorCondISEdt.setText(mBinding.unitOfMeasureTorCondISEdt.getAdapter().getItem(Integer.parseInt(spiltData[9])).toString());
-                    mBinding.tempCompTorCondISEdt.setText(spiltData[10]);
-                    mBinding.tempCompFacTorCondISEdt.setText(spiltData[11]);
-                    mBinding.smoothingFactorTorConEDT.setText(spiltData[12]);
-                    mBinding.alarmLowTorCondISEdt.setText(spiltData[13].substring(0, 4) + "." + spiltData[13].substring(4, 6));
-                    mBinding.alarmHighTorCondISEdt.setText(spiltData[14].substring(0, 4) + "." + spiltData[14].substring(4, 6));
-                    mBinding.calibRequiredAlarmTorCondISEdt.setText(spiltData[15]);
-                    mBinding.resetCalibTorCondISEdt.setText(mBinding.resetCalibTorCondISEdt.getAdapter().getItem(Integer.parseInt(spiltData[16])).toString());
+                    mBinding.tempCompensationAct.setText(mBinding.tempCompensationAct.getAdapter().getItem(Integer.parseInt(spiltData[10])).toString());
+                    if (spiltData[11].equals("0")) {
+                        mBinding.tempCompFacTorCondISEdt.setText(spiltData[11]);
+                        mBinding.smoothingFactorTorConEDT.setText(spiltData[12]);
+                        mBinding.alarmLowTorCondISEdt.setText(spiltData[13].substring(0, 4) + "." + spiltData[13].substring(4, 6));
+                        mBinding.alarmHighTorCondISEdt.setText(spiltData[14].substring(0, 4) + "." + spiltData[14].substring(4, 6));
+                        mBinding.calibRequiredAlarmTorCondISEdt.setText(spiltData[15]);
+                        mBinding.resetCalibTorCondISEdt.setText(mBinding.resetCalibTorCondISEdt.getAdapter().getItem(Integer.parseInt(spiltData[16])).toString());
+                    } else {
+                        mBinding.smoothingFactorTorConEDT.setText(spiltData[11]);
+                        mBinding.alarmLowTorCondISEdt.setText(spiltData[12].substring(0, 4) + "." + spiltData[12].substring(4, 6));
+                        mBinding.alarmHighTorCondISEdt.setText(spiltData[13].substring(0, 4) + "." + spiltData[13].substring(4, 6));
+                        mBinding.calibRequiredAlarmTorCondISEdt.setText(spiltData[14]);
+                        mBinding.resetCalibTorCondISEdt.setText(mBinding.resetCalibTorCondISEdt.getAdapter().getItem(Integer.parseInt(spiltData[15])).toString());
+                    }
+
 
                     initAdapters();
 
@@ -306,5 +356,38 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                 break;
         }
 
+    }
+
+    void userManagement() {
+        switch (userManagement) {
+            case 1:
+                mBinding.inputLabelInputSettings.setEnabled(false);
+                mBinding.tempLinkedInputSettings.setEnabled(false);
+                mBinding.tempValueInputSettings.setEnabled(false);
+                mBinding.unitOfMeasureInputSettings.setEnabled(false);
+                mBinding.alarmLowInputSettings.setEnabled(false);
+                mBinding.alarmHighInputSettings.setEnabled(false);
+                mBinding.calibRequiredAlarmInputSettings.setEnabled(false);
+                mBinding.resetCalibInputSettings.setEnabled(false);
+                mBinding.sensorActivationInputSettings.setVisibility(View.GONE);
+                mBinding.condRow5.setVisibility(View.GONE);
+                mBinding.conRow7.setVisibility(View.GONE);
+                break;
+
+            case 2:
+
+                //View
+                mBinding.tempCompensationTil.setEnabled(false);
+                mBinding.tempCompFacInputSettings.setEnabled(false);
+                mBinding.smoothingFactorInputSettings.setEnabled(false);
+                mBinding.sensorActivationInputSettings.setVisibility(View.GONE);
+                mBinding.DeleteLayoutInputSettings.setVisibility(View.GONE);
+
+                break;
+
+            case 3:
+
+                break;
+        }
     }
 }

@@ -43,6 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:layout_margin="3dp"
+                    android:enabled="false"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -93,6 +94,7 @@
                     android:layout_width="0dp"
                     android:layout_height="?attr/actionBarSize"
                     android:layout_margin="3dp"
+                    android:enabled="false"
                     android:layout_weight="1">
 
                     <AutoCompleteTextView

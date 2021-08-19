@@ -1,8 +1,5 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.sensorsViArr;
-
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,6 +28,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.sensorsViArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
 
 public class FragmentInputSensorList_Config extends Fragment implements View.OnClickListener, InputRvOnClick {
     FragmentInputsettingsBinding mBinding;
@@ -86,31 +87,37 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
         switch (v.getId()) {
             case R.id.addsensor_is_btn:
 
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-                LayoutInflater inflater = this.getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.add_input_sensor_dailog, null);
-                dialogBuilder.setView(dialogView);
-                AlertDialog alertDialog = dialogBuilder.create();
-                inputNumber = dialogView.findViewById(R.id.add_input_number_dialog_act);
-                sensorName = dialogView.findViewById(R.id.add_sensor_name_dialog_act);
-                Button btn = dialogView.findViewById(R.id.add_sensor_dialog_btn);
-                inputNumber.setAdapter(getAdapter(sensorsViArr));
-                sensorName.setAdapter(getAdapter(inputTypeArr));
-                btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (dialogValidation()) {
-                            String dialogInput = inputNumber.getText().toString();
-                            String dialogSensorName = sensorName.getText().toString();
-                            frameLayout(dialogInput, dialogSensorName, getPosition(1, dialogSensorName, inputTypeArr));
-                            alertDialog.dismiss();
+                if (userType == 3) {
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = this.getLayoutInflater();
+                    View dialogView = inflater.inflate(R.layout.add_input_sensor_dailog, null);
+                    dialogBuilder.setView(dialogView);
+                    AlertDialog alertDialog = dialogBuilder.create();
+                    inputNumber = dialogView.findViewById(R.id.add_input_number_dialog_act);
+                    sensorName = dialogView.findViewById(R.id.add_sensor_name_dialog_act);
+                    Button btn = dialogView.findViewById(R.id.add_sensor_dialog_btn);
+                    inputNumber.setAdapter(getAdapter(sensorsViArr));
+                    sensorName.setAdapter(getAdapter(inputTypeArr));
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (dialogValidation()) {
+                                String dialogInput = inputNumber.getText().toString();
+                                String dialogSensorName = sensorName.getText().toString();
+                                frameLayout(dialogInput, dialogSensorName, getPosition(1, dialogSensorName, inputTypeArr));
+                                alertDialog.dismiss();
+                            }
                         }
-                    }
-                });
-                alertDialog.show();
-                int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.50);
-                int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.50);
-                alertDialog.getWindow().setLayout(width, height);
+                    });
+                    alertDialog.show();
+                    int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.50);
+                    int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.50);
+                    alertDialog.getWindow().setLayout(width, height);
+
+                } else {
+                    mAppClass.showSnackBar(getContext(), "Access Denied !");
+                }
+
                 break;
         }
     }
