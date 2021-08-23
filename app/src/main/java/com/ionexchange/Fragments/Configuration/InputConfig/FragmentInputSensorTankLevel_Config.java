@@ -22,10 +22,14 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputSensorTankLevelBinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.ionexchange.Others.ApplicationClass.digitalArr;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
@@ -33,9 +37,6 @@ import static com.ionexchange.Others.PacketControl.RES_FAILED;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FragmentInputSensorTankLevel_Config extends Fragment implements DataReceiveCallback {
     FragmentInputSensorTankLevelBinding mBinding;
@@ -71,6 +72,39 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
         mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
+
+        switch (userType) {
+
+            case 1:
+                mBinding.tankInputNumber.setEnabled(false);
+                mBinding.tankSensorLabel.setEnabled(false);
+                mBinding.tankSensorType.setEnabled(false);
+                mBinding.tankOpenMessage.setEnabled(false);
+                mBinding.tankCloseMessage.setEnabled(false);
+                mBinding.tankInnerLock.setEnabled(false);
+                mBinding.tankAlarm.setEnabled(false);
+                mBinding.tankTotalTime.setEnabled(false);
+                mBinding.tankReseTime.setEnabled(false);
+
+                mBinding.tankSensorActivation.setVisibility(View.GONE);
+
+                mBinding.tankRow6Isc.setVisibility(View.GONE);
+                break;
+
+            case 2:
+                mBinding.tankInputNumber.setEnabled(false);
+                mBinding.tankSensorType.setEnabled(false);
+
+                mBinding.tankSensorActivation.setVisibility(View.GONE);
+                break;
+
+            case 3:
+
+                break;
+
+
+        }
+
         initAdapter();
         mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
         mBinding.saveFabInputSettings.setOnClickListener(this::save);

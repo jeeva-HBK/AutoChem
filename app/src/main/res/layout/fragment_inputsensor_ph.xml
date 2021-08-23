@@ -83,6 +83,7 @@
                         android:hint="Input Label"
                         android:imeOptions="actionNext"
                         android:inputType="textPersonName"
+                        android:maxLength="20"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -171,7 +172,7 @@
                         android:hint="Low Alarm"
                         android:imeOptions="actionNext"
                         android:inputType="numberDecimal"
-                        android:maxLength="6"
+                        android:maxLength="7"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -192,7 +193,7 @@
                         android:hint="High Alarm"
                         android:imeOptions="actionNext"
                         android:inputType="numberDecimal"
-                        android:maxLength="6"
+                        android:maxLength="7"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -240,6 +241,7 @@
                         android:layout_height="match_parent"
                         android:hint="Default Temperature Value"
                         android:maxLength="2"
+                        android:inputType="number"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>

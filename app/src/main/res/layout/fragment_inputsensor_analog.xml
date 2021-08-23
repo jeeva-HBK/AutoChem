@@ -2,432 +2,443 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!--Layout Analog-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <View
+        <ImageView
             android:id="@+id/backArrow"
             android:layout_width="38dp"
             android:layout_height="38dp"
-            android:layout_marginStart="10dp"
             android:background="@drawable/ic_back"
-            app:layout_constraintBottom_toBottomOf="@+id/analog_input_number_til"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.03"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/analog_input_number_til" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.03" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/analog_input_number_til"
-            style="@style/appEdtTxt"
+        <TableLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/analog_input_label_til"
-            app:layout_constraintEnd_toEndOf="@+id/analog_sensor_type_til"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/analog_sensor_type_til"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/analog_input_number_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:hint="Input Number">
-
-            </com.google.android.material.textfield.TextInputEditText>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/analog_input_label_til"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/analog_min_value_til"
-            app:layout_constraintEnd_toStartOf="@id/analog_sensor_type_til"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/analog_input_number_til">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/analog_input_label_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Input Label"
-                android:imeOptions="actionNext"
-                android:maxLines="1">
-
-            </com.google.android.material.textfield.TextInputEditText>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/analog_sensor_type_til"
-            style="@style/appAutoTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/analog_input_label_til"
-            app:layout_constraintEnd_toStartOf="@id/analog_sensor_activation_til"
-            app:layout_constraintStart_toEndOf="@id/analog_input_label_til"
-            app:layout_constraintTop_toTopOf="@+id/analog_input_label_til">
-
-            <AutoCompleteTextView
-                android:id="@+id/analog_sensor_type_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:hint="Sensor Type"
-                android:maxLines="1">
-
-            </AutoCompleteTextView>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/analog_sensor_activation_til"
-            style="@style/appAutoTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/analog_input_label_til"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/analog_sensor_type_til"
-            app:layout_constraintTop_toTopOf="@+id/analog_sensor_type_til">
-
-            <AutoCompleteTextView
-                android:id="@+id/analog_sensor_activation_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:hint="Sensor Activation"
-                android:maxLines="1">
-
-            </AutoCompleteTextView>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/analog_min_value_til"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/analog_smoothing_factor_til"
-            app:layout_constraintEnd_toEndOf="@+id/analog_input_label_til"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/analog_input_label_til"
-            app:layout_constraintTop_toBottomOf="@+id/analog_input_label_til">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/analog_min_value_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Min Value"
-                android:imeOptions="actionNext"
-                android:inputType="number"
-                android:maxLength="4"
-                android:maxLines="1">
-
-            </com.google.android.material.textfield.TextInputEditText>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/analog_max_value_til"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@+id/analog_sensor_type_til"
-            app:layout_constraintStart_toStartOf="@+id/analog_sensor_type_til"
-            app:layout_constraintTop_toTopOf="@+id/analog_min_value_til">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/analog_max_value_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Max Value"
-                android:imeOptions="actionNext"
-                android:inputType="number"
-                android:maxLength="4"
-                android:maxLines="1">
-
-            </com.google.android.material.textfield.TextInputEditText>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/analog_type_til"
-            style="@style/appAutoTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-
-            app:layout_constraintBottom_toBottomOf="@+id/analog_max_value_til"
-            app:layout_constraintEnd_toEndOf="@+id/analog_sensor_activation_til"
-            app:layout_constraintStart_toStartOf="@+id/analog_sensor_activation_til"
-            app:layout_constraintTop_toTopOf="@+id/analog_max_value_til">
-
-            <AutoCompleteTextView
-                android:id="@+id/analog_type_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:hint="Analog Type"
-                android:maxLines="1">
-
-            </AutoCompleteTextView>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/analog_smoothing_factor_til"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/analog_alarm_low_til"
-            app:layout_constraintEnd_toEndOf="@+id/analog_min_value_til"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/analog_min_value_til"
-            app:layout_constraintTop_toBottomOf="@+id/analog_min_value_til">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/analog_smoothing_factor_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Smoothing Factor"
-                android:imeOptions="actionNext"
-                android:inputType="number"
-                android:maxLength="3"
-                android:maxLines="1">
-
-            </com.google.android.material.textfield.TextInputEditText>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/analog_unit_measurement_til"
-            style="@style/appAutoTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/analog_smoothing_factor_til"
-            app:layout_constraintEnd_toEndOf="@+id/analog_max_value_til"
-            app:layout_constraintStart_toStartOf="@+id/analog_max_value_til"
-            app:layout_constraintTop_toTopOf="@+id/analog_smoothing_factor_til">
-
-            <AutoCompleteTextView
-                android:id="@+id/analog_unit_measurement_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:hint="Unit Measurement"
-                android:maxLines="1">
-
-            </AutoCompleteTextView>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/analog_calibration_required_alarm_til"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/analog_smoothing_factor_til"
-            app:layout_constraintEnd_toEndOf="@+id/analog_type_til"
-            app:layout_constraintStart_toStartOf="@+id/analog_type_til"
-            app:layout_constraintTop_toTopOf="@+id/analog_unit_measurement_til">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/analog_calibration_required_alarm_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Calibration Required Alarm"
-                android:imeOptions="actionNext"
-                android:inputType="number"
-                android:maxLength="3">
-
-            </com.google.android.material.textfield.TextInputEditText>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/analog_alarm_low_til"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/DeleteLayout_inputSettings"
-            app:layout_constraintEnd_toEndOf="@+id/analog_min_value_til"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/analog_min_value_til"
-            app:layout_constraintTop_toBottomOf="@+id/analog_smoothing_factor_til">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/analog_alarm_low_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Low Alarm"
-                android:imeOptions="actionNext"
-                android:inputType="numberDecimal"
-                android:maxLength="7"
-                android:maxLines="1">
-
-            </com.google.android.material.textfield.TextInputEditText>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/analog_high_low_til"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@+id/analog_unit_measurement_til"
-            app:layout_constraintStart_toStartOf="@+id/analog_unit_measurement_til"
-            app:layout_constraintTop_toTopOf="@+id/analog_alarm_low_til">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/analog_high_low_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="High Alarm"
-                android:imeOptions="actionDone"
-                android:inputType="numberDecimal"
-                android:maxLength="7"
-                android:maxLines="1">
-
-            </com.google.android.material.textfield.TextInputEditText>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/analog_reset_calibration_til"
-            style="@style/appAutoTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/analog_high_low_til"
-            app:layout_constraintEnd_toEndOf="@+id/analog_calibration_required_alarm_til"
-            app:layout_constraintStart_toStartOf="@+id/analog_calibration_required_alarm_til"
-            app:layout_constraintTop_toTopOf="@+id/analog_high_low_til">
-
-            <AutoCompleteTextView
-                android:id="@+id/analog_reset_calibration_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:hint="Reset Calibration">
-
-            </AutoCompleteTextView>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <LinearLayout
-            android:id="@+id/deleteLayout_inputSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/saveLayout_inputSettings"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/analog_alarm_low_til">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
+            <!--Row 1-->
+            <TableRow
+                android:id="@+id/analogRow1_isc"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:text="Delete"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:weightSum="3">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/DeleteFab_inputSettings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@color/red"
-                android:backgroundTint="@color/red"
-                android:src="@drawable/ic_baseline_delete"
-                app:maxImageSize="35dp"
-                app:tint="@color/black" />
+                <!--Input Number-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/analog_inputNumber"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1"
+                    android:enabled="false">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/analog_input_number_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Input Number">
 
-        </LinearLayout>
+                    </com.google.android.material.textfield.TextInputEditText>
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:id="@+id/saveLayout_inputSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/deleteLayout_inputSettings"
-            app:layout_constraintTop_toBottomOf="@+id/analog_alarm_low_til">
+            </TableRow>
 
-            <TextView
-                android:id="@+id/save_txt"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
+            <!--Row 2-->
+            <TableRow
+                android:id="@+id/analogRow2_isc"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:text="Save"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:weightSum="3">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/saveFab_inputSettings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@color/colorSecondary"
-                android:backgroundTint="@color/colorSecondary"
-                android:src="@drawable/ic_round_right"
-                app:maxImageSize="50dp"
+                <!--Input Label-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/analog_inputLabel"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
 
-                app:tint="@color/black" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/analog_input_label_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Input Label"
+                        android:imeOptions="actionNext"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Sensor Type-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/analog_sensorType"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1"
+                    android:enabled="false">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/analog_sensor_type_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Sensor Type"
+                        android:maxLines="1">
+
+                    </AutoCompleteTextView>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Analog Type-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/analog_analogType"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/analog_type_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Analog Type"
+                        android:maxLines="1">
+
+                    </AutoCompleteTextView>
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 3-->
+            <TableRow
+                android:id="@+id/analogRow3_isc"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="3">
+
+                <!--Unit Of Measurement-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/analog_unit"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/analog_unit_measurement_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Unit Measurement"
+                        android:maxLines="1">
+
+                    </AutoCompleteTextView>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Min Value-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/analog_minValue"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/analog_min_value_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Min Value"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1">
+
+                    </com.google.android.material.textfield.TextInputEditText>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Max Value-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/analog_maxValue"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/analog_max_value_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Max Value"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1">
+
+                    </com.google.android.material.textfield.TextInputEditText>
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 4-->
+            <TableRow
+                android:id="@+id/analogRow4_isc"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="3">
+
+                <!--Alarm Low-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/analog_alarmLow"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/analog_alarm_low_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Low Alarm"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
+                        android:maxLines="1">
+
+                    </com.google.android.material.textfield.TextInputEditText>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Alarm High-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/analog_alarmHigh"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/analog_high_low_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="High Alarm"
+                        android:imeOptions="actionDone"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
+                        android:maxLines="1">
+
+                    </com.google.android.material.textfield.TextInputEditText>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Calib Alarm Required-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/analog_calibAlarmRequired"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/analog_calibration_required_alarm_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Calibration Required Alarm"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="3">
+
+                    </com.google.android.material.textfield.TextInputEditText>
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 5-->
+            <TableRow
+                android:id="@+id/analogRow5_isc"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="3">
+
+                <!--Smoothing Factor-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/analog_smoothingFactor"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/analog_smoothing_factor_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Smoothing Factor"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Reset Calibration-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/analog_resetCalibration"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/analog_reset_calibration_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Reset Calibration">
+
+                    </AutoCompleteTextView>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Sensor Activation-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/analog_sensorActivation"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/analog_sensor_activation_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Sensor Activation"
+                        android:maxLines="1">
+
+                    </AutoCompleteTextView>
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 6-->
+            <TableRow
+                android:id="@+id/analog_Row6_isc"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="3">
+
+                <!--saveLayout-->
+                <LinearLayout
+                    android:id="@+id/saveLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/save_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="center_vertical"
+                        android:text="Save"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/saveFab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@color/colorSecondary"
+                        android:backgroundTint="@color/colorSecondary"
+                        android:src="@drawable/ic_round_right"
+                        app:maxImageSize="50dp"
+                        app:tint="@color/black" />
 
 
-        </LinearLayout>
+                </LinearLayout>
 
-        <View
-            android:id="@+id/view_dump"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.4"
-            app:layout_constraintStart_toStartOf="parent" />
+                <!--DeleteLayout-->
+                <LinearLayout
+                    android:id="@+id/deleteLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|left"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="center"
+                        android:text="Delete"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/deleteFab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@color/red"
+                        android:backgroundTint="@color/red"
+                        android:src="@drawable/ic_baseline_delete"
+                        app:maxImageSize="35dp"
+                        app:tint="@color/black" />
 
 
-        <View
-            android:id="@+id/view_dump_1"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.7"
-            app:layout_constraintStart_toStartOf="parent" />
+                </LinearLayout>
+
+            </TableRow>
+
+        </TableLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

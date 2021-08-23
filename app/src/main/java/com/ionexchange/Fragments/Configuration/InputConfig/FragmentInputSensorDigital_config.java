@@ -1,18 +1,6 @@
 
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
-import static com.ionexchange.Others.ApplicationClass.digitalArr;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +25,19 @@ import com.ionexchange.databinding.FragmentInputsensorDigitalBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ionexchange.Others.ApplicationClass.digitalArr;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentInputSensorDigital_config extends Fragment implements DataReceiveCallback {
 
@@ -75,6 +76,39 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
         mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
+
+        switch (userType) {
+            case 1:
+                mBinding.digitalInputNumber.setEnabled(false);
+                mBinding.digitalSensorLabel.setEnabled(false);
+                mBinding.digitalSensorType.setEnabled(false);
+                mBinding.digitalOpenMessage.setEnabled(false);
+                mBinding.digitalCloseMessage.setEnabled(false);
+                mBinding.digitalInnerLock.setEnabled(false);
+                mBinding.digitalAlarm.setEnabled(false);
+                mBinding.digitalTotalTime.setEnabled(false);
+                mBinding.digitalResetTime.setEnabled(false);
+
+                mBinding.digitalSensorActivation.setVisibility(View.GONE);
+                mBinding.digitalRow5Isc.setVisibility(View.GONE);
+                break;
+
+            case 2:
+                mBinding.digitalInputNumber.setEnabled(false);
+                mBinding.digitalSensorType.setEnabled(false);
+                mBinding.digitalInnerLock.setEnabled(false);
+                mBinding.digitalAlarm.setEnabled(false);
+                mBinding.digitalTotalTime.setEnabled(false);
+
+                mBinding.digitalSensorActivation.setVisibility(View.GONE);
+                mBinding.DeleteLayoutInputSettings.setVisibility(View.GONE);
+                break;
+
+            case 3:
+
+                break;
+        }
+
         initAdapter();
         mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
         mBinding.saveFabInputSettings.setOnClickListener(this::save);
@@ -162,7 +196,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
             mAppClass.showSnackBar(getContext(), "TimeOut");
         }
         if (data != null) {
-            handleResponse(data.split("\\*")[1].split("#"));
+            handleResponse(data.split("\\*")[1].split(SPILT_CHAR));
         }
     }
 

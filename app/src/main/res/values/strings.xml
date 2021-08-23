@@ -2,5 +2,9 @@
     <string name="app_name">Auto Chem</string>
 
     <string name="wrongPack">Received Wrong Packet</string>
-    <string name="readFailed">Read Failed</string>
+    <string name="readFailed">Unable to get the values</string>
+    <string name="update_success">Update Success</string>
+    <string name="update_failed">Update Failed</string>
+    <string name="connection_failed">Failed to connect</string>
+    <string name="timeout">Timeout</string>
 </resources>

@@ -6,334 +6,353 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <View
+        <ImageView
             android:id="@+id/backArrow"
             android:layout_width="38dp"
             android:layout_height="38dp"
-            android:layout_marginStart="10dp"
             android:background="@drawable/ic_back"
-            app:layout_constraintBottom_toBottomOf="@+id/tank_level_input_number_til"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.03"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tank_level_input_number_til" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.03" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tank_level_input_number_til"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/tank_level_input_sensor_label_til"
-            app:layout_constraintEnd_toEndOf="@+id/tank_level_input_sensor_type_til"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/tank_level_input_sensor_type_til"
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tank_level_input_number_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:hint="Input number"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tank_level_input_sensor_label_til"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/tank_level_input_sensor_open_message_til"
-            app:layout_constraintEnd_toStartOf="@+id/tank_level_input_sensor_type_til"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tank_level_input_number_til">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tank_level_input_sensor_label_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Input Label"
-                android:imeOptions="actionNext"
-                android:inputType="textPersonName" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tank_level_input_sensor_type_til"
-            style="@style/appAutoTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tank_level_input_sensor_label_til"
-            app:layout_constraintEnd_toStartOf="@+id/tank_level_input_sensor_sensor_activation_til"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tank_level_input_sensor_label_til"
-            app:layout_constraintTop_toTopOf="@+id/tank_level_input_sensor_label_til">
-
-            <AutoCompleteTextView
-                android:id="@+id/tank_level_input_sensor_type_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:hint="Sensor Type" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tank_level_input_sensor_sensor_activation_til"
-            style="@style/appAutoTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tank_level_input_sensor_label_til"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tank_level_input_sensor_type_til"
-            app:layout_constraintTop_toTopOf="@+id/tank_level_input_sensor_type_til">
-
-            <AutoCompleteTextView
-                android:id="@+id/tank_level_input_sensor_sensor_activation_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:hint="Sensor Activation"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tank_level_input_sensor_open_message_til"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/tank_level_input_sensor_total_time_til"
-            app:layout_constraintEnd_toEndOf="@+id/tank_level_input_sensor_label_til"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/tank_level_input_sensor_label_til"
-            app:layout_constraintTop_toBottomOf="@+id/tank_level_input_sensor_label_til">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tank_level_input_sensor_open_message_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Open Message"
-                android:imeOptions="actionNext"
-                android:inputType="textPersonName"
-                android:maxLength="15" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tank_level_input_sensor_close_message_til"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/tank_level_input_sensor_open_message_til"
-            app:layout_constraintEnd_toEndOf="@+id/tank_level_input_sensor_type_til"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/tank_level_input_sensor_type_til"
-            app:layout_constraintTop_toTopOf="@+id/tank_level_input_sensor_open_message_til">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tank_level_input_sensor_close_message_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Close Message"
-                android:imeOptions="actionNext"
-                android:inputType="textPersonName"
-                android:maxLength="15" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tank_level_input_sensor_inner_lock_til"
-            style="@style/appAutoTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tank_level_input_sensor_close_message_til"
-            app:layout_constraintEnd_toEndOf="@+id/tank_level_input_sensor_sensor_activation_til"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/tank_level_input_sensor_sensor_activation_til"
-            app:layout_constraintTop_toTopOf="@+id/tank_level_input_sensor_close_message_til">
-
-            <AutoCompleteTextView
-                android:id="@+id/tank_level_input_sensor_inner_lock_act"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:hint="InterLock"
-                android:maxLength="15" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tank_level_input_sensor_total_time_til"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/DeleteLayout_inputSettings"
-            app:layout_constraintEnd_toEndOf="@+id/tank_level_input_sensor_open_message_til"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/tank_level_input_sensor_open_message_til"
-            app:layout_constraintTop_toBottomOf="@+id/tank_level_input_sensor_open_message_til">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tank_level_input_sensor_total_time_tie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Total Time"
-                android:imeOptions="actionDone"
-                android:inputType="textPersonName"
-                android:maxLength="15" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tank_level_input_sensor_alarm_til"
-            style="@style/appAutoTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tank_level_input_sensor_total_time_til"
-            app:layout_constraintEnd_toEndOf="@+id/tank_level_input_sensor_close_message_til"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/tank_level_input_sensor_close_message_til"
-            app:layout_constraintTop_toTopOf="@+id/tank_level_input_sensor_total_time_til">
-
-            <AutoCompleteTextView
-                android:id="@+id/tank_level_input_sensor_alarm_act"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:hint="Alarm" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tank_level_input_sensor_reset_time_til"
-            style="@style/appAutoTxt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tank_level_input_sensor_total_time_til"
-            app:layout_constraintEnd_toEndOf="@+id/tank_level_input_sensor_inner_lock_til"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/tank_level_input_sensor_inner_lock_til"
-            app:layout_constraintTop_toTopOf="@+id/tank_level_input_sensor_alarm_til">
-
-            <AutoCompleteTextView
-                android:id="@+id/tank_level_input_sensor_reset_time_act"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="false"
-                android:editable="false"
-                android:focusable="false"
-                android:hint="Reset Time"
-                android:maxLength="15" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <LinearLayout
-            android:id="@+id/DeleteLayout_inputSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/view_dump"
-            app:layout_constraintTop_toBottomOf="@+id/tank_level_input_sensor_total_time_til">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
+            <!--Row 1-->
+            <TableRow
+                android:id="@+id/tankRow1_isc"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:text="Delete"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:weightSum="3">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/DeleteFab_inputSettings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@color/red"
-                android:backgroundTint="@color/red"
-                android:src="@drawable/ic_baseline_delete"
-                app:maxImageSize="35dp"
-                app:tint="@color/black" />
+                <!--Input Number-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tank_inputNumber"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1"
+                    android:enabled="false">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tank_level_input_number_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Input number"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
+            </TableRow>
 
-        <LinearLayout
-            android:id="@+id/saveLayout_inputSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/view_dump_1"
-            app:layout_constraintTop_toBottomOf="@+id/tank_level_input_sensor_reset_time_til">
-
-            <TextView
-                android:id="@+id/save_txt"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
+            <!--Row 2-->
+            <TableRow
+                android:id="@+id/tankRow2_isc"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:text="Save"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:weightSum="3">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/saveFab_inputSettings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@color/colorSecondary"
-                android:backgroundTint="@color/colorSecondary"
-                android:src="@drawable/ic_round_right"
-                app:maxImageSize="50dp"
-                app:tint="@color/black" />
+                <!--input Label-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tank_SensorLabel"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tank_level_input_sensor_label_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Input Label"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPersonName" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--sensorType-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tank_sensorType"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1"
+                    android:enabled="false">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/tank_level_input_sensor_type_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Sensor Type" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--interLock-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tank_innerLock"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/tank_level_input_sensor_inner_lock_act"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="InterLock"
+                        android:maxLength="15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 3-->
+            <TableRow
+                android:id="@+id/tankRow3_isc"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="3">
+
+                <!--Open Message-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tank_openMessage"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tank_level_input_sensor_open_message_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Open Message"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPersonName"
+                        android:maxLength="15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Close Message-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tank_closeMessage"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tank_level_input_sensor_close_message_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Close Message"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPersonName"
+                        android:maxLength="15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Reset Time-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tank_reseTime"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/tank_level_input_sensor_reset_time_act"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Reset Time"
+                        android:maxLength="15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 4-->
+            <TableRow
+                android:id="@+id/tankRow4_isc"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="3">
+
+                <!--Total Time-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tank_totalTime"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tank_level_input_sensor_total_time_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Total Time"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPersonName"
+                        android:maxLength="15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Alarm-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tank_alarm"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/tank_level_input_sensor_alarm_act"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Alarm" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Sensor Activation-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tank_sensorActivation"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/tank_level_input_sensor_sensor_activation_tie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Sensor Activation"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 5-->
+            <TableRow
+                android:id="@+id/tankRow5_isc"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="3">
+
+            </TableRow>
+
+            <!--Row 6-->
+            <TableRow
+                android:id="@+id/tankRow6_isc"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="3">
+
+                <!--saveLayout-->
+                <LinearLayout
+                    android:id="@+id/saveLayout_inputSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/save_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="center_vertical"
+                        android:text="Save"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/saveFab_inputSettings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@color/colorSecondary"
+                        android:backgroundTint="@color/colorSecondary"
+                        android:src="@drawable/ic_round_right"
+                        app:maxImageSize="50dp"
+                        app:tint="@color/black" />
+
+                </LinearLayout>
+
+                <!--DeleteLayout-->
+                <LinearLayout
+                    android:id="@+id/DeleteLayout_inputSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|left"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="center"
+                        android:text="Delete"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/DeleteFab_inputSettings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@color/red"
+                        android:backgroundTint="@color/red"
+                        android:src="@drawable/ic_baseline_delete"
+                        app:maxImageSize="35dp"
+                        app:tint="@color/black" />
 
 
-        </LinearLayout>
+                </LinearLayout>
 
-        <View
-            android:id="@+id/view_dump"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.4"
-            app:layout_constraintStart_toStartOf="parent" />
+            </TableRow>
 
+        </TableLayout>
 
-        <View
-            android:id="@+id/view_dump_1"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.7"
-            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
 

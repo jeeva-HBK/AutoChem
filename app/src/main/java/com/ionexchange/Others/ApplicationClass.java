@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,9 @@ import com.google.android.material.snackbar.Snackbar;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.R;
 
+import java.util.regex.Matcher;
+
+import static android.util.Patterns.IP_ADDRESS;
 import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
 
 /* Created by Jeeva on 13/07/2021 */
@@ -33,16 +37,17 @@ public class ApplicationClass extends Application {
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},
-            unitArr = {" µS/cm", " mS/cm", "S/cm"}, typeOfValueRead = {"None", "Fluorescence value", "Turbidity Value", "Corrosion rate", "Pitting rate", "Fluorescence value", "Tagged Polymer value"},
+            unitArr = {" ÂµS/cm", " mS/cm", "S/cm"},
+            typeOfValueRead = {"None", "Fluorescence value", "Turbidity Value", "Corrosion rate", "Pitting rate", "Fluorescence value", "Tagged Polymer value"},
 
     flowMeterTypeArr = {"Analog Flow Meter", "Flow Meter Contactor", "Paddle Wheel", "Feed Monitor"},
             flowUnitArr = {"Volume", "Gallons", "Litres", "Cubic Meters", "Millions of Gallons"},
-            scheduleResetArr = {"No Schedule Reset", "Daily", "Weekly", "Annually"},
+            scheduleResetArr = {"No Schedule Reset", "Daily", "Monthly", "Annually"},
 
     digitalArr = {"NC", "NO"},
             modBusTypeArr = {"ST500", "CR300CS", "CR-300 CU", "ST-590", "ST-588", "ST-500 RO"},
             modBusUnitArr = {"ppb", "ppm", "mpy"},
-            analogTypeArr = {"(4-20mA)", "(0 – 10V)"},
+            analogTypeArr = {"(4-20mA)", "(0 â€“ 10V)"},
             analogUnitArr = {"ma", "V"},
 
     calculationArr = {"Difference", "Ratio", "Total", "% Difference"},
@@ -64,8 +69,8 @@ public class ApplicationClass extends Application {
 
 
     /* Static Variables */
-    static String mIPAddress = "192.168.1.104", Packet;
-    static int mPortNumber = 6000;
+    static String mIPAddress = "192.168.1.107", Packet;
+    static int mPortNumber = 9760;
 
     public static CountDownTimer packetTimeOut;
     Context mContext;
@@ -91,7 +96,6 @@ public class ApplicationClass extends Application {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
     };
 
@@ -190,6 +194,27 @@ public class ApplicationClass extends Application {
         return finalDigits;
     }
 
+    public static Integer findDecimal(EditText editText) {
+        int throwError = 0;
+        String[] findDecimalEdtTxt = editText.getText().toString().split("\\.");
+        try {
+            if (!editText.getText().toString().contains(".") && editText.getText().toString().length() > 4) {
+                return 1;
+            }
+            if (findDecimalEdtTxt[0].length() > 4) {
+                return 1;
+            } else if (findDecimalEdtTxt[1].isEmpty()) {
+                return 1;
+            } else if (findDecimalEdtTxt[1].length() > 2) {
+                return 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throwError = 1;
+        }
+        return throwError;
+    }
+
     public void sendPacket(final DataReceiveCallback listener, String packet) {
         tcp = new TCP();
         this.listener = listener;
@@ -230,4 +255,17 @@ public class ApplicationClass extends Application {
         snackbar.show();
     }
 
+    public static Boolean isValidIp(String ip) {
+        Matcher matcher = IP_ADDRESS.matcher(ip);
+        return matcher.matches();
+    }
+
+    public static Boolean isValidPort(String ports) {
+        try {
+            int port = Integer.parseInt(ports);
+            return port >= 0000 && port <= 65535;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

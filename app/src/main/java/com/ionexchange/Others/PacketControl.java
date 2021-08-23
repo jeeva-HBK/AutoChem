@@ -5,7 +5,7 @@ import com.ionexchange.BuildConfig;
 public class PacketControl {
 
     /* General */
-    public static String SPILT_CHAR = "#",
+    public static String SPILT_CHAR = "$",
             DEVICE_PASSWORD = "1234",
             WRITE_PACKET = "0",
             READ_PACKET = "1",

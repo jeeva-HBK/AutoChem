@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.bufferArr;
+import static com.ionexchange.Others.ApplicationClass.findDecimal;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
@@ -79,7 +80,6 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         mAppClass = (ApplicationClass) getActivity().getApplication();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
-
         switch (userType) {
             case 1:
                 mBinding.pHTemperatureSensorLinked.setVisibility(View.GONE);
@@ -163,6 +163,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
 
     void sendData(int sensorStatus) {
         mActivity.showProgress();
+
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR +
                 toString(2, mBinding.inputNumberInputSettingsEDT) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.sensorInputSettingsATXT), inputTypeArr) + SPILT_CHAR +
@@ -180,17 +181,23 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     }
 
     private boolean validField() {
+        if (mBinding.calibrationRequiredInputSettingATXT.getText().toString().isEmpty()) {
+            mBinding.calibrationRequiredInputSettingATXT.setText("0");
+        }
         if (isEmpty(mBinding.inputNumberInputSettingsEDT)) {
-            mAppClass.showSnackBar(getContext(), "InputNumber cannot be Empty");
+            mAppClass.showSnackBar(getContext(), "Input Number cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.sensorInputSettingsATXT)) {
-            mAppClass.showSnackBar(getContext(), "InputNumber cannot be Empty");
+            mAppClass.showSnackBar(getContext(), "Sensor Type cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.temperatureInputSettingEDT)) {
-            mAppClass.showSnackBar(getContext(), "Temperature value cannot be Empty");
+        } else if (isEmpty(mBinding.inputLabelInputSettingsEdt)) {
+            mAppClass.showSnackBar(getContext(), "Input Label cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.smoothingFactorInputSettingEDT)) {
-            mAppClass.showSnackBar(getContext(), "smoothing factor cannot be Empty");
+        } else if (isEmpty(mBinding.bufferTypeInputSettingATXT)) {
+            mAppClass.showSnackBar(getContext(), "Choose any mode of Buffer Type");
+            return false;
+        } else if (Integer.parseInt(mBinding.calibrationRequiredInputSettingATXT.getText().toString()) > 366) {
+            mAppClass.showSnackBar(getContext(), "Calibration Required Alarm should be less than 366");
             return false;
         } else if (isEmpty(mBinding.alarmLowInputSettingEDT)) {
             mAppClass.showSnackBar(getContext(), "Alarm low cannot be Empty");
@@ -198,11 +205,31 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         } else if (isEmpty(mBinding.alarmhighInputSettingEDT)) {
             mAppClass.showSnackBar(getContext(), "Alarm high cannot be Empty");
             return false;
-        } else if (mBinding.alarmLowInputSettingEDT.getText().toString().matches(".")) {
-            mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
+        } else if ((!mBinding.alarmLowInputSettingEDT.getText().toString().contains(".") && mBinding.alarmLowInputSettingEDT.getText().toString().length() > 4)
+                || (mBinding.alarmLowInputSettingEDT.getText().toString().contains(".") && findDecimal(mBinding.alarmLowInputSettingEDT) == 1)) {
+            mAppClass.showSnackBar(getContext(), "Alarm low decimal format like XXXX.XX");
             return false;
-        } else if (mBinding.alarmhighInputSettingEDT.getText().toString().matches(".")) {
-            mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
+        } else if ((!mBinding.alarmhighInputSettingEDT.getText().toString().contains(".") && mBinding.alarmhighInputSettingEDT.getText().toString().length() > 4)
+                || (mBinding.alarmhighInputSettingEDT.getText().toString().contains(".") && findDecimal(mBinding.alarmhighInputSettingEDT) == 1)) {
+            mAppClass.showSnackBar(getContext(), "Alarm high decimal format like XXXX.XX");
+            return false;
+        } else if (isEmpty(mBinding.tempLinkedInputSettingATXT)) {
+            mAppClass.showSnackBar(getContext(), "Select Temperature Sensor Linked value");
+            return false;
+        } else if (isEmpty(mBinding.temperatureInputSettingEDT)) {
+            mAppClass.showSnackBar(getContext(), "Temperature value cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.resetCalibrationInputSettingEDT)) {
+            mAppClass.showSnackBar(getContext(), "Select Reset Calibration value");
+            return false;
+        } else if (isEmpty(mBinding.smoothingFactorInputSettingEDT)) {
+            mAppClass.showSnackBar(getContext(), "Smoothing factor cannot be Empty");
+            return false;
+        } else if (Integer.parseInt(mBinding.smoothingFactorInputSettingEDT.getText().toString()) > 101) {
+            mAppClass.showSnackBar(getContext(), "Smoothing factor should be less than 101");
+            return false;
+        } else if (isEmpty(mBinding.sensorActivationInputSettingsATXT)) {
+            mAppClass.showSnackBar(getContext(), "Select Sensor Activation value");
             return false;
         }
         return true;
@@ -328,20 +355,20 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                     mBinding.resetCalibrationInputSettingEDT.setText(mBinding.resetCalibrationInputSettingEDT.getAdapter().getItem(Integer.parseInt(splitData[14])).toString());
                     mBinding.resetCalibrationInputSettingEDT.setAdapter(getAdapter(resetCalibrationArr));
                 } else if (splitData[2].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), "Read Failed !");
+                    mAppClass.showSnackBar(getContext(), getString(R.string.readFailed));
                 }
 
             } else if (splitData[0].equals(WRITE_PACKET)) {
 
                 if (splitData[2].equals(RES_SUCCESS)) {
-                    mAppClass.showSnackBar(getContext(), "Operation Success !");
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                     pHEntity(1);
                 } else if (splitData[2].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), "Operation Failed !");
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }
             }
         } else {
-            mAppClass.showSnackBar(getContext(), "Received Wrong Packet");
+            mAppClass.showSnackBar(getContext(), getString(R.string.wrongPack));
         }
 
 
