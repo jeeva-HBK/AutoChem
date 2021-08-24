@@ -1,16 +1,5 @@
 package com.ionexchange.Fragments.Configuration.VirtualConfig;
 
-import static com.ionexchange.Others.ApplicationClass.calculationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorsViArr;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.VIRTUAL_INPUT;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,13 +27,24 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ionexchange.Others.ApplicationClass.calculationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorsViArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.VIRTUAL_INPUT;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 public class FragmentVirtualSensor_config extends Fragment implements DataReceiveCallback {
     FragmentVirtualsensorConfigBinding mBinding;
     ApplicationClass mAppClass;
     int sensorInputNo;
     WaterTreatmentDb db;
     VirtualConfigurationDao dao;
-
 
     private static final String TAG = "FragmentVirtualSensor_c";
 
@@ -66,11 +66,46 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
         mAppClass = (ApplicationClass) getActivity().getApplication();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.virtualConfigurationDao();
+
+        switch (userType) {
+            case 1:
+                mBinding.lowRangeVi.setEnabled(false);
+                mBinding.highRangeVi.setEnabled(false);
+                mBinding.lowAlarmVi.setEnabled(false);
+                mBinding.highAlarmVi.setEnabled(false);
+
+                mBinding.vsRow1Isc.setVisibility(View.GONE);
+                mBinding.vsRow2Isc.setVisibility(View.GONE);
+                mBinding.vsRow4Isc.setVisibility(View.GONE);
+                break;
+
+            case 2:
+                mBinding.lowRangeVi.setEnabled(false);
+                mBinding.highRangeVi.setEnabled(false);
+                mBinding.smoothingFactorVi.setEnabled(false);
+
+                mBinding.calculationVi.setVisibility(View.GONE);
+                mBinding.sensorActivationVi.setVisibility(View.GONE);
+                mBinding.vsRow2Isc.setVisibility(View.GONE);
+                mBinding.DeleteLayoutInputSettings.setVisibility(View.GONE);
+                break;
+
+            case 3:
+
+                break;
+        }
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + VIRTUAL_INPUT + SPILT_CHAR + sensorInputNo);
         initAdapters();
         mBinding.saveFabInputSettings.setOnClickListener(this::save);
         mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
         mBinding.DeleteFabInputSettings.setOnClickListener(this::delete);
+
+        mBinding.toolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentVirtualSensorList_Config());
+            }
+        });
     }
 
     private void delete(View view) {
@@ -112,7 +147,6 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
         mBinding.sensor2ViATXT.setAdapter(getAdapter(sensorsViArr));
     }
 
-
     private Boolean isEmpty(EditText editText) {
         if (editText.getText() == null || editText.getText().toString().equals("")) {
             editText.setError("Field shouldn't empty !");
@@ -152,7 +186,6 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
         }
         return true;
     }
-
 
     private String getPosition(int digit, String string, String[] strArr) {
         String j = null;

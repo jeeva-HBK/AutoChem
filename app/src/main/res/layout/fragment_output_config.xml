@@ -227,6 +227,7 @@
                              android:hint="Dose Period"
                              android:imeOptions="actionDone"
                              android:maxLength="3"
+                             android:inputType="number"
                              android:maxLines="1" />
 
                      </com.google.android.material.textfield.TextInputLayout>
@@ -579,7 +580,7 @@
                           android:id="@+id/targetPPM_onOFf_osATXT"
                           android:layout_width="match_parent"
                           android:layout_height="match_parent"
-                          android:hint="Target PPM"
+                          android:hint="Set Point"
                           android:imeOptions="actionNext"
                           android:inputType="number"
                           android:maxLength="4"
@@ -680,7 +681,7 @@
                           android:hint="Safety Min"
                           android:imeOptions="actionNext"
                           android:inputType="number"
-                          android:maxLength="6"
+                          android:maxLength="7"
                           android:maxLines="1" />
 
                   </com.google.android.material.textfield.TextInputLayout>
@@ -703,7 +704,7 @@
                           android:hint="Safety Max"
                           android:imeOptions="actionNext"
                           android:inputType="number"
-                          android:maxLength="6"
+                          android:maxLength="7"
                           android:maxLines="1" />
 
                   </com.google.android.material.textfield.TextInputLayout>
@@ -1338,7 +1339,7 @@
                           android:layout_height="match_parent"
                           android:editable="false"
                           android:focusable="false"
-                          android:hint="Link Output Delay" />
+                          android:hint="Link Input Relay" />
 
                   </com.google.android.material.textfield.TextInputLayout>
 

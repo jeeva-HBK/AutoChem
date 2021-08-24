@@ -9,7 +9,7 @@ public class PacketControl {
             DEVICE_PASSWORD = "1234",
             WRITE_PACKET = "0",
             READ_PACKET = "1",
-            RES_SUCCESS = "0", RES_FAILED = "1";
+            RES_SUCCESS = "0", RES_FAILED = "1",CONN_TYPE="0";
 
     /* Packet Identifier */
     public static String PCK_connectPacket = "00", PCK_panelIpConfig = "01", PCK_target_ip = "02", PCK_GENERAL = "03", INPUT_SENSOR_CONFIG = "04", VIRTUAL_INPUT = "05",

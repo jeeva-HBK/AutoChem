@@ -1,20 +1,6 @@
 
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
-import static com.ionexchange.Others.ApplicationClass.flowMeterTypeArr;
-import static com.ionexchange.Others.ApplicationClass.flowUnitArr;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.scheduleResetArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,6 +29,21 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ionexchange.Others.ApplicationClass.flowMeterTypeArr;
+import static com.ionexchange.Others.ApplicationClass.flowUnitArr;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.scheduleResetArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentInputSensorFlow_config extends Fragment implements DataReceiveCallback {
     FragmentInputsensorFlowBinding mBinding;
@@ -82,6 +83,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         mAppClass = (ApplicationClass) getActivity().getApplication();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
+        checkUser();
+
         initAdapter();
         mActivity = (BaseActivity) getActivity();
         mBinding.flowMeterTypeFlowISATXT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -90,10 +93,65 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 mBinding.setFlowMeterType(String.valueOf(i));
             }
         });
-        mBinding.saveFabFlowIS.setOnClickListener(this::save);
-        mBinding.saveLayoutFlowIS.setOnClickListener(this::save);
-        mBinding.DeleteFabFlowIS.setOnClickListener(this::delete);
-        mBinding.DeleteLayoutFlowIS.setOnClickListener(this::delete);
+        mBinding.flowSaveFab.setOnClickListener(this::save);
+        mBinding.flowSaveLayout.setOnClickListener(this::save);
+        mBinding.flowDeleteFab.setOnClickListener(this::delete);
+        mBinding.flowDeleteLayout.setOnClickListener(this::delete);
+        handleResponse(new String[]{});
+    }
+
+    private void checkUser() {
+        switch (userType) {
+            case 1:
+                mBinding.flowInputLabel.setEnabled(false);
+                mBinding.flowFlowMeterType.setEnabled(false);
+                mBinding.flowFlowUnit.setEnabled(false);
+                mBinding.flowRateUnit.setEnabled(false);
+                mBinding.flowMinAnalogFlowISEdt.setEnabled(false);
+                mBinding.flowFlowMeterMaxAnalog.setEnabled(false);
+                mBinding.flowTotalizerAlarm.setEnabled(false);
+                mBinding.flowResetFlowTotal.setEnabled(false);
+                mBinding.flowSetFlowTotal.setEnabled(false);
+                mBinding.flowScheduleReset.setEnabled(false);
+                mBinding.flowAlarmLow.setEnabled(false);
+                mBinding.flowAlarmHigh.setEnabled(false);
+                mBinding.flowCalibrationRequired.setEnabled(false);
+                mBinding.flowVolume.setEnabled(false);
+                mBinding.flowKFactor.setEnabled(false);
+                mBinding.flowTotalAlarmMode.setEnabled(false);
+                mBinding.flowFlowtotalAlarmDelay.setEnabled(false);
+                mBinding.flowFlowtotalAlarmClear.setEnabled(false);
+                mBinding.flowOutputRelayLink.setEnabled(false);
+
+                mBinding.flowSensorActivation.setVisibility(View.GONE);
+                mBinding.flowSmoothingFactorAnalog.setVisibility(View.GONE);
+
+                mBinding.flowRow8Isc.setVisibility(View.GONE);
+                break;
+
+            case 2:
+                mBinding.flowFlowMeterType.setEnabled(false);
+                mBinding.flowFlowUnit.setEnabled(false);
+                mBinding.flowRateUnit.setEnabled(false);
+                mBinding.flowMinAnalogFlowISEdt.setEnabled(false);
+                mBinding.flowFlowMeterMaxAnalog.setEnabled(false);
+                mBinding.flowScheduleReset.setEnabled(false);
+                mBinding.flowVolume.setEnabled(false);
+                mBinding.flowKFactor.setEnabled(false);
+                mBinding.flowTotalAlarmMode.setEnabled(false);
+                mBinding.flowFlowtotalAlarmDelay.setEnabled(false);
+                mBinding.flowFlowtotalAlarmClear.setEnabled(false);
+
+                mBinding.flowSensorActivation.setVisibility(View.GONE);
+                mBinding.flowSmoothingFactorAnalog.setVisibility(View.GONE);
+
+                mBinding.flowDeleteLayout.setVisibility(View.GONE);
+                break;
+
+            case 3:
+
+                break;
+        }
     }
 
     private void delete(View view) {
@@ -480,7 +538,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else {
             mBinding.inputNumberFlowISEDT.setText(inputNumber);
             mBinding.sensorTypeFlowISATXT.setText(sensorName);
-            mBinding.DeleteLayoutFlowIS.setVisibility(View.INVISIBLE);
+            mBinding.flowDeleteLayout.setVisibility(View.INVISIBLE);
             mBinding.saveTxt.setText("ADD");
         }
 
@@ -501,6 +559,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         //  - Contactor->   {*1# 04# 0# | 07# 03# 1# 0# DigitalInput2# 1#| 100000# 2000# 4000# 4000# 1# 120000# 240000*}
         //  - paddle wheel->{*1# 04# 0# | 07# 03# 2# 0# DigitalInput2# 1#| 1000# 80# 2000# 4000# 4000# 1# 120000# 240000*}
         //  - FeedMonitor ->{*1# 04# 0# | 07# 03# 3# 0# DigitalInput2# 1#| 1000# 01# 01# 2230# 240000# 00# 2000# 4000# 4000# 1# 120000# 240000*}
+
+        splitData = "{*1#04#0#07#03#0#0#AnalogInput1#1#1000#1500#3000#100#2000#4000#1#1200#120000#240000#333#1*}".split("\\*")[1].split("#");
         if (splitData[1].equals(INPUT_SENSOR_CONFIG)) {
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {

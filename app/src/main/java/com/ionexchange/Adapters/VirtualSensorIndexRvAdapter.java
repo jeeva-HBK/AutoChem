@@ -16,11 +16,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class VirtualInputIndexRvAdapter extends RecyclerView.Adapter<VirtualInputIndexRvAdapter.ViewHolder> {
+public class VirtualSensorIndexRvAdapter extends RecyclerView.Adapter<VirtualSensorIndexRvAdapter.ViewHolder> {
     RvOnClick rvOnClick;
     List<VirtualConfigurationEntity> virtualConfigurationEntityList;
 
-    public VirtualInputIndexRvAdapter(RvOnClick rvOnClick, List<VirtualConfigurationEntity> virtualConfigurationEntityList) {
+    public VirtualSensorIndexRvAdapter(RvOnClick rvOnClick, List<VirtualConfigurationEntity> virtualConfigurationEntityList) {
         this.rvOnClick = rvOnClick;
         this.virtualConfigurationEntityList = virtualConfigurationEntityList;
     }
@@ -30,7 +30,7 @@ public class VirtualInputIndexRvAdapter extends RecyclerView.Adapter<VirtualInpu
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.vi_rv_item, parent, false);
-        return new VirtualInputIndexRvAdapter.ViewHolder(view);
+        return new VirtualSensorIndexRvAdapter.ViewHolder(view);
     }
 
     @Override
@@ -39,6 +39,7 @@ public class VirtualInputIndexRvAdapter extends RecyclerView.Adapter<VirtualInpu
         holder.label.setText(virtualConfigurationEntityList.get(position).inputLabel);
         holder.low.setText(virtualConfigurationEntityList.get(position).subValueOne);
         holder.high.setText(virtualConfigurationEntityList.get(position).subValueTwo);
+        holder.tv.setText(holder.tv.getText() + " " + (position + 1));
     }
 
     @Override

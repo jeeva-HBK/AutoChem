@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.ionexchange.Adapters.VirtualInputIndexRvAdapter;
+import com.ionexchange.Adapters.VirtualSensorIndexRvAdapter;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
@@ -56,7 +56,7 @@ public class FragmentVirtualSensorList_Config extends Fragment implements RvOnCl
         }
         virtualConfigurationEntityList = dao.getVirtualConfigurationEntityList();
         mBinding.viRv.setLayoutManager(new GridLayoutManager(getContext(), 4));
-        mBinding.viRv.setAdapter(new VirtualInputIndexRvAdapter(this, virtualConfigurationEntityList));
+        mBinding.viRv.setAdapter(new VirtualSensorIndexRvAdapter(this, virtualConfigurationEntityList));
     }
 
     public void updateToDb(List<VirtualConfigurationEntity> entryList) {
@@ -68,7 +68,7 @@ public class FragmentVirtualSensorList_Config extends Fragment implements RvOnCl
     @Override
     public void onClick(int sensorInputNo) {
         mBinding.viRv.setVisibility(View.GONE);
-        mBinding.view8.setVisibility(View.GONE);
+        mBinding.toolBar.setVisibility(View.GONE);
         getParentFragmentManager().beginTransaction().replace(mBinding.viHost.getId(), new FragmentVirtualSensor_config(sensorInputNo)).commit();
     }
 

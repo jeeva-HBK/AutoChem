@@ -37,7 +37,7 @@ public class ApplicationClass extends Application {
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},
-            unitArr = {" ÂµS/cm", " mS/cm", "S/cm"},
+            unitArr = {" Ã‚ÂµS/cm", " mS/cm", "S/cm"},
             typeOfValueRead = {"None", "Fluorescence value", "Turbidity Value", "Corrosion rate", "Pitting rate", "Fluorescence value", "Tagged Polymer value"},
 
     flowMeterTypeArr = {"Analog Flow Meter", "Flow Meter Contactor", "Paddle Wheel", "Feed Monitor"},
@@ -47,22 +47,21 @@ public class ApplicationClass extends Application {
     digitalArr = {"NC", "NO"},
             modBusTypeArr = {"ST500", "CR300CS", "CR-300 CU", "ST-590", "ST-588", "ST-500 RO"},
             modBusUnitArr = {"ppb", "ppm", "mpy"},
-            analogTypeArr = {"(4-20mA)", "(0 â€“ 10V)"},
+            analogTypeArr = {"(4-20mA)", "(0 Ã¢â‚¬â€œ 10V)"},
             analogUnitArr = {"ma", "V"},
 
     calculationArr = {"Difference", "Ratio", "Total", "% Difference"},
             sensorsViArr = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45"},
-            interlockChannel = {"DI - 1", "DI - 2", "DI - 3", "DI - 4", "DI - 5", "DI - 6", "DI - 7", "DI - 8", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4", "Tank Level - 5", "Tank Level - 6", "Tank Level - 7", "Tank Level - 8"},
-            functionMode = {"Disable", "Inhibitor", "Sensor", "Analog"}, modeInhibitor = {"Continuous", "Bleed/Blow Down", "Water Meter/Biocide"},
+            interlockChannel = {"Digital Input - 1", "Digital Input - 2", "Digital Input - 3", "Digital Input - 4", "Digital Input - 5", "Digital Input - 6", "Digital Input - 7", "Digital Input - 8", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4", "Tank Level - 5", "Tank Level - 6", "Tank Level - 7", "Tank Level - 8"},
+            functionMode, modeInhibitor = {"Continuous", "Bleed/Blow Down", "Water Meter/Biocide"},
             modeSensor = {"On/Off", "PID", "Fuzzy"}, modeAnalog = {"Disable", "Probe", "Test", "Pump Status", "Dosing"},
-            linkBleedRelay = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16"},
             flowMeters = {"Flow Meter 1", "Flow Meter 2", "Flow Meter 3", "Flow Meter 4", "Flow Meter 5", "Flow Meter 6", "Flow Meter 7", "Flow Meter 8"},
-            bleedRelay = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14"},
+            bleedRelay = {"Output 01", "Output 02", "Output 03", "Output 04", "Output 05", "Output 06", "Output 07", "Output 08", "Output 09", "Output 10", "Output 11", "Output 12", "Output 13", "Output 14"},
 
     inputSensors = {"Input 1", "Input 2", "Input 3", "Input 4", "Input 5", "Input 6", "Input 7", "Input 8", "Input 9", "Input 10", "Input 11", "Input 12", "Input 13", "Input 14", "Input 15", "Input 16", "Input 17", "Input 18", "Input 19", "Input 20", "Input 21", "Input 22", "Input 23", "Input 24",
             "Input 25", "Input 26", "Input 27", "Input 28", "Input 29", "Input 30", "Input 31", "Input 32", "Input 33", "Input 34", "Input 35", "Input 36", "Input 37", "Input 38", "Input 39", "Input 40", "Input 41", "Input 42", "Input 43", "Input 44", "Input 45", "Input 46", "Input 47", "Input 48", "Input 49", "Input 50", "Input 51", "Input 52"},
             doseTypeArr = {"Below", "Above"},
-
+            inputAnalogSensors = {"Input 1", "Input 2", "Input 3", "Input 4", "Input 5", "Input 6", "Input 7", "Input 8", "Input 9", "Input 10", "Input 11", "Input 12","Input 13"},
     OutputBleedFlowRate = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14"},
 
     TemperatureCompensationType = {"Linear temperature Compensation","standard NaCl temperature compensation"};
@@ -157,7 +156,7 @@ public class ApplicationClass extends Application {
     }
 
 
-    public String formDigits(int digits, String value) {
+    public static String formDigits(int digits, String value) {
         String finalDigits = null;
         switch (digits) {
             case 0:
@@ -200,8 +199,7 @@ public class ApplicationClass extends Application {
         try {
             if (!editText.getText().toString().contains(".") && editText.getText().toString().length() > 4) {
                 return 1;
-            }
-            if (findDecimalEdtTxt[0].length() > 4) {
+            }else if (findDecimalEdtTxt[0].length() > 4) {
                 return 1;
             } else if (findDecimalEdtTxt[1].isEmpty()) {
                 return 1;
