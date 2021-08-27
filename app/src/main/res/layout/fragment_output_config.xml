@@ -1107,7 +1107,7 @@
                         android:id="@+id/maxmA_analog_osATXT"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="Min mA"
+                        android:hint="Max mA"
                         android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="6"
@@ -1196,13 +1196,13 @@
                         android:layout_height="match_parent"
                         android:editable="false"
                         android:focusable="false"
-                        android:hint="Link Output Delay" />
+                        android:hint="Link Input Relay" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!--fixed_value_test-->
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/fixed_value__AnalogMain"
+                    android:id="@+id/fixed_value_AnalogTest"
                     style="@style/appEdtTxt"
                     android:layout_width="0dp"
                     android:layout_height="?attr/actionBarSize"
@@ -1232,24 +1232,14 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:weightSum="3"
                 android:visibility="@{functionMode.equals(`layoutAnalogDisable`) ? View.VISIBLE : View.GONE}">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/linkOut_pid_os_disabled"
-                    style="@style/appAutoTxt"
+                <TextView
                     android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/linkOut_analog_disabled_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Link Input Relay" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
+                    android:layout_height="0dp"
+                    android:text="DISABLED"
+                    android:layout_weight="1"/>
 
             </TableRow>
 
