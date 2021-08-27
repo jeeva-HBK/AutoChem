@@ -39,6 +39,7 @@ import static com.ionexchange.Others.ApplicationClass.interlockChannel;
 import static com.ionexchange.Others.ApplicationClass.modeAnalog;
 import static com.ionexchange.Others.ApplicationClass.modeInhibitor;
 import static com.ionexchange.Others.ApplicationClass.modeSensor;
+import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_OUTPUT_CONFIG;
@@ -50,6 +51,7 @@ import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentOutput_Config extends Fragment implements DataReceiveCallback {
     FragmentOutputConfigBinding mBinding;
+    // DummyBinding mBinding;
     ApplicationClass mAppClass;
     WaterTreatmentDb db;
     OutputConfigurationDao dao;
@@ -79,6 +81,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         db = WaterTreatmentDb.getDatabase(getContext());
         Log.e(TAG, "onViewCreated: " + sensorInputNo);
         dao = db.outputConfigurationDao();
+
+
         initAdapter();
         enableDisabled();
         mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(1).toString());
@@ -108,7 +112,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                         break;
                 }
             }
-
         });
 
         mBinding.modeOsATXT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -157,8 +160,54 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             }
         });
 
-        mBinding.saveFabCommonSettings.setOnClickListener(this::save);
-        mBinding.saveLayoutCommonSettings.setOnClickListener(this::save);
+        mBinding.saveFabOutput.setOnClickListener(this::save);
+        mBinding.saveLayoutOutput.setOnClickListener(this::save);
+        checkUser();
+    }
+
+    private void checkUser() {
+
+        switch (userType) {
+            case 1:
+
+                if (sensorInputNo > 15) {
+                    mBinding.outputRow2.setVisibility(View.GONE);
+                } else {
+
+                }
+
+                mBinding.outputLabelOs.setEnabled(false);
+                mBinding.functionModeOs.setEnabled(false);
+                mBinding.modeOs.setEnabled(false);
+                mBinding.outputInterLockChannelOs.setEnabled(false);
+                mBinding.outputActivateChannelOs.setEnabled(false);
+
+                mBinding.setFunctionMode("basic");
+                mBinding.outputRow3InhibitorCont.setVisibility(View.GONE);
+                mBinding.outputRow4InhibitorBleed.setVisibility(View.GONE);
+                mBinding.outputRow5InhibitorBleed.setVisibility(View.GONE);
+                mBinding.outputRow6InhibitorWater.setVisibility(View.GONE);
+                mBinding.outputRow7InhibitorWater.setVisibility(View.GONE);
+                mBinding.outputRow8SensorOnOff.setVisibility(View.GONE);
+                mBinding.outputRow9SensorOnOff.setVisibility(View.GONE);
+                mBinding.outputRow10SensorOnOff.setVisibility(View.GONE);
+                mBinding.outputRow11SensorPID.setVisibility(View.GONE);
+                mBinding.outputRow12SensorPID.setVisibility(View.GONE);
+                mBinding.outputRow13SensorPID.setVisibility(View.GONE);
+                mBinding.outputRow14SensorPID.setVisibility(View.GONE);
+                mBinding.outputRow17AnalogTest.setVisibility(View.GONE);
+                mBinding.outputRow18AnalogDisabled.setVisibility(View.GONE);
+
+                mBinding.linkOutOutputMain.setEnabled(false);
+                mBinding.outputRowSave.setVisibility(View.GONE);
+                break;
+
+            case 2:
+
+
+                break;
+        }
+
     }
 
     private void enableAnalogMain() {
@@ -287,7 +336,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     }
 
     private void sendFuzzy() {
-        /*Still in Development*/
+        // Still in Development
     }
 
     private void sendPID() {
@@ -351,7 +400,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 toString(3, mBinding.GravityWaterOsATXT));
     }
 
-    /* Bleed Blow */
+    /*Bleed Blow*/
     private void sendBleedBlow() {
         // Bleed/Blown -
 
@@ -370,7 +419,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 toString(3, mBinding.specificBleedOsATXT));
     }
 
-    /* WriteData */
+    /*WriteData*/
     private void sendContinuous() {
         // Con - {*1234# 0# 06# 01# Output1# 30# 30# 1# 0# 125# 322# 212*}
 
@@ -421,6 +470,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.bleedRelayTie.setAdapter(getAdapter(bleedRelay));
         mBinding.flowMeterInputWaterOsATXT.setAdapter(getAdapter(flowMeters));
     }
+
 
     private void enableBleed() {
         mBinding.modeOsATXT.setText(mBinding.modeOsATXT.getAdapter().getItem(1).toString());
@@ -645,7 +695,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         } else {
             Log.e(TAG, "handleResponse: ");
         }
-
+        checkUser();
     }
 
     private Boolean isEmpty(EditText editText) {

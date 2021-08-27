@@ -24,6 +24,7 @@
         app:layout_constraintBottom_toBottomOf="@id/view_base"
         app:layout_constraintEnd_toEndOf="@id/view_base"
         android:text="Output 1"
+        android:layout_marginStart="10dp"
         android:gravity="center"
         android:textStyle="bold"
         android:textColor="@color/white"

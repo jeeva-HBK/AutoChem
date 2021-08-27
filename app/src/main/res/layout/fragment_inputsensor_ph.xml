@@ -325,8 +325,7 @@
                 android:id="@+id/phRow6_isc"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:weightSum="3">
+                android:gravity="center">
 
                 <!--saveLayout-->
                 <LinearLayout

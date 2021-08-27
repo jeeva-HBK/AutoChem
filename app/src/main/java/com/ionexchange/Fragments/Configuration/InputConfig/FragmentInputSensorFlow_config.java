@@ -102,56 +102,95 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
 
     private void checkUser() {
         switch (userType) {
-            case 1:
-                mBinding.flowInputLabel.setEnabled(false);
-                mBinding.flowFlowMeterType.setEnabled(false);
-                mBinding.flowFlowUnit.setEnabled(false);
-                mBinding.flowRateUnit.setEnabled(false);
-                mBinding.flowMinAnalogFlowISEdt.setEnabled(false);
-                mBinding.flowFlowMeterMaxAnalog.setEnabled(false);
-                mBinding.flowTotalizerAlarm.setEnabled(false);
-                mBinding.flowResetFlowTotal.setEnabled(false);
-                mBinding.flowSetFlowTotal.setEnabled(false);
-                mBinding.flowScheduleReset.setEnabled(false);
-                mBinding.flowAlarmLow.setEnabled(false);
-                mBinding.flowAlarmHigh.setEnabled(false);
-                mBinding.flowCalibrationRequired.setEnabled(false);
-                mBinding.flowVolume.setEnabled(false);
-                mBinding.flowKFactor.setEnabled(false);
-                mBinding.flowTotalAlarmMode.setEnabled(false);
-                mBinding.flowFlowtotalAlarmDelay.setEnabled(false);
-                mBinding.flowFlowtotalAlarmClear.setEnabled(false);
-                mBinding.flowOutputRelayLink.setEnabled(false);
+            case 1: // Basic
+                // root
+                mBinding.flowInputNoRoot.setEnabled(false);
+                mBinding.flowInputLabelRoot.setEnabled(false);
+                mBinding.flowSensorTypeRoot.setEnabled(false);
+                mBinding.flowFlowUnitRoot.setEnabled(false);
+                mBinding.flowTotalizerAlarmRoot.setEnabled(false);
+                mBinding.flowResetFlowTotalRoot.setEnabled(false);
+                mBinding.flowScheduleResetRoot.setEnabled(false);
+                mBinding.flowFlowMeterTypeRoot.setEnabled(false);
 
-                mBinding.flowSensorActivation.setVisibility(View.GONE);
+                /* flowMeter type */
+                // analog
+                mBinding.flowRateUnitAnalog.setEnabled(false);
+                mBinding.flowFlowMeterMinAnalog.setEnabled(false);
+                mBinding.flowFlowMeterMaxAnalog.setEnabled(false);
+                mBinding.flowCalibrationRequiredAlarmAnalog.setEnabled(false);
+                mBinding.flowAlarmLowAnalog.setEnabled(false);
+                mBinding.flowAlarmHighAnalog.setEnabled(false);
+                mBinding.flowSetFlowTotalAnalog.setEnabled(false);
+                mBinding.flowResetCalibrationAnalog.setEnabled(false);
+                mBinding.flowResetCalibrationAnalog.setEnabled(false);
                 mBinding.flowSmoothingFactorAnalog.setVisibility(View.GONE);
+                mBinding.flowSensorActivationRoot.setVisibility(View.GONE);
+
+                // contactor
+                mBinding.flowVolumeContactor.setEnabled(false);
+                mBinding.flowSetFlowTotalContactor.setEnabled(false);
+                mBinding.flowAlarmHighContactor.setEnabled(false);
+                mBinding.flowAlarmLowContactor.setEnabled(false);
+
+                // paddle wheel
+                mBinding.flowRateUnitPaddle.setEnabled(false);
+                mBinding.flowKFactorPaddle.setEnabled(false);
+                mBinding.flowKFactorPaddle.setEnabled(false);
+                mBinding.flowSetFlowTotalPaddle.setEnabled(false);
+                mBinding.flowALarmLowPaddle.setEnabled(false);
+                mBinding.flowAlarmHighPaddle.setEnabled(false);
+                mBinding.flowKFactorPaddle.setEnabled(false);
+
+                // feed monitor
+                mBinding.flowRateunitFeedmonitor.setEnabled(false);
+                mBinding.flowTotalAlarmModeFeedmonitor.setEnabled(false);
+                mBinding.flowOutPutRealyFeedmonitor.setEnabled(false);
+                mBinding.flowSetflowtotalFeedmonitor.setEnabled(false);
+                mBinding.flowAlarmLowFeedmonitor.setEnabled(false);
+                mBinding.flowAlarmhighFeedmonitor.setEnabled(false);
+                mBinding.flowFlowAlarmModeFeedmonitor.setEnabled(false);
+                mBinding.flowAlarmClearFeedmoniter.setEnabled(false);
+                mBinding.flowAlarmDelayFeedmoniter.setEnabled(false);
 
                 mBinding.flowRow8Isc.setVisibility(View.GONE);
+
                 break;
+            case 2: // Intermediate
+                // root
+                mBinding.flowInputNoRoot.setEnabled(false);
+                mBinding.flowSensorTypeRoot.setEnabled(false);
+                mBinding.flowSensorTypeRoot.setEnabled(false);
+                mBinding.flowFlowMeterTypeRoot.setEnabled(false);
+                mBinding.flowFlowUnitRoot.setEnabled(false);
+                mBinding.flowResetFlowTotalRoot.setEnabled(false);
+                mBinding.flowTotalizerAlarmRoot.setEnabled(false);
+                mBinding.flowScheduleResetRoot.setEnabled(false);
 
-            case 2:
-                mBinding.flowFlowMeterType.setEnabled(false);
-                mBinding.flowFlowUnit.setEnabled(false);
-                mBinding.flowRateUnit.setEnabled(false);
-                mBinding.flowMinAnalogFlowISEdt.setEnabled(false);
+                /* flowMeter type */
+                // analog
+                mBinding.flowRateUnitAnalog.setEnabled(false);
+                mBinding.flowFlowMeterMinAnalog.setEnabled(false);
                 mBinding.flowFlowMeterMaxAnalog.setEnabled(false);
-                mBinding.flowScheduleReset.setEnabled(false);
-                mBinding.flowVolume.setEnabled(false);
-                mBinding.flowKFactor.setEnabled(false);
-                mBinding.flowTotalAlarmMode.setEnabled(false);
-                mBinding.flowFlowtotalAlarmDelay.setEnabled(false);
-                mBinding.flowFlowtotalAlarmClear.setEnabled(false);
+                mBinding.flowSmoothingFactorAnalog.setEnabled(false);
 
-                mBinding.flowSensorActivation.setVisibility(View.GONE);
-                mBinding.flowSmoothingFactorAnalog.setVisibility(View.GONE);
+                // contactor
+                mBinding.flowVolumeContactor.setEnabled(false);
+
+                //paddle wheel//
+                mBinding.flowRateUnitPaddle.setEnabled(false);
+                mBinding.flowKFactorPaddle.setEnabled(false);
+
+                //feed monitor
+                mBinding.flowFlowAlarmModeFeedmonitor.setEnabled(false);
+                mBinding.flowTotalAlarmModeFeedmonitor.setEnabled(false);
+                mBinding.flowAlarmDelayFeedmoniter.setEnabled(false);
+                mBinding.flowAlarmClearFeedmoniter.setEnabled(false);
 
                 mBinding.flowDeleteLayout.setVisibility(View.GONE);
                 break;
-
-            case 3:
-
-                break;
         }
+
     }
 
     private void delete(View view) {

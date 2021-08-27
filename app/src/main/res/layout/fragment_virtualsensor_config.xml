@@ -112,7 +112,7 @@
                         android:layout_height="match_parent"
                         android:hint="Smoothing Factor"
                         android:imeOptions="actionNext"
-                        android:inputType="textPersonName"
+                        android:inputType="number"
                         android:maxLength="3"
                         android:maxLines="1" />
 
@@ -163,8 +163,8 @@
                         android:layout_height="match_parent"
                         android:hint="Sensor 1 Constant"
                         android:imeOptions="actionNext"
-                        android:maxLength="7"
-                        android:inputType="textPersonName"
+                        android:inputType="numberDecimal"
+                        android:maxLength="9"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -204,8 +204,8 @@
                         android:layout_height="match_parent"
                         android:hint="Sensor 2 Constant"
                         android:imeOptions="actionNext"
-                        android:inputType="textPersonName"
-                        android:maxLength="7"
+                        android:inputType="numberDecimal"
+                        android:maxLength="9"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -235,8 +235,8 @@
                         android:layout_height="match_parent"
                         android:hint="Low Range"
                         android:imeOptions="actionNext"
-                        android:inputType="textPersonName"
-                        android:maxLength="7"
+                        android:inputType="number"
+                        android:maxLength="4"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -256,8 +256,8 @@
                         android:layout_height="match_parent"
                         android:hint="High Range"
                         android:imeOptions="actionNext"
-                        android:inputType="textPersonName"
-                        android:maxLength="7"
+                        android:inputType="number"
+                        android:maxLength="4"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -277,7 +277,7 @@
                         android:layout_height="match_parent"
                         android:hint="Low Alarm"
                         android:imeOptions="actionNext"
-                        android:inputType="textPersonName"
+                        android:inputType="numberDecimal"
                         android:maxLength="7"
                         android:maxLines="1" />
 
@@ -299,7 +299,7 @@
                         android:hint="High Alarm"
                         android:imeOptions="actionNext"
                         android:maxLength="7"
-                        android:inputType="textPersonName"
+                        android:inputType="numberDecimal"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>

@@ -1,958 +1,962 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
-        <data>
-            <import type="android.view.View" />
-            <variable
-                name="flowMeterType"
-                type="String" />
-        </data>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="flowMeterType"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <TableLayout
-                android:layout_width="match_parent"
+            <!--Row 1-->
+            <TableRow
+                android:id="@+id/flowRow1_isc"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="3">
 
-                <!--Row 1-->
-                <TableRow
-                    android:id="@+id/flowRow1_isc"
-                    android:layout_height="0dp"
+                <!--Input Number-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_inputNo_root"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:weightSum="3">
+                    android:enabled="false">
 
-                    <!--Input Number-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_inputNo"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_weight="1"
-                        android:enabled="false">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/inputNumber_flowISEDT"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:digits="0123456789"
-                            android:editable="false"
-                            android:focusable="false"
-                            android:hint="Input Number"
-                            android:inputType="number"
-                            android:maxLength="2"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </TableRow>
-
-                <!--Row 2-->
-                <TableRow
-                    android:id="@+id/flowRow2_isc"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:weightSum="4">
-
-                    <!--input Label-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_inputLabel"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/inputLabel_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="3dp"
-                            android:hint="Input Label"
-                            android:imeOptions="actionNext"
-                            android:inputType="textPersonName"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Sensor type-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_sensorType"
-                        style="@style/appAutoTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_weight="1"
-                        android:enabled="false">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/sensorType_flowISATXT"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:clickable="false"
-                            android:editable="false"
-                            android:focusable="false"
-                            android:hint="Sensor Type" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Sensor Activation-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_sensorActivation"
-                        style="@style/appAutoTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/sensorActivation_flowISATXT"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:editable="false"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-                            android:hint="Sensor Activation" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Flow Unit-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_flowUnit"
-                        style="@style/appAutoTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/flowUnit_flowISATXT"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:editable="false"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-                            android:hint="Flow Unit" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </TableRow>
-
-                <!--Row 3-->
-                <TableRow
-                    android:id="@+id/flowRow3_isc"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:weightSum="4">
-
-                    <!--Totalizer Alarm-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_totalizerAlarm"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/totalizerAlarm_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Totalizer Alarm"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--resetFlowTotal-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_resetFlowTotal"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/resetFlowTotal_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Reset Flow Total"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--scheduleReset-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_scheduleReset"
-                        style="@style/appAutoTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/scheduleReset_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:focusable="false"
-                            android:hint="Scheduled Reset"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Flow meter Type-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_flowMeterType"
-                        style="@style/appAutoTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/flowMeterType_flowISATXT"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:editable="false"
-                            android:focusableInTouchMode="false"
-                            android:hint="Flow Mater Type" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </TableRow>
-
-                <!--Row 4 - contactorLayout-->
-                <TableRow
-                    android:id="@+id/contactorLayout_flowConfig"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:visibility="@{flowMeterType.equals(`1`) ? View.VISIBLE : View.GONE}"
-                    android:weightSum="4">
-
-                    <!--Volume-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_volume"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/volume_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Volume"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="6"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--set Flow Total-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_setFlowTotal"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/setFlowTotal_contactor_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Set Flow Total"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Alarm Low-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_conTactorAlarmLow"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/alarmLow_contactor_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Alarm Low"
-                            android:imeOptions="actionNext"
-                            android:inputType="numberDecimal"
-                            android:maxLength="7"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Alarm High-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_conTactorAlarmHigh"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/alarmHigh_contactor_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Alarm High"
-                            android:imeOptions="actionNext"
-                            android:inputType="numberDecimal"
-                            android:maxLength="7"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </TableRow>
-
-                <!--Row 5 - 1 - paddleLayout_flowConfig -->
-                <TableRow
-                    android:id="@+id/paddleLayout_flowConfig"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:visibility="@{flowMeterType.equals(`2`) ? View.VISIBLE : View.GONE}"
-                    android:weightSum="3">
-
-                    <!--Rate Unit-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_rateUnit"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/rateUnit_paddle_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Rate Unit"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--K Factor-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_kFactor"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/kFactor_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="K Factor"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Set Flow Total-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_etFlowTotalPaddle"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/setFlowTotalPaddle_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Set Flow Total"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </TableRow>
-
-                <!--Row 5 - 2-->
-                <TableRow
-                    android:id="@+id/paddleLayout2_flowConfig"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:visibility="@{flowMeterType.equals(`2`) ? View.VISIBLE : View.GONE}"
-                    android:weightSum="2">
-
-                    <!--Alarm Low-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_alarmLowPad"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/alarmLowPaddle_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Alarm Low"
-                            android:imeOptions="actionNext"
-                            android:inputType="numberDecimal"
-                            android:maxLength="7"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Alarm High-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_alarmHigh"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/alarmHigh_paddle_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Alarm High"
-                            android:imeOptions="actionNext"
-                            android:inputType="numberDecimal"
-                            android:maxLength="7"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </TableRow>
-
-                <!--Row 6 - 1 - feedMonitorLayout_flowConfig-->
-                <TableRow
-                    android:id="@+id/feedMonitorLayout_flowConfig"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:visibility="@{flowMeterType.equals(`3`) ? View.VISIBLE : View.GONE}"
-                    android:weightSum="4">
-
-                    <!--Total alarm mode-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_rateUnitFeed"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/totalAlarmMode_feed_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Total Alram Mode"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:maxLines="2" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Flow Alarm mode-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_totalAlarmMode"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/flowAlarmMode_feed_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Flow Alarm Mode"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Flow alarm Delay-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_flowtotalAlarmDelay"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/flowAlarmDelay_feed_ISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Flow Alarm Delay"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="2"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Flow alarm clear-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_flowtotalAlarmClear"
-                        style="@style/appEdtTxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/flowAlarmClear_feed_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Flow Alarm Clear"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="6"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </TableRow>
-
-                <!--Row 6 - 2-->
-                <TableRow
-                    android:id="@+id/feedMonitorLayout2_flowConfig"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:visibility="@{flowMeterType.equals(`3`) ? View.VISIBLE : View.GONE}"
-                    android:weightSum="4">
-
-                    <!--Output Relay Link-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_outputRelayLinkFeed"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/outputRelayLink_Feed_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Output Relay Link"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="2"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Set Flow Total-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_outputRelayLink"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/setFlowTotal_feed_isEDT"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Set Flow Total"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Alarm Low-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_alarmLowFeed"
-                        style="@style/appEdtTxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/alarmLow_Feed_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Alarm Low"
-                            android:imeOptions="actionNext"
-                            android:inputType="numberDecimal"
-                            android:maxLength="6"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Alarm High-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_alarmLow"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/alarmHigh_feed_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Alarm High"
-                            android:imeOptions="actionNext"
-                            android:inputType="numberDecimal"
-                            android:maxLength="6"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Rate Unit-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_feed_rate_unit"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/rateUnit_feed__inputSettings_edt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Rate Unit"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </TableRow>
-
-                <!--Row 7 - 1 - analogLayout_flowConfig-->
-                <TableRow
-                    android:id="@+id/analogLayout_flowConfig"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:visibility="@{flowMeterType.equals(`0`) ? View.VISIBLE : View.GONE}"
-                    android:gravity="center"
-                    android:weightSum="4">
-
-                    <!--Rate Unit-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_rateUnitAnalog"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/rateUnit_Analog_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Rate Unit"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Flow Meter Min-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_flowMeterMinAnalog"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/flowMinAnalog_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Flow Meter Min"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Flow Meter Max-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/appEdtTxt"
-                        android:id="@+id/flow_flowMeterMaxAnalog"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/flowMaxAnalog_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Flow Meter Max"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Smoothing Factor-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_smoothingFactorAnalog"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/smoothingFactorAnalog_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Smoothing Factor"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="3"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </TableRow>
-
-                <!--Row 7 - 2-->
-                <TableRow
-                    android:id="@+id/analogLayout2_flowConfig"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:visibility="@{flowMeterType.equals(`0`) ? View.VISIBLE : View.GONE}"
-                    android:weightSum="5">
-
-                    <!--Calibration Required Alarm-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_calibrationRequired"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/calibrationRequired_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Calibration Required Alarm"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="3"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Alarm Low-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_alarmLowAnalog"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/alarmLow_Analog_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Alarm Low"
-                            android:imeOptions="actionNext"
-                            android:inputType="numberDecimal"
-                            android:maxLength="7"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Alarm High-->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_alarmHighAnalog"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/alarmHighAnalog_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Alarm High"
-                            android:imeOptions="actionNext"
-                            android:inputType="numberDecimal"
-                            android:maxLength="7"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Set Flow Total -->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_setFlowTotalAnalog"
-                        style="@style/appEdtTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/setFlowTotal_Analog_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Set Flow Total"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--Reset Calibration -->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/flow_resetCalibrationAnalog"
-                        style="@style/appAutoTxt"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/resetCalibrationAnalog_flowISEdt"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:hint="Reset Calibration"
-                            android:maxLines="1" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </TableRow>
-
-                <!--Row 8-->
-                <TableRow
-                    android:id="@+id/flowRow8_isc"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:weightSum="3">
-
-                    <!--saveLayout-->
-                    <LinearLayout
-                        android:id="@+id/flow_saveLayout"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputNumber_flowISEDT"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:digits="0123456789"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Input Number"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 2-->
+            <TableRow
+                android:id="@+id/flowRow2_isc"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="4">
+
+                <!--input Label-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_inputLabel_root"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputLabel_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:hint="Input Label"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPersonName"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Sensor type-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_sensorType_root"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_weight="1"
+                    android:enabled="false">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/sensorType_flowISATXT"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Sensor Type" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Sensor Activation-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_sensorActivation_root"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/sensorActivation_flowISATXT"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="Sensor Activation" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Flow Unit-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_flowUnit_root"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/flowUnit_flowISATXT"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="Flow Unit" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 3-->
+            <TableRow
+                android:id="@+id/flowRow3_isc"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="4">
+
+                <!--Totalizer Alarm-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_totalizerAlarm_root"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/totalizerAlarm_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Totalizer Alarm"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--resetFlowTotal-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_resetFlowTotal_root"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/resetFlowTotal_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Reset Flow Total"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--scheduleReset-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_scheduleReset_root"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/scheduleReset_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:focusable="false"
+                        android:hint="Scheduled Reset"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Flow meter Type-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_flowMeterType_root"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/flowMeterType_flowISATXT"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:editable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="Flow Meter Type" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 4 - contactorLayout-->
+            <TableRow
+                android:id="@+id/contactorLayout_flowConfig"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:visibility="@{flowMeterType.equals(`1`) ? View.VISIBLE : View.GONE}"
+                android:weightSum="4">
+
+                <!--Volume-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_volume_contactor"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/volume_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Volume"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--set Flow Total-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_setFlowTotal_contactor"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/setFlowTotal_contactor_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Set Flow Total"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Alarm Low-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_alarmLow_contactor"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/alarmLow_contactor_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alarm Low"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Alarm High-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_alarmHigh_contactor"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/alarmHigh_contactor_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alarm High"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 5 - 1 - paddleLayout_flowConfig 1 -->
+            <TableRow
+                android:id="@+id/paddleLayout_flowConfig"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:visibility="@{flowMeterType.equals(`2`) ? View.VISIBLE : View.GONE}"
+                android:weightSum="3">
+
+                <!--Rate Unit-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_rateUnit_paddle"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/rateUnit_paddle_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Rate Unit"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--K Factor-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_kFactor_paddle"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/kFactor_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="K Factor"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Set Flow Total-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_setFlowTotal_Paddle"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/setFlowTotalPaddle_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Set Flow Total"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </TableRow>
+
+            <!--Row 5 - 2 paddleLayout_flowConfig 2-->
+            <TableRow
+                android:id="@+id/paddleLayout2_flowConfig"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:visibility="@{flowMeterType.equals(`2`) ? View.VISIBLE : View.GONE}"
+                android:weightSum="2">
+
+                <!-- -Alarm Low-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_aLarmLow_paddle"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/alarmLowPaddle_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alarm Low"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Alarm High-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_alarmHigh_paddle"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/alarmHigh_paddle_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alarm High"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 6 - 1 - feedMonitorLayout_flowConfig 1-->
+            <TableRow
+                android:id="@+id/feedMonitorLayout_flowConfig"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:visibility="@{flowMeterType.equals(`3`) ? View.VISIBLE : View.GONE}"
+                android:weightSum="4">
+
+                <!--Total alarm mode-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_totalAlarmMode_feedmonitor"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/totalAlarmMode_feed_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Total Alram Mode"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="2" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Flow Alarm mode-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_flowAlarmMode_feedmonitor"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/flowAlarmMode_feed_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Flow Alarm Mode"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Flow alarm Delay-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_alarmDelay_feedmoniter"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/flowAlarmDelay_feed_ISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Flow Alarm Delay"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Flow alarm clear-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_alarmClear_feedmoniter"
+                    style="@style/appEdtTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/flowAlarmClear_feed_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Flow Alarm Clear"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 6 - 2 feedMonitorLayout_flowConfig 2-->
+            <TableRow
+                android:id="@+id/feedMonitorLayout2_flowConfig"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:visibility="@{flowMeterType.equals(`3`) ? View.VISIBLE : View.GONE}"
+                android:weightSum="4">
+
+                <!--Output Relay Link-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_outPutRealy_feedmonitor"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/outputRelayLink_Feed_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Output Relay Link"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Set Flow Total-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_setflowtotal_feedmonitor"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/setFlowTotal_feed_isEDT"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Set Flow Total"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Alarm Low-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_alarmLow_feedmonitor"
+                    style="@style/appEdtTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/alarmLow_Feed_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alarm Low"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
+                        android:maxLength="6"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Alarm High-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_alarmhigh_feedmonitor"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/alarmHigh_feed_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alarm High"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
+                        android:maxLength="6"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Rate Unit-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_rateunit_feedmonitor"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/rateUnit_feed__inputSettings_edt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Rate Unit"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 7 - 1 - analogLayout_flowConfig 1-->
+            <TableRow
+                android:id="@+id/analogLayout_flowConfig"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:visibility="@{flowMeterType.equals(`0`) ? View.VISIBLE : View.GONE}"
+                android:weightSum="4">
+
+                <!--Rate Unit-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_rateUnit_analog"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/rateUnit_Analog_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Rate Unit"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Flow Meter Min-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_flowMeterMin_Analog"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/flow_MinAnalog_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Flow Meter Min"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Flow Meter Max-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_flowMeterMaxAnalog"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/flowMaxAnalog_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Flow Meter Max"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Smoothing Factor-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_smoothingFactorAnalog"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/smoothingFactorAnalog_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Smoothing Factor"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 7 - 2 analogLayout_flowConfig 2-->
+            <TableRow
+                android:id="@+id/analogLayout2_flowConfig"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:visibility="@{flowMeterType.equals(`0`) ? View.VISIBLE : View.GONE}"
+                android:weightSum="5">
+
+                <!--Calibration Required Alarm-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_calibrationRequiredAlarm_analog"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/calibrationRequired_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Calibration Required Alarm"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Alarm Low-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_alarmLow_Analog"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/alarmLow_Analog_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alarm Low"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Alarm High-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_alarmHighAnalog"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/alarmHighAnalog_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alarm High"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
+                        android:maxLength="7"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Set Flow Total -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_setFlowTotalAnalog"
+                    style="@style/appEdtTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/setFlowTotal_Analog_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Set Flow Total"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Reset Calibration -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_resetCalibrationAnalog"
+                    style="@style/appAutoTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/resetCalibrationAnalog_flowISEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Reset Calibration"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <!--Row 8 (Save and Delete)-->
+            <TableRow
+                android:id="@+id/flowRow8_isc"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="3">
+
+                <!--saveLayout-->
+                <LinearLayout
+                    android:id="@+id/flow_saveLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/save_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="center_vertical"
+                        android:text="Save"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/flow_saveFab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@color/colorSecondary"
+                        android:backgroundTint="@color/colorSecondary"
+                        android:src="@drawable/ic_round_right"
+                        app:maxImageSize="50dp"
+                        app:tint="@color/black" />
+
+
+                </LinearLayout>
+
+                <!--DeleteLayout-->
+                <LinearLayout
+                    android:id="@+id/flow_deleteLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|left"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
                         android:gravity="center"
-                        android:orientation="horizontal"
-                        android:visibility="visible">
+                        android:text="Delete"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/save_txt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:gravity="center_vertical"
-                            android:text="Save"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/flow_saveFab"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:background="@color/colorSecondary"
-                            android:backgroundTint="@color/colorSecondary"
-                            android:src="@drawable/ic_round_right"
-                            app:maxImageSize="50dp"
-                            app:tint="@color/black" />
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/flow_deleteFab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@color/red"
+                        android:backgroundTint="@color/red"
+                        android:src="@drawable/ic_baseline_delete"
+                        app:maxImageSize="35dp"
+                        app:tint="@color/black" />
 
 
-                    </LinearLayout>
+                </LinearLayout>
 
-                    <!--DeleteLayout-->
-                    <LinearLayout
-                        android:id="@+id/flow_deleteLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center|left"
-                        android:orientation="horizontal"
-                        android:visibility="visible">
+            </TableRow>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:gravity="center"
-                            android:text="Delete"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+        </TableLayout>
 
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/flow_deleteFab"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:background="@color/red"
-                            android:backgroundTint="@color/red"
-                            android:src="@drawable/ic_baseline_delete"
-                            app:maxImageSize="35dp"
-                            app:tint="@color/black" />
-
-
-                    </LinearLayout>
-
-                </TableRow>
-
-            </TableLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
