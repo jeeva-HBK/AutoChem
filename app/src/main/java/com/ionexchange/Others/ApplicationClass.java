@@ -64,7 +64,13 @@ public class ApplicationClass extends Application {
             inputAnalogSensors = {"Input 1", "Input 2", "Input 3", "Input 4", "Input 5", "Input 6", "Input 7", "Input 8", "Input 9", "Input 10", "Input 11", "Input 12","Input 13"},
     OutputBleedFlowRate = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14"},
 
-    TemperatureCompensationType = {"Linear temperature Compensation","standard NaCl temperature compensation"};
+    TemperatureCompensationType = {"Linear temperature Compensation","standard NaCl temperature compensation"},
+
+    timerOutputMode = {"Timer", "Timer Flow", "Timer Disabled"},
+    timerFlowSensor = {"Flow Sensor - 1", "Flow Sensor - 2", "Flow Sensor - 3", "Flow Sensor - 4", " Flow Sensor - 5", "Flow Sensor - 6",
+            "Flow Sensor - 7", "Flow Sensor - 8"},
+    accessoryTimerMode = {"Timer Safety", "Timer Safety Flow", "Disabled"},
+    accessoryType = {" ON Before", "OFF Before", "ON After", " OFF After", "ON With", "OFF with"};
 
 
     /* Static Variables */
@@ -189,6 +195,10 @@ public class ApplicationClass extends Application {
             case 7:
                 finalDigits = ("0000000" + value).substring(value.length());
                 break;
+
+            case 12:
+                finalDigits = ("000000000000" + value).substring(value.length());
+                break;
         }
         return finalDigits;
     }
@@ -265,5 +275,23 @@ public class ApplicationClass extends Application {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public static int validDecimalField(EditText editText, int prefixDigit, int suffixDigit) {
+        int throwError = 0;
+        String[] findDecimalEdtTxt = editText.getText().toString().split("\\.");
+        try {
+            if (findDecimalEdtTxt[0].length() > prefixDigit) {
+                return 1;
+            } else if (findDecimalEdtTxt[1].isEmpty()) {
+                return 1;
+            } else if (findDecimalEdtTxt[1].length() > suffixDigit) {
+                return 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throwError = 1;
+        }
+        return throwError;
     }
 }

@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <View
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/primary"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Monday"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        app:layout_constraintEnd_toEndOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="@id/toolbar" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkbox_enable_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="right|center"
+        android:layoutDirection="rtl"
+
+        android:text="ENABLE"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="@id/toolbar" />
+
+
+    <TextView
+        android:id="@+id/txt_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="START"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_timer_retcangle"
+        app:layout_constraintEnd_toStartOf="@id/view2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_start" />
+
+    <EditText
+        android:id="@+id/number_picker_hour"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:gravity="center"
+        android:hint="00"
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:maxLength="2"
+        android:theme="@style/DefaultNumberPickerTheme"
+        app:layout_constraintBottom_toBottomOf="@id/view1"
+        app:layout_constraintEnd_toEndOf="@id/view1"
+        app:layout_constraintStart_toStartOf="@id/view1"
+        app:layout_constraintTop_toTopOf="@id/view1" />
+
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="HH"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/view1"
+        app:layout_constraintStart_toStartOf="@id/view1"
+        app:layout_constraintTop_toBottomOf="@id/view1" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/bg_timer_retcangle"
+        app:layout_constraintBottom_toBottomOf="@+id/view1"
+        app:layout_constraintEnd_toStartOf="@id/view3"
+        app:layout_constraintStart_toEndOf="@+id/view1"
+        app:layout_constraintTop_toTopOf="@+id/view1" />
+
+
+    <EditText
+        android:id="@+id/number_min_hour"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:gravity="center"
+        android:hint="00"
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:maxLength="2"
+        android:selectionDividerHeight="0dp"
+        android:theme="@style/DefaultNumberPickerTheme"
+        app:layout_constraintBottom_toBottomOf="@id/view2"
+        app:layout_constraintEnd_toEndOf="@id/view2"
+        app:layout_constraintStart_toStartOf="@id/view2"
+        app:layout_constraintTop_toTopOf="@id/view2" />
+
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="MM"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/view2"
+        app:layout_constraintStart_toStartOf="@id/view2"
+        app:layout_constraintTop_toBottomOf="@id/view2" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/bg_timer_retcangle"
+        app:layout_constraintBottom_toBottomOf="@+id/view1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/view2"
+        app:layout_constraintTop_toTopOf="@+id/view1" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="SS"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/view3"
+        app:layout_constraintStart_toStartOf="@id/view3"
+        app:layout_constraintTop_toBottomOf="@id/view3" />
+
+    <EditText
+        android:id="@+id/number_sec_hour"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:gravity="center"
+        android:hint="00"
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:maxLength="2"
+        android:selectionDividerHeight="0dp"
+        android:theme="@style/DefaultNumberPickerTheme"
+        app:layout_constraintBottom_toBottomOf="@id/view3"
+        app:layout_constraintEnd_toEndOf="@id/view3"
+        app:layout_constraintStart_toStartOf="@id/view3"
+        app:layout_constraintTop_toTopOf="@id/view3" />
+
+
+    <TextView
+        android:id="@+id/txt_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="DURATION"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_timer_retcangle"
+        app:layout_constraintEnd_toEndOf="@id/view1"
+        app:layout_constraintStart_toStartOf="@id/view1"
+        app:layout_constraintTop_toBottomOf="@+id/txt_end" />
+
+    <EditText
+        android:id="@+id/number_dur_picker_hour"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:gravity="center"
+        android:hint="00"
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:maxLength="2"
+        android:selectionDividerHeight="0dp"
+        android:theme="@style/DefaultNumberPickerTheme"
+        app:layout_constraintBottom_toBottomOf="@id/view4"
+        app:layout_constraintEnd_toEndOf="@id/view4"
+        app:layout_constraintStart_toStartOf="@id/view4"
+        app:layout_constraintTop_toTopOf="@id/view4" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="HH"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/view4"
+        app:layout_constraintStart_toStartOf="@id/view4"
+        app:layout_constraintTop_toBottomOf="@id/view4" />
+
+
+    <View
+        android:id="@+id/view5"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_timer_retcangle"
+        app:layout_constraintEnd_toEndOf="@id/view2"
+        app:layout_constraintStart_toStartOf="@id/view2"
+        app:layout_constraintTop_toBottomOf="@+id/txt_end" />
+
+
+    <EditText
+        android:id="@+id/number_dur_min_hour"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+
+        android:gravity="center"
+        android:hint="00"
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:maxLength="2"
+        android:theme="@style/DefaultNumberPickerTheme"
+        app:layout_constraintBottom_toBottomOf="@id/view5"
+        app:layout_constraintEnd_toEndOf="@id/view5"
+        app:layout_constraintStart_toStartOf="@id/view5"
+        app:layout_constraintTop_toTopOf="@id/view5" />
+
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="MM"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/view5"
+        app:layout_constraintStart_toStartOf="@id/view5"
+        app:layout_constraintTop_toBottomOf="@id/view5" />
+
+
+    <View
+        android:id="@+id/view6"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_timer_retcangle"
+        app:layout_constraintEnd_toEndOf="@id/view3"
+        app:layout_constraintStart_toStartOf="@id/view3"
+        app:layout_constraintTop_toBottomOf="@+id/txt_end" />
+
+
+    <EditText
+        android:id="@+id/number_dur_sec_hour"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+
+        android:gravity="center"
+        android:hint="00"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        android:maxLength="2"
+        android:theme="@style/DefaultNumberPickerTheme"
+        app:layout_constraintBottom_toBottomOf="@id/view6"
+        app:layout_constraintEnd_toEndOf="@id/view6"
+        app:layout_constraintStart_toStartOf="@id/view6"
+        app:layout_constraintTop_toTopOf="@id/view6" />
+
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="SS"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/view6"
+        app:layout_constraintStart_toStartOf="@id/view6"
+        app:layout_constraintTop_toBottomOf="@id/view6" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/colorSecondary"
+        android:text="Cancel"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/view4"
+        app:layout_constraintStart_toStartOf="@+id/view4"
+        app:layout_constraintTop_toBottomOf="@id/textView19" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/colorSecondary"
+        android:text="oK"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/view5"
+        app:layout_constraintStart_toStartOf="@+id/view5"
+        app:layout_constraintTop_toBottomOf="@id/textView19" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_apply_to_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/colorSecondary"
+        android:text="Apply To All"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/view6"
+        app:layout_constraintStart_toStartOf="@+id/view6"
+        app:layout_constraintTop_toBottomOf="@id/textView19" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

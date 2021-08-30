@@ -237,9 +237,9 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
 
     private String toStringSplit(int digits, int digitPoint, EditText editText) {
         if (editText.getText().toString().split("\\.").length == 1) {
-            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
+            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + "." + mAppClass.formDigits(digitPoint, "00");
         }
-        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
+        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0])+"." + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
     }
 
     private Boolean isEmpty(EditText editText) {

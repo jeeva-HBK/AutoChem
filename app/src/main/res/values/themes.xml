@@ -53,4 +53,9 @@
         <item name="android:navigationBarDividerColor">@color/black</item>
     </style>
 
+    <style name="DefaultNumberPickerTheme">
+        <item name="colorControlNormal">@android:color/transparent</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+
 </resources>

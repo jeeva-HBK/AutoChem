@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <View
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/primary"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Accessory Timer"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        app:layout_constraintEnd_toEndOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="@id/toolbar" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkbox_enable_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="right|center"
+        android:layoutDirection="rtl"
+        android:text="ENABLE"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="@id/toolbar" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/primary"
+        app:layout_constraintEnd_toStartOf="@id/view3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Output"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/view2"
+        app:layout_constraintEnd_toEndOf="@id/view2"
+        app:layout_constraintStart_toStartOf="@id/view2"
+        app:layout_constraintTop_toTopOf="@id/view2" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/output_til"
+        style="@style/appAutoTxt"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintEnd_toEndOf="@+id/view2"
+        app:layout_constraintStart_toStartOf="@+id/view2"
+        app:layout_constraintTop_toBottomOf="@+id/textView22">
+
+        <AutoCompleteTextView
+            android:id="@+id/output_act"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:editable="false"
+            android:gravity="center"
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/primary"
+        app:layout_constraintBottom_toBottomOf="@id/view2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/view2"
+        app:layout_constraintTop_toTopOf="@+id/view2" />
+
+
+    <TextView
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mode"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/view3"
+        app:layout_constraintEnd_toEndOf="@id/view3"
+        app:layout_constraintStart_toStartOf="@id/view3"
+        app:layout_constraintTop_toTopOf="@id/view3" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/mode_til"
+        style="@style/appAutoTxt"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintEnd_toEndOf="@+id/view3"
+        app:layout_constraintStart_toStartOf="@+id/view3"
+        app:layout_constraintTop_toBottomOf="@+id/textView23">
+
+        <AutoCompleteTextView
+            android:id="@+id/mode_act"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:editable="false"
+            android:gravity="center"
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <View
+        android:id="@+id/v1"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/v2"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/primary"
+        app:layout_constraintEnd_toEndOf="@+id/v2"
+        app:layout_constraintStart_toStartOf="@+id/v1"
+        app:layout_constraintTop_toBottomOf="@+id/output_til" />
+
+
+    <TextView
+        android:id="@+id/textView24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Output Type"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/view4"
+        app:layout_constraintEnd_toEndOf="@id/view4"
+        app:layout_constraintStart_toStartOf="@id/view4"
+        app:layout_constraintTop_toTopOf="@id/view4" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/outputType"
+        style="@style/appAutoTxt"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintEnd_toEndOf="@+id/view4"
+        app:layout_constraintStart_toStartOf="@+id/view4"
+        app:layout_constraintTop_toBottomOf="@+id/textView24">
+
+        <AutoCompleteTextView
+            android:id="@+id/outputType_act"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:editable="false"
+            android:gravity="center"
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="DURATION"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/outputType" />
+
+
+    <View
+        android:id="@+id/view7"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_timer_retcangle"
+        app:layout_constraintEnd_toStartOf="@id/view8"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView25" />
+
+    <EditText
+        android:id="@+id/number_picker_hour"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:hint="00"
+        android:maxLength="2"
+        android:inputType="number"
+        android:imeOptions="actionNext"
+        android:cursorVisible="false"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="@id/view7"
+        app:layout_constraintEnd_toEndOf="@id/view7"
+        app:layout_constraintStart_toStartOf="@id/view7"
+        app:layout_constraintTop_toTopOf="@id/view7" />
+
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="HH"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/view7"
+        app:layout_constraintStart_toStartOf="@id/view7"
+        app:layout_constraintTop_toBottomOf="@id/view7" />
+
+    <View
+        android:id="@+id/view8"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/bg_timer_retcangle"
+        app:layout_constraintBottom_toBottomOf="@+id/view7"
+        app:layout_constraintEnd_toStartOf="@id/view9"
+        app:layout_constraintStart_toEndOf="@+id/view7"
+        app:layout_constraintTop_toTopOf="@+id/view7" />
+
+
+    <EditText
+        android:id="@+id/number_min_hour"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:cursorVisible="false"
+        android:gravity="center"
+        android:background="@null"
+        android:hint="00"
+        android:maxLength="2"
+        android:inputType="number"
+        android:imeOptions="actionNext"
+        app:layout_constraintBottom_toBottomOf="@id/view8"
+        app:layout_constraintEnd_toEndOf="@id/view8"
+        app:layout_constraintStart_toStartOf="@id/view8"
+        app:layout_constraintTop_toTopOf="@id/view8" />
+
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="MM"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/view8"
+        app:layout_constraintStart_toStartOf="@id/view8"
+        app:layout_constraintTop_toBottomOf="@id/view8" />
+
+    <View
+        android:id="@+id/view9"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/bg_timer_retcangle"
+        app:layout_constraintBottom_toBottomOf="@+id/view7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/view8"
+        app:layout_constraintTop_toTopOf="@+id/view7" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="SS"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/view9"
+        app:layout_constraintStart_toStartOf="@id/view9"
+        app:layout_constraintTop_toBottomOf="@id/view9" />
+
+    <EditText
+        android:id="@+id/number_sec_hour"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:cursorVisible="false"
+        android:gravity="center"
+        android:hint="00"
+        android:maxLength="2"
+        android:inputType="number"
+        android:imeOptions="actionDone"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="@id/view9"
+        app:layout_constraintEnd_toEndOf="@id/view9"
+        app:layout_constraintStart_toStartOf="@id/view9"
+        app:layout_constraintTop_toTopOf="@id/view9" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/colorSecondary"
+        android:text="Ok"
+        android:textStyle="bold"
+        android:textColor="@color/primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_cancel"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView17" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/colorSecondary"
+        android:text="Cancel"
+        android:textStyle="bold"
+        android:textColor="@color/primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_ok"
+        app:layout_constraintTop_toBottomOf="@id/textView17" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
