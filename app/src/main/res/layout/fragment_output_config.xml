@@ -3,1292 +3,1322 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="android.view.View" />
+
         <variable
             name="functionMode"
             type="String" />
     </data>
 
     <!--Root-->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TableLayout
-            android:layout_width="0dp"
+        <!--Row 1-->
+        <LinearLayout
+            android:id="@+id/outputRow1"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <!--Row 1-->
-            <TableRow
-                android:id="@+id/outputRow1"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <!--Output Label-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/output_label_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/outputLabel_osEDT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Output Label"
-                        android:imeOptions="actionNext"
-                        android:inputType="textPersonName"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Function Mode-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/functionMode_os"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/funtionMode_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Function Mode" />
-
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Mode-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/mode_os"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/mode_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Mode" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-            </TableRow>
-
-            <!--Row 2-->
-            <TableRow
-                android:id="@+id/outputRow2"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <!--Interlock Channel-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/output_interLockChannel_os"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/interLockChannel_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Interlock Channel" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Activate Channel-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/output_activateChannel_os"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/activateChannel_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Activate With Channel" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--Row 3 (INHIBITOR - continuous)
-            android:visibility="@{functionMode.equals(`layoutInhibitorContinuous`) ? View.VISIBLE : View.GONE}" -->
-            <TableRow
-                android:id="@+id/outputRow3_inhibitor_cont"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="@{functionMode.equals(`layoutInhibitorContinuous`) ? View.VISIBLE : View.GONE}">
-
-                <!--Flow Rate-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/cont_flowRate_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/flowRate_cont_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Flow Rate"
-                        android:imeOptions="actionNext"
-                        android:inputType="numberDecimal"
-                        android:maxLength="13"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Dose Rate-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/doseRate_cont_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/doseRate_cont_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Dose Rate"
-                        android:imeOptions="actionNext"
-                        android:inputType="numberDecimal"
-                        android:maxLength="13"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Dose Period-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/dosePeriod_cont_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/dosePeriod_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Dose Period"
-                        android:imeOptions="actionDone"
-                        android:inputType="number"
-                        android:maxLength="4"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--*********************************************************************************************-->
-
-            <!--Row 4 (INHIBITOR - Bleed/BleedDown)
-            android:visibility="@{functionMode.equals(`layoutInhibitorBleedDown`) ? View.VISIBLE : View.GONE}"-->
-            <TableRow
-                android:id="@+id/outputRow4_inhibitor_bleed"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="@{functionMode.equals(`layoutInhibitorBleedDown`) ? View.VISIBLE : View.GONE}">
-
-                <!--Pump Flow Rate-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/flowRate_bleed_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/flowRate_bleed_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Pump Flow Rate"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="13"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Target PPM-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/targetppm_bleed_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/targetppm_bleed_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Target PPM"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="4"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Concentration-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/concentration_bleed_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/concentration_bleed_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Concentration"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="3"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--Row 5 (INHIBITOR - Bleed/BleedDown)
-           android:visibility="@{functionMode.equals(`layoutInhibitorBleedDown`) ? View.VISIBLE : View.GONE}"-->
-            <TableRow
-                android:id="@+id/outputRow5_inhibitor_bleed"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="@{functionMode.equals(`layoutInhibitorBleedDown`) ? View.VISIBLE : View.GONE}">
-
-                <!--Link bleed relay-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/Linkbleed_bleed_os"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/Linkbleed_bleed_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Link Bleed Relay" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Specific gravity-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/specific_bleed_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/specific_bleed_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Specific Gravity"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="3"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Bleed Flow Rate-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/bleed_flow_bleed_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/bleed_flow_bleed_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Bleed Flow Rate"
-                        android:imeOptions="actionDone"
-                        android:inputType="number"
-                        android:maxLength="10"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--*********************************************************************************************-->
-
-            <!--Row 6 (Inhibitor - Water Meter/ Biocide)
-           android:visibility="@{functionMode.equals(`layoutInhibitorWaterFlow`) ? View.VISIBLE : View.GONE}" -->
-            <TableRow
-                android:id="@+id/outputRow6_inhibitor_water"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="@{functionMode.equals(`layoutInhibitorWaterFlow`) ? View.VISIBLE : View.GONE}">
-
-                <!--Flow Rate-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/flowRate_water_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/flowRate_water_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Pump Flow Rate"
-                        android:imeOptions="actionNext"
-                        android:inputType="numberDecimal"
-                        android:maxLength="13"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--PPM-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/targetPPM_water_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/targetPPM_water_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Target PPM"
-                        android:imeOptions="actionNext"
-                        android:inputType="numberDecimal"
-                        android:maxLength="11"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Concentration-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/concentration_water_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/concentration_water_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Concentration"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="3"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--Row 7 (Inhibitor - Water Meter/ Biocide)
-           android:visibility="@{functionMode.equals(`layoutInhibitorWaterFlow`) ? View.VISIBLE : View.GONE}" -->
-            <TableRow
-                android:id="@+id/outputRow7_inhibitor_water"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="@{functionMode.equals(`layoutInhibitorWaterFlow`) ? View.VISIBLE : View.GONE}">
-
-                <!--Bleed Relay-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/bleed_relay_os"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/bleed_relay_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Link Bleed Relay" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Gravity-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/Gravity_water_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/Gravity_water_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Specific Gravity"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="3"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Flow Meter Input-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/flowMeterInput_water_os"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/flowMeterInput_water_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="false"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Flow Meter Input"
-                        android:imeOptions="actionDone" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--*********************************************************************************************-->
-
-            <!--Row 8 (Sensor - On/Off)
-           android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}" -->
-            <TableRow
-                android:id="@+id/outputRow8_sensor_onOff"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}">
-
-                <!--set Point-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/setPoint_sensor_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/targetPPM_onOFf_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Set Point"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="4"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Dose Type-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/doseType_sensor_os"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/doseType_sensor_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Dose Type" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Hysteresis-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/hysteresis_sensor_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/hysteresis_sensor_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Hysteresis"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="5"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--Row 9 (Sensor - On/Off)
-           android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}" -->
-            <TableRow
-                android:id="@+id/outputRow9_sensor_onOff"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}">
-
-                <!--Dose Cycle-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/doseCycle_sensor_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/dutyCycle_sensor_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Duty Cycle"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="3"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Safety Min-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/safetyMin_sensor_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/safetyMin_sensor_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Safety Min"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="7"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Safety Max-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/safetyMax_sensor_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/safetyMax_sensor_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Safety Max"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="7"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--Row 10 (Sensor - On/Off)
-          android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}" -->
-            <TableRow
-                android:id="@+id/outputRow10_sensor_onOff"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}">
-
-                <!--LockOut Time Delay-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/lockOutTimeDelay_sensor_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/lockOutTimeDelay_sensor_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="lockOut Time Delay"
-                        android:imeOptions="actionDone"
-                        android:inputType="number"
-                        android:maxLength="6"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Link Input-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/linkInput_sensor_os"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/linkInput_onOff_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Link Input Sensor" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--*********************************************************************************************-->
-
-            <!--Row 11 (Sensor - PID)
-           android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}"-->
-            <TableRow
-                android:id="@+id/outputRow11_sensor_PID"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}">
-
-                <!--Set Point-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/setPoint_pid_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/setPoint_pid_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Set Point"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="6"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Gain-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/gain_pid_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/gain_pid_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Gain"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="6"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Integeral Time-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/integeral_pid_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/integeral_pid_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Integral Time"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Derivative Time-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/derivative_pid_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/derivative_pid_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Derivative Time"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--Row 12 (Sensor - PID)
-          android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}"-->
-            <TableRow
-                android:id="@+id/outputRow12_sensor_PID"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}">
-
-                <!--Input Min-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/input_pid_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/inputMin_pid_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Input Min"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Input Max-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/inputMax_pid_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/inputMax_pid_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Input Max"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Output Min-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/outputMin_pid_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/outputMin_pid_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Output Min"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Output Max-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/outputMax_pid_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/outputMax_pid_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Output Max"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--Row 13 (Sensor - PID)
-         android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}"-->
-            <TableRow
-                android:id="@+id/outputRow13_sensor_PID"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}">
-
-                <!--Safety Min-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/safetyMin_pid_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/safetyMin_pid_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Safety Min"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="6"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Safety Max-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/safetyMax_pid_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/safetyMax_pid_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Safety Max"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="6"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Reset PID Integeral-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/resetPid_pid_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/resetPid_pid_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Reset PID Integral"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Lockout Delay-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/lockOutDelay_pid_os"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/lockOutDelay_pid_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Lockout Delay"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="3"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--Row 14 (Sensor - PID)
-         android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}"-->
-            <TableRow
-                android:id="@+id/outputRow14_sensor_PID"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}">
-
-                <!--Dose Type-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/doseType_pid_os"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/doseType_pid_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Dose Type" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Link Input-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/linkInput_pid_os"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/linkInput_pid_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Link Input Sensor" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--*********************************************************************************************-->
-
-            <!--Row 15 (Analog - probe/pump/dosing)
-                    android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}"-->
-            <TableRow
-                android:id="@+id/outputRow15_analog_main"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}">
-
-                <!--Link Input Delay-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/linkOut_outputMain"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/linkOut_analog_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Link Input Delay" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--min mA-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/minmA_outputMain"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/minmA_analog_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Min mA"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="6"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--max mA-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/maxmA_outputMain"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/maxmA_analog_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Max mA"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="6"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--Row 16 (Analog - probe/pump/dosing)
-                   android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}"-->
-            <TableRow
-                android:id="@+id/outputRow16_analog_main"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}">
-
-                <!--min value-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/minValue_outputMain"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/minValue_analog_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Min Value"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="6"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--max value-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/maxValue__outputMain"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/maxValue_analog_osATXT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Max Value"
-                        android:imeOptions="actionDone"
-                        android:inputType="number"
-                        android:maxLength="6"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--*********************************************************************************************-->
-
-            <!--Row 17 (Analog - test)
-                   android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}"-->
-            <TableRow
-                android:id="@+id/outputRow17_analog_test"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="@{functionMode.equals(`layoutAnalogTest`) ? View.VISIBLE : View.GONE}">
-
-                <!--Link OutPut Delay-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/linkOut_AnalogTest"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/linkOut_analog_test_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Link Input Relay" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--fixed_value_test-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/fixed_value_AnalogTest"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/fixed_value_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Fixed Value"
-                        android:imeOptions="actionDone"
-                        android:inputType="number"
-                        android:maxLength="4"
-                        android:maxLines="@integer/material_motion_duration_long_1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--*********************************************************************************************-->
-
-            <!--Row 18 (Analog - Disabled)
-                   android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}"-->
-            <TableRow
-                android:id="@+id/outputRow18_analog_disabled"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:weightSum="3"
-                android:visibility="@{functionMode.equals(`layoutAnalogDisable`) ? View.VISIBLE : View.GONE}">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:text="DISABLED"
-                    android:layout_weight="1"/>
-
-            </TableRow>
-
-            <!--*********************************************************************************************-->
-
-            <!--Row U/D save Btn-->
-            <TableRow
-                android:id="@+id/outputRow_save"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <!--saveLayout-->
-                <LinearLayout
-                    android:id="@+id/saveLayout_output"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!--Output Label-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/output_label_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/outputLabel_osEDT"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:hint="Output Label"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName"
+                    android:maxLines="1" />
 
-                    <TextView
-                        android:id="@+id/save_txt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="5dp"
-                        android:gravity="center_vertical"
-                        android:text="Save"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/saveFab_output"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:background="@color/colorSecondary"
-                        android:backgroundTint="@color/colorSecondary"
-                        android:src="@drawable/ic_round_right"
-                        app:maxImageSize="50dp"
-                        app:tint="@color/black" />
+            <!--Function Mode-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/functionMode_os"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/funtionMode_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Function Mode" />
 
 
-                </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            </TableRow>
+            <!--Mode-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/mode_os"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
 
-        </TableLayout>
+                <AutoCompleteTextView
+                    android:id="@+id/mode_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Mode" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+
+        <!--Row 2-->
+        <LinearLayout
+            android:id="@+id/outputRow2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!--Interlock Channel-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/output_interLockChannel_os"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/interLockChannel_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Interlock Channel" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Activate Channel-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/output_activateChannel_os"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/activateChannel_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Activate With Channel" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 3 (INHIBITOR - continuous)
+        android:visibility="@{functionMode.equals(`layoutInhibitorContinuous`) ? View.VISIBLE : View.GONE}" -->
+        <LinearLayout
+            android:id="@+id/outputRow3_inhibitor_cont"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutInhibitorContinuous`) ? View.VISIBLE : View.GONE}">
+
+            <!--Flow Rate-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/cont_flowRate_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/flowRate_cont_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Flow Rate"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
+                    android:maxLength="13"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Dose Rate-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/doseRate_cont_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/doseRate_cont_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Dose Rate"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
+                    android:maxLength="13"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Dose Period-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dosePeriod_cont_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dosePeriod_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Dose Period"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--*********************************************************************************************-->
+
+        <!--Row 4 (INHIBITOR - Bleed/BleedDown)
+        android:visibility="@{functionMode.equals(`layoutInhibitorBleedDown`) ? View.VISIBLE : View.GONE}"-->
+        <LinearLayout
+            android:id="@+id/outputRow4_inhibitor_bleed"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutInhibitorBleedDown`) ? View.VISIBLE : View.GONE}">
+
+            <!--Pump Flow Rate-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/flowRate_bleed_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/flowRate_bleed_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Pump Flow Rate"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="13"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Target PPM-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/targetppm_bleed_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/targetppm_bleed_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Target PPM"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Concentration-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/concentration_bleed_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/concentration_bleed_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Concentration"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 5 (INHIBITOR - Bleed/BleedDown)
+       android:visibility="@{functionMode.equals(`layoutInhibitorBleedDown`) ? View.VISIBLE : View.GONE}"-->
+        <LinearLayout
+            android:id="@+id/outputRow5_inhibitor_bleed"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutInhibitorBleedDown`) ? View.VISIBLE : View.GONE}">
+
+            <!--Link bleed relay-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/Linkbleed_bleed_os"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/Linkbleed_bleed_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Link Bleed Relay" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Specific gravity-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/specific_bleed_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/specific_bleed_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Specific Gravity"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Bleed Flow Rate-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/bleed_flow_bleed_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/bleed_flow_bleed_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Bleed Flow Rate"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--*********************************************************************************************-->
+
+        <!--Row 6 (Inhibitor - Water Meter/ Biocide)
+       android:visibility="@{functionMode.equals(`layoutInhibitorWaterFlow`) ? View.VISIBLE : View.GONE}" -->
+        <LinearLayout
+            android:id="@+id/outputRow6_inhibitor_water"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutInhibitorWaterFlow`) ? View.VISIBLE : View.GONE}">
+
+            <!--Flow Rate-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/flowRate_water_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/flowRate_water_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Pump Flow Rate"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
+                    android:maxLength="13"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--PPM-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/targetPPM_water_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/targetPPM_water_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Target PPM"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
+                    android:maxLength="11"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Concentration-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/concentration_water_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/concentration_water_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Concentration"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 7 (Inhibitor - Water Meter/ Biocide)
+       android:visibility="@{functionMode.equals(`layoutInhibitorWaterFlow`) ? View.VISIBLE : View.GONE}" -->
+        <LinearLayout
+            android:id="@+id/outputRow7_inhibitor_water"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutInhibitorWaterFlow`) ? View.VISIBLE : View.GONE}">
+
+            <!--Bleed Relay-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/bleed_relay_os"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/bleed_relay_tie"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Link Bleed Relay" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Gravity-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/Gravity_water_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/Gravity_water_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Specific Gravity"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Flow Meter Input-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/flowMeterInput_water_os"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/flowMeterInput_water_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="false"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Flow Meter Input"
+                    android:imeOptions="actionDone" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--*********************************************************************************************-->
+
+        <!--Row 8 (Sensor - On/Off)
+       android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}" -->
+        <LinearLayout
+            android:id="@+id/outputRow8_sensor_onOff"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}">
+
+            <!--set Point-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/setPoint_sensor_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/targetPPM_onOFf_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Set Point"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Dose Type-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/doseType_sensor_os"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/doseType_sensor_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Dose Type" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Hysteresis-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/hysteresis_sensor_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/hysteresis_sensor_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Hysteresis"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 9 (Sensor - On/Off)
+       android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}" -->
+        <LinearLayout
+            android:id="@+id/outputRow9_sensor_onOff"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}">
+
+            <!--Dose Cycle-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/doseCycle_sensor_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dutyCycle_sensor_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Duty Cycle"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Safety Min-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/safetyMin_sensor_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/safetyMin_sensor_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Safety Min"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="7"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Safety Max-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/safetyMax_sensor_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/safetyMax_sensor_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Safety Max"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="7"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 10 (Sensor - On/Off)
+      android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}" -->
+        <LinearLayout
+            android:id="@+id/outputRow10_sensor_onOff"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}">
+
+            <!--LockOut Time Delay-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lockOutTimeDelay_sensor_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/lockOutTimeDelay_sensor_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="lockOut Time Delay"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Link Input-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/linkInput_sensor_os"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/linkInput_onOff_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Link Input Sensor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--*********************************************************************************************-->
+
+        <!--Row 11 (Sensor - PID)
+       android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}"-->
+        <LinearLayout
+            android:id="@+id/outputRow11_sensor_PID"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}">
+
+            <!--Set Point-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/setPoint_pid_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/setPoint_pid_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Set Point"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Gain-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/gain_pid_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/gain_pid_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Gain"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Integeral Time-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/integeral_pid_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/integeral_pid_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Integral Time"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Derivative Time-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/derivative_pid_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/derivative_pid_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Derivative Time"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 12 (Sensor - PID)
+      android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}"-->
+        <LinearLayout
+            android:id="@+id/outputRow12_sensor_PID"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}">
+
+            <!--Input Min-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_pid_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputMin_pid_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Input Min"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Input Max-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputMax_pid_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputMax_pid_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Input Max"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Output Min-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/outputMin_pid_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/outputMin_pid_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Output Min"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Output Max-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/outputMax_pid_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/outputMax_pid_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Output Max"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 13 (Sensor - PID)
+     android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}"-->
+        <LinearLayout
+            android:id="@+id/outputRow13_sensor_PID"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}">
+
+            <!--Safety Min-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/safetyMin_pid_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/safetyMin_pid_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Safety Min"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Safety Max-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/safetyMax_pid_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/safetyMax_pid_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Safety Max"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Reset PID Integeral-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/resetPid_pid_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/resetPid_pid_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Reset PID Integral"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Lockout Delay-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lockOutDelay_pid_os"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/lockOutDelay_pid_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Lockout Delay"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 14 (Sensor - PID)
+     android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}"-->
+        <LinearLayout
+            android:id="@+id/outputRow14_sensor_PID"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}">
+
+            <!--Dose Type-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/doseType_pid_os"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/doseType_pid_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Dose Type" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Link Input-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/linkInput_pid_os"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/linkInput_pid_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Link Input Sensor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--*********************************************************************************************-->
+
+        <!--Row 15 (Analog - probe/pump/dosing)
+                android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}"-->
+        <LinearLayout
+            android:id="@+id/outputRow15_analog_main"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}">
+
+            <!--Link Input Delay-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/linkOut_outputMain"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/linkOut_analog_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Link Input Delay" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--min mA-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/minmA_outputMain"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/minmA_analog_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Min mA"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--max mA-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/maxmA_outputMain"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/maxmA_analog_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Max mA"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 16 (Analog - probe/pump/dosing)
+               android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}"-->
+        <LinearLayout
+            android:id="@+id/outputRow16_analog_main"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}">
+
+            <!--min value-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/minValue_outputMain"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/minValue_analog_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Min Value"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--max value-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/maxValue__outputMain"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/maxValue_analog_osATXT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Max Value"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--*********************************************************************************************-->
+
+        <!--Row 17 (Analog - test)
+               android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}"-->
+        <LinearLayout
+            android:id="@+id/outputRow17_analog_test"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutAnalogTest`) ? View.VISIBLE : View.GONE}">
+
+            <!--Link OutPut Delay-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/linkOut_AnalogTest"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/linkOut_analog_test_tie"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Link Input Relay" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--fixed_value_test-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fixed_value_AnalogTest"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fixed_value_tie"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Fixed Value"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:maxLines="@integer/material_motion_duration_long_1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--*********************************************************************************************-->
+
+        <!--Row 18 (Analog - Disabled)
+               android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}"-->
+        <LinearLayout
+            android:id="@+id/outputRow18_analog_disabled"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutAnalogDisable`) ? View.VISIBLE : View.GONE}">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="DISABLED" />
+
+        </LinearLayout>
+
+        <!--*********************************************************************************************-->
+
+        <!--Row U/D save Btn-->
+        <LinearLayout
+            android:id="@+id/outputRow_save"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!--saveLayout-->
+            <LinearLayout
+                android:id="@+id/saveLayout_output"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/save_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:gravity="center_vertical"
+                    android:text="Save"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/saveFab_output"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@color/colorSecondary"
+                    android:backgroundTint="@color/colorSecondary"
+                    android:src="@drawable/ic_round_right"
+                    app:maxImageSize="50dp"
+                    app:tint="@color/black" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 </layout>

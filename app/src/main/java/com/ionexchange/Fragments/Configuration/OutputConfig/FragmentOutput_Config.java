@@ -85,7 +85,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         Log.e(TAG, "onViewCreated: " + outputSensorNo);
         dao = db.outputConfigurationDao();
 
-
         initAdapter();
         enableDisabled();
         mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(1).toString());
@@ -198,6 +197,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
                 } else {
                     Toast.makeText(mAppClass, "Analog Output", Toast.LENGTH_SHORT).show();
+                    mBinding.outputLabelOs.setEnabled(false);
                     mBinding.outputRow2.setVisibility(View.GONE);
                     mBinding.functionModeOs.setEnabled(false);
                     mBinding.modeOs.setEnabled(false);

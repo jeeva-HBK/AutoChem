@@ -21,6 +21,7 @@ import com.ionexchange.databinding.FragmentUnitipsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_panelIpConfig;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
@@ -65,7 +66,7 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
 
     private void readData() {
         mActivity.showProgress();
-        mAppclass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_panelIpConfig);
+        mAppclass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_panelIpConfig);
     }
 
 
@@ -135,7 +136,7 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
             mAppclass.showSnackBar(getContext(), "TimeOut");
         }
         if (data != null) {
-            handleData(data.split("\\*")[1].split("#"));
+            handleData(data.split("\\*")[1].split(SPILT_CHAR));
         }
 
     }

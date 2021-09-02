@@ -160,6 +160,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 // root
                 mBinding.flowInputNoRoot.setEnabled(false);
                 mBinding.flowSensorTypeRoot.setEnabled(false);
+                mBinding.flowSensorActivationRoot.setEnabled(false);
                 mBinding.flowSensorTypeRoot.setEnabled(false);
                 mBinding.flowFlowMeterTypeRoot.setEnabled(false);
                 mBinding.flowFlowUnitRoot.setEnabled(false);
@@ -177,7 +178,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 // contactor
                 mBinding.flowVolumeContactor.setEnabled(false);
 
-                //paddle wheel//
+                //paddle wheel
                 mBinding.flowRateUnitPaddle.setEnabled(false);
                 mBinding.flowKFactorPaddle.setEnabled(false);
 
@@ -580,8 +581,6 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
             mBinding.flowDeleteLayout.setVisibility(View.INVISIBLE);
             mBinding.saveTxt.setText("ADD");
         }
-
-
     }
 
     @Override
@@ -594,10 +593,10 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
 
     private void handleResponse(String[] splitData) {
         /* READ_RES */
-        //  - Analog->      {*1# 04# 0# | 07# 03# 0# 0# AnalogInput1# 1# | 1000# 1500# 3000# 100# 2000# 4000# 1# 1200# 120000# 240000# 333# 1*}
-        //  - Contactor->   {*1# 04# 0# | 07# 03# 1# 0# DigitalInput2# 1#| 100000# 2000# 4000# 4000# 1# 120000# 240000*}
-        //  - paddle wheel->{*1# 04# 0# | 07# 03# 2# 0# DigitalInput2# 1#| 1000# 80# 2000# 4000# 4000# 1# 120000# 240000*}
-        //  - FeedMonitor ->{*1# 04# 0# | 07# 03# 3# 0# DigitalInput2# 1#| 1000# 01# 01# 2230# 240000# 00# 2000# 4000# 4000# 1# 120000# 240000*}
+        //  - Analog      -> {*1# 04# 0# | 07# 03# 0# 0# AnalogInput1# 1# | 1000# 1500# 3000# 100# 2000# 4000# 1# 1200# 120000# 240000# 333# 1*}
+        //  - Contactor   -> {*1# 04# 0# | 07# 03# 1# 0# DigitalInput2# 1#| 100000# 2000# 4000# 4000# 1# 120000# 240000*}
+        //  - paddle wheel-> {*1# 04# 0# | 07# 03# 2# 0# DigitalInput2# 1#| 1000# 80# 2000# 4000# 4000# 1# 120000# 240000*}
+        //  - FeedMonitor -> {*1# 04# 0# | 07# 03# 3# 0# DigitalInput2# 1#| 1000# 01# 01# 2230# 240000# 00# 2000# 4000# 4000# 1# 120000# 240000*}
 
         splitData = "{*1#04#0#07#03#0#0#AnalogInput1#1#1000#1500#3000#100#2000#4000#1#1200#120000#240000#333#1*}".split("\\*")[1].split("#");
         if (splitData[1].equals(INPUT_SENSOR_CONFIG)) {

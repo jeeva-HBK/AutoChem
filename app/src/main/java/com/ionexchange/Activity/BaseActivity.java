@@ -43,7 +43,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     // Exit Focus
-    @Override
+    /*@Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         View v = getCurrentFocus();
 
@@ -67,7 +67,7 @@ public class BaseActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
         }
-    }
+    }*/
 
     public void showProgress() {
         mBinding.progressCircular.setVisibility(View.VISIBLE);

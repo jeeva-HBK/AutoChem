@@ -58,4 +58,49 @@
         <item name="android:textSize">25sp</item>
     </style>
 
+    <style name="config_EdTil" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
+        </item>
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="endIconTint">@color/primary</item>
+        <item name="android:textColorHint">@color/primary</item>
+    </style>
+
+    <style name="config_Edt">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="maxLines">1</item>
+    </style>
+
+    <style name="config_AtxTil" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
+        </item>
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="endIconTint">@color/primary</item>
+        <item name="android:textColorHint">@color/primary</item>
+        <item name="android:clickable">false</item>
+        <item name="android:editable">false</item>
+    </style>
+
+    <style name="config_Atxt">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:editable">false</item>
+    </style>
+
+    <style name="config_rowLl">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
 </resources>

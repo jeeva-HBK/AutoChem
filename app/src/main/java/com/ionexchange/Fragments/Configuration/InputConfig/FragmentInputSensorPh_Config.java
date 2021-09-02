@@ -80,6 +80,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         mAppClass = (ApplicationClass) getActivity().getApplication();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
+
         switch (userType) {
             case 1:
                 mBinding.pHTemperatureSensorLinked.setVisibility(View.GONE);
@@ -320,7 +321,6 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             mBinding.DeleteLayoutInputSettings.setVisibility(View.INVISIBLE);
             mBinding.saveTxt.setText("ADD");
         }
-
     }
 
     private void handleResponce(String[] splitData) {

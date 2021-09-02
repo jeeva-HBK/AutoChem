@@ -1,7 +1,6 @@
 package com.ionexchange.Fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +12,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
-import com.ionexchange.Fragments.MainScreen.FragmentSensorDetails;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentMainhostBinding;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static com.ionexchange.Others.PacketControl.ADMIN;
 import static com.ionexchange.Others.PacketControl.APP_VERSION;
@@ -58,7 +51,7 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
         // Connect_Packet
 
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_connectPacket + SPILT_CHAR + APP_VERSION + SPILT_CHAR + CONNECT_COMMAND + ADMIN);
-        setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentSensorDetails(), "Dashboard");
+        setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentRoot_MainScreen(), "Dashboard");
     }
 
     private void castFrag(Fragment fragment) {
@@ -110,7 +103,7 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
         // mActivity.changeProgress(View.VISIBLE);
         switch (v.getId()) {
             case R.id.main_screen_btn:
-                setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentSensorDetails(), "Dashboard");
+                setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentRoot_MainScreen(), "Dashboard");
                 break;
 
             case R.id.trend_screen_btn:

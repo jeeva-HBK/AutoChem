@@ -65,7 +65,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_inputsensor_orp, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_inputsensor_ph, container, false);
         return mBinding.getRoot();
     }
 
@@ -254,7 +254,6 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
 
     }
 
-
     boolean validation() {
         if (isEmpty(mBinding.orpSmoothingFactorISEDT)) {
             mAppClass.showSnackBar(getContext(), "Smoothing Factor Cannot be Empty");
@@ -280,7 +279,6 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
         }
         return true;
     }
-
 
     private Boolean isEmpty(EditText editText) {
         if (editText.getText() == null || editText.getText().toString().equals("")) {

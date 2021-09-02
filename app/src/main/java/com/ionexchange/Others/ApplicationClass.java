@@ -75,6 +75,7 @@ public class ApplicationClass extends Application {
 
     /* Static Variables */
     static String mIPAddress = "192.168.1.107", Packet;
+    //static String mIPAddress = "192.168.2.37", Packet;
     static int mPortNumber = 9760;
 
     public static CountDownTimer packetTimeOut;

@@ -123,7 +123,6 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         mBinding.AccessoryCheckbox3.setOnClickListener(this);
         mBinding.AccessoryCheckbox4.setOnClickListener(this);
 
-
         mBinding.switchBtnWeek.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -2342,4 +2341,3 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
 
     }
 }
-
