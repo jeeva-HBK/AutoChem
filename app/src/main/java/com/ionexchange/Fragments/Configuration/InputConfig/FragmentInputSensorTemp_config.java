@@ -33,7 +33,7 @@ import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_FAILED;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
@@ -126,7 +126,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
 
     void sendData(int sensorStatus){
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
                 toString(2, mBinding.inputNumberTempISEDT) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.sensorTypeTempISATXT), inputTypeArr) + SPILT_CHAR +
                 getPosition(0, toString(mBinding.sensorActivationTempISATXT), sensorActivationArr) + SPILT_CHAR +
@@ -183,7 +183,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         super.onResume();
         if (sensorName == null) {
             mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + inputNumber);
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + inputNumber);
         } else {
             mBinding.inputNumberTempISEDT.setText(inputNumber);
             mBinding.sensorTypeTempISATXT.setText(sensorName);
@@ -217,7 +217,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     private void handleResponse(String[] splitData) {
         // Read RES - {1# 04# 0# |05# 02# 1# TEMPPH# 33# 100# 120000# 240000# 320# 1}
         // Write Res -
-        if (splitData[1].equals(INPUT_SENSOR_CONFIG)) {
+        if (splitData[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
                     mBinding.inputNumberTempISEDT.setText(splitData[3]);

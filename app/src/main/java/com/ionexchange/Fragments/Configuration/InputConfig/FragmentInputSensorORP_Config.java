@@ -32,7 +32,7 @@ import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_FAILED;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
@@ -132,7 +132,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     void sendData(int sensorStatus) {
         mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
-                INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
                 toString(2, mBinding.orpInputNumberInputSettingsEDT) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.orpSensorTypeEDT), inputTypeArr) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.orpSensorActISEDT), sensorActivationArr) + SPILT_CHAR +
@@ -186,7 +186,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
         super.onResume();
         if (sensorName == null) {
             mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "02");
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + "02");
         } else {
             mBinding.orpInputNumberInputSettingsEDT.setText(inputNumber);
             mBinding.orpSensorTypeEDT.setText(sensorName);
@@ -219,7 +219,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     private void handleResponse(String[] data) {
         // Read - Res - 1# 04# 0# | 02# 1# 1# ORP# 10# 500# 1000# 20# 0
         // Write - Res -
-        if (data[1].equals(INPUT_SENSOR_CONFIG)) {
+        if (data[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
             if (data[0].equals(READ_PACKET)) {
                 if (data[2].equals(RES_SUCCESS)) {
 

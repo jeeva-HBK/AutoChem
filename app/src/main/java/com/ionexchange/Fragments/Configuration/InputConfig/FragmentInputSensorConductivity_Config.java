@@ -7,7 +7,7 @@ import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
 import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
 import static com.ionexchange.Others.ApplicationClass.unitArr;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_FAILED;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
@@ -121,7 +121,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     void sendDataLinearTemperature(int sensorStatus) {
         mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
-                INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
                 toString(2, mBinding.inputNumberCondISEDT) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.sensorTypeCondISATXT), inputTypeArr) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.sensorActivationCondISATXT), sensorActivationArr) + SPILT_CHAR +
@@ -144,7 +144,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     void sendStandardNaClTemperature(int sensorStatus) {
         mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
-                INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
                 toString(2, mBinding.inputNumberCondISEDT) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.sensorTypeCondISATXT), inputTypeArr) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.sensorActivationCondISATXT), sensorActivationArr) + SPILT_CHAR +
@@ -251,7 +251,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
 
         if (sensorName == null) {
             mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + INPUT_SENSOR_CONFIG + SPILT_CHAR + "03");
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + "03");
         } else {
             mBinding.inputNumberCondISEDT.setText(inputNumber);
             mBinding.sensorTypeCondISATXT.setText(sensorName);
@@ -285,7 +285,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     private void handleResponse(String[] spiltData) {
         // read Res - {*1# 04# 0# | 03# 04# 0# CONCON# 1# 33# 1# 2345# 2371# 1500# 100# 120000# 220000# 300# 1*}
         // write Res -
-        if (spiltData[1].equals(INPUT_SENSOR_CONFIG)) {
+        if (spiltData[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
 
             if (spiltData[0].equals(READ_PACKET)) {
                 if (spiltData[2].equals(RES_SUCCESS)) {
