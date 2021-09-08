@@ -104,4 +104,54 @@
         <item name="android:gravity">center</item>
         <item name="android:orientation">horizontal</item>
     </style>
+
+
+    <style name="config_rowll_Zero">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+
+    <style name="config_Til_Zero" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
+        </item>
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="endIconTint">@color/primary</item>
+        <item name="android:textColorHint">@color/primary</item>
+    </style>
+
+    <style name="config_Edt_zero">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="maxLines">1</item>
+    </style>
+
+    <style name="config_Atxt_Zero">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:editable">false</item>
+        <item name="android:focusableInTouchMode">false</item>
+    </style>
+
+    <style name="config_AtxTil_zero" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
+        </item>
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="endIconTint">@color/primary</item>
+        <item name="android:textColorHint">@color/primary</item>
+        <item name="android:clickable">false</item>
+        <item name="android:editable">false</item>
+    </style>
+
 </resources>

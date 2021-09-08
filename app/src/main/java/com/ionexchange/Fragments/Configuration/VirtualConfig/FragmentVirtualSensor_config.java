@@ -1,5 +1,20 @@
 package com.ionexchange.Fragments.Configuration.VirtualConfig;
 
+import static com.ionexchange.Others.ApplicationClass.calculationArr;
+import static com.ionexchange.Others.ApplicationClass.findDecimal;
+import static com.ionexchange.Others.ApplicationClass.formDigits;
+import static com.ionexchange.Others.ApplicationClass.inputSensors;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.VIRTUAL_INPUT;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,21 +41,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.ionexchange.Others.ApplicationClass.calculationArr;
-import static com.ionexchange.Others.ApplicationClass.findDecimal;
-import static com.ionexchange.Others.ApplicationClass.formDigits;
-import static com.ionexchange.Others.ApplicationClass.inputSensors;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.userType;
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.VIRTUAL_INPUT;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentVirtualSensor_config extends Fragment implements DataReceiveCallback {
     FragmentVirtualsensorConfigBinding mBinding;
@@ -76,7 +76,6 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
                 mBinding.highRangeVi.setEnabled(false);
                 mBinding.lowAlarmVi.setEnabled(false);
                 mBinding.highAlarmVi.setEnabled(false);
-
                 mBinding.vsRow1Isc.setVisibility(View.GONE);
                 mBinding.vsRow2Isc.setVisibility(View.GONE);
                 mBinding.vsRow4Isc.setVisibility(View.GONE);
@@ -90,18 +89,18 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
                 mBinding.calculationVi.setVisibility(View.GONE);
                 mBinding.sensorActivationVi.setVisibility(View.GONE);
                 mBinding.vsRow2Isc.setVisibility(View.GONE);
-                mBinding.DeleteLayoutInputSettings.setVisibility(View.GONE);
+
                 break;
 
             case 3:
 
                 break;
         }
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + VIRTUAL_INPUT + SPILT_CHAR + sensorInputNo);
+
         initAdapters();
         mBinding.saveFabInputSettings.setOnClickListener(this::save);
         mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
-        mBinding.DeleteFabInputSettings.setOnClickListener(this::delete);
+
 
         mBinding.toolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,14 +122,14 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
                     getPosition(0, toString(mBinding.sensorActivationViEDT), sensorActivationArr) + SPILT_CHAR +
                     toString(0, mBinding.labelViEDT) + SPILT_CHAR +
                     formDigits(2, (Integer.parseInt(getPosition(2, toString(mBinding.sensor1ViATXT), inputSensors)) + 1) + "") + SPILT_CHAR +
-                    toStringSplit(6, 2, mBinding.sensor1ConstantViEDT) + SPILT_CHAR +
+                    toString(7, mBinding.sensor1ConstantViEDT) + "." + toString(2, mBinding.sensor1ConstantDec) + SPILT_CHAR +
                     formDigits(2, (Integer.parseInt(getPosition(2, toString(mBinding.sensor2ViATXT), inputSensors)) + 1) + "") + SPILT_CHAR +
-                    toStringSplit(6, 2, mBinding.sensor2ConstantViEDT) + SPILT_CHAR +
+                    toString(7, mBinding.sensor2ConstantViEDT) + "." + toString(2, mBinding.sensor2ConstantDec) + SPILT_CHAR +
                     toString(4, mBinding.lowRangeViEDT) + SPILT_CHAR +
                     toString(4, mBinding.highRangeViEDT) + SPILT_CHAR +
                     toString(3, mBinding.smoothingFactorViEDT) + SPILT_CHAR +
-                    toStringSplit(4, 2, mBinding.lowAlarmViEDT) + SPILT_CHAR +
-                    toStringSplit(4, 2, mBinding.highAlarmViEDT) + SPILT_CHAR +
+                    toString(7, mBinding.lowAlarmViEDT) + "." + toString(2, mBinding.lowAlarmViDec) + SPILT_CHAR +
+                    toString(7, mBinding.highAlarmViEDT) + "." + toString(2, mBinding.highAlarmDec) + SPILT_CHAR +
                     getPosition(0, toString(mBinding.calculationViEDT), calculationArr) + SPILT_CHAR + "1"
             );
         }
@@ -180,19 +179,11 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
         } else if (isEmpty(mBinding.sensor1ConstantViEDT)) {
             mAppClass.showSnackBar(getContext(), "Sensor Constant 1 cannot be Empty");
             return false;
-        } else if ((!mBinding.sensor1ConstantViEDT.getText().toString().contains(".") && mBinding.sensor1ConstantViEDT.getText().toString().length() > 6)
-                || (mBinding.sensor1ConstantViEDT.getText().toString().contains(".") && find_sixdigit_Decimal(mBinding.sensor1ConstantViEDT) == 1)) {
-            mAppClass.showSnackBar(getContext(), "Sensor Constant 1 decimal format like XXXXXX.XX");
-            return false;
         } else if (isEmpty(mBinding.sensor2ViATXT)) {
             mAppClass.showSnackBar(getContext(), "Please select Sensor 2 Input Number");
             return false;
         } else if (isEmpty(mBinding.sensor2ConstantViEDT)) {
             mAppClass.showSnackBar(getContext(), "Sensor Constant 2 cannot be Empty");
-            return false;
-        } else if ((!mBinding.sensor2ConstantViEDT.getText().toString().contains(".") && mBinding.sensor2ConstantViEDT.getText().toString().length() > 6)
-                || (mBinding.sensor2ConstantViEDT.getText().toString().contains(".") && find_sixdigit_Decimal(mBinding.sensor2ConstantViEDT) == 1)) {
-            mAppClass.showSnackBar(getContext(), "Sensor Constant 2 decimal format like XXXXXX.XX");
             return false;
         } else if (isEmpty(mBinding.lowRangeViEDT)) {
             mAppClass.showSnackBar(getContext(), "Low Range cannot be Empty");
@@ -205,14 +196,6 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
             return false;
         } else if (isEmpty(mBinding.highAlarmViEDT)) {
             mAppClass.showSnackBar(getContext(), "Alarm high cannot be Empty");
-            return false;
-        } else if ((!mBinding.lowAlarmViEDT.getText().toString().contains(".") && mBinding.lowAlarmViEDT.getText().toString().length() > 4)
-                || (mBinding.lowAlarmViEDT.getText().toString().contains(".") && findDecimal(mBinding.lowAlarmViEDT) == 1)) {
-            mAppClass.showSnackBar(getContext(), "Alarm low decimal format like XXXX.XX");
-            return false;
-        } else if ((!mBinding.highAlarmViEDT.getText().toString().contains(".") && mBinding.highAlarmViEDT.getText().toString().length() > 4)
-                || (mBinding.highAlarmViEDT.getText().toString().contains(".") && findDecimal(mBinding.highAlarmViEDT) == 1)) {
-            mAppClass.showSnackBar(getContext(), "Alarm high decimal format like XXXX.XX");
             return false;
         }
         return true;
@@ -243,28 +226,12 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
     public ArrayAdapter<String> getAdapter(String[] strArr) {
         return new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, strArr);
     }
-    public static Integer find_sixdigit_Decimal(EditText editText) {
-        int throwError = 0;
-        String[] findDecimalEdtTxt = editText.getText().toString().split("\\.");
-        try {
-            if (!editText.getText().toString().contains(".") && editText.getText().toString().length() > 6) {
-                return 1;
-            }else if (findDecimalEdtTxt[0].length() > 6) {
-                return 1;
-            } else if (findDecimalEdtTxt[1].isEmpty()) {
-                return 1;
-            } else if (findDecimalEdtTxt[1].length() > 2) {
-                return 1;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throwError = 1;
-        }
-        return throwError;
-    }
+
+
     @Override
     public void onResume() {
         super.onResume();
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + VIRTUAL_INPUT + SPILT_CHAR + sensorInputNo);
     }
 
     @Override
@@ -283,14 +250,18 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
                     mBinding.sensorActivationViEDT.setText(mBinding.sensorActivationViEDT.getAdapter().getItem(Integer.parseInt(spiltData[4])).toString());
                     mBinding.labelViEDT.setText(spiltData[5]);
                     mBinding.sensor1ViATXT.setText(mBinding.sensor1ViATXT.getAdapter().getItem(Integer.parseInt(spiltData[6]) - 1).toString());
-                    mBinding.sensor1ConstantViEDT.setText(spiltData[7].substring(0, 6) + "." + spiltData[13].substring(6, 8));
+                    mBinding.sensor1ConstantViEDT.setText(spiltData[7].substring(0, 7));
+                    mBinding.sensor1ConstantDec.setText(spiltData[7].substring(8, 10));
                     mBinding.sensor2ViATXT.setText(mBinding.sensor2ViATXT.getAdapter().getItem(Integer.parseInt(spiltData[8]) - 1).toString());
-                    mBinding.sensor2ConstantViEDT.setText(spiltData[9].substring(0, 6) + "." + spiltData[13].substring(6, 8));
+                    mBinding.sensor2ConstantViEDT.setText(spiltData[9].substring(0, 7));
+                    mBinding.sensor2ConstantDec.setText(spiltData[9].substring(8, 10));
                     mBinding.lowRangeViEDT.setText(spiltData[10]);
                     mBinding.highRangeViEDT.setText(spiltData[11]);
                     mBinding.smoothingFactorViEDT.setText(spiltData[12]);
-                    mBinding.lowAlarmViEDT.setText(spiltData[13].substring(0, 4) + "." + spiltData[13].substring(4, 6));
-                    mBinding.highAlarmViEDT.setText(spiltData[14].substring(0, 4) + "." + spiltData[14].substring(4, 6));
+                    mBinding.lowAlarmViEDT.setText(spiltData[13].substring(0, 7));
+                    mBinding.lowAlarmViDec.setText(spiltData[13].substring(8, 10));
+                    mBinding.highAlarmViEDT.setText(spiltData[14].substring(0, 7));
+                    mBinding.highAlarmDec.setText(spiltData[13].substring(8, 10));
                     mBinding.calculationViEDT.setText(mBinding.calculationViEDT.getAdapter().getItem(Integer.parseInt(spiltData[15])).toString());
 
                     initAdapters();
@@ -313,8 +284,8 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
     void virtualEntity() {
         VirtualConfigurationEntity virtualConfigurationEntity = new VirtualConfigurationEntity(
                 sensorInputNo, 0, toString(0, mBinding.labelViEDT),
-                toStringSplit(4, 2, mBinding.lowAlarmViEDT),
-                toStringSplit(4, 2, mBinding.highAlarmViEDT));
+                toString(7, mBinding.lowAlarmViEDT) + "." + toString(2, mBinding.lowAlarmViDec),
+                toString(7, mBinding.highAlarmViEDT) + "." + toString(2, mBinding.highAlarmDec));
         List<VirtualConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(virtualConfigurationEntity);
         updateToDb(entryListUpdate);

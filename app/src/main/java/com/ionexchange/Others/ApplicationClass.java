@@ -68,7 +68,7 @@ public class ApplicationClass extends Application {
             inputAnalogSensors = {"Input 1", "Input 2", "Input 3", "Input 4", "Input 5", "Input 6", "Input 7", "Input 8", "Input 9", "Input 10", "Input 11", "Input 12", "Input 13"},
             OutputBleedFlowRate = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14"},
 
-    TemperatureCompensationType = {"Linear temperature Compensation", "standard NaCl temperature compensation"},
+    TemperatureCompensationType = {"Linear", "Standard NaCl "},
 
     timerOutputMode = {"Timer", "Timer Flow", "Timer Disabled"},
             timerFlowSensor = {"Flow Sensor - 1", "Flow Sensor - 2", "Flow Sensor - 3", "Flow Sensor - 4", " Flow Sensor - 5", "Flow Sensor - 6",
@@ -166,7 +166,7 @@ public class ApplicationClass extends Application {
         mContext.unregisterReceiver(receiver);
     }
 
-
+    // Written by silambu
     public static String formDigits(int digits, String value) {
         String finalDigits = null;
         switch (digits) {

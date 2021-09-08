@@ -47,7 +47,7 @@ public class FragmentVirtualSensorList_Config extends Fragment implements RvOnCl
         if (dao.getVirtualConfigurationEntityList().isEmpty()) {
             for (int i = 46; i < 54; i++) {
                 VirtualConfigurationEntity entityUpdate = new VirtualConfigurationEntity
-                        (i,  0, "N/A",
+                        (i, 0, "N/A",
                                 "N/A", "N/A");
                 List<VirtualConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
@@ -70,6 +70,7 @@ public class FragmentVirtualSensorList_Config extends Fragment implements RvOnCl
         mBinding.viRv.setVisibility(View.GONE);
         mBinding.toolBar.setVisibility(View.GONE);
         getParentFragmentManager().beginTransaction().replace(mBinding.viHost.getId(), new FragmentVirtualSensor_config(sensorInputNo)).commit();
+
     }
 
     @Override

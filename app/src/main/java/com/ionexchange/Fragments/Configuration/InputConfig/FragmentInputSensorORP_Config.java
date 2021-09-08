@@ -251,8 +251,10 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
 
                     mBinding.orpInputNumberEdtIsc.setText(data[3]);
                     mBinding.orpSensorTypeAtxtIsc.setText(mBinding.orpSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(data[4])).toString());
-                    // sequenceNumber 5
+                    mBinding.orpSeqNumberAtxtIsc.setText(mBinding.orpSeqNumberAtxtIsc.getAdapter().getItem(Integer.parseInt(data[5])).toString());
+
                     mBinding.orpSensorActAtxtIsc.setText(mBinding.orpSensorActAtxtIsc.getAdapter().getItem(Integer.parseInt(data[6])).toString());
+
                     mBinding.orpInputLabelEdtIsc.setText(data[7]);
                     mBinding.orpSmoothingFactorEdtIsc.setText(data[8]);
 
