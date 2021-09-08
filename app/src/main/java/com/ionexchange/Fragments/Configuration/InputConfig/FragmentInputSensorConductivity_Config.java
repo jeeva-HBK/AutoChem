@@ -1,19 +1,5 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
-import static com.ionexchange.Others.ApplicationClass.TemperatureCompensationType;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
-import static com.ionexchange.Others.ApplicationClass.unitArr;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,12 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
@@ -41,6 +29,21 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ionexchange.Others.ApplicationClass.TemperatureCompensationType;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
+import static com.ionexchange.Others.ApplicationClass.unitArr;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentInputSensorConductivity_Config extends Fragment implements DataReceiveCallback {
     private static final String TAG = "FragmentInputSensorCond";
@@ -84,81 +87,87 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
         userManagement = 3;
         userManagement();
         initAdapters();
-        mBinding.saveFabInputSettings.setOnClickListener(this::save);
-        mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
-        mBinding.DeleteFabInputSettings.setOnClickListener(this::delete);
-        mBinding.DeleteLayoutInputSettings.setOnClickListener(this::delete);
+        mBinding.conSaveFabIsc.setOnClickListener(this::save);
+        mBinding.conDeleteFabIsc.setOnClickListener(this::delete);
 
-        mBinding.backArrow.setOnClickListener(v -> {
+        mBinding.conBackArrowIsc.setOnClickListener(v -> {
             mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
         });
     }
 
     private void delete(View view) {
         if (validation()) {
-            if (getPosition(1, toString(mBinding.tempCompensationAct), TemperatureCompensationType).equals("0")) {
+            if (getPosition(1, toString(mBinding.conCompensationAtxtIsc), TemperatureCompensationType).equals("0")) {
                 sendDataLinearTemperature(2);
             } else {
                 sendStandardNaClTemperature(2);
             }
-
         }
-
     }
 
     private void save(View view) {
         if (validation()) {
-            if (getPosition(1, toString(mBinding.tempCompensationAct), TemperatureCompensationType).equals("0")) {
+            if (getPosition(1, toString(mBinding.conCompensationAtxtIsc), TemperatureCompensationType).equals("0")) {
                 sendDataLinearTemperature(sensorStatus);
             } else {
                 sendStandardNaClTemperature(sensorStatus);
             }
-
         }
-
     }
 
     void sendDataLinearTemperature(int sensorStatus) {
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+                CONN_TYPE + SPILT_CHAR +
+                WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                toString(2, mBinding.inputNumberCondISEDT) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.sensorTypeCondISATXT), inputTypeArr) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.sensorActivationCondISATXT), sensorActivationArr) + SPILT_CHAR +
-                toString(0, mBinding.inputLabelCondISEdt) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.tempLinkedCondISEdt), tempLinkedArr) + SPILT_CHAR +
-                toString(2, mBinding.tempValueCondISEdt) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.unitOfMeasureCondISEdt), unitArr) + SPILT_CHAR +
-                toString(4, mBinding.cellConstantCondISEdt) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.tempCompensationAct), TemperatureCompensationType) + SPILT_CHAR +
-                toString(4, mBinding.tempCompFacCondISEdt) + SPILT_CHAR +
-                toString(3, mBinding.smoothingFactorCondISEdt) + SPILT_CHAR +
-                toStringSplit(4, 2, mBinding.alarmLowCondISEdt) +
-                SPILT_CHAR + toStringSplit(4, 2, mBinding.alarmHighCondISEdt) + SPILT_CHAR +
-                toString(3, mBinding.calibRequiredAlarmCondISEdt) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.resetCalibCondISEdt), resetCalibrationArr) + SPILT_CHAR +
+                toString(2, mBinding.conInputNumberEdtIsc) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.conSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.conSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
+                toString(0, mBinding.conInputLabelEdtIsc) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.conTempLinkedAtxtIsc), tempLinkedArr) + SPILT_CHAR +
+                getPlusMinusValue(mBinding.conDefaultTempValueTBtn, mBinding.conDefaultTemperatureEdtIsc, 3, mBinding.conDefaultTempDeciIsc, 2) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.conUnitOfMeasureAxtIsc), unitArr) + SPILT_CHAR +
+                toString(4, mBinding.conCellConstantEdtIsc) + SPILT_CHAR +
+                getPosition(0, toString(mBinding.conCompensationAtxtIsc), TemperatureCompensationType) + SPILT_CHAR +
+                toString(4, mBinding.conTempCompFacEdtIsc) + SPILT_CHAR +
+                toString(3, mBinding.conSmoothingFactorEdtIsc) + SPILT_CHAR +
+                getDecimalValue(mBinding.conAlarmLowEdtIsc, 6, mBinding.conAlarmLowDeciIsc, 2) +
+                getDecimalValue(mBinding.conAlarmhighEdtIsc, 6, mBinding.conHighAlarmDeciIsc, 2) + SPILT_CHAR +
+                toString(3, mBinding.conCalibRequiredAlarmEdtIsc) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.conResetCalibAtxtIsc), resetCalibrationArr) + SPILT_CHAR +
                 sensorStatus
         );
     }
 
+    String getDecimalValue(TextInputEditText prefixEdittext, int prefixDigit, EditText suffixEdittext, int suffixDigit) {
+        return toString(prefixDigit, prefixEdittext) + "." + toString(suffixDigit, suffixEdittext);
+    }
+
+    String getPlusMinusValue(ToggleButton toggleButton, TextInputEditText prefixEdt, int prefixDigit, EditText suffixEdt, int suffixDigit) {
+        return (toggleButton.isChecked() ? "+" : "-") + toString(prefixDigit, prefixEdt) + "." + toString(suffixDigit, suffixEdt);
+    }
+
     void sendStandardNaClTemperature(int sensorStatus) {
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+                CONN_TYPE + SPILT_CHAR +
+                WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                toString(2, mBinding.inputNumberCondISEDT) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.sensorTypeCondISATXT), inputTypeArr) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.sensorActivationCondISATXT), sensorActivationArr) + SPILT_CHAR +
-                toString(0, mBinding.inputLabelCondISEdt) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.tempLinkedCondISEdt), tempLinkedArr) + SPILT_CHAR +
-                toString(2, mBinding.tempValueCondISEdt) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.unitOfMeasureCondISEdt), unitArr) + SPILT_CHAR +
-                toString(4, mBinding.cellConstantCondISEdt) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.tempCompensationAct), TemperatureCompensationType) + SPILT_CHAR +
-                toString(3, mBinding.smoothingFactorCondISEdt) + SPILT_CHAR +
-                toStringSplit(4, 2, mBinding.alarmLowCondISEdt) +
-                SPILT_CHAR + toStringSplit(4, 2, mBinding.alarmHighCondISEdt) + SPILT_CHAR +
-                toString(3, mBinding.calibRequiredAlarmCondISEdt) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.resetCalibCondISEdt), resetCalibrationArr) + SPILT_CHAR +
+                toString(2, mBinding.conInputNumberEdtIsc) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.conSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.conSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
+                toString(0, mBinding.conInputLabelEdtIsc) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.conTempLinkedAtxtIsc), tempLinkedArr) + SPILT_CHAR +
+                getPlusMinusValue(mBinding.conDefaultTempValueTBtn, mBinding.conDefaultTemperatureEdtIsc, 3, mBinding.conDefaultTempDeciIsc, 2) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.conUnitOfMeasureAxtIsc), unitArr) + SPILT_CHAR +
+                toString(4, mBinding.conCellConstantEdtIsc) + SPILT_CHAR +
+                getPosition(0, toString(mBinding.conCompensationAtxtIsc), TemperatureCompensationType) + SPILT_CHAR +
+                toString(3, mBinding.conSmoothingFactorEdtIsc) + SPILT_CHAR +
+                getDecimalValue(mBinding.conAlarmLowEdtIsc, 6, mBinding.conAlarmLowDeciIsc, 2) + SPILT_CHAR +
+                getDecimalValue(mBinding.conAlarmhighEdtIsc,6, mBinding.conHighAlarmDeciIsc, 2) + SPILT_CHAR +
+                toString(3, mBinding.conCalibRequiredAlarmEdtIsc) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.conResetCalibAtxtIsc), resetCalibrationArr) + SPILT_CHAR +
                 sensorStatus
         );
     }
@@ -171,7 +180,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     }
 
     boolean validation() {
-        if (isEmpty(mBinding.inputLabelCondISEdt)) {
+       /* if (isEmpty(mBinding.inputLabelCondISEdt)) {
             mAppClass.showSnackBar(getContext(), "Input Label Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.tempValueCondISEdt)) {
@@ -201,10 +210,9 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
         } else if (mBinding.alarmHighCondISEdt.getText().toString().matches(".")) {
             mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
             return false;
-        }
+        }*/
         return true;
     }
-
 
     private Boolean isEmpty(EditText editText) {
         if (editText.getText() == null || editText.getText().toString().equals("")) {
@@ -233,12 +241,12 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     }
 
     private void initAdapters() {
-        mBinding.sensorTypeCondISATXT.setAdapter(getAdapter(inputTypeArr));
-        mBinding.sensorActivationCondISATXT.setAdapter(getAdapter(sensorActivationArr));
-        mBinding.tempLinkedCondISEdt.setAdapter(getAdapter(tempLinkedArr));
-        mBinding.unitOfMeasureCondISEdt.setAdapter(getAdapter(unitArr));
-        mBinding.resetCalibCondISEdt.setAdapter(getAdapter(resetCalibrationArr));
-        mBinding.tempCompensationAct.setAdapter(getAdapter(TemperatureCompensationType));
+        mBinding.conSensorTypeAtxtIsc.setAdapter(getAdapter(inputTypeArr));
+        mBinding.conSensorActivationAtxtIsc.setAdapter(getAdapter(sensorActivationArr));
+        mBinding.conTempLinkedAtxtIsc.setAdapter(getAdapter(tempLinkedArr));
+        mBinding.conUnitOfMeasureAxtIsc.setAdapter(getAdapter(unitArr));
+        mBinding.conResetCalibAtxtIsc.setAdapter(getAdapter(resetCalibrationArr));
+        mBinding.conCompensationAtxtIsc.setAdapter(getAdapter(TemperatureCompensationType));
     }
 
     public ArrayAdapter<String> getAdapter(String[] strArr) {
@@ -248,18 +256,15 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     @Override
     public void onResume() {
         super.onResume();
-
         if (sensorName == null) {
             mActivity.showProgress();
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + "03");
         } else {
-            mBinding.inputNumberCondISEDT.setText(inputNumber);
-            mBinding.sensorTypeCondISATXT.setText(sensorName);
-            mBinding.DeleteLayoutInputSettings.setVisibility(View.INVISIBLE);
-            mBinding.saveTxt.setText("ADD");
+            mBinding.conInputNumberEdtIsc.setText(inputNumber);
+            mBinding.conSensorTypeAtxtIsc.setText(sensorName);
+            mBinding.conDeleteLayoutIsc.setVisibility(View.INVISIBLE);
+            mBinding.conSaveTxtIsc.setText("ADD");
         }
-
-
     }
 
     @Override
@@ -283,7 +288,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     }
 
     private void handleResponse(String[] spiltData) {
-        // read Res - {*1# 04# 0# | 03# 04# 0# CONCON# 1# 33# 1# 2345# 2371# 1500# 100# 120000# 220000# 300# 1*}
+      /*  // read Res - {*1# 04# 0# | 03# 04# 0# CONCON# 1# 33# 1# 2345# 2371# 1500# 100# 120000# 220000# 300# 1*}
         // write Res -
         if (spiltData[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
 
@@ -328,7 +333,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
         } else {
             Log.e(TAG, "handleResponse: Wrong Packet");
         }
-
+*/
     }
 
 
@@ -339,7 +344,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     }
 
     public void conductivityEntity(int flagValue) {
-        switch (flagValue) {
+      /*  switch (flagValue) {
             case 0:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(toString(2, mBinding.inputNumberCondISEDT)), "0", 0, "0", "0", "0", flagValue);
@@ -359,12 +364,12 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);
                 break;
-        }
+        }*/
 
     }
 
     void userManagement() {
-        switch (userManagement) {
+      /*  switch (userManagement) {
             case 1:
                 mBinding.inputLabelInputSettings.setEnabled(false);
                 mBinding.tempLinkedInputSettings.setEnabled(false);
@@ -395,6 +400,6 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
             case 3:
 
                 break;
-        }
+        }*/
     }
 }

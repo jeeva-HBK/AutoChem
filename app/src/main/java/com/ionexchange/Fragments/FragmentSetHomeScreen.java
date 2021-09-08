@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments.Configuration.HomeScreen;
+package com.ionexchange.Fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +14,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentSethomescreenBinding;
@@ -26,13 +28,12 @@ import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.macAddress;
 
-public class FragmentSetHomeScreen extends Fragment {
+public class FragmentSetHomeScreen extends Fragment{
     FragmentSethomescreenBinding mBinding;
     WaterTreatmentDb dB;
     DefaultLayoutConfigurationDao dao;
     List<DefaultLayoutConfigurationEntity> getEnabledLayout;
-    int enableScreenNo = 0, updateDefaultScreen = 0, findLayoutClick = 0;
-
+    int enableScreenNo = 0,updateDefaultScreen = 0,findLayoutClick = 0;
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
@@ -49,47 +50,47 @@ public class FragmentSetHomeScreen extends Fragment {
         if (dao.getDefaultLayoutConfigurationEntityList().isEmpty()) {
             for (int i = 1; i < 6; i++) {
                 DefaultLayoutConfigurationEntity entityUpdate = new DefaultLayoutConfigurationEntity
-                        (i, i, 0, macAddress, 1);
+                        (i, i, 0, macAddress,1);
                 List<DefaultLayoutConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 insertToDb(entryListUpdate);
             }
-            mBinding.setLayoutBtn.setText("Set Layout 1");
-            mBinding.layout1RB.setChecked(true);
-            dao.update(1, 1);
-            mBinding.setDefaultLayout.setChecked(true);
-        } else {
-            getEnabledLayout = dao.getEnableDefaultScreen(1);
-            if (getEnabledLayout.size() == 0) {
                 mBinding.setLayoutBtn.setText("Set Layout 1");
                 mBinding.layout1RB.setChecked(true);
                 dao.update(1, 1);
                 mBinding.setDefaultLayout.setChecked(true);
-            } else {
+        }else{
+            getEnabledLayout = dao.getEnableDefaultScreen(1);
+            if(getEnabledLayout.size() == 0) {
+                mBinding.setLayoutBtn.setText("Set Layout 1");
+                mBinding.layout1RB.setChecked(true);
+                dao.update(1, 1);
+                mBinding.setDefaultLayout.setChecked(true);
+            }else {
                 updateLayout();
             }
         }
         mBinding.setDefaultLayout.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                updateDefaultScreen = mBinding.layoutRadioGroup.indexOfChild(getActivity().findViewById(mBinding.layoutRadioGroup.getCheckedRadioButtonId()));
-                updateDefaultScreen = updateDefaultScreen + 1;
-                Log.e("default", updateDefaultScreen + "");
-                if (updateDefaultScreen > 0) {
-                    if (findLayoutClick == 0) {
-                        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
-                        DefaultLayoutConfigurationDao dao = db.defaultLayoutConfigurationDao();
-                        getEnabledLayout = dao.getEnableDefaultScreen(1);
-                        if (getEnabledLayout.size() > 0) {
-                            dao.update(0, getEnabledLayout.get(0).screenNo);
+                    updateDefaultScreen = mBinding.layoutRadioGroup.indexOfChild(getActivity().findViewById(mBinding.layoutRadioGroup.getCheckedRadioButtonId()));
+                    updateDefaultScreen = updateDefaultScreen + 1;
+                    Log.e("default", updateDefaultScreen + "");
+                    if(updateDefaultScreen > 0){
+                        if(findLayoutClick == 0) {
+                            WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+                            DefaultLayoutConfigurationDao dao = db.defaultLayoutConfigurationDao();
+                            getEnabledLayout = dao.getEnableDefaultScreen(1);
+                            if(getEnabledLayout.size() > 0){
+                                dao.update(0,getEnabledLayout.get(0).screenNo);
+                            }
+                            dao.update( isChecked ? 1 : 0,updateDefaultScreen);
+                            updateLayout();
+                        }else{
+                            findLayoutClick = 0;
                         }
-                        dao.update(isChecked ? 1 : 0, updateDefaultScreen);
-                        updateLayout();
-                    } else {
-                        findLayoutClick = 0;
                     }
-                }
-            }
+           }
         });
         mBinding.layoutRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -131,16 +132,15 @@ public class FragmentSetHomeScreen extends Fragment {
         });
 
     }
-
     public void insertToDb(List<DefaultLayoutConfigurationEntity> entryList) {
         WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
         DefaultLayoutConfigurationDao dao = db.defaultLayoutConfigurationDao();
         dao.insert(entryList.toArray(new DefaultLayoutConfigurationEntity[0]));
     }
 
-    private void updateEnableBox() {
+    private void updateEnableBox(){
         getEnabledLayout = dao.getEnableDefaultScreen(1);
-        if (getEnabledLayout.size() != 0) {
+        if(getEnabledLayout.size() != 0) {
             enableScreenNo = getEnabledLayout.get(0).screenNo;
             updateDefaultScreen = mBinding.layoutRadioGroup.indexOfChild(getActivity().findViewById(mBinding.layoutRadioGroup.getCheckedRadioButtonId()));
             updateDefaultScreen = updateDefaultScreen + 1;
@@ -148,11 +148,10 @@ public class FragmentSetHomeScreen extends Fragment {
             mBinding.setDefaultLayout.setChecked(enableScreenNo == updateDefaultScreen);
         }
     }
-
-    private void updateLayout() {
+    private void updateLayout(){
         getEnabledLayout = dao.getEnableDefaultScreen(1);
-        if (getEnabledLayout.size() != 0) {
-            enableScreenNo = getEnabledLayout.get(0).screenNo;
+        if(getEnabledLayout.size() != 0){
+            enableScreenNo =  getEnabledLayout.get(0).screenNo;
             updateDefaultScreen = enableScreenNo;
             mBinding.setDefaultLayout.setChecked(true);
             switch (enableScreenNo) {

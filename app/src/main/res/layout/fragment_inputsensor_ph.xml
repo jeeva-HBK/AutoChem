@@ -44,10 +44,18 @@
          </com.google.android.material.textfield.TextInputLayout>
 
          <!--Empty Space-->
-         <Space
-             android:layout_width="0dp"
-             android:layout_height="match_parent"
-             android:layout_weight="1" />
+         <!--Sequence Number -->
+         <com.google.android.material.textfield.TextInputLayout
+             android:id="@+id/ph_seqNumber_til_isc"
+             style="@style/config_AtxTil"
+             android:enabled="false">
+
+            <AutoCompleteTextView
+                android:id="@+id/ph_seqNumber_atxt_isc"
+                style="@style/config_Atxt"
+                android:hint="Sequence Number" />
+
+         </com.google.android.material.textfield.TextInputLayout>
 
       </LinearLayout>
 

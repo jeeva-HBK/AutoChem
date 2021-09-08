@@ -17,7 +17,7 @@ public class CustomRadioButton extends TableLayout implements View.OnClickListen
      */
     public CustomRadioButton(Context context) {
         super(context);
-        // TODO Auto-generated constructor stub
+
     }
 
     /**
@@ -26,7 +26,6 @@ public class CustomRadioButton extends TableLayout implements View.OnClickListen
      */
     public CustomRadioButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        // TODO Auto-generated constructor stub
     }
 
     @Override

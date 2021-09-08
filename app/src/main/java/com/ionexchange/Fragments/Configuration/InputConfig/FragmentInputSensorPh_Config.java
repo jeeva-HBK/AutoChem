@@ -33,6 +33,7 @@ import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
 import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
@@ -52,6 +53,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     InputConfigurationDao dao;
     boolean primary;
     private static final String TAG = "FragmentInputSensor";
+    String sensorSequence;
 
     String inputNumber, sensorName;
     int sensorStatus;
@@ -66,7 +68,6 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         this.inputNumber = inputNumber;
         this.sensorName = sensorName;
         this.sensorStatus = sensorStatus;
-        primary = false;
     }
 
     @Nullable
@@ -97,6 +98,8 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         mBinding.phBufferTypeAtxtIsc.setAdapter(getAdapter(bufferArr));
         mBinding.phTempLinkedAtxtIsc.setAdapter(getAdapter(tempLinkedArr));
         mBinding.phResetCalibrationAtxtIsc.setAdapter(getAdapter(resetCalibrationArr));
+        mBinding.phSeqNumberAtxtIsc.setAdapter(getAdapter(sensorSequenceNumber));
+        sensorSequenceNumber();
 
         // change UI for userRole
         changeUI(userType);
@@ -155,6 +158,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     }
 
     void sendData(int sensorStatus) {
+        sensorSequenceNumber();
         mActivity.showProgress();
         // Write -> {* 1234$ 0$ 0$ 04$ 01$ 00$ 1$ 0$ pHSensor$ 0$ 1$ +220.00$ 090$ 07.25$ 12.50$ 300$ 1$ 1 *}
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
@@ -163,7 +167,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
                 toString(2, mBinding.phInputNumberEdtIsc) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.phSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
-                getSequenceNumber() + SPILT_CHAR +
+                sensorSequence + SPILT_CHAR +
                 getPosition(2, toString(mBinding.phSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
                 toString(0, mBinding.phInputLabelEdtIsc) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.phBufferTypeAtxtIsc), bufferArr) + SPILT_CHAR +
@@ -178,11 +182,17 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         );
     }
 
-    private String getSequenceNumber() {
-        if (primary) {
-            return "1";
+    void sensorSequenceNumber() {
+        if (Integer.parseInt(inputNumber) > 13 && Integer.parseInt(inputNumber) < 21) {
+            mBinding.phSeqNumberTilIsc.setVisibility(View.VISIBLE);
+            if (!mBinding.phSeqNumberAtxtIsc.getText().toString().isEmpty()) {
+                sensorSequence = getPosition(1, toString(mBinding.phSeqNumberAtxtIsc), sensorSequenceNumber);
+            }
+        } else {
+            mBinding.phSeqNumberTilIsc.setVisibility(View.GONE);
+            sensorSequence = "0";
+
         }
-        return "2"; // todo SequenceNumber
     }
 
     private String getDefaultTempValue() {
@@ -398,7 +408,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(toString(2, mBinding.phInputNumberEdtIsc)),
-                                "N/A", Integer.parseInt(getSequenceNumber()), "N/A", "N/A", "N/A", 0);
+                                "N/A", Integer.parseInt(sensorSequence), "N/A", "N/A", "N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
@@ -410,7 +420,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(toString(2, mBinding.phInputNumberEdtIsc)),
                                 mBinding.phSensorTypeAtxtIsc.getText().toString(),
-                                Integer.parseInt(getSequenceNumber()), toString(0, mBinding.phInputLabelEdtIsc),
+                                Integer.parseInt(sensorSequence), toString(0, mBinding.phInputLabelEdtIsc),
                                 toString(2, mBinding.phAlarmLowEdtIsc) + "." + toString(2, mBinding.phAlarmLowDeciIsc),
                                 toString(2, mBinding.phAlarmhighEdtIsc) + "." + toString(2, mBinding.phHighAlarmDeciIsc), 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();

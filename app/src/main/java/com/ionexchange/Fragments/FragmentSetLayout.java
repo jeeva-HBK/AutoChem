@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments.Configuration.HomeScreen;
+package com.ionexchange.Fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -159,15 +159,15 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
         String windowNo = view.getTag().toString();
         windowNo = windowNo.substring(windowNo.length() - 1);
         Log.e("window", windowNo + " ="+ windowNo.substring(windowNo.length() - 1));
-        /*List<MainConfigurationEntity> sensorlist = dao.getSensorList(screenNo,updateDefaultLayout,Integer.parseInt(windowNo));*/
+        List<MainConfigurationEntity> sensorlist = dao.getSensorList(screenNo,updateDefaultLayout,Integer.parseInt(windowNo));
 
-        FragmentSelectSensors fragmentSetLayout = new FragmentSelectSensors(fragment,screenNo,updateDefaultLayout,Integer.parseInt(windowNo));
+       /* FragmentSelectSensors fragmentSetLayout = new FragmentSelectSensors(fragment,screenNo,updateDefaultLayout,Integer.parseInt(windowNo));
         fragment.init(fragmentSetLayout, "Layout "+updateDefaultLayout+" - Window "+ windowNo, new DialogDismissListener() {
             @Override
             public void OnDismiss() {
 
             }
         });
-        fragment.show(getChildFragmentManager(), null);
+        fragment.show(getChildFragmentManager(), null);*/
     }
 }

@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
@@ -27,10 +29,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
 import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
@@ -48,6 +53,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     int sensorStatus;
     WaterTreatmentDb db;
     InputConfigurationDao dao;
+    String sensorSequence;
 
     public FragmentInputSensorORP_Config(String inputNumber, int sensorStatus) {
         this.inputNumber = inputNumber;
@@ -65,7 +71,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_inputsensor_ph, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_inputsensor_orp, container, false);
         return mBinding.getRoot();
     }
 
@@ -76,28 +82,27 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
         mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
-
         switch (userType) {
 
             case 1:
-                mBinding.orpRow4.setVisibility(View.GONE);
-                mBinding.orpRow5.setVisibility(View.GONE);
+                mBinding.orpRow4Isc.setVisibility(View.GONE);
+                mBinding.orpRow5Isc.setVisibility(View.GONE);
 
                 // Only View Access for
-                mBinding.orpInputNumber.setEnabled(false);
-                mBinding.orpInputLabel.setEnabled(false);
-                mBinding.orpSensorType.setEnabled(false);
-                mBinding.orpAlarmLow.setEnabled(false);
-                mBinding.orpAlarmHigh.setEnabled(false);
-                mBinding.orpCalibrationAlarmRequired.setEnabled(false);
-                mBinding.orpResetCalibration.setEnabled(false);
+                mBinding.orpInputNumberTilIsc.setEnabled(false);
+                mBinding.orpInputLabelTilIsc.setEnabled(false);
+                mBinding.orpSensorTypeTilIsc.setEnabled(false);
+                mBinding.orpAlarmLowTilIsc.setEnabled(false);
+                mBinding.orpAlarmHighTilIsc.setEnabled(false);
+                mBinding.orpCalibrationAlarmRequiredTilIsc.setEnabled(false);
+                mBinding.orpResetCalibrationTilIsc.setEnabled(false);
                 break;
 
             case 2:
-                mBinding.orpSmoothingFactor.setEnabled(false);
+                mBinding.orpSmoothingFactorTilIsc.setEnabled(false);
 
-                mBinding.orpSensorAct.setVisibility(View.GONE);
-                mBinding.orpDeleteLayoutInputSettings.setVisibility(View.GONE);
+                mBinding.orpSensorActTilIsc.setVisibility(View.GONE);
+                mBinding.orpDeleteLayoutIsc.setVisibility(View.GONE);
                 break;
 
             case 3:
@@ -107,14 +112,11 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
         }
 
         initAdapter();
+        sensorSequenceNumber();
+        mBinding.orpSaveFabIsc.setOnClickListener(this::save);
 
-
-        mBinding.orpsaveLayoutInputSettings.setOnClickListener(this::save);
-        mBinding.orpsaveFabInputSettings.setOnClickListener(this::save);
-
-        mBinding.orpDeleteFabInputSettings.setOnClickListener(this::delete);
-        mBinding.orpDeleteFabInputSettings.setOnClickListener(this::delete);
-        mBinding.backArrow.setOnClickListener(v -> {
+        mBinding.orpDeleteFabIsc.setOnClickListener(this::delete);
+        mBinding.orpBackArrowIsc.setOnClickListener(v -> {
             mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
         });
     }
@@ -130,20 +132,44 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     }
 
     void sendData(int sensorStatus) {
+        sensorSequenceNumber();
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+                CONN_TYPE + SPILT_CHAR +
+                WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                toString(2, mBinding.orpInputNumberInputSettingsEDT) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.orpSensorTypeEDT), inputTypeArr) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.orpSensorActISEDT), sensorActivationArr) + SPILT_CHAR +
-                toString(0, mBinding.orpInputLabelISEDT) + SPILT_CHAR +
-                toString(3, mBinding.orpSmoothingFactorISEDT) + SPILT_CHAR +
-                toStringSplit(4, 2, mBinding.orpalarmLowISEDT) + SPILT_CHAR +
-                toStringSplit(4, 2, mBinding.orpalarmHighISEDT) + SPILT_CHAR +
-                toString(3, mBinding.orpCalibrationAlarmRequiredISEDT) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.orpResetCalibrationISEDT), resetCalibrationArr) + SPILT_CHAR +
-                sensorStatus
-        );
+                toString(2, mBinding.orpInputNumberEdtIsc) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.orpSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
+                sensorSequence + SPILT_CHAR +
+                getPosition(1, toString(mBinding.orpSensorActAtxtIsc), sensorActivationArr) + SPILT_CHAR +
+                toString(0, mBinding.orpInputLabelEdtIsc) + SPILT_CHAR +
+                toString(3, mBinding.orpSmoothingFactorEdtIsc) + SPILT_CHAR +
+                getPlusMinusValue(mBinding.orpAlarmLowTBtn, mBinding.orpAlarmLowEdtIsc, 4, mBinding.orpAlarmLowDeciIsc, 2) + SPILT_CHAR +
+                getPlusMinusValue(mBinding.orpAlarmHighTBtn, mBinding.orpAlarmHighEdtIsc, 4, mBinding.orpAlarmHighDeciIsc, 2) + SPILT_CHAR +
+                toString(3, mBinding.orpCalibrationAlarmRequiredEdtIsc) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.orpResetCalibrationAtxtIsc), resetCalibrationArr) + SPILT_CHAR +
+                sensorStatus);
+    }
+
+    void sensorSequenceNumber() {
+        if (Integer.parseInt(inputNumber) > 13 && Integer.parseInt(inputNumber) < 21) {
+            mBinding.orpSeqNumberTilIsc.setVisibility(View.VISIBLE);
+            if (!mBinding.orpSeqNumberAtxtIsc.getText().toString().isEmpty()) {
+                sensorSequence = getPosition(1, toString(mBinding.orpSeqNumberAtxtIsc), sensorSequenceNumber);
+            }
+        } else {
+            mBinding.orpSeqNumberTilIsc.setVisibility(View.GONE);
+            sensorSequence = "0";
+
+        }
+    }
+
+    String getDecimalValue(TextInputEditText prefixEdittext, int prefixDigit, EditText suffixEdittext, int suffixDigit) {
+        return toString(prefixDigit, prefixEdittext) + "." + toString(suffixDigit, suffixEdittext);
+    }
+
+    String getPlusMinusValue(ToggleButton toggleButton, TextInputEditText prefixEdt, int prefixDigit, EditText suffixEdt, int suffixDigit) {
+        return (toggleButton.isChecked() ? "+" : "-") + toString(prefixDigit, prefixEdt) + "." + toString(suffixDigit, suffixEdt);
     }
 
     private String toStringSplit(int digits, int digitPoint, EditText editText) {
@@ -172,9 +198,10 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     }
 
     private void initAdapter() {
-        mBinding.orpSensorActISEDT.setAdapter(getAdapter(sensorActivationArr));
-        mBinding.orpSensorTypeEDT.setAdapter(getAdapter(inputTypeArr));
-        mBinding.orpResetCalibrationISEDT.setAdapter(getAdapter(resetCalibrationArr));
+        mBinding.orpSensorActAtxtIsc.setAdapter(getAdapter(sensorActivationArr));
+        mBinding.orpSensorTypeAtxtIsc.setAdapter(getAdapter(inputTypeArr));
+        mBinding.orpResetCalibrationAtxtIsc.setAdapter(getAdapter(resetCalibrationArr));
+        mBinding.orpSeqNumberAtxtIsc.setAdapter(getAdapter(sensorSequenceNumber));
     }
 
     public ArrayAdapter<String> getAdapter(String[] strArr) {
@@ -186,14 +213,13 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
         super.onResume();
         if (sensorName == null) {
             mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + "02");
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + formDigits(2, inputNumber));
         } else {
-            mBinding.orpInputNumberInputSettingsEDT.setText(inputNumber);
-            mBinding.orpSensorTypeEDT.setText(sensorName);
-            mBinding.orpDeleteLayoutInputSettings.setVisibility(View.INVISIBLE);
-            mBinding.saveTxt.setText("ADD");
+            mBinding.orpInputNumberEdtIsc.setText(inputNumber);
+            mBinding.orpSensorTypeAtxtIsc.setText(sensorName);
+            mBinding.orpDeleteLayoutIsc.setVisibility(View.GONE);
+            mBinding.orpSavTxtIsc.setText("ADD");
         }
-
     }
 
     @Override
@@ -212,39 +238,44 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
             mAppClass.showSnackBar(getContext(), "TimeOut");
         }
         if (data != null) {
-            handleResponse(data.split("\\*")[1].split("#"));
+            handleResponse(data.split("\\*")[1].split("\\$"));
         }
     }
 
     private void handleResponse(String[] data) {
-        // Read - Res - 1# 04# 0# | 02# 1# 1# ORP# 10# 500# 1000# 20# 0
+        // Read - Res - {*1$ 04$ 0$ 02$ 01$ 1$ 0$ ORPSensor$ 010$ -1800.00$ +1900.25$ 300$ 1$ 1*}
         // Write - Res -
         if (data[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
             if (data[0].equals(READ_PACKET)) {
                 if (data[2].equals(RES_SUCCESS)) {
 
-                    mBinding.orpInputNumberInputSettingsEDT.setText(data[3]);
+                    mBinding.orpInputNumberEdtIsc.setText(data[3]);
+                    mBinding.orpSensorTypeAtxtIsc.setText(mBinding.orpSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(data[4])).toString());
+                    // sequenceNumber 5
+                    mBinding.orpSensorActAtxtIsc.setText(mBinding.orpSensorActAtxtIsc.getAdapter().getItem(Integer.parseInt(data[6])).toString());
+                    mBinding.orpInputLabelEdtIsc.setText(data[7]);
+                    mBinding.orpSmoothingFactorEdtIsc.setText(data[8]);
 
-                    mBinding.orpSensorTypeEDT.setText(mBinding.orpSensorTypeEDT.getAdapter().getItem(Integer.parseInt(data[4])).toString());
-                    mBinding.orpSensorActISEDT.setText(mBinding.orpSensorActISEDT.getAdapter().getItem(Integer.parseInt(data[5])).toString());
+                    mBinding.orpAlarmLowTBtn.setChecked((data[9].substring(0, 1)).equals("+"));
+                    mBinding.orpAlarmLowEdtIsc.setText(data[9].substring(1, 4));
+                    mBinding.orpAlarmLowDeciIsc.setText(data[9].substring(6, 7));
 
-                    mBinding.orpInputLabelISEDT.setText(data[6]);
-                    mBinding.orpSmoothingFactorISEDT.setText(data[7]);
-                    mBinding.orpalarmLowISEDT.setText(data[8].substring(0, 4) + "." + data[8].substring(4, 6));
-                    mBinding.orpalarmHighISEDT.setText(data[9].substring(0, 4) + "." + data[9].substring(4, 6));
-                    mBinding.orpCalibrationAlarmRequiredISEDT.setText(data[10]);
+                    mBinding.orpAlarmHighTBtn.setChecked(data[10].substring(0, 1).equals("+"));
+                    mBinding.orpAlarmHighEdtIsc.setText(data[10].substring(1, 4));
+                    mBinding.orpAlarmHighDeciIsc.setText(data[10].substring(6, 7));
 
-                    mBinding.orpResetCalibrationISEDT.setText(mBinding.orpResetCalibrationISEDT.getAdapter().getItem(Integer.parseInt(data[11])).toString());
-
+                    mBinding.orpCalibrationAlarmRequiredEdtIsc.setText(data[11]);
+                    mBinding.orpResetCalibrationAtxtIsc.setText(mBinding.orpResetCalibrationAtxtIsc.getAdapter().getItem(Integer.parseInt(data[12])).toString());
                     initAdapter();
                 } else if (data[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), "READ FAILED");
                 }
+                // *0$ 04$ 0$ *0}
             } else if (data[0].equals(WRITE_PACKET)) {
-                if (data[2].equals(RES_SUCCESS)) {
-                    orpEntity(1);
+                if (data[3].equals(RES_SUCCESS)) {
+                    orpEntity(Integer.parseInt(data[2]));
                     mAppClass.showSnackBar(getContext(), "WRITE SUCCESS");
-                } else if (data[2].equals(RES_FAILED)) {
+                } else if (data[3].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), "WRITE FAILED");
                 }
             }
@@ -255,26 +286,20 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     }
 
     boolean validation() {
-        if (isEmpty(mBinding.orpSmoothingFactorISEDT)) {
+        if (isEmpty(mBinding.orpSmoothingFactorEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Smoothing Factor Cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.orpInputNumberInputSettingsEDT)) {
+        } else if (isEmpty(mBinding.orpInputNumberEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Input Label Cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.orpCalibrationAlarmRequiredISEDT)) {
+        } else if (isEmpty(mBinding.orpCalibrationAlarmRequiredEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Calibration Alarm Cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.orpalarmLowISEDT)) {
+        } else if (isEmpty(mBinding.orpAlarmLowEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm Low Factor Cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.orpalarmHighISEDT)) {
+        } else if (isEmpty(mBinding.orpAlarmHighEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm High Factor Cannot be Empty");
-            return false;
-        } else if (mBinding.orpalarmLowISEDT.getText().toString().matches(".")) {
-            mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
-            return false;
-        } else if (mBinding.orpalarmHighISEDT.getText().toString().matches(".")) {
-            mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
             return false;
         }
         return true;
@@ -296,21 +321,22 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
 
     public void orpEntity(int flagValue) {
         switch (flagValue) {
-            case 0:
+            case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(toString(2, mBinding.orpInputNumberInputSettingsEDT)), "0", 0, "0", "0", "0", flagValue);
+                        (Integer.parseInt(toString(2, mBinding.orpInputNumberEdtIsc)), "0", 0, "0", "0", "0", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
                 break;
 
+            case 0:
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                        (Integer.parseInt(toString(2, mBinding.orpInputNumberInputSettingsEDT)),
-                                mBinding.orpSensorTypeEDT.getText().toString(),
-                                0, toString(0, mBinding.orpInputLabelISEDT),
-                                toStringSplit(4, 2, mBinding.orpalarmLowISEDT),
-                                toStringSplit(4, 2, mBinding.orpalarmHighISEDT), flagValue);
+                        (Integer.parseInt(toString(2, mBinding.orpInputNumberEdtIsc)),
+                                mBinding.orpSensorTypeAtxtIsc.getText().toString(),
+                                0, toString(0, mBinding.orpInputLabelEdtIsc),
+                                getPlusMinusValue(mBinding.orpAlarmLowTBtn, mBinding.orpAlarmLowEdtIsc, 4, mBinding.orpAlarmLowDeciIsc, 2),
+                                getPlusMinusValue(mBinding.orpAlarmHighTBtn, mBinding.orpAlarmHighEdtIsc, 4, mBinding.orpAlarmHighDeciIsc, 2), 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);

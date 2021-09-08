@@ -3,341 +3,408 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- Layout ORP -->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:id="@+id/orp_rootLayout_isc"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/backArrow"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:background="@drawable/ic_back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.03"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.03" />
+        <!--Row 1-->
+        <LinearLayout
+            android:id="@+id/orp_row1_isc"
+            style="@style/config_rowLl">
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            <!--Back Arrow-->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:gravity="left|center"
+                android:paddingLeft="10dp">
 
-            <!--Row 1-->
-            <TableRow
-                android:id="@+id/orp_row1"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:weightSum="3">
+                <ImageView
+                    android:id="@+id/orp_backArrow_isc"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@drawable/ic_back" />
 
-                <!--Input Number-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/orp_inputNumber"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1"
-                    android:enabled="false">
+            </LinearLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/orpInputNumber_inputSettingsEDT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="false"
-                        android:digits="0123456789"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Input Number"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1" />
+            <!--Input Number-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/orp_inputNumber_til_isc"
+                style="@style/config_Til"
+                android:enabled="false">
 
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--Row 2-->
-            <TableRow
-                android:id="@+id/orp_row2"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:weightSum="3">
-
-                <!--Input Label-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/orp_inputLabel"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/orpInputLabel_ISEDT"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:hint="Input Label"
-                        android:imeOptions="actionNext"
-                        android:inputType="textPersonName"
-                        android:maxLength="20"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Sensor Type-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/orp_sensorType"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1"
-                    android:enabled="false">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/orpSensorType_EDT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:hint="Sensor Type" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Calibration Required Alarm-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/orp_calibrationAlarmRequired"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/orpCalibrationAlarmRequired_ISEDT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:hint="Calibration Alarm Required"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="6"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--Row 3-->
-            <TableRow
-                android:id="@+id/orp_row3"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:weightSum="3">
-
-                <!--Alarm Low-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/orp_alarmLow"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/orpalarmLow_ISEDT"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:hint="Alarm Low"
-                        android:imeOptions="actionNext"
-                        android:inputType="numberDecimal"
-                        android:maxLength="6"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Alarm High-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/orp_alarmHigh"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_margin="3dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/orpalarmHigh_ISEDT"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:hint="Alarm High"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberDecimal"
-                        android:maxLength="6"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Reset Calibration-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/orp_resetCalibration"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/orpResetCalibration_ISEDT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:hint="Reset Calibration"
-                        android:inputType="number" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--Row 4-->
-            <TableRow
-                android:id="@+id/orp_row4"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:weightSum="3">
-
-                <!--Smoothing Factor-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/orp_smoothingFactor"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/orpSmoothingFactor_ISEDT"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:hint="Smoothing Factor"
-                        android:imeOptions="actionNext"
-                        android:inputType="textPersonName"
-                        android:maxLength="3"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Sensor Activation-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/orp_sensorAct"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/orpSensorAct_ISEDT"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:editable="false"
-                        android:hint="Sensor Activation"
-                        android:inputType="textPersonName"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--Row 5-->
-            <TableRow
-                android:id="@+id/orp_row5"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:weightSum="3">
-
-                <!--saveLayout-->
-                <LinearLayout
-                    android:id="@+id/orpsaveLayout_inputSettings"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/orp_InputNumber_edt_isc"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:clickable="false"
+                    android:digits="0123456789"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Input Number"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Sensor Type-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/orp_sensorType_til_isc"
+                style="@style/config_AtxTil"
+                android:enabled="false">
+
+                <AutoCompleteTextView
+                    android:id="@+id/orp_SensorType_atxt_isc"
+                    style="@style/config_Atxt"
+                    android:hint="Sensor Type" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Sequence Number-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/orp_seqNumber_til_isc"
+                style="@style/config_AtxTil"
+                android:visibility="visible">
+
+                <AutoCompleteTextView
+                    android:id="@+id/orp_seqNumber_atxt_isc"
+                    style="@style/config_Atxt"
+                    android:clickable="false"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Sequence Number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 2-->
+        <LinearLayout
+            android:id="@+id/orp_row2_isc"
+            style="@style/config_rowLl">
+
+            <!--Input Label-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/orp_inputLabel_til_isc"
+                style="@style/config_Til">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/orp_inputLabel_edt_isc"
+                    style="@style/config_Edt"
+                    android:editable="false"
+                    android:hint="Input Label"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName"
+                    android:maxLength="20" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Smoothing Factor-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/orp_smoothingFactor_til_isc"
+                style="@style/config_Til">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/orp_smoothingFactor_edt_isc"
+                    style="@style/config_Edt"
+                    android:editable="false"
+                    android:hint="Smoothing Factor"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName"
+                    android:maxLength="3" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Sensor Activation-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/orp_sensorAct_til_isc"
+                style="@style/config_AtxTil">
+
+                <AutoCompleteTextView
+                    android:id="@+id/orp_sensorAct_atxt_isc"
+                    style="@style/config_Atxt"
+                    android:editable="false"
+                    android:hint="Sensor Activation" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 3-->
+        <LinearLayout
+            android:id="@+id/orp_row3_isc"
+            style="@style/config_rowLl"
+            android:weightSum="3">
+
+            <!--Alarm Low-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <ToggleButton
+                    android:id="@+id/orp_alarmLow_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/orp_alarmLow_til_isc" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/orp_alarmLow_til_isc"
+                    style="@style/appEdtTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:hint="Alarm Low"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/orp_alarmLow_edt_isc"
+                        style="@style/config_Edt"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:text="."
+                    app:layout_constraintBottom_toBottomOf="@+id/orp_alarmLow_deci_isc"
+                    app:layout_constraintEnd_toStartOf="@+id/orp_alarmLow_deci_isc"
+                    app:layout_constraintTop_toTopOf="@+id/orp_alarmLow_deci_isc" />
+
+                <EditText
+                    android:id="@+id/orp_alarmLow_deci_isc"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@null"
                     android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:hint="00"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textColorHint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/orp_alarmLow_til_isc"
+                    app:layout_constraintEnd_toEndOf="@+id/orp_alarmLow_til_isc"
+                    app:layout_constraintHorizontal_bias="0.98"
+                    app:layout_constraintStart_toStartOf="@+id/orp_alarmLow_til_isc"
+                    app:layout_constraintTop_toTopOf="@+id/orp_alarmLow_til_isc" />
 
-                    <TextView
-                        android:id="@+id/save_txt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="5dp"
-                        android:gravity="center_vertical"
-                        android:text="Save"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/orpsaveFab_inputSettings"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:background="@color/colorSecondary"
-                        android:backgroundTint="@color/colorSecondary"
-                        android:src="@drawable/ic_round_right"
-                        app:maxImageSize="50dp"
-                        app:tint="@color/black" />
+            <!--Alarm High-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
 
+                <ToggleButton
+                    android:id="@+id/orp_alarmHigh_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/orp_alarmHigh_til_isc" />
 
-                </LinearLayout>
-
-                <!--DeleteLayout-->
-                <LinearLayout
-                    android:id="@+id/orpDeleteLayout_inputSettings"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/orp_alarmHigh_til_isc"
+                    style="@style/appEdtTxt"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center|left"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:layout_height="?attr/actionBarSize"
+                    android:hint="Alarm High"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="5dp"
-                        android:gravity="center"
-                        android:text="Delete"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/orp_alarmHigh_edt_isc"
+                        style="@style/config_Edt"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true" />
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/orpDeleteFab_inputSettings"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:background="@color/red"
-                        android:backgroundTint="@color/red"
-                        android:src="@drawable/ic_baseline_delete"
-                        app:maxImageSize="35dp"
-                        app:tint="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:text="."
+                    app:layout_constraintBottom_toBottomOf="@+id/orp_alarmHigh_deci_isc"
+                    app:layout_constraintEnd_toStartOf="@+id/orp_alarmHigh_deci_isc"
+                    app:layout_constraintTop_toTopOf="@+id/orp_alarmHigh_deci_isc" />
+
+                <EditText
+                    android:id="@+id/orp_alarmHigh_deci_isc"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textColorHint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/orp_alarmHigh_til_isc"
+                    app:layout_constraintEnd_toEndOf="@+id/orp_alarmHigh_til_isc"
+                    app:layout_constraintHorizontal_bias="0.98"
+                    app:layout_constraintStart_toStartOf="@+id/orp_alarmHigh_til_isc"
+                    app:layout_constraintTop_toTopOf="@+id/orp_alarmHigh_til_isc" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--Reset Calibration-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/orp_resetCalibration_til_isc"
+                style="@style/config_AtxTil">
+
+                <AutoCompleteTextView
+                    android:id="@+id/orp_ResetCalibration_atxt_isc"
+                    style="@style/config_Atxt"
+                    android:editable="false"
+                    android:hint="Reset Calibration"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 4-->
+        <LinearLayout
+            android:id="@+id/orp_row4_isc"
+            style="@style/config_rowLl"
+            android:weightSum="3">
+
+            <!--Calibration Required Alarm-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/orp_calibrationAlarmRequired_til_isc"
+                style="@style/config_Til">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/orp_calibrationAlarmRequired_edt_isc"
+                    style="@style/config_Edt"
+                    android:editable="false"
+                    android:hint="Calibration Alarm Required"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 5 - Save / Delete-->
+        <LinearLayout
+            android:id="@+id/orp_row5_isc"
+            style="@style/config_rowLl">
+
+            <!--saveLayout-->
+            <LinearLayout
+                android:id="@+id/orp_saveLayout_isc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/orp_sav_txt_isc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:gravity="center_vertical"
+                    android:text="Save"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/orp_save_fab_isc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@color/colorSecondary"
+                    android:backgroundTint="@color/colorSecondary"
+                    android:src="@drawable/ic_round_right"
+                    app:maxImageSize="50dp"
+                    app:tint="@color/black" />
 
 
-                </LinearLayout>
+            </LinearLayout>
 
-            </TableRow>
+            <!--DeleteLayout-->
+            <LinearLayout
+                android:id="@+id/orp_delete_layout_isc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|left"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-        </TableLayout>
+                <TextView
+                    android:id="@+id/orp_delete_txt_isc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:gravity="center"
+                    android:text="Delete"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/orp_delete_Fab_isc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@color/red"
+                    android:backgroundTint="@color/red"
+                    android:src="@drawable/ic_baseline_delete"
+                    app:maxImageSize="35dp"
+                    app:tint="@color/black" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </layout>

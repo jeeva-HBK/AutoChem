@@ -83,18 +83,6 @@
             <TableRow>
 
                 <RadioButton
-                    android:id="@+id/generalRb"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/radio_flat_selector"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="GENERAL"
-                    android:textColor="@color/radio_flat_text_selector"
-                    android:textStyle="bold" />
-
-                <RadioButton
                     android:id="@+id/tankRb"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -114,7 +102,7 @@
                     android:background="@drawable/radio_flat_selector"
                     android:button="@null"
                     android:gravity="center"
-                    android:text="VIRTUAL SENSOR"
+                    android:text="VIRTUAL"
                     android:textColor="@color/radio_flat_text_selector"
                     android:textStyle="bold" />
 
@@ -126,10 +114,21 @@
                     android:background="@drawable/radio_flat_selector"
                     android:button="@null"
                     android:gravity="center"
-                    android:text="OUTPUT"
+                    android:text="RELAY OUTPUT"
                     android:textColor="@color/radio_flat_text_selector"
                     android:textStyle="bold" />
 
+                <RadioButton
+                    android:id="@+id/generalRb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_flat_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="ANALOG OUTPUT"
+                    android:textColor="@color/radio_flat_text_selector"
+                    android:textStyle="bold" />
             </TableRow>
 
         </com.ionexchange.customClass.CustomRadioButton>

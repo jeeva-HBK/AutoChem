@@ -2,477 +2,568 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="modbusType"
+            type="String" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <View
-            android:id="@+id/backArrow"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:background="@drawable/ic_back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.03"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.03" />
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <!--Row 1-->
+        <LinearLayout
+            android:id="@+id/mod_bus_Row1_isc"
+            style="@style/config_rowLl">
 
-            <!--Row 1-->
-            <TableRow
-                android:id="@+id/modbus_row1"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:weightSum="3">
+            <!--Back Arrow-->
 
-                <!--Input Number-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/modbus_inputNumber"
-                    style="@style/appEdtTxt"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:gravity="left|center">
+
+                <ImageView
+                    android:id="@+id/backArrow_isc"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/ic_back" />
+            </LinearLayout>
+            <!--Input Number-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_inputNumber"
+                style="@style/config_Til">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/mod_bus_input_number_tie"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1"
-                    android:enabled="false">
+                    android:layout_height="match_parent"
+                    android:clickable="false"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Input Number" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/mod_bus_input_number_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="false"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Input Number" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                </com.google.android.material.textfield.TextInputLayout>
+            <!--Sensor Type-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_sensorType"
+                style="@style/config_AtxTil">
 
-            </TableRow>
+                <AutoCompleteTextView
+                    android:id="@+id/mod_bus_sensor_type_tie"
+                    style="@style/config_Atxt"
+                    android:hint="SensorType" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <!--Row 2-->
-            <TableRow
-                android:id="@+id/modbus_row2"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:weightSum="4">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_sequence_number"
+                style="@style/config_AtxTil"
+                android:visibility="gone">
 
-                <!--Input Label-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/modbus_inputLabel"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/mod_bus_input_label_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Input Label"
-                        android:imeOptions="actionNext"
-                        android:inputType="textPersonName" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Sensor Type-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/modbus_sensorType"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1"
-                    android:enabled="false">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/mod_bus_sensor_type_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="false"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="SensorType" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <AutoCompleteTextView
+                    android:id="@+id/modbus_sequence_number_tie"
+                    style="@style/config_Atxt"
+                    android:hint="Sequence Number" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-                <!--Modbus Type-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/modbus_modbusType"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
+        </LinearLayout>
 
-                    <AutoCompleteTextView
-                        android:id="@+id/mod_bus_type_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="false"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Modbus Type" />
-                </com.google.android.material.textfield.TextInputLayout>
+        <!--Row 2-->
+        <LinearLayout
+            android:id="@+id/modbus_row2"
+            style="@style/config_rowLl">
 
-                <!--Type of value Read-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/modbus_typeOfValueRead"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
+            <!--Input Label-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_inputLabel"
+                style="@style/config_Til">
 
-                    <AutoCompleteTextView
-                        android:id="@+id/mod_bus_typeOfValueRead_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="false"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Type of value Read" />
-
-                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/mod_bus_input_label_tie"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Input Label"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-            </TableRow>
+            <!--Modbus Type-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_modbusType"
+                style="@style/config_AtxTil">
 
-            <!--Row 3-->
-            <TableRow
-                android:id="@+id/modbus_row3"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:weightSum="4">
+                <AutoCompleteTextView
+                    android:id="@+id/mod_bus_type_tie"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Modbus Type" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                <!--Min Value-->
+            <!--Type of value Read-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_typeOfValueRead"
+                style="@style/config_AtxTil">
+
+                <AutoCompleteTextView
+                    android:id="@+id/mod_bus_typeOfValueRead_tie"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Type of value Read" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+
+        <!--Row 3-->
+        <LinearLayout
+            android:id="@+id/modbus_row3"
+            style="@style/config_rowLl">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/modbus_minValue"
                     style="@style/appEdtTxt"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
+                    android:hint="Min Value"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/mod_bus_Min_value_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Min Value"
-                        android:imeOptions="actionNext"
+                        style="@style/config_Edt"
                         android:inputType="number"
-                        android:maxLength="4"
-                        android:maxLines="1" />
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!--Max Value-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:text="."
+                    app:layout_constraintBottom_toBottomOf="@+id/modbus_minValue"
+                    app:layout_constraintEnd_toStartOf="@+id/modbus_min_deci_isc"
+                    app:layout_constraintTop_toTopOf="@+id/modbus_min_deci_isc" />
+
+                <EditText
+                    android:id="@+id/modbus_min_deci_isc"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textColorHint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/modbus_minValue"
+                    app:layout_constraintEnd_toEndOf="@+id/modbus_minValue"
+                    app:layout_constraintHorizontal_bias="0.98"
+                    app:layout_constraintStart_toStartOf="@+id/modbus_minValue"
+                    app:layout_constraintTop_toTopOf="@+id/modbus_minValue" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/modbus_maxValue"
                     style="@style/appEdtTxt"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
+                    android:hint="Max Value"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/mod_bus_max_value_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Max Value"
-                        android:imeOptions="actionNext"
+                        style="@style/config_Edt"
                         android:inputType="number"
-                        android:maxLength="4"
-                        android:maxLines="1" />
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!--Diagnostic Sweep-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/modbus_diagnosticSweep"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:text="."
+                    app:layout_constraintBottom_toBottomOf="@+id/modbus_maxValue"
+                    app:layout_constraintEnd_toStartOf="@+id/modbus_max_deci_isc"
+                    app:layout_constraintTop_toTopOf="@+id/modbus_max_deci_isc" />
 
-                    <AutoCompleteTextView
-                        android:id="@+id/mod_bus_diagnostic_sweep_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="false"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Diagnostic sweep" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    android:id="@+id/modbus_max_deci_isc"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textColorHint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/modbus_maxValue"
+                    app:layout_constraintEnd_toEndOf="@+id/modbus_maxValue"
+                    app:layout_constraintHorizontal_bias="0.98"
+                    app:layout_constraintStart_toStartOf="@+id/modbus_maxValue"
+                    app:layout_constraintTop_toTopOf="@+id/modbus_maxValue" />
 
-                <!--Diagnostic Sweep Time-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/modbus_diagnosticTime"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/mod_bus_time_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Time"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="6"
-                        android:maxLines="1" />
-                </com.google.android.material.textfield.TextInputLayout>
 
-            </TableRow>
+            <!--Diagnostic Sweep-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_diagnosticSweep"
+                style="@style/config_AtxTil">
 
-            <!--Row 4-->
-            <TableRow
-                android:id="@+id/modbus_row4"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:weightSum="4">
+                <AutoCompleteTextView
+                    android:id="@+id/mod_bus_diagnostic_sweep_tie"
+                    style="@style/config_Atxt"
+                    android:hint="Diagnostic sweep" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                <!--Alarm Low-->
+            <!--Diagnostic Sweep Time-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_diagnosticTime"
+                style="@style/config_Til"
+                android:visibility="@{modbusType.equals(`0`) ? View.VISIBLE : View.GONE}">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/mod_bus_time_tie"
+                    style="@style/config_Atxt"
+                    android:hint="Time"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="6" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 4-->
+        <LinearLayout
+            android:id="@+id/modbus_row4"
+            style="@style/config_rowLl">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/modbus_alarmLow"
                     style="@style/appEdtTxt"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
+                    android:hint="Alarm low"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/mod_bus_alarm_low_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Alarm Low"
-                        android:imeOptions="actionNext"
-                        android:inputType="numberDecimal"
-                        android:maxLength="7"
-                        android:maxLines="1" />
+                        style="@style/config_Edt"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!--Alarm High-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:text="."
+                    app:layout_constraintBottom_toBottomOf="@+id/modbus_alarmLow"
+                    app:layout_constraintEnd_toStartOf="@+id/modbus_alarm_low_isc"
+                    app:layout_constraintTop_toTopOf="@+id/modbus_alarm_low_isc" />
+
+                <EditText
+                    android:id="@+id/modbus_alarm_low_isc"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textColorHint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/modbus_alarmLow"
+                    app:layout_constraintEnd_toEndOf="@+id/modbus_alarmLow"
+                    app:layout_constraintHorizontal_bias="0.98"
+                    app:layout_constraintStart_toStartOf="@+id/modbus_alarmLow"
+                    app:layout_constraintTop_toTopOf="@+id/modbus_alarmLow" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/modbus_alarmHigh"
                     style="@style/appEdtTxt"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
+                    android:hint="Alarm low"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/mod_bus_alarm_high_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Alarm High"
-                        android:imeOptions="actionNext"
-                        android:inputType="numberDecimal"
-                        android:maxLength="7"
-                        android:maxLines="1" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Calibration Required Alarm-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/modbus_calibrationRequiredAlarm"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/mod_bus_calibration_required_alarm_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Calibration Required Alarm"
-                        android:imeOptions="actionDone"
-                        android:inputType="number"
-                        android:maxLength="4"
-                        android:maxLines="1" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--Reset Calibration-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/modbus_resetCalibration"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/mod_bus_reset_calibration_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="false"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Reset Calibration" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </TableRow>
-
-            <!--Row 5-->
-            <TableRow
-                android:id="@+id/modbus_row5"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:weightSum="3">
-
-                <!--Smoothing Factor-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/modbus_smoothingFactor"
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/mod_bus_smoothing_factor_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Smoothing Factor"
-                        android:imeOptions="actionNext"
+                        style="@style/config_Edt"
                         android:inputType="number"
                         android:maxLength="3"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!--Unit Of Measurement-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/modbus_unit"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:text="."
+                    app:layout_constraintBottom_toBottomOf="@+id/modbus_alarmHigh"
+                    app:layout_constraintEnd_toStartOf="@+id/modbus_alarm_high_isc"
+                    app:layout_constraintTop_toTopOf="@+id/modbus_alarm_high_isc" />
 
-                    <AutoCompleteTextView
-                        android:id="@+id/mod_bus_unit_measurement_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="false"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="Measurement Unit" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    android:id="@+id/modbus_alarm_high_isc"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textColorHint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/modbus_alarmHigh"
+                    app:layout_constraintEnd_toEndOf="@+id/modbus_alarmHigh"
+                    app:layout_constraintHorizontal_bias="0.98"
+                    app:layout_constraintStart_toStartOf="@+id/modbus_alarmHigh"
+                    app:layout_constraintTop_toTopOf="@+id/modbus_alarmHigh" />
 
-                <!--Sensor Activation-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/modbus_sensorActivation"
-                    style="@style/appAutoTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/mod_bus_sensor_activation_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="false"
-                        android:editable="false"
-                        android:focusable="false"
-                        android:hint="SensorActivation" />
-                </com.google.android.material.textfield.TextInputLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            </TableRow>
+            <!--Calibration Required Alarm-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_calibrationRequiredAlarm"
+                style="@style/config_Til">
 
-            <!--Row 6-->
-            <TableRow
-                android:id="@+id/modbus_row6"
-                android:layout_height="0dp"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/mod_bus_calibration_required_alarm_tie"
+                    style="@style/config_Edt"
+                    android:hint="Calibration Required Alarm"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Reset Calibration-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_resetCalibration"
+                style="@style/config_AtxTil">
+
+                <AutoCompleteTextView
+                    android:id="@+id/mod_bus_reset_calibration_tie"
+                    style="@style/config_Atxt"
+
+                    android:hint="Reset Calibration" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 5-->
+        <LinearLayout
+            android:id="@+id/modbus_row5"
+            style="@style/config_rowLl">
+
+            <!--Smoothing Factor-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_smoothingFactor"
+                style="@style/config_Til">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/mod_bus_smoothing_factor_tie"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Smoothing Factor"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Unit Of Measurement-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_unit"
+                style="@style/config_AtxTil">
+
+                <AutoCompleteTextView
+                    android:id="@+id/mod_bus_unit_measurement_tie"
+                    style="@style/config_Atxt"
+                    android:hint="Measurement Unit" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Sensor Activation-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_sensorActivation"
+                style="@style/config_AtxTil">
+
+                <AutoCompleteTextView
+                    android:id="@+id/mod_bus_sensor_activation_tie"
+                    style="@style/config_Atxt"
+
+                    android:hint="SensorActivation" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+
+        <!--Row 6 - Save/Delete-->
+        <LinearLayout
+            android:id="@+id/modbus_row6_isc"
+            style="@style/config_rowLl">
+
+            <!--saveLayout-->
+            <LinearLayout
+                android:id="@+id/modbus_save_layout_isc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:weightSum="2">
+                android:orientation="horizontal"
+                android:visibility="visible">
 
-                <!--saveLayout-->
-                <LinearLayout
-                    android:id="@+id/modbus_saveLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                <TextView
+                    android:id="@+id/modbus_save_txt_isc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:gravity="center_vertical"
+                    android:text="Save"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/modbus_save_fab_isc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@color/colorSecondary"
+                    android:backgroundTint="@color/colorSecondary"
+                    android:src="@drawable/ic_round_right"
+                    app:maxImageSize="50dp"
+                    app:tint="@color/black" />
+
+
+            </LinearLayout>
+
+            <!--DeleteLayout-->
+            <LinearLayout
+                android:id="@+id/modbus_delete_layout_isc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|left"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/modbus_delete_txt_isc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
                     android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:text="Delete"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/save_txt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="5dp"
-                        android:gravity="center_vertical"
-                        android:text="Save"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/modbus_delete_fab_isc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@color/red"
+                    android:backgroundTint="@color/red"
+                    android:src="@drawable/ic_baseline_delete"
+                    app:maxImageSize="35dp"
+                    app:tint="@color/black" />
+            </LinearLayout>
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/modbus_saveFab"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:background="@color/colorSecondary"
-                        android:backgroundTint="@color/colorSecondary"
-                        android:src="@drawable/ic_round_right"
-                        app:maxImageSize="50dp"
-                        app:tint="@color/black" />
-
-                </LinearLayout>
-
-                <!--DeleteLayout-->
-                <LinearLayout
-                    android:id="@+id/modbus_deleteLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center|left"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="5dp"
-                        android:gravity="center"
-                        android:text="Delete"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/modbus_deleteFab"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:background="@color/red"
-                        android:backgroundTint="@color/red"
-                        android:src="@drawable/ic_baseline_delete"
-                        app:maxImageSize="35dp"
-                        app:tint="@color/black" />
+        </LinearLayout>
 
 
-                </LinearLayout>
-
-            </TableRow>
-
-        </TableLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </layout>

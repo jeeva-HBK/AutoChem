@@ -96,6 +96,11 @@ public class FragmentTimer_Config extends Fragment implements RvOnClick {
         }
     }
 
+    @Override
+    public void onClick(String sensorInputNo, String type, int position) {
+
+    }
+
     public void updateToDb(List<TimerConfigurationEntity> entryList) {
         WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
         TimerConfigurationDao dao = db.timerConfigurationDao();

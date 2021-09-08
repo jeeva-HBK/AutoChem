@@ -76,4 +76,9 @@ public class FragmentVirtualSensorList_Config extends Fragment implements RvOnCl
     public void onClick(String sensorInputNo) {
 
     }
+
+    @Override
+    public void onClick(String sensorInputNo, String type, int position) {
+
+    }
 }

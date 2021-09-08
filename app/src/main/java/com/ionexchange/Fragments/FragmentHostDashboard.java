@@ -17,11 +17,15 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentMainhostBinding;
 
+import static com.ionexchange.Others.ApplicationClass.macAddress;
 import static com.ionexchange.Others.PacketControl.ADMIN;
 import static com.ionexchange.Others.PacketControl.APP_VERSION;
 import static com.ionexchange.Others.PacketControl.CONNECT_COMMAND;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_connectPacket;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
@@ -38,7 +42,6 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
         return mBinding.getRoot();
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -50,7 +53,7 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
         mBinding.configScreenBtn.setOnClickListener(this);
         // Connect_Packet
 
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_connectPacket + SPILT_CHAR + APP_VERSION + SPILT_CHAR + CONNECT_COMMAND + ADMIN);
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_connectPacket + SPILT_CHAR + APP_VERSION + SPILT_CHAR + CONNECT_COMMAND + SPILT_CHAR + ADMIN);
         setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentRoot_MainScreen(), "Dashboard");
     }
 
@@ -123,5 +126,22 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
 
     @Override
     public void OnDataReceive(String data) {
+        if (data != null) {
+            handleResponse(data.split("\\*")[1].split("\\$"));
+        }
+    }
+
+    private void handleResponse(String[] spiltData) {
+        try {
+            if (spiltData[1].equals(PCK_connectPacket)) {
+                if (spiltData[0].equals(READ_PACKET)) {
+                    if (spiltData[2].equals(RES_SUCCESS)) {
+                        macAddress = spiltData[5];
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

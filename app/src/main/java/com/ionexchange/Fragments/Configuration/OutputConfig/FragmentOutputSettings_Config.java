@@ -76,6 +76,11 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
 
     }
 
+    @Override
+    public void onClick(String sensorInputNo, String type, int position) {
+
+    }
+
     public void updateToDb(List<OutputConfigurationEntity> entryList) {
         WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
         OutputConfigurationDao dao = db.outputConfigurationDao();

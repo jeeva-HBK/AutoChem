@@ -37,12 +37,16 @@ public class ApplicationClass extends Application {
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},
-            unitArr = {" Ã‚ÂµS/cm", " mS/cm", "S/cm"},
+            unitArr = {" Ã‚ÂµS/cm", " mS/cm", " S/cm"},
+            resetFlowTotalArr = {"No reset", "Reset"},
+            sensorSequenceNumber = {"1-Sensor", "2-Sensor", "3-Sensor", "4-Sensor", "5-Sensor", "6-Sensor"},
             typeOfValueRead = {"None", "Fluorescence value", "Turbidity Value", "Corrosion rate", "Pitting rate", "Fluorescence value", "Tagged Polymer value"},
 
-    flowMeterTypeArr = {"Analog Flow Meter", "Flow Meter Contactor", "Paddle Wheel", "Feed Monitor"},
+    flowMeterTypeArr = {"Analog Flow Meter", "Contactor", "Paddle Wheel", "Feed Monitor"},
             flowUnitArr = {"Volume", "Gallons", "Litres", "Cubic Meters", "Millions of Gallons"},
             scheduleResetArr = {"No Schedule Reset", "Daily", "Monthly", "Annually"},
+            totalAlarmMode = {"Interlock", "Maintain"},
+            flowAlarmMode = {"Disable", "Interlock", "Maintain"},
 
     digitalArr = {"NC", "NO"},
             modBusTypeArr = {"ST500", "CR300CS", "CR-300 CU", "ST-590", "ST-588", "ST-500 RO"},
@@ -61,20 +65,20 @@ public class ApplicationClass extends Application {
     inputSensors = {"Input 1", "Input 2", "Input 3", "Input 4", "Input 5", "Input 6", "Input 7", "Input 8", "Input 9", "Input 10", "Input 11", "Input 12", "Input 13", "Input 14", "Input 15", "Input 16", "Input 17", "Input 18", "Input 19", "Input 20", "Input 21", "Input 22", "Input 23", "Input 24",
             "Input 25", "Input 26", "Input 27", "Input 28", "Input 29", "Input 30", "Input 31", "Input 32", "Input 33", "Input 34", "Input 35", "Input 36", "Input 37", "Input 38", "Input 39", "Input 40", "Input 41", "Input 42", "Input 43", "Input 44", "Input 45", "Input 46", "Input 47", "Input 48", "Input 49", "Input 50", "Input 51", "Input 52"},
             doseTypeArr = {"Below", "Above"},
-            inputAnalogSensors = {"Input 1", "Input 2", "Input 3", "Input 4", "Input 5", "Input 6", "Input 7", "Input 8", "Input 9", "Input 10", "Input 11", "Input 12","Input 13"},
-    OutputBleedFlowRate = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14"},
+            inputAnalogSensors = {"Input 1", "Input 2", "Input 3", "Input 4", "Input 5", "Input 6", "Input 7", "Input 8", "Input 9", "Input 10", "Input 11", "Input 12", "Input 13"},
+            OutputBleedFlowRate = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14"},
 
-    TemperatureCompensationType = {"Linear temperature Compensation","standard NaCl temperature compensation"},
+    TemperatureCompensationType = {"Linear temperature Compensation", "standard NaCl temperature compensation"},
 
     timerOutputMode = {"Timer", "Timer Flow", "Timer Disabled"},
-    timerFlowSensor = {"Flow Sensor - 1", "Flow Sensor - 2", "Flow Sensor - 3", "Flow Sensor - 4", " Flow Sensor - 5", "Flow Sensor - 6",
-            "Flow Sensor - 7", "Flow Sensor - 8"},
-    accessoryTimerMode = {"Timer Safety", "Timer Safety Flow", "Disabled"},
-    accessoryType = {" ON Before", "OFF Before", "ON After", " OFF After", "ON With", "OFF with"};
+            timerFlowSensor = {"Flow Sensor - 1", "Flow Sensor - 2", "Flow Sensor - 3", "Flow Sensor - 4", " Flow Sensor - 5", "Flow Sensor - 6",
+                    "Flow Sensor - 7", "Flow Sensor - 8"},
+            accessoryTimerMode = {"Timer Safety", "Timer Safety Flow", "Disabled"},
+            accessoryType = {" ON Before", "OFF Before", "ON After", " OFF After", "ON With", "OFF with"};
 
 
     /* Static Variables */
-    static String mIPAddress = "192.168.1.107", Packet;
+    public static String mIPAddress = "192.168.1.223", Packet, macAddress; // mac address of the unit controller;
     //static String mIPAddress = "192.168.2.37", Packet;
     static int mPortNumber = 9760;
 
@@ -197,8 +201,24 @@ public class ApplicationClass extends Application {
                 finalDigits = ("0000000" + value).substring(value.length());
                 break;
 
+            case 8:
+                finalDigits = ("00000000" + value).substring(value.length());
+                break;
+
+            case 9:
+                finalDigits = ("000000000" + value).substring(value.length());
+                break;
+            case 10:
+                finalDigits = ("0000000000" + value).substring(value.length());
+                break;
+            case 11:
+                finalDigits = ("00000000000" + value).substring(value.length());
+                break;
             case 12:
                 finalDigits = ("000000000000" + value).substring(value.length());
+                break;
+            case 13:
+                finalDigits = ("0000000000000" + value).substring(value.length());
                 break;
         }
         return finalDigits;

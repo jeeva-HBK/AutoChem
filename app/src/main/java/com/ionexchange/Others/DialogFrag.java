@@ -64,7 +64,8 @@ public class DialogFrag extends androidx.fragment.app.DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.toolbar.setTitle(title);
+        //binding.toolbar.setTitle(title);
+        binding.toolbarTitle.setText(title);
         binding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

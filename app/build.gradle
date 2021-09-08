@@ -4,7 +4,7 @@ plugins {
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
-    dataBinding.enabled = true
+    android.buildFeatures.dataBinding = true
     defaultConfig {
         applicationId "com.ionexchange"
         minSdkVersion 21

@@ -1,5 +1,20 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Others.ApplicationClass.analogTypeArr;
+import static com.ionexchange.Others.ApplicationClass.analogUnitArr;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,20 +40,6 @@ import com.ionexchange.databinding.FragmentInputsensorAnalogBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ionexchange.Others.ApplicationClass.analogTypeArr;
-import static com.ionexchange.Others.ApplicationClass.analogUnitArr;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.userType;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-
 public class FragmentInputSensorAnalog_Config extends Fragment implements DataReceiveCallback {
 
     FragmentInputsensorAnalogBinding mBinding;
@@ -50,6 +51,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
     int sensorStatus;
     WaterTreatmentDb db;
     InputConfigurationDao dao;
+    String sensorSequence;
 
     public FragmentInputSensorAnalog_Config(String inputNumber, int sensorStatus) {
         this.inputNumber = inputNumber;
@@ -77,7 +79,8 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
-
+        initAdapter();
+        sensorSequenceNumber();
         switch (userType) {
             case 1:
                 mBinding.analogInputNumber.setEnabled(false);
@@ -93,7 +96,6 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                 mBinding.analogCalibAlarmRequired.setEnabled(false);
                 mBinding.analogResetCalibration.setEnabled(false);
                 mBinding.analogSensorActivation.setVisibility(View.GONE);
-
                 mBinding.analogRow6Isc.setVisibility(View.GONE);
                 break;
 
@@ -103,30 +105,23 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                 mBinding.analogAnalogType.setEnabled(false);
                 mBinding.analogUnit.setEnabled(false);
                 mBinding.analogSmoothingFactor.setEnabled(false);
-
                 mBinding.analogSensorActivation.setVisibility(View.GONE);
-                mBinding.deleteLayout.setVisibility(View.GONE);
-                break;
-
-            case 3:
-
+                mBinding.analogDeleteLayoutIsc.setVisibility(View.GONE);
                 break;
         }
 
-        initAdapter();
-        mBinding.saveLayout.setOnClickListener(this::save);
-        mBinding.saveFab.setOnClickListener(this::save);
-        mBinding.deleteFab.setOnClickListener(this::delete);
-        mBinding.deleteLayout.setOnClickListener(this::delete);
+        mBinding.analogSaveLayoutIsc.setOnClickListener(this::save);
+        mBinding.analogSaveFabIsc.setOnClickListener(this::save);
+        mBinding.analogDeleteFabIsc.setOnClickListener(this::delete);
+        mBinding.analogDeleteLayoutIsc.setOnClickListener(this::delete);
 
-        mBinding.backArrow.setOnClickListener(new View.OnClickListener() {
+        mBinding.backArrowIsc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
             }
         });
     }
-
 
 
     private void delete(View view) {
@@ -140,22 +135,23 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         }
     }
 
-
     void sendData(int sensorStatus) {
+        sensorSequenceNumber();
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + "0" + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
                 toString(2, mBinding.analogInputNumberTie) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.analogSensorTypeTie), inputTypeArr) + SPILT_CHAR +
+                sensorSequence + SPILT_CHAR +
                 getPosition(1, toString(mBinding.analogTypeTie), analogTypeArr) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.analogSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
                 toString(0, mBinding.analogInputLabelTie) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.analogUnitMeasurementTie), analogUnitArr) + SPILT_CHAR +
-                toString(4, mBinding.analogMinValueTie) + SPILT_CHAR +
-                toString(4, mBinding.analogMaxValueTie) + SPILT_CHAR +
+                toString(2, mBinding.analogMinValueTie) + "." + toString(2, mBinding.analogMinValueIsc) + SPILT_CHAR +
+                toString(2, mBinding.analogMaxValueTie) + "." + toString(2, mBinding.analogMaxValueIsc) + SPILT_CHAR +
                 toString(3, mBinding.analogSmoothingFactorTie) + SPILT_CHAR +
-                toStringSplit(4, 2, mBinding.analogAlarmLowTie) + SPILT_CHAR +
-                toStringSplit(4, 2, mBinding.analogHighLowTie) + SPILT_CHAR +
+                toString(2, mBinding.analogAlarmLowTie) + "." + toString(2, mBinding.lowAlarmMinValueIsc) + SPILT_CHAR +
+                toString(2, mBinding.analogHighLowTie) + "." + toString(2, mBinding.highAlarmMinValueIsc) + SPILT_CHAR +
                 toString(3, mBinding.analogCalibrationRequiredAlarmTie) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.analogResetCalibrationTie), resetCalibrationArr) + SPILT_CHAR +
                 sensorStatus);
@@ -192,6 +188,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         mBinding.analogTypeTie.setAdapter(getAdapter(analogTypeArr));
         mBinding.analogUnitMeasurementTie.setAdapter(getAdapter(analogUnitArr));
         mBinding.analogResetCalibrationTie.setAdapter(getAdapter(resetCalibrationArr));
+        mBinding.analogSequenceNumberTie.setAdapter(getAdapter(sensorSequenceNumber));
     }
 
     public ArrayAdapter<String> getAdapter(String[] strArr) {
@@ -204,12 +201,12 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
 
         if (sensorName == null) {
             mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + "19");
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + "0" + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + inputNumber);
         } else {
             mBinding.analogInputNumberTie.setText(inputNumber);
             mBinding.analogSensorTypeTie.setText(sensorName);
-            mBinding.deleteLayout.setVisibility(View.INVISIBLE);
-            mBinding.saveTxt.setText("ADD");
+            mBinding.analogDeleteLayoutIsc.setVisibility(View.INVISIBLE);
+            mBinding.analogSaveTxtIsc.setText("ADD");
         }
     }
 
@@ -229,7 +226,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
             mAppClass.showSnackBar(getContext(), "TimeOut");
         }
         if (data != null) {
-            handleResponse(data.split("\\*")[1].split("#"));
+            handleResponse(data.split("\\*")[1].split("\\$"));
         }
     }
 
@@ -237,33 +234,33 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         if (data[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
             if (data[0].equals(READ_PACKET)) {
                 if (data[2].equals(RES_SUCCESS)) {
-
                     mBinding.analogInputNumberTie.setText(data[3]);
-
                     mBinding.analogSensorTypeTie.setText(mBinding.analogSensorTypeTie.getAdapter().getItem(Integer.parseInt(data[4])).toString());
-                    mBinding.analogTypeTie.setText(mBinding.analogTypeTie.getAdapter().getItem(Integer.parseInt(data[5])).toString());
-
-                    mBinding.analogSensorActivationTie.setText(mBinding.analogSensorActivationTie.getAdapter().getItem(Integer.parseInt(data[6])).toString());
-
-                    mBinding.analogInputLabelTie.setText(data[7]);
-                    mBinding.analogUnitMeasurementTie.setText(mBinding.analogUnitMeasurementTie.getAdapter().getItem(Integer.parseInt(data[8])).toString());
-                    mBinding.analogMinValueTie.setText(data[9]);
-                    mBinding.analogMaxValueTie.setText(data[10]);
-                    mBinding.analogSmoothingFactorTie.setText(data[11]);
-                    mBinding.analogAlarmLowTie.setText(data[12].substring(0, 4) + "." + data[12].substring(4, 6));
-                    mBinding.analogHighLowTie.setText(data[13].substring(0, 4) + "." + data[13].substring(4, 6));
-                    mBinding.analogCalibrationRequiredAlarmTie.setText(data[14]);
-                    mBinding.analogResetCalibrationTie.setText(mBinding.analogResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[15])).toString());
-
+                    mBinding.analogSequenceNumberTie.setText(mBinding.analogSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[5])).toString());
+                    mBinding.analogTypeTie.setText(mBinding.analogTypeTie.getAdapter().getItem(Integer.parseInt(data[6])).toString());
+                    mBinding.analogSensorActivationTie.setText(mBinding.analogSensorActivationTie.getAdapter().getItem(Integer.parseInt(data[7])).toString());
+                    mBinding.analogInputLabelTie.setText(data[8]);
+                    mBinding.analogUnitMeasurementTie.setText(mBinding.analogUnitMeasurementTie.getAdapter().getItem(Integer.parseInt(data[9])).toString());
+                    mBinding.analogMinValueTie.setText(data[10].substring(0, 2));
+                    mBinding.analogMinValueIsc.setText(data[10].substring(3, 5));
+                    mBinding.analogMaxValueTie.setText(data[11].substring(0, 2));
+                    mBinding.analogMaxValueIsc.setText(data[11].substring(3, 5));
+                    mBinding.analogSmoothingFactorTie.setText(data[12]);
+                    mBinding.analogAlarmLowTie.setText(data[13].substring(0, 2));
+                    mBinding.lowAlarmMinValueIsc.setText(data[13].substring(3, 5));
+                    mBinding.analogHighLowTie.setText(data[14].substring(0, 2));
+                    mBinding.highAlarmMinValueIsc.setText(data[14].substring(3, 5));
+                    mBinding.analogCalibrationRequiredAlarmTie.setText(data[15]);
+                    mBinding.analogResetCalibrationTie.setText(mBinding.analogResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[16])).toString());
                     initAdapter();
                 } else if (data[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), "READ FAILED");
                 }
             } else if (data[0].equals(WRITE_PACKET)) {
-                if (data[2].equals(RES_SUCCESS)) {
-                    analogEntity(1);
+                if (data[3].equals(RES_SUCCESS)) {
+                    analogEntity(Integer.parseInt(data[2]));
                     mAppClass.showSnackBar(getContext(), "WRITE SUCCESS");
-                } else if (data[2].equals(RES_FAILED)) {
+                } else if (data[3].equals(RES_FAILED)) {
 
                     mAppClass.showSnackBar(getContext(), "WRITE FAILED");
                 }
@@ -334,21 +331,23 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
 
     public void analogEntity(int flagValue) {
         switch (flagValue) {
-            case 0:
+            case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(toString(2, mBinding.analogInputNumberTie)), "0", 0, "0", "0", "0", flagValue);
+                        (Integer.parseInt(toString(2, mBinding.analogInputNumberTie)), "0",
+                                0, "0", "0", "0", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
                 break;
 
+            case 0:
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(toString(2, mBinding.analogInputNumberTie)),
                                 mBinding.analogSensorTypeTie.getText().toString(),
                                 0, toString(0, mBinding.analogInputLabelTie),
                                 toStringSplit(4, 2, mBinding.analogAlarmLowTie),
-                                toStringSplit(4, 2, mBinding.analogHighLowTie), flagValue);
+                                toStringSplit(4, 2, mBinding.analogHighLowTie), 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);
@@ -359,7 +358,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
 
     class pHm {
 
-        String inputNumber ="InputNumber,01";
+        String inputNumber = "InputNumber,01";
 
         public String getInputNumber() {
             return inputNumber;
@@ -370,4 +369,17 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         }
     }
 
+
+    void sensorSequenceNumber() {
+        if (Integer.parseInt(inputNumber) > 13 && Integer.parseInt(inputNumber) < 21) {
+            mBinding.analogSequenceNumber.setVisibility(View.VISIBLE);
+            if (!mBinding.analogSequenceNumberTie.getText().toString().isEmpty()) {
+                sensorSequence = getPosition(1, toString(mBinding.analogSequenceNumberTie), sensorSequenceNumber);
+            }
+        } else {
+            mBinding.analogSequenceNumber.setVisibility(View.GONE);
+            sensorSequence = "0";
+
+        }
+    }
 }

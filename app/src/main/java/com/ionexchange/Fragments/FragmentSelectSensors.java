@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments.Configuration.HomeScreen;
+package com.ionexchange.Fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,9 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ionexchange.Adapters.SelectSensorListAdapter;
-import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
 import com.ionexchange.Database.Dao.MainConfigurationDao;
-import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
 import com.ionexchange.Database.Entity.MainConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.RvOnClick;
@@ -36,10 +34,11 @@ public class FragmentSelectSensors extends Fragment implements CompoundButton.On
 
     RvOnClick rvOnClick;
     DialogFrag fragment;
-    int screenNo,layoutNo,windowNo;
+    int screenNo, layoutNo, windowNo;
     WaterTreatmentDb dB;
     MainConfigurationDao dao;
-    public FragmentSelectSensors(DialogFrag fragment,int screenNo,int layoutNo,int windowNo) {
+
+    public FragmentSelectSensors(DialogFrag fragment, int screenNo, int layoutNo, int windowNo) {
         this.fragment = fragment;
         this.screenNo = screenNo;
         this.layoutNo = layoutNo;
@@ -77,7 +76,7 @@ public class FragmentSelectSensors extends Fragment implements CompoundButton.On
 
     private void setAdapter(boolean b, String type, String[] mList) {
         if (b) {
-            mBinding.selectSensorRv.setAdapter(new SelectSensorListAdapter(mList, type,rvOnClick = this,screenNo,layoutNo,windowNo));
+            mBinding.selectSensorRv.setAdapter(new SelectSensorListAdapter(mList, type, rvOnClick = this, screenNo, layoutNo, windowNo));
         }
     }
 
@@ -119,8 +118,8 @@ public class FragmentSelectSensors extends Fragment implements CompoundButton.On
 
             case R.id.outputRb:
                 setAdapter(b, "Relay Output", new String[]{"Output 1", "Output 2", "Output 3", "Output 4", "Output 5",
-                        "Output 6", "Output 7",  "Output 8",  "Output 9",  "Output 10",
-                        "Output 11",  "Output 12",  "Output 13",  "Output 14"});
+                        "Output 6", "Output 7", "Output 8", "Output 9", "Output 10",
+                        "Output 11", "Output 12", "Output 13", "Output 14"});
                 break;
 
             case R.id.generalRb:
@@ -142,9 +141,9 @@ public class FragmentSelectSensors extends Fragment implements CompoundButton.On
     }
 
     @Override
-    public void onClick(String sensorInputNo,String type,int position) {
+    public void onClick(String sensorInputNo, String type, int position) {
         int sensor_sequence_number = 0;
-        String input_type ="Sensor";
+        String input_type = "Sensor";
         /*if(type.equalsIgnoreCase("Sensor")){
             switch (position){
                 case 0:
@@ -168,12 +167,12 @@ public class FragmentSelectSensors extends Fragment implements CompoundButton.On
                     break;
             }
         } else {*/
-            input_type = type;
-            sensor_sequence_number = position + 1;
+        input_type = type;
+        sensor_sequence_number = position + 1;
         //}
-        Log.e("final_valueto_insert",screenNo+" "+layoutNo+" "+type+" "+sensor_sequence_number+" ");
-        Log.e("sensor",sensorInputNo+"type "+type+ "sequence_number "+sensor_sequence_number);
-        MainConfigurationEntity entityUpdate = new MainConfigurationEntity(screenNo,layoutNo,windowNo,type,sensor_sequence_number,sensorInputNo,macAddress);
+        Log.e("final_valueto_insert", screenNo + " " + layoutNo + " " + type + " " + sensor_sequence_number + " ");
+        Log.e("sensor", sensorInputNo + "type " + type + "sequence_number " + sensor_sequence_number);
+        MainConfigurationEntity entityUpdate = new MainConfigurationEntity(screenNo, layoutNo, windowNo, type, sensor_sequence_number, sensorInputNo, macAddress);
         List<MainConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(entityUpdate);
         WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());

@@ -60,7 +60,7 @@
 
     <style name="config_Til" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:layout_margin">3dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
@@ -78,7 +78,7 @@
 
     <style name="config_AtxTil" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:layout_margin">3dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
@@ -94,6 +94,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:editable">false</item>
+        <item name="android:focusableInTouchMode">false</item>
     </style>
 
     <style name="config_rowLl">

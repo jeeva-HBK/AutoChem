@@ -22,7 +22,15 @@
             android:background="@color/primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" >
+        <TextView
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Configuration"
+            android:textColor="@color/white" />
+        </RelativeLayout>
 
         <!--Layout-->
         <RadioGroup
@@ -206,7 +214,7 @@
                     android:text="🔵 Sample Text Point 2"
                     android:textColor="@color/white"
                     android:textSize="18dp"
-                    app:layout_constraintBottom_toTopOf="@+id/checkBox"
+                    app:layout_constraintBottom_toTopOf="@+id/set_default_layout"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
@@ -221,10 +229,10 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+                    app:layout_constraintTop_toBottomOf="@+id/set_default_layout" />
 
                 <CheckBox
-                    android:id="@+id/checkBox"
+                    android:id="@+id/set_default_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/primary"
