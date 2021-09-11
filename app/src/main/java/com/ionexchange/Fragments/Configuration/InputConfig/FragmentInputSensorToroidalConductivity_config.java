@@ -1,11 +1,11 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
-import android.media.audiofx.DynamicsProcessing;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -96,6 +96,18 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
         mBinding.candBackArrowIsc.setOnClickListener(v -> {
             mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
         });
+        mBinding.candCompensationAtxtIsc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i==0) {
+                    mBinding.candCompFactorEdtIsc.setEnabled(true);
+                    mBinding.candHighAlarmDeciIsc.setEnabled(true);
+                } else {
+                    mBinding.candCompFactorEdtIsc.setEnabled(false);
+                    mBinding.candHighAlarmDeciIsc.setEnabled(false);
+                }
+            }
+        });
     }
 
     private void sensorSequenceNumber() {
@@ -128,7 +140,6 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
             } else {
                 sendStandardNaClTemperature(sensorStatus);
             }
-
         }
     }
 
@@ -141,7 +152,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                 toString(2, mBinding.candInputNumberEdtIsc) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.candSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
                 sensorSequence + SPILT_CHAR +
-                getPosition(1, toString(mBinding.candSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
+                getPosition(0, toString(mBinding.candSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
                 toString(0, mBinding.candInputLabelEdtIsc) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.candTempLinkedAtxtIsc), tempLinkedArr) + SPILT_CHAR +
                 getPlusMinusValue(mBinding.candTempValueTBtn, mBinding.candTemperatureEdtIsc, 3, mBinding.candTempDeciIsc, 2) + SPILT_CHAR +
@@ -277,38 +288,36 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                     mBinding.candUnitOfMeasureAtxtIsc.setText(mBinding.candUnitOfMeasureAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[10])).toString());
                     mBinding.candCompensationAtxtIsc.setText(mBinding.candCompensationAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[11])).toString());
                     if (spiltData[11].equals("0")) {
-                        mBinding.candCompFactorEdtIsc.setText(spiltData[11].substring(0,2));
-                        mBinding.candCompFactorDeciIsc.setText(spiltData[11].substring(3,5));
+                        mBinding.candCompFactorEdtIsc.setText(spiltData[12].substring(0,2));
+                        mBinding.candCompFactorDeciIsc.setText(spiltData[12].substring(3,5));
 
+                        mBinding.candSmoothingFactorEdtIsc.setText(spiltData[13]);
+
+                        mBinding.candLowAlarmEdtIsc.setText(spiltData[14].substring(0,6));
+                        mBinding.candAlarmlowDeciIsc.setText(spiltData[14].substring(7,9));
+
+                        mBinding.candHighAlarmEdtIsc.setText(spiltData[15].substring(0,6));
+                        mBinding.candHighAlarmDeciIsc.setText(spiltData[15].substring(7,9));
+
+                        mBinding.candCalibRequiredAlarmEdtIsc.setText(spiltData[16]);
+                        mBinding.candResetCalibAtxtIsc.setText(mBinding.candResetCalibAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[17])).toString());
+                    } else {
                         mBinding.candSmoothingFactorEdtIsc.setText(spiltData[12]);
 
-                        mBinding.candLowAlarmEdtIsc.setText(spiltData[13].substring(0,7));
-                        mBinding.candAlarmlowDeciIsc.setText(spiltData[13].substring(8,10));
+                        mBinding.candLowAlarmEdtIsc.setText(spiltData[13].substring(0,6));
+                        mBinding.candAlarmlowDeciIsc.setText(spiltData[13].substring(7,9));
 
-                        mBinding.candHighAlarmEdtIsc.setText(spiltData[14].substring(0,7));
-                        mBinding.candHighAlarmDeciIsc.setText(spiltData[14].substring(8,10));
+                        mBinding.candHighAlarmEdtIsc.setText(spiltData[14].substring(0,6));
+                        mBinding.candHighAlarmDeciIsc.setText(spiltData[14].substring(7,9));
 
                         mBinding.candCalibRequiredAlarmEdtIsc.setText(spiltData[15]);
                         mBinding.candResetCalibAtxtIsc.setText(mBinding.candResetCalibAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[16])).toString());
-                    } else {
-                        mBinding.candSmoothingFactorEdtIsc.setText(spiltData[11]);
-
-                        mBinding.candLowAlarmEdtIsc.setText(spiltData[12].substring(0,7));
-                        mBinding.candAlarmlowDeciIsc.setText(spiltData[12].substring(8,10));
-
-                        mBinding.candHighAlarmEdtIsc.setText(spiltData[13].substring(0,7));
-                        mBinding.candHighAlarmDeciIsc.setText(spiltData[13].substring(8,10));
-
-                        mBinding.candCalibRequiredAlarmEdtIsc.setText(spiltData[14]);
-                        mBinding.candResetCalibAtxtIsc.setText(mBinding.candResetCalibAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[15])).toString());
                     }
-
-
                     initAdapters();
                 } else if (spiltData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), "READ FAILED");
                 }
-               // 0$ 04$ 0$ 0
+
             } else if (spiltData[0].equals(WRITE_PACKET)) {
                 if (spiltData[3].equals(RES_SUCCESS)) {
                     mAppClass.showSnackBar(getContext(), "WRITE SUCCESS");

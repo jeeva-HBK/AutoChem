@@ -32,6 +32,7 @@ import com.ionexchange.databinding.FragmentCommonsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_GENERAL;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
@@ -110,10 +111,22 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
 
     private void onCLick(View view) {
         if (validateFields()) {
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_GENERAL + SPILT_CHAR + toString(0, mBinding.siteIdCommonSettingsEDT) + SPILT_CHAR +
-                    toString(0, mBinding.siteNameCommonSettingsEDT) + SPILT_CHAR + toString(0, mBinding.sitePasswordCommonSettingsEDT) + SPILT_CHAR + getRadio(mBinding.radioGroup, mBinding.enableCommonSettings) + SPILT_CHAR + toString(0, mBinding.siteLocationCommonSettingsEDT) + SPILT_CHAR +
-                    toString(2, mBinding.alarmDelayCommonSettingsEDT) + SPILT_CHAR + getRadio(mBinding.radioGroup2, mBinding.fahrenheit) + SPILT_CHAR + toString(2, mBinding.Hours) + toString(2, mBinding.MM) + toString(2, mBinding.SS) + toString(1, mBinding.NN) + toString(2, mBinding.DD) +
-                    toString(2, mBinding.month) + toString(4, mBinding.YYYY));
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+                    CONN_TYPE + SPILT_CHAR +
+                    WRITE_PACKET + SPILT_CHAR +
+                    PCK_GENERAL + SPILT_CHAR +
+                    toString(0, mBinding.siteIdCommonSettingsEDT) + SPILT_CHAR +
+                    toString(0, mBinding.siteNameCommonSettingsEDT) + SPILT_CHAR +
+                    toString(0, mBinding.sitePasswordCommonSettingsEDT) + SPILT_CHAR +
+                    getRadio(mBinding.radioGroup, mBinding.enableCommonSettings) + SPILT_CHAR +
+                    toString(0, mBinding.siteLocationCommonSettingsEDT) + SPILT_CHAR +
+                    toString(2, mBinding.alarmDelayCommonSettingsEDT) + SPILT_CHAR +
+                    getRadio(mBinding.radioGroup2, mBinding.fahrenheit) + SPILT_CHAR +
+                    toString(2, mBinding.Hours) + toString(2, mBinding.MM) +
+                    toString(2, mBinding.SS) + toString(1, mBinding.NN) +
+                    toString(2, mBinding.DD) +
+                    toString(2, mBinding.month) +
+                    toString(4, mBinding.YYYY));
         }
     }
 
@@ -227,7 +240,7 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
 
     private void readData() {
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_GENERAL);
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_GENERAL);
     }
 
     @Override
@@ -246,7 +259,7 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
             mAppClass.showSnackBar(getContext(), "TimeOut");
         }
         if (data != null) {
-            handleResponce(data.split("\\*")[1].split("#"));
+            handleResponce(data.split("\\*")[1].split("\\$"));
         }
     }
 
@@ -277,7 +290,7 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
                     } else if (splitData[9].equals("1")) {
                         mBinding.fahrenheit.setChecked(true);
                     }
-                    // FIXME: 22-07-2021 RTC --by silam
+                    // FIXME: 22-07-2021 RTC -- by silam
                     mBinding.Hours.setText(splitData[10].substring(1, 2));
                     mBinding.MM.setText(splitData[10].substring(3, 4));
                     mBinding.SS.setText(splitData[10].substring(5, 6));

@@ -115,9 +115,16 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
 
     private String formData() {
         mActivity.showProgress();
-        return DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_panelIpConfig + SPILT_CHAR
-                + toString(mBinding.ipUnitipEDT) + SPILT_CHAR + toString(mBinding.subNetUnitipEDT) + SPILT_CHAR + toString(mBinding.gatewayUnitipEDT) + SPILT_CHAR
-                + toString(mBinding.DNS1UnitipEDT) + SPILT_CHAR + toString(mBinding.DNS2UnitipEDT) + SPILT_CHAR + toString(mBinding.portUnitipEDT);
+        return DEVICE_PASSWORD + SPILT_CHAR +
+                CONN_TYPE + SPILT_CHAR +
+                WRITE_PACKET + SPILT_CHAR +
+                PCK_panelIpConfig + SPILT_CHAR +
+                toString(mBinding.ipUnitipEDT) + SPILT_CHAR +
+                toString(mBinding.subNetUnitipEDT) + SPILT_CHAR +
+                toString(mBinding.gatewayUnitipEDT) + SPILT_CHAR +
+                toString(mBinding.DNS1UnitipEDT) + SPILT_CHAR +
+                toString(mBinding.DNS2UnitipEDT) + SPILT_CHAR +
+                toString(mBinding.portUnitipEDT);
     }
 
     @Override
@@ -136,7 +143,7 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
             mAppclass.showSnackBar(getContext(), "TimeOut");
         }
         if (data != null) {
-            handleData(data.split("\\*")[1].split(SPILT_CHAR));
+            handleData(data.split("\\*")[1].split("\\$"));
         }
 
     }
@@ -147,7 +154,7 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
 
         /* Read Res */
         if (splitData[1].equals("01")) {
-            if (splitData[0].equals("1")) {
+            if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
                     mBinding.ipUnitipEDT.setText(splitData[3]);
                     mBinding.subNetUnitipEDT.setText(splitData[4]);

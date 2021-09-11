@@ -33,7 +33,8 @@ public class ApplicationClass extends Application {
     public static int userType = 0; // 0 - None | 1 - Basic | 2 - intermediate | 3 - Advanced
 
     public static String[] sensorActivationArr = {"ENABLE", "DISABLE"},
-            inputTypeArr = {"pH", "ORP", "Temp", "Flow/Water Meter", "Conductivity", "Toroidal", "Analog Input", "Tank Level", "Digital Sensor", "Modbus Sensor"},
+            inputTypeArr = {"pH", "ORP", "Temperature", "Flow/Water Meter", "Contacting Conductivity", "Toroidal Conductivity", "Analog Input", "Tank Level", "Digital Input", "Modbus Sensor"},
+            analogInputArr = {"pH", "ORP", "Temperature", "Contacting Conductivity", "Toroidal Conductivity", "Analog Input"},
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},

@@ -20,6 +20,7 @@ import com.ionexchange.databinding.FragmentTargetipsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_target_ip;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
@@ -84,9 +85,14 @@ public class FragmentTargetIpSettings_Config extends Fragment implements DataRec
 
     private String formData() {
         mActivity.showProgress();
-        return DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_target_ip +
-                SPILT_CHAR + toString(mBinding.server1ipTargetipEDT) + SPILT_CHAR + toString(mBinding.server1portTargetipEDT)
-                + SPILT_CHAR + toString(mBinding.tabipTargetipEDT) + SPILT_CHAR + toString(mBinding.tabportTargetipEDT);
+        return DEVICE_PASSWORD + SPILT_CHAR +
+                CONN_TYPE + SPILT_CHAR +
+                WRITE_PACKET + SPILT_CHAR +
+                PCK_target_ip + SPILT_CHAR +
+                toString(mBinding.server1ipTargetipEDT) + SPILT_CHAR +
+                toString(mBinding.server1portTargetipEDT) + SPILT_CHAR +
+                toString(mBinding.tabipTargetipEDT) + SPILT_CHAR +
+                toString(mBinding.tabportTargetipEDT);
     }
 
     public String toString(EditText edt) {
@@ -101,7 +107,7 @@ public class FragmentTargetIpSettings_Config extends Fragment implements DataRec
 
     private void readData() {
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_target_ip);
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_target_ip);
     }
 
     @Override
@@ -120,7 +126,7 @@ public class FragmentTargetIpSettings_Config extends Fragment implements DataRec
             mAppClass.showSnackBar(getContext(), "TimeOut");
         }
         if (data != null) {
-            handleData(data.split("\\*")[1].split("#"));
+            handleData(data.split("\\*")[1].split("\\$"));
         }
     }
 

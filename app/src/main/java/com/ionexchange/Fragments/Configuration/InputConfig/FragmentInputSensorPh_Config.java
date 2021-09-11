@@ -168,14 +168,14 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                 toString(2, mBinding.phInputNumberEdtIsc) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.phSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
                 sensorSequence + SPILT_CHAR +
-                getPosition(2, toString(mBinding.phSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.phSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
                 toString(0, mBinding.phInputLabelEdtIsc) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.phBufferTypeAtxtIsc), bufferArr) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.phTempLinkedAtxtIsc), tempLinkedArr) + SPILT_CHAR +
                 getDefaultTempValue() + SPILT_CHAR +
                 toString(3, mBinding.phSmoothingFactorEdtIsc) + SPILT_CHAR +
                 getDecimal(toString(2, mBinding.phAlarmLowEdtIsc), toString(2, mBinding.phAlarmLowDeciIsc)) + SPILT_CHAR +
-                getDecimal(toString(2, mBinding.phAlarmhighEdtIsc), toString(2, mBinding.phAlarmhighEdtIsc)) + SPILT_CHAR +
+                getDecimal(toString(2, mBinding.phAlarmhighEdtIsc), toString(2, mBinding.phHighAlarmDeciIsc)) + SPILT_CHAR +
                 toString(3, mBinding.phCalibrationRequiredEdtIsc) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.phResetCalibrationAtxtIsc), resetCalibrationArr) + SPILT_CHAR +
                 sensorStatus
@@ -189,7 +189,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                 sensorSequence = getPosition(1, toString(mBinding.phSeqNumberAtxtIsc), sensorSequenceNumber);
             }
         } else {
-            mBinding.phSeqNumberTilIsc.setVisibility(View.GONE);
+            mBinding.phSeqNumberTilIsc.setVisibility(View.INVISIBLE);
             sensorSequence = "0";
 
         }

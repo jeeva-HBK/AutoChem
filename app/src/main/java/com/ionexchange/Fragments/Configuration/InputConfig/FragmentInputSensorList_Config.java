@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.ionexchange.Adapters.InputsIndexRvAdapter;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
@@ -29,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ionexchange.Others.ApplicationClass.analogInputArr;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.sensorsViArr;
 import static com.ionexchange.Others.ApplicationClass.userType;
@@ -38,6 +41,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
     List<InputConfigurationEntity> inputConfigurationEntityList;
     AutoCompleteTextView inputNumber;
     AutoCompleteTextView sensorName;
+    TextInputLayout sensorTypeLayout;
     ApplicationClass mAppClass;
     WaterTreatmentDb dB;
     InputConfigurationDao dao;
@@ -69,7 +73,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
                 updateToDb(entryListUpdate);
             }
         }
-        inputConfigurationEntityList = dao.getInputConfigurationEntityFlagKeyList(1);
+        inputConfigurationEntityList = dao.getInputConfigurationEntityFlagKeyList(0);
         mBinding.inputsRv.setLayoutManager(new GridLayoutManager(getContext(), 4));
         mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(this, inputConfigurationEntityList));
         mBinding.addsensorIsBtn.setOnClickListener(this);
@@ -93,11 +97,78 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
                     View dialogView = inflater.inflate(R.layout.add_input_sensor_dailog, null);
                     dialogBuilder.setView(dialogView);
                     AlertDialog alertDialog = dialogBuilder.create();
+
                     inputNumber = dialogView.findViewById(R.id.add_input_number_dialog_act);
                     sensorName = dialogView.findViewById(R.id.add_sensor_name_dialog_act);
+                    sensorTypeLayout = dialogView.findViewById(R.id.add_sensor_name_dialog_til);
                     Button btn = dialogView.findViewById(R.id.add_sensor_dialog_btn);
                     inputNumber.setAdapter(getAdapter(sensorsViArr));
                     sensorName.setAdapter(getAdapter(inputTypeArr));
+
+
+                    inputNumber.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            int inputNo = Integer.parseInt(inputNumber.getText().toString());
+                            if (inputNo >= 1 && inputNo <= 13) {
+                                sensorName.setAdapter(getAdapter(inputTypeArr));
+                                switch (inputNo) {
+                                    case 1:
+                                        sensorName.setText(sensorName.getAdapter().getItem(0).toString());
+                                        break;
+                                    case 2:
+                                        sensorName.setText(sensorName.getAdapter().getItem(1).toString());
+                                        break;
+                                    case 3:
+                                        sensorName.setText(sensorName.getAdapter().getItem(4).toString());
+                                        break;
+                                    case 4:
+                                        sensorName.setText(sensorName.getAdapter().getItem(5).toString());
+                                        break;
+                                    case 5:
+                                    case 6:
+                                    case 7:
+                                    case 8:
+                                    case 9:
+                                    case 10:
+                                        sensorName.setText(sensorName.getAdapter().getItem(9).toString());
+                                        break;
+                                    case 11:
+                                    case 12:
+                                    case 13:
+                                        sensorName.setText(sensorName.getAdapter().getItem(2).toString());
+                                        break;
+                                }
+                                sensorTypeLayout.setEnabled(false);
+                                sensorName.setAdapter(getAdapter(inputTypeArr));
+
+                            } else if (inputNo >= 14 && inputNo <= 21) {
+                                sensorName.setAdapter(getAdapter(inputTypeArr));
+                                sensorName.setText(sensorName.getAdapter().getItem(6).toString());
+                                sensorTypeLayout.setEnabled(true);
+                                sensorName.setAdapter(getAdapter(analogInputArr));
+
+                            } else if (inputNo >= 22 && inputNo <= 29) {
+                                sensorName.setAdapter(getAdapter(inputTypeArr));
+                                sensorTypeLayout.setEnabled(false);
+                                sensorName.setAdapter(getAdapter(inputTypeArr));
+                                sensorName.setText(sensorName.getAdapter().getItem(3).toString());
+
+                            } else if (inputNo >= 30 && inputNo <= 37) {
+                                sensorName.setAdapter(getAdapter(inputTypeArr));
+                                sensorTypeLayout.setEnabled(false);
+                                sensorName.setAdapter(getAdapter(inputTypeArr));
+                                sensorName.setText(sensorName.getAdapter().getItem(8).toString());
+
+                            } else if (inputNo >= 38 && inputNo <= 45) {
+                                sensorName.setAdapter(getAdapter(inputTypeArr));
+                                sensorTypeLayout.setEnabled(false);
+                                sensorName.setAdapter(getAdapter(inputTypeArr));
+                                sensorName.setText(sensorName.getAdapter().getItem(7).toString());
+                            }
+                        }
+                    });
+
                     btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -140,16 +211,16 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
             case "Conductivity":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorConductivity_Config(inputNumber, 1)).commit();
                 break;
-            case "Toroidal":
+            case "Toroidal Conductivity":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorToroidalConductivity_config(inputNumber, 1)).commit();
                 break;
-            case "Temp":
+            case "Temperature":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorTemp_config(inputNumber, 1)).commit();
                 break;
             case "Flow/Water Meter":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorFlow_config(inputNumber, 1)).commit();
                 break;
-            case "Digital Sensor":
+            case "Digital Input":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorDigital_config(inputNumber, 1)).commit();
                 break;
             case "Tank Level":
@@ -174,7 +245,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
             case "ORP":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorORP_Config(inputNumber, sensorName, 0)).commit();
                 break;
-            case "Conductivity":
+            case "Contacting Conductivity":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorConductivity_Config(inputNumber, sensorName, 0)).commit();
                 break;
             case "Toroidal":

@@ -103,16 +103,17 @@
                     android:hint="Input Label"
                     android:imeOptions="actionNext"
                     android:inputType="textPersonName"
-                    android:maxLength="20" />
+                    android:maxLength="20"
+                    android:maxLines="1"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--temperature value-->
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
                 <ToggleButton
                     android:id="@+id/cand_tempValue_tBtn"
@@ -240,7 +241,9 @@
             <!--Alarm Low-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ph_lowAlarm_root_isc"
-                style="@style/config_Til"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -257,7 +260,7 @@
                         android:hint="Low Alarm"
                         android:imeOptions="actionNext"
                         android:inputType="number"
-                        android:maxLength="6"
+                        android:maxLength="7"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -316,7 +319,7 @@
                         android:hint="High Alarm"
                         android:imeOptions="actionNext"
                         android:inputType="numberDecimal"
-                        android:maxLength="6" />
+                        android:maxLength="7" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -412,7 +415,7 @@
                         android:hint="comp Factor"
                         android:imeOptions="actionNext"
                         android:inputType="numberDecimal"
-                        android:maxLength="6" />
+                        android:maxLength="2" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
