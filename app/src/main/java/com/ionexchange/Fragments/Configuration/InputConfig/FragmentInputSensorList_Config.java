@@ -2,6 +2,7 @@ package com.ionexchange.Fragments.Configuration.InputConfig;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.ionexchange.Adapters.InputsIndexRvAdapter;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Interface.InputRvOnClick;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
@@ -29,12 +31,20 @@ import com.ionexchange.databinding.FragmentInputsettingsBinding;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.analogInputArr;
+import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.sensorsViArr;
 import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 
 public class FragmentInputSensorList_Config extends Fragment implements View.OnClickListener, InputRvOnClick {
     FragmentInputsettingsBinding mBinding;
@@ -47,7 +57,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
     InputConfigurationDao dao;
     String[] inputHardwareNo;
     private static final String TAG = "FragmentInputSettings";
-
+    HashMap<Integer, String> mArr;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -90,7 +100,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addsensor_is_btn:
-
+                mArr = new HashMap<>();
                 if (userType == 3) {
                     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
                     LayoutInflater inflater = this.getLayoutInflater();
@@ -104,7 +114,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
                     Button btn = dialogView.findViewById(R.id.add_sensor_dialog_btn);
                     inputNumber.setAdapter(getAdapter(sensorsViArr));
                     sensorName.setAdapter(getAdapter(inputTypeArr));
-
+                    getPrimarySensors(1);
 
                     inputNumber.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -114,7 +124,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
                                 sensorName.setAdapter(getAdapter(inputTypeArr));
                                 switch (inputNo) {
                                     case 1:
-                                        sensorName.setText(sensorName.getAdapter().getItem(0).toString());
+                                        sensorName.setText(sensorName.getAdapter().getItem(Integer.parseInt(mArr.get(01).split("\\$")[0])).toString());
                                         break;
                                     case 2:
                                         sensorName.setText(sensorName.getAdapter().getItem(1).toString());
@@ -193,10 +203,34 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
         }
     }
 
+    private void getPrimarySensors(int HARDWARE_INPUTNO) {
+        final int[] finalHARDWARE_INPUTNO = {HARDWARE_INPUTNO};
+        mAppClass.sendPacket(new DataReceiveCallback() {
+            @Override
+            public void OnDataReceive(String data) {
+                Log.e(TAG, finalHARDWARE_INPUTNO[0] + "-->" + data);
+                if (finalHARDWARE_INPUTNO[0] <= 13) {
+                    String[] tempRes = data.split("\\*")[1].split("\\$");
+                    if (tempRes[0].equals(READ_PACKET)) {
+                        if (tempRes[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
+                            if (tempRes[2].equals(RES_SUCCESS)) {
+                                if (tempRes.length < 8) {
+                                    mArr.put(Integer.parseInt(tempRes[3]), tempRes[4] + "$" + tempRes[5] + "$" + tempRes[6]);
+                                }
+                                getPrimarySensors(Integer.parseInt(tempRes[3]) + 1);
+                            }
+                        }
+                    }
+
+                }
+            }
+        }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + formDigits(2, String.valueOf(HARDWARE_INPUTNO)));
+        Log.e(TAG, "getPrimarySensors: mArr" + mArr.size());
+    }
+
     public ArrayAdapter<String> getAdapter(String[] strArr) {
         return new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, strArr);
     }
-
 
     void frameLayout(String inputNumber, String sensorType) {
         mBinding.inputsRv.setVisibility(View.GONE);

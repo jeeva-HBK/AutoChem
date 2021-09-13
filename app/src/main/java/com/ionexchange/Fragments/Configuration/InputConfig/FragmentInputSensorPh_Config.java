@@ -269,6 +269,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             editText.setError("Field shouldn't empty !");
             return true;
         }
+        editText.setError(null);
         return false;
     }
 
@@ -277,6 +278,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             editText.setError("Field shouldn't empty !");
             return true;
         }
+        editText.setError(null);
         return false;
     }
 
