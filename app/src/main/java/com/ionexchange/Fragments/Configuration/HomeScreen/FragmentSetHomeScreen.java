@@ -26,6 +26,7 @@ import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.macAddress;
 
+
 public class FragmentSetHomeScreen extends Fragment {
     FragmentSethomescreenBinding mBinding;
     WaterTreatmentDb dB;

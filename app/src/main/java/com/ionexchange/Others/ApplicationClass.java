@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -38,7 +39,7 @@ public class ApplicationClass extends Application {
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},
-            unitArr = {" Ã‚ÂµS/cm", " mS/cm", " S/cm"},
+            unitArr = {" Ãƒâ€šÃ‚ÂµS/cm", " mS/cm", "S/cm"},
             resetFlowTotalArr = {"No reset", "Reset"},
             sensorSequenceNumber = {"1-Sensor", "2-Sensor", "3-Sensor", "4-Sensor", "5-Sensor", "6-Sensor"},
             typeOfValueRead = {"None", "Fluorescence value", "Turbidity Value", "Corrosion rate", "Pitting rate", "Fluorescence value", "Tagged Polymer value"},
@@ -52,7 +53,7 @@ public class ApplicationClass extends Application {
     digitalArr = {"NC", "NO"},
             modBusTypeArr = {"ST500", "CR300CS", "CR-300 CU", "ST-590", "ST-588", "ST-500 RO"},
             modBusUnitArr = {"ppb", "ppm", "mpy"},
-            analogTypeArr = {"(4-20mA)", "(0 Ã¢â‚¬â€œ 10V)"},
+            analogTypeArr = {"(4-20mA)", "(0 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ 10V)"},
             analogUnitArr = {"ma", "V"},
 
     calculationArr = {"Difference", "Ratio", "Total", "% Difference"},
@@ -64,22 +65,23 @@ public class ApplicationClass extends Application {
             bleedRelay = {"Output 01", "Output 02", "Output 03", "Output 04", "Output 05", "Output 06", "Output 07", "Output 08", "Output 09", "Output 10", "Output 11", "Output 12", "Output 13", "Output 14"},
 
     inputSensors = {"Input 1", "Input 2", "Input 3", "Input 4", "Input 5", "Input 6", "Input 7", "Input 8", "Input 9", "Input 10", "Input 11", "Input 12", "Input 13", "Input 14", "Input 15", "Input 16", "Input 17", "Input 18", "Input 19", "Input 20", "Input 21", "Input 22", "Input 23", "Input 24",
-            "Input 25", "Input 26", "Input 27", "Input 28", "Input 29", "Input 30", "Input 31", "Input 32", "Input 33", "Input 34", "Input 35", "Input 36", "Input 37", "Input 38", "Input 39", "Input 40", "Input 41", "Input 42", "Input 43", "Input 44", "Input 45", "Input 46", "Input 47", "Input 48", "Input 49", "Input 50", "Input 51", "Input 52"},
+            "Input 25", "Input 26", "Input 27", "Input 28", "Input 29", "Input 30", "Input 31", "Input 32", "Input 33", "Input 34", "Input 35", "Input 36", "Input 37", "Input 38", "Input 39", "Input 40", "Input 41", "Input 42", "Input 43", "Input 44", "Input 45"},
             doseTypeArr = {"Below", "Above"},
             inputAnalogSensors = {"Input 1", "Input 2", "Input 3", "Input 4", "Input 5", "Input 6", "Input 7", "Input 8", "Input 9", "Input 10", "Input 11", "Input 12", "Input 13"},
             OutputBleedFlowRate = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14"},
 
-    TemperatureCompensationType = {"Linear", "Standard NaCl "},
+    TemperatureCompensationType = {"Linear temperature Compensation", "standard NaCl temperature compensation"},
 
     timerOutputMode = {"Timer", "Timer Flow", "Timer Disabled"},
-            timerFlowSensor = {"Flow Sensor - 1", "Flow Sensor - 2", "Flow Sensor - 3", "Flow Sensor - 4", " Flow Sensor - 5", "Flow Sensor - 6",
+            timerFlowSensor = {"Flow Sensor - 1", "Flow Sensor - 2", "Flow Sensor - 3", "Flow Sensor - 4", "Flow Sensor - 5", "Flow Sensor - 6",
                     "Flow Sensor - 7", "Flow Sensor - 8"},
             accessoryTimerMode = {"Timer Safety", "Timer Safety Flow", "Disabled"},
             accessoryType = {" ON Before", "OFF Before", "ON After", " OFF After", "ON With", "OFF with"};
 
 
     /* Static Variables */
-    public static String mIPAddress = "192.168.1.223", Packet, macAddress; // mac address of the unit controller;
+    static String mIPAddress = "192.168.1.223", Packet;
+    public static String macAddress; //mac address of the unit controller
     //static String mIPAddress = "192.168.2.37", Packet;
     static int mPortNumber = 9760;
 
@@ -167,7 +169,7 @@ public class ApplicationClass extends Application {
         mContext.unregisterReceiver(receiver);
     }
 
-    // Written by silambu
+
     public static String formDigits(int digits, String value) {
         String finalDigits = null;
         switch (digits) {
@@ -243,6 +245,24 @@ public class ApplicationClass extends Application {
             throwError = 1;
         }
         return throwError;
+    }
+
+    public static String toStringValue(int digits, EditText editText) {
+        return formDigits(digits, editText.getText().toString());
+    }
+
+    public static String toStringValue(AutoCompleteTextView editText) {
+        return editText.getText().toString();
+    }
+
+    public static String getPosition(int digit, String string, String[] strArr) {
+        String j = null;
+        for (int i = 0; i < strArr.length; i++) {
+            if (string.equals(strArr[i])) {
+                j = String.valueOf(i);
+            }
+        }
+        return formDigits(digit, j);
     }
 
     public void sendPacket(final DataReceiveCallback listener, String packet) {

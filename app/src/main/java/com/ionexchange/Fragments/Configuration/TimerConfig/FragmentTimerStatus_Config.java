@@ -1,18 +1,5 @@
 package com.ionexchange.Fragments.Configuration.TimerConfig;
 
-import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
-import static com.ionexchange.Others.ApplicationClass.OutputBleedFlowRate;
-import static com.ionexchange.Others.ApplicationClass.accessoryTimerMode;
-import static com.ionexchange.Others.ApplicationClass.accessoryType;
-import static com.ionexchange.Others.ApplicationClass.timerFlowSensor;
-import static com.ionexchange.Others.ApplicationClass.timerOutputMode;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.PCK_TIMER_CONFIG;
-import static com.ionexchange.Others.PacketControl.PCK_WEEKLY_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -20,12 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +24,8 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Database.Dao.TimerConfigurationDao;
+import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
@@ -42,16 +33,30 @@ import com.ionexchange.databinding.FragmentTimerstatusConfigBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.ionexchange.Others.ApplicationClass.accessoryTimerMode;
+import static com.ionexchange.Others.ApplicationClass.accessoryType;
+import static com.ionexchange.Others.ApplicationClass.bleedRelay;
+import static com.ionexchange.Others.ApplicationClass.formDigits;
+import static com.ionexchange.Others.ApplicationClass.getPosition;
+import static com.ionexchange.Others.ApplicationClass.timerFlowSensor;
+import static com.ionexchange.Others.ApplicationClass.timerOutputMode;
+import static com.ionexchange.Others.ApplicationClass.toStringValue;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_TIMER_CONFIG;
+import static com.ionexchange.Others.PacketControl.PCK_WEEKLY_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 public class FragmentTimerStatus_Config extends Fragment implements DataReceiveCallback, View.OnClickListener {
     FragmentTimerstatusConfigBinding mBinding;
     String timerNo;
     BaseActivity mActivity;
     ApplicationClass mAppClass;
 
-    String week1;
-    String week2;
-    String week3;
-    String week4;
+    String week1, week2, week3, week4;
 
     String enabledWeek1;
 
@@ -123,41 +128,41 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         mBinding.AccessoryCheckbox3.setOnClickListener(this);
         mBinding.AccessoryCheckbox4.setOnClickListener(this);
 
-        mBinding.switchBtnWeek.setOnClickListener(new View.OnClickListener() {
+        mBinding.switchBtnWeek.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                if (mBinding.switchBtnWeek.isChecked()) {
-                    if (mBinding.switchBtnWeek.getText().toString().equals("Enabled Week-1")) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week1_enable))) {
                         mBinding.weekCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_checked));
                         timerOne[5] = "1";
                     }
-                    if (mBinding.switchBtnWeek.getText().toString().equals("Enabled Week-2")) {
+                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week2_enable))) {
                         mBinding.weekCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_checked));
                         timerTwo[5] = "1";
                     }
-                    if (mBinding.switchBtnWeek.getText().toString().equals("Enabled Week-3")) {
+                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week3_enable))) {
                         mBinding.weekCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_checked));
                         timerThree[5] = "1";
                     }
-                    if (mBinding.switchBtnWeek.getText().toString().equals("Enabled Week-4")) {
+                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week4_enable))) {
                         mBinding.weekCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_cheched));
                         timerFour[5] = "1";
                     }
 
                 } else {
-                    if (mBinding.switchBtnWeek.getText().toString().equals("Enabled Week-1")) {
+                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week1_enable))) {
                         mBinding.weekCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_unchecked));
                         timerOne[5] = "0";
                     }
-                    if (mBinding.switchBtnWeek.getText().toString().equals("Enabled Week-2")) {
+                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week2_enable))) {
                         mBinding.weekCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_unchecked));
                         timerTwo[5] = "0";
                     }
-                    if (mBinding.switchBtnWeek.getText().toString().equals("Enabled Week-3")) {
+                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week3_enable))) {
                         mBinding.weekCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_unchecked));
                         timerThree[5] = "0";
                     }
-                    if (mBinding.switchBtnWeek.getText().toString().equals("Enabled Week-4")) {
+                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week4_enable))) {
                         mBinding.weekCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_unchecked));
                         timerFour[5] = "0";
                     }
@@ -177,10 +182,15 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
 
 
     private void initAdapter() {
-        mBinding.txtOutputNameValueAct.setAdapter(getAdapter(OutputBleedFlowRate));
+        mBinding.txtOutputNameValueAct.setAdapter(getAdapter(bleedRelay));
         mBinding.txtModeValueAct.setAdapter(getAdapter(timerOutputMode));
         mBinding.txtFlowSensorValueAct.setAdapter(getAdapter(timerFlowSensor));
-
+        mBinding.txtModeValueAct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
+                flowSensorVisibility(position);
+            }
+        });
     }
 
     public ArrayAdapter<String> getAdapter(String[] strArr) {
@@ -191,13 +201,12 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
     public void onResume() {
         super.onResume();
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + "0" +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                 SPILT_CHAR + READ_PACKET + SPILT_CHAR +
                 PCK_TIMER_CONFIG + SPILT_CHAR + timerNo);
     }
 
-    void dayDialog(int day, String week) {
-
+    void dayDialog(int day, String week, String titleName) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_timer_day, null);
@@ -207,6 +216,8 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         Button btnOk = dialogView.findViewById(R.id.btn_ok);
         Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
         Button btnApplyToAll = dialogView.findViewById(R.id.btn_apply_to_all);
+        TextView title = dialogView.findViewById(R.id.txt_date);
+        title.setText(titleName);
         startHourDay = dialogView.findViewById(R.id.number_picker_hour);
         startMinDay = dialogView.findViewById(R.id.number_min_hour);
         startSecDay = dialogView.findViewById(R.id.number_sec_hour);
@@ -214,41 +225,14 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         endMinDay = dialogView.findViewById(R.id.number_dur_min_hour);
         endSecDay = dialogView.findViewById(R.id.number_dur_sec_hour);
 
-        if (enableSchedule.isChecked()) {
-            startHourDay.setEnabled(true);
-            startMinDay.setEnabled(true);
-            startSecDay.setEnabled(true);
-            endHourDay.setEnabled(true);
-            endMinDay.setEnabled(true);
-            startHourDay.setEnabled(true);
-        } else {
-            startHourDay.setEnabled(false);
-            startMinDay.setEnabled(false);
-            startSecDay.setEnabled(false);
-            endHourDay.setEnabled(false);
-            endMinDay.setEnabled(false);
-            endSecDay.setEnabled(false);
-        }
+        enableDayScreen(enableSchedule.isChecked(), startHourDay, startMinDay, startSecDay,
+                endHourDay, endMinDay, endSecDay);
 
         enableSchedule.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    startHourDay.setEnabled(true);
-                    startMinDay.setEnabled(true);
-                    startSecDay.setEnabled(true);
-                    endHourDay.setEnabled(true);
-                    endMinDay.setEnabled(true);
-                    endSecDay.setEnabled(true);
-                } else {
-                    startHourDay.setEnabled(false);
-                    startMinDay.setEnabled(false);
-                    startSecDay.setEnabled(false);
-                    endHourDay.setEnabled(false);
-                    endMinDay.setEnabled(false);
-                    endSecDay.setEnabled(false);
-
-                }
+                enableDayScreen(isChecked, startHourDay, startMinDay, startSecDay,
+                        endHourDay, endMinDay, endSecDay);
             }
         });
 
@@ -257,382 +241,145 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.8);
         alertDialog.getWindow().setLayout(width, height);
 
-
         //DataReceive status
         //Week-1
         if (week.equals("Week-1")) {
-            if (day == 1) {
-                if (timerOne[6].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerOne[6].equals("1")) {
-                    enableSchedule.setChecked(true);
+            if (timerOne != null) {
+                switch (day) {
+                    case 1:
+                        setWeekDatas(timerOne[6], timerOne[7], timerOne[8], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 2:
+                        setWeekDatas(timerOne[9], timerOne[10], timerOne[11], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 3:
+                        setWeekDatas(timerOne[12], timerOne[13], timerOne[14], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 4:
+                        setWeekDatas(timerOne[15], timerOne[16], timerOne[17], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 5:
+                        setWeekDatas(timerOne[18], timerOne[19], timerOne[20], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 6:
+                        setWeekDatas(timerOne[21], timerOne[22], timerOne[23], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 7:
+                        setWeekDatas(timerOne[24], timerOne[25], timerOne[26], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
                 }
-                startHourDay.setText(timerOne[7].substring(0, 2));
-                startMinDay.setText(timerOne[7].substring(2, 4));
-                startSecDay.setText(timerOne[7].substring(4, 6));
-                endHourDay.setText(timerOne[8].substring(0, 2));
-                endMinDay.setText(timerOne[8].substring(2, 4));
-                endSecDay.setText(timerOne[8].substring(4, 6));
-            }
-            if (day == 2) {
-                if (timerOne[9].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerOne[9].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerOne[10].substring(0, 2));
-                startMinDay.setText(timerOne[10].substring(2, 4));
-                startSecDay.setText(timerOne[10].substring(4, 6));
-                endHourDay.setText(timerOne[11].substring(0, 2));
-                endMinDay.setText(timerOne[11].substring(2, 4));
-                endSecDay.setText(timerOne[11].substring(4, 6));
-            }
-            if (day == 3) {
-                if (timerOne[12].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerOne[12].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerOne[13].substring(0, 2));
-                startMinDay.setText(timerOne[13].substring(2, 4));
-                startSecDay.setText(timerOne[13].substring(4, 6));
-                endHourDay.setText(timerOne[14].substring(0, 2));
-                endMinDay.setText(timerOne[14].substring(2, 4));
-                endSecDay.setText(timerOne[14].substring(4, 6));
-            }
-            if (day == 4) {
-                if (timerOne[15].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerOne[15].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerOne[16].substring(0, 2));
-                startMinDay.setText(timerOne[16].substring(2, 4));
-                startSecDay.setText(timerOne[16].substring(4, 6));
-                endHourDay.setText(timerOne[17].substring(0, 2));
-                endMinDay.setText(timerOne[17].substring(2, 4));
-                endSecDay.setText(timerOne[17].substring(4, 6));
-            }
-            if (day == 5) {
-                if (timerOne[18].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerOne[18].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerOne[19].substring(0, 2));
-                startMinDay.setText(timerOne[19].substring(2, 4));
-                startSecDay.setText(timerOne[19].substring(4, 6));
-                endHourDay.setText(timerOne[20].substring(0, 2));
-                endMinDay.setText(timerOne[20].substring(2, 4));
-                endSecDay.setText(timerOne[20].substring(4, 6));
-            }
-            if (day == 6) {
-                if (timerOne[21].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerOne[21].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerOne[22].substring(0, 2));
-                startMinDay.setText(timerOne[22].substring(2, 4));
-                startSecDay.setText(timerOne[22].substring(4, 6));
-                endHourDay.setText(timerOne[23].substring(0, 2));
-                endMinDay.setText(timerOne[23].substring(2, 4));
-                endSecDay.setText(timerOne[23].substring(4, 6));
-            }
-            if (day == 7) {
-                if (timerOne[24].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerOne[24].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerOne[25].substring(0, 2));
-                startMinDay.setText(timerOne[25].substring(2, 4));
-                startSecDay.setText(timerOne[25].substring(4, 6));
-                endHourDay.setText(timerOne[26].substring(0, 2));
-                endMinDay.setText(timerOne[26].substring(2, 4));
-                endSecDay.setText(timerOne[26].substring(4, 6));
             }
         }
         //Week-2
         if (week.equals("Week-2")) {
-            if (day == 1) {
-                if (timerTwo[6].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerTwo[6].equals("1")) {
-                    enableSchedule.setChecked(true);
+            if (timerTwo != null) {
+                switch (day) {
+                    case 1:
+                        setWeekDatas(timerTwo[6], timerTwo[7], timerTwo[8], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 2:
+                        setWeekDatas(timerTwo[9], timerTwo[10], timerTwo[11], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 3:
+                        setWeekDatas(timerTwo[12], timerTwo[13], timerTwo[14], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 4:
+                        setWeekDatas(timerTwo[15], timerTwo[16], timerTwo[17], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 5:
+                        setWeekDatas(timerTwo[18], timerTwo[19], timerTwo[20], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 6:
+                        setWeekDatas(timerTwo[21], timerTwo[22], timerTwo[23], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 7:
+                        setWeekDatas(timerTwo[24], timerTwo[25], timerTwo[26], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
                 }
-                startHourDay.setText(timerTwo[7].substring(0, 2));
-                startMinDay.setText(timerTwo[7].substring(2, 4));
-                startSecDay.setText(timerTwo[7].substring(4, 6));
-                endHourDay.setText(timerTwo[8].substring(0, 2));
-                endMinDay.setText(timerTwo[8].substring(2, 4));
-                endSecDay.setText(timerTwo[8].substring(4, 6));
-            }
-            if (day == 2) {
-                if (timerTwo[9].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerTwo[9].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerTwo[10].substring(0, 2));
-                startMinDay.setText(timerTwo[10].substring(2, 4));
-                startSecDay.setText(timerTwo[10].substring(4, 6));
-                endHourDay.setText(timerTwo[11].substring(0, 2));
-                endMinDay.setText(timerTwo[11].substring(2, 4));
-                endSecDay.setText(timerTwo[11].substring(4, 6));
-            }
-            if (day == 3) {
-                if (timerTwo[12].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerTwo[12].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerTwo[13].substring(0, 2));
-                startMinDay.setText(timerTwo[13].substring(2, 4));
-                startSecDay.setText(timerTwo[13].substring(4, 6));
-                endHourDay.setText(timerTwo[14].substring(0, 2));
-                endMinDay.setText(timerTwo[14].substring(2, 4));
-                endSecDay.setText(timerTwo[14].substring(4, 6));
-            }
-            if (day == 4) {
-                if (timerTwo[15].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerTwo[15].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerTwo[16].substring(0, 2));
-                startMinDay.setText(timerTwo[16].substring(2, 4));
-                startSecDay.setText(timerTwo[16].substring(4, 6));
-                endHourDay.setText(timerTwo[17].substring(0, 2));
-                endMinDay.setText(timerTwo[17].substring(2, 4));
-                endSecDay.setText(timerTwo[17].substring(4, 6));
-            }
-            if (day == 5) {
-                if (timerTwo[18].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerTwo[18].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerTwo[19].substring(0, 2));
-                startMinDay.setText(timerTwo[19].substring(2, 4));
-                startSecDay.setText(timerTwo[19].substring(4, 6));
-                endHourDay.setText(timerTwo[20].substring(0, 2));
-                endMinDay.setText(timerTwo[20].substring(2, 4));
-                endSecDay.setText(timerTwo[20].substring(4, 6));
-            }
-            if (day == 6) {
-                if (timerTwo[21].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerTwo[21].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerTwo[22].substring(0, 2));
-                startMinDay.setText(timerTwo[22].substring(2, 4));
-                startSecDay.setText(timerTwo[22].substring(4, 6));
-                endHourDay.setText(timerTwo[23].substring(0, 2));
-                endMinDay.setText(timerTwo[23].substring(2, 4));
-                endSecDay.setText(timerTwo[23].substring(4, 6));
-            }
-            if (day == 7) {
-                if (timerTwo[24].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerTwo[24].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerTwo[25].substring(0, 2));
-                startMinDay.setText(timerTwo[25].substring(2, 4));
-                startSecDay.setText(timerTwo[25].substring(4, 6));
-                endHourDay.setText(timerTwo[26].substring(0, 2));
-                endMinDay.setText(timerTwo[26].substring(2, 4));
-                endSecDay.setText(timerTwo[26].substring(4, 6));
             }
         }
         //Week-3
         if (week.equals("Week-3")) {
-            if (day == 1) {
-                if (timerThree[6].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerThree[6].equals("1")) {
-                    enableSchedule.setChecked(true);
+            if (timerThree != null) {
+                switch (day) {
+                    case 1:
+                        setWeekDatas(timerThree[6], timerThree[7], timerThree[8], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 2:
+                        setWeekDatas(timerThree[9], timerThree[10], timerThree[11], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 3:
+                        setWeekDatas(timerThree[12], timerThree[13], timerThree[14], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 4:
+                        setWeekDatas(timerThree[15], timerThree[16], timerThree[17], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 5:
+                        setWeekDatas(timerThree[18], timerThree[19], timerThree[20], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 6:
+                        setWeekDatas(timerThree[21], timerThree[22], timerThree[23], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 7:
+                        setWeekDatas(timerThree[24], timerThree[25], timerThree[26], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
                 }
-                startHourDay.setText(timerThree[7].substring(0, 2));
-                startMinDay.setText(timerThree[7].substring(2, 4));
-                startSecDay.setText(timerThree[7].substring(4, 6));
-                endHourDay.setText(timerThree[8].substring(0, 2));
-                endMinDay.setText(timerThree[8].substring(2, 4));
-                endSecDay.setText(timerThree[8].substring(4, 6));
-            }
-            if (day == 2) {
-                if (timerThree[9].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerThree[9].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerThree[10].substring(0, 2));
-                startMinDay.setText(timerThree[10].substring(2, 4));
-                startSecDay.setText(timerThree[10].substring(4, 6));
-                endHourDay.setText(timerThree[11].substring(0, 2));
-                endMinDay.setText(timerThree[11].substring(2, 4));
-                endSecDay.setText(timerThree[11].substring(4, 6));
-            }
-            if (day == 3) {
-                if (timerThree[12].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerThree[12].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerThree[13].substring(0, 2));
-                startMinDay.setText(timerThree[13].substring(2, 4));
-                startSecDay.setText(timerThree[13].substring(4, 6));
-                endHourDay.setText(timerThree[14].substring(0, 2));
-                endMinDay.setText(timerThree[14].substring(2, 4));
-                endSecDay.setText(timerThree[14].substring(4, 6));
-            }
-            if (day == 4) {
-                if (timerThree[15].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerThree[15].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerThree[16].substring(0, 2));
-                startMinDay.setText(timerThree[16].substring(2, 4));
-                startSecDay.setText(timerThree[16].substring(4, 6));
-                endHourDay.setText(timerThree[17].substring(0, 2));
-                endMinDay.setText(timerThree[17].substring(2, 4));
-                endSecDay.setText(timerThree[17].substring(4, 6));
-            }
-            if (day == 5) {
-                if (timerThree[18].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerThree[18].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerThree[19].substring(0, 2));
-                startMinDay.setText(timerThree[19].substring(2, 4));
-                startSecDay.setText(timerThree[19].substring(4, 6));
-                endHourDay.setText(timerThree[20].substring(0, 2));
-                endMinDay.setText(timerThree[20].substring(2, 4));
-                endSecDay.setText(timerThree[20].substring(4, 6));
-            }
-            if (day == 6) {
-                if (timerThree[21].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerThree[21].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerThree[22].substring(0, 2));
-                startMinDay.setText(timerThree[22].substring(2, 4));
-                startSecDay.setText(timerThree[22].substring(4, 6));
-                endHourDay.setText(timerThree[23].substring(0, 2));
-                endMinDay.setText(timerThree[23].substring(2, 4));
-                endSecDay.setText(timerThree[23].substring(4, 6));
-            }
-            if (day == 7) {
-                if (timerThree[24].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerThree[24].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerThree[25].substring(0, 2));
-                startMinDay.setText(timerThree[25].substring(2, 4));
-                startSecDay.setText(timerThree[25].substring(4, 6));
-                endHourDay.setText(timerThree[26].substring(0, 2));
-                endMinDay.setText(timerThree[26].substring(2, 4));
-                endSecDay.setText(timerThree[26].substring(4, 6));
             }
         }
         //Week-4
         if (week.equals("Week-4")) {
-            if (day == 1) {
-                if (timerFour[6].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerFour[6].equals("1")) {
-                    enableSchedule.setChecked(true);
+            if (timerFour != null) {
+                switch (day) {
+                    case 1:
+                        setWeekDatas(timerFour[6], timerFour[7], timerFour[8], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 2:
+                        setWeekDatas(timerFour[9], timerFour[10], timerFour[11], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 3:
+                        setWeekDatas(timerFour[12], timerFour[13], timerFour[14], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 4:
+                        setWeekDatas(timerFour[15], timerFour[16], timerFour[17], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 5:
+                        setWeekDatas(timerFour[18], timerFour[19], timerFour[20], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 6:
+                        setWeekDatas(timerFour[21], timerFour[22], timerFour[23], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
+                    case 7:
+                        setWeekDatas(timerFour[24], timerFour[25], timerFour[26], enableSchedule, startHourDay,
+                                startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
+                        break;
                 }
-                startHourDay.setText(timerFour[7].substring(0, 2));
-                startMinDay.setText(timerFour[7].substring(2, 4));
-                startSecDay.setText(timerFour[7].substring(4, 6));
-                endHourDay.setText(timerFour[8].substring(0, 2));
-                endMinDay.setText(timerFour[8].substring(2, 4));
-                endSecDay.setText(timerFour[8].substring(4, 6));
-            }
-            if (day == 2) {
-                if (timerFour[9].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerFour[9].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerFour[10].substring(0, 2));
-                startMinDay.setText(timerFour[10].substring(2, 4));
-                startSecDay.setText(timerFour[10].substring(4, 6));
-                endHourDay.setText(timerFour[11].substring(0, 2));
-                endMinDay.setText(timerFour[11].substring(2, 4));
-                endSecDay.setText(timerFour[11].substring(4, 6));
-            }
-            if (day == 3) {
-                if (timerFour[12].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerFour[12].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerFour[13].substring(0, 2));
-                startMinDay.setText(timerFour[13].substring(2, 4));
-                startSecDay.setText(timerFour[13].substring(4, 6));
-                endHourDay.setText(timerFour[14].substring(0, 2));
-                endMinDay.setText(timerFour[14].substring(2, 4));
-                endSecDay.setText(timerFour[14].substring(4, 6));
-            }
-            if (day == 4) {
-                if (timerFour[15].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerFour[15].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerFour[16].substring(0, 2));
-                startMinDay.setText(timerFour[16].substring(2, 4));
-                startSecDay.setText(timerFour[16].substring(4, 6));
-                endHourDay.setText(timerFour[17].substring(0, 2));
-                endMinDay.setText(timerFour[17].substring(2, 4));
-                endSecDay.setText(timerFour[17].substring(4, 6));
-            }
-            if (day == 5) {
-                if (timerFour[18].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerFour[18].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerFour[19].substring(0, 2));
-                startMinDay.setText(timerFour[19].substring(2, 4));
-                startSecDay.setText(timerFour[19].substring(4, 6));
-                endHourDay.setText(timerFour[20].substring(0, 2));
-                endMinDay.setText(timerFour[20].substring(2, 4));
-                endSecDay.setText(timerFour[20].substring(4, 6));
-            }
-            if (day == 6) {
-                if (timerFour[21].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerFour[21].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerFour[22].substring(0, 2));
-                startMinDay.setText(timerFour[22].substring(2, 4));
-                startSecDay.setText(timerFour[22].substring(4, 6));
-                endHourDay.setText(timerFour[23].substring(0, 2));
-                endMinDay.setText(timerFour[23].substring(2, 4));
-                endSecDay.setText(timerFour[23].substring(4, 6));
-            }
-            if (day == 7) {
-                if (timerFour[24].equals("0")) {
-                    enableSchedule.setChecked(false);
-                } else if (timerFour[24].equals("1")) {
-                    enableSchedule.setChecked(true);
-                }
-                startHourDay.setText(timerFour[25].substring(0, 2));
-                startMinDay.setText(timerFour[25].substring(2, 4));
-                startSecDay.setText(timerFour[25].substring(4, 6));
-                endHourDay.setText(timerFour[26].substring(0, 2));
-                endMinDay.setText(timerFour[26].substring(2, 4));
-                endSecDay.setText(timerFour[26].substring(4, 6));
             }
         }
 
@@ -640,332 +387,18 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
             @Override
             public void onClick(View v) {
                 //SendData
-                if (week.equals("Week-1")) {
-                    if (weeklyScheduledValidation()) {
-                        if (day == 1) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[6] = "1";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerOne[6] = "0";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerOne[7] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerOne[8] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 2) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[9] = "1";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerOne[9] = "0";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerOne[10] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerOne[11] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 3) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[12] = "1";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerOne[12] = "0";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerOne[13] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerOne[14] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 4) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[15] = "1";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerOne[15] = "0";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerOne[16] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerOne[17] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 5) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[18] = "1";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerOne[18] = "0";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerOne[19] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerOne[20] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 6) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[21] = "1";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerOne[21] = "0";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerOne[22] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerOne[23] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 7) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[24] = "1";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerOne[24] = "0";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerOne[25] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerOne[26] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
+                if (weeklyScheduledValidation()) {
+                    if (week.equals("Week-1")) {
+                        weekupdateData(enableSchedule, day, timerOne);
                     }
-                    alertDialog.dismiss();
-                }
-                if (week.equals("Week-2")) {
-                    if (weeklyScheduledValidation()) {
-                        if (day == 1) {
-                            if (enableSchedule.isChecked()) {
-                                timerTwo[6] = "1";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerTwo[6] = "0";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerTwo[7] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerTwo[8] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 2) {
-                            if (enableSchedule.isChecked()) {
-                                timerTwo[9] = "1";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerTwo[9] = "0";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-
-                            timerTwo[10] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerTwo[11] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 3) {
-                            if (enableSchedule.isChecked()) {
-                                timerTwo[12] = "1";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerTwo[12] = "0";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerTwo[13] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerTwo[14] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 4) {
-                            if (enableSchedule.isChecked()) {
-                                timerTwo[15] = "1";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerTwo[15] = "0";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerTwo[16] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerTwo[17] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 5) {
-                            if (enableSchedule.isChecked()) {
-                                timerTwo[18] = "1";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerTwo[18] = "0";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerTwo[19] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerTwo[20] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 6) {
-                            if (enableSchedule.isChecked()) {
-                                timerTwo[21] = "1";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerTwo[21] = "0";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerTwo[22] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerTwo[23] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 7) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[24] = "1";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerTwo[24] = "0";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerTwo[25] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerTwo[26] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
+                    if (week.equals("Week-2")) {
+                        weekupdateData(enableSchedule, day, timerTwo);
                     }
-                    alertDialog.dismiss();
-                }
-                if (week.equals("Week-3")) {
-                    if (weeklyScheduledValidation()) {
-                        if (day == 1) {
-                            if (enableSchedule.isChecked()) {
-                                timerThree[6] = "1";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerThree[6] = "0";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerThree[7] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerThree[8] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 2) {
-                            if (enableSchedule.isChecked()) {
-                                timerThree[9] = "1";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerThree[9] = "0";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerThree[10] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerThree[11] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 3) {
-                            if (enableSchedule.isChecked()) {
-                                timerThree[12] = "1";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerThree[12] = "0";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerThree[13] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerThree[14] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 4) {
-                            if (enableSchedule.isChecked()) {
-                                timerThree[15] = "1";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerThree[15] = "0";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerThree[16] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerThree[17] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 5) {
-                            if (enableSchedule.isChecked()) {
-                                timerThree[18] = "1";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerThree[18] = "0";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerThree[19] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerThree[20] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 6) {
-                            if (enableSchedule.isChecked()) {
-                                timerThree[21] = "1";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerThree[21] = "0";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerThree[22] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerThree[23] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 7) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[24] = "1";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerThree[24] = "0";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerThree[25] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerThree[26] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
+                    if (week.equals("Week-3")) {
+                        weekupdateData(enableSchedule, day, timerThree);
                     }
-                    alertDialog.dismiss();
-                }
-                if (week.equals("Week-4")) {
-                    if (weeklyScheduledValidation()) {
-                        if (day == 1) {
-                            if (enableSchedule.isChecked()) {
-                                timerFour[6] = "1";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerFour[6] = "0";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerFour[7] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerFour[8] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 2) {
-                            if (enableSchedule.isChecked()) {
-                                timerFour[9] = "1";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerFour[9] = "0";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerFour[10] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerFour[11] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 3) {
-                            if (enableSchedule.isChecked()) {
-                                timerFour[12] = "1";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerFour[12] = "0";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerFour[13] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerFour[14] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 4) {
-                            if (enableSchedule.isChecked()) {
-                                timerFour[15] = "1";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerFour[15] = "0";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerFour[16] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerFour[17] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 5) {
-                            if (enableSchedule.isChecked()) {
-                                timerFour[18] = "1";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerFour[18] = "0";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerFour[19] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerFour[20] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 6) {
-                            if (enableSchedule.isChecked()) {
-                                timerFour[21] = "1";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerFour[21] = "0";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerFour[22] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerFour[23] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 7) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[24] = "1";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            } else {
-                                timerFour[24] = "0";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            }
-                            timerFour[25] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerFour[26] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
+                    if (week.equals("Week-4")) {
+                        weekupdateData(enableSchedule, day, timerFour);
                     }
                     alertDialog.dismiss();
                 }
@@ -983,346 +416,136 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
             @Override
             public void onClick(View v) {
                 //ApplyToAll
-                if (week.equals("Week-1")) {
-                    if (weeklyScheduledValidation()) {
-                        if (day == 1) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[6] = "1";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerOne[6] = "0";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerOne[7] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerOne[8] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 2) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[9] = "1";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerOne[9] = "0";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerOne[10] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerOne[11] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 3) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[12] = "1";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerOne[12] = "0";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerOne[13] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerOne[14] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 4) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[15] = "1";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerOne[15] = "0";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerOne[16] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerOne[17] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 5) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[18] = "1";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerOne[18] = "0";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerOne[19] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerOne[20] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 6) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[21] = "1";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerOne[21] = "0";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerOne[22] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerOne[23] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 7) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[24] = "1";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerOne[24] = "0";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerOne[25] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerOne[26] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
+                Log.e("week", week);
+                if (weeklyScheduledValidation()) {
+                    if (week.equals("Week-1")) {
+                        weekupdateData(enableSchedule, day, timerOne);
+                        applyToAllTime(timerOne, timerOne, day);
+                        handleResponse(timerOne, 1);
+                        alertDialog.dismiss();
                     }
-
-                    applyToAllTime(timerOne, timerOne);
-                    handleResponse(timerOne, 1);
-                    alertDialog.dismiss();
-                }
-                if (week.equals("Week-2")) {
-                    if (weeklyScheduledValidation()) {
-                        if (day == 1) {
-                            if (enableSchedule.isChecked()) {
-                                timerTwo[6] = "1";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerTwo[6] = "0";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerTwo[7] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerTwo[8] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 2) {
-                            if (enableSchedule.isChecked()) {
-                                timerTwo[9] = "1";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerTwo[9] = "0";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-
-                            timerTwo[10] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerTwo[11] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 3) {
-                            if (enableSchedule.isChecked()) {
-                                timerTwo[12] = "1";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerTwo[12] = "0";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerTwo[13] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerTwo[14] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 4) {
-                            if (enableSchedule.isChecked()) {
-                                timerTwo[15] = "1";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerTwo[15] = "0";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerTwo[16] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerTwo[17] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 5) {
-                            if (enableSchedule.isChecked()) {
-                                timerTwo[18] = "1";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerTwo[18] = "0";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerTwo[19] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerTwo[20] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 6) {
-                            if (enableSchedule.isChecked()) {
-                                timerTwo[21] = "1";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerTwo[21] = "0";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerTwo[22] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerTwo[23] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 7) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[24] = "1";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerTwo[24] = "0";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerTwo[25] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerTwo[26] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
+                    if (week.equals("Week-2")) {
+                        weekupdateData(enableSchedule, day, timerTwo);
+                        applyToAllTime(timerTwo, timerTwo, day);
+                        handleResponse(timerTwo, 1);
+                        alertDialog.dismiss();
                     }
-                    applyToAllTime(timerTwo, timerTwo);
-                    handleResponse(timerTwo, 1);
-                    alertDialog.dismiss();
-                }
-                if (week.equals("Week-3")) {
-                    if (weeklyScheduledValidation()) {
-                        if (day == 1) {
-                            if (enableSchedule.isChecked()) {
-                                timerThree[6] = "1";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerThree[6] = "0";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerThree[7] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerThree[8] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 2) {
-                            if (enableSchedule.isChecked()) {
-                                timerThree[9] = "1";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerThree[9] = "0";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerThree[10] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerThree[11] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 3) {
-                            if (enableSchedule.isChecked()) {
-                                timerThree[12] = "1";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerThree[12] = "0";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerThree[13] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerThree[14] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 4) {
-                            if (enableSchedule.isChecked()) {
-                                timerThree[15] = "1";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerThree[15] = "0";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerThree[16] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerThree[17] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 5) {
-                            if (enableSchedule.isChecked()) {
-                                timerThree[18] = "1";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerThree[18] = "0";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerThree[19] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerThree[20] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 6) {
-                            if (enableSchedule.isChecked()) {
-                                timerThree[21] = "1";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerThree[21] = "0";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerThree[22] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerThree[23] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 7) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[24] = "1";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerThree[24] = "0";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerThree[25] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerThree[26] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
+                    if (week.equals("Week-3")) {
+                        weekupdateData(enableSchedule, day, timerThree);
+                        applyToAllTime(timerThree, timerThree, day);
+                        handleResponse(timerThree, 1);
+                        alertDialog.dismiss();
                     }
-                    applyToAllTime(timerThree, timerThree);
-                    handleResponse(timerThree, 1);
-                    alertDialog.dismiss();
-                }
-                if (week.equals("Week-4")) {
-                    if (weeklyScheduledValidation()) {
-                        if (day == 1) {
-                            if (enableSchedule.isChecked()) {
-                                timerFour[6] = "1";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerFour[6] = "0";
-                                mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerFour[7] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerFour[8] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 2) {
-                            if (enableSchedule.isChecked()) {
-                                timerFour[9] = "1";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerFour[9] = "0";
-                                mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerFour[10] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerFour[11] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 3) {
-                            if (enableSchedule.isChecked()) {
-                                timerFour[12] = "1";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerFour[12] = "0";
-                                mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerFour[13] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerFour[14] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 4) {
-                            if (enableSchedule.isChecked()) {
-                                timerFour[15] = "1";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerFour[15] = "0";
-                                mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerFour[16] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerFour[17] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 5) {
-                            if (enableSchedule.isChecked()) {
-                                timerFour[18] = "1";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerFour[18] = "0";
-                                mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerFour[19] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerFour[20] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 6) {
-                            if (enableSchedule.isChecked()) {
-                                timerFour[21] = "1";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            } else {
-                                timerFour[21] = "0";
-                                mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            }
-                            timerFour[22] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerFour[23] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
-                        if (day == 7) {
-                            if (enableSchedule.isChecked()) {
-                                timerOne[24] = "1";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                            } else {
-                                timerFour[24] = "0";
-                                mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                            }
-                            timerFour[25] = startHourDay.getText().toString() + startMinDay.getText().toString() + startSecDay.getText().toString();
-                            timerFour[26] = endHourDay.getText().toString() + endMinDay.getText().toString() + endSecDay.getText().toString();
-                        }
+                    if (week.equals("Week-4")) {
+                        weekupdateData(enableSchedule, day, timerFour);
+                        applyToAllTime(timerFour, timerFour, day);
+                        handleResponse(timerFour, 1);
+                        alertDialog.dismiss();
                     }
-                    applyToAllTime(timerFour, timerFour);
-                    handleResponse(timerFour, 1);
-                    alertDialog.dismiss();
                 }
             }
         });
+
+    }
+
+    private void weekupdateData(CheckBox enableSchedule, int day, String[] timerNo) {
+        if (day == 1) {
+            updateWeekDay(enableSchedule.isChecked(), mBinding.checkBoxMonday,
+                    timerNo, 6, 7, 8,
+                    startHourDay, startMinDay, startSecDay,
+                    endHourDay, endMinDay, endSecDay);
+        }
+        if (day == 2) {
+            updateWeekDay(enableSchedule.isChecked(), mBinding.checkBoxTuesday,
+                    timerNo, 9, 10, 11,
+                    startHourDay, startMinDay, startSecDay,
+                    endHourDay, endMinDay, endSecDay);
+        }
+        if (day == 3) {
+            updateWeekDay(enableSchedule.isChecked(), mBinding.checkBoxWednesday,
+                    timerNo, 12, 13, 14,
+                    startHourDay, startMinDay, startSecDay,
+                    endHourDay, endMinDay, endSecDay);
+        }
+        if (day == 4) {
+            updateWeekDay(enableSchedule.isChecked(), mBinding.checkBoxThursday,
+                    timerNo, 15, 16, 17,
+                    startHourDay, startMinDay, startSecDay,
+                    endHourDay, endMinDay, endSecDay);
+        }
+        if (day == 5) {
+            updateWeekDay(enableSchedule.isChecked(), mBinding.checkBoxFriday,
+                    timerNo, 18, 19, 20,
+                    startHourDay, startMinDay, startSecDay,
+                    endHourDay, endMinDay, endSecDay);
+        }
+        if (day == 6) {
+            updateWeekDay(enableSchedule.isChecked(), mBinding.checkBoxSaturday,
+                    timerNo, 21, 22, 23,
+                    startHourDay, startMinDay, startSecDay,
+                    endHourDay, endMinDay, endSecDay);
+        }
+        if (day == 7) {
+            updateWeekDay(enableSchedule.isChecked(), mBinding.checkBoxSunday,
+                    timerNo, 24, 25, 26,
+                    startHourDay, startMinDay, startSecDay,
+                    endHourDay, endMinDay, endSecDay);
+        }
+    }
+
+    private void updateWeekDay(boolean enableDay, View checkBoxDate, String[] timerNo,
+                               int day, int startTime, int durationTime,
+                               EditText startHourDay, EditText startMinDay, EditText startSecDay,
+                               EditText endHourDay, EditText endMinDay, EditText endSecDay) {
+        if (enableDay) {
+            timerNo[day] = "1";
+            checkBoxDate.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
+        } else {
+            timerNo[day] = "0";
+            checkBoxDate.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
+        }
+        timerNo[startTime] = formDigits(2, startHourDay.getText().toString()) + formDigits(2, startMinDay.getText().toString()) + formDigits(2, startSecDay.getText().toString());
+        timerNo[durationTime] = formDigits(2, endHourDay.getText().toString()) + formDigits(2, endMinDay.getText().toString()) + formDigits(2, endSecDay.getText().toString());
+        Log.e("update", timerNo[day] + " " + timerNo[startTime] + " " + timerNo[durationTime]);
+    }
+
+    private void setWeekDatas(String enableDay, String startTime, String durationTime,
+                              CheckBox enableSchedule,
+                              EditText startHourDay, EditText startMinDay, EditText startSecDay,
+                              EditText endHourDay, EditText endMinDay, EditText endSecDay) {
+        if (enableDay.equals("0")) {
+            enableSchedule.setChecked(false);
+        } else if (enableDay.equals("1")) {
+            enableSchedule.setChecked(true);
+        }
+        if (startTime != null && startTime.length() == 6) {
+            startHourDay.setText(startTime.substring(0, 2));
+            startMinDay.setText(startTime.substring(2, 4));
+            startSecDay.setText(startTime.substring(4, 6));
+        }
+        if (durationTime != null && durationTime.length() == 6) {
+            endHourDay.setText(durationTime.substring(0, 2));
+            endMinDay.setText(durationTime.substring(2, 4));
+            endSecDay.setText(durationTime.substring(4, 6));
+        }
+    }
+
+    private void enableDayScreen(boolean checked, EditText startHourDay, EditText startMinDay, EditText startSecDay, EditText endHourDay, EditText endMinDay, EditText endSecDay) {
+        if (checked) {
+            startHourDay.setEnabled(true);
+            startMinDay.setEnabled(true);
+            startSecDay.setEnabled(true);
+            endHourDay.setEnabled(true);
+            endMinDay.setEnabled(true);
+            endSecDay.setEnabled(true);
+        } else {
+            startHourDay.setEnabled(false);
+            startMinDay.setEnabled(false);
+            startSecDay.setEnabled(false);
+            endHourDay.setEnabled(false);
+            endMinDay.setEnabled(false);
+            endSecDay.setEnabled(false);
+        }
 
     }
 
@@ -1334,10 +557,10 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         AlertDialog alertDialog = dialogBuilder.create();
 
         //init
+        TextView txt_header = dialogView.findViewById(R.id.txt_date);
         TextInputLayout outputNameTil = dialogView.findViewById(R.id.output_til);
         TextInputLayout modeTil = dialogView.findViewById(R.id.mode_til);
         TextInputLayout typeTil = dialogView.findViewById(R.id.outputType);
-
 
         startHour = dialogView.findViewById(R.id.number_picker_hour);
         startMin = dialogView.findViewById(R.id.number_min_hour);
@@ -1350,123 +573,42 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         outputName = dialogView.findViewById(R.id.output_act);
         mode.setAdapter(getAdapter(accessoryTimerMode));
         type.setAdapter(getAdapter(accessoryType));
-        outputName.setAdapter(getAdapter(OutputBleedFlowRate));
+        outputName.setAdapter(getAdapter(bleedRelay));
 
+        txt_header.setText(getString(R.string.accessories_timer_header) + " " + timer);
 
-        if (accessory.isChecked()) {
-            startHour.setEnabled(true);
-            startMin.setEnabled(true);
-            startSec.setEnabled(true);
-            outputNameTil.setEnabled(true);
-            modeTil.setEnabled(true);
-            typeTil.setEnabled(true);
-        } else {
-            startHour.setEnabled(false);
-            startMin.setEnabled(false);
-            startSec.setEnabled(false);
-            outputNameTil.setEnabled(false);
-            modeTil.setEnabled(false);
-            typeTil.setEnabled(false);
-        }
+        setAccessoryTimerEnabled(accessory.isChecked(), startHour, startMin, startSec, outputNameTil, modeTil, typeTil);
 
         accessory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    startHour.setEnabled(true);
-                    startMin.setEnabled(true);
-                    startSec.setEnabled(true);
-                    outputNameTil.setEnabled(true);
-                    modeTil.setEnabled(true);
-                    typeTil.setEnabled(true);
-                } else {
-                    startHour.setEnabled(false);
-                    startMin.setEnabled(false);
-                    startSec.setEnabled(false);
-                    outputNameTil.setEnabled(false);
-                    modeTil.setEnabled(false);
-                    typeTil.setEnabled(false);
-                }
+                setAccessoryTimerEnabled(isChecked, startHour, startMin, startSec, outputNameTil, modeTil, typeTil);
             }
         });
-        //OnDataReceive status
-        if (timer == 1) {
-            if (accessoryTimer[9].equals("0")) {
-                accessory.setChecked(false);
-            } else if (accessoryTimer[9].equals("1")) {
-                accessory.setChecked(true);
-            }
-            if (accessoryTimer[10] != null && accessoryTimer[11] != null && accessoryTimer[12] != null && accessoryTimer[13] != null) {
-                mode.setText(mode.getAdapter().getItem(Integer.parseInt(accessoryTimer[10])).toString());
-                startHour.setText(accessoryTimer[11].substring(0, 2));
-                startMin.setText(accessoryTimer[11].substring(2, 4));
-                startSec.setText(accessoryTimer[11].substring(4, 6));
-                outputName.setText(outputName.getAdapter().getItem(Integer.parseInt(accessoryTimer[12])).toString());
-                type.setText(type.getAdapter().getItem(Integer.parseInt(accessoryTimer[13])).toString());
 
-
-            }
-
+        //OnDataReceive Timer status
+        if (timer == 1 && accessoryTimer != null) {
+            setTimerDatas(accessoryTimer[9], accessoryTimer[10], accessoryTimer[11], accessoryTimer[12], accessoryTimer[13],
+                    accessory, mode, startHour, startMin, startSec, outputName, type);
         }
-        if (timer == 2) {
-            if (accessoryTimer[15].equals("0")) {
-                accessory.setChecked(false);
-            } else if (accessoryTimer[15].equals("1")) {
-                accessory.setChecked(true);
-
-            }
-            if (accessoryTimer[16] != null && accessoryTimer[17] != null && accessoryTimer[18] != null && accessoryTimer[19] != null) {
-                mode.setText(mode.getAdapter().getItem(Integer.parseInt(accessoryTimer[16])).toString());
-                startHour.setText(accessoryTimer[17].substring(0, 2));
-                startMin.setText(accessoryTimer[17].substring(2, 4));
-                startSec.setText(accessoryTimer[17].substring(4, 6));
-                outputName.setText(outputName.getAdapter().getItem(Integer.parseInt(accessoryTimer[18])).toString());
-                type.setText(type.getAdapter().getItem(Integer.parseInt(accessoryTimer[19])).toString());
-
-            }
-
+        if (timer == 2 && accessoryTimer != null) {
+            setTimerDatas(accessoryTimer[15], accessoryTimer[16], accessoryTimer[17], accessoryTimer[18], accessoryTimer[19],
+                    accessory, mode, startHour, startMin, startSec, outputName, type);
         }
-        if (timer == 3) {
-            if (accessoryTimer[21].equals("0")) {
-                accessory.setChecked(false);
-            } else if (accessoryTimer[21].equals("1")) {
-                accessory.setChecked(true);
-            }
-            if (accessoryTimer[22] != null && accessoryTimer[23] != null && accessoryTimer[24] != null && accessoryTimer[25] != null) {
-                mode.setText(mode.getAdapter().getItem(Integer.parseInt(accessoryTimer[22])).toString());
-                startHour.setText(accessoryTimer[23].substring(0, 2));
-                startMin.setText(accessoryTimer[23].substring(2, 4));
-                startSec.setText(accessoryTimer[23].substring(4, 6));
-                outputName.setText(outputName.getAdapter().getItem(Integer.parseInt(accessoryTimer[24])).toString());
-                type.setText(type.getAdapter().getItem(Integer.parseInt(accessoryTimer[25])).toString());
-
-            }
+        if (timer == 3 && accessoryTimer != null) {
+            setTimerDatas(accessoryTimer[21], accessoryTimer[22], accessoryTimer[23], accessoryTimer[24], accessoryTimer[25],
+                    accessory, mode, startHour, startMin, startSec, outputName, type);
         }
-        if (timer == 4) {
-            if (accessoryTimer[27].equals("0")) {
-                accessory.setChecked(false);
-            } else if (accessoryTimer[27].equals("1")) {
-                accessory.setChecked(true);
-            }
-            if (accessoryTimer[28] != null && accessoryTimer[29] != null && accessoryTimer[30] != null && accessoryTimer[31] != null) {
-                mode.setText(mode.getAdapter().getItem(Integer.parseInt(accessoryTimer[28])).toString());
-                startHour.setText(accessoryTimer[29].substring(0, 2));
-                startMin.setText(accessoryTimer[29].substring(2, 4));
-                startSec.setText(accessoryTimer[29].substring(4, 6));
-                outputName.setText(outputName.getAdapter().getItem(Integer.parseInt(accessoryTimer[30])).toString());
-                type.setText(type.getAdapter().getItem(Integer.parseInt(accessoryTimer[31])).toString());
-
-            }
-
+        if (timer == 4 && accessoryTimer != null) {
+            setTimerDatas(accessoryTimer[27], accessoryTimer[28], accessoryTimer[29], accessoryTimer[30], accessoryTimer[31],
+                    accessory, mode, startHour, startMin, startSec, outputName, type);
         }
-
 
         //dialog size
         alertDialog.show();
         int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.7);
         int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.8);
         alertDialog.getWindow().setLayout(width, height);
-
 
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1481,10 +623,10 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                             accessoryTimer[9] = "0";
                             mBinding.AccessoryCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_unchecked));
                         }
-                        accessoryTimer[10] = getPosition(1, FragmentTimerStatus_Config.this.toString(mode), accessoryTimerMode);
-                        accessoryTimer[11] = startHour.getText().toString() + startMin.getText().toString() + startSec.getText().toString();
-                        accessoryTimer[12] = getPosition(2, FragmentTimerStatus_Config.this.toString(outputName), OutputBleedFlowRate);
-                        accessoryTimer[13] = getPosition(1, FragmentTimerStatus_Config.this.toString(type), accessoryType);
+                        accessoryTimer[10] = getPosition(1, toStringValue(mode), accessoryTimerMode);
+                        accessoryTimer[11] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
+                        accessoryTimer[12] = getPosition(2, toStringValue(outputName), bleedRelay);
+                        accessoryTimer[13] = getPosition(1, toStringValue(type), accessoryType);
                         alertDialog.dismiss();
                     }
                 }
@@ -1496,10 +638,10 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                         accessoryTimer[15] = "0";
                         mBinding.AccessoryCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_unchecked));
                     }
-                    accessoryTimer[16] = getPosition(1, FragmentTimerStatus_Config.this.toString(mode), accessoryTimerMode);
-                    accessoryTimer[17] = startHour.getText().toString() + startMin.getText().toString() + startSec.getText().toString();
-                    accessoryTimer[18] = getPosition(2, FragmentTimerStatus_Config.this.toString(outputName), OutputBleedFlowRate);
-                    accessoryTimer[19] = getPosition(1, FragmentTimerStatus_Config.this.toString(type), accessoryType);
+                    accessoryTimer[16] = getPosition(1, toStringValue(mode), accessoryTimerMode);
+                    accessoryTimer[17] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
+                    accessoryTimer[18] = getPosition(2, toStringValue(outputName), bleedRelay);
+                    accessoryTimer[19] = getPosition(1, toStringValue(type), accessoryType);
                     alertDialog.dismiss();
 
                 }
@@ -1512,10 +654,10 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                         accessoryTimer[21] = "0";
                         mBinding.AccessoryCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_unchecked));
                     }
-                    accessoryTimer[22] = getPosition(1, FragmentTimerStatus_Config.this.toString(mode), accessoryTimerMode);
-                    accessoryTimer[24] = startHour.getText().toString() + startMin.getText().toString() + startSec.getText().toString();
-                    accessoryTimer[25] = getPosition(2, FragmentTimerStatus_Config.this.toString(outputName), OutputBleedFlowRate);
-                    accessoryTimer[26] = getPosition(1, FragmentTimerStatus_Config.this.toString(type), accessoryType);
+                    accessoryTimer[22] = getPosition(1, toStringValue(mode), accessoryTimerMode);
+                    accessoryTimer[24] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
+                    accessoryTimer[25] = getPosition(2, toStringValue(outputName), bleedRelay);
+                    accessoryTimer[26] = getPosition(1, toStringValue(type), accessoryType);
                     alertDialog.dismiss();
 
                 }
@@ -1527,10 +669,10 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                         accessoryTimer[27] = "0";
                         mBinding.AccessoryCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_unchecked));
                     }
-                    accessoryTimer[28] = getPosition(1, FragmentTimerStatus_Config.this.toString(mode), accessoryTimerMode);
-                    accessoryTimer[29] = startHour.getText().toString() + startMin.getText().toString() + startSec.getText().toString();
-                    accessoryTimer[30] = getPosition(2, FragmentTimerStatus_Config.this.toString(outputName), OutputBleedFlowRate);
-                    accessoryTimer[31] = getPosition(1, FragmentTimerStatus_Config.this.toString(type), accessoryType);
+                    accessoryTimer[28] = getPosition(1, toStringValue(mode), accessoryTimerMode);
+                    accessoryTimer[29] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
+                    accessoryTimer[30] = getPosition(2, toStringValue(outputName), bleedRelay);
+                    accessoryTimer[31] = getPosition(1, toStringValue(type), accessoryType);
                     alertDialog.dismiss();
 
                 }
@@ -1541,7 +683,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
 
         mode.setAdapter(getAdapter(accessoryTimerMode));
         type.setAdapter(getAdapter(accessoryType));
-        outputName.setAdapter(getAdapter(OutputBleedFlowRate));
+        outputName.setAdapter(getAdapter(bleedRelay));
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1551,24 +693,58 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         });
     }
 
+    private void setAccessoryTimerEnabled(boolean checked, EditText startHour, EditText startMin, EditText startSec,
+                                          TextInputLayout outputNameTil, TextInputLayout modeTil, TextInputLayout typeTil) {
+        if (checked) {
+            startHour.setEnabled(true);
+            startMin.setEnabled(true);
+            startSec.setEnabled(true);
+            outputNameTil.setEnabled(true);
+            modeTil.setEnabled(true);
+            typeTil.setEnabled(true);
+        } else {
+            startHour.setEnabled(false);
+            startMin.setEnabled(false);
+            startSec.setEnabled(false);
+            outputNameTil.setEnabled(false);
+            modeTil.setEnabled(false);
+            typeTil.setEnabled(false);
+        }
+    }
+
+    private void setTimerDatas(String accessoryTimerEnable, String accessoryTimerMode, String accessoryTimehhmmsec,
+                               String accessoryTimerOutput, String accessoryTimerType, CheckBox accessory,
+                               AutoCompleteTextView mode, EditText startHour, EditText startMin, EditText startSec,
+                               AutoCompleteTextView outputName, AutoCompleteTextView type) {
+        if (accessoryTimerEnable.equals("0")) {
+            accessory.setChecked(false);
+        } else if (accessoryTimerEnable.equals("1")) {
+            accessory.setChecked(true);
+        }
+        if (accessoryTimerMode != null && accessoryTimehhmmsec != null && accessoryTimerOutput != null && accessoryTimerType != null) {
+            mode.setText(mode.getAdapter().getItem(Integer.parseInt(accessoryTimerMode)).toString());
+            if (accessoryTimehhmmsec.length() == 6) {
+                startHour.setText(accessoryTimehhmmsec.substring(0, 2));
+                startMin.setText(accessoryTimehhmmsec.substring(2, 4));
+                startSec.setText(accessoryTimehhmmsec.substring(4, 6));
+            }
+            outputName.setText(outputName.getAdapter().getItem(Integer.parseInt(accessoryTimerOutput)).toString());
+            type.setText(type.getAdapter().getItem(Integer.parseInt(accessoryTimerType)).toString());
+        }
+    }
+
 
     @Override
     public void OnDataReceive(String data) {
         mActivity.dismissProgress();
-        if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
-        }
-        if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
-        }
-        if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        if (data.equals("FailedToConnect") || data.equals("pckError") || data.equals("sendCatch")) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getContext(), "TimeOut");
+            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
         }
         if (data != null) {
-            handleResponse(data.split("\\$"), 0);
+            handleResponse(data.split(RES_SPILT_CHAR), 0);
         }
     }
 
@@ -1579,53 +755,30 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
             accessoryTimer = splitData;
             mBinding.timerNameTxt.setText(splitData[4]);
             mBinding.txtOutputNameValueAct.setText(mBinding.txtOutputNameValueAct.getAdapter().getItem(Integer.parseInt(splitData[5])).toString());
+            flowSensorVisibility(Integer.parseInt(splitData[6]));
             mBinding.txtModeValueAct.setText(mBinding.txtModeValueAct.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
             mBinding.txtFlowSensorValueAct.setText(mBinding.txtFlowSensorValueAct.getAdapter().getItem(Integer.parseInt(splitData[7])).toString());
 
-            //accessoryTimer-1
-            if (splitData[9].equals("0")) {
-                mBinding.AccessoryCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_unchecked));
-            } else if (splitData[9].equals("1")) {
-                mBinding.AccessoryCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_checked));
-            }
-
-
-            //accessoryTimer-2
-            if (splitData[15].equals("0")) {
-                mBinding.AccessoryCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_unchecked));
-
-            } else if (splitData[15].equals("1")) {
-                mBinding.AccessoryCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_checked));
-
-            }
-
-            //accessoryTimer-3
-            if (splitData[21].equals("0")) {
-                mBinding.AccessoryCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_unchecked));
-
-            } else if (splitData[21].equals("1")) {
-                mBinding.AccessoryCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_checked));
-
-            }
-
-
-            //accessoryTimer-4
-            if (splitData[27].equals("0")) {
-                mBinding.AccessoryCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_unchecked));
-            } else if (splitData[27].equals("1")) {
-                mBinding.AccessoryCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_cheched));
-            }
+            //accessoryTimer- set background
+            setAccessoryTimerBackground(splitData[9], mBinding.AccessoryCheckbox1, 1);
+            setAccessoryTimerBackground(splitData[15], mBinding.AccessoryCheckbox2, 2);
+            setAccessoryTimerBackground(splitData[21], mBinding.AccessoryCheckbox3, 3);
+            setAccessoryTimerBackground(splitData[27], mBinding.AccessoryCheckbox4, 4);
 
             weeklyScheduleReadPacket(week1);
-
         }
 
         if (splitData[0].equals("{*0") && splitData[1].equals("08")) {
             if (splitData[2].equals("0*}")) {
-                writeWeeklySchedule(week1, timerOne,1);
+                WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+                TimerConfigurationDao dao = db.timerConfigurationDao();
+                int timerNum = Integer.parseInt(timerNo) + 1;
+                dao.updateTimer(mBinding.timerNameTxt.getText().toString(),
+                        mBinding.txtOutputNameValueAct.getText().toString(), mBinding.txtModeValueAct.getText().toString(), timerNum);
+                writeWeeklySchedule(week1, timerOne, 1);
             }
             if (splitData[2].equals("1*}")) {
-                mAppClass.showSnackBar(getContext(), "WRITE FAILED");
+                mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
             }
         }
         //Weekly
@@ -1640,47 +793,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                         mBinding.weekCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_checked));
                         mBinding.switchBtnWeek.setChecked(true);
                     }
-                    if (splitData[6].equals("0")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[6].equals("1")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[9].equals("0")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[9].equals("1")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[12].equals("0")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[12].equals("1")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[15].equals("0")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[15].equals("1")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[18].equals("0")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[18].equals("1")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-
-                    if (splitData[21].equals("0")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[21].equals("1")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[24].equals("0")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[24].equals("1")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
+                    setWeekBackground(splitData);
                     weeklyScheduleReadPacket(week2);
                 }
                 if (splitData[4].equals(week2)) {
@@ -1690,47 +803,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                     } else if (splitData[5].equals("1")) {
                         mBinding.weekCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_checked));
                     }
-                    if (splitData[6].equals("0")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[6].equals("1")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[9].equals("0")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[9].equals("1")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[12].equals("0")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[12].equals("1")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[15].equals("0")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[15].equals("1")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[18].equals("0")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[18].equals("1")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-
-                    if (splitData[21].equals("0")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[21].equals("1")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[24].equals("0")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[24].equals("1")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
+                    setWeekBackground(splitData);
                     weeklyScheduleReadPacket(week3);
                 }
                 if (splitData[4].equals(week3)) {
@@ -1740,47 +813,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                     } else if (splitData[5].equals("1")) {
                         mBinding.weekCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_checked));
                     }
-                    if (splitData[6].equals("0")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[6].equals("1")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[9].equals("0")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[9].equals("1")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[12].equals("0")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[12].equals("1")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[15].equals("0")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[15].equals("1")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[18].equals("0")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[18].equals("1")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-
-                    if (splitData[21].equals("0")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[21].equals("1")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[24].equals("0")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[24].equals("1")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
+                    setWeekBackground(splitData);
                     weeklyScheduleReadPacket(week4);
                 }
                 if (splitData[4].equals(week4)) {
@@ -1790,47 +823,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                     } else if (splitData[5].equals("1")) {
                         mBinding.weekCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_cheched));
                     }
-                    if (splitData[6].equals("0")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[6].equals("1")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[9].equals("0")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[9].equals("1")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[12].equals("0")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[12].equals("1")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[15].equals("0")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[15].equals("1")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[18].equals("0")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[18].equals("1")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-
-                    if (splitData[21].equals("0")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[21].equals("1")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[24].equals("0")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[24].equals("1")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
+                    setWeekBackground(splitData);
                     handleResponse(timerOne, 1);
                 }
             }
@@ -1840,189 +833,23 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
             if (splitData[0].equals("{*1") && splitData[1].equals("09")) {
                 if (splitData[4].equals(week1)) {
                     timerOne = splitData;
-                    if (splitData[6].equals("0")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[6].equals("1")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[9].equals("0")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[9].equals("1")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[12].equals("0")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[12].equals("1")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[15].equals("0")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[15].equals("1")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[18].equals("0")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[18].equals("1")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-
-                    if (splitData[21].equals("0")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[21].equals("1")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[24].equals("0")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[24].equals("1")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-
                 }
                 if (splitData[4].equals(week2)) {
                     timerTwo = splitData;
-                    if (splitData[6].equals("0")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[6].equals("1")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[9].equals("0")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[9].equals("1")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[12].equals("0")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[12].equals("1")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[15].equals("0")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[15].equals("1")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[18].equals("0")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[18].equals("1")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-
-                    if (splitData[21].equals("0")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[21].equals("1")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[24].equals("0")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[24].equals("1")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-
                 }
                 if (splitData[4].equals(week3)) {
                     timerThree = splitData;
-                    if (splitData[6].equals("0")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[6].equals("1")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[9].equals("0")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[9].equals("1")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[12].equals("0")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[12].equals("1")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[15].equals("0")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[15].equals("1")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[18].equals("0")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[18].equals("1")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-
-                    if (splitData[21].equals("0")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[21].equals("1")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[24].equals("0")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[24].equals("1")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-
                 }
                 if (splitData[4].equals(week4)) {
                     timerFour = splitData;
-                    if (splitData[6].equals("0")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[6].equals("1")) {
-                        mBinding.checkBoxMonday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[9].equals("0")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[9].equals("1")) {
-                        mBinding.checkBoxTuesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[12].equals("0")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[12].equals("1")) {
-                        mBinding.checkBoxWednesday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[15].equals("0")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-
-                    } else if (splitData[15].equals("1")) {
-                        mBinding.checkBoxThursday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
-                    if (splitData[18].equals("0")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[18].equals("1")) {
-                        mBinding.checkBoxFriday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-
-                    if (splitData[21].equals("0")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[21].equals("1")) {
-                        mBinding.checkBoxSaturday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-                    }
-                    if (splitData[24].equals("0")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
-                    } else if (splitData[24].equals("1")) {
-                        mBinding.checkBoxSunday.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
-
-                    }
                 }
+                setWeekBackground(splitData);
             }
         }
 
         if (splitData[0].equals("{*0") && splitData[1].equals("09")) {
             if (splitData[2].equals("0*}")) {
-                mAppClass.showSnackBar(getContext(), "WRITE SUCCESS ");
+                mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 switch (loopWeeklyPacket){
                     case 1:
                         writeWeeklySchedule(week2, timerTwo,2);
@@ -2030,19 +857,77 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                     case 2:
                         writeWeeklySchedule(week3, timerThree,3);
                         break;
-
                     case 3:
-                        writeWeeklySchedule(week4, timerFour,0);
+                        writeWeeklySchedule(week4, timerFour, 0);
                         break;
                 }
             }
             if (splitData[2].equals("1*}")) {
-                mAppClass.showSnackBar(getContext(), "WRITE FAILED");
+                mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
             }
         }
         initAdapter();
 
+    }
 
+    private void setWeekBackground(String[] splitData) {
+        setWeekDayBackground(splitData[6], mBinding.checkBoxMonday);
+        setWeekDayBackground(splitData[9], mBinding.checkBoxTuesday);
+        setWeekDayBackground(splitData[12], mBinding.checkBoxWednesday);
+        setWeekDayBackground(splitData[15], mBinding.checkBoxThursday);
+        setWeekDayBackground(splitData[18], mBinding.checkBoxFriday);
+        setWeekDayBackground(splitData[21], mBinding.checkBoxSaturday);
+        setWeekDayBackground(splitData[24], mBinding.checkBoxSunday);
+    }
+
+    private void setWeekDayBackground(String enableWeekDay, View weekdaycheckBox) {
+        if (enableWeekDay.equals("0")) {
+            weekdaycheckBox.setBackground(getResources().getDrawable(R.drawable.ic_date_unchecked));
+        } else if (enableWeekDay.equals("1")) {
+            weekdaycheckBox.setBackground(getResources().getDrawable(R.drawable.ic_date_checked));
+        }
+    }
+
+    private void setAccessoryTimerBackground(String enableAccessoryTimer, View accessoryCheckbox, int i) {
+        switch (i) {
+            case 1:
+                if (enableAccessoryTimer.equals("0")) {
+                    accessoryCheckbox.setBackground(getResources().getDrawable(R.drawable.one_unchecked));
+                } else if (enableAccessoryTimer.equals("1")) {
+                    accessoryCheckbox.setBackground(getResources().getDrawable(R.drawable.one_checked));
+                }
+                break;
+            case 2:
+                if (enableAccessoryTimer.equals("0")) {
+                    accessoryCheckbox.setBackground(getResources().getDrawable(R.drawable.two_unchecked));
+                } else if (enableAccessoryTimer.equals("1")) {
+                    accessoryCheckbox.setBackground(getResources().getDrawable(R.drawable.two_checked));
+                }
+                break;
+            case 3:
+                if (enableAccessoryTimer.equals("0")) {
+                    accessoryCheckbox.setBackground(getResources().getDrawable(R.drawable.three_unchecked));
+                } else if (enableAccessoryTimer.equals("1")) {
+                    accessoryCheckbox.setBackground(getResources().getDrawable(R.drawable.three_checked));
+                }
+                break;
+            case 4:
+                if (enableAccessoryTimer.equals("0")) {
+                    accessoryCheckbox.setBackground(getResources().getDrawable(R.drawable.four_unchecked));
+                } else if (enableAccessoryTimer.equals("1")) {
+                    accessoryCheckbox.setBackground(getResources().getDrawable(R.drawable.four_cheched));
+                }
+                break;
+        }
+
+    }
+
+    private void flowSensorVisibility(int mode) {
+        if (mode == 1) {
+            mBinding.viewFlowSensor.setVisibility(View.VISIBLE);
+        } else {
+            mBinding.viewFlowSensor.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -2061,60 +946,57 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                 accessoryTimer(4);
                 break;
             case R.id.week_checkbox_1:
-                mBinding.switchBtnWeek.setText("Enabled Week-1");
+                mBinding.switchBtnWeek.setText(getString(R.string.week1_enable));
                 enabledWeeklySchedule(mBinding.switchBtnWeek, timerOne);
                 week = "Week-1";
                 handleResponse(timerOne, 1);
                 break;
 
             case R.id.week_checkbox_2:
-                mBinding.switchBtnWeek.setText("Enabled Week-2");
+                mBinding.switchBtnWeek.setText(getString(R.string.week2_enable));
                 enabledWeeklySchedule(mBinding.switchBtnWeek, timerTwo);
                 week = "Week-2";
                 handleResponse(timerTwo, 1);
                 break;
 
             case R.id.week_checkbox_3:
-                mBinding.switchBtnWeek.setText("Enabled Week-3");
+                mBinding.switchBtnWeek.setText(getString(R.string.week3_enable));
                 enabledWeeklySchedule(mBinding.switchBtnWeek, timerThree);
                 week = "Week-3";
                 handleResponse(timerThree, 1);
                 break;
 
-
             case R.id.week_checkbox_4:
-                mBinding.switchBtnWeek.setText("Enabled Week-4");
+                mBinding.switchBtnWeek.setText(getString(R.string.week4_enable));
                 enabledWeeklySchedule(mBinding.switchBtnWeek, timerFour);
                 week = "Week-4";
                 handleResponse(timerFour, 1);
-
                 break;
 
             case R.id.saveLayout_condIS:
             case R.id.saveFab_condIS:
                 writeTimerConfiguration();
                 break;
-
             case R.id.check_box_monday:
-                dayDialog(1, week);
+                dayDialog(1, week, "MONDAY");
                 break;
             case R.id.check_box_tuesday:
-                dayDialog(2, week);
+                dayDialog(2, week, "TUESDAY");
                 break;
             case R.id.check_box_wednesday:
-                dayDialog(3, week);
+                dayDialog(3, week, "WEDNESDAY");
                 break;
             case R.id.check_box_thursday:
-                dayDialog(4, week);
+                dayDialog(4, week, "THURSDAY");
                 break;
             case R.id.check_box_friday:
-                dayDialog(5, week);
+                dayDialog(5, week, "FRIDAY");
                 break;
             case R.id.check_box_saturday:
-                dayDialog(6, week);
+                dayDialog(6, week, "SATURDAY");
                 break;
             case R.id.check_box_sunday:
-                dayDialog(7, week);
+                dayDialog(7, week, "SUNDAY");
                 break;
 
         }
@@ -2122,51 +1004,54 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
 
     void weeklyScheduleReadPacket(String week) {
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + "0" +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                 SPILT_CHAR + READ_PACKET + SPILT_CHAR +
                 PCK_WEEKLY_CONFIG + SPILT_CHAR + timerNo + SPILT_CHAR + week);
     }
 
     void writeTimerConfiguration() {
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + "0" +
-                SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
-                PCK_TIMER_CONFIG + SPILT_CHAR + timerNo + SPILT_CHAR + mBinding.timerNameTxt.getText().toString()
-                + SPILT_CHAR + getPosition(2, toString(mBinding.txtOutputNameValueAct), OutputBleedFlowRate)
-                + SPILT_CHAR + getPosition(2, toString(mBinding.txtModeValueAct), timerOutputMode)
-                + SPILT_CHAR + getPosition(1, toString(mBinding.txtFlowSensorValueAct), timerFlowSensor)
-                + SPILT_CHAR + "1"
-                + SPILT_CHAR + accessoryTimer[9]
-                + SPILT_CHAR + accessoryTimer[10]
-                + SPILT_CHAR + accessoryTimer[11]
-                + SPILT_CHAR + accessoryTimer[12]
-                + SPILT_CHAR + accessoryTimer[13]
-                + SPILT_CHAR + "2"
-                + SPILT_CHAR + accessoryTimer[15]
-                + SPILT_CHAR + accessoryTimer[16]
-                + SPILT_CHAR + accessoryTimer[17]
-                + SPILT_CHAR + accessoryTimer[18]
-                + SPILT_CHAR + accessoryTimer[19]
-                + SPILT_CHAR + "3"
-                + SPILT_CHAR + accessoryTimer[21]
-                + SPILT_CHAR + accessoryTimer[22]
-                + SPILT_CHAR + accessoryTimer[23]
-                + SPILT_CHAR + accessoryTimer[24]
-                + SPILT_CHAR + accessoryTimer[25]
-                + SPILT_CHAR + "4"
-                + SPILT_CHAR + accessoryTimer[27]
-                + SPILT_CHAR + accessoryTimer[28]
-                + SPILT_CHAR + accessoryTimer[29]
-                + SPILT_CHAR + accessoryTimer[30]
-                + SPILT_CHAR + accessoryTimer[31]
-                + SPILT_CHAR + "1" + timerOne[5] + "2" + timerTwo[5] + "3" + timerThree[5] + "4" + timerFour[5]);
-
+        try {
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
+                    SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                    PCK_TIMER_CONFIG + SPILT_CHAR + timerNo + SPILT_CHAR + mBinding.timerNameTxt.getText().toString()
+                    + SPILT_CHAR + getPosition(2, toStringValue(mBinding.txtOutputNameValueAct), bleedRelay)
+                    + SPILT_CHAR + getPosition(2, toStringValue(mBinding.txtModeValueAct), timerOutputMode)
+                    + SPILT_CHAR + getPosition(1, toStringValue(mBinding.txtFlowSensorValueAct), timerFlowSensor)
+                    + SPILT_CHAR + "1"
+                    + SPILT_CHAR + accessoryTimer[9]
+                    + SPILT_CHAR + accessoryTimer[10]
+                    + SPILT_CHAR + accessoryTimer[11]
+                    + SPILT_CHAR + accessoryTimer[12]
+                    + SPILT_CHAR + accessoryTimer[13]
+                    + SPILT_CHAR + "2"
+                    + SPILT_CHAR + accessoryTimer[15]
+                    + SPILT_CHAR + accessoryTimer[16]
+                    + SPILT_CHAR + accessoryTimer[17]
+                    + SPILT_CHAR + accessoryTimer[18]
+                    + SPILT_CHAR + accessoryTimer[19]
+                    + SPILT_CHAR + "3"
+                    + SPILT_CHAR + accessoryTimer[21]
+                    + SPILT_CHAR + accessoryTimer[22]
+                    + SPILT_CHAR + accessoryTimer[23]
+                    + SPILT_CHAR + accessoryTimer[24]
+                    + SPILT_CHAR + accessoryTimer[25]
+                    + SPILT_CHAR + "4"
+                    + SPILT_CHAR + accessoryTimer[27]
+                    + SPILT_CHAR + accessoryTimer[28]
+                    + SPILT_CHAR + accessoryTimer[29]
+                    + SPILT_CHAR + accessoryTimer[30]
+                    + SPILT_CHAR + accessoryTimer[31]
+                    + SPILT_CHAR + "1" + timerOne[5] + "2" + timerTwo[5] + "3" + timerThree[5] + "4" + timerFour[5]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
     void writeWeeklySchedule(String week, String[] weekType, int loop) {
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + "0" +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                 SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                 PCK_WEEKLY_CONFIG + SPILT_CHAR + timerNo
                 + SPILT_CHAR + week
@@ -2196,46 +1081,8 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         loopWeeklyPacket = loop;
     }
 
-    public String toString(int digits, EditText editText) {
-        return mAppClass.formDigits(digits, editText.getText().toString());
-    }
-
-    public String toString(AutoCompleteTextView editText) {
-        return editText.getText().toString();
-    }
-
-    public String toStringSplit(int digits, int digitPoint, EditText editText) {
-        if (editText.getText().toString().split("\\.").length == 1) {
-            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
-        }
-        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
-    }
-
-    private String getPosition(int digit, String string, String[] strArr) {
-        String j = null;
-        for (int i = 0; i < strArr.length; i++) {
-            if (string.equals(strArr[i])) {
-                j = String.valueOf(i);
-            }
-        }
-        return mAppClass.formDigits(digit, j);
-    }
-
-
     boolean accessoryTimeValidation() {
-        if (Integer.parseInt(startHour.getText().toString()) > 24) {
-            startHour.setError("");
-            mAppClass.showSnackBar(getContext(), "Invalid Hour");
-            return false;
-        } else if (Integer.parseInt(startMin.getText().toString()) > 60) {
-            startMin.setError("");
-            mAppClass.showSnackBar(getContext(), "Invalid Min");
-            return false;
-        } else if (Integer.parseInt(startSec.getText().toString()) > 60) {
-            startSec.setError("");
-            mAppClass.showSnackBar(getContext(), "Invalid Sec");
-            return false;
-        }else if (startHour.getText().toString().isEmpty()) {
+        if (startHour.getText().toString().isEmpty()) {
             startHour.setError("");
             mAppClass.showSnackBar(getContext(), "Hour cannot be empty");
             return false;
@@ -2247,6 +1094,23 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
             startSec.setError("");
             mAppClass.showSnackBar(getContext(), "Sec cannot be empty");
             return false;
+        } else if (Integer.parseInt(startHour.getText().toString()) > 24) {
+            startHour.setError("");
+            mAppClass.showSnackBar(getContext(), "Invalid Hour");
+            return false;
+        } else if (Integer.parseInt(startMin.getText().toString()) > 60) {
+            startMin.setError("");
+            mAppClass.showSnackBar(getContext(), "Invalid Min");
+            return false;
+        } else if (Integer.parseInt(startSec.getText().toString()) > 60) {
+            startSec.setError("");
+            mAppClass.showSnackBar(getContext(), "Invalid Sec");
+            return false;
+        } else if ((getPosition(2, toStringValue(mBinding.txtModeValueAct), timerOutputMode).equalsIgnoreCase("00") ||
+                getPosition(2, toStringValue(mBinding.txtModeValueAct), timerOutputMode).equalsIgnoreCase("3")) &&
+                getPosition(1, toStringValue(mode), accessoryTimerMode).equalsIgnoreCase("1")) {
+            mAppClass.showSnackBar(getContext(), "You can't able to choose Timer Safety Flow when the Main Timer Mode is Timer|Disabled");
+            return false;
         }
 
         return true;
@@ -2254,31 +1118,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
 
 
     boolean weeklyScheduledValidation() {
-        if (Integer.parseInt(startHourDay.getText().toString()) > 24) {
-            startHourDay.setError("");
-            mAppClass.showSnackBar(getContext(), "Invalid Hour");
-            return false;
-        } else if (Integer.parseInt(startMinDay.getText().toString()) > 60) {
-            startMinDay.setError("");
-            mAppClass.showSnackBar(getContext(), "Invalid Min");
-            return false;
-        } else if (Integer.parseInt(startSecDay.getText().toString()) > 60) {
-            startSecDay.setError("");
-            mAppClass.showSnackBar(getContext(), "Invalid Sec");
-            return false;
-        } else if (Integer.parseInt(endHourDay.getText().toString()) > 24) {
-            endHourDay.setError("");
-            mAppClass.showSnackBar(getContext(), "Invalid Hour");
-            return false;
-        } else if (Integer.parseInt(endMinDay.getText().toString()) > 60) {
-            endMinDay.setError("");
-            mAppClass.showSnackBar(getContext(), "Invalid Min");
-            return false;
-        } else if (Integer.parseInt(endSecDay.getText().toString()) > 60) {
-            endSecDay.setError("");
-            mAppClass.showSnackBar(getContext(), "Invalid Sec");
-            return false;
-        }else if (startHourDay.getText().toString().isEmpty()) {
+        if (startHourDay.getText().toString().isEmpty()) {
             startHourDay.setError("");
             mAppClass.showSnackBar(getContext(), "Hour cannot be empty");
             return false;
@@ -2302,6 +1142,30 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
             endSecDay.setError("");
             mAppClass.showSnackBar(getContext(), "Sec cannot be empty");
             return false;
+        } else if (Integer.parseInt(startHourDay.getText().toString()) > 24) {
+            startHourDay.setError("");
+            mAppClass.showSnackBar(getContext(), "Invalid Hour");
+            return false;
+        } else if (Integer.parseInt(startMinDay.getText().toString()) > 60) {
+            startMinDay.setError("");
+            mAppClass.showSnackBar(getContext(), "Invalid Min");
+            return false;
+        } else if (Integer.parseInt(startSecDay.getText().toString()) > 60) {
+            startSecDay.setError("");
+            mAppClass.showSnackBar(getContext(), "Invalid Sec");
+            return false;
+        } else if (Integer.parseInt(endHourDay.getText().toString()) > 24) {
+            endHourDay.setError("");
+            mAppClass.showSnackBar(getContext(), "Invalid Hour");
+            return false;
+        } else if (Integer.parseInt(endMinDay.getText().toString()) > 60) {
+            endMinDay.setError("");
+            mAppClass.showSnackBar(getContext(), "Invalid Min");
+            return false;
+        } else if (Integer.parseInt(endSecDay.getText().toString()) > 60) {
+            endSecDay.setError("");
+            mAppClass.showSnackBar(getContext(), "Invalid Sec");
+            return false;
         }
 
         return true;
@@ -2315,29 +1179,65 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         }
     }
 
-    void applyToAllTime(String[] stringArr, String[] applyStringArr) {
-        stringArr[6] = applyStringArr[6];
-        stringArr[7] = applyStringArr[7];
-        stringArr[8] = applyStringArr[8];
-        stringArr[9] = applyStringArr[6];
-        stringArr[10] = applyStringArr[7];
-        stringArr[11] = applyStringArr[8];
-        stringArr[12] = applyStringArr[6];
-        stringArr[13] = applyStringArr[7];
-        stringArr[14] = applyStringArr[8];
-        stringArr[15] = applyStringArr[6];
-        stringArr[16] = applyStringArr[7];
-        stringArr[17] = applyStringArr[8];
-        stringArr[18] = applyStringArr[6];
-        stringArr[19] = applyStringArr[7];
-        stringArr[20] = applyStringArr[8];
-        stringArr[21] = applyStringArr[6];
-        stringArr[22] = applyStringArr[7];
-        stringArr[23] = applyStringArr[8];
-        stringArr[24] = applyStringArr[6];
-        stringArr[25] = applyStringArr[7];
-        stringArr[26] = applyStringArr[8];
-
-
+    void applyToAllTime(String[] stringArr, String[] applyStringArr, int day) {
+        int enable = 0, startTime = 0, durationTime = 0;
+        switch (day) {
+            case 1:
+                enable = 6;
+                startTime = 7;
+                durationTime = 8;
+                break;
+            case 2:
+                enable = 9;
+                startTime = 10;
+                durationTime = 11;
+                break;
+            case 3:
+                enable = 12;
+                startTime = 13;
+                durationTime = 14;
+                break;
+            case 4:
+                enable = 15;
+                startTime = 16;
+                durationTime = 17;
+                break;
+            case 5:
+                enable = 18;
+                startTime = 19;
+                durationTime = 20;
+                break;
+            case 6:
+                enable = 21;
+                startTime = 22;
+                durationTime = 23;
+                break;
+            case 7:
+                enable = 24;
+                startTime = 25;
+                durationTime = 26;
+                break;
+        }
+        stringArr[6] = applyStringArr[enable];
+        stringArr[7] = applyStringArr[startTime];
+        stringArr[8] = applyStringArr[durationTime];
+        stringArr[9] = applyStringArr[enable];
+        stringArr[10] = applyStringArr[startTime];
+        stringArr[11] = applyStringArr[durationTime];
+        stringArr[12] = applyStringArr[enable];
+        stringArr[13] = applyStringArr[startTime];
+        stringArr[14] = applyStringArr[durationTime];
+        stringArr[15] = applyStringArr[enable];
+        stringArr[16] = applyStringArr[startTime];
+        stringArr[17] = applyStringArr[durationTime];
+        stringArr[18] = applyStringArr[enable];
+        stringArr[19] = applyStringArr[startTime];
+        stringArr[20] = applyStringArr[durationTime];
+        stringArr[21] = applyStringArr[enable];
+        stringArr[22] = applyStringArr[startTime];
+        stringArr[23] = applyStringArr[durationTime];
+        stringArr[24] = applyStringArr[enable];
+        stringArr[25] = applyStringArr[startTime];
+        stringArr[26] = applyStringArr[durationTime];
     }
 }

@@ -73,8 +73,8 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
                 updateToDb(entryListUpdate);
             }
         }
-        inputConfigurationEntityList = dao.getInputConfigurationEntityFlagKeyList(0);
-        mBinding.inputsRv.setLayoutManager(new GridLayoutManager(getContext(), 4));
+        inputConfigurationEntityList = dao.getInputConfigurationEntityFlagKeyList(1);
+        mBinding.inputsRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(this, inputConfigurationEntityList));
         mBinding.addsensorIsBtn.setOnClickListener(this);
     }
@@ -211,7 +211,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
             case "Conductivity":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorConductivity_Config(inputNumber, 1)).commit();
                 break;
-            case "Toroidal Conductivity":
+            case "Toroidal":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorToroidalConductivity_config(inputNumber, 1)).commit();
                 break;
             case "Temperature":

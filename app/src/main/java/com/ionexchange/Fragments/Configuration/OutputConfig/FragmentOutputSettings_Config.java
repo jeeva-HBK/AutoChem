@@ -58,7 +58,7 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
             }
         }
         outputConfigurationEntityList = dao.getOutputConfigurationEntityList();
-        mBinding.outputRv.setLayoutManager(new GridLayoutManager(getContext(), 4));
+        mBinding.outputRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(this, outputConfigurationEntityList));
     }
 

@@ -14,9 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ionexchange.Adapters.SelectSensorListAdapter;
-import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
 import com.ionexchange.Database.Dao.MainConfigurationDao;
-import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
 import com.ionexchange.Database.Entity.MainConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.RvOnClick;
@@ -30,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.macAddress;
+
 
 public class FragmentSelectSensors extends Fragment implements CompoundButton.OnCheckedChangeListener, RvOnClick {
     FragmentSelectsensorBinding mBinding;

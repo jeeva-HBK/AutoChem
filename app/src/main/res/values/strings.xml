@@ -2,9 +2,50 @@
     <string name="app_name">Auto Chem</string>
 
     <string name="wrongPack">Received Wrong Packet</string>
+
     <string name="readFailed">Unable to get the values</string>
+
     <string name="update_success">Update Success</string>
+
     <string name="update_failed">Update Failed</string>
+
     <string name="connection_failed">Failed to connect</string>
+
     <string name="timeout">Timeout</string>
+
+    <string name="accessories_timer_header">ACCESSORY TIMER</string>
+
+    <string name="mode">MODE</string>
+
+    <string name="output">OUTPUT</string>
+
+    <string name="output_type">OUTPUT TYPE</string>
+
+    <string name="duration">DURATION</string>
+
+    <string name="hh">HH</string>
+
+    <string name="mm">MM</string>
+
+    <string name="ss">SS</string>
+
+    <string name="double_zero">00</string>
+
+    <string name="enable">ENABLE</string>
+
+    <string name="start">START</string>
+
+    <string name="week1_enable">Enable Week-1</string>
+
+    <string name="week2_enable">Enable Week-2</string>
+
+    <string name="week3_enable">Enable Week-3</string>
+
+    <string name="week4_enable">Enable Week-4</string>
+
+    <string name="ok">OK</string>
+
+    <string name="cancel">CANCEL</string>
+
+    <string name="apply_to_all">APPLY TO ALL</string>
 </resources>

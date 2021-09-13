@@ -17,4 +17,9 @@ public interface TimerConfigurationDao {
 
     @Query("select * FROM timerconfigurationentity")
     List<TimerConfigurationEntity> geTimerConfigurationEntityList();
+
+    @Query("UPDATE TimerConfigurationEntity SET timerName =:timerName , outputLinked =:outputLinked " +
+            ", mode=:mode WHERE timerNo = :timerNo")
+    void updateTimer(String timerName,String outputLinked,String mode,int timerNo);
+
 }
