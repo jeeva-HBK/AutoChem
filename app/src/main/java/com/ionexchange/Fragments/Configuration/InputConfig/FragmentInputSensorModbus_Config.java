@@ -221,8 +221,6 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
             mBinding.modbusDeleteLayoutIsc.setVisibility(View.INVISIBLE);
             mBinding.modbusSaveTxtIsc.setText("ADD");
         }
-
-
     }
 
     @Override

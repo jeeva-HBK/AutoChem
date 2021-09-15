@@ -30,7 +30,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/analog_inputNumber"
-                style="@style/config_Til">
+                style="@style/config_Til"
+                android:enabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/analog_input_number_tie"
@@ -48,7 +49,8 @@
             <!--Sensor Type-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/analog_sensorType"
-                style="@style/config_AtxTil">
+                style="@style/config_AtxTil"
+                android:enabled="false">
 
                 <AutoCompleteTextView
                     android:id="@+id/analog_sensor_type_tie"
@@ -264,8 +266,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
         </LinearLayout>
 
         <!--Row 4-->
@@ -279,8 +279,6 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1">
 
-
-                <!--Alarm Low-->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/analog_alarmLow"
                     style="@style/config_Til"
@@ -295,7 +293,6 @@
                         android:id="@+id/analog_alarm_low_tie"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-
                         android:imeOptions="actionNext"
                         android:inputType="numberDecimal"
                         android:maxLength="2"
@@ -342,9 +339,6 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1">
 
-
-
-                <!--Alarm High-->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/analog_alarmHigh"
                     style="@style/config_Til"
@@ -359,7 +353,6 @@
                         android:id="@+id/analog_high_low_tie"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-
                         android:imeOptions="actionDone"
                         android:inputType="numberDecimal"
                         android:maxLength="2"

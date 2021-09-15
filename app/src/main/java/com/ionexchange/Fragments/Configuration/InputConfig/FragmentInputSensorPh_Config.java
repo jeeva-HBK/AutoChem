@@ -4,10 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,7 +26,12 @@ import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.bufferArr;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
+import static com.ionexchange.Others.ApplicationClass.getAdapter;
+import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
+import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
+import static com.ionexchange.Others.ApplicationClass.getStringValue;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
@@ -53,7 +54,6 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     InputConfigurationDao dao;
     boolean primary;
     private static final String TAG = "FragmentInputSensor";
-    String sensorSequence;
 
     String inputNumber, sensorName;
     int sensorStatus;
@@ -93,13 +93,12 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         dao = db.inputConfigurationDao();
 
         // initializing ATXT adapters
-        mBinding.phSensorActivationAtxtIsc.setAdapter(getAdapter(sensorActivationArr));
-        mBinding.phSensorTypeAtxtIsc.setAdapter(getAdapter(inputTypeArr));
-        mBinding.phBufferTypeAtxtIsc.setAdapter(getAdapter(bufferArr));
-        mBinding.phTempLinkedAtxtIsc.setAdapter(getAdapter(tempLinkedArr));
-        mBinding.phResetCalibrationAtxtIsc.setAdapter(getAdapter(resetCalibrationArr));
-        mBinding.phSeqNumberAtxtIsc.setAdapter(getAdapter(sensorSequenceNumber));
-        sensorSequenceNumber();
+        mBinding.phSensorActivationAtxtIsc.setAdapter(getAdapter(sensorActivationArr, getContext()));
+        mBinding.phSensorTypeAtxtIsc.setAdapter(getAdapter(inputTypeArr, getContext()));
+        mBinding.phBufferTypeAtxtIsc.setAdapter(getAdapter(bufferArr, getContext()));
+        mBinding.phTempLinkedAtxtIsc.setAdapter(getAdapter(tempLinkedArr, getContext()));
+        mBinding.phResetCalibrationAtxtIsc.setAdapter(getAdapter(resetCalibrationArr, getContext()));
+        mBinding.phSeqNumberAtxtIsc.setAdapter(getAdapter(sensorSequenceNumber, getContext()));
 
         // change UI for userRole
         changeUI(userType);
@@ -132,6 +131,8 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                 mBinding.phHighAlarmDeciIsc.setEnabled(false);
 
                 mBinding.phDefaultTemperatureValueTilIsc.setEnabled(false);
+                mBinding.phTempDeciIsc.setEnabled(false);
+                mBinding.phTempValueTBtn.setEnabled(false);
                 mBinding.phResetCalibrationTilIsc.setEnabled(false);
                 break;
 
@@ -151,157 +152,79 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     }
 
     void save(View view) {
-        Toast.makeText(mAppClass, getDefaultTempValue(), Toast.LENGTH_SHORT).show();
         if (validField()) {
             sendData(sensorStatus);
         }
     }
 
     void sendData(int sensorStatus) {
-        sensorSequenceNumber();
         mActivity.showProgress();
         // Write -> {* 1234$ 0$ 0$ 04$ 01$ 00$ 1$ 0$ pHSensor$ 0$ 1$ +220.00$ 090$ 07.25$ 12.50$ 300$ 1$ 1 *}
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                toString(2, mBinding.phInputNumberEdtIsc) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.phSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
-                sensorSequence + SPILT_CHAR +
-                getPosition(1, toString(mBinding.phSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
-                toString(0, mBinding.phInputLabelEdtIsc) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.phBufferTypeAtxtIsc), bufferArr) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.phTempLinkedAtxtIsc), tempLinkedArr) + SPILT_CHAR +
-                getDefaultTempValue() + SPILT_CHAR +
-                toString(3, mBinding.phSmoothingFactorEdtIsc) + SPILT_CHAR +
-                getDecimal(toString(2, mBinding.phAlarmLowEdtIsc), toString(2, mBinding.phAlarmLowDeciIsc)) + SPILT_CHAR +
-                getDecimal(toString(2, mBinding.phAlarmhighEdtIsc), toString(2, mBinding.phHighAlarmDeciIsc)) + SPILT_CHAR +
-                toString(3, mBinding.phCalibrationRequiredEdtIsc) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.phResetCalibrationAtxtIsc), resetCalibrationArr) + SPILT_CHAR +
+                getStringValue(2, mBinding.phInputNumberEdtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(2, getStringValue(mBinding.phSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
+                "1" + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.phSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
+                getStringValue(0, mBinding.phInputLabelEdtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.phBufferTypeAtxtIsc), bufferArr) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.phTempLinkedAtxtIsc), tempLinkedArr) + SPILT_CHAR +
+                getDecimalValue(mBinding.phTempValueTBtn, mBinding.phTemperatureEdtIsc, 3, mBinding.phTempDeciIsc, 2) + SPILT_CHAR +
+                getStringValue(3, mBinding.phSmoothingFactorEdtIsc) + SPILT_CHAR +
+                getDecimalValue(mBinding.phAlarmLowEdtIsc, 2, mBinding.phAlarmLowDeciIsc, 2) + SPILT_CHAR +
+                getDecimalValue(mBinding.phAlarmhighEdtIsc, 2, mBinding.phHighAlarmDeciIsc, 2) + SPILT_CHAR +
+                getStringValue(3, mBinding.phCalibrationRequiredEdtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.phResetCalibrationAtxtIsc), resetCalibrationArr) + SPILT_CHAR +
                 sensorStatus
         );
     }
 
-    void sensorSequenceNumber() {
-        if (Integer.parseInt(inputNumber) > 13 && Integer.parseInt(inputNumber) < 21) {
-            mBinding.phSeqNumberTilIsc.setVisibility(View.VISIBLE);
-            if (!mBinding.phSeqNumberAtxtIsc.getText().toString().isEmpty()) {
-                sensorSequence = getPosition(1, toString(mBinding.phSeqNumberAtxtIsc), sensorSequenceNumber);
-            }
-        } else {
-            mBinding.phSeqNumberTilIsc.setVisibility(View.INVISIBLE);
-            sensorSequence = "0";
-
-        }
-    }
-
-    private String getDefaultTempValue() {
-        return (mBinding.phTempValueTBtn.isChecked() ? "+" : "-") + toString(3, mBinding.phTemperatureEdtIsc) + "." + toString(2, mBinding.phTempDeciIsc);
-    }
-
-    private String getDecimal(String wholeValue, String decimalValue) {
-        String wholeResult = wholeValue, decimalResult = decimalValue;
-        if (wholeValue.isEmpty() || wholeValue.equals("") || wholeValue == null) {
-            wholeResult = "00";
-        }
-        if (decimalValue.isEmpty() || decimalValue.equals("") || decimalValue == null) {
-            decimalResult = "00";
-        }
-        return wholeResult + "." + decimalResult;
-    }
-
     boolean validField() {
-        if (isEmpty(mBinding.phCalibrationRequiredEdtIsc)) {
-            mBinding.phCalibrationRequiredEdtIsc.setText("0");
-        }
-        if (isEmpty(mBinding.phInputNumberEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Input Number cannot be Empty");
-            return false;
-        } else if (isEmpty(mBinding.phSensorTypeAtxtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Sensor Type cannot be Empty");
-            return false;
-        } else if (isEmpty(mBinding.phInputLabelEdtIsc)) {
+
+        if (isFieldEmpty(mBinding.phInputLabelEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Input Label cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.phBufferTypeAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.phBufferTypeAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Choose any mode of Buffer Type");
             return false;
-        } else if (Integer.parseInt(mBinding.phCalibrationRequiredEdtIsc.getText().toString()) > 366) {
-            mAppClass.showSnackBar(getContext(), "Calibration Required Alarm should be less than 366");
+        } else if (isFieldEmpty(mBinding.phCalibrationRequiredEdtIsc)) {
+            mAppClass.showSnackBar(getContext(), "Calibration Required Alarm cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.phAlarmLowEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.phAlarmLowEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm low cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.phAlarmhighEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.phAlarmhighEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm high cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.phTempLinkedAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.phTempLinkedAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Select Temperature Sensor Linked value");
             return false;
-        } else if (isEmpty(mBinding.phTemperatureEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.phTemperatureEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Temperature value cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.phResetCalibrationAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.phResetCalibrationAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Select Reset Calibration value");
             return false;
-        } else if (isEmpty(mBinding.phSmoothingFactorEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.phSmoothingFactorEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Smoothing factor cannot be Empty");
             return false;
-        } else if (Integer.parseInt(mBinding.phSmoothingFactorEdtIsc.getText().toString()) > 101) {
-            mAppClass.showSnackBar(getContext(), "Smoothing factor should be less than 101");
-            return false;
-        } else if (isEmpty(mBinding.phSensorActivationAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.phSensorActivationAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Select Sensor Activation value");
+            return false;
+        } else if (Integer.parseInt(getStringValue(3, mBinding.phCalibrationRequiredEdtIsc)) > 365) {
+            mBinding.phCalibrationRequiredEdtIsc.setError("Should be less than 365");
+            return false;
+        } else if (Integer.parseInt(getStringValue(3, mBinding.phSmoothingFactorEdtIsc)) > 100) {
+            mBinding.phSmoothingFactorEdtIsc.setError("Should be less than 100");
+            return false;
+        } else if (Float.parseFloat(getDecimalValue(mBinding.phAlarmLowEdtIsc, 4, mBinding.phAlarmLowDeciIsc, 2)) >=
+                Float.parseFloat(getDecimalValue(mBinding.phAlarmhighEdtIsc, 4, mBinding.phHighAlarmDeciIsc, 2))) {
+            mAppClass.showSnackBar(getContext(), "Alarm High Should be Greater Than Alarm Low");
             return false;
         }
         return true;
-    }
-
-    String toStringSplit(int digits, int digitPoint, EditText editText) {
-        if (editText.getText().toString().split("\\.").length == 1) {
-            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + "." + mAppClass.formDigits(digitPoint, "00");
-        }
-        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + "." + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
-    }
-
-    Boolean isEmpty(EditText editText) {
-        if (editText.getText() == null || editText.getText().toString().equals("")) {
-            editText.setError("Field shouldn't empty !");
-            return true;
-        }
-        editText.setError(null);
-        return false;
-    }
-
-    Boolean isEmpty(AutoCompleteTextView editText) {
-        if (editText.getText() == null || editText.getText().toString().equals("")) {
-            editText.setError("Field shouldn't empty !");
-            return true;
-        }
-        editText.setError(null);
-        return false;
-    }
-
-    String getPosition(int digit, String string, String[] strArr) {
-        String j = null;
-        for (int i = 0; i < strArr.length; i++) {
-            if (string.equals(strArr[i])) {
-                j = String.valueOf(i);
-            }
-        }
-        return mAppClass.formDigits(digit, j);
-    }
-
-    String toString(int digits, EditText editText) {
-        return mAppClass.formDigits(digits, editText.getText().toString());
-    }
-
-    String toString(AutoCompleteTextView editText) {
-        return editText.getText().toString();
-    }
-
-    ArrayAdapter<String> getAdapter(String[] strArr) {
-        return new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, strArr);
     }
 
     @Override
@@ -333,35 +256,33 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         } else {
             mBinding.phInputNumberEdtIsc.setText(inputNumber);
             mBinding.phSensorTypeAtxtIsc.setText(sensorName);
-            mBinding.phDeleteLayoutIsc.setVisibility(View.INVISIBLE);
+            mBinding.phDeleteLayoutIsc.setVisibility(View.GONE);
             mBinding.phSaveTxtIsc.setText("ADD");
         }
     }
 
     void handleResponce(String[] splitData) {
         mActivity.dismissProgress();
-        // {*0$ 04$ 1$ 0*}
-        // READ_RES - {* 1$ 04$ 0$ 01$ 00$ | 1$ 0$ pHSensor$ 0$ 1$ +220.00$ 090 $ 07.25$ 12.50$ 300$ 1$ 1 *}
         if (splitData[1].equals("04")) {
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
                     mBinding.phInputNumberEdtIsc.setText(splitData[3]);
 
                     mBinding.phSensorTypeAtxtIsc.setText(mBinding.phSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
-                    mBinding.phSensorTypeAtxtIsc.setAdapter(getAdapter(inputTypeArr));
+                    mBinding.phSensorTypeAtxtIsc.setAdapter(getAdapter(inputTypeArr, getContext()));
 
                     // splitData[5] - sequenceNumber
 
                     mBinding.phSensorActivationAtxtIsc.setText(mBinding.phSensorActivationAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
-                    mBinding.phSensorActivationAtxtIsc.setAdapter(getAdapter(sensorActivationArr));
+                    mBinding.phSensorActivationAtxtIsc.setAdapter(getAdapter(sensorActivationArr, getContext()));
 
                     mBinding.phInputLabelEdtIsc.setText(splitData[7]);
 
                     mBinding.phBufferTypeAtxtIsc.setText(mBinding.phBufferTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[8])).toString());
-                    mBinding.phBufferTypeAtxtIsc.setAdapter(getAdapter(bufferArr));
+                    mBinding.phBufferTypeAtxtIsc.setAdapter(getAdapter(bufferArr, getContext()));
 
                     mBinding.phTempLinkedAtxtIsc.setText(mBinding.phTempLinkedAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[9])).toString());
-                    mBinding.phTempLinkedAtxtIsc.setAdapter(getAdapter(tempLinkedArr));
+                    mBinding.phTempLinkedAtxtIsc.setAdapter(getAdapter(tempLinkedArr, getContext()));
 
                     mBinding.phTempValueTBtn.setChecked((splitData[10].substring(0, 1)).equals("+"));
 
@@ -379,7 +300,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                     mBinding.phCalibrationRequiredEdtIsc.setText(splitData[14]);
 
                     mBinding.phResetCalibrationAtxtIsc.setText(mBinding.phResetCalibrationAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[15])).toString());
-                    mBinding.phResetCalibrationAtxtIsc.setAdapter(getAdapter(resetCalibrationArr));
+                    mBinding.phResetCalibrationAtxtIsc.setAdapter(getAdapter(resetCalibrationArr, getContext()));
 
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.readFailed));
@@ -409,8 +330,8 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         switch (flagValue) {
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(toString(2, mBinding.phInputNumberEdtIsc)),
-                                "N/A", Integer.parseInt(sensorSequence), "N/A", "N/A", "N/A", 0);
+                        (Integer.parseInt(getStringValue(2, mBinding.phInputNumberEdtIsc)),
+                                "N/A", 1, "N/A", "N/A", "N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
@@ -420,16 +341,15 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             case 0:
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                        (Integer.parseInt(toString(2, mBinding.phInputNumberEdtIsc)),
+                        (Integer.parseInt(getStringValue(2, mBinding.phInputNumberEdtIsc)),
                                 mBinding.phSensorTypeAtxtIsc.getText().toString(),
-                                Integer.parseInt(sensorSequence), toString(0, mBinding.phInputLabelEdtIsc),
-                                toString(2, mBinding.phAlarmLowEdtIsc) + "." + toString(2, mBinding.phAlarmLowDeciIsc),
-                                toString(2, mBinding.phAlarmhighEdtIsc) + "." + toString(2, mBinding.phHighAlarmDeciIsc), 1);
+                                1, getStringValue(0, mBinding.phInputLabelEdtIsc),
+                                getStringValue(2, mBinding.phAlarmLowEdtIsc) + "." + getStringValue(2, mBinding.phAlarmLowDeciIsc),
+                                getStringValue(2, mBinding.phAlarmhighEdtIsc) + "." + getStringValue(2, mBinding.phHighAlarmDeciIsc), 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);
                 break;
         }
-
     }
 }

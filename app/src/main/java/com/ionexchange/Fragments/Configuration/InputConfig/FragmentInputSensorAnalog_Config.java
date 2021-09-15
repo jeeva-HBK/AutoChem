@@ -1,27 +1,9 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
-import static com.ionexchange.Others.ApplicationClass.analogTypeArr;
-import static com.ionexchange.Others.ApplicationClass.analogUnitArr;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
-import static com.ionexchange.Others.ApplicationClass.userType;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,6 +22,27 @@ import com.ionexchange.databinding.FragmentInputsensorAnalogBinding;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ionexchange.Others.ApplicationClass.analogTypeArr;
+import static com.ionexchange.Others.ApplicationClass.analogUnitArr;
+import static com.ionexchange.Others.ApplicationClass.getAdapter;
+import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
+import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
+import static com.ionexchange.Others.ApplicationClass.getStringValue;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 public class FragmentInputSensorAnalog_Config extends Fragment implements DataReceiveCallback {
 
     FragmentInputsensorAnalogBinding mBinding;
@@ -51,7 +54,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
     int sensorStatus;
     WaterTreatmentDb db;
     InputConfigurationDao dao;
-    String sensorSequence;
+    String sensorSequence; // todo SequenceNumber
 
     public FragmentInputSensorAnalog_Config(String inputNumber, int sensorStatus) {
         this.inputNumber = inputNumber;
@@ -80,7 +83,6 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
         initAdapter();
-        sensorSequenceNumber();
         switch (userType) {
             case 1:
                 mBinding.analogInputNumber.setEnabled(false);
@@ -136,63 +138,33 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
     }
 
     void sendData(int sensorStatus) {
-        sensorSequenceNumber();
         mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + "0" + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                toString(2, mBinding.analogInputNumberTie) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.analogSensorTypeTie), inputTypeArr) + SPILT_CHAR +
-                sensorSequence + SPILT_CHAR +
-                getPosition(1, toString(mBinding.analogTypeTie), analogTypeArr) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.analogSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
-                toString(0, mBinding.analogInputLabelTie) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.analogUnitMeasurementTie), analogUnitArr) + SPILT_CHAR +
-                toString(2, mBinding.analogMinValueTie) + "." + toString(2, mBinding.analogMinValueIsc) + SPILT_CHAR +
-                toString(2, mBinding.analogMaxValueTie) + "." + toString(2, mBinding.analogMaxValueIsc) + SPILT_CHAR +
-                toString(3, mBinding.analogSmoothingFactorTie) + SPILT_CHAR +
-                toString(2, mBinding.analogAlarmLowTie) + "." + toString(2, mBinding.lowAlarmMinValueIsc) + SPILT_CHAR +
-                toString(2, mBinding.analogHighLowTie) + "." + toString(2, mBinding.highAlarmMinValueIsc) + SPILT_CHAR +
-                toString(3, mBinding.analogCalibrationRequiredAlarmTie) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.analogResetCalibrationTie), resetCalibrationArr) + SPILT_CHAR +
+                getStringValue(2, mBinding.analogInputNumberTie) + SPILT_CHAR +
+                getPositionFromAtxt(2, getStringValue(mBinding.analogSensorTypeTie), inputTypeArr) + SPILT_CHAR +
+                "1" + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogTypeArr) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.analogSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
+                getStringValue(0, mBinding.analogInputLabelTie) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.analogUnitMeasurementTie), analogUnitArr) + SPILT_CHAR +
+                getStringValue(2, mBinding.analogMinValueTie) + "." + getStringValue(2, mBinding.analogMinValueIsc) + SPILT_CHAR +
+                getStringValue(2, mBinding.analogMaxValueTie) + "." + getStringValue(2, mBinding.analogMaxValueIsc) + SPILT_CHAR +
+                getStringValue(3, mBinding.analogSmoothingFactorTie) + SPILT_CHAR +
+                getStringValue(2, mBinding.analogAlarmLowTie) + "." + getStringValue(2, mBinding.lowAlarmMinValueIsc) + SPILT_CHAR +
+                getStringValue(2, mBinding.analogHighLowTie) + "." + getStringValue(2, mBinding.highAlarmMinValueIsc) + SPILT_CHAR +
+                getStringValue(3, mBinding.analogCalibrationRequiredAlarmTie) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.analogResetCalibrationTie), resetCalibrationArr) + SPILT_CHAR +
                 sensorStatus);
     }
 
-    private String getPosition(int digit, String string, String[] strArr) {
-        String j = null;
-        for (int i = 0; i < strArr.length; i++) {
-            if (string.equals(strArr[i])) {
-                j = String.valueOf(i);
-            }
-        }
-        return mAppClass.formDigits(digit, j);
-    }
-
-    private String toString(int digits, EditText editText) {
-        return mAppClass.formDigits(digits, editText.getText().toString());
-    }
-
-    private String toStringSplit(int digits, int digitPoint, EditText editText) {
-        if (editText.getText().toString().split("\\.").length == 1) {
-            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
-        }
-        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
-    }
-
-    private String toString(AutoCompleteTextView editText) {
-        return editText.getText().toString();
-    }
-
     private void initAdapter() {
-        mBinding.analogSensorTypeTie.setAdapter(getAdapter(inputTypeArr));
-        mBinding.analogSensorActivationTie.setAdapter(getAdapter(sensorActivationArr));
-        mBinding.analogTypeTie.setAdapter(getAdapter(analogTypeArr));
-        mBinding.analogUnitMeasurementTie.setAdapter(getAdapter(analogUnitArr));
-        mBinding.analogResetCalibrationTie.setAdapter(getAdapter(resetCalibrationArr));
-        mBinding.analogSequenceNumberTie.setAdapter(getAdapter(sensorSequenceNumber));
-    }
-
-    public ArrayAdapter<String> getAdapter(String[] strArr) {
-        return new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, strArr);
+        mBinding.analogSensorTypeTie.setAdapter(getAdapter(inputTypeArr, getContext()));
+        mBinding.analogSensorActivationTie.setAdapter(getAdapter(sensorActivationArr, getContext()));
+        mBinding.analogTypeTie.setAdapter(getAdapter(analogTypeArr, getContext()));
+        mBinding.analogUnitMeasurementTie.setAdapter(getAdapter(analogUnitArr, getContext()));
+        mBinding.analogResetCalibrationTie.setAdapter(getAdapter(resetCalibrationArr, getContext()));
+        mBinding.analogSequenceNumberTie.setAdapter(getAdapter(sensorSequenceNumber, getContext()));
     }
 
     @Override
@@ -201,11 +173,11 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
 
         if (sensorName == null) {
             mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + "0" + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + inputNumber);
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + inputNumber);
         } else {
             mBinding.analogInputNumberTie.setText(inputNumber);
             mBinding.analogSensorTypeTie.setText(sensorName);
-            mBinding.analogDeleteLayoutIsc.setVisibility(View.INVISIBLE);
+            mBinding.analogDeleteLayoutIsc.setVisibility(View.GONE);
             mBinding.analogSaveTxtIsc.setText("ADD");
         }
     }
@@ -272,56 +244,56 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
 
 
     private boolean validField() {
-        if (isEmpty(mBinding.analogInputNumberTie)) {
-            mAppClass.showSnackBar(getContext(), "InputNumber cannot be Empty");
-            return false;
-        } else if (isEmpty(mBinding.analogInputLabelTie)) {
+        if (isFieldEmpty(mBinding.analogInputLabelTie)) {
             mAppClass.showSnackBar(getContext(), "InputLabel cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.analogMinValueTie)) {
+        } else if (isFieldEmpty(mBinding.analogTypeTie)) {
+            mAppClass.showSnackBar(getContext(), "Analog Type cannot be Empty");
+            return false;
+        } else if (isFieldEmpty(mBinding.analogUnitMeasurementTie)) {
+            mAppClass.showSnackBar(getContext(), "Unit cannot be Empty");
+            return false;
+        } else if (isFieldEmpty(mBinding.analogMinValueTie)) {
             mAppClass.showSnackBar(getContext(), "Min Value cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.analogMaxValueTie)) {
+        } else if (isFieldEmpty(mBinding.analogMaxValueTie)) {
             mAppClass.showSnackBar(getContext(), "Max Value cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.analogAlarmLowTie)) {
+        } else if (isFieldEmpty(mBinding.analogAlarmLowTie)) {
             mAppClass.showSnackBar(getContext(), "Alarm low cannot be Empty");
             return false;
-        } else if (mBinding.analogAlarmLowTie.getText().toString().matches(".")) {
-            mAppClass.showSnackBar(getContext(), "Alarm low is decimal format");
-            return false;
-        } else if (mBinding.analogHighLowTie.getText().toString().matches(".")) {
-            mAppClass.showSnackBar(getContext(), "Alarm High is decimal format");
-            return false;
-        } else if (isEmpty(mBinding.analogHighLowTie)) {
+        } else if (isFieldEmpty(mBinding.analogHighLowTie)) {
             mAppClass.showSnackBar(getContext(), "Alarm High cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.analogSmoothingFactorTie)) {
+        } else if (isFieldEmpty(mBinding.analogCalibrationRequiredAlarmTie)) {
+            mAppClass.showSnackBar(getContext(), "Calibration cannot be Empty");
+            return false;
+        } else if (isFieldEmpty(mBinding.analogSmoothingFactorTie)) {
             mAppClass.showSnackBar(getContext(), "Smoothing Factor cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.analogCalibrationRequiredAlarmTie)) {
-            mAppClass.showSnackBar(getContext(), "Calibration cannot be Empty");
+        } else if (isFieldEmpty(mBinding.analogResetCalibrationTie)) {
+            mAppClass.showSnackBar(getContext(), "Reset Calibration cannot be Empty");
+            return false;
+        } else if (isFieldEmpty(mBinding.analogSensorActivationTie)) {
+            mAppClass.showSnackBar(getContext(), "Sensor Activation cannot be Empty");
+            return false;
+        } else if (Integer.parseInt(getStringValue(3, mBinding.analogCalibrationRequiredAlarmTie)) > 365) {
+            mBinding.analogCalibrationRequiredAlarmTie.setError("Should be less than 365");
+            return false;
+        } else if (Integer.parseInt(getStringValue(3, mBinding.analogSmoothingFactorTie)) > 100) {
+            mBinding.analogSmoothingFactorTie.setError("Should be less than 100");
+            return false;
+        } else if (Float.parseFloat(getDecimalValue(mBinding.analogAlarmLowTie, 2, mBinding.lowAlarmMinValueIsc, 2)) >=
+                Float.parseFloat(getDecimalValue(mBinding.analogHighLowTie, 2, mBinding.highAlarmMinValueIsc, 2))) {
+            mAppClass.showSnackBar(getContext(), "Alarm High Should be Greater Than Alarm Low");
+            return false;
+        } else if (Float.parseFloat(getDecimalValue(mBinding.analogMinValueTie, 2, mBinding.analogMinValueIsc, 2)) >=
+                Float.parseFloat(getDecimalValue(mBinding.analogMaxValueTie, 2, mBinding.analogMaxValueIsc, 2))) {
+            mAppClass.showSnackBar(getContext(), "Alarm High Should be Greater Than Alarm Low");
             return false;
         }
         return true;
     }
-
-    private Boolean isEmpty(EditText editText) {
-        if (editText.getText() == null || editText.getText().toString().equals("")) {
-            editText.setError("Field shouldn't empty !");
-            return true;
-        }
-        return false;
-    }
-
-    private Boolean isEmpty(AutoCompleteTextView editText) {
-        if (editText.getText() == null || editText.getText().toString().equals("")) {
-            editText.setError("Field shouldn't empty !");
-            return true;
-        }
-        return false;
-    }
-
 
     public void updateToDb(List<InputConfigurationEntity> entryList) {
         WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
@@ -333,53 +305,26 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         switch (flagValue) {
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(toString(2, mBinding.analogInputNumberTie)), "0",
+                        (Integer.parseInt(getStringValue(2, mBinding.analogInputNumberTie)), "0",
                                 0, "0", "0", "0", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
+                mBinding.backArrowIsc.performClick();
                 break;
 
             case 0:
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                        (Integer.parseInt(toString(2, mBinding.analogInputNumberTie)),
+                        (Integer.parseInt(getStringValue(2, mBinding.analogInputNumberTie)),
                                 mBinding.analogSensorTypeTie.getText().toString(),
-                                0, toString(0, mBinding.analogInputLabelTie),
-                                toStringSplit(4, 2, mBinding.analogAlarmLowTie),
-                                toStringSplit(4, 2, mBinding.analogHighLowTie), 1);
+                                0, getStringValue(0, mBinding.analogInputLabelTie),
+                                getDecimalValue(mBinding.analogAlarmLowTie, 2, mBinding.lowAlarmMinValueIsc, 2),
+                                getDecimalValue(mBinding.analogHighLowTie, 2, mBinding.highAlarmMinValueIsc, 2), 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);
                 break;
-        }
-    }
-
-
-    class pHm {
-
-        String inputNumber = "InputNumber,01";
-
-        public String getInputNumber() {
-            return inputNumber;
-        }
-
-        public void setInputNumber(String inputNumber) {
-            this.inputNumber = inputNumber;
-        }
-    }
-
-
-    void sensorSequenceNumber() {
-        if (Integer.parseInt(inputNumber) > 13 && Integer.parseInt(inputNumber) < 21) {
-            mBinding.analogSequenceNumber.setVisibility(View.VISIBLE);
-            if (!mBinding.analogSequenceNumberTie.getText().toString().isEmpty()) {
-                sensorSequence = getPosition(1, toString(mBinding.analogSequenceNumberTie), sensorSequenceNumber);
-            }
-        } else {
-            mBinding.analogSequenceNumber.setVisibility(View.GONE);
-            sensorSequence = "0";
-
         }
     }
 }

@@ -5,17 +5,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
@@ -31,7 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.formDigits;
+import static com.ionexchange.Others.ApplicationClass.getAdapter;
+import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
+import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
+import static com.ionexchange.Others.ApplicationClass.getStringValue;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
@@ -55,7 +55,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     int sensorStatus;
     WaterTreatmentDb db;
     InputConfigurationDao dao;
-    String sensorSequence;
+    String sensorSequence = "1"; // todo sequenceNumber
 
     public FragmentInputSensorTemp_config(String inputNumber, int sensorStatus) {
         this.inputNumber = inputNumber;
@@ -83,7 +83,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
-
+        mBinding.temSeqNumberAtxtIsc.setText(sensorSequence);
         switch (userType) {
             case 1:
                 mBinding.tempInputLabelTilIsc.setEnabled(false);
@@ -121,7 +121,6 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         }
 
         initAdapter();
-        sensorSequenceNumber();
         mBinding.tempSaveFabIsc.setOnClickListener(this::save);
         mBinding.tempDeleteFabSic.setOnClickListener(this::delete);
         mBinding.tempBackArrowIsc.setOnClickListener(v -> {
@@ -133,91 +132,37 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         sendData(2);
     }
 
-
     private void save(View view) {
         if (validation()) {
             sendData(sensorStatus);
         }
     }
 
-    void sensorSequenceNumber() {
-        if (Integer.parseInt(inputNumber) > 13 && Integer.parseInt(inputNumber) < 21) {
-            mBinding.tempSeqNumberTilIsc.setVisibility(View.VISIBLE);
-            if (!mBinding.temSeqNumberAtxtIsc.getText().toString().isEmpty()) {
-                sensorSequence = getPosition(1, toString(mBinding.temSeqNumberAtxtIsc), sensorSequenceNumber);
-            }
-        } else {
-            mBinding.tempSeqNumberTilIsc.setVisibility(View.GONE);
-            sensorSequence = "0";
-
-        }
-    }
-
     void sendData(int sensorStatus) {
-        sensorSequenceNumber();
         mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                toString(2, mBinding.tempInputNumberEdtIsc) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.temSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
+                getStringValue(2, mBinding.tempInputNumberEdtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(2, getStringValue(mBinding.temSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
                 sensorSequence + SPILT_CHAR +
-                getPosition(0, toString(mBinding.tempSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
-                toString(0, mBinding.tempInputLabelEdtIsc) + SPILT_CHAR +
-                getPlusMinusValue(mBinding.tempTempValueTBtn, mBinding.tempTemperatureEdtIsc, 3, mBinding.tempTempDeciIsc, 2) + SPILT_CHAR +
-                toString(3, mBinding.tempSmoothingFactorEdtIsc) + SPILT_CHAR +
-                getPlusMinusValue(mBinding.tempLowAlarmTBtn, mBinding.tempLowAlarmEdtIsc, 3, mBinding.tempLowAlarmDeciIsc, 2) + SPILT_CHAR +
-                getPlusMinusValue(mBinding.tempHighAlarmTBtn, mBinding.tempHighAlarmEdtIsc, 3, mBinding.tempHighAlarmDeciIsc, 2) + SPILT_CHAR +
-                toString(3, mBinding.tempCalibRequiredAlarmEdtIsc) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.tempResetCalibAtxtIsc), resetCalibrationArr) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.tempSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
+                getStringValue(0, mBinding.tempInputLabelEdtIsc) + SPILT_CHAR +
+                getDecimalValue(mBinding.tempTempValueTBtn, mBinding.tempTemperatureEdtIsc, 3, mBinding.tempTempDeciIsc, 2) + SPILT_CHAR +
+                getStringValue(3, mBinding.tempSmoothingFactorEdtIsc) + SPILT_CHAR +
+                getDecimalValue(mBinding.tempLowAlarmTBtn, mBinding.tempLowAlarmEdtIsc, 3, mBinding.tempLowAlarmDeciIsc, 2) + SPILT_CHAR +
+                getDecimalValue(mBinding.tempHighAlarmTBtn, mBinding.tempHighAlarmEdtIsc, 3, mBinding.tempHighAlarmDeciIsc, 2) + SPILT_CHAR +
+                getStringValue(3, mBinding.tempCalibRequiredAlarmEdtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.tempResetCalibAtxtIsc), resetCalibrationArr) + SPILT_CHAR +
                 sensorStatus);
     }
 
-    String getDecimalValue(TextInputEditText prefixEdittext, int prefixDigit, EditText suffixEdittext, int suffixDigit) {
-        return toString(prefixDigit, prefixEdittext) + "." + toString(suffixDigit, suffixEdittext);
-    }
-
-    String getPlusMinusValue(ToggleButton toggleButton, TextInputEditText prefixEdt, int prefixDigit, EditText suffixEdt, int suffixDigit) {
-        return (toggleButton.isChecked() ? "+" : "-") + toString(prefixDigit, prefixEdt) + "." + toString(suffixDigit, suffixEdt);
-    }
-
-    private String toStringSplit(int digits, int digitPoint, EditText editText) {
-        if (editText.getText().toString().split("\\.").length == 1) {
-            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
-        }
-        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
-    }
-
     private void initAdapter() {
-        mBinding.temSensorTypeAtxtIsc.setAdapter(getAdapter(inputTypeArr));
-        mBinding.tempSensorActivationAtxtIsc.setAdapter(getAdapter(sensorActivationArr));
-        mBinding.tempResetCalibAtxtIsc.setAdapter(getAdapter(resetCalibrationArr));
-        mBinding.temSeqNumberAtxtIsc.setAdapter(getAdapter(sensorSequenceNumber));
-    }
-
-    public ArrayAdapter<String> getAdapter(String[] strArr) {
-        return new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, strArr);
-    }
-
-
-    private String getPosition(int digit, String string, String[] strArr) {
-        String j = null;
-        for (int i = 0; i < strArr.length; i++) {
-            if (string.equals(strArr[i])) {
-                j = String.valueOf(i);
-            }
-        }
-        return mAppClass.formDigits(digit, j);
-    }
-
-
-    private String toString(int digits, EditText editText) {
-        return mAppClass.formDigits(digits, editText.getText().toString());
-    }
-
-    private String toString(AutoCompleteTextView editText) {
-        return editText.getText().toString();
+        mBinding.temSensorTypeAtxtIsc.setAdapter(getAdapter(inputTypeArr, getContext()));
+        mBinding.tempSensorActivationAtxtIsc.setAdapter(getAdapter(sensorActivationArr, getContext()));
+        mBinding.tempResetCalibAtxtIsc.setAdapter(getAdapter(resetCalibrationArr, getContext()));
+        mBinding.temSeqNumberAtxtIsc.setAdapter(getAdapter(sensorSequenceNumber, getContext()));
     }
 
     @Override
@@ -255,8 +200,6 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     }
 
     private void handleResponse(String[] splitData) {
-        // Read RES - {1# 04# 0# |05# 02# 1# TEMPPH# 33# 100# 120000# 240000# 320# 1}
-        // Write Res -
         if (splitData[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
@@ -300,35 +243,45 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     }
 
     boolean validation() {
-        if (isEmpty(mBinding.tempSmoothingFactorEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Smoothing Factor Cannot be Empty");
-            return false;
-        } else if (isEmpty(mBinding.tempInputLabelEdtIsc)) {
+
+        if (isFieldEmpty(mBinding.tempInputLabelEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Input Label Cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.tempCalibRequiredAlarmEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Calibration Alarm Cannot be Empty");
+        } else if (isFieldEmpty(mBinding.tempTemperatureEdtIsc)) {
+            mAppClass.showSnackBar(getContext(), "Default Temperature Value Cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.tempTemperatureEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Temperature Value Cannot be Empty");
+        } else if (isFieldEmpty(mBinding.tempSensorActivationAtxtIsc)) {
+            mAppClass.showSnackBar(getContext(), "Sensor Activation Cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.tempLowAlarmEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.tempLowAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm Low Factor Cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.tempHighAlarmEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.tempHighAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm High Factor Cannot be Empty");
+            return false;
+        } else if (isFieldEmpty(mBinding.tempCalibRequiredAlarmEdtIsc)) {
+            mAppClass.showSnackBar(getContext(), "Calibration Alarm Cannot be Empty");
+            return false;
+        } else if (isFieldEmpty(mBinding.tempSmoothingFactorEdtIsc)) {
+            mAppClass.showSnackBar(getContext(), "Smoothing Factor Cannot be Empty");
+            return false;
+        } else if (isFieldEmpty(mBinding.tempResetCalibAtxtIsc)) {
+            mAppClass.showSnackBar(getContext(), "Reset Calibration Cannot be Empty");
+            return false;
+        } else if (Integer.parseInt(getStringValue(3, mBinding.tempCalibRequiredAlarmEdtIsc)) > 365) {
+            mBinding.tempCalibRequiredAlarmEdtIsc.setError("Should be less than 365");
+            return false;
+        } else if (Integer.parseInt(getStringValue(3, mBinding.tempSmoothingFactorEdtIsc)) > 100) {
+            mBinding.tempSmoothingFactorEdtIsc.setError("Should be less than 100");
+            return false;
+        } else if (Float.parseFloat(getDecimalValue(mBinding.tempLowAlarmTBtn, mBinding.tempLowAlarmEdtIsc, 3, mBinding.tempLowAlarmDeciIsc, 2)) >=
+                Float.parseFloat(getDecimalValue(mBinding.tempHighAlarmTBtn, mBinding.tempHighAlarmEdtIsc, 3, mBinding.tempHighAlarmDeciIsc, 2))) {
+            mAppClass.showSnackBar(getContext(), "Alarm High Should be Greater Than Alarm Low");
             return false;
         }
         return true;
     }
 
-    private Boolean isEmpty(EditText editText) {
-        if (editText.getText() == null || editText.getText().toString().equals("")) {
-            editText.setError("Field shouldn't empty !");
-            return true;
-        }
-        return false;
-    }
 
     public void updateToDb(List<InputConfigurationEntity> entryList) {
         WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
@@ -340,19 +293,20 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         switch (flagValue) {
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(toString(2, mBinding.tempInputNumberEdtIsc)), "0", 0, "0", "0", "0", 0);
+                        (Integer.parseInt(getStringValue(2, mBinding.tempInputNumberEdtIsc)), "0", 0, "0", "0", "0", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
+                mBinding.tempBackArrowIsc.performClick();
                 break;
             case 0:
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                        (Integer.parseInt(toString(2, mBinding.tempInputNumberEdtIsc)),
+                        (Integer.parseInt(getStringValue(2, mBinding.tempInputNumberEdtIsc)),
                                 mBinding.temSensorTypeAtxtIsc.getText().toString(),
-                                0, toString(0, mBinding.tempInputLabelEdtIsc),
-                                getPlusMinusValue(mBinding.tempLowAlarmTBtn, mBinding.tempLowAlarmEdtIsc, 3, mBinding.tempLowAlarmDeciIsc, 2),
-                                getPlusMinusValue(mBinding.tempHighAlarmTBtn, mBinding.tempHighAlarmEdtIsc, 3, mBinding.tempHighAlarmDeciIsc, 2), 1);
+                                0, getStringValue(0, mBinding.tempInputLabelEdtIsc),
+                                getDecimalValue(mBinding.tempLowAlarmTBtn, mBinding.tempLowAlarmEdtIsc, 3, mBinding.tempLowAlarmDeciIsc, 2),
+                                getDecimalValue(mBinding.tempHighAlarmTBtn, mBinding.tempHighAlarmEdtIsc, 3, mBinding.tempHighAlarmDeciIsc, 2), 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);

@@ -18,7 +18,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.3"
+                android:layout_weight="1"
                 android:gravity="left|center"
                 android:paddingLeft="10dp">
 
@@ -53,24 +53,14 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--Sensor Type-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/cand_sensorType_til_isc"
-                style="@style/config_AtxTil"
-                android:enabled="false">
-
-                <AutoCompleteTextView
-                    android:id="@+id/cand_SensorType_atxt_isc"
-                    style="@style/config_Atxt"
-                    android:hint="Sensor Type" />
-
-            </com.google.android.material.textfield.TextInputLayout>
 
             <!--Sequence Number-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/cand_seqNumber_til_isc"
                 style="@style/config_AtxTil"
-                android:enabled="false">
+                android:enabled="false"
+                android:layout_weight="1"
+                android:visibility="invisible">
 
                 <AutoCompleteTextView
                     android:id="@+id/cand_seqNumber_atxt_isc"
@@ -105,6 +95,19 @@
                     android:inputType="textPersonName"
                     android:maxLength="20"
                     android:maxLines="1"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Sensor Type-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/cand_sensorType_til_isc"
+                style="@style/config_AtxTil"
+                android:enabled="false">
+
+                <AutoCompleteTextView
+                    android:id="@+id/cand_SensorType_atxt_isc"
+                    style="@style/config_Atxt"
+                    android:hint="Sensor Type" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

@@ -48,7 +48,8 @@
          <com.google.android.material.textfield.TextInputLayout
              android:id="@+id/ph_seqNumber_til_isc"
              style="@style/config_AtxTil"
-             android:enabled="false">
+             android:enabled="false"
+             android:visibility="invisible">
 
             <AutoCompleteTextView
                 android:id="@+id/ph_seqNumber_atxt_isc"
@@ -92,15 +93,15 @@
 
          </com.google.android.material.textfield.TextInputLayout>
 
-         <!--Buffer Type-->
+         <!--Sensor Activation-->
          <com.google.android.material.textfield.TextInputLayout
-             android:id="@+id/ph_bufferType_til_isc"
+             android:id="@+id/ph_sensorActivation_til_isc"
              style="@style/config_AtxTil">
 
             <AutoCompleteTextView
-                android:id="@+id/ph_bufferType_atxt_isc"
+                android:id="@+id/ph_sensorActivation_atxt_isc"
                 style="@style/config_Atxt"
-                android:hint="Buffer Type" />
+                android:hint="Sensor Activation" />
 
          </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,20 +112,80 @@
           android:id="@+id/ph_Row3_isc"
           style="@style/config_rowLl">
 
-         <!--Calibration Required Alarm-->
-         <com.google.android.material.textfield.TextInputLayout
-             android:id="@+id/ph_calibrationRequiredAlarm_til_isc"
-             style="@style/config_Til">
+         <!--Default Temperature Value-->
+         <androidx.constraintlayout.widget.ConstraintLayout
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_margin="3dp"
+             android:layout_weight="1">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ph_calibrationRequired_edt_isc"
-                style="@style/config_Edt"
-                android:hint="Calibration Required Alarm"
-                android:imeOptions="actionNext"
+            <ToggleButton
+                android:id="@+id/ph_tempValue_tBtn"
+                android:layout_width="50dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginTop="8dp"
+                android:background="@null"
+                android:textOff="-"
+                android:textOn="+"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/ph_defaultTemperatureValue_til_isc" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ph_defaultTemperatureValue_til_isc"
+                style="@style/appEdtTxt"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:hint="Temperature Value"
+                app:expandedHintEnabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+               <com.google.android.material.textfield.TextInputEditText
+                   android:id="@+id/ph_temperature_edt_isc"
+                   style="@style/config_Edt"
+                   android:inputType="number"
+                   android:maxLength="3"
+                   android:maxLines="1"
+                   android:textAlignment="center"
+                   app:textInputLayoutFocusedRectEnabled="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:text="."
+                app:layout_constraintBottom_toBottomOf="@+id/ph_temp_deci_isc"
+                app:layout_constraintEnd_toStartOf="@+id/ph_temp_deci_isc"
+                app:layout_constraintTop_toTopOf="@+id/ph_temp_deci_isc" />
+
+            <EditText
+                android:id="@+id/ph_temp_deci_isc"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="2dp"
+                android:background="@null"
+                android:gravity="center"
+                android:hint="00"
                 android:inputType="number"
-                android:maxLength="3" />
+                android:maxLength="2"
+                android:textColorHint="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="@id/ph_defaultTemperatureValue_til_isc"
+                app:layout_constraintEnd_toEndOf="@+id/ph_defaultTemperatureValue_til_isc"
+                app:layout_constraintHorizontal_bias="0.98"
+                app:layout_constraintStart_toStartOf="@+id/ph_defaultTemperatureValue_til_isc"
+                app:layout_constraintTop_toTopOf="@+id/ph_defaultTemperatureValue_til_isc" />
 
-         </com.google.android.material.textfield.TextInputLayout>
+         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
          <!--Low Alarm-->
          <androidx.constraintlayout.widget.ConstraintLayout
@@ -138,6 +199,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/ph_lowAlarm_til_isc"
                 style="@style/config_Til"
+                android:hint="Low Alarm"
+                app:expandedHintEnabled="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -146,7 +209,6 @@
                <com.google.android.material.textfield.TextInputEditText
                    android:id="@+id/ph_alarmLow_edt_isc"
                    style="@style/config_Edt"
-                   android:hint="Low Alarm"
                    android:imeOptions="actionNext"
                    android:inputType="number"
                    android:maxLength="2"
@@ -199,6 +261,8 @@
                 android:id="@+id/ph_highAlarm_til_isc"
                 style="@style/config_Til"
                 android:layout_weight="1.5"
+                android:hint="High Alarm"
+                app:expandedHintEnabled="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -207,7 +271,6 @@
                <com.google.android.material.textfield.TextInputEditText
                    android:id="@+id/ph_alarmhigh_edt_isc"
                    style="@style/config_Edt"
-                   android:hint="High Alarm"
                    android:imeOptions="actionNext"
                    android:inputType="numberDecimal"
                    android:maxLength="2" />
@@ -252,90 +315,35 @@
           android:id="@+id/ph_row4_isc"
           style="@style/config_rowLl">
 
-         <!--Temp Linked-->
+         <!--Smoothing Factor-->
          <com.google.android.material.textfield.TextInputLayout
-             android:id="@+id/ph_temperatureSensorLinked_til_isc"
-             style="@style/config_AtxTil">
+             android:id="@+id/ph_smoothingFactor_til_isc"
+             style="@style/config_Til">
 
-            <AutoCompleteTextView
-                android:id="@+id/ph_tempLinked_atxt_isc"
-                style="@style/config_Atxt"
-                android:hint="Temperature Sensor Linked" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ph_smoothingFactor_edt_isc"
+                style="@style/config_Edt"
+                android:hint="Smoothing Factor"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="3" />
 
          </com.google.android.material.textfield.TextInputLayout>
 
-         <!--Default Temperature Value-->
-         <androidx.constraintlayout.widget.ConstraintLayout
-             android:layout_width="0dp"
-             android:layout_height="wrap_content"
-             android:layout_margin="3dp"
-             android:layout_weight="1">
+         <!--Calibration Required Alarm-->
+         <com.google.android.material.textfield.TextInputLayout
+             android:id="@+id/ph_calibrationRequiredAlarm_til_isc"
+             style="@style/config_Til">
 
-            <ToggleButton
-                android:id="@+id/ph_tempValue_tBtn"
-                android:layout_width="50dp"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_marginTop="8dp"
-                android:background="@null"
-                android:textOff="-"
-                android:textOn="+"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/ph_defaultTemperatureValue_til_isc" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ph_defaultTemperatureValue_til_isc"
-                style="@style/appEdtTxt"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:hint="Temp Value"
-                app:expandedHintEnabled="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-               <com.google.android.material.textfield.TextInputEditText
-                   android:id="@+id/ph_temperature_edt_isc"
-                   style="@style/config_Edt"
-                   android:inputType="number"
-                   android:maxLength="3"
-                   android:maxLines="1"
-                   android:textAlignment="center"
-                   app:textInputLayoutFocusedRectEnabled="true" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="5dp"
-                android:text="."
-                app:layout_constraintBottom_toBottomOf="@+id/ph_temp_deci_isc"
-                app:layout_constraintEnd_toStartOf="@+id/ph_temp_deci_isc"
-                app:layout_constraintTop_toTopOf="@+id/ph_temp_deci_isc" />
-
-            <EditText
-                android:id="@+id/ph_temp_deci_isc"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="2dp"
-                android:background="@null"
-                android:gravity="center"
-                android:hint="00"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ph_calibrationRequired_edt_isc"
+                style="@style/config_Edt"
+                android:hint="Calibration Required Alarm"
+                android:imeOptions="actionNext"
                 android:inputType="number"
-                android:maxLength="2"
-                android:textColorHint="@color/colorPrimary"
-                app:layout_constraintBottom_toBottomOf="@id/ph_defaultTemperatureValue_til_isc"
-                app:layout_constraintEnd_toEndOf="@+id/ph_defaultTemperatureValue_til_isc"
-                app:layout_constraintHorizontal_bias="0.98"
-                app:layout_constraintStart_toStartOf="@+id/ph_defaultTemperatureValue_til_isc"
-                app:layout_constraintTop_toTopOf="@+id/ph_defaultTemperatureValue_til_isc" />
+                android:maxLength="3" />
 
-         </androidx.constraintlayout.widget.ConstraintLayout>
+         </com.google.android.material.textfield.TextInputLayout>
 
          <!--resetCalibration-->
          <com.google.android.material.textfield.TextInputLayout
@@ -356,30 +364,27 @@
           android:id="@+id/phRow5_isc"
           style="@style/config_rowLl">
 
-         <!--Smoothing Factor-->
+         <!--Buffer Type-->
          <com.google.android.material.textfield.TextInputLayout
-             android:id="@+id/ph_smoothingFactor_til_isc"
-             style="@style/config_Til">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ph_smoothingFactor_edt_isc"
-                style="@style/config_Edt"
-                android:hint="Smoothing Factor"
-                android:imeOptions="actionNext"
-                android:inputType="number"
-                android:maxLength="3" />
-
-         </com.google.android.material.textfield.TextInputLayout>
-
-         <!--Sensor Activation-->
-         <com.google.android.material.textfield.TextInputLayout
-             android:id="@+id/ph_sensorActivation_til_isc"
+             android:id="@+id/ph_bufferType_til_isc"
              style="@style/config_AtxTil">
 
             <AutoCompleteTextView
-                android:id="@+id/ph_sensorActivation_atxt_isc"
+                android:id="@+id/ph_bufferType_atxt_isc"
                 style="@style/config_Atxt"
-                android:hint="Sensor Activation" />
+                android:hint="Buffer Type" />
+
+         </com.google.android.material.textfield.TextInputLayout>
+
+         <!--Temp Linked-->
+         <com.google.android.material.textfield.TextInputLayout
+             android:id="@+id/ph_temperatureSensorLinked_til_isc"
+             style="@style/config_AtxTil">
+
+            <AutoCompleteTextView
+                android:id="@+id/ph_tempLinked_atxt_isc"
+                style="@style/config_Atxt"
+                android:hint="Temperature Sensor Linked" />
 
          </com.google.android.material.textfield.TextInputLayout>
 

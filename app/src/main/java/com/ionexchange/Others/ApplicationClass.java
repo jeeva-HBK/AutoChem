@@ -9,9 +9,11 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.R;
 
@@ -80,7 +83,7 @@ public class ApplicationClass extends Application {
 
 
     /* Static Variables */
-    static String mIPAddress = "192.168.1.223", Packet;
+    static String mIPAddress = "192.168.1.107", Packet;
     public static String macAddress; //mac address of the unit controller
     //static String mIPAddress = "192.168.2.37", Packet;
     static int mPortNumber = 9760;
@@ -336,4 +339,54 @@ public class ApplicationClass extends Application {
         }
         return throwError;
     }
+
+    public static String getDecimalValue(ToggleButton toggleButton, TextInputEditText prefixEdt, int prefixDigit, EditText suffixEdt, int suffixDigit) {
+        return (toggleButton.isChecked() ? "+" : "-") + getStringValue(prefixDigit, prefixEdt) + "." + getStringValue(suffixDigit, suffixEdt);
+    }
+
+    public static String getDecimalValue(TextInputEditText prefixEdt, int prefixDigit, EditText suffixEdt, int suffixDigit) {
+        return getStringValue(prefixDigit, prefixEdt) + "." + getStringValue(suffixDigit, suffixEdt);
+    }
+
+    public static String getStringValue(int digits, EditText editText) {
+        return formDigits(digits, editText.getText().toString());
+    }
+
+    public static String getStringValue(AutoCompleteTextView editText) {
+        return editText.getText().toString();
+    }
+
+    public static Boolean isFieldEmpty(EditText editText) {
+        if (editText.getText() == null || editText.getText().toString().equals("")) {
+            editText.setError("Field shouldn't empty !");
+            editText.requestFocus();
+            return true;
+        }
+        editText.setError(null);
+        return false;
+    }
+
+    public static Boolean isFieldEmpty(AutoCompleteTextView editText) {
+        if (editText.getText() == null || editText.getText().toString().equals("")) {
+            editText.setError("Field shouldn't empty !");
+            return true;
+        }
+        editText.setError(null);
+        return false;
+    }
+
+    public static String getPositionFromAtxt(int digit, String string, String[] strArr) {
+        String j = null;
+        for (int i = 0; i < strArr.length; i++) {
+            if (string.equals(strArr[i])) {
+                j = String.valueOf(i);
+            }
+        }
+        return formDigits(digit, j);
+    }
+
+    public static ArrayAdapter<String> getAdapter(String[] strArr, Context context) {
+        return new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, strArr);
+    }
+
 }

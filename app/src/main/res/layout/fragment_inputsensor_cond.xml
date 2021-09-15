@@ -53,7 +53,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/con_seqNumber_til_isc"
                 style="@style/config_AtxTil"
-                android:visibility="visible">
+                android:enabled="false"
+                android:visibility="invisible">
 
                 <AutoCompleteTextView
                     android:id="@+id/con_seqNumber_atxt_isc"
@@ -85,7 +86,7 @@
                     android:hint="Input Label"
                     android:imeOptions="actionNext"
                     android:inputType="textPersonName"
-                    android:maxLength="6"
+                    android:maxLength="20"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -105,79 +106,22 @@
                     android:hint="Sensor Type" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--Default Temperature Value-->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/con_defaultTemperature_root_isc"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:layout_weight="1">
+            <!--Sensor Activation-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/con_sensorActivation_til_isc"
+                style="@style/config_AtxTil_zero">
 
-                <ToggleButton
-                    android:id="@+id/con_defaultTempValue_tBtn"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:background="@null"
-                    android:textOff="-"
-                    android:textOn="+"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/con_defaultTemperatureValue_til_isc" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/con_defaultTemperatureValue_til_isc"
-                    style="@style/appEdtTxt"
+                <AutoCompleteTextView
+                    android:id="@+id/con_sensorActivation_atxt_isc"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:expandedHintEnabled="false"
-                    android:hint="Default TempValue"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:clickable="false"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Sensor Activation" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/con_defaultTemperature_edt_isc"
-                        style="@style/config_Edt"
-                        android:textAlignment="center"
-                        app:textInputLayoutFocusedRectEnabled="true"
-                        android:maxLines="1"
-                        android:inputType="number"
-                        android:maxLength="3" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="5dp"
-                    android:text="."
-                    app:layout_constraintBottom_toBottomOf="@+id/con_defaultTemperatureValue_til_isc"
-                    app:layout_constraintEnd_toStartOf="@+id/con_defaultTemp_deci_isc"
-                    app:layout_constraintTop_toTopOf="@+id/con_defaultTemperatureValue_til_isc"/>
-
-                <EditText
-                    android:id="@+id/con_defaultTemp_deci_isc"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="2dp"
-                    android:background="@null"
-                    android:gravity="center"
-                    android:hint="00"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:textColorHint="@color/colorPrimary"
-                    app:layout_constraintBottom_toBottomOf="@+id/con_defaultTemperatureValue_til_isc"
-                    app:layout_constraintEnd_toEndOf="@+id/con_defaultTemperatureValue_til_isc"
-                    app:layout_constraintHorizontal_bias="0.98"
-                    app:layout_constraintStart_toStartOf="@+id/con_defaultTemperatureValue_til_isc"
-                    app:layout_constraintTop_toTopOf="@+id/con_defaultTemperatureValue_til_isc"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
@@ -186,81 +130,39 @@
             style="@style/config_rowLl"
             android:id="@+id/condRow3">
 
-            <!--temperature linked-->
+            <!--smoothing factor-->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/con_tempLinked_til_isc"
-                style="@style/config_AtxTil_zero">
+                android:id="@+id/con_smoothingFactor_til_isc"
+                style="@style/config_Til_Zero">
 
-                <AutoCompleteTextView
-                    android:id="@+id/con_tempLinked_atxt_isc"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/con_smoothingFactor_edt_isc"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="false"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:hint="Temperature Linked"
+                    android:layout_height="wrap_content"
+                    android:hint="Smoothing Factor"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Calibration Required Alarm-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/con_calibRequiredAlarm_til_isc"
+                style="@style/config_Til_Zero">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/con_calibRequiredAlarm_edt_isc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Calibration Required Alarm"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--cell constant-->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/con_cellConstant_root_isc"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/con_cellConstant_til_isc"
-                    style="@style/config_Til_Zero"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/con_cellConstant_edt_isc"
-                        style="@style/config_Edt"
-                        android:hint="Cell Constant"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:layout_width="12dp"
-                    android:layout_height="28dp"
-                    android:layout_gravity="center"
-                    android:padding="5dp"
-                    android:text="."
-                    app:layout_constraintBottom_toBottomOf="@+id/con_cellConstant_deci_isc"
-                    app:layout_constraintEnd_toStartOf="@+id/con_cellConstant_deci_isc"
-                    app:layout_constraintTop_toTopOf="@+id/con_cellConstant_deci_isc" />
-
-                <EditText
-                    android:id="@+id/con_cellConstant_deci_isc"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="2dp"
-                    android:background="@null"
-                    android:gravity="center"
-                    android:hint="00"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:textColorHint="@color/colorPrimary"
-                    app:layout_constraintBottom_toBottomOf="@+id/con_cellConstant_root_isc"
-                    app:layout_constraintEnd_toEndOf="@+id/con_cellConstant_til_isc"
-                    app:layout_constraintHorizontal_bias="0.98"
-                    app:layout_constraintStart_toStartOf="@+id/con_cellConstant_til_isc"
-                    app:layout_constraintTop_toTopOf="@+id/con_cellConstant_root_isc" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!--reset calibration-->
             <com.google.android.material.textfield.TextInputLayout
@@ -300,13 +202,14 @@
                     style="@style/config_Til_Zero"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:hint="Low Alarm"
+                    app:expandedHintEnabled="false"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/con_alarmLow_edt_isc"
                         style="@style/config_Edt"
-                        android:hint="Low Alarm"
                         android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="6"
@@ -359,6 +262,8 @@
                     android:id="@+id/con_highAlarm_til_isc"
                     style="@style/config_Til_Zero"
                     android:layout_weight="1.5"
+                    android:hint="High Alarm"
+                    app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -367,7 +272,6 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/con_alarmhigh_edt_isc"
                         style="@style/config_Edt"
-                        android:hint="High Alarm"
                         android:imeOptions="actionNext"
                         android:inputType="numberDecimal"
                         android:maxLength="6" />
@@ -401,26 +305,71 @@
                     app:layout_constraintEnd_toEndOf="@+id/con_highAlarm_til_isc"
                     app:layout_constraintHorizontal_bias="0.98"
                     app:layout_constraintStart_toStartOf="@+id/con_highAlarm_til_isc"
-                    app:layout_constraintTop_toTopOf="@+id/con_highAlarm_root_isc"/>
+                    app:layout_constraintTop_toTopOf="@+id/con_highAlarm_root_isc" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!--Calibration Required Alarm-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/con_calibRequiredAlarm_til_isc"
-                style="@style/config_Til_Zero">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/con_calibRequiredAlarm_edt_isc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Calibration Required Alarm"
-                    android:imeOptions="actionNext"
+            <!--cell constant-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/con_cellConstant_root_isc"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/con_cellConstant_til_isc"
+                    style="@style/config_Til_Zero"
+                    android:hint="Cell Constant"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/con_cellConstant_edt_isc"
+                        style="@style/config_Edt"
+
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="12dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:text="."
+                    app:layout_constraintBottom_toBottomOf="@+id/con_cellConstant_deci_isc"
+                    app:layout_constraintEnd_toStartOf="@+id/con_cellConstant_deci_isc"
+                    app:layout_constraintTop_toTopOf="@+id/con_cellConstant_deci_isc" />
+
+                <EditText
+                    android:id="@+id/con_cellConstant_deci_isc"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="00"
                     android:inputType="number"
-                    android:maxLength="3"
-                    android:maxLines="1" />
+                    android:maxLength="2"
+                    android:textColorHint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@+id/con_cellConstant_root_isc"
+                    app:layout_constraintEnd_toEndOf="@+id/con_cellConstant_til_isc"
+                    app:layout_constraintHorizontal_bias="0.98"
+                    app:layout_constraintStart_toStartOf="@+id/con_cellConstant_til_isc"
+                    app:layout_constraintTop_toTopOf="@+id/con_cellConstant_root_isc" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 
@@ -429,21 +378,6 @@
             android:id="@+id/con_row5_isc"
             style="@style/config_rowLl">
 
-            <!--smoothing factor-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/con_smoothingFactor_til_isc"
-                style="@style/config_Til_Zero">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/con_smoothingFactor_edt_isc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Smoothing Factor"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <!--compensation type-->
             <com.google.android.material.textfield.TextInputLayout
@@ -476,6 +410,7 @@
                     style="@style/config_Til_Zero"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:expandedHintEnabled="false"
                     android:enabled="@{compType.equals(`0`)? true : false}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -523,6 +458,80 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!--Default Temperature Value-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/con_defaultTemperature_root_isc"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <ToggleButton
+                    android:id="@+id/con_defaultTempValue_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/con_defaultTemperatureValue_til_isc" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/con_defaultTemperatureValue_til_isc"
+                    style="@style/appEdtTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Default TempValue"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/con_defaultTemperature_edt_isc"
+                        style="@style/config_Edt"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:text="."
+                    app:layout_constraintBottom_toBottomOf="@+id/con_defaultTemperatureValue_til_isc"
+                    app:layout_constraintEnd_toStartOf="@+id/con_defaultTemp_deci_isc"
+                    app:layout_constraintTop_toTopOf="@+id/con_defaultTemperatureValue_til_isc" />
+
+                <EditText
+                    android:id="@+id/con_defaultTemp_deci_isc"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textColorHint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@+id/con_defaultTemperatureValue_til_isc"
+                    app:layout_constraintEnd_toEndOf="@+id/con_defaultTemperatureValue_til_isc"
+                    app:layout_constraintHorizontal_bias="0.98"
+                    app:layout_constraintStart_toStartOf="@+id/con_defaultTemperatureValue_til_isc"
+                    app:layout_constraintTop_toTopOf="@+id/con_defaultTemperatureValue_til_isc" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
 
         <!--Row-6-->
@@ -530,6 +539,7 @@
             android:id="@+id/con_row6_isc"
             style="@style/config_rowLl">
 
+            <!--Unit of Measurement-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/con_unitOfMeasure_til_isc"
                 style="@style/config_AtxTil_zero">
@@ -547,22 +557,23 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
+            <!--temperature linked-->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/con_sensorActivation_til_isc"
+                android:id="@+id/con_tempLinked_til_isc"
                 style="@style/config_AtxTil_zero">
 
                 <AutoCompleteTextView
-                    android:id="@+id/con_sensorActivation_atxt_isc"
+                    android:id="@+id/con_tempLinked_atxt_isc"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clickable="false"
                     android:editable="false"
                     android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="Sensor Activation" />
+                    android:hint="Temperature Linked"
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
 
         </LinearLayout>
 
