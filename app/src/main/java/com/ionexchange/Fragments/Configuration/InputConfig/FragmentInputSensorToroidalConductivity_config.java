@@ -370,21 +370,29 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                 mBinding.candTempLinkedAtxtIsc.setEnabled(false);
                 mBinding.candDefaultTemperatureValueTilIsc.setEnabled(false);
                 mBinding.candTempDeciIsc.setEnabled(false);
-                mBinding.candUnitOfMeasureAtxtIsc.setEnabled(false);
-                mBinding.candLowAlarmEdtIsc.setEnabled(false);
+                mBinding.candUnitOfMeasureTilIsc.setEnabled(false);
+                mBinding.phLowAlarmTilIsc.setEnabled(false);
+                mBinding.candAlarmlowDeciIsc.setEnabled(false);
                 mBinding.candTempDeciIsc.setEnabled(false);
-                mBinding.candHighAlarmEdtIsc.setEnabled(false);
+                mBinding.candHighalarmTilIsc.setEnabled(false);
+                mBinding.candSmoothingFactorTilIsc.setVisibility(View.GONE);
                 mBinding.candHighAlarmDeciIsc.setEnabled(false);
-                mBinding.candCalibRequiredAlarmEdtIsc.setEnabled(false);
-                mBinding.candResetCalibAtxtIsc.setEnabled(false);
+                mBinding.candCalibRequiredAlarmTilIsc.setEnabled(false);
+                mBinding.candResetCalibTilIsc.setEnabled(false);
                 mBinding.candSensorActivationAtxtIsc.setVisibility(View.GONE);
                 mBinding.candRow5Isc.setVisibility(View.GONE);
                 mBinding.conRow7.setVisibility(View.GONE);
                 break;
 
             case 2:
-                mBinding.candCompensationAtxtIsc.setEnabled(false);
-                // Role Management
+               mBinding.candInputNumberTilIsc.setEnabled(false);
+               mBinding.candSensorTypeTilIsc.setEnabled(false);
+               mBinding.candCompensationTilIsc.setEnabled(false);
+               mBinding.candCompFactorTilIsc.setEnabled(false);
+               mBinding.candCompFactorDeciIsc.setEnabled(false);
+               mBinding.candSensorActivationTilIsc.setVisibility(View.GONE);
+               mBinding.candSmoothingFactorTilIsc.setEnabled(false);
+               mBinding.candDeleteLayoutIsc.setVisibility(View.GONE);
                 break;
 
         }

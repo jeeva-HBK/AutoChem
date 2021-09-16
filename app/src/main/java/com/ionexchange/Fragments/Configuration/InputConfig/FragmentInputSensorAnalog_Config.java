@@ -83,6 +83,20 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
         initAdapter();
+        changeUi();
+
+        mBinding.analogSaveFabIsc.setOnClickListener(this::save);
+        mBinding.analogDeleteFabIsc.setOnClickListener(this::delete);
+
+        mBinding.backArrowIsc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+            }
+        });
+    }
+
+    void changeUi() {
         switch (userType) {
             case 1:
                 mBinding.analogInputNumber.setEnabled(false);
@@ -111,23 +125,11 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                 mBinding.analogDeleteLayoutIsc.setVisibility(View.GONE);
                 break;
         }
-
-        mBinding.analogSaveFabIsc.setOnClickListener(this::save);
-        mBinding.analogDeleteFabIsc.setOnClickListener(this::delete);
-
-        mBinding.backArrowIsc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
-            }
-        });
     }
-
 
     private void delete(View view) {
         sendData(2);
     }
-
 
     private void save(View view) {
         if (validField()) {

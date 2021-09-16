@@ -80,30 +80,8 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
         mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
-        switch (userType) {
-
-            case 1:
-                mBinding.orpRow4Isc.setVisibility(View.GONE);
-                mBinding.orpRow5Isc.setVisibility(View.GONE);
-
-                mBinding.orpInputNumberTilIsc.setEnabled(false);
-                mBinding.orpInputLabelTilIsc.setEnabled(false);
-                mBinding.orpSensorTypeTilIsc.setEnabled(false);
-                mBinding.orpAlarmLowTilIsc.setEnabled(false);
-                mBinding.orpAlarmHighTilIsc.setEnabled(false);
-                mBinding.orpCalibrationAlarmRequiredTilIsc.setEnabled(false);
-                mBinding.orpResetCalibrationTilIsc.setEnabled(false);
-                break;
-
-            case 2:
-                mBinding.orpSmoothingFactorTilIsc.setEnabled(false);
-
-                mBinding.orpSensorActTilIsc.setVisibility(View.GONE);
-                mBinding.orpDeleteLayoutIsc.setVisibility(View.GONE);
-                break;
-        }
-
         initAdapter();
+        changeUI();
         mBinding.orpSaveFabIsc.setOnClickListener(this::save);
 
         mBinding.orpDeleteFabIsc.setOnClickListener(this::delete);
@@ -119,6 +97,29 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     private void save(View view) {
         if (validation()) {
             sendData(sensorStatus);
+        }
+    }
+
+    void changeUI() {
+        switch (userType) {
+            case 1:
+                mBinding.orpRow5Isc.setVisibility(View.GONE);
+                mBinding.orpSensorActTilIsc.setVisibility(View.GONE);
+                mBinding.orpInputNumberTilIsc.setEnabled(false);
+                mBinding.orpInputLabelTilIsc.setEnabled(false);
+                mBinding.orpSensorTypeTilIsc.setEnabled(false);
+                mBinding.orpAlarmLowTilIsc.setEnabled(false);
+                mBinding.orpAlarmHighTilIsc.setEnabled(false);
+                mBinding.orpSmoothingFactorTilIsc.setVisibility(View.GONE);
+                mBinding.orpCalibrationAlarmRequiredTilIsc.setEnabled(false);
+                mBinding.orpResetCalibrationTilIsc.setEnabled(false);
+                break;
+
+            case 2:
+                mBinding.orpSmoothingFactorTilIsc.setEnabled(false);
+                mBinding.orpSensorActTilIsc.setVisibility(View.GONE);
+                mBinding.orpDeleteLayoutIsc.setVisibility(View.GONE);
+                break;
         }
     }
 
@@ -246,10 +247,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
         } else if (isFieldEmpty(mBinding.orpSmoothingFactorEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Smoothing Factor Cannot be Empty");
             return false;
-        }
-
-
-        else if (Integer.parseInt(getStringValue(3, mBinding.orpCalibrationAlarmRequiredEdtIsc)) > 365) {
+        } else if (Integer.parseInt(getStringValue(3, mBinding.orpCalibrationAlarmRequiredEdtIsc)) > 365) {
             mBinding.orpCalibrationAlarmRequiredEdtIsc.setError("Should be less than 365");
             return false;
         } else if (Integer.parseInt(getStringValue(3, mBinding.orpSmoothingFactorEdtIsc)) > 100) {

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,7 @@ import com.ionexchange.databinding.FragmentInputsensorModbusBinding;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.getAdapter;
 import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
 import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
@@ -36,6 +38,7 @@ import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
 import static com.ionexchange.Others.ApplicationClass.typeOfValueRead;
 import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
@@ -82,6 +85,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
         initAdapter();
+
         mBinding.modBusDiagnosticSweepTie.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -93,52 +97,18 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                 }
             }
         });
-        switch (userType) {
-            case 1:
-                mBinding.modbusInputLabel.setEnabled(false);
-                mBinding.modbusModbusType.setEnabled(false);
-                mBinding.modbusTypeOfValueRead.setEnabled(false);
-                mBinding.modbusUnit.setEnabled(false);
-                mBinding.modbusMinValue.setEnabled(false);
-                mBinding.modbusMaxValue.setEnabled(false);
-                mBinding.modbusDiagnosticSweep.setEnabled(false);
-                mBinding.modbusDiagnosticTime.setEnabled(false);
-                mBinding.modbusAlarmLow.setEnabled(false);
-                mBinding.modbusAlarmHigh.setEnabled(false);
-                mBinding.modbusCalibrationRequiredAlarm.setEnabled(false);
-                mBinding.modbusResetCalibration.setEnabled(false);
 
-                mBinding.modbusSmoothingFactor.setVisibility(View.GONE);
-                mBinding.modbusSensorActivation.setVisibility(View.GONE);
-
-                mBinding.modbusRow6Isc.setVisibility(View.GONE);
-                break;
-
-            case 2:
-                mBinding.modbusModbusType.setEnabled(false);
-                mBinding.modbusTypeOfValueRead.setEnabled(false);
-                mBinding.modbusUnit.setEnabled(false);
-                mBinding.modbusDiagnosticSweep.setEnabled(false);
-                mBinding.modbusDiagnosticTime.setEnabled(false);
-                mBinding.modbusSmoothingFactor.setEnabled(false);
-
-                mBinding.modbusSensorActivation.setVisibility(View.GONE);
-                mBinding.modbusDeleteLayoutIsc.setVisibility(View.GONE);
-                break;
-        }
-
+        changeUi();
 
         mBinding.modbusSaveFabIsc.setOnClickListener(this::save);
-        mBinding.modbusSaveLayoutIsc.setOnClickListener(this::save);
-        mBinding.modBusSensorTypeTie.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mBinding.modbusSequenceNumberTie.setText(mBinding.modBusSensorTypeTie.getAdapter().getItem(i).toString());
-            }
+        mBinding.modbusDeleteFabIsc.setOnClickListener(this::delete);
 
+        mBinding.modBusTypeTie.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getContext(), mBinding.modbusSequenceNumberTie.getAdapter().getItem(i).toString(), Toast.LENGTH_SHORT).show();
+                mBinding.modbusSequenceNumberTie.setText(mBinding.modbusSequenceNumberTie.getAdapter().getItem(i).toString());
+                mBinding.modbusSequenceNumberTie.setAdapter(getAdapter(sensorSequenceNumber, getContext()));
             }
         });
 
@@ -150,7 +120,15 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
         });
     }
 
+    private void delete(View view) {
+        sendData(2);
+    }
+
     private void save(View view) {
+        sendData(sensorStatus);
+    }
+
+    void sendData(int sensorStatus) {
         if (validField()) {
             mActivity.showProgress();
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + "0" + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
@@ -190,11 +168,11 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
         super.onResume();
         if (sensorName == null) {
             mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + "0" + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + inputNumber);
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + formDigits(2, inputNumber));
         } else {
             mBinding.modBusInputNumberTie.setText(inputNumber);
             mBinding.modBusSensorTypeTie.setText(sensorName);
-            mBinding.modbusDeleteLayoutIsc.setVisibility(View.INVISIBLE);
+            mBinding.modbusDeleteLayoutIsc.setVisibility(View.GONE);
             mBinding.modbusSaveTxtIsc.setText("ADD");
         }
     }
@@ -310,6 +288,41 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
             return false;
         }
         return true;
+    }
+
+    void changeUi(){
+        switch (userType) {
+            case 1:
+                mBinding.modbusInputNumber.setEnabled(false);
+                mBinding.modbusInputLabel.setEnabled(false);
+                mBinding.modbusTypeOfValueRead.setEnabled(false);
+                mBinding.modbusUnit.setEnabled(false);
+                mBinding.modbusMinValue.setEnabled(false);
+                mBinding.modbusMaxValue.setEnabled(false);
+                mBinding.modbusDiagnosticSweep.setEnabled(false);
+                mBinding.modbusDiagnosticTime.setEnabled(false);
+                mBinding.modbusAlarmLow.setEnabled(false);
+                mBinding.modbusAlarmHigh.setEnabled(false);
+                mBinding.modbusCalibrationRequiredAlarm.setEnabled(false);
+                mBinding.modbusResetCalibration.setEnabled(false);
+                mBinding.modbusSmoothingFactor.setVisibility(View.GONE);
+                mBinding.modbusSensorActivation.setVisibility(View.GONE);
+                mBinding.modbusRow6Isc.setVisibility(View.GONE);
+                break;
+
+            case 2:
+                mBinding.modbusInputNumber.setEnabled(false);
+
+                mBinding.modbusTypeOfValueRead.setEnabled(false);
+                mBinding.modbusUnit.setEnabled(false);
+                mBinding.modbusDiagnosticSweep.setEnabled(false);
+                mBinding.modbusDiagnosticTime.setEnabled(false);
+                mBinding.modbusSmoothingFactor.setEnabled(false);
+
+                mBinding.modbusSensorActivation.setVisibility(View.GONE);
+                mBinding.modbusDeleteLayoutIsc.setVisibility(View.GONE);
+                break;
+        }
     }
 
     public void updateToDb(List<InputConfigurationEntity> entryList) {

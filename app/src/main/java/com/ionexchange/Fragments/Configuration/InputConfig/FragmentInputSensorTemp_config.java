@@ -84,43 +84,8 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
         mBinding.temSeqNumberAtxtIsc.setText(sensorSequence);
-        switch (userType) {
-            case 1:
-                mBinding.tempInputLabelTilIsc.setEnabled(false);
-                mBinding.tempDefaultTemperatureValueTilIsc.setEnabled(false);
-                mBinding.tempTempDeciIsc.setEnabled(false);
-                mBinding.tempTempValueTBtn.setEnabled(false);
-
-                mBinding.tempLowAlarmEdtIsc.setEnabled(false);
-                mBinding.tempLowAlarmDeciIsc.setEnabled(false);
-                mBinding.tempLowAlarmTBtn.setEnabled(false);
-
-                mBinding.tempHighAlarmEdtIsc.setEnabled(false);
-                mBinding.tempHighAlarmDeciIsc.setEnabled(false);
-                mBinding.tempHighAlarmTBtn.setEnabled(false);
-
-                mBinding.tempCalibRequiredAlarmEdtIsc.setEnabled(false);
-                mBinding.tempResetCalibAtxtIsc.setEnabled(false);
-
-                mBinding.tempSensorActivationTilIsc.setVisibility(View.GONE);
-                mBinding.tempSmoothingFactorTilIsc.setVisibility(View.GONE);
-
-                mBinding.tempRow5Isc.setVisibility(View.GONE);
-                break;
-
-            case 2:
-                mBinding.tempDefaultTemperatureValueTilIsc.setEnabled(false);
-                mBinding.tempTempDeciIsc.setEnabled(false);
-                mBinding.tempTempValueTBtn.setEnabled(false);
-
-                mBinding.tempSmoothingFactorTilIsc.setEnabled(false);
-
-                mBinding.tempSensorActivationTilIsc.setVisibility(View.GONE);
-                mBinding.tempDeleteLayoutIsc.setVisibility(View.GONE);
-                break;
-        }
-
         initAdapter();
+        changeUi();
         mBinding.tempSaveFabIsc.setOnClickListener(this::save);
         mBinding.tempDeleteFabSic.setOnClickListener(this::delete);
         mBinding.tempBackArrowIsc.setOnClickListener(v -> {
@@ -289,6 +254,43 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
     }
 
+    void  changeUi(){
+        switch (userType) {
+            case 1:
+                mBinding.tempInputLabelTilIsc.setEnabled(false);
+                mBinding.tempDefaultTemperatureValueTilIsc.setEnabled(false);
+                mBinding.tempTempDeciIsc.setEnabled(false);
+                mBinding.tempTempValueTBtn.setEnabled(false);
+
+                mBinding.tempLowAlarmEdtIsc.setEnabled(false);
+                mBinding.tempLowAlarmDeciIsc.setEnabled(false);
+                mBinding.tempLowAlarmTBtn.setEnabled(false);
+
+                mBinding.tempHighAlarmEdtIsc.setEnabled(false);
+                mBinding.tempHighAlarmDeciIsc.setEnabled(false);
+                mBinding.tempHighAlarmTBtn.setEnabled(false);
+
+                mBinding.tempCalibRequiredAlarmEdtIsc.setEnabled(false);
+                mBinding.tempResetCalibAtxtIsc.setEnabled(false);
+
+                mBinding.tempSensorActivationTilIsc.setVisibility(View.GONE);
+                mBinding.tempSmoothingFactorTilIsc.setVisibility(View.GONE);
+
+                mBinding.tempRow5Isc.setVisibility(View.GONE);
+                break;
+
+            case 2:
+                mBinding.tempDefaultTemperatureValueTilIsc.setEnabled(false);
+                mBinding.tempTempDeciIsc.setEnabled(false);
+                mBinding.tempTempValueTBtn.setEnabled(false);
+
+                mBinding.tempSmoothingFactorTilIsc.setEnabled(false);
+
+                mBinding.tempSensorActivationTilIsc.setVisibility(View.GONE);
+                mBinding.tempDeleteLayoutIsc.setVisibility(View.GONE);
+                break;
+        }
+    }
     public void temperatureEntity(int flagValue) {
         switch (flagValue) {
             case 2:

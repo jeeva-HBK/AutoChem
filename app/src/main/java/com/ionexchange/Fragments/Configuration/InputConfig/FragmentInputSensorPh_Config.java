@@ -117,19 +117,18 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         switch (userRole) {
             case 1: // Basic
                 mBinding.phTemperatureSensorLinkedTilIsc.setVisibility(View.GONE);
-                mBinding.phRow5Isc.setVisibility(View.GONE);
                 mBinding.phRow6Isc.setVisibility(View.GONE);
                 mBinding.phInputNumberTilIsc.setEnabled(false);
                 mBinding.phInputLabelTilIsc.setEnabled(false);
                 mBinding.phSensorTypeTilIsc.setEnabled(false);
                 mBinding.phBufferTypeTilIsc.setEnabled(false);
                 mBinding.phCalibrationRequiredAlarmTilIsc.setEnabled(false);
-
+                mBinding.phSmoothingFactorTilIsc.setVisibility(View.GONE);
+                mBinding.phSensorActivationTilIsc.setVisibility(View.GONE);
                 mBinding.phLowAlarmTilIsc.setEnabled(false);
                 mBinding.phAlarmLowDeciIsc.setEnabled(false);
                 mBinding.phHighAlarmTilIsc.setEnabled(false);
                 mBinding.phHighAlarmDeciIsc.setEnabled(false);
-
                 mBinding.phDefaultTemperatureValueTilIsc.setEnabled(false);
                 mBinding.phTempDeciIsc.setEnabled(false);
                 mBinding.phTempValueTBtn.setEnabled(false);

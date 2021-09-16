@@ -385,7 +385,12 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 mBinding.conDefaultTemperatureValueTilIsc.setEnabled(false);
                 mBinding.conUnitOfMeasureTilIsc.setEnabled(false);
                 mBinding.conCellConstantTilIsc.setEnabled(false);
-                mBinding.conLowAlarmRootIsc.setEnabled(false);
+                mBinding.conLowAlarmTilIsc.setEnabled(false);
+
+                mBinding.conCompensationTilIsc.setVisibility(View.GONE);
+                mBinding.conCompFactorRootIsc.setVisibility(View.GONE);
+                mBinding.conSensorActivationTilIsc.setVisibility(View.VISIBLE);
+                mBinding.conSmoothingFactorTilIsc.setVisibility(View.GONE);
                 mBinding.conHighAlarmTilIsc.setEnabled(false);
                 mBinding.conCalibRequiredAlarmTilIsc.setEnabled(false);
                 mBinding.conResetCalibTilIsc.setEnabled(false);
@@ -396,12 +401,15 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
 
             case 2:
                 //View
+                mBinding.conSensorActivationTilIsc.setVisibility(View.GONE);
                 mBinding.conCellConstantEdtIsc.setEnabled(false);
-                mBinding.conCompFactorRootIsc.setEnabled(false);
-                mBinding.conCompFactorRootIsc.setEnabled(false);
+                mBinding.conCompFactorTilIsc.setEnabled(false);
+                mBinding.conCompFactorDeciIsc.setEnabled(false);
+                mBinding.conCompensationTilIsc.setEnabled(false);
                 mBinding.conSmoothingFactorTilIsc.setEnabled(false);
                 mBinding.conSensorActivationTilIsc.setVisibility(View.GONE);
                 mBinding.conDeleteLayoutIsc.setVisibility(View.GONE);
+                mBinding.conSensorActivationTilIsc.setVisibility(View.VISIBLE);
 
                 break;
         }

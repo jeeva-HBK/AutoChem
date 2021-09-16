@@ -7,16 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
@@ -35,7 +31,12 @@ import static com.ionexchange.Others.ApplicationClass.flowAlarmMode;
 import static com.ionexchange.Others.ApplicationClass.flowMeterTypeArr;
 import static com.ionexchange.Others.ApplicationClass.flowUnitArr;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
+import static com.ionexchange.Others.ApplicationClass.getAdapter;
+import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
+import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
+import static com.ionexchange.Others.ApplicationClass.getStringValue;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.resetFlowTotalArr;
 import static com.ionexchange.Others.ApplicationClass.scheduleResetArr;
@@ -63,7 +64,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     int packetId;
     WaterTreatmentDb db;
     InputConfigurationDao dao;
-    String sequenceNumber;
+    String sequenceNumber = "1"; // todo sequenceNumber
 
     public FragmentInputSensorFlow_config(String inputNumber, int sensorStatus) {
         this.inputNumber = inputNumber;
@@ -102,10 +103,12 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 mBinding.setFlowMeterType(String.valueOf(i));
             }
         });
+
+        mBinding.orpBackArrowIsc.setOnClickListener(v -> {
+            mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+        });
         mBinding.flowSaveFab.setOnClickListener(this::save);
-        mBinding.flowSaveLayout.setOnClickListener(this::save);
         mBinding.flowDeleteFab.setOnClickListener(this::delete);
-        mBinding.flowDeleteLayout.setOnClickListener(this::delete);
     }
 
     private void checkUser() {
@@ -197,24 +200,10 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 mBinding.flowDeleteLayout.setVisibility(View.GONE);
                 break;
         }
-
-    }
-
-    void sensorSequenceNumber() {
-        if (Integer.parseInt(inputNumber) > 13 && Integer.parseInt(inputNumber) < 21) {
-            mBinding.flowSeqNumberTilIsc.setVisibility(View.VISIBLE);
-            if (!mBinding.flowSeqNumberAtxtIsc.getText().toString().isEmpty()) {
-                sequenceNumber = getPosition(1, toString(mBinding.flowSeqNumberAtxtIsc), sensorSequenceNumber);
-            }
-        } else {
-            mBinding.flowSeqNumberTilIsc.setVisibility(View.GONE);
-            sequenceNumber = "0";
-
-        }
     }
 
     private void delete(View view) {
-        switch (getPosition(toString(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr)) {
+        switch (Integer.parseInt(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr))) {
             case 0:
                 if (validation()) {
                     sendAnalogPacket(2);
@@ -222,7 +211,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 }
                 break;
             case 1:
-                if (validation1()) {
+                if (validContactor()) {
                     sendContactorPacket(2);
                     packetId = 1;
                 }
@@ -243,7 +232,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     }
 
     private void save(View view) {
-        switch (getPosition(toString(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr)) {
+        switch (Integer.parseInt(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr))) {
             case 0:
                 if (validation()) {
                     sendAnalogPacket(sensorStatus);
@@ -251,7 +240,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 }
                 break;
             case 1:
-                if (validation1()) {
+                if (validContactor()) {
                     sendContactorPacket(sensorStatus);
                     packetId = 1;
                 }
@@ -272,61 +261,61 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     }
 
     private boolean validation3() {
-        if (isEmpty(mBinding.flowInputNumberEdtIsc)) {
+        if (isFieldEmpty(mBinding.flowInputNumberEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "InputNumber cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowSensorTypeAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowSensorTypeAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Input Type cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowFlowMeterTypeAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowFlowMeterTypeAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Flow Meter Type cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowSensorActivationAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowSensorActivationAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Sensor Activation cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowInputLabelEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowInputLabelEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Input Label cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowFlowUnitAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowFlowUnitAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Flow Unit cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowFeedVolumeEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowFeedVolumeEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Volume cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowVolumeRateunitEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowVolumeRateunitEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Rate Unit cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowTotalAlarmModeAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowTotalAlarmModeAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Total Alarm Mode cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowAlarmModeAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowAlarmModeAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Flow Alarm Mode cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowAlarmDelayEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowAlarmDelayEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Flow Alarm Mode cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowAlarmClearEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowAlarmClearEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Flow Alarm Clear cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowOutputRelayEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowOutputRelayEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Output Relay Link cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowTotalizerAlarmEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowTotalizerAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Totalizer Alarm cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowResetFlowTotalAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowResetFlowTotalAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Reset Flow Total cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Set Flow Total cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowScheduleResetAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowScheduleResetAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Schedule Reset cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowAlarmLowEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowAlarmLowEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm Low cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowHighAlarmEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowHighAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm High cannot be Empty");
             return false;
         }
@@ -334,170 +323,144 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     }
 
     private boolean validation2() {
-        if (isEmpty(mBinding.flowInputNumberEdtIsc)) {
+        if (isFieldEmpty(mBinding.flowInputNumberEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "InputNumber cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowSensorTypeAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowSensorTypeAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Sensor Type cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowFlowMeterTypeAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowFlowMeterTypeAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Flow Meter Type cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowSensorActivationAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowSensorActivationAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Sensor Activation cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowInputLabelEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowInputLabelEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "InputLabel cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowFlowUnitAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowFlowUnitAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Flow Unit cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowVolumeRateunitEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowVolumeRateunitEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Rate Unit cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowKFactorEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowKFactorEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "K Factor cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowTotalizerAlarmEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowTotalizerAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Totalizer Alarm cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowResetFlowTotalAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowResetFlowTotalAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Reset Flow cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "set Flow Total cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowScheduleResetAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowScheduleResetAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Schedule Reset cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowAlarmLowEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowAlarmLowEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm low cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowHighAlarmEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowHighAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm high cannot be Empty");
             return false;
         }
         return true;
     }
 
-    private boolean validation1() {
-        if (isEmpty(mBinding.flowInputNumberEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "InputNumber cannot be Empty");
-            return false;
-        } else if (isEmpty(mBinding.flowSensorTypeAtxtIsc)) {
-            mAppClass.showSnackBar(getContext(), "SensorType cannot be Empty");
-            return false;
-        } else if (isEmpty(mBinding.flowFlowMeterTypeAtxtIsc)) {
+    private boolean validContactor() {
+        if (isFieldEmpty(mBinding.flowFlowMeterTypeAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "FlowMeter Type cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowSensorActivationAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowSensorActivationAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Sensor Activation cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowInputLabelEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowInputLabelEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "InputLabel cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowFlowUnitAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowFlowUnitAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Flow Unit cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowVolumeRateunitEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowVolumeRateunitEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Volume cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowTotalizerAlarmDeciIsc)) {
+        } else if (isFieldEmpty(mBinding.flowTotalizerAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Totalizer Alarm cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowResetFlowTotalAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowResetFlowTotalAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "ResetFlowTotal cannot be Empty ");
             return false;
-        } else if (isEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Set Flow Total cannot be Empty ");
             return false;
-        } else if (isEmpty(mBinding.flowScheduleResetAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowScheduleResetAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Schedule Reset cannot be Empty ");
             return false;
-        } else if (isEmpty(mBinding.flowAlarmLowEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowAlarmLowEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm low cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowHighAlarmEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowHighAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm high cannot be Empty");
+            return false;
+        } else if (Integer.parseInt(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) > 7) {
+            mAppClass.showSnackBar(getContext(), "Volume should less than 7 digit");
             return false;
         }
         return true;
-
     }
 
     private boolean validation() {
-        if (isEmpty(mBinding.flowInputNumberEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "InputNumber cannot be Empty");
-            return false;
-        } else if (isEmpty(mBinding.flowSensorTypeAtxtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Sensor Type cannot be Empty");
-            return false;
-        } else if (isEmpty(mBinding.flowFlowMeterTypeAtxtIsc)) {
+        if (isFieldEmpty(mBinding.flowFlowMeterTypeAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Flow Meter Type cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowSensorActivationAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowSensorActivationAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Sensor Activation cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowInputLabelEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowInputLabelEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Input Label cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowFlowUnitAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowFlowUnitAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Flow Unit cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowVolumeRateunitEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowVolumeRateunitEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Rate unit cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowMaxEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowMaxEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Flow max cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowMinEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowMinEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "flow min cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowSmoothingFactorEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowSmoothingFactorEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "smoothing Factor cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowTotalizerAlarmEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowTotalizerAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Totalizer Alarm cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowResetFlowTotalAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowResetFlowTotalAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Reset Flow Total cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowScheduleResetAtxtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowScheduleResetAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Schedule Reset cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "SetFlowTotal cannot be Empty ");
             return false;
-        } else if (isEmpty(mBinding.flowAlarmLowEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowAlarmLowEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm low cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowHighAlarmEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowHighAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm high cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowCalibrationRequiredEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowCalibrationRequiredEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Calibartion Required cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.flowResetCalibrationEdtIsc)) {
+        } else if (isFieldEmpty(mBinding.flowResetCalibrationEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Calibartion Required cannot be Empty");
             return false;
         }
         return true;
-    }
-
-    private Boolean isEmpty(EditText editText) {
-        if (editText.getText() == null || editText.getText().toString().equals("")) {
-            editText.setError("Field shouldn't empty !");
-            return true;
-        }
-        return false;
-    }
-
-    private Boolean isEmpty(AutoCompleteTextView editText) {
-        if (editText.getText() == null || editText.getText().toString().equals("")) {
-            editText.setError("Field shouldn't empty !");
-            return true;
-        }
-        return false;
     }
 
     private void sendFeedMonitorPacket(int sensorStatus) {
@@ -505,24 +468,24 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                toString(2, mBinding.flowInputNumberEdtIsc) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.flowSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr) + SPILT_CHAR +
+                getStringValue(2, mBinding.flowInputNumberEdtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(2, getStringValue(mBinding.flowSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr) + SPILT_CHAR +
                 sequenceNumber + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
-                toString(0, mBinding.flowInputLabelEdtIsc) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowFlowUnitAtxtIsc), flowUnitArr) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
+                getStringValue(0, mBinding.flowInputLabelEdtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowFeedVolumeEdtIsc, 7, mBinding.flowFeedVolumeDeciIsc, 3) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowVolumeRateunitEdtIsc, 4, mBinding.flowVolumeRateunitDeciIsc, 2) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowTotalAlarmModeAtxtIsc), totalAlarmMode) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowAlarmModeAtxtIsc), flowAlarmMode) + SPILT_CHAR +
-                toString(4, mBinding.flowAlarmDelayEdtIsc) + SPILT_CHAR +
-                toString(6, mBinding.flowAlarmClearEdtIsc) + SPILT_CHAR +
-                toString(2, mBinding.flowOutputRelayEdtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowTotalAlarmModeAtxtIsc), totalAlarmMode) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowAlarmModeAtxtIsc), flowAlarmMode) + SPILT_CHAR +
+                getStringValue(4, mBinding.flowAlarmDelayEdtIsc) + SPILT_CHAR +
+                getStringValue(6, mBinding.flowAlarmClearEdtIsc) + SPILT_CHAR +
+                getStringValue(2, mBinding.flowOutputRelayEdtIsc) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowTotalizerAlarmEdtIsc, 7, mBinding.flowTotalizerAlarmDeciIsc, 2) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowResetFlowTotalAtxtIsc), resetFlowTotalArr) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowResetFlowTotalAtxtIsc), resetFlowTotalArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowSetFlowTotalEdtIsc, 10, mBinding.flowSetFlowTotalDeciIsc, 2) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowScheduleResetAtxtIsc), scheduleResetArr) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowScheduleResetAtxtIsc), scheduleResetArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowAlarmLowEdtIsc, 10, mBinding.flowAlarmLowDeciIsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowHighAlarmEdtIsc, 10, mBinding.flowHighAlarmDeciIsc, 2) + SPILT_CHAR +
                 sensorStatus);
@@ -533,19 +496,19 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                toString(2, mBinding.flowInputNumberEdtIsc) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.flowSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr) + SPILT_CHAR +
+                getStringValue(2, mBinding.flowInputNumberEdtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(2, getStringValue(mBinding.flowSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr) + SPILT_CHAR +
                 sequenceNumber + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
-                toString(0, mBinding.flowInputLabelEdtIsc) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowFlowUnitAtxtIsc), flowUnitArr) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
+                getStringValue(0, mBinding.flowInputLabelEdtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowVolumeRateunitEdtIsc, 4, mBinding.flowVolumeRateunitDeciIsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowKFactorEdtIsc, 7, mBinding.flowKFactorDeciIsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowTotalizerAlarmEdtIsc, 7, mBinding.flowTotalizerAlarmDeciIsc, 2) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowResetFlowTotalAtxtIsc), resetFlowTotalArr) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowResetFlowTotalAtxtIsc), resetFlowTotalArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowSetFlowTotalEdtIsc, 10, mBinding.flowSetFlowTotalDeciIsc, 2) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.flowScheduleResetAtxtIsc), scheduleResetArr) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.flowScheduleResetAtxtIsc), scheduleResetArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowAlarmLowEdtIsc, 10, mBinding.flowAlarmLowDeciIsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowHighAlarmEdtIsc, 10, mBinding.flowHighAlarmDeciIsc, 2) + SPILT_CHAR +
                 sensorStatus);
@@ -556,25 +519,21 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                toString(2, mBinding.flowInputNumberEdtIsc) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.flowSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr) + SPILT_CHAR +
+                getStringValue(2, mBinding.flowInputNumberEdtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(2, getStringValue(mBinding.flowSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr) + SPILT_CHAR +
                 sequenceNumber + SPILT_CHAR +
-                getPosition(1, toString(mBinding.flowSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
-                toString(0, mBinding.flowInputLabelEdtIsc) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.flowFlowUnitAtxtIsc), flowUnitArr) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.flowSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
+                getStringValue(0, mBinding.flowInputLabelEdtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowVolumeRateunitEdtIsc, 7, mBinding.flowVolumeRateunitDeciIsc, 3) + SPILT_CHAR +
-                getDecimalValue(mBinding.flowTotalizerAlarmEdtIsc, 7, mBinding.flowTotalizerAlarmDeciIsc, 2) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowResetFlowTotalAtxtIsc), resetFlowTotalArr) + SPILT_CHAR +
+                getDecimalValue(mBinding.flowTotalizerAlarmEdtIsc, 10, mBinding.flowTotalizerAlarmDeciIsc, 2) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowResetFlowTotalAtxtIsc), resetFlowTotalArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowSetFlowTotalEdtIsc, 10, mBinding.flowSetFlowTotalDeciIsc, 2) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.flowScheduleResetAtxtIsc), scheduleResetArr) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.flowScheduleResetAtxtIsc), scheduleResetArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowAlarmLowEdtIsc, 10, mBinding.flowAlarmLowDeciIsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowHighAlarmEdtIsc, 10, mBinding.flowHighAlarmDeciIsc, 2) + SPILT_CHAR +
                 sensorStatus);
-    }
-
-    String getDecimalValue(TextInputEditText prefixEdittext, int prefixDigit, EditText suffixEdittext, int suffixDigit) {
-        return toString(prefixDigit, prefixEdittext) + "." + toString(suffixDigit, suffixEdittext);
     }
 
     private void sendAnalogPacket(int sensorStatus) {
@@ -582,76 +541,38 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                toString(2, mBinding.flowInputNumberEdtIsc) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.flowSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr) + SPILT_CHAR +
+                getStringValue(2, mBinding.flowInputNumberEdtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(2, getStringValue(mBinding.flowSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr) + SPILT_CHAR +
                 sequenceNumber + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
-                toString(0, mBinding.flowInputLabelEdtIsc) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.flowFlowUnitAtxtIsc), flowUnitArr) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
+                getStringValue(0, mBinding.flowInputLabelEdtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowVolumeRateunitEdtIsc, 4, mBinding.flowVolumeRateunitDeciIsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowMaxEdtIsc, 7, mBinding.flowMaxDeciIsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowMinEdtIsc, 7, mBinding.flowMinDeciIsc, 2) + SPILT_CHAR +
-                toString(3, mBinding.flowSmoothingFactorEdtIsc) + SPILT_CHAR +
+                getStringValue(3, mBinding.flowSmoothingFactorEdtIsc) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowTotalizerAlarmEdtIsc, 7, mBinding.flowTotalizerAlarmDeciIsc, 2) + SPILT_CHAR +
-                toString(4, mBinding.flowResetFlowTotalAtxtIsc) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.flowScheduleResetAtxtIsc), scheduleResetArr) + SPILT_CHAR +
+                getStringValue(4, mBinding.flowResetFlowTotalAtxtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.flowScheduleResetAtxtIsc), scheduleResetArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowSetFlowTotalEdtIsc, 10, mBinding.flowSetFlowTotalDeciIsc, 2) + SPILT_CHAR +
-                toString(9, mBinding.flowAlarmLowEdtIsc) + "." + toString(2, mBinding.flowAlarmLowDeciIsc) + SPILT_CHAR +
-                toString(9, mBinding.flowHighAlarmEdtIsc) + "." + toString(2, mBinding.flowHighAlarmDeciIsc) + SPILT_CHAR +
-                toString(3, mBinding.flowCalibrationRequiredEdtIsc) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.flowResetCalibrationEdtIsc), resetCalibrationArr) + SPILT_CHAR +
+                getStringValue(10, mBinding.flowAlarmLowEdtIsc) + "." + getStringValue(2, mBinding.flowAlarmLowDeciIsc) + SPILT_CHAR +
+                getStringValue(10, mBinding.flowHighAlarmEdtIsc) + "." + getStringValue(2, mBinding.flowHighAlarmDeciIsc) + SPILT_CHAR +
+                getStringValue(3, mBinding.flowCalibrationRequiredEdtIsc) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.flowResetCalibrationEdtIsc), resetCalibrationArr) + SPILT_CHAR +
                 sensorStatus);
-    }
-
-    private String getPosition(int digit, String string, String[] strArr) {
-        String j = null;
-        for (int i = 0; i < strArr.length; i++) {
-            if (string.equals(strArr[i])) {
-                j = String.valueOf(i);
-            }
-        }
-        return mAppClass.formDigits(digit, j);
-    }
-
-    private int getPosition(String string, String[] strArr) {
-        int j = 0;
-        for (int i = 0; i < strArr.length; i++) {
-            if (string.equals(strArr[i])) {
-                j = (i);
-            }
-        }
-        return j;
-    }
-
-    private String toString(int digits, EditText editText) {
-        return mAppClass.formDigits(digits, editText.getText().toString());
-    }
-
-    private String toString(AutoCompleteTextView editText) {
-        return editText.getText().toString();
-    }
-
-    private String toStringSplit(int digits, int digitPoint, EditText editText) {
-        if (editText.getText().toString().split("\\.").length == 1) {
-            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
-        }
-        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
     }
 
     private void initAdapter() {
         mBinding.flowFlowMeterTypeAtxtIsc.setText("Contactor");
-        mBinding.flowFlowMeterTypeAtxtIsc.setAdapter(getAdapter(flowMeterTypeArr));
-        mBinding.flowSensorTypeAtxtIsc.setAdapter(getAdapter(inputTypeArr));
-        mBinding.flowSensorActivationAtxtIsc.setAdapter(getAdapter(sensorActivationArr));
-        mBinding.flowFlowUnitAtxtIsc.setAdapter(getAdapter(flowUnitArr));
-        mBinding.flowScheduleResetAtxtIsc.setAdapter(getAdapter(scheduleResetArr));
-        mBinding.flowResetCalibrationEdtIsc.setAdapter(getAdapter(resetCalibrationArr));
-        mBinding.flowResetFlowTotalAtxtIsc.setAdapter(getAdapter(resetFlowTotalArr));
-    }
-
-    public ArrayAdapter<String> getAdapter(String[] strArr) {
-        return new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, strArr);
+        mBinding.flowFlowMeterTypeAtxtIsc.setAdapter(getAdapter(flowMeterTypeArr, getContext()));
+        mBinding.flowSensorTypeAtxtIsc.setAdapter(getAdapter(inputTypeArr, getContext()));
+        mBinding.flowSensorActivationAtxtIsc.setAdapter(getAdapter(sensorActivationArr, getContext()));
+        mBinding.flowFlowUnitAtxtIsc.setAdapter(getAdapter(flowUnitArr, getContext()));
+        mBinding.flowScheduleResetAtxtIsc.setAdapter(getAdapter(scheduleResetArr, getContext()));
+        mBinding.flowResetCalibrationEdtIsc.setAdapter(getAdapter(resetCalibrationArr, getContext()));
+        mBinding.flowResetFlowTotalAtxtIsc.setAdapter(getAdapter(resetFlowTotalArr, getContext()));
+        mBinding.flowSeqNumberAtxtIsc.setAdapter(getAdapter(sensorSequenceNumber, getContext()));
     }
 
     @Override
@@ -663,7 +584,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else {
             mBinding.flowInputNumberEdtIsc.setText(inputNumber);
             mBinding.flowSensorTypeAtxtIsc.setText(sensorName);
-            mBinding.flowDeleteLayout.setVisibility(View.INVISIBLE);
+            mBinding.flowDeleteLayout.setVisibility(View.GONE);
             mBinding.saveTxt.setText("ADD");
         }
     }
@@ -673,7 +594,6 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         mActivity.dismissProgress();
         if (data != null) {
             handleResponse(data.split("\\*")[1].split("\\$"));
-            Log.e(TAG, "OnDataReceive: ");
         }
     }
 
@@ -687,8 +607,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                     // Alarm Low/Alarm High
                     mBinding.flowInputNumberEdtIsc.setText(splitData[3]);
                     mBinding.flowSensorTypeAtxtIsc.setText(mBinding.flowSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
-                    mBinding.flowSeqNumberAtxtIsc.setText(mBinding.flowSeqNumberAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[5])).toString());
-                    mBinding.flowFlowMeterTypeAtxtIsc.setText(mBinding.flowFlowMeterTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
+                    mBinding.flowFlowMeterTypeAtxtIsc.setText(mBinding.flowFlowMeterTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[5])).toString());
+                    mBinding.flowSeqNumberAtxtIsc.setText(mBinding.flowSeqNumberAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
                     mBinding.flowSensorActivationAtxtIsc.setText(mBinding.flowSensorActivationAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[7])).toString());
                     mBinding.flowInputLabelEdtIsc.setText(splitData[8]);
                     mBinding.flowFlowUnitAtxtIsc.setText(mBinding.flowFlowUnitAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[9])).toString());
@@ -731,8 +651,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
 
                         // Paddle wheel flow meter type
                     } else if (splitData[5].equals("2")) {
-                        mBinding.flowVolumeRateunitEdtIsc.setText(splitData[10].substring(0, 8));
-                        mBinding.flowVolumeRateunitDeciIsc.setText(splitData[10].substring(10, 13));
+                        mBinding.flowVolumeRateunitEdtIsc.setText(splitData[10].substring(0, 4));
+                        mBinding.flowVolumeRateunitDeciIsc.setText(splitData[10].substring(5, 7));
                         mBinding.flowKFactorEdtIsc.setText(splitData[11].substring(0, 7));
                         mBinding.flowKFactorDeciIsc.setText(splitData[11].substring(8, 10));
                         mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[12].substring(0, 10));
@@ -795,22 +715,23 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         switch (flagValue) {
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(toString(2, mBinding.flowInputNumberEdtIsc)),
+                        (Integer.parseInt(getStringValue(2, mBinding.flowInputNumberEdtIsc)),
                                 "0", 0, "0", "0",
                                 "0", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
+                mBinding.orpBackArrowIsc.performClick();
                 break;
 
             case 0:
             case 1:
                 InputConfigurationEntity flowEntityUpdate = new InputConfigurationEntity
-                        (Integer.parseInt(toString(2, mBinding.flowInputNumberEdtIsc)),
+                        (Integer.parseInt(getStringValue(2, mBinding.flowInputNumberEdtIsc)),
                                 mBinding.flowSensorTypeAtxtIsc.getText().toString(),
-                                0, toString(0, mBinding.flowInputLabelEdtIsc),
-                                toStringSplit(4, 2, mBinding.flowAlarmLowEdtIsc),
-                                toStringSplit(4, 2, mBinding.flowHighAlarmEdtIsc),
+                                0, getStringValue(0, mBinding.flowInputLabelEdtIsc),
+                                getDecimalValue(mBinding.flowAlarmLowEdtIsc, 10, mBinding.flowAlarmLowDeciIsc, 2),
+                                getDecimalValue(mBinding.flowHighAlarmEdtIsc, 10, mBinding.flowHighAlarmDeciIsc, 2),
                                 1);
                 List<InputConfigurationEntity> entryFlowList = new ArrayList<>();
                 entryFlowList.add(flowEntityUpdate);

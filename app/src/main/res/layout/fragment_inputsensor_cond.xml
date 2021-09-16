@@ -94,7 +94,8 @@
             <!--sensor type-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/con_sensorType_til_isc"
-                style="@style/config_AtxTil_zero">
+                style="@style/config_AtxTil_zero"
+                android:enabled="false">
 
                 <AutoCompleteTextView
                     android:id="@+id/con_sensorType_atxt_isc"

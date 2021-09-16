@@ -76,27 +76,7 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
         initAdapter();
-        switch (userType) {
-            case 1:
-                mBinding.tankInputNumber.setEnabled(false);
-                mBinding.tankSensorLabel.setEnabled(false);
-                mBinding.tankSensorType.setEnabled(false);
-                mBinding.tankOpenMessage.setEnabled(false);
-                mBinding.tankCloseMessage.setEnabled(false);
-                mBinding.tankInnerLock.setEnabled(false);
-                mBinding.tankAlarm.setEnabled(false);
-                mBinding.tankTotalTime.setEnabled(false);
-                mBinding.tankReseTime.setEnabled(false);
-                mBinding.tankSensorActivation.setVisibility(View.GONE);
-                mBinding.tankLevelRow6Isc.setVisibility(View.GONE);
-                break;
-
-            case 2:
-                mBinding.tankInputNumber.setEnabled(false);
-                mBinding.tankSensorType.setEnabled(false);
-                mBinding.tankSensorActivation.setVisibility(View.GONE);
-                break;
-        }
+        changeUi();
 
         mBinding.tankLevelSaveFabIsc.setOnClickListener(this::save);
         mBinding.tankLevelDeleteFabIsc.setOnClickListener(this::delete);
@@ -277,6 +257,32 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                 break;
         }
 
+    }
+    void changeUi(){
+        switch (userType) {
+            case 1:
+                mBinding.tankInputNumber.setEnabled(false);
+                mBinding.tankSensorLabel.setEnabled(false);
+                mBinding.tankSensorType.setEnabled(false);
+                mBinding.tankOpenMessage.setEnabled(false);
+                mBinding.tankCloseMessage.setEnabled(false);
+                mBinding.tankInnerLock.setEnabled(false);
+                mBinding.tankAlarm.setEnabled(false);
+                mBinding.tankTotalTime.setEnabled(false);
+                mBinding.tankReseTime.setEnabled(false);
+                mBinding.tankSensorActivation.setVisibility(View.GONE);
+                mBinding.tankLevelRow6Isc.setVisibility(View.GONE);
+                break;
+
+            case 2:
+                mBinding.tankInputNumber.setEnabled(false);
+                mBinding.tankSensorType.setEnabled(false);
+                mBinding.tankTotalTime.setEnabled(false);
+                mBinding.tankSensorActivation.setVisibility(View.GONE);
+                mBinding.tankLevelDeleteLayoutIsc.setVisibility(View.GONE);
+                break;
+
+        }
     }
 
 }

@@ -80,6 +80,20 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
         initAdapter();
+        changeUi();
+
+        mBinding.digitalLevelSaveFabIsc.setOnClickListener(this::save);
+        mBinding.digitalLevelDeleteFabIsc.setOnClickListener(this::delete);
+
+        mBinding.backArrowIsc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+            }
+        });
+    }
+
+    private void changeUi() {
         switch (userType) {
             case 1:
                 mBinding.digitalInputNumber.setEnabled(false);
@@ -107,16 +121,6 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
                 mBinding.digitalLevelDeleteLayoutIsc.setVisibility(View.GONE);
                 break;
         }
-
-        mBinding.digitalLevelSaveFabIsc.setOnClickListener(this::save);
-        mBinding.digitalLevelDeleteFabIsc.setOnClickListener(this::delete);
-
-        mBinding.backArrowIsc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
-            }
-        });
     }
 
     private void delete(View view) {
