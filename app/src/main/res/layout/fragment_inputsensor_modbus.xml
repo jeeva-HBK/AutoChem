@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <import type="android.view.View" />
-
         <variable
             name="modbusType"
             type="String" />
@@ -40,7 +38,8 @@
             <!--Input Number-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_inputNumber"
-                style="@style/config_Til">
+                style="@style/config_Til"
+                android:enabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/mod_bus_input_number_tie"
@@ -56,7 +55,8 @@
             <!--Sensor Type-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_sensorType"
-                style="@style/config_AtxTil">
+                style="@style/config_AtxTil"
+                android:enabled="false">
 
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_sensor_type_tie"
@@ -67,7 +67,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_sequence_number"
                 style="@style/config_AtxTil"
-                android:visibility="gone">
+                android:visibility="visible"
+                android:enabled="false">
 
                 <AutoCompleteTextView
                     android:id="@+id/modbus_sequence_number_tie"
@@ -97,7 +98,6 @@
                     android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
             <!--Modbus Type-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_modbusType"
@@ -107,7 +107,8 @@
                     android:id="@+id/mod_bus_type_tie"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Modbus Type" />
+                    android:hint="Modbus Type"
+                    style="@style/config_Atxt"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--Type of value Read-->
@@ -119,7 +120,8 @@
                     android:id="@+id/mod_bus_typeOfValueRead_tie"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Type of value Read" />
+                    android:hint="Type of value Read"
+                    style="@style/config_Atxt"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -262,8 +264,8 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_diagnostic_sweep_tie"
-                    style="@style/config_Atxt"
-                    android:hint="Diagnostic sweep" />
+                    android:hint="Diagnostic sweep"
+                    style="@style/config_Atxt"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--Diagnostic Sweep Time-->
@@ -363,7 +365,7 @@
                     style="@style/appEdtTxt"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:hint="Alarm low"
+                    android:hint="Alarm High"
                     app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -469,8 +471,8 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_unit_measurement_tie"
-                    style="@style/config_Atxt"
-                    android:hint="Measurement Unit" />
+                    android:hint="Measurement Unit"
+                    style="@style/config_Atxt"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--Sensor Activation-->
@@ -481,7 +483,6 @@
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_sensor_activation_tie"
                     style="@style/config_Atxt"
-
                     android:hint="SensorActivation" />
             </com.google.android.material.textfield.TextInputLayout>
 

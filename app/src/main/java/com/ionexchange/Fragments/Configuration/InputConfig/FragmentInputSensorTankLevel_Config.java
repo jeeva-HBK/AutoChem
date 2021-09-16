@@ -1,26 +1,9 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
-import static com.ionexchange.Others.ApplicationClass.digitalArr;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
-import static com.ionexchange.Others.ApplicationClass.userType;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +22,24 @@ import com.ionexchange.databinding.FragmentInputSensorTankLevelBinding;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ionexchange.Others.ApplicationClass.digitalArr;
+import static com.ionexchange.Others.ApplicationClass.getAdapter;
+import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
+import static com.ionexchange.Others.ApplicationClass.getStringValue;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 public class FragmentInputSensorTankLevel_Config extends Fragment implements DataReceiveCallback {
     FragmentInputSensorTankLevelBinding mBinding;
     ApplicationClass mAppClass;
@@ -46,7 +47,7 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
     String inputNumber;
     String sensorName;
     int sensorStatus;
-    String sensorSequence;
+    String sensorSequence = "1"; // todo sequenceNumber
     WaterTreatmentDb db;
     InputConfigurationDao dao;
 
@@ -75,7 +76,6 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
         initAdapter();
-        sensorSequenceNumber();
         switch (userType) {
             case 1:
                 mBinding.tankInputNumber.setEnabled(false);
@@ -96,17 +96,9 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                 mBinding.tankSensorType.setEnabled(false);
                 mBinding.tankSensorActivation.setVisibility(View.GONE);
                 break;
-
-            case 3:
-
-                break;
-
-
         }
 
-        mBinding.tankLevelSaveLayoutIsc.setOnClickListener(this::save);
         mBinding.tankLevelSaveFabIsc.setOnClickListener(this::save);
-        mBinding.tankLevelDeleteLayoutIsc.setOnClickListener(this::delete);
         mBinding.tankLevelDeleteFabIsc.setOnClickListener(this::delete);
 
         mBinding.backArrowIsc.setOnClickListener(new View.OnClickListener() {
@@ -128,53 +120,30 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
     }
 
     void sendData(int sensorStatus) {
-        sensorSequenceNumber();
         mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + "0" + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                toString(2, mBinding.tankLevelInputNumberTie) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.tankLevelInputSensorTypeTie), inputTypeArr) + SPILT_CHAR +
+                getStringValue(2, mBinding.tankLevelInputNumberTie) + SPILT_CHAR +
+                getPositionFromAtxt(2, getStringValue(mBinding.tankLevelInputSensorTypeTie), inputTypeArr) + SPILT_CHAR +
                 sensorSequence + SPILT_CHAR +
-                getPosition(1, toString(mBinding.tankLevelInputSensorSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
-                toString(0, mBinding.tankLevelInputSensorLabelTie) + SPILT_CHAR +
-                toString(3, mBinding.tankLevelInputSensorOpenMessageTie) + SPILT_CHAR +
-                toString(6, mBinding.tankLevelInputSensorCloseMessageTie) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.tankLevelInputSensorInnerLockAct), digitalArr) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.tankLevelInputSensorAlarmAct), digitalArr) + SPILT_CHAR +
-                toString(6, mBinding.tankLevelInputSensorTotalTimeTie) + SPILT_CHAR +
-                getPosition(1, toString(mBinding.tankLevelInputSensorResetTimeAct), resetCalibrationArr) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.tankLevelInputSensorSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
+                getStringValue(0, mBinding.tankLevelInputSensorLabelTie) + SPILT_CHAR +
+                getStringValue(3, mBinding.tankLevelInputSensorOpenMessageTie) + SPILT_CHAR +
+                getStringValue(6, mBinding.tankLevelInputSensorCloseMessageTie) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.tankLevelInputSensorInnerLockAct), digitalArr) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.tankLevelInputSensorAlarmAct), digitalArr) + SPILT_CHAR +
+                getStringValue(6, mBinding.tankLevelInputSensorTotalTimeTie) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.tankLevelInputSensorResetTimeAct), resetCalibrationArr) + SPILT_CHAR +
                 sensorStatus);
     }
 
-    private String getPosition(int digit, String string, String[] strArr) {
-        String j = null;
-        for (int i = 0; i < strArr.length; i++) {
-            if (string.equals(strArr[i])) {
-                j = String.valueOf(i);
-            }
-        }
-        return mAppClass.formDigits(digit, j);
-    }
-
-    private String toString(int digits, EditText editText) {
-        return mAppClass.formDigits(digits, editText.getText().toString());
-    }
-
-    private String toString(AutoCompleteTextView editText) {
-        return editText.getText().toString();
-    }
-
     private void initAdapter() {
-        mBinding.tankLevelInputSensorTypeTie.setAdapter(getAdapter(inputTypeArr));
-        mBinding.tankLevelInputSensorSensorActivationTie.setAdapter(getAdapter(sensorActivationArr));
-        mBinding.tankLevelInputSensorInnerLockAct.setAdapter(getAdapter(digitalArr));
-        mBinding.tankLevelInputSensorAlarmAct.setAdapter(getAdapter(digitalArr));
-        mBinding.tankLevelInputSensorResetTimeAct.setAdapter(getAdapter(resetCalibrationArr));
-        mBinding.tankLevelSequenceNumberTie.setAdapter(getAdapter(sensorSequenceNumber));
-    }
-
-    public ArrayAdapter<String> getAdapter(String[] strArr) {
-        return new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, strArr);
+        mBinding.tankLevelInputSensorTypeTie.setAdapter(getAdapter(inputTypeArr, getContext()));
+        mBinding.tankLevelInputSensorSensorActivationTie.setAdapter(getAdapter(sensorActivationArr, getContext()));
+        mBinding.tankLevelInputSensorInnerLockAct.setAdapter(getAdapter(digitalArr, getContext()));
+        mBinding.tankLevelInputSensorAlarmAct.setAdapter(getAdapter(digitalArr, getContext()));
+        mBinding.tankLevelInputSensorResetTimeAct.setAdapter(getAdapter(resetCalibrationArr, getContext()));
+        mBinding.tankLevelSequenceNumberTie.setAdapter(getAdapter(sensorSequenceNumber, getContext()));
     }
 
     @Override
@@ -239,47 +208,42 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +"0"+SPILT_CHAR+ READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +inputNumber);
         } else {
             mBinding.tankLevelInputNumberTie.setText(inputNumber);
-
             mBinding.tankLevelInputSensorTypeTie.setText(sensorName);
-            mBinding.tankLevelDeleteLayoutIsc.setVisibility(View.INVISIBLE);
+            mBinding.tankLevelDeleteLayoutIsc.setVisibility(View.GONE);
             mBinding.tankLevelSaveTxtIsc.setText("ADD");
         }
     }
 
     private boolean validField() {
-        if (isEmpty(mBinding.tankLevelInputNumberTie)) {
-            mAppClass.showSnackBar(getContext(), "InputNumber cannot be Empty");
-            return false;
-        } else if (isEmpty(mBinding.tankLevelInputSensorLabelTie)) {
+        if (isFieldEmpty(mBinding.tankLevelInputSensorLabelTie)) {
             mAppClass.showSnackBar(getContext(), "InputLabel cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.tankLevelInputSensorOpenMessageTie)) {
+        } else if (isFieldEmpty(mBinding.tankLevelInputSensorTypeTie)) {
+            mAppClass.showSnackBar(getContext(), "Sensor Type cannot be Empty");
+            return false;
+        } else if (isFieldEmpty(mBinding.tankLevelInputSensorInnerLockAct)) {
+            mAppClass.showSnackBar(getContext(), "Interlock cannot be Empty");
+            return false;
+        } else if (isFieldEmpty(mBinding.tankLevelInputSensorOpenMessageTie)) {
             mAppClass.showSnackBar(getContext(), "Open message cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.tankLevelInputSensorCloseMessageTie)) {
+        } else if (isFieldEmpty(mBinding.tankLevelInputSensorCloseMessageTie)) {
             mAppClass.showSnackBar(getContext(), "Close message cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.tankLevelInputSensorTotalTimeTie)) {
+        } else if (isFieldEmpty(mBinding.tankLevelInputSensorResetTimeAct)) {
+            mAppClass.showSnackBar(getContext(), "Reset Time cannot be Empty");
+            return false;
+        } else if (isFieldEmpty(mBinding.tankLevelInputSensorTotalTimeTie)) {
             mAppClass.showSnackBar(getContext(), "Total time cannot be Empty");
+            return false;
+        } else if (isFieldEmpty(mBinding.tankLevelInputSensorAlarmAct)) {
+            mAppClass.showSnackBar(getContext(), "Alarm cannot be Empty");
+            return false;
+        } else if (isFieldEmpty(mBinding.tankLevelInputSensorSensorActivationTie)) {
+            mAppClass.showSnackBar(getContext(), "Sensor Activation cannot be Empty");
             return false;
         }
         return true;
-    }
-
-    private Boolean isEmpty(EditText editText) {
-        if (editText.getText() == null || editText.getText().toString().equals("")) {
-            editText.setError("Field shouldn't empty !");
-            return true;
-        }
-        return false;
-    }
-
-    private Boolean isEmpty(AutoCompleteTextView editText) {
-        if (editText.getText() == null || editText.getText().toString().equals("")) {
-            editText.setError("Field shouldn't empty !");
-            return true;
-        }
-        return false;
     }
 
     public void updateToDb(List<InputConfigurationEntity> entryList) {
@@ -292,18 +256,19 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
         switch (flagValue) {
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(toString(2, mBinding.tankLevelInputNumberTie)), "0", 0, "0", "0", "0", 0);
+                        (Integer.parseInt(getStringValue(2, mBinding.tankLevelInputNumberTie)), "0", 0, "0", "0", "0", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
+                mBinding.backArrowIsc.performClick();
                 break;
 
             case 0:
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                        (Integer.parseInt(toString(2, mBinding.tankLevelInputNumberTie)),
+                        (Integer.parseInt(getStringValue(2, mBinding.tankLevelInputNumberTie)),
                                 mBinding.tankLevelInputSensorTypeTie.getText().toString(),
-                                0, toString(0, mBinding.tankLevelInputSensorLabelTie),
+                                0, getStringValue(0, mBinding.tankLevelInputSensorLabelTie),
                                 "N/A",
                                 "N/A", 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
@@ -314,15 +279,4 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
 
     }
 
-    void sensorSequenceNumber() {
-        if (Integer.parseInt(inputNumber) > 13 && Integer.parseInt(inputNumber) < 21) {
-            mBinding.tankLevelSequenceNumber.setVisibility(View.VISIBLE);
-            if (!mBinding.tankLevelSequenceNumberTie.getText().toString().isEmpty()) {
-                sensorSequence = getPosition(1, toString(mBinding.tankLevelSequenceNumberTie), sensorSequenceNumber);
-            }
-        } else {
-            mBinding.tankLevelSequenceNumber.setVisibility(View.GONE);
-            sensorSequence = "0";
-        }
-    }
 }

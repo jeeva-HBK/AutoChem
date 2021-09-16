@@ -255,7 +255,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
             case "Flow/Water Meter":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorFlow_config(inputNumber, sensorName, 0)).commit();
                 break;
-            case "Digital Sensor":
+            case "Digital Input":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorDigital_config(inputNumber, sensorName, 0)).commit();
                 break;
             case "Tank Level":

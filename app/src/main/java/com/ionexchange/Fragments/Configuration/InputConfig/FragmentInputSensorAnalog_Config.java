@@ -112,10 +112,8 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                 break;
         }
 
-        mBinding.analogSaveLayoutIsc.setOnClickListener(this::save);
         mBinding.analogSaveFabIsc.setOnClickListener(this::save);
         mBinding.analogDeleteFabIsc.setOnClickListener(this::delete);
-        mBinding.analogDeleteLayoutIsc.setOnClickListener(this::delete);
 
         mBinding.backArrowIsc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -289,7 +287,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
             return false;
         } else if (Float.parseFloat(getDecimalValue(mBinding.analogMinValueTie, 2, mBinding.analogMinValueIsc, 2)) >=
                 Float.parseFloat(getDecimalValue(mBinding.analogMaxValueTie, 2, mBinding.analogMaxValueIsc, 2))) {
-            mAppClass.showSnackBar(getContext(), "Alarm High Should be Greater Than Alarm Low");
+            mAppClass.showSnackBar(getContext(), "Max Value Should be Greater Than Min Value");
             return false;
         }
         return true;

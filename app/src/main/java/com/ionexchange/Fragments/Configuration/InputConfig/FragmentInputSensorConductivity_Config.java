@@ -88,6 +88,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
         dao = db.inputConfigurationDao();
         userManagement();
         initAdapters();
+
         mBinding.conSaveFabIsc.setOnClickListener(this::save);
         mBinding.conDeleteFabIsc.setOnClickListener(this::delete);
 
