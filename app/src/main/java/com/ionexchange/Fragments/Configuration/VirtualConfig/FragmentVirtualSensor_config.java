@@ -1,20 +1,5 @@
 package com.ionexchange.Fragments.Configuration.VirtualConfig;
 
-import static com.ionexchange.Others.ApplicationClass.calculationArr;
-import static com.ionexchange.Others.ApplicationClass.findDecimal;
-import static com.ionexchange.Others.ApplicationClass.formDigits;
-import static com.ionexchange.Others.ApplicationClass.inputSensors;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.userType;
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.VIRTUAL_INPUT;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +26,20 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ionexchange.Others.ApplicationClass.calculationArr;
+import static com.ionexchange.Others.ApplicationClass.formDigits;
+import static com.ionexchange.Others.ApplicationClass.inputSensors;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.VIRTUAL_INPUT;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentVirtualSensor_config extends Fragment implements DataReceiveCallback {
     FragmentVirtualsensorConfigBinding mBinding;
@@ -283,7 +282,7 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
 
     void virtualEntity() {
         VirtualConfigurationEntity virtualConfigurationEntity = new VirtualConfigurationEntity(
-                sensorInputNo, 0, toString(0, mBinding.labelViEDT),
+                sensorInputNo, "", 0, toString(0, mBinding.labelViEDT),
                 toString(7, mBinding.lowAlarmViEDT) + "." + toString(2, mBinding.lowAlarmViDec),
                 toString(7, mBinding.highAlarmViEDT) + "." + toString(2, mBinding.highAlarmDec));
         List<VirtualConfigurationEntity> entryListUpdate = new ArrayList<>();

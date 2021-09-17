@@ -78,7 +78,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
                 updateToDb(entryListUpdate);
             }
         }
-        mBinding.rightArrowIsBtn.setVisibility((dao.getInputConfigurationEntityFlagKeyList(0).size() / 9) > 0 ? View.VISIBLE : View.GONE);
+        mBinding.rightArrowIsBtn.setVisibility((dao.getInputConfigurationEntityFlagKeyList(0).size() / 9) > 0 ? View.VISIBLE : View.INVISIBLE);
         mBinding.addsensorIsBtn.setOnClickListener(this);
 
         mBinding.inputsRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
@@ -89,7 +89,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
             public void onClick(View view) {
                 currentPage--;
                 mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this, dao.getInputConfigurationEntityFlagKeyList(0, 9, pageOffset = pageOffset - 9)));
-                mBinding.leftArrowIsBtn.setVisibility(currentPage <= 0 ? View.GONE : View.VISIBLE);
+                mBinding.leftArrowIsBtn.setVisibility(currentPage <= 0 ? View.INVISIBLE : View.VISIBLE);
                 mBinding.rightArrowIsBtn.setVisibility(View.VISIBLE);
             }
         });
@@ -100,7 +100,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
                 currentPage++;
                 mBinding.leftArrowIsBtn.setVisibility(View.VISIBLE);
                 mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this, dao.getInputConfigurationEntityFlagKeyList(0, 9, pageOffset = pageOffset + 9)));
-                mBinding.rightArrowIsBtn.setVisibility(dao.getInputConfigurationEntityFlagKeyList(0, 9, pageOffset + 9).isEmpty() ? View.GONE : View.VISIBLE);
+                mBinding.rightArrowIsBtn.setVisibility(dao.getInputConfigurationEntityFlagKeyList(0, 9, pageOffset + 9).isEmpty() ? View.INVISIBLE : View.VISIBLE);
             }
         });
     }

@@ -1019,13 +1019,11 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
     public void outputConfigurationEntity() {
         OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
-                (outputSensorNo, toString(0, mBinding.outputLabelOsEDT),
+                (outputSensorNo,"", toString(0, mBinding.outputLabelOsEDT),
                         mBinding.funtionModeOsATXT.getText().toString(),
                         mBinding.modeOsATXT.getText().toString());
         List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(entityUpdate);
         updateToDb(entryListUpdate);
-
-
     }
 }

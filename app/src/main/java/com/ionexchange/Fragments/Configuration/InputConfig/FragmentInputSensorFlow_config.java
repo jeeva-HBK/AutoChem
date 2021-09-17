@@ -185,12 +185,12 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 mBinding.flowVolumeRateunitTilIsc.setEnabled(false);
                 mBinding.flowVolumeRateunitDeciIsc.setEnabled(false);
 
-                //paddle wheel
+                // paddle wheel
                 mBinding.flowVolumeRateunitTilIsc.setEnabled(false);
                 mBinding.flowVolumeRateunitDeciIsc.setEnabled(false);
                 mBinding.flowKFactorTilIsc.setEnabled(false);
 
-                //feed monitor
+                // feed monitor
                 mBinding.flowAlarmModeTilIsc.setEnabled(false);
                 mBinding.flowTotalAlarmModeTilIsc.setEnabled(false);
                 mBinding.flowAlarmDelayTilIsc.setEnabled(false);
@@ -204,7 +204,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     private void delete(View view) {
         switch (Integer.parseInt(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr))) {
             case 0:
-                if (validation()) {
+                if (validAnalog()) {
                     sendAnalogPacket(2);
                     packetId = 0;
                 }
@@ -233,7 +233,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     private void save(View view) {
         switch (Integer.parseInt(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr))) {
             case 0:
-                if (validation()) {
+                if (validAnalog()) {
                     sendAnalogPacket(sensorStatus);
                     packetId = 0;
                 }
@@ -416,7 +416,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         return true;
     }
 
-    private boolean validation() {
+    private boolean validAnalog() {
         if (isFieldEmpty(mBinding.flowFlowMeterTypeAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Flow Meter Type cannot be Empty");
             return false;

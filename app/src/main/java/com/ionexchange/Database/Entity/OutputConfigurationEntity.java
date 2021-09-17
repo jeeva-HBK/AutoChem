@@ -10,6 +10,9 @@ public class OutputConfigurationEntity {
     @ColumnInfo(name = "outputNumber")
     public int outputHardwareNo;
 
+    @ColumnInfo(name = "outputType")
+    public String outputType;
+
     @ColumnInfo(name = "outputLabel")
     public String outputLabel;
 
@@ -20,14 +23,12 @@ public class OutputConfigurationEntity {
     public String outputStatus;
 
 
-
-    public OutputConfigurationEntity(int outputHardwareNo, String outputLabel,
-                                     String outputMode, String outputStatus) {
+    public OutputConfigurationEntity(int outputHardwareNo, String outputType, String outputLabel, String outputMode, String outputStatus) {
         this.outputHardwareNo = outputHardwareNo;
+        this.outputType = outputType;
         this.outputLabel = outputLabel;
         this.outputMode = outputMode;
         this.outputStatus = outputStatus;
-
     }
 
     public int getOutputHardwareNo() {
@@ -36,6 +37,14 @@ public class OutputConfigurationEntity {
 
     public void setOutputHardwareNo(int outputHardwareNo) {
         this.outputHardwareNo = outputHardwareNo;
+    }
+
+    public String getOutputType() {
+        return outputType;
+    }
+
+    public void setOutputType(String outputType) {
+        this.outputType = outputType;
     }
 
     public String getOutputLabel() {
@@ -61,6 +70,6 @@ public class OutputConfigurationEntity {
     public void setOutputStatus(String outputStatus) {
         this.outputStatus = outputStatus;
     }
-
-
 }
+
+

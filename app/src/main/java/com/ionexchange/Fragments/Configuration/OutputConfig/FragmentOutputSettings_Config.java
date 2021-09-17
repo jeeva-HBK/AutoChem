@@ -47,7 +47,9 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
         if (dao.getOutputConfigurationEntityList().isEmpty()) {
             for (int i = 1; i < 23; i++) {
                 OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
-                        (i, "N/A", "N/A", "N/A");
+                        (i, "output-" + i, "N/A",
+                                "N/A",
+                                "N/A");
                 List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);

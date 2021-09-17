@@ -18,6 +18,12 @@ public class MainConfigurationEntity {
     @ColumnInfo(name = "window_no")
     public int windowNo;
 
+    @ColumnInfo(name = "page_No")
+    public int pageNo;
+
+    @ColumnInfo(name = "hardware_no")
+    public int hardware_no;
+
     @ColumnInfo(name = "inputType")
     public String inputType;
 
@@ -27,18 +33,17 @@ public class MainConfigurationEntity {
     @ColumnInfo(name = "sensor_name")
     public String sensorName;
 
-    @ColumnInfo(name = "macId")
-    public String macId;
-
-    public MainConfigurationEntity(int screenNo, int layoutNo, int windowNo, String inputType,
-                                   int sensorSequenceNo, String sensorName, String macId) {
+    public MainConfigurationEntity(int sNo, int screenNo, int layoutNo,
+                                   int windowNo, int pageNo, int hardware_no, String inputType, int sensorSequenceNo, String sensorName) {
+        this.sNo = sNo;
         this.screenNo = screenNo;
         this.layoutNo = layoutNo;
         this.windowNo = windowNo;
+        this.pageNo = pageNo;
+        this.hardware_no = hardware_no;
         this.inputType = inputType;
         this.sensorSequenceNo = sensorSequenceNo;
         this.sensorName = sensorName;
-        this.macId = macId;
     }
 
     public int getsNo() {
@@ -73,6 +78,22 @@ public class MainConfigurationEntity {
         this.windowNo = windowNo;
     }
 
+    public int getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(int pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public int getHardware_no() {
+        return hardware_no;
+    }
+
+    public void setHardware_no(int hardware_no) {
+        this.hardware_no = hardware_no;
+    }
+
     public String getInputType() {
         return inputType;
     }
@@ -95,13 +116,5 @@ public class MainConfigurationEntity {
 
     public void setSensorName(String sensorName) {
         this.sensorName = sensorName;
-    }
-
-    public String getMacId() {
-        return macId;
-    }
-
-    public void setMacId(String macId) {
-        this.macId = macId;
     }
 }

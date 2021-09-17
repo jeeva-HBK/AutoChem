@@ -24,4 +24,7 @@ public interface InputConfigurationDao {
     @Query("select * FROM inputConfigurationEntity WHERE flagKey = :flagKey ")
     List<InputConfigurationEntity> getInputConfigurationEntityFlagKeyList(int flagKey);
 
+    @Query("select * FROM inputConfigurationEntity WHERE  hardwareNo BETWEEN :hardwareTo AND :hardwareNo")
+    List<InputConfigurationEntity> getInputHardWareNoConfigurationEntityList(int hardwareTo, int hardwareNo);
+
 }

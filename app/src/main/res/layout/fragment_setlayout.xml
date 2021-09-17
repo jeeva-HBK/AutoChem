@@ -22,18 +22,65 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            app:layout_constraintTop_toTopOf="parent" >
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.appcompat.widget.Toolbar>
+
+
         <TextView
-            android:id="@+id/toolbar_title"
+            android:id="@+id/pageNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Set Layout"
-            android:textColor="@android:color/white"
-            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-            android:layout_gravity="center"
-            />
-        </androidx.appcompat.widget.Toolbar>
-        <!--Layout Buttons-->
+            android:layout_marginEnd="20sp"
+            android:textColor="@color/colorSecondary"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/toolbar"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar"
+            app:layout_constraintEnd_toEndOf="@id/toolbar"
+            app:layout_constraintTop_toTopOf="@id/toolbar" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/leftArrow_is_btn"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:backgroundTint="@color/colorSecondary"
+            android:text=""
+            android:layout_marginRight="10dp"
+            android:visibility="gone"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_back"
+            app:iconGravity="textStart"
+            app:iconTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintEnd_toStartOf="@+id/rightArrow_is_btn"
+            app:layout_constraintTop_toTopOf="@+id/toolbar" />
+
+        <!--ButtonRight-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/rightArrow_is_btn"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="@color/colorSecondary"
+            android:text=""
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_back_right"
+            app:iconGravity="textStart"
+            app:iconTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintEnd_toEndOf="@+id/toolbar"
+            app:layout_constraintTop_toTopOf="@+id/toolbar" />
+
+        <ImageView
+            android:id="@+id/save_btn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/toolbar" />
+
         <RadioGroup
             android:id="@+id/radio_group"
             android:layout_width="match_parent"
@@ -115,8 +162,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/saveLayout_inputSettings"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/radio_group"
             app:layout_constraintStart_toStartOf="@+id/radio_group"
             app:layout_constraintTop_toBottomOf="@+id/radio_group">
@@ -136,7 +183,7 @@
                     android:id="@+id/layout1_view1"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout1view1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -147,13 +194,51 @@
                     android:id="@+id/layout1_view1Txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@id/layout1_view1"
-                    app:layout_constraintEnd_toEndOf="@id/layout1_view1"
+                    android:layout_margin="20sp"
+                    android:gravity="center"
+                    android:text="WINDOW\n1"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/layout1_view1"
                     app:layout_constraintTop_toTopOf="@id/layout1_view1" />
+
+                <TextView
+                    android:id="@+id/layout_1_TextView_1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout1_view1"
+                    app:layout_constraintEnd_toEndOf="@+id/layout1_view1"
+                    app:layout_constraintStart_toStartOf="@+id/layout1_view1"
+                    app:layout_constraintTop_toBottomOf="@id/layout1_view1Txt" />
+
+
+                <TextView
+                    android:id="@+id/layout_page_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout1_view1"
+                    app:layout_constraintStart_toStartOf="@+id/layout1_view1Txt" />
+
+                <View
+                    android:id="@+id/layout_1_delete_1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout1_view1Txt"
+                    app:layout_constraintEnd_toEndOf="@+id/layout1_view1"
+                    app:layout_constraintTop_toTopOf="@+id/layout1_view1Txt" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -173,7 +258,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginBottom="2.5dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout2view1"
                     app:layout_constraintBottom_toTopOf="@id/layout2_view2"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -181,15 +266,54 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/layout2_txt1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@id/layout2_view1"
-                    app:layout_constraintEnd_toEndOf="@id/layout2_view1"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n1"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/layout2_view1"
                     app:layout_constraintTop_toTopOf="@id/layout2_view1" />
+
+
+                <TextView
+                    android:id="@+id/layout_2_TextView_1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout2_view1"
+                    app:layout_constraintEnd_toEndOf="@+id/layout2_view1"
+                    app:layout_constraintStart_toStartOf="@+id/layout2_view1"
+                    app:layout_constraintTop_toBottomOf="@id/layout2_txt1" />
+
+                <View
+                    android:id="@+id/layout_2_delete_1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout2_txt1"
+                    app:layout_constraintEnd_toEndOf="@+id/layout2_view1"
+                    app:layout_constraintTop_toTopOf="@+id/layout2_txt1" />
+
+                <TextView
+                    android:id="@+id/layout_2_page_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout2_view1"
+                    app:layout_constraintStart_toStartOf="@+id/layout2_txt1" />
 
 
                 <View
@@ -197,7 +321,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="2.5dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout2view2"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -205,15 +329,56 @@
                     app:layout_constraintTop_toBottomOf="@id/layout2_view1" />
 
                 <TextView
+                    android:id="@+id/layout_2_txt_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@id/layout2_view2"
-                    app:layout_constraintEnd_toEndOf="@id/layout2_view2"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n2"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/layout2_view2"
                     app:layout_constraintTop_toTopOf="@id/layout2_view2" />
+
+                <TextView
+                    android:id="@+id/layout_2_TextView_2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout2_view2"
+                    app:layout_constraintEnd_toEndOf="@+id/layout2_view2"
+                    app:layout_constraintStart_toStartOf="@+id/layout2_view2"
+                    app:layout_constraintTop_toBottomOf="@id/layout_2_txt_2" />
+
+
+
+
+                <TextView
+                    android:id="@+id/layout_2_page_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout2_view2"
+                    app:layout_constraintStart_toStartOf="@+id/layout_2_txt_2" />
+
+                <View
+                    android:id="@+id/layout_2_delete_2"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_2_txt_2"
+                    app:layout_constraintEnd_toEndOf="@+id/layout2_view2"
+                    app:layout_constraintTop_toTopOf="@+id/layout_2_txt_2" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!--Layout-3-->
@@ -233,7 +398,7 @@
                     android:layout_height="0dp"
                     android:layout_marginEnd="2.5dp"
                     android:layout_marginBottom="2.5dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout3view1"
                     app:layout_constraintBottom_toTopOf="@+id/layout3_view3"
                     app:layout_constraintEnd_toStartOf="@+id/layout3_view2"
@@ -242,24 +407,64 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView14"
+                    android:id="@+id/layout3_txt_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@id/layout3_view1"
-                    app:layout_constraintEnd_toEndOf="@id/layout3_view1"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n1"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/layout3_view1"
                     app:layout_constraintTop_toTopOf="@id/layout3_view1" />
 
+
+                <TextView
+                    android:id="@+id/layout_3_TextView_1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout3_view1"
+                    app:layout_constraintEnd_toEndOf="@+id/layout3_view1"
+                    app:layout_constraintStart_toStartOf="@+id/layout3_view1"
+                    app:layout_constraintTop_toBottomOf="@id/layout3_txt_1" />
+
+
+
+                <TextView
+                    android:id="@+id/layout_3_page_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout3_view1"
+                    app:layout_constraintStart_toStartOf="@+id/layout3_txt_1" />
+
+
+                <View
+                    android:id="@+id/layout_3_delete_1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout3_txt_1"
+                    app:layout_constraintEnd_toEndOf="@+id/layout3_view1"
+                    app:layout_constraintTop_toTopOf="@+id/layout3_txt_1" />
 
                 <View
                     android:id="@+id/layout3_view2"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="2.5dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout3view2"
                     app:layout_constraintBottom_toBottomOf="@+id/layout3_view1"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -268,23 +473,61 @@
                     app:layout_constraintTop_toTopOf="@+id/layout3_view1" />
 
                 <TextView
+                    android:id="@+id/layout_3_txt_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@id/layout3_view2"
-                    app:layout_constraintEnd_toEndOf="@id/layout3_view2"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n2"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/layout3_view2"
                     app:layout_constraintTop_toTopOf="@id/layout3_view2" />
 
+                <TextView
+                    android:id="@+id/layout_3_TextView_2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout3_view2"
+                    app:layout_constraintEnd_toEndOf="@+id/layout3_view2"
+                    app:layout_constraintStart_toStartOf="@+id/layout3_view2"
+                    app:layout_constraintTop_toBottomOf="@id/layout_3_txt_2" />
+
+                <TextView
+                    android:id="@+id/layout_3_page_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout_3_TextView_2"
+                    app:layout_constraintStart_toStartOf="@+id/layout_3_txt_2" />
+
+
+                <View
+                    android:id="@+id/layout_3_delete_2"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_3_txt_2"
+                    app:layout_constraintEnd_toEndOf="@+id/layout3_view2"
+                    app:layout_constraintTop_toTopOf="@+id/layout_3_txt_2" />
 
                 <View
                     android:id="@+id/layout3_view3"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="2.5dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout3view3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -293,16 +536,55 @@
                     app:layout_constraintTop_toBottomOf="@+id/layout3_view1" />
 
                 <TextView
-                    android:id="@+id/textView15"
+                    android:id="@+id/layout_3_txt_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@id/layout3_view3"
-                    app:layout_constraintEnd_toEndOf="@id/layout3_view3"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n3"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/layout3_view3"
                     app:layout_constraintTop_toTopOf="@id/layout3_view3" />
+
+                <TextView
+                    android:id="@+id/layout_3_TextView_3"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout3_view3"
+                    app:layout_constraintEnd_toEndOf="@+id/layout3_view3"
+                    app:layout_constraintStart_toStartOf="@+id/layout3_view3"
+                    app:layout_constraintTop_toBottomOf="@id/layout_3_txt_3" />
+
+
+                <TextView
+                    android:id="@+id/layout_3_page_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout3_view3"
+                    app:layout_constraintStart_toStartOf="@+id/layout_3_txt_3" />
+
+
+                <View
+                    android:id="@+id/layout_3_delete_3"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_3_txt_3"
+                    app:layout_constraintEnd_toEndOf="@+id/layout3_view3"
+                    app:layout_constraintTop_toTopOf="@+id/layout_3_txt_3" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -322,7 +604,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginRight="2.5dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout4view1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/layout4_view2"
@@ -330,16 +612,54 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/layout_4_txt_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@id/layout4_view1"
-                    app:layout_constraintEnd_toEndOf="@id/layout4_view1"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n1"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/layout4_view1"
                     app:layout_constraintTop_toTopOf="@id/layout4_view1" />
 
+
+                <TextView
+                    android:id="@+id/layout_4_TextView_1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout4_view1"
+                    app:layout_constraintEnd_toEndOf="@+id/layout4_view1"
+                    app:layout_constraintStart_toStartOf="@+id/layout4_view1"
+                    app:layout_constraintTop_toBottomOf="@id/layout_4_txt_1" />
+
+                <TextView
+                    android:id="@+id/layout_4_page_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout4_view1"
+                    app:layout_constraintStart_toStartOf="@+id/layout_4_txt_1" />
+
+                <View
+                    android:id="@+id/layout_4_delete_1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_4_txt_1"
+                    app:layout_constraintEnd_toEndOf="@+id/layout4_view1"
+                    app:layout_constraintTop_toTopOf="@+id/layout_4_txt_1" />
 
                 <View
                     android:id="@+id/layout4_view2"
@@ -347,7 +667,7 @@
                     android:layout_height="0dp"
                     android:layout_marginStart="2.5dp"
                     android:layout_marginBottom="2.5dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout4view2"
                     app:layout_constraintBottom_toTopOf="@id/layout4_layout3"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -355,23 +675,62 @@
                     app:layout_constraintTop_toTopOf="@id/layout4_view1" />
 
                 <TextView
+                    android:id="@+id/layout_4_txt_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@id/layout4_view2"
-                    app:layout_constraintEnd_toEndOf="@id/layout4_view2"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n2"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/layout4_view2"
                     app:layout_constraintTop_toTopOf="@id/layout4_view2" />
 
+                <TextView
+                    android:id="@+id/layout_4_TextView_2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout4_view2"
+                    app:layout_constraintEnd_toEndOf="@+id/layout4_view2"
+                    app:layout_constraintStart_toStartOf="@+id/layout4_view2"
+                    app:layout_constraintTop_toBottomOf="@id/layout_4_txt_2" />
+
+
+                <TextView
+                    android:id="@+id/layout_4_page_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout4_view2"
+                    app:layout_constraintStart_toStartOf="@+id/layout_4_txt_2" />
+
+
+                <View
+                    android:id="@+id/layout_4_delete_2"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_4_txt_2"
+                    app:layout_constraintEnd_toEndOf="@+id/layout4_view2"
+                    app:layout_constraintTop_toTopOf="@+id/layout_4_txt_2" />
 
                 <View
                     android:id="@+id/layout4_layout3"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="2.5dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout4view3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/layout4_view2"
@@ -379,15 +738,55 @@
                     app:layout_constraintTop_toBottomOf="@id/layout4_view2" />
 
                 <TextView
+                    android:id="@+id/layout_4_txt_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@id/layout4_layout3"
-                    app:layout_constraintEnd_toEndOf="@id/layout4_layout3"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n3"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/layout4_layout3"
                     app:layout_constraintTop_toTopOf="@id/layout4_layout3" />
+
+                <TextView
+                    android:id="@+id/layout_4_TextView_3"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout4_layout3"
+                    app:layout_constraintEnd_toEndOf="@+id/layout4_layout3"
+                    app:layout_constraintStart_toStartOf="@+id/layout4_layout3"
+                    app:layout_constraintTop_toBottomOf="@id/layout_4_txt_3" />
+
+
+                <TextView
+                    android:id="@+id/layout_4_page_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout4_layout3"
+                    app:layout_constraintStart_toStartOf="@+id/layout_4_txt_3" />
+
+
+                <View
+                    android:id="@+id/layout_4_delete_3"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_4_txt_3"
+                    app:layout_constraintEnd_toEndOf="@+id/layout4_layout3"
+                    app:layout_constraintTop_toTopOf="@+id/layout_4_txt_3" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -408,7 +807,7 @@
                     android:layout_height="0dp"
                     android:layout_marginEnd="2.5dp"
                     android:layout_marginBottom="2.5dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout5view1"
                     app:layout_constraintBottom_toTopOf="@id/layout5_view3"
                     app:layout_constraintEnd_toStartOf="@id/layout5_view2"
@@ -416,23 +815,61 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/layout_5_txt_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@id/layout5_view1"
-                    app:layout_constraintEnd_toEndOf="@id/layout5_view1"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n1"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/layout5_view1"
                     app:layout_constraintTop_toTopOf="@id/layout5_view1" />
 
+
+                <TextView
+                    android:id="@+id/layout_5_TextView_1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout5_view1"
+                    app:layout_constraintEnd_toEndOf="@+id/layout5_view1"
+                    app:layout_constraintStart_toStartOf="@+id/layout5_view1"
+                    app:layout_constraintTop_toBottomOf="@id/layout_5_txt_1" />
+
+                <TextView
+                    android:id="@+id/layout_5_page_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout5_view1"
+                    app:layout_constraintStart_toStartOf="@+id/layout_5_txt_1" />
+
+                <View
+                    android:id="@+id/layout_5_delete_1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_5_txt_1"
+                    app:layout_constraintEnd_toEndOf="@+id/layout5_view1"
+                    app:layout_constraintTop_toTopOf="@+id/layout_5_txt_1" />
 
                 <View
                     android:id="@+id/layout5_view2"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="2.5dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout5view2"
                     app:layout_constraintBottom_toBottomOf="@+id/layout5_view1"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -440,23 +877,60 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/layout_5_txt_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@id/layout5_view2"
-                    app:layout_constraintEnd_toEndOf="@id/layout5_view2"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n2"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/layout5_view2"
                     app:layout_constraintTop_toTopOf="@id/layout5_view2" />
 
+                <TextView
+                    android:id="@+id/layout_5_TextView_2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout5_view2"
+                    app:layout_constraintEnd_toEndOf="@+id/layout5_view2"
+                    app:layout_constraintStart_toStartOf="@+id/layout5_view2"
+                    app:layout_constraintTop_toBottomOf="@id/layout_5_txt_2" />
+
+                <TextView
+                    android:id="@+id/layout_5_page_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout5_view2"
+                    app:layout_constraintStart_toStartOf="@+id/layout_5_txt_2" />
+
+                <View
+                    android:id="@+id/layout_5_delete_2"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_5_txt_2"
+                    app:layout_constraintEnd_toEndOf="@+id/layout5_view2"
+                    app:layout_constraintTop_toTopOf="@+id/layout_5_txt_2" />
 
                 <View
                     android:id="@+id/layout5_view3"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="2.5dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout5view3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/layout5_view1"
@@ -464,22 +938,61 @@
                     app:layout_constraintTop_toBottomOf="@id/layout5_view1" />
 
                 <TextView
+                    android:id="@+id/layout_5_txt_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@id/layout5_view3"
-                    app:layout_constraintEnd_toEndOf="@id/layout5_view3"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n3"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/layout5_view3"
                     app:layout_constraintTop_toTopOf="@id/layout5_view3" />
 
+
+                <TextView
+                    android:id="@+id/layout_5_TextView_3"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout5_view3"
+                    app:layout_constraintEnd_toEndOf="@+id/layout5_view3"
+                    app:layout_constraintStart_toStartOf="@+id/layout5_view3"
+                    app:layout_constraintTop_toBottomOf="@id/layout_5_txt_3" />
+
+
+                <TextView
+                    android:id="@+id/layout_5_page_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout5_view3"
+                    app:layout_constraintStart_toStartOf="@+id/layout_5_txt_3" />
+
+                <View
+                    android:id="@+id/layout_5_delete_3"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_5_txt_3"
+                    app:layout_constraintEnd_toEndOf="@+id/layout5_view3"
+                    app:layout_constraintTop_toTopOf="@+id/layout_5_txt_3" />
 
                 <View
                     android:id="@+id/layout5_view4"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout5view4"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/layout5_view2"
@@ -487,16 +1000,56 @@
                     app:layout_constraintTop_toTopOf="@+id/layout5_view3" />
 
                 <TextView
+                    android:id="@+id/layout_5_text_5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="4"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@id/layout5_view4"
-                    app:layout_constraintEnd_toEndOf="@id/layout5_view4"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n4"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/layout5_view4"
                     app:layout_constraintTop_toTopOf="@id/layout5_view4" />
 
+
+                <TextView
+                    android:id="@+id/layout_5_TextView_4"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout5_view4"
+                    app:layout_constraintEnd_toEndOf="@+id/layout5_view4"
+                    app:layout_constraintStart_toStartOf="@+id/layout5_view4"
+                    app:layout_constraintTop_toBottomOf="@id/layout_5_text_5" />
+
+
+                <TextView
+                    android:id="@+id/layout_5_page_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout5_view4"
+                    app:layout_constraintStart_toStartOf="@+id/layout_5_text_5" />
+
+
+                <View
+                    android:id="@+id/layout_5_delete_4"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_5_text_5"
+                    app:layout_constraintEnd_toEndOf="@+id/layout5_view4"
+                    app:layout_constraintTop_toTopOf="@+id/layout_5_text_5" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -517,7 +1070,7 @@
                     android:layout_height="0dp"
                     android:layout_marginEnd="2.5dp"
                     android:layout_marginBottom="2.5dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout6view1"
                     app:layout_constraintBottom_toTopOf="@+id/layout6_view4"
                     app:layout_constraintEnd_toStartOf="@+id/layout6_view2"
@@ -526,15 +1079,54 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/layout_6_text_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n1"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/layout6_view1"
+                    app:layout_constraintTop_toTopOf="@+id/layout6_view1" />
+
+                <TextView
+                    android:id="@+id/layout_6_TextView_1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/layout6_view1"
                     app:layout_constraintEnd_toEndOf="@+id/layout6_view1"
                     app:layout_constraintStart_toStartOf="@+id/layout6_view1"
-                    app:layout_constraintTop_toTopOf="@+id/layout6_view1" />
+                    app:layout_constraintTop_toBottomOf="@id/layout_6_text_1" />
+
+
+                <TextView
+                    android:id="@+id/layout_6_page_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout6_view1"
+                    app:layout_constraintStart_toStartOf="@+id/layout_6_text_1" />
+
+                <View
+                    android:id="@+id/layout_6_delete_1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_6_text_1"
+                    app:layout_constraintEnd_toEndOf="@+id/layout6_view1"
+                    app:layout_constraintTop_toTopOf="@+id/layout_6_text_1" />
 
                 <View
                     android:id="@+id/layout6_view2"
@@ -542,7 +1134,7 @@
                     android:layout_height="0dp"
                     android:layout_marginStart="2.5dp"
                     android:layout_marginEnd="2.5dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout6view2"
                     app:layout_constraintBottom_toBottomOf="@+id/layout6_view1"
                     app:layout_constraintEnd_toStartOf="@+id/layout6_view3"
@@ -551,22 +1143,61 @@
                     app:layout_constraintTop_toTopOf="@+id/layout6_view1" />
 
                 <TextView
+                    android:id="@+id/layout_6_text_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n2"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/layout6_view2"
+                    app:layout_constraintTop_toTopOf="@+id/layout6_view2" />
+
+                <TextView
+                    android:id="@+id/layout_6_TextView_2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/layout6_view2"
                     app:layout_constraintEnd_toEndOf="@+id/layout6_view2"
                     app:layout_constraintStart_toStartOf="@+id/layout6_view2"
-                    app:layout_constraintTop_toTopOf="@+id/layout6_view2" />
+                    app:layout_constraintTop_toBottomOf="@id/layout_6_text_2" />
+
+                <TextView
+                    android:id="@+id/layout_6_page_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout6_view2"
+                    app:layout_constraintStart_toStartOf="@+id/layout_6_text_2" />
+
+
+                <View
+                    android:id="@+id/layout_6_delete_2"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_6_text_2"
+                    app:layout_constraintEnd_toEndOf="@+id/layout6_view2"
+                    app:layout_constraintTop_toTopOf="@+id/layout_6_text_2" />
 
                 <View
                     android:id="@+id/layout6_view3"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="2.5dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout6view3"
                     app:layout_constraintBottom_toBottomOf="@+id/layout6_view2"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -574,23 +1205,63 @@
                     app:layout_constraintStart_toEndOf="@+id/layout6_view2"
                     app:layout_constraintTop_toTopOf="@+id/layout6_view2" />
 
+
                 <TextView
+                    android:id="@+id/layout_6_text_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/layout6_view3"
-                    app:layout_constraintEnd_toEndOf="@+id/layout6_view3"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n3"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/layout6_view3"
                     app:layout_constraintTop_toTopOf="@+id/layout6_view3" />
 
+                <TextView
+                    android:id="@+id/layout_6_TextView_3"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout6_view3"
+                    app:layout_constraintEnd_toEndOf="@+id/layout6_view3"
+                    app:layout_constraintStart_toStartOf="@+id/layout6_view3"
+                    app:layout_constraintTop_toBottomOf="@id/layout_6_text_3" />
+
+
+                <TextView
+                    android:id="@+id/layout_6_page_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout6_view3"
+                    app:layout_constraintStart_toStartOf="@+id/layout_6_text_3" />
+
+
+                <View
+                    android:id="@+id/layout_6_delete_3"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_6_text_3"
+                    app:layout_constraintEnd_toEndOf="@+id/layout6_view3"
+                    app:layout_constraintTop_toTopOf="@+id/layout_6_text_3" />
                 <View
                     android:id="@+id/layout6_view4"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="2.5dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout6view4"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/layout6_view1"
@@ -599,22 +1270,60 @@
                     app:layout_constraintTop_toBottomOf="@+id/layout6_view1" />
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/layout_6_text_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="4"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n4"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/layout6_view4"
+                    app:layout_constraintTop_toTopOf="@+id/layout6_view4" />
+
+                <TextView
+                    android:id="@+id/layout_6_TextView_4"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/layout6_view4"
                     app:layout_constraintEnd_toEndOf="@+id/layout6_view4"
                     app:layout_constraintStart_toStartOf="@+id/layout6_view4"
-                    app:layout_constraintTop_toTopOf="@+id/layout6_view4" />
+                    app:layout_constraintTop_toBottomOf="@id/layout_6_text_4" />
+
+
+                <TextView
+                    android:id="@+id/layout_6_page_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout6_view4"
+                    app:layout_constraintStart_toStartOf="@+id/layout_6_text_4" />
+
+                <View
+                    android:id="@+id/layout_6_delete_4"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_6_text_4"
+                    app:layout_constraintEnd_toEndOf="@+id/layout6_view4"
+                    app:layout_constraintTop_toTopOf="@+id/layout_6_text_4" />
 
                 <View
                     android:id="@+id/layout6_view5"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout6view5"
                     app:layout_constraintBottom_toBottomOf="@+id/layout6_view4"
                     app:layout_constraintEnd_toEndOf="@+id/layout6_view2"
@@ -622,22 +1331,60 @@
                     app:layout_constraintTop_toTopOf="@+id/layout6_view4" />
 
                 <TextView
+                    android:id="@+id/layout_6_text_5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/layout6_view5"
-                    app:layout_constraintEnd_toEndOf="@+id/layout6_view5"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n5"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/layout6_view5"
                     app:layout_constraintTop_toTopOf="@+id/layout6_view5" />
 
+                <TextView
+                    android:id="@+id/layout_6_TextView_5"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout6_view5"
+                    app:layout_constraintEnd_toEndOf="@+id/layout6_view5"
+                    app:layout_constraintStart_toStartOf="@+id/layout6_view5"
+                    app:layout_constraintTop_toBottomOf="@id/layout_6_text_5" />
+
+
+                <TextView
+                    android:id="@+id/layout_6_page_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout6_view5"
+                    app:layout_constraintStart_toStartOf="@+id/layout_6_text_5" />
+
+                <View
+                    android:id="@+id/layout_6_delete_5"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_6_text_5"
+                    app:layout_constraintEnd_toEndOf="@+id/layout6_view5"
+                    app:layout_constraintTop_toTopOf="@+id/layout_6_text_5" />
 
                 <View
                     android:id="@+id/layout6_view6"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:background="@color/primary"
+                    android:background="@drawable/bg_square"
                     android:tag="layout6view6"
                     app:layout_constraintBottom_toBottomOf="@+id/layout6_view4"
                     app:layout_constraintEnd_toEndOf="@+id/layout6_view3"
@@ -645,56 +1392,61 @@
                     app:layout_constraintTop_toTopOf="@+id/layout6_view4" />
 
                 <TextView
+                    android:id="@+id/layout_6_text_6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="6"
-                    android:textColor="@color/black"
-                    android:textSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/layout6_view5"
-                    app:layout_constraintEnd_toEndOf="@+id/layout6_view6"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WINDOW\n6"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/layout6_view6"
                     app:layout_constraintTop_toTopOf="@+id/layout6_view5" />
 
+
+                <TextView
+                    android:id="@+id/layout_6_TextView_6"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout6_view6"
+                    app:layout_constraintEnd_toEndOf="@+id/layout6_view6"
+                    app:layout_constraintStart_toStartOf="@+id/layout6_view6"
+                    app:layout_constraintTop_toBottomOf="@id/layout_6_text_6" />
+
+
+                <TextView
+                    android:id="@+id/layout_6_page_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/layout6_view6"
+                    app:layout_constraintStart_toStartOf="@+id/layout_6_text_6" />
+
+
+                <View
+                    android:id="@+id/layout_6_delete_6"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20sp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_baseline_delete_filled"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_6_text_6"
+                    app:layout_constraintEnd_toEndOf="@+id/layout6_view6"
+                    app:layout_constraintTop_toTopOf="@+id/layout_6_text_6" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!--Save Button-->
-        <LinearLayout
-            android:id="@+id/saveLayout_inputSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:id="@+id/save_txt"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
-                android:gravity="center"
-                android:text="Save"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/saveFab_inputSettings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@color/colorSecondary"
-                android:backgroundTint="@color/colorSecondary"
-                android:src="@drawable/ic_round_right"
-                app:maxImageSize="50dp"
-                app:tint="@color/black" />
-
-
-        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

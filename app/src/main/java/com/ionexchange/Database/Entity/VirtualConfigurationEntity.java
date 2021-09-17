@@ -8,7 +8,8 @@ public class VirtualConfigurationEntity {
     @ColumnInfo(name = "hardwareNo")
     public int hardwareNo;
 
-
+    @ColumnInfo(name = "virtualType")
+    public String virtualType;
 
     @ColumnInfo(name = "inputSequenceNumber")
     public int inputSequenceNumber;
@@ -23,17 +24,16 @@ public class VirtualConfigurationEntity {
     public String subValueTwo;
 
 
-
-    public VirtualConfigurationEntity(int hardwareNo, int inputSequenceNumber, String inputLabel,
-                                      String subValueOne, String subValueTwo) {
+    public VirtualConfigurationEntity(int hardwareNo, String virtualType,
+                                      int inputSequenceNumber, String inputLabel, String subValueOne, String subValueTwo) {
         this.hardwareNo = hardwareNo;
-
+        this.virtualType = virtualType;
         this.inputSequenceNumber = inputSequenceNumber;
         this.inputLabel = inputLabel;
         this.subValueOne = subValueOne;
         this.subValueTwo = subValueTwo;
-
     }
+
 
     public int getHardwareNo() {
         return hardwareNo;
@@ -41,6 +41,14 @@ public class VirtualConfigurationEntity {
 
     public void setHardwareNo(int hardwareNo) {
         this.hardwareNo = hardwareNo;
+    }
+
+    public String getVirtualType() {
+        return virtualType;
+    }
+
+    public void setVirtualType(String virtualType) {
+        this.virtualType = virtualType;
     }
 
     public int getInputSequenceNumber() {
@@ -74,8 +82,6 @@ public class VirtualConfigurationEntity {
     public void setSubValueTwo(String subValueTwo) {
         this.subValueTwo = subValueTwo;
     }
-
-
 }
 
 
