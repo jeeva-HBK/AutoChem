@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +17,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.google.android.material.textfield.TextInputLayout;
 import com.ionexchange.Adapters.InputsIndexRvAdapter;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
@@ -30,7 +30,6 @@ import com.ionexchange.databinding.FragmentInputsettingsBinding;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.analogInputArr;
@@ -47,15 +46,13 @@ import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 
 public class FragmentInputSensorList_Config extends Fragment implements View.OnClickListener, InputRvOnClick {
     FragmentInputsettingsBinding mBinding;
-    List<InputConfigurationEntity> inputConfigurationEntityList;
     AutoCompleteTextView inputNumber;
     AutoCompleteTextView sensorName;
-    TextInputLayout sensorTypeLayout;
     ApplicationClass mAppClass;
     WaterTreatmentDb dB;
     InputConfigurationDao dao;
     private static final String TAG = "FragmentInputSettings";
-    HashMap<Integer, String> mArr;
+    int pageOffset = 0, currentPage = 0;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -81,10 +78,31 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
                 updateToDb(entryListUpdate);
             }
         }
-        inputConfigurationEntityList = dao.getInputConfigurationEntityFlagKeyList(1);
-        mBinding.inputsRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(this, inputConfigurationEntityList));
+        mBinding.rightArrowIsBtn.setVisibility((dao.getInputConfigurationEntityFlagKeyList(0).size() / 9) > 0 ? View.VISIBLE : View.GONE);
         mBinding.addsensorIsBtn.setOnClickListener(this);
+
+        mBinding.inputsRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(this, dao.getInputConfigurationEntityFlagKeyList(0, 9, pageOffset)));
+
+        mBinding.leftArrowIsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentPage--;
+                mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this, dao.getInputConfigurationEntityFlagKeyList(0, 9, pageOffset = pageOffset - 9)));
+                mBinding.leftArrowIsBtn.setVisibility(currentPage <= 0 ? View.GONE : View.VISIBLE);
+                mBinding.rightArrowIsBtn.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mBinding.rightArrowIsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentPage++;
+                mBinding.leftArrowIsBtn.setVisibility(View.VISIBLE);
+                mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this, dao.getInputConfigurationEntityFlagKeyList(0, 9, pageOffset = pageOffset + 9)));
+                mBinding.rightArrowIsBtn.setVisibility(dao.getInputConfigurationEntityFlagKeyList(0, 9, pageOffset + 9).isEmpty() ? View.GONE : View.VISIBLE);
+            }
+        });
     }
 
     public void updateToDb(List<InputConfigurationEntity> entryList) {
@@ -93,12 +111,10 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
         dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addsensor_is_btn:
-                mArr = new HashMap<>();
                 if (userType == 3) {
                     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
                     LayoutInflater inflater = this.getLayoutInflater();
@@ -108,44 +124,35 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
 
                     inputNumber = dialogView.findViewById(R.id.add_input_number_dialog_act);
                     sensorName = dialogView.findViewById(R.id.add_sensor_name_dialog_act);
-                    sensorTypeLayout = dialogView.findViewById(R.id.add_sensor_name_dialog_til);
                     Button btn = dialogView.findViewById(R.id.add_sensor_dialog_btn);
                     inputNumber.setAdapter(getAdapter(sensorsViArr));
                     sensorName.setAdapter(getAdapter(inputTypeArr));
-
                     inputNumber.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             int inputNo = Integer.parseInt(inputNumber.getText().toString());
                             if (inputNo >= 1 && inputNo <= 13) {
                                 sensorName.setAdapter(getAdapter(inputTypeArr));
-
-                                getSensorName(inputNo);
-
-                                sensorTypeLayout.setEnabled(false);
+                                getSensorName(inputNo); // todo sequenceNumber
                                 sensorName.setAdapter(getAdapter(inputTypeArr));
 
                             } else if (inputNo >= 14 && inputNo <= 21) {
                                 sensorName.setAdapter(getAdapter(inputTypeArr));
                                 sensorName.setText(sensorName.getAdapter().getItem(6).toString());
-                                sensorTypeLayout.setEnabled(false);
                                 sensorName.setAdapter(getAdapter(analogInputArr));
 
                             } else if (inputNo >= 22 && inputNo <= 29) {
                                 sensorName.setAdapter(getAdapter(inputTypeArr));
-                                sensorTypeLayout.setEnabled(false);
                                 sensorName.setAdapter(getAdapter(inputTypeArr));
                                 sensorName.setText(sensorName.getAdapter().getItem(3).toString());
 
                             } else if (inputNo >= 30 && inputNo <= 37) {
                                 sensorName.setAdapter(getAdapter(inputTypeArr));
-                                sensorTypeLayout.setEnabled(false);
                                 sensorName.setAdapter(getAdapter(inputTypeArr));
                                 sensorName.setText(sensorName.getAdapter().getItem(8).toString());
 
                             } else if (inputNo >= 38 && inputNo <= 45) {
                                 sensorName.setAdapter(getAdapter(inputTypeArr));
-                                sensorTypeLayout.setEnabled(false);
                                 sensorName.setAdapter(getAdapter(inputTypeArr));
                                 sensorName.setText(sensorName.getAdapter().getItem(7).toString());
                             }

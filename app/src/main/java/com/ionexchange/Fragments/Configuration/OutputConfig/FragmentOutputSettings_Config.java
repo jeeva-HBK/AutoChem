@@ -29,8 +29,7 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
     FragmentOutputsettingsBinding mBinding;
     WaterTreatmentDb dB;
     OutputConfigurationDao dao;
-    List<OutputConfigurationEntity> outputConfigurationEntityList;
-    RvOnClick rvOnClick;
+    int pageOffset = 0, currentPage = 0;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -43,32 +42,49 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        outputConfigurationEntityList = new ArrayList<>();
         dB = WaterTreatmentDb.getDatabase(getContext());
         dao = dB.outputConfigurationDao();
-        if (dao.getOutputConfigurationEntityList().isEmpty()){
-            for (int i=1; i<23; i++){
+        if (dao.getOutputConfigurationEntityList().isEmpty()) {
+            for (int i = 1; i < 23; i++) {
                 OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
-                        (i, "N/A",
-                                "N/A",
-                                "N/A");
+                        (i, "N/A", "N/A", "N/A");
                 List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);
             }
         }
-        outputConfigurationEntityList = dao.getOutputConfigurationEntityList();
+        mBinding.rightArrowOsBtn.setVisibility(View.VISIBLE);
+
         mBinding.outputRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(this, outputConfigurationEntityList));
+        mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(this, dao.getOutputConfigurationEntityList(9, pageOffset)));
+
+        mBinding.leftArrowOsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentPage--;
+                mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this, dao.getOutputConfigurationEntityList(9, pageOffset = pageOffset - 9)));
+                mBinding.leftArrowOsBtn.setVisibility(currentPage <= 0 ? View.GONE : View.VISIBLE);
+                mBinding.rightArrowOsBtn.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mBinding.rightArrowOsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentPage++;
+                mBinding.leftArrowOsBtn.setVisibility(View.VISIBLE);
+                mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this, dao.getOutputConfigurationEntityList(9, pageOffset = pageOffset + 9)));
+                mBinding.rightArrowOsBtn.setVisibility(dao.getOutputConfigurationEntityList(9, pageOffset + 9).isEmpty() ? View.GONE : View.VISIBLE);
+            }
+        });
+
     }
 
     @Override
     public void onClick(int sensorInputNo) {
         mBinding.outputRv.setVisibility(View.GONE);
         mBinding.outputHost.setVisibility(View.VISIBLE);
-        mBinding.view9.setVisibility(View.GONE);
         getParentFragmentManager().beginTransaction().replace(mBinding.outputHost.getId(), new FragmentOutput_Config(sensorInputNo)).commit();
-
     }
 
     @Override

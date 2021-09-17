@@ -17,4 +17,7 @@ public interface OutputConfigurationDao {
 
     @Query("select * FROM outputConfigurationEntity")
     List<OutputConfigurationEntity> getOutputConfigurationEntityList();
+
+    @Query("select * FROM outputConfigurationEntity LIMIT  :limit OFFSET :offset")
+    List<OutputConfigurationEntity> getOutputConfigurationEntityList(int limit, int offset);
 }

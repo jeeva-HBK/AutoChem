@@ -48,6 +48,7 @@
         style="@style/appAutoTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="@+id/add_input_number_dialog_til"
         app:layout_constraintStart_toStartOf="@+id/add_input_number_dialog_til"

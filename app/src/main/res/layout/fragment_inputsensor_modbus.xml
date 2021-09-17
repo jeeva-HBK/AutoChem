@@ -25,7 +25,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.3"
+                android:layout_weight="1"
                 android:gravity="left|center">
 
                 <ImageView
@@ -52,17 +52,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--Sensor Type-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/modbus_sensorType"
-                style="@style/config_AtxTil"
-                android:enabled="false">
-
-                <AutoCompleteTextView
-                    android:id="@+id/mod_bus_sensor_type_tie"
-                    style="@style/config_Atxt"
-                    android:hint="SensorType" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_sequence_number"
@@ -98,6 +87,18 @@
                     android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!--Sensor Type-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_sensorType"
+                style="@style/config_AtxTil"
+                android:enabled="false">
+
+                <AutoCompleteTextView
+                    android:id="@+id/mod_bus_sensor_type_tie"
+                    style="@style/config_Atxt"
+                    android:hint="SensorType" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <!--Modbus Type-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_modbusType"
@@ -112,19 +113,6 @@
                     style="@style/config_Atxt"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--Type of value Read-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/modbus_typeOfValueRead"
-                style="@style/config_AtxTil">
-
-                <AutoCompleteTextView
-                    android:id="@+id/mod_bus_typeOfValueRead_tie"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Type of value Read"
-                    style="@style/config_Atxt"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
 
 
         </LinearLayout>
@@ -449,6 +437,21 @@
         <LinearLayout
             android:id="@+id/modbus_row5"
             style="@style/config_rowLl">
+
+            <!--Type of value Read-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_typeOfValueRead"
+                style="@style/config_AtxTil">
+
+                <AutoCompleteTextView
+                    android:id="@+id/mod_bus_typeOfValueRead_tie"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Type of value Read"
+                    style="@style/config_Atxt"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <!--Smoothing Factor-->
             <com.google.android.material.textfield.TextInputLayout

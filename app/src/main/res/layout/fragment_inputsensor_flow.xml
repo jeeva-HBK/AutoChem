@@ -6,7 +6,7 @@
         <import type="android.view.View" />
         <variable
             name="flowMeterType"
-            type="String" />
+            type="String"/>
 
     </data>
 
@@ -49,19 +49,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--Sensor type-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/flow_sensorType_til_isc"
-                style="@style/config_AtxTil"
-                android:enabled="false">
-
-                <AutoCompleteTextView
-                    android:id="@+id/flow_sensorType_atxt_isc"
-                    style="@style/config_Atxt"
-                    android:editable="false"
-                    android:hint="Sensor Type" />
-
-            </com.google.android.material.textfield.TextInputLayout>
 
             <!--Sequence Number-->
             <com.google.android.material.textfield.TextInputLayout
@@ -94,6 +81,20 @@
                     android:hint="Input Label"
                     android:maxLength="20"
                     android:inputType="textPersonName" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Sensor type-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/flow_sensorType_til_isc"
+                style="@style/config_AtxTil"
+                android:enabled="false">
+
+                <AutoCompleteTextView
+                    android:id="@+id/flow_sensorType_atxt_isc"
+                    style="@style/config_Atxt"
+                    android:editable="false"
+                    android:hint="Sensor Type" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -235,7 +236,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/flow_volumeRateunit_root_isc"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
@@ -244,6 +245,7 @@
                     android:id="@+id/flow_volumeRateunit_til_isc"
                     style="@style/config_Til"
                     app:expandedHintEnabled="false"
+                    android:hint="@{flowMeterType.equals(`1`) ? `Volume/Contact` : `Rate Unit`}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -252,7 +254,6 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/flow_volumeRateunit_edt_isc"
                         style="@style/config_Edt"
-                        android:hint="@{flowMeterType.equals(`1`)?`Volume/Contact`:`Rate Unit`}"
                         android:maxLength="@{flowMeterType.equals(`1`)?7:4}"
                         android:imeOptions="actionNext"
                         android:inputType="number"
@@ -484,10 +485,7 @@
             android:visibility="@{flowMeterType.equals(`2`) ? View.VISIBLE : View.GONE}"
             android:weightSum="3">
 
-            <!--K Factor
-            android:id="@+id/flow_kFactor_til_isc"
-             android:id="@+id/flow_kFactor_edt_isc"
-            -->
+            <!--K Factor-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/flow_kFactor_root_isc"
                 android:layout_width="0dp"
@@ -648,10 +646,10 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/flow_feedVolume_edt_isc"
                         style="@style/config_Edt"
-                        android:hint="@{flowMeterType.equals(`1`)?`Volume/Contact`:`Rate Unit`}"
+                        android:hint="Volume/Contact"
                         android:imeOptions="actionNext"
                         android:inputType="number"
-                        android:maxLength="@{flowMeterType.equals(`1`)?7:4}"
+                        android:maxLength="7"
                         android:maxLines="1"
                         android:textColorHint="@color/colorPrimary" />
 
@@ -705,7 +703,8 @@
                     android:id="@+id/flow_calibrationRequired_edt_isc"
                     style="@style/config_Edt"
                     android:hint="Calibration Required Alarm"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="3"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -729,7 +728,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/flow_smoothingFactor_edt_isc"
                     style="@style/config_Edt"
-                    android:hint="Smoothing Factor" />
+                    android:hint="Smoothing Factor"
+                    android:maxLength="3"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -764,7 +764,7 @@
                         android:hint="Flow Meter Min"
                         android:imeOptions="actionNext"
                         android:inputType="number"
-                        android:maxLength="2"
+                        android:maxLength="7"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -939,8 +939,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
-        <!--todo Flow XML completed-->
 
     </LinearLayout>
 

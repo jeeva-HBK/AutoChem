@@ -91,7 +91,6 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         mAppClass = (ApplicationClass) getActivity().getApplication();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
-        mBinding.setFlowMeterType("1");
         checkUser();
         initAdapter();
         mActivity = (BaseActivity) getActivity();
@@ -217,7 +216,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 }
                 break;
             case 2:
-                if (validation2()) {
+                if (validPaddleWheel()) {
                     sendPaddleWheelPacket(2);
                     packetId = 2;
                 }
@@ -246,7 +245,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 }
                 break;
             case 2:
-                if (validation2()) {
+                if (validPaddleWheel()) {
                     sendPaddleWheelPacket(sensorStatus);
                     packetId = 2;
                 }
@@ -322,14 +321,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         return true;
     }
 
-    private boolean validation2() {
-        if (isFieldEmpty(mBinding.flowInputNumberEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "InputNumber cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.flowSensorTypeAtxtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Sensor Type cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.flowFlowMeterTypeAtxtIsc)) {
+    private boolean validPaddleWheel() {
+        if (isFieldEmpty(mBinding.flowFlowMeterTypeAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Flow Meter Type cannot be Empty");
             return false;
         } else if (isFieldEmpty(mBinding.flowSensorActivationAtxtIsc)) {
@@ -365,7 +358,13 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else if (isFieldEmpty(mBinding.flowHighAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm high cannot be Empty");
             return false;
+        } else if (Float.parseFloat(getDecimalValue(mBinding.flowAlarmLowEdtIsc, 10, mBinding.flowAlarmLowDeciIsc, 2)) >=
+                Float.parseFloat(getDecimalValue(mBinding.flowHighAlarmEdtIsc, 10, mBinding.flowHighAlarmDeciIsc, 2))) {
+            mAppClass.showSnackBar(getContext(), "Alarm High Should be Greater Than Alarm Low");
+            return false;
         }
+
+
         return true;
     }
 
@@ -403,8 +402,15 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else if (isFieldEmpty(mBinding.flowHighAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Alarm high cannot be Empty");
             return false;
-        } else if (Integer.parseInt(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) > 7) {
+        } else if (Float.parseFloat(getDecimalValue(mBinding.flowAlarmLowEdtIsc, 10, mBinding.flowAlarmLowDeciIsc, 2)) >=
+                Float.parseFloat(getDecimalValue(mBinding.flowHighAlarmEdtIsc, 10, mBinding.flowHighAlarmDeciIsc, 2))) {
+            mAppClass.showSnackBar(getContext(), "Alarm High Should be Greater Than Alarm Low");
+            return false;
+        } else if (mBinding.flowVolumeRateunitEdtIsc.getText().toString().length() > 7) {
             mAppClass.showSnackBar(getContext(), "Volume should less than 7 digit");
+            return false;
+        } else if (mBinding.flowTotalizerAlarmEdtIsc.getText().toString().length() > 10) {
+            mAppClass.showSnackBar(getContext(), "Totalizer Alarm should less than 10 digit");
             return false;
         }
         return true;
@@ -482,7 +488,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 getStringValue(4, mBinding.flowAlarmDelayEdtIsc) + SPILT_CHAR +
                 getStringValue(6, mBinding.flowAlarmClearEdtIsc) + SPILT_CHAR +
                 getStringValue(2, mBinding.flowOutputRelayEdtIsc) + SPILT_CHAR +
-                getDecimalValue(mBinding.flowTotalizerAlarmEdtIsc, 7, mBinding.flowTotalizerAlarmDeciIsc, 2) + SPILT_CHAR +
+                getDecimalValue(mBinding.flowTotalizerAlarmEdtIsc, 10, mBinding.flowTotalizerAlarmDeciIsc, 2) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowResetFlowTotalAtxtIsc), resetFlowTotalArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowSetFlowTotalEdtIsc, 10, mBinding.flowSetFlowTotalDeciIsc, 2) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowScheduleResetAtxtIsc), scheduleResetArr) + SPILT_CHAR +
@@ -505,7 +511,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowVolumeRateunitEdtIsc, 4, mBinding.flowVolumeRateunitDeciIsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowKFactorEdtIsc, 7, mBinding.flowKFactorDeciIsc, 2) + SPILT_CHAR +
-                getDecimalValue(mBinding.flowTotalizerAlarmEdtIsc, 7, mBinding.flowTotalizerAlarmDeciIsc, 2) + SPILT_CHAR +
+                getDecimalValue(mBinding.flowTotalizerAlarmEdtIsc, 10, mBinding.flowTotalizerAlarmDeciIsc, 2) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowResetFlowTotalAtxtIsc), resetFlowTotalArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowSetFlowTotalEdtIsc, 10, mBinding.flowSetFlowTotalDeciIsc, 2) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.flowScheduleResetAtxtIsc), scheduleResetArr) + SPILT_CHAR +
@@ -552,8 +558,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 getDecimalValue(mBinding.flowMaxEdtIsc, 7, mBinding.flowMaxDeciIsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowMinEdtIsc, 7, mBinding.flowMinDeciIsc, 2) + SPILT_CHAR +
                 getStringValue(3, mBinding.flowSmoothingFactorEdtIsc) + SPILT_CHAR +
-                getDecimalValue(mBinding.flowTotalizerAlarmEdtIsc, 7, mBinding.flowTotalizerAlarmDeciIsc, 2) + SPILT_CHAR +
-                getStringValue(4, mBinding.flowResetFlowTotalAtxtIsc) + SPILT_CHAR +
+                getDecimalValue(mBinding.flowTotalizerAlarmEdtIsc, 10, mBinding.flowTotalizerAlarmDeciIsc, 2) + SPILT_CHAR +
+                getPositionFromAtxt(4, getStringValue(mBinding.flowResetFlowTotalAtxtIsc), resetFlowTotalArr) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.flowScheduleResetAtxtIsc), scheduleResetArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowSetFlowTotalEdtIsc, 10, mBinding.flowSetFlowTotalDeciIsc, 2) + SPILT_CHAR +
                 getStringValue(10, mBinding.flowAlarmLowEdtIsc) + "." + getStringValue(2, mBinding.flowAlarmLowDeciIsc) + SPILT_CHAR +
@@ -564,7 +570,6 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     }
 
     private void initAdapter() {
-        mBinding.flowFlowMeterTypeAtxtIsc.setText("Contactor");
         mBinding.flowFlowMeterTypeAtxtIsc.setAdapter(getAdapter(flowMeterTypeArr, getContext()));
         mBinding.flowSensorTypeAtxtIsc.setAdapter(getAdapter(inputTypeArr, getContext()));
         mBinding.flowSensorActivationAtxtIsc.setAdapter(getAdapter(sensorActivationArr, getContext()));
@@ -573,11 +578,14 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         mBinding.flowResetCalibrationEdtIsc.setAdapter(getAdapter(resetCalibrationArr, getContext()));
         mBinding.flowResetFlowTotalAtxtIsc.setAdapter(getAdapter(resetFlowTotalArr, getContext()));
         mBinding.flowSeqNumberAtxtIsc.setAdapter(getAdapter(sensorSequenceNumber, getContext()));
+        mBinding.flowTotalAlarmModeAtxtIsc.setAdapter(getAdapter(totalAlarmMode, getContext()));
+        mBinding.flowAlarmModeAtxtIsc.setAdapter(getAdapter(flowAlarmMode, getContext()));
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        mBinding.setFlowMeterType("1");
         if (sensorName == null) {
             mActivity.showProgress();
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + formDigits(2, inputNumber));
@@ -613,23 +621,26 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                     mBinding.flowInputLabelEdtIsc.setText(splitData[8]);
                     mBinding.flowFlowUnitAtxtIsc.setText(mBinding.flowFlowUnitAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[9])).toString());
 
+                    mBinding.flowFlowMeterTypeAtxtIsc.setAdapter(getAdapter(flowMeterTypeArr, getContext()));
+
                     // Analog Flow Meter
                     if (splitData[5].equals("0")) {
-                        mBinding.flowVolumeRateunitEdtIsc.setText(splitData[10]);
-                        mBinding.flowMinEdtIsc.setText(splitData[11].substring(0, 7));
-                        mBinding.flowMinDeciIsc.setText(splitData[11].substring(9, 10));
-                        mBinding.flowMaxEdtIsc.setText(splitData[12].substring(0, 7));
-                        mBinding.flowMaxDeciIsc.setText(splitData[12].substring(9, 10));
+                        mBinding.flowVolumeRateunitEdtIsc.setText(splitData[10].substring(0, 4));
+                        mBinding.flowVolumeRateunitDeciIsc.setText(splitData[10].substring(5, 7));
+                        mBinding.flowMaxEdtIsc.setText(splitData[11].substring(0, 7));
+                        mBinding.flowMaxDeciIsc.setText(splitData[11].substring(8, 10));
+                        mBinding.flowMinEdtIsc.setText(splitData[12].substring(0, 7));
+                        mBinding.flowMinDeciIsc.setText(splitData[12].substring(8, 10));
                         mBinding.flowSmoothingFactorEdtIsc.setText(splitData[13]);
                         mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[14].substring(0, 10));
                         mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[14].substring(11, 13));
                         mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[15])).toString());
                         mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[16])).toString());
-                        mBinding.flowSetFlowTotalEdtIsc.setText(splitData[17].substring(0, 9));
+                        mBinding.flowSetFlowTotalEdtIsc.setText(splitData[17].substring(0, 10));
                         mBinding.flowSetFlowTotalDeciIsc.setText(splitData[17].substring(11, 13));
-                        mBinding.flowAlarmLowEdtIsc.setText(splitData[18].substring(0, 9));
+                        mBinding.flowAlarmLowEdtIsc.setText(splitData[18].substring(0, 10));
                         mBinding.flowAlarmLowDeciIsc.setText(splitData[18].substring(11, 13));
-                        mBinding.flowHighAlarmEdtIsc.setText(splitData[19].substring(0, 9));
+                        mBinding.flowHighAlarmEdtIsc.setText(splitData[19].substring(0, 10));
                         mBinding.flowHighAlarmDeciIsc.setText(splitData[19].substring(11, 13));
                         mBinding.flowCalibrationRequiredEdtIsc.setText(splitData[20]);
                         mBinding.flowResetCalibrationEdtIsc.setText(mBinding.flowResetCalibrationEdtIsc.getAdapter().getItem(Integer.parseInt(splitData[21])).toString());
@@ -668,24 +679,25 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
 
                         // Feed Monitor type
                     } else if (splitData[5].equals("3")) {
-                        mBinding.flowFeedVolumeEdtIsc.setText(splitData[9].substring(0, 7));
-                        mBinding.flowFeedVolumeDeciIsc.setText(splitData[9].substring(9, 11));
-                        mBinding.flowVolumeRateunitEdtIsc.setText(splitData[10].substring(0, 4));
-                        mBinding.flowVolumeRateunitDeciIsc.setText(splitData[10].substring(6, 7));
-                        mBinding.flowTotalAlarmModeAtxtIsc.setText(mBinding.flowTotalAlarmModeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[11])).toString());
+                        mBinding.flowFeedVolumeEdtIsc.setText(splitData[10].substring(0, 7));
+                        mBinding.flowFeedVolumeDeciIsc.setText(splitData[10].substring(8, 11));
+                        mBinding.flowVolumeRateunitEdtIsc.setText(splitData[11].substring(0, 4));
+                        mBinding.flowVolumeRateunitDeciIsc.setText(splitData[11].substring(5, 7));
                         mBinding.flowTotalAlarmModeAtxtIsc.setText(mBinding.flowTotalAlarmModeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[12])).toString());
-                        mBinding.flowAlarmClearEdtIsc.setText(splitData[13]);
-                        mBinding.flowOutputRelayEdtIsc.setText(splitData[14]);
-                        mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[12].substring(0, 10));
-                        mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[12].substring(11, 13));
-                        mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
-                        mBinding.flowSetFlowTotalEdtIsc.setText(splitData[14].substring(0, 9));
-                        mBinding.flowSetFlowTotalDeciIsc.setText(splitData[14].substring(11, 13));
-                        mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[15])).toString());
-                        mBinding.flowAlarmLowEdtIsc.setText(splitData[16].substring(0, 9));
-                        mBinding.flowAlarmLowDeciIsc.setText(splitData[16].substring(11, 13));
-                        mBinding.flowHighAlarmEdtIsc.setText(splitData[17].substring(0, 9));
-                        mBinding.flowHighAlarmDeciIsc.setText(splitData[17].substring(11, 13));
+                        mBinding.flowAlarmModeAtxtIsc.setText(mBinding.flowAlarmModeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
+                        mBinding.flowAlarmDelayEdtIsc.setText(splitData[14]);
+                        mBinding.flowAlarmClearEdtIsc.setText(splitData[15]);
+                        mBinding.flowOutputRelayEdtIsc.setText(splitData[16]);
+                        mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[17].substring(0, 10));
+                        mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[17].substring(11, 13));
+                        mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[18])).toString());
+                        mBinding.flowSetFlowTotalEdtIsc.setText(splitData[19].substring(0, 9));
+                        mBinding.flowSetFlowTotalDeciIsc.setText(splitData[19].substring(11, 13));
+                        mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[20])).toString());
+                        mBinding.flowAlarmLowEdtIsc.setText(splitData[21].substring(0, 9));
+                        mBinding.flowAlarmLowDeciIsc.setText(splitData[21].substring(11, 13));
+                        mBinding.flowHighAlarmEdtIsc.setText(splitData[22].substring(0, 9));
+                        mBinding.flowHighAlarmDeciIsc.setText(splitData[22].substring(11, 13));
                     }
                     initAdapter();
                 } else if (splitData[2].equals(RES_FAILED)) {

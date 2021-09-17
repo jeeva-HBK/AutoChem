@@ -98,10 +98,10 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i==0) {
                     mBinding.candCompFactorEdtIsc.setEnabled(true);
-                    mBinding.candHighAlarmDeciIsc.setEnabled(true);
+                    mBinding.candCompFactorDeciIsc.setEnabled(true);
                 } else {
                     mBinding.candCompFactorEdtIsc.setEnabled(false);
-                    mBinding.candHighAlarmDeciIsc.setEnabled(false);
+                    mBinding.candCompFactorDeciIsc.setEnabled(false);
                 }
             }
         });
