@@ -2,13 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="230dp">
 
     <View
         android:id="@+id/view_1"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="5dp"
         android:background="@drawable/bg_timer_retcangle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,6 +56,7 @@
         android:layout_marginTop="5dp"
         android:text="Output"
         android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/txt_output_value_1"
         app:layout_constraintStart_toStartOf="@id/view_timer_header_1"
         app:layout_constraintTop_toBottomOf="@id/view_timer_header_1" />
 
@@ -64,10 +64,10 @@
         android:id="@+id/txt_output_value_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:text="Output 6"
         android:textColor="@color/primary"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/txt_mode_name_1"
         app:layout_constraintStart_toStartOf="@id/txt_output_name_1"
         app:layout_constraintTop_toBottomOf="@id/txt_output_name_1" />
 
@@ -86,9 +86,9 @@
         android:id="@+id/txt_mode_name_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:text="Mode"
         android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/txt_mode_value_1"
         app:layout_constraintStart_toStartOf="@id/txt_output_value_1"
         app:layout_constraintTop_toBottomOf="@id/txt_output_value_1" />
 
@@ -97,9 +97,9 @@
         android:id="@+id/txt_mode_value_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:text="off Before"
         android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/txt_mode_name_1"
         app:layout_constraintTop_toBottomOf="@id/txt_mode_name_1" />
 
@@ -144,6 +144,7 @@
         android:id="@+id/view_vertical_timer_1_1"
         android:layout_width="1dp"
         android:layout_height="0dp"
+        android:visibility="gone"
         android:background="@color/black"
         app:layout_constraintBottom_toBottomOf="@id/view_1"
         app:layout_constraintEnd_toEndOf="@id/view_1"

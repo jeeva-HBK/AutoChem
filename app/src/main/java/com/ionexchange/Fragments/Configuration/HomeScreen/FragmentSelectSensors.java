@@ -205,8 +205,11 @@ public class FragmentSelectSensors extends Fragment implements CompoundButton.On
                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mainConfigurationEntity
-                                (hardwareNo, inputType, SeqNo, sensorName);
+                        if (mainConfigurationDao.getInputType(screenNo, layoutNo, windowNo, pageNo) != null
+                                && mainConfigurationDao.getInputType(screenNo, layoutNo, windowNo, pageNo).equals("Sensor not Added")) {
+                            mainConfigurationDao.delete(screenNo, layoutNo, windowNo, pageNo);
+                        }
+                        mainConfigurationEntity(hardwareNo, inputType, SeqNo, sensorName);
                         dialog.dismiss();
                         fragment.dismiss();
                     }

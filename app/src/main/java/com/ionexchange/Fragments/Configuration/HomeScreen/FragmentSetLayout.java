@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +41,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
     int pageNo = 1;
     BaseActivity mActivity;
     private static final String TAG = "SetLayout";
+    String sensorNotAdded = "Sensor not Added";
 
     public FragmentSetLayout(int screenNo) {
         this.screenNo = screenNo;
@@ -63,7 +63,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
         mActivity = (BaseActivity) getActivity();
         dao = dB.defaultLayoutConfigurationDao();
         mainConfigurationDao = dB.mainConfigurationDao();
-
+        enableDefaultLayout();
         mBinding.radioLyOne.setOnCheckedChangeListener(this);
         mBinding.radioLyTwo.setOnCheckedChangeListener(this);
         mBinding.radioLyThree.setOnCheckedChangeListener(this);
@@ -116,6 +116,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
         mBinding.layout6Delete4.setOnClickListener(this);
         mBinding.layout6Delete5.setOnClickListener(this);
         mBinding.layout6Delete6.setOnClickListener(this);
+        mBinding.saveBtn.setOnClickListener(this);
         getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
     }
 
@@ -136,7 +137,6 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                     defaultWindowPage();
                     layoutNo = 2;
                     loopLayoutDetails();
-                    dao.updateEnabledLayout(2, screenNo);
                     break;
                 case R.id.radio_ly_three:
                     mBinding.setSelected("layout3");
@@ -144,28 +144,25 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                     layoutNo = 3;
                     mActivity.showProgress();
                     loopLayoutDetails();
-                    dao.updateEnabledLayout(3, screenNo);
+
                     break;
                 case R.id.radio_ly_four:
                     mBinding.setSelected("layout4");
                     defaultWindowPage();
                     layoutNo = 4;
                     loopLayoutDetails();
-                    dao.updateEnabledLayout(4, screenNo);
                     break;
                 case R.id.radio_ly_five:
                     mBinding.setSelected("layout5");
                     defaultWindowPage();
                     layoutNo = 5;
                     loopLayoutDetails();
-                    dao.updateEnabledLayout(5, screenNo);
                     break;
                 case R.id.radio_ly_six:
                     mBinding.setSelected("layout6");
                     defaultWindowPage();
                     layoutNo = 6;
                     loopLayoutDetails();
-                    dao.updateEnabledLayout(6, screenNo);
                     break;
             }
         }
@@ -192,18 +189,20 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rightArrow_is_btn:
-                if (emptySensorValidation(getTextViewNo())) {
+                if (emptyNextSensorValidation(getTextViewNo())) {
                     loopWindowNextPage();
                 }
 
                 break;
             case R.id.leftArrow_is_btn:
-                pageNo--;
-                int j = 1;
-                while (j <= layoutNo) {
-                    windowNo = j;
-                    windowPrevPage();
-                    j++;
+                if (emptyPrevSensorValidation(getTextViewNo())) {
+                    pageNo--;
+                    int j = 1;
+                    while (j <= layoutNo) {
+                        windowNo = j;
+                        windowPrevPage();
+                        j++;
+                    }
                 }
                 break;
 
@@ -266,6 +265,10 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                 deleteSensorWindowPage(6, mBinding.layout6Delete6);
                 break;
 
+            case R.id.save_btn:
+                dao.updateEnabledLayout(layoutNo, screenNo);
+                getParentFragmentManager().beginTransaction().replace(R.id.setHomeScreenHost, new FragmentSetHomeScreen()).commit();
+                break;
             case R.id.layout1_view1:
             case R.id.layout2_view1:
             case R.id.layout2_view2:
@@ -308,7 +311,6 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
 
 
     void enableDefaultLayout() {
-        Toast.makeText(getContext(), screenNo+"", Toast.LENGTH_SHORT).show();
         switch (dao.enableLayout(screenNo)) {
             case 1:
                 mBinding.radioLyOne.setChecked(true);
@@ -475,9 +477,15 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                 case R.id.radio_ly_one:
                     if (mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo) != null
                             && !mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo).isEmpty()) {
-                        mBinding.layout1Delete1.setVisibility(View.VISIBLE);
                         textViewList.get(0).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                        viewList.get(0).setEnabled(false);
+                        viewList.get(0).setEnabled(textViewList.get(0).getText().toString().equals(sensorNotAdded));
+                        if (textViewList.get(0).getText().toString().equals(sensorNotAdded)) {
+                            mBinding.layout1Delete1.setVisibility(View.GONE);
+                        } else {
+                            mBinding.layout1Delete1.setVisibility(View.VISIBLE);
+                        }
+
+
                     }
                     break;
                 case R.id.radio_ly_two:
@@ -485,14 +493,21 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                             && !mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo).isEmpty()) {
                         if (windowNo == 1) {
                             textViewList.get(0).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(0).setEnabled(false);
-                            mBinding.layout2Delete1.setVisibility(View.VISIBLE);
+                            viewList.get(0).setEnabled(textViewList.get(0).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(0).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout2Delete1.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout2Delete1.setVisibility(View.VISIBLE);
+                            }
                         }
                         if (windowNo == 2) {
                             textViewList.get(1).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(1).setEnabled(false);
-                            mBinding.layout2Delete2.setVisibility(View.VISIBLE);
-
+                            viewList.get(1).setEnabled(textViewList.get(1).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(1).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout2Delete2.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout2Delete2.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                     break;
@@ -501,18 +516,30 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                             && !mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo).isEmpty()) {
                         if (windowNo == 1) {
                             textViewList.get(0).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(0).setEnabled(false);
-                            mBinding.layout3Delete1.setVisibility(View.VISIBLE);
+                            viewList.get(0).setEnabled(textViewList.get(0).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(0).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout3Delete1.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout3Delete1.setVisibility(View.VISIBLE);
+                            }
                         }
                         if (windowNo == 2) {
                             textViewList.get(1).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(1).setEnabled(false);
-                            mBinding.layout3Delete2.setVisibility(View.VISIBLE);
+                            viewList.get(1).setEnabled(textViewList.get(1).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(1).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout3Delete2.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout3Delete2.setVisibility(View.VISIBLE);
+                            }
                         }
                         if (windowNo == 3) {
                             textViewList.get(2).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(2).setEnabled(false);
-                            mBinding.layout3Delete3.setVisibility(View.VISIBLE);
+                            viewList.get(2).setEnabled(textViewList.get(2).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(2).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout3Delete3.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout3Delete3.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 case R.id.radio_ly_four:
@@ -520,18 +547,30 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                             && !mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo).isEmpty()) {
                         if (windowNo == 1) {
                             textViewList.get(0).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(0).setEnabled(false);
-                            mBinding.layout4Delete1.setVisibility(View.VISIBLE);
+                            viewList.get(0).setEnabled(textViewList.get(0).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(0).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout4Delete1.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout4Delete1.setVisibility(View.VISIBLE);
+                            }
                         }
                         if (windowNo == 2) {
                             textViewList.get(1).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(1).setEnabled(false);
-                            mBinding.layout4Delete2.setVisibility(View.VISIBLE);
+                            viewList.get(1).setEnabled(textViewList.get(1).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(1).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout4Delete2.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout4Delete2.setVisibility(View.VISIBLE);
+                            }
                         }
                         if (windowNo == 3) {
                             textViewList.get(2).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(2).setEnabled(false);
-                            mBinding.layout4Delete3.setVisibility(View.VISIBLE);
+                            viewList.get(2).setEnabled(textViewList.get(2).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(2).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout4Delete3.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout4Delete3.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
 
@@ -541,23 +580,39 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                             && !mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo).isEmpty()) {
                         if (windowNo == 1) {
                             textViewList.get(0).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(0).setEnabled(false);
-                            mBinding.layout5Delete1.setVisibility(View.VISIBLE);
+                            viewList.get(0).setEnabled(textViewList.get(0).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(0).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout5Delete1.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout5Delete1.setVisibility(View.VISIBLE);
+                            }
                         }
                         if (windowNo == 2) {
                             textViewList.get(1).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(1).setEnabled(false);
-                            mBinding.layout5Delete2.setVisibility(View.VISIBLE);
+                            viewList.get(1).setEnabled(textViewList.get(1).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(1).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout5Delete2.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout5Delete2.setVisibility(View.VISIBLE);
+                            }
                         }
                         if (windowNo == 3) {
                             textViewList.get(2).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(2).setEnabled(false);
-                            mBinding.layout5Delete3.setVisibility(View.VISIBLE);
+                            viewList.get(2).setEnabled(textViewList.get(2).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(2).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout5Delete3.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout5Delete3.setVisibility(View.VISIBLE);
+                            }
                         }
                         if (windowNo == 4) {
                             textViewList.get(3).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(3).setEnabled(false);
-                            mBinding.layout5Delete4.setVisibility(View.VISIBLE);
+                            viewList.get(3).setEnabled(textViewList.get(3).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(3).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout5Delete4.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout5Delete4.setVisibility(View.VISIBLE);
+                            }
 
                         }
                     }
@@ -568,34 +623,58 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                             && !mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo).isEmpty()) {
                         if (windowNo == 1) {
                             textViewList.get(0).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(0).setEnabled(false);
-                            mBinding.layout6Delete1.setVisibility(View.VISIBLE);
+                            viewList.get(0).setEnabled(textViewList.get(0).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(0).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout6Delete1.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout6Delete1.setVisibility(View.VISIBLE);
+                            }
                         }
                         if (windowNo == 2) {
                             textViewList.get(1).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(1).setEnabled(false);
-                            mBinding.layout6Delete2.setVisibility(View.VISIBLE);
+                            viewList.get(1).setEnabled(textViewList.get(1).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(1).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout6Delete2.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout6Delete2.setVisibility(View.VISIBLE);
+                            }
                         }
                         if (windowNo == 3) {
                             textViewList.get(2).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(2).setEnabled(false);
-                            mBinding.layout6Delete3.setVisibility(View.VISIBLE);
+                            viewList.get(2).setEnabled(textViewList.get(2).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(2).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout6Delete3.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout6Delete3.setVisibility(View.VISIBLE);
+                            }
                         }
                         if (windowNo == 4) {
                             textViewList.get(3).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(3).setEnabled(false);
-                            mBinding.layout6Delete4.setVisibility(View.VISIBLE);
+                            viewList.get(3).setEnabled(textViewList.get(3).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(3).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout6Delete4.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout6Delete4.setVisibility(View.VISIBLE);
+                            }
 
                         }
                         if (windowNo == 5) {
                             textViewList.get(4).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(4).setEnabled(false);
-                            mBinding.layout6Delete5.setVisibility(View.VISIBLE);
+                            viewList.get(4).setEnabled(textViewList.get(4).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(4).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout6Delete5.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout6Delete5.setVisibility(View.VISIBLE);
+                            }
                         }
                         if (windowNo == 6) {
                             textViewList.get(5).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(5).setEnabled(false);
-                            mBinding.layout6Delete6.setVisibility(View.VISIBLE);
+                            viewList.get(5).setEnabled(textViewList.get(4).getText().toString().equals(sensorNotAdded));
+                            if (textViewList.get(5).getText().toString().equals(sensorNotAdded)) {
+                                mBinding.layout6Delete6.setVisibility(View.GONE);
+                            } else {
+                                mBinding.layout6Delete6.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                     break;
@@ -701,7 +780,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                         viewList.get(3).setEnabled(true);
                     }
                     if (windowNo == 3) {
-                        mBinding.layout6Delete6.setVisibility(View.GONE);
+                        mBinding.layout6Delete5.setVisibility(View.GONE);
                         textViewList.get(4).setText("N/A");
                         viewList.get(4).setEnabled(true);
                     }
@@ -741,7 +820,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
         }).show();
     }
 
-    boolean emptySensorValidation(List<TextView> textViewList) {
+    boolean emptyNextSensorValidation(List<TextView> textViewList) {
         switch (mBinding.radioGroup.getCheckedRadioButtonId()) {
             case R.id.radio_ly_one:
                 if (textViewList.get(0).getText().toString().equals("N/A")) {
@@ -817,6 +896,95 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
         return true;
     }
 
+    boolean emptyPrevSensorValidation(List<TextView> textViewList) {
+        switch (mBinding.radioGroup.getCheckedRadioButtonId()) {
+            case R.id.radio_ly_two:
+                if (mainConfigurationDao.sumWindowNo(screenNo, layoutNo, pageNo) == null) {
+                    return true;
+                } else if (mainConfigurationDao.sumWindowNo(screenNo, layoutNo, pageNo) < 3) {
+                    if (textViewList.get(0).getText().toString().equals("N/A")) {
+                        addEmptySensorToDb(textViewList.get(0), 1);
+                        return false;
+                    } else if (textViewList.get(1).getText().toString().equals("N/A")) {
+                        addEmptySensorToDb(textViewList.get(1), 2);
+                        return false;
+                    }
+                    return false;
+                }
+                break;
+            case R.id.radio_ly_three:
+            case R.id.radio_ly_four:
+                if (mainConfigurationDao.sumWindowNo(screenNo, layoutNo, pageNo) == null) {
+                    return true;
+                } else if (mainConfigurationDao.sumWindowNo(screenNo, layoutNo, pageNo) < 6) {
+                    if (textViewList.get(0).getText().toString().equals("N/A")) {
+                        addEmptySensorToDb(textViewList.get(0), 1);
+                        return false;
+                    } else if (textViewList.get(1).getText().toString().equals("N/A")) {
+                        addEmptySensorToDb(textViewList.get(1), 2);
+                        return false;
+                    } else if (textViewList.get(2).getText().toString().equals("N/A")) {
+                        addEmptySensorToDb(textViewList.get(2), 3);
+                        return false;
+                    }
+                    return false;
+                }
+
+                break;
+
+            case R.id.radio_ly_five:
+                if (mainConfigurationDao.sumWindowNo(screenNo, layoutNo, pageNo) == null) {
+                    return true;
+                } else if (mainConfigurationDao.sumWindowNo(screenNo, layoutNo, pageNo) < 10) {
+                    if (textViewList.get(0).getText().toString().equals("N/A")) {
+                        addEmptySensorToDb(textViewList.get(0), 1);
+                        return false;
+                    } else if (textViewList.get(1).getText().toString().equals("N/A")) {
+                        addEmptySensorToDb(textViewList.get(1), 2);
+                        return false;
+                    } else if (textViewList.get(2).getText().toString().equals("N/A")) {
+                        addEmptySensorToDb(textViewList.get(2), 3);
+                        return false;
+                    } else if (textViewList.get(3).getText().toString().equals("N/A")) {
+                        addEmptySensorToDb(textViewList.get(3), 4);
+                        return false;
+                    }
+                    return false;
+                }
+
+                break;
+
+            case R.id.radio_ly_six:
+                if (mainConfigurationDao.sumWindowNo(screenNo, layoutNo, pageNo) == null) {
+                    return true;
+                } else if (mainConfigurationDao.sumWindowNo(screenNo, layoutNo, pageNo) < 21) {
+                    if (textViewList.get(0).getText().toString().equals("N/A")) {
+                        addEmptySensorToDb(textViewList.get(0), 1);
+                        return false;
+                    } else if (textViewList.get(1).getText().toString().equals("N/A")) {
+                        addEmptySensorToDb(textViewList.get(1), 2);
+                        return false;
+                    } else if (textViewList.get(2).getText().toString().equals("N/A")) {
+                        addEmptySensorToDb(textViewList.get(2), 3);
+                        return false;
+                    } else if (textViewList.get(3).getText().toString().equals("N/A")) {
+                        addEmptySensorToDb(textViewList.get(3), 4);
+                        return false;
+                    } else if (textViewList.get(4).getText().toString().equals("N/A")) {
+                        addEmptySensorToDb(textViewList.get(4), 5);
+                        return false;
+                    } else if (textViewList.get(5).getText().toString().equals("N/A")) {
+                        addEmptySensorToDb(textViewList.get(5), 6);
+                        return false;
+                    }
+                    return false;
+                }
+                break;
+
+        }
+        return true;
+    }
+
     void addEmptySensorToDb(TextView textView, int window) {
         new MaterialAlertDialogBuilder(getContext()).setTitle("Sensor Not Added")
                 .setMessage("WINDOW - " + window + " is empty. Are you sure, you want to Continue ?").
@@ -826,7 +994,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                         MainConfigurationEntity mainConfigurationEntity = new MainConfigurationEntity
                                 (mainConfigurationDao.getLastSno() + 1,
                                         screenNo, layoutNo, window, pageNo,
-                                        0, "Senor not Added", 0, "N/A");
+                                        0, "Sensor not Added", 0, "N/A");
                         List<MainConfigurationEntity> entryListUpdate = new ArrayList<>();
                         entryListUpdate.add(mainConfigurationEntity);
                         updateToDb(entryListUpdate);
@@ -837,7 +1005,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                             windowNextPage();
                             i++;
                         }
-                        textView.setText("Senor not Added");
+                        //   textView.setText("Senor not Added");
 
                     }
                 }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -858,7 +1026,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
     @Override
     public void onResume() {
         super.onResume();
-        enableDefaultLayout();
+
     }
 }
 

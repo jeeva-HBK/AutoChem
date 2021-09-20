@@ -36,6 +36,7 @@ import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.VIRTUAL_INPUT;
@@ -121,14 +122,14 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
                     getPosition(0, toString(mBinding.sensorActivationViEDT), sensorActivationArr) + SPILT_CHAR +
                     toString(0, mBinding.labelViEDT) + SPILT_CHAR +
                     formDigits(2, (Integer.parseInt(getPosition(2, toString(mBinding.sensor1ViATXT), inputSensors)) + 1) + "") + SPILT_CHAR +
-                    toString(7, mBinding.sensor1ConstantViEDT) + "." + toString(2, mBinding.sensor1ConstantDec) + SPILT_CHAR +
+                    toString(6, mBinding.sensor1ConstantViEDT) + "." + toString(2, mBinding.sensor1ConstantDec) + SPILT_CHAR +
                     formDigits(2, (Integer.parseInt(getPosition(2, toString(mBinding.sensor2ViATXT), inputSensors)) + 1) + "") + SPILT_CHAR +
-                    toString(7, mBinding.sensor2ConstantViEDT) + "." + toString(2, mBinding.sensor2ConstantDec) + SPILT_CHAR +
+                    toString(6, mBinding.sensor2ConstantViEDT) + "." + toString(2, mBinding.sensor2ConstantDec) + SPILT_CHAR +
                     toString(4, mBinding.lowRangeViEDT) + SPILT_CHAR +
                     toString(4, mBinding.highRangeViEDT) + SPILT_CHAR +
                     toString(3, mBinding.smoothingFactorViEDT) + SPILT_CHAR +
-                    toString(7, mBinding.lowAlarmViEDT) + "." + toString(2, mBinding.lowAlarmViDec) + SPILT_CHAR +
-                    toString(7, mBinding.highAlarmViEDT) + "." + toString(2, mBinding.highAlarmDec) + SPILT_CHAR +
+                    toString(6, mBinding.lowAlarmViEDT) + "." + toString(2, mBinding.lowAlarmViDec) + SPILT_CHAR +
+                    toString(6, mBinding.highAlarmViEDT) + "." + toString(2, mBinding.highAlarmDec) + SPILT_CHAR +
                     getPosition(0, toString(mBinding.calculationViEDT), calculationArr) + SPILT_CHAR + "1"
             );
         }
@@ -236,7 +237,7 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
     @Override
     public void OnDataReceive(String data) {
         if (data != null) {
-            handleResponse(data.split("\\*")[1].split("\\$"));
+            handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
         }
     }
 
@@ -249,18 +250,18 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
                     mBinding.sensorActivationViEDT.setText(mBinding.sensorActivationViEDT.getAdapter().getItem(Integer.parseInt(spiltData[4])).toString());
                     mBinding.labelViEDT.setText(spiltData[5]);
                     mBinding.sensor1ViATXT.setText(mBinding.sensor1ViATXT.getAdapter().getItem(Integer.parseInt(spiltData[6]) - 1).toString());
-                    mBinding.sensor1ConstantViEDT.setText(spiltData[7].substring(0, 7));
-                    mBinding.sensor1ConstantDec.setText(spiltData[7].substring(8, 10));
+                    mBinding.sensor1ConstantViEDT.setText(spiltData[7].substring(0, 6));
+                    mBinding.sensor1ConstantDec.setText(spiltData[7].substring(7, 9));
                     mBinding.sensor2ViATXT.setText(mBinding.sensor2ViATXT.getAdapter().getItem(Integer.parseInt(spiltData[8]) - 1).toString());
-                    mBinding.sensor2ConstantViEDT.setText(spiltData[9].substring(0, 7));
-                    mBinding.sensor2ConstantDec.setText(spiltData[9].substring(8, 10));
+                    mBinding.sensor2ConstantViEDT.setText(spiltData[9].substring(0, 6));
+                    mBinding.sensor2ConstantDec.setText(spiltData[9].substring(7, 9));
                     mBinding.lowRangeViEDT.setText(spiltData[10]);
                     mBinding.highRangeViEDT.setText(spiltData[11]);
                     mBinding.smoothingFactorViEDT.setText(spiltData[12]);
-                    mBinding.lowAlarmViEDT.setText(spiltData[13].substring(0, 7));
-                    mBinding.lowAlarmViDec.setText(spiltData[13].substring(8, 10));
-                    mBinding.highAlarmViEDT.setText(spiltData[14].substring(0, 7));
-                    mBinding.highAlarmDec.setText(spiltData[13].substring(8, 10));
+                    mBinding.lowAlarmViEDT.setText(spiltData[13].substring(0, 6));
+                    mBinding.lowAlarmViDec.setText(spiltData[13].substring(7, 9));
+                    mBinding.highAlarmViEDT.setText(spiltData[14].substring(0, 6));
+                    mBinding.highAlarmDec.setText(spiltData[13].substring(7, 9));
                     mBinding.calculationViEDT.setText(mBinding.calculationViEDT.getAdapter().getItem(Integer.parseInt(spiltData[15])).toString());
 
                     initAdapters();
@@ -282,9 +283,9 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
 
     void virtualEntity() {
         VirtualConfigurationEntity virtualConfigurationEntity = new VirtualConfigurationEntity(
-                sensorInputNo, "", 0, toString(0, mBinding.labelViEDT),
-                toString(7, mBinding.lowAlarmViEDT) + "." + toString(2, mBinding.lowAlarmViDec),
-                toString(7, mBinding.highAlarmViEDT) + "." + toString(2, mBinding.highAlarmDec));
+                sensorInputNo, "Virtual", 0, toString(0, mBinding.labelViEDT),
+                toString(6, mBinding.lowAlarmViEDT) + "." + toString(2, mBinding.lowAlarmViDec),
+                toString(6, mBinding.highAlarmViEDT) + "." + toString(2, mBinding.highAlarmDec));
         List<VirtualConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(virtualConfigurationEntity);
         updateToDb(entryListUpdate);

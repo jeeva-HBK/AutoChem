@@ -135,8 +135,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:imeOptions="actionNext"
-                        android:inputType="numberDecimal"
-                        android:maxLength="7"
+                        android:inputType="number"
+                        android:maxLength="6"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -211,10 +211,9 @@
                         android:id="@+id/sensor2Constant_viEDT"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-
                         android:imeOptions="actionNext"
-                        android:inputType="numberDecimal"
-                        android:maxLength="9"
+                        android:inputType="number"
+                        android:maxLength="6"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -314,8 +313,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:imeOptions="actionNext"
-                        android:inputType="numberDecimal"
-                        android:maxLength="7"
+                        android:inputType="number"
+                        android:maxLength="6"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -374,8 +373,8 @@
                         android:layout_height="match_parent"
 
                         android:imeOptions="actionNext"
-                        android:maxLength="7"
-                        android:inputType="numberDecimal"
+                        android:maxLength="6"
+                        android:inputType="number"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>

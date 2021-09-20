@@ -128,47 +128,49 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         mBinding.AccessoryCheckbox3.setOnClickListener(this);
         mBinding.AccessoryCheckbox4.setOnClickListener(this);
 
-        mBinding.switchBtnWeek.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week1_enable))) {
-                        mBinding.weekCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_checked));
-                        timerOne[5] = "1";
-                    }
-                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week2_enable))) {
-                        mBinding.weekCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_checked));
-                        timerTwo[5] = "1";
-                    }
-                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week3_enable))) {
-                        mBinding.weekCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_checked));
-                        timerThree[5] = "1";
-                    }
-                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week4_enable))) {
-                        mBinding.weekCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_cheched));
-                        timerFour[5] = "1";
-                    }
+        if(timerOne != null && timerTwo != null && timerThree != null && timerFour != null) {
+            mBinding.switchBtnWeek.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week1_enable))) {
+                            mBinding.weekCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_checked));
+                            timerOne[5] = "1";
+                        }
+                        if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week2_enable))) {
+                            mBinding.weekCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_checked));
+                            timerTwo[5] = "1";
+                        }
+                        if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week3_enable))) {
+                            mBinding.weekCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_checked));
+                            timerThree[5] = "1";
+                        }
+                        if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week4_enable))) {
+                            mBinding.weekCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_cheched));
+                            timerFour[5] = "1";
+                        }
 
-                } else {
-                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week1_enable))) {
-                        mBinding.weekCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_unchecked));
-                        timerOne[5] = "0";
-                    }
-                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week2_enable))) {
-                        mBinding.weekCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_unchecked));
-                        timerTwo[5] = "0";
-                    }
-                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week3_enable))) {
-                        mBinding.weekCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_unchecked));
-                        timerThree[5] = "0";
-                    }
-                    if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week4_enable))) {
-                        mBinding.weekCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_unchecked));
-                        timerFour[5] = "0";
+                    } else {
+                        if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week1_enable))) {
+                            mBinding.weekCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_unchecked));
+                            timerOne[5] = "0";
+                        }
+                        if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week2_enable))) {
+                            mBinding.weekCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_unchecked));
+                            timerTwo[5] = "0";
+                        }
+                        if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week3_enable))) {
+                            mBinding.weekCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_unchecked));
+                            timerThree[5] = "0";
+                        }
+                        if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week4_enable))) {
+                            mBinding.weekCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_unchecked));
+                            timerFour[5] = "0";
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
     }
 
@@ -388,16 +390,16 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
             public void onClick(View v) {
                 //SendData
                 if (weeklyScheduledValidation()) {
-                    if (week.equals("Week-1")) {
+                    if (week.equals("Week-1") && timerOne != null) {
                         weekupdateData(enableSchedule, day, timerOne);
                     }
-                    if (week.equals("Week-2")) {
+                    if (week.equals("Week-2") && timerTwo != null) {
                         weekupdateData(enableSchedule, day, timerTwo);
                     }
-                    if (week.equals("Week-3")) {
+                    if (week.equals("Week-3") && timerThree != null) {
                         weekupdateData(enableSchedule, day, timerThree);
                     }
-                    if (week.equals("Week-4")) {
+                    if (week.equals("Week-4") &&  timerFour != null) {
                         weekupdateData(enableSchedule, day, timerFour);
                     }
                     alertDialog.dismiss();
@@ -418,25 +420,25 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                 //ApplyToAll
                 Log.e("week", week);
                 if (weeklyScheduledValidation()) {
-                    if (week.equals("Week-1")) {
+                    if (week.equals("Week-1") && timerOne != null) {
                         weekupdateData(enableSchedule, day, timerOne);
                         applyToAllTime(timerOne, timerOne, day);
                         handleResponse(timerOne, 1);
                         alertDialog.dismiss();
                     }
-                    if (week.equals("Week-2")) {
+                    if (week.equals("Week-2") && timerTwo != null ) {
                         weekupdateData(enableSchedule, day, timerTwo);
                         applyToAllTime(timerTwo, timerTwo, day);
                         handleResponse(timerTwo, 1);
                         alertDialog.dismiss();
                     }
-                    if (week.equals("Week-3")) {
+                    if (week.equals("Week-3") && timerThree != null) {
                         weekupdateData(enableSchedule, day, timerThree);
                         applyToAllTime(timerThree, timerThree, day);
                         handleResponse(timerThree, 1);
                         alertDialog.dismiss();
                     }
-                    if (week.equals("Week-4")) {
+                    if (week.equals("Week-4") && timerFour != null) {
                         weekupdateData(enableSchedule, day, timerFour);
                         applyToAllTime(timerFour, timerFour, day);
                         handleResponse(timerFour, 1);
@@ -587,19 +589,19 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         });
 
         //OnDataReceive Timer status
-        if (timer == 1 && accessoryTimer != null) {
+        if (timer == 1 && accessoryTimer != null && accessoryTimer.length > 8) {
             setTimerDatas(accessoryTimer[9], accessoryTimer[10], accessoryTimer[11], accessoryTimer[12], accessoryTimer[13],
                     accessory, mode, startHour, startMin, startSec, outputName, type);
         }
-        if (timer == 2 && accessoryTimer != null) {
+        if (timer == 2 && accessoryTimer != null && accessoryTimer.length > 14) {
             setTimerDatas(accessoryTimer[15], accessoryTimer[16], accessoryTimer[17], accessoryTimer[18], accessoryTimer[19],
                     accessory, mode, startHour, startMin, startSec, outputName, type);
         }
-        if (timer == 3 && accessoryTimer != null) {
+        if (timer == 3 && accessoryTimer != null && accessoryTimer.length > 20) {
             setTimerDatas(accessoryTimer[21], accessoryTimer[22], accessoryTimer[23], accessoryTimer[24], accessoryTimer[25],
                     accessory, mode, startHour, startMin, startSec, outputName, type);
         }
-        if (timer == 4 && accessoryTimer != null) {
+        if (timer == 4 && accessoryTimer != null && accessoryTimer.length > 26) {
             setTimerDatas(accessoryTimer[27], accessoryTimer[28], accessoryTimer[29], accessoryTimer[30], accessoryTimer[31],
                     accessory, mode, startHour, startMin, startSec, outputName, type);
         }
@@ -615,7 +617,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
             public void onClick(View v) {
                 //SendData
                 if (timer == 1) {
-                    if (accessoryTimeValidation()) {
+                    if (accessoryTimeValidation()  && accessoryTimer != null && accessoryTimer.length > 8) {
                         if (accessory.isChecked()) {
                             accessoryTimer[9] = "1";
                             mBinding.AccessoryCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_checked));
@@ -631,50 +633,55 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                     }
                 }
                 if (timer == 2) {
-                    if (accessory.isChecked()) {
-                        accessoryTimer[15] = "1";
-                        mBinding.AccessoryCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_checked));
-                    } else {
-                        accessoryTimer[15] = "0";
-                        mBinding.AccessoryCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_unchecked));
+                    if (accessoryTimeValidation()  && accessoryTimer != null && accessoryTimer.length > 14) {
+                        if (accessory.isChecked()) {
+                            accessoryTimer[15] = "1";
+                            mBinding.AccessoryCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_checked));
+                        } else {
+                            accessoryTimer[15] = "0";
+                            mBinding.AccessoryCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_unchecked));
+                        }
+                        accessoryTimer[16] = getPosition(1, toStringValue(mode), accessoryTimerMode);
+                        accessoryTimer[17] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
+                        accessoryTimer[18] = getPosition(2, toStringValue(outputName), bleedRelay);
+                        accessoryTimer[19] = getPosition(1, toStringValue(type), accessoryType);
+                        alertDialog.dismiss();
                     }
-                    accessoryTimer[16] = getPosition(1, toStringValue(mode), accessoryTimerMode);
-                    accessoryTimer[17] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
-                    accessoryTimer[18] = getPosition(2, toStringValue(outputName), bleedRelay);
-                    accessoryTimer[19] = getPosition(1, toStringValue(type), accessoryType);
-                    alertDialog.dismiss();
 
                 }
                 if (timer == 3) {
-                    if (accessory.isChecked()) {
-                        accessoryTimer[21] = "1";
-                        mBinding.AccessoryCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_checked));
+                    if (accessoryTimeValidation()  && accessoryTimer != null && accessoryTimer.length > 20) {
+                        if (accessory.isChecked()) {
+                            accessoryTimer[21] = "1";
+                            mBinding.AccessoryCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_checked));
 
-                    } else {
-                        accessoryTimer[21] = "0";
-                        mBinding.AccessoryCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_unchecked));
+                        } else {
+                            accessoryTimer[21] = "0";
+                            mBinding.AccessoryCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_unchecked));
+                        }
+                        accessoryTimer[22] = getPosition(1, toStringValue(mode), accessoryTimerMode);
+                        accessoryTimer[23] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
+                        accessoryTimer[24] = getPosition(2, toStringValue(outputName), bleedRelay);
+                        accessoryTimer[25] = getPosition(1, toStringValue(type), accessoryType);
+                        alertDialog.dismiss();
                     }
-                    accessoryTimer[22] = getPosition(1, toStringValue(mode), accessoryTimerMode);
-                    accessoryTimer[24] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
-                    accessoryTimer[25] = getPosition(2, toStringValue(outputName), bleedRelay);
-                    accessoryTimer[26] = getPosition(1, toStringValue(type), accessoryType);
-                    alertDialog.dismiss();
 
                 }
                 if (timer == 4) {
-                    if (accessory.isChecked()) {
-                        accessoryTimer[27] = "1";
-                        mBinding.AccessoryCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_cheched));
-                    } else {
-                        accessoryTimer[27] = "0";
-                        mBinding.AccessoryCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_unchecked));
+                    if (accessoryTimeValidation()  && accessoryTimer != null && accessoryTimer.length > 26) {
+                        if (accessory.isChecked()) {
+                            accessoryTimer[27] = "1";
+                            mBinding.AccessoryCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_cheched));
+                        } else {
+                            accessoryTimer[27] = "0";
+                            mBinding.AccessoryCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_unchecked));
+                        }
+                        accessoryTimer[28] = getPosition(1, toStringValue(mode), accessoryTimerMode);
+                        accessoryTimer[29] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
+                        accessoryTimer[30] = getPosition(2, toStringValue(outputName), bleedRelay);
+                        accessoryTimer[31] = getPosition(1, toStringValue(type), accessoryType);
+                        alertDialog.dismiss();
                     }
-                    accessoryTimer[28] = getPosition(1, toStringValue(mode), accessoryTimerMode);
-                    accessoryTimer[29] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
-                    accessoryTimer[30] = getPosition(2, toStringValue(outputName), bleedRelay);
-                    accessoryTimer[31] = getPosition(1, toStringValue(type), accessoryType);
-                    alertDialog.dismiss();
-
                 }
 
             }
@@ -728,6 +735,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                 startMin.setText(accessoryTimehhmmsec.substring(2, 4));
                 startSec.setText(accessoryTimehhmmsec.substring(4, 6));
             }
+            Log.e("output",accessoryTimerOutput);
             outputName.setText(outputName.getAdapter().getItem(Integer.parseInt(accessoryTimerOutput)).toString());
             type.setText(type.getAdapter().getItem(Integer.parseInt(accessoryTimerType)).toString());
         }
@@ -928,6 +936,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         } else {
             mBinding.viewFlowSensor.setVisibility(View.GONE);
         }
+        mBinding.txtFlowSensorValueAct.setAdapter(getAdapter(timerFlowSensor));
     }
 
     @Override
@@ -947,30 +956,38 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                 break;
             case R.id.week_checkbox_1:
                 mBinding.switchBtnWeek.setText(getString(R.string.week1_enable));
-                enabledWeeklySchedule(mBinding.switchBtnWeek, timerOne);
                 week = "Week-1";
-                handleResponse(timerOne, 1);
+                if(timerOne != null) {
+                    enabledWeeklySchedule(mBinding.switchBtnWeek, timerOne);
+                    handleResponse(timerOne, 1);
+                }
                 break;
 
             case R.id.week_checkbox_2:
                 mBinding.switchBtnWeek.setText(getString(R.string.week2_enable));
-                enabledWeeklySchedule(mBinding.switchBtnWeek, timerTwo);
                 week = "Week-2";
-                handleResponse(timerTwo, 1);
+                if(timerTwo != null) {
+                    enabledWeeklySchedule(mBinding.switchBtnWeek, timerTwo);
+                    handleResponse(timerTwo, 1);
+                }
                 break;
 
             case R.id.week_checkbox_3:
                 mBinding.switchBtnWeek.setText(getString(R.string.week3_enable));
-                enabledWeeklySchedule(mBinding.switchBtnWeek, timerThree);
                 week = "Week-3";
-                handleResponse(timerThree, 1);
+                if(timerThree != null) {
+                    enabledWeeklySchedule(mBinding.switchBtnWeek, timerThree);
+                    handleResponse(timerThree, 1);
+                }
                 break;
 
             case R.id.week_checkbox_4:
                 mBinding.switchBtnWeek.setText(getString(R.string.week4_enable));
-                enabledWeeklySchedule(mBinding.switchBtnWeek, timerFour);
                 week = "Week-4";
-                handleResponse(timerFour, 1);
+                if(timerFour != null) {
+                    enabledWeeklySchedule(mBinding.switchBtnWeek, timerFour);
+                    handleResponse(timerFour, 1);
+                }
                 break;
 
             case R.id.saveLayout_condIS:
@@ -1012,6 +1029,38 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
     void writeTimerConfiguration() {
         mActivity.showProgress();
         try {
+            Log.e("update",DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
+                    SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                    PCK_TIMER_CONFIG + SPILT_CHAR + timerNo + SPILT_CHAR + mBinding.timerNameTxt.getText().toString()
+                    + SPILT_CHAR + getPosition(2, toStringValue(mBinding.txtOutputNameValueAct), bleedRelay)
+                    + SPILT_CHAR + getPosition(2, toStringValue(mBinding.txtModeValueAct), timerOutputMode)
+                    + SPILT_CHAR + getPosition(1, toStringValue(mBinding.txtFlowSensorValueAct), timerFlowSensor)
+                    + SPILT_CHAR + "1"
+                    + SPILT_CHAR + accessoryTimer[9]
+                    + SPILT_CHAR + accessoryTimer[10]
+                    + SPILT_CHAR + accessoryTimer[11]
+                    + SPILT_CHAR + accessoryTimer[12]
+                    + SPILT_CHAR + accessoryTimer[13]
+                    + SPILT_CHAR + "2"
+                    + SPILT_CHAR + accessoryTimer[15]
+                    + SPILT_CHAR + accessoryTimer[16]
+                    + SPILT_CHAR + accessoryTimer[17]
+                    + SPILT_CHAR + accessoryTimer[18]
+                    + SPILT_CHAR + accessoryTimer[19]
+                    + SPILT_CHAR + "3"
+                    + SPILT_CHAR + accessoryTimer[21]
+                    + SPILT_CHAR + accessoryTimer[22]
+                    + SPILT_CHAR + accessoryTimer[23]
+                    + SPILT_CHAR + accessoryTimer[24]
+                    + SPILT_CHAR + accessoryTimer[25]
+                    + SPILT_CHAR + "4"
+                    + SPILT_CHAR + accessoryTimer[27]
+                    + SPILT_CHAR + accessoryTimer[28]
+                    + SPILT_CHAR + accessoryTimer[29]
+                    + SPILT_CHAR + accessoryTimer[30]
+                    + SPILT_CHAR + accessoryTimer[31]
+                    + SPILT_CHAR + "1" + timerOne[5] + "2" + timerTwo[5] + "3" + timerThree[5] + "4" + timerFour[5]);
+
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                     SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                     PCK_TIMER_CONFIG + SPILT_CHAR + timerNo + SPILT_CHAR + mBinding.timerNameTxt.getText().toString()
@@ -1172,9 +1221,16 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
     }
 
     void enabledWeeklySchedule(SwitchMaterial checkBox, String[] week) {
-        if (week[5].equals("1")) {
-            checkBox.setChecked(true);
-        } else if (week[5].equals("0")) {
+        try {
+            if (week[5].equals("1")) {
+                checkBox.setChecked(true);
+            } else if (week[5].equals("0")) {
+                checkBox.setChecked(false);
+            } else {
+                checkBox.setChecked(false);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
             checkBox.setChecked(false);
         }
     }
