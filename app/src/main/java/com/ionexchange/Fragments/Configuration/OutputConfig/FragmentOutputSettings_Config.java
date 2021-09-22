@@ -13,22 +13,18 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ionexchange.Adapters.OutputIndexRvAdapter;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
-import com.ionexchange.Database.Entity.OutputConfigurationEntity;
-import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Fragments.FragmentHostDashboard;
 import com.ionexchange.Interface.RvOnClick;
+import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentOutputsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FragmentOutputSettings_Config extends Fragment implements RvOnClick {
 
     static FragmentOutputsettingsBinding mBinding;
-
+    ApplicationClass mAppClass;
     OutputConfigurationDao dao;
     int pageOffset = 0, currentPage = 0;
 
@@ -48,6 +44,7 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
         dao = FragmentHostDashboard.outputDAO;
         mBinding.outputRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(this, dao.getOutputConfigurationEntityList(9, pageOffset)));
+        mAppClass = (ApplicationClass) getActivity().getApplication();
 
         mBinding.leftArrowOsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,9 +68,8 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
 
     }
 
-    public static void hideArrows() {
-        mBinding.rightArrowOsBtn.setVisibility(View.GONE);
-        mBinding.leftArrowOsBtn.setVisibility(View.GONE);
+    public static void hideToolbar() {
+        mBinding.view8.setVisibility(View.GONE);
     }
 
     @Override
@@ -85,14 +81,9 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
 
     @Override
     public void onClick(String sensorInputNo) {
-
     }
 
     @Override
     public void onClick(String sensorInputNo, String type, int position) {
-
     }
-
-
-
 }

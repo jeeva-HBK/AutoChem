@@ -392,7 +392,7 @@
                     android:clickable="false"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="Comp Type"
+                    android:hint="Compensation Type"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -419,7 +419,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/con_compFactor_edt_isc"
                         style="@style/config_Edt"
-                        android:hint="Comp Factor"
+                        android:hint="Compensation Factor"
                         android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="2"

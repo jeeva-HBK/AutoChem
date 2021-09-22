@@ -24,6 +24,18 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <!--Back_Arrow-->
+            <ImageView
+                android:id="@+id/backArrow_osc"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:src="@drawable/ic_back"
+                android:layout_weight="0.2"
+                android:layout_marginStart="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/leftArrow_os_btn"
+                app:layout_constraintStart_toStartOf="@+id/view8"
+                app:layout_constraintTop_toTopOf="@+id/leftArrow_os_btn" />
+
             <!--Output Label-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/output_label_os"
@@ -881,6 +893,25 @@
             android:orientation="horizontal"
             android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}">
 
+            <!--Link Input Sensor-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/sensor_linkInputSensor_til_osc"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/sensor_linkInputSensor_atxt_osc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Link Input Sensor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <!--set Point-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/sensor_setPoint_root_osc"
@@ -956,25 +987,6 @@
                     android:editable="false"
                     android:focusable="false"
                     android:hint="Dose Type" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--Link Input Sensor-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/sensor_linkInputSensor_til_osc"
-                style="@style/appAutoTxt"
-                android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_margin="3dp"
-                android:layout_weight="1">
-
-                <AutoCompleteTextView
-                    android:id="@+id/sensor_linkInputSensor_atxt_osc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:hint="Link Input Sensor" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

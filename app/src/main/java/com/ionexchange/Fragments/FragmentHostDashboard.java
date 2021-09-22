@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.macAddress;
+import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.ADMIN;
 import static com.ionexchange.Others.PacketControl.APP_VERSION;
 import static com.ionexchange.Others.PacketControl.CONNECT_COMMAND;
@@ -124,25 +125,27 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        // mActivity.changeProgress(View.VISIBLE);
-        switch (v.getId()) {
-            case R.id.main_screen_btn:
-                setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentRoot_MainScreen(), "Dashboard");
-                break;
+        if (userType != 0) {
+            switch (v.getId()) {
+                case R.id.main_screen_btn:
+                    setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentRoot_MainScreen(), "Dashboard");
+                    break;
 
-            case R.id.trend_screen_btn:
-                setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle, mBinding.statisticsText, new FragmentRoot_Trend(), "Statistics");
-                break;
+                case R.id.trend_screen_btn:
+                    setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle, mBinding.statisticsText, new FragmentRoot_Trend(), "Statistics");
+                    break;
 
-            case R.id.event_logs_screen_btn:
-                setNewState(mBinding.supportBigCircle, mBinding.supportMain, mBinding.supportSub, mBinding.supportSmallCircle, mBinding.supportText, new FragmentRoot_EventLogs(), "Events & Logs");
-                break;
+                case R.id.event_logs_screen_btn:
+                    setNewState(mBinding.supportBigCircle, mBinding.supportMain, mBinding.supportSub, mBinding.supportSmallCircle, mBinding.supportText, new FragmentRoot_EventLogs(), "Events & Logs");
+                    break;
 
-            case R.id.config_screen_btn:
-                // mActivity.changeProgress(View.VISIBLE);
-                initDB();
-                setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText, new FragmentRoot_Config(), "Configuration");
-                break;
+                case R.id.config_screen_btn:
+                    initDB();
+                    setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText, new FragmentRoot_Config(), "Configuration");
+                    break;
+            }
+        } else {
+            mAppClass.showSnackBar(getContext(), "Access Denied !");
         }
     }
 

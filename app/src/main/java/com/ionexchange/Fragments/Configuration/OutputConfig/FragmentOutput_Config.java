@@ -17,7 +17,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
@@ -56,7 +58,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     FragmentOutputConfigBinding mBinding;
     ApplicationClass mAppClass;
     int outputSensorNo;
-    String[] bleedArr;
+    String[] bleedArr, sensorInputArr;
     String lInhibitorContinuous = "layoutInhibitorContinuous", lInhibitorBleed = "layoutInhibitorBleedDown", lInhibitorWaterFlow = "layoutInhibitorWaterFlow",
             lSensorOnOFF = "layoutSensorOnOff", lSensorPid = "layoutSensorPID", lAnalogMain = "layoutAnalogMain", lAnalogTest = "layoutAnalogTest", lAnalogDisable = "layoutAnalogDisable",
             currentFunctionMode = "", analogMode = "3";
@@ -78,7 +80,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
-        FragmentOutputSettings_Config.hideArrows();
+        FragmentOutputSettings_Config.hideToolbar();
         initAdapter();
         mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(1).toString());
         if (outputSensorNo < 15) {
@@ -89,6 +91,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             enableAnalogLayout();
         }
         bleedArr = getBleedArray();
+        sensorInputArr = getSensorInputArray();
         initAdapter();
         mBinding.funtionModeOsATXT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -163,9 +166,31 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             }
         });
 
+        mBinding.backArrowOsc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentOutputSettings_Config());
+            }
+        });
+
         mBinding.saveFabOutput.setOnClickListener(this::save);
-        mBinding.saveLayoutOutput.setOnClickListener(this::save);
         checkUser();
+    }
+
+    private String[] getSensorInputArray() {
+        WaterTreatmentDb DB = WaterTreatmentDb.getDatabase(getContext());
+        InputConfigurationDao DAO = DB.inputConfigurationDao();
+        List<InputConfigurationEntity> inputNameList = DAO.getInputHardWareNoConfigurationEntityList(1, 13);
+        String[] inputNames = new String[13];
+        if (!inputNameList.isEmpty()) {
+            for (int i = 0; i < inputNameList.size(); i++) {
+                inputNames[i] = "Input- " + inputNameList.get(i).getHardwareNo() + " (" + inputNameList.get(i).getInputLabel() + ")";
+            }
+        }
+        if (inputNames.length == 0) {
+            inputNames = inputAnalogSensors;
+        }
+        return inputNames;
     }
 
     private void checkUser() {
@@ -232,13 +257,13 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
     private void enableAnalogMain() {
         mBinding.setFunctionMode(lAnalogMain);
-        mBinding.analogLinkInputAtxtOsc.setAdapter(getAdapter(inputAnalogSensors));
+        mBinding.analogLinkInputAtxtOsc.setAdapter(getAdapter(sensorInputArr));
     }
 
     private void enableAnalogTest() {
         mBinding.setFunctionMode(lAnalogTest);
         mBinding.modeOsATXT.setText(mBinding.modeOsATXT.getAdapter().getItem(2).toString());
-        mBinding.testLinkInputRelayEdtOsc.setAdapter(getAdapter(inputAnalogSensors));
+        mBinding.testLinkInputRelayEdtOsc.setAdapter(getAdapter(sensorInputArr));
         mBinding.modeOsATXT.setAdapter(getAdapter(modeAnalog));
     }
 
@@ -294,7 +319,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                 break;
                         }
                         break;
-                    case "Disable":
+                    case "Disabled":
                         sendRelayDisable();
                         break;
                 }
@@ -341,19 +366,19 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 toString(2, outputSensorNo) + SPILT_CHAR +
                 analogMode + SPILT_CHAR +
                 getPosition(0, toString(mBinding.modeOsATXT), modeAnalog) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.testLinkInputRelayEdtOsc), inputAnalogSensors) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.testLinkInputRelayEdtOsc), sensorInputArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.analogFixedValueEdtOsc, 2, mBinding.analogFixedValueDeciOsc, 2));
     }
 
     /*AnalogDisable*/
     private void sendAnalogDisable() {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
-                PCK_OUTPUT_CONFIG + SPILT_CHAR + toString(2, outputSensorNo) + SPILT_CHAR +
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+                CONN_TYPE + SPILT_CHAR +
+                WRITE_PACKET + SPILT_CHAR +
+                PCK_OUTPUT_CONFIG + SPILT_CHAR +
+                toString(2, outputSensorNo) + SPILT_CHAR +
                 analogMode + SPILT_CHAR +
-                toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
-                formDigits(2, (Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 1) + "") + SPILT_CHAR +
-                formDigits(2, (Integer.parseInt(getPosition(2, toString(mBinding.activateChannelOsATXT), interlockChannel)) + 1) + "") + SPILT_CHAR +
-                getPosition(0, toString(mBinding.modeOsATXT), modeAnalog) + SPILT_CHAR + "00");
+                getPosition(0, toString(mBinding.modeOsATXT), modeAnalog));
     }
 
     /*analogValue*/
@@ -365,7 +390,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 toString(2, outputSensorNo) + SPILT_CHAR +
                 analogMode + SPILT_CHAR +
                 getPosition(1, toString(mBinding.modeOsATXT), modeAnalog) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.analogLinkInputAtxtOsc), inputAnalogSensors) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.analogLinkInputAtxtOsc), sensorInputArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.analogMinMaEdtOsc, 2, mBinding.analogMinMaDeciOsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.analogMaxMaEdtOsc, 2, mBinding.analogMaxMaDeciOsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.analogMinValueEdtOsc, 2, mBinding.analogMinValueDeciOsc, 2) + SPILT_CHAR +
@@ -388,7 +413,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.activateChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.pidLinkInputAtxtOsc), inputAnalogSensors) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.pidLinkInputAtxtOsc), sensorInputArr) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.modeOsATXT), modeSensor) + SPILT_CHAR +
                 getDecimalValue(mBinding.pidSetPointEdtOsc, 3, mBinding.pidSetPointDeciOsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.pidGainEdtOsc, 4, mBinding.pidGainDeciOsc, 3) + SPILT_CHAR +
@@ -416,7 +441,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.activateChannelOsATXT), interlockChannel)) + 30) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.sensorLinkInputSensorAtxtOsc), inputAnalogSensors) + SPILT_CHAR +
+                getPosition(2, toString(mBinding.sensorLinkInputSensorAtxtOsc), sensorInputArr) + SPILT_CHAR +
                 getPosition(0, toString(mBinding.modeOsATXT), modeSensor) + SPILT_CHAR +
                 getDecimalValue(mBinding.sensorSetPointEdtOsc, 3, mBinding.sensorSetPointDeciOsc, 2) + SPILT_CHAR +
                 getPosition(0, toString(mBinding.sensorDoseTypeAtxtOsc), doseTypeArr) + SPILT_CHAR +
@@ -491,15 +516,17 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.setFunctionMode(lSensorOnOFF);
         mBinding.modeOsATXT.setText(mBinding.modeOsATXT.getAdapter().getItem(0).toString());
         mBinding.modeOsATXT.setAdapter(getAdapter(modeSensor));
-        mBinding.sensorLinkInputSensorAtxtOsc.setAdapter(getAdapter(inputAnalogSensors));
+        mBinding.sensorLinkInputSensorAtxtOsc.setAdapter(getAdapter(sensorInputArr));
         mBinding.sensorDoseTypeAtxtOsc.setAdapter(getAdapter(doseTypeArr));
-        mBinding.pidLinkInputAtxtOsc.setAdapter(getAdapter(inputAnalogSensors));
+        mBinding.pidLinkInputAtxtOsc.setAdapter(getAdapter(sensorInputArr));
         mBinding.pidDoseTypeAtxtOsc.setAdapter(getAdapter(doseTypeArr));
     }
 
 
     void enableDisabled() {
+        currentFunctionMode = "Disabled";
         mBinding.modeOs.setEnabled(false);
+        mBinding.modeOsATXT.setText("");
         mBinding.setFunctionMode("Disabled");
         mBinding.outputRow2.setVisibility(View.GONE);
         Log.e(TAG, "enableDisabled: ");
@@ -511,7 +538,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.modeOsATXT.setText(mBinding.modeOsATXT.getAdapter().getItem(1).toString());
         mBinding.modeOsATXT.setAdapter(getAdapter(modeSensor));
         mBinding.pidDoseTypeAtxtOsc.setAdapter(getAdapter(doseTypeArr));
-        mBinding.pidLinkInputAtxtOsc.setAdapter(getAdapter(inputAnalogSensors));
+        mBinding.pidLinkInputAtxtOsc.setAdapter(getAdapter(sensorInputArr));
         mBinding.pidResetPidAtxtOsc.setAdapter(getAdapter(resetFlowTotalArr));
     }
 
@@ -570,9 +597,9 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     private void enableSensorLayout() {
         currentFunctionMode = "Sensor";
         mBinding.setFunctionMode(lSensorOnOFF);
-        mBinding.sensorLinkInputSensorAtxtOsc.setAdapter(getAdapter(inputAnalogSensors));
+        mBinding.sensorLinkInputSensorAtxtOsc.setAdapter(getAdapter(sensorInputArr));
         mBinding.sensorDoseTypeAtxtOsc.setAdapter(getAdapter(doseTypeArr));
-        mBinding.pidLinkInputAtxtOsc.setAdapter(getAdapter(inputAnalogSensors));
+        mBinding.pidLinkInputAtxtOsc.setAdapter(getAdapter(sensorInputArr));
         mBinding.pidDoseTypeAtxtOsc.setAdapter(getAdapter(doseTypeArr));
         mBinding.modeOsATXT.setAdapter(getAdapter(modeSensor));
         mBinding.modeOsATXT.setText(mBinding.modeOsATXT.getAdapter().getItem(0).toString());
@@ -659,12 +686,14 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                         mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(1).toString());
                         //   } else {
                         //        mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
-                        //     }
+                        //   }
                     } else {
                         mBinding.outputLabelOsEDT.setText(splitData[5]);
-                        mBinding.interLockChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(Integer.parseInt(splitData[6]) - 30).toString());
-                        mBinding.activateChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(Integer.parseInt(splitData[7]) - 30).toString());
                         mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
+                        if (!splitData[4].equals("0")) {
+                            mBinding.interLockChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(Integer.parseInt(splitData[6]) - 30).toString());
+                            mBinding.activateChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(Integer.parseInt(splitData[7]) - 30).toString());
+                        }
                     }
                     switch (splitData[4]) {
                         case "0": // Disable
@@ -739,7 +768,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                 mBinding.sensorSafetyMinEdtOsc.setText(splitData[16]);
 
                                 mBinding.sensorDoseTypeAtxtOsc.setAdapter(getAdapter(doseTypeArr));
-                                mBinding.sensorLinkInputSensorAtxtOsc.setAdapter(getAdapter(inputAnalogSensors));
+                                mBinding.sensorLinkInputSensorAtxtOsc.setAdapter(getAdapter(sensorInputArr));
                             } else if (splitData[9].equals("1")) { // PID
                                 enablePID();
                                 mBinding.pidLinkInputAtxtOsc.setText(mBinding.pidLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8])).toString());
@@ -766,7 +795,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                 mBinding.pidSafetyMinEdtOsc.setText(splitData[22]);
 
                                 mBinding.pidDoseTypeAtxtOsc.setAdapter(getAdapter(doseTypeArr));
-                                mBinding.pidLinkInputAtxtOsc.setAdapter(getAdapter(inputAnalogSensors));
+                                mBinding.pidLinkInputAtxtOsc.setAdapter(getAdapter(sensorInputArr));
 
                                 mBinding.pidResetPidAtxtOsc.setAdapter(getAdapter(resetFlowTotalArr));
                             } else if (splitData[9].equals("2")) {
@@ -784,7 +813,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                 mBinding.testLinkInputRelayEdtOsc.setText(mBinding.testLinkInputRelayEdtOsc.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
                                 mBinding.analogFixedValueEdtOsc.setText(splitData[7].substring(0, 2));
                                 mBinding.analogFixedValueDeciOsc.setText(splitData[7].substring(3, 5));
-                                mBinding.testLinkInputRelayEdtOsc.setAdapter(getAdapter(inputAnalogSensors));
+                                mBinding.testLinkInputRelayEdtOsc.setAdapter(getAdapter(sensorInputArr));
                             } else {
                                 enableAnalogMain();
                                 mBinding.modeOsATXT.setText(mBinding.modeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[5])).toString());
@@ -802,7 +831,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                 mBinding.analogMaxValueEdtOsc.setText(splitData[10].substring(0, 2));
                                 mBinding.analogMaxValueDeciOsc.setText(splitData[10].substring(3, 5));
 
-                                mBinding.analogLinkInputAtxtOsc.setAdapter(getAdapter(inputAnalogSensors));
+                                mBinding.analogLinkInputAtxtOsc.setAdapter(getAdapter(sensorInputArr));
                             }
                             mBinding.modeOsATXT.setAdapter(getAdapter(modeAnalog));
                             break;
@@ -1024,16 +1053,21 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         if (isEmpty(mBinding.outputLabelOsEDT)) {
             mAppClass.showSnackBar(getContext(), "Output Label  cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.interLockChannelOsATXT)) {
-            mAppClass.showSnackBar(getContext(), "Please select the Interlock Channel");
-            return false;
-        } else if (isEmpty(mBinding.activateChannelOsATXT)) {
-            mAppClass.showSnackBar(getContext(), "Please select the Activate Channel");
-            return false;
-        } else if (isEmpty(mBinding.modeOsATXT)) {
-            mAppClass.showSnackBar(getContext(), "Please select the Mode");
-            return false;
         }
+
+        if (!currentFunctionMode.equals("Disabled")) {
+            if (isEmpty(mBinding.interLockChannelOsATXT)) {
+                mAppClass.showSnackBar(getContext(), "Please select the Interlock Channel");
+                return false;
+            } else if (isEmpty(mBinding.activateChannelOsATXT)) {
+                mAppClass.showSnackBar(getContext(), "Please select the Activate Channel");
+                return false;
+            } else if (isEmpty(mBinding.modeOsATXT)) {
+                mAppClass.showSnackBar(getContext(), "Please select the Mode");
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -1047,7 +1081,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
                 (outputSensorNo, "Output- " + outputSensorNo + "(" + toString(mBinding.outputLabelOsEDT) + ")", toString(0, mBinding.outputLabelOsEDT),
                         mBinding.funtionModeOsATXT.getText().toString(),
-                        mBinding.modeOsATXT.getText().toString());
+                        (currentFunctionMode.equals("Disabled") ? "" : mBinding.modeOsATXT.getText().toString()));
         List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(entityUpdate);
         updateToDb(entryListUpdate);

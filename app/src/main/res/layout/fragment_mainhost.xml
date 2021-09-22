@@ -70,7 +70,6 @@
             app:layout_constraintStart_toStartOf="@id/homeSmallCircle"
             app:layout_constraintTop_toTopOf="@id/homeSmallCircle" />
 
-
         <TextView
             android:id="@+id/homeText"
             android:layout_width="wrap_content"
@@ -82,7 +81,6 @@
             app:layout_constraintEnd_toEndOf="@id/homeBigCircle"
             app:layout_constraintStart_toStartOf="@id/homeBigCircle"
             app:layout_constraintTop_toTopOf="@id/guideline2" />
-
 
         <View
             android:id="@+id/main_screen_btn"
@@ -102,7 +100,6 @@
             app:layout_constraintEnd_toStartOf="@+id/supportMain"
             app:layout_constraintStart_toEndOf="@+id/homeMain"
             app:layout_constraintTop_toTopOf="@+id/view2" />
-
 
         <View
             android:id="@+id/statisticsBigCircle"

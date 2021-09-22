@@ -132,50 +132,55 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         mBinding.AccessoryCheckbox3.setOnClickListener(this);
         mBinding.AccessoryCheckbox4.setOnClickListener(this);
 
-        if(timerOne != null && timerTwo != null && timerThree != null && timerFour != null) {
             mBinding.switchBtnWeek.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week1_enable))) {
                             mBinding.weekCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_checked));
-                            timerOne[5] = "1";
+                            if (timerOne != null)
+                                timerOne[5] = "1";
                         }
                         if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week2_enable))) {
                             mBinding.weekCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_checked));
-                            timerTwo[5] = "1";
+                            if (timerTwo != null)
+                                timerTwo[5] = "1";
                         }
                         if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week3_enable))) {
                             mBinding.weekCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_checked));
-                            timerThree[5] = "1";
+                            if (timerThree != null)
+                                timerThree[5] = "1";
                         }
                         if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week4_enable))) {
                             mBinding.weekCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_cheched));
-                            timerFour[5] = "1";
+                            if (timerFour != null)
+                                timerFour[5] = "1";
                         }
 
                     } else {
                         if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week1_enable))) {
                             mBinding.weekCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_unchecked));
-                            timerOne[5] = "0";
+                            if (timerOne != null)
+                                timerOne[5] = "0";
                         }
                         if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week2_enable))) {
                             mBinding.weekCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_unchecked));
-                            timerTwo[5] = "0";
+                            if (timerTwo != null)
+                                timerTwo[5] = "0";
                         }
                         if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week3_enable))) {
                             mBinding.weekCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_unchecked));
-                            timerThree[5] = "0";
+                            if (timerThree != null)
+                                timerThree[5] = "0";
                         }
                         if (mBinding.switchBtnWeek.getText().toString().equals(getString(R.string.week4_enable))) {
                             mBinding.weekCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_unchecked));
-                            timerFour[5] = "0";
+                            if (timerFour != null)
+                                timerFour[5] = "0";
                         }
                     }
                 }
             });
-        }
-
     }
 
     void enableWeek() {
@@ -946,8 +951,10 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
     private void flowSensorVisibility(int mode) {
         if (mode == 1) {
             mBinding.viewFlowSensor.setVisibility(View.VISIBLE);
+            mBinding.txtHeaderFlowSensor.setVisibility(View.VISIBLE);
         } else {
             mBinding.viewFlowSensor.setVisibility(View.GONE);
+            mBinding.txtHeaderFlowSensor.setVisibility(View.GONE);
         }
         mBinding.txtFlowSensorValueAct.setAdapter(getAdapter(timerFlowSensor));
     }
@@ -1042,38 +1049,6 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
     void writeTimerConfiguration() {
         mActivity.showProgress();
         try {
-            Log.e("update", DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
-                    SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
-                    PCK_TIMER_CONFIG + SPILT_CHAR + timerNo + SPILT_CHAR + mBinding.timerNameTxt.getText().toString()
-                    + SPILT_CHAR + getPosition(2, toStringValue(mBinding.txtOutputNameValueAct), outputNames)
-                    + SPILT_CHAR + getPosition(2, toStringValue(mBinding.txtModeValueAct), timerOutputMode)
-                    + SPILT_CHAR + getPosition(1, toStringValue(mBinding.txtFlowSensorValueAct), timerFlowSensor)
-                    + SPILT_CHAR + "1"
-                    + SPILT_CHAR + accessoryTimer[9]
-                    + SPILT_CHAR + accessoryTimer[10]
-                    + SPILT_CHAR + accessoryTimer[11]
-                    + SPILT_CHAR + accessoryTimer[12]
-                    + SPILT_CHAR + accessoryTimer[13]
-                    + SPILT_CHAR + "2"
-                    + SPILT_CHAR + accessoryTimer[15]
-                    + SPILT_CHAR + accessoryTimer[16]
-                    + SPILT_CHAR + accessoryTimer[17]
-                    + SPILT_CHAR + accessoryTimer[18]
-                    + SPILT_CHAR + accessoryTimer[19]
-                    + SPILT_CHAR + "3"
-                    + SPILT_CHAR + accessoryTimer[21]
-                    + SPILT_CHAR + accessoryTimer[22]
-                    + SPILT_CHAR + accessoryTimer[23]
-                    + SPILT_CHAR + accessoryTimer[24]
-                    + SPILT_CHAR + accessoryTimer[25]
-                    + SPILT_CHAR + "4"
-                    + SPILT_CHAR + accessoryTimer[27]
-                    + SPILT_CHAR + accessoryTimer[28]
-                    + SPILT_CHAR + accessoryTimer[29]
-                    + SPILT_CHAR + accessoryTimer[30]
-                    + SPILT_CHAR + accessoryTimer[31]
-                    + SPILT_CHAR + "1" + timerOne[5] + "2" + timerTwo[5] + "3" + timerThree[5] + "4" + timerFour[5]);
-
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                     SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                     PCK_TIMER_CONFIG + SPILT_CHAR + timerNo + SPILT_CHAR + mBinding.timerNameTxt.getText().toString()

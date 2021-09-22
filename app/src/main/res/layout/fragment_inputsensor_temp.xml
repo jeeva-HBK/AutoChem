@@ -52,6 +52,7 @@
                 android:id="@+id/temp_seqNumber_til_isc"
                 style="@style/config_AtxTil"
                 android:enabled="false"
+                android:visibility="invisible"
                 android:layout_weight="1">
 
                 <AutoCompleteTextView

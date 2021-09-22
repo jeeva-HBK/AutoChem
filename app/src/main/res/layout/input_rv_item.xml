@@ -1,48 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rv_view"
     android:layout_width="match_parent"
     android:layout_height="135dp"
     android:layout_margin="1dp"
     android:background="@drawable/blue_box">
 
+    <!--Number-->
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         android:text="Label Name"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.03"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.03" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:text="Type : "
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-    <TextView
-        android:id="@+id/typeTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="pH"
-        android:textColor="@color/colorSecondary"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/textView6"
-        app:layout_constraintStart_toEndOf="@+id/textView6"
-        app:layout_constraintTop_toTopOf="@+id/textView6" />
+        app:layout_constraintBottom_toTopOf="@+id/view6"
+        app:layout_constraintStart_toStartOf="@+id/textView7"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <TextView
         android:id="@+id/textView7"
@@ -51,9 +39,9 @@
         android:text="Input No : "
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintStart_toStartOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
         android:id="@+id/inputNumberRv"
@@ -65,13 +53,26 @@
         app:layout_constraintStart_toEndOf="@+id/textView7"
         app:layout_constraintTop_toTopOf="@+id/textView7" />
 
+    <!--Type-->
+    <TextView
+        android:id="@+id/typeTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/colorSecondary"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/textView6"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toTopOf="@+id/textView6" />
+
     <View
         android:id="@+id/view6"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="8dp"
         android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6" />
 
     <View
         android:id="@+id/view7"
@@ -89,8 +90,8 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="12"
-        android:textSize="25dp"
         android:textColor="@color/colorSecondary"
+        android:textSize="25dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/view6"
         app:layout_constraintEnd_toEndOf="parent"
@@ -102,10 +103,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Low Alarm"
-        android:layout_marginTop="8dp"
         android:textColor="@color/white"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/lowAlarmtvRv"
         app:layout_constraintEnd_toStartOf="@+id/view7"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/view7" />
 
@@ -115,11 +117,11 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="17"
-        android:layout_marginBottom="2dp"
         android:textColor="@color/colorSecondary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/textView9"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/textView9"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
@@ -129,11 +131,10 @@
         android:layout_height="wrap_content"
         android:text="High Alarm"
         android:textColor="@color/white"
-        android:layout_marginTop="8dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/view7"
-        app:layout_constraintTop_toBottomOf="@+id/view6" />
+        app:layout_constraintTop_toTopOf="@+id/textView9" />
 
     <TextView
         android:id="@+id/highAlarmTvRv"
@@ -141,12 +142,11 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="17"
-        android:layout_marginBottom="2dp"
         android:textColor="@color/colorSecondary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/highAlarmTv"
         app:layout_constraintStart_toStartOf="@+id/highAlarmTv"
-        app:layout_constraintTop_toBottomOf="@+id/highAlarmTv" />
+        app:layout_constraintTop_toTopOf="@+id/lowAlarmtvRv" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

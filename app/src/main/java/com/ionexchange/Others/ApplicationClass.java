@@ -42,7 +42,7 @@ public class ApplicationClass extends Application {
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},
-            unitArr = {" Ãƒâ€šÃ‚ÂµS/cm", " mS/cm", "S/cm"},
+            unitArr = {"µS/cm", " mS/cm", "S/cm"},
             resetFlowTotalArr = {"No reset", "Reset"},
             sensorSequenceNumber = {"1-Sensor", "2-Sensor", "3-Sensor", "4-Sensor", "5-Sensor", "6-Sensor"},
             typeOfValueRead = {"None", "Fluorescence value", "Turbidity Value", "Corrosion rate", "Pitting rate", "Fluorescence value", "Tagged Polymer value"},
@@ -73,7 +73,7 @@ public class ApplicationClass extends Application {
             inputAnalogSensors = {"Input 1", "Input 2", "Input 3", "Input 4", "Input 5", "Input 6", "Input 7", "Input 8", "Input 9", "Input 10", "Input 11", "Input 12", "Input 13"},
             OutputBleedFlowRate = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14"},
 
-    TemperatureCompensationType = {"Linear temperature Compensation", "standard NaCl temperature compensation"},
+    TemperatureCompensationType = {"Linear", "Standard NaCl"},
 
     timerOutputMode = {"Timer", "Timer Flow", "Timer Disabled"},
             timerFlowSensor = {"Flow Sensor - 1", "Flow Sensor - 2", "Flow Sensor - 3", "Flow Sensor - 4", "Flow Sensor - 5", "Flow Sensor - 6",

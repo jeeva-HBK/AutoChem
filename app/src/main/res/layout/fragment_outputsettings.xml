@@ -11,12 +11,14 @@
             android:id="@+id/view8"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/mActionBarSize"
+            android:visibility="visible"
             android:background="@color/primary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
+            android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Output Configuration"

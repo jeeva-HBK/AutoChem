@@ -40,7 +40,7 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
         holder.outputModeValue.setText(outputConfigurationEntityList.get(position).outputMode);
         holder.outputNumber.setText(outputConfigurationEntityList.get(position).outputHardwareNo+"");
         holder.outputStatus.setText(outputConfigurationEntityList.get(position).outputStatus);
-        holder.outputLabel.setText(outputConfigurationEntityList.get(position).outputLabel);
+        holder.outputLabel.setText("");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             holder.outputHeader.setTooltipText(outputConfigurationEntityList.get(position).outputLabel);

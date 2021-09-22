@@ -12,6 +12,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/mActionBarSize"
             android:background="@color/primary"
+            android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,9 +46,9 @@
             android:textColor="@color/colorSecondary"
             android:textSize="18dp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/help_is_btn"
+            app:layout_constraintBottom_toBottomOf="@+id/view8"
             app:layout_constraintEnd_toStartOf="@+id/help_is_btn"
-            app:layout_constraintTop_toTopOf="@+id/help_is_btn" />
+            app:layout_constraintTop_toTopOf="@+id/view8" />
 
         <!--Button Help-->
         <com.google.android.material.button.MaterialButton
@@ -88,7 +89,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="visible"
-            android:layout_margin="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -98,11 +98,12 @@
             android:id="@+id/inputHostFrame"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.444"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view8" />
+            app:layout_constraintTop_toBottomOf="@+id/view8"
+            app:layout_constraintVertical_bias="0.888" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

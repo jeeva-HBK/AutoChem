@@ -14,14 +14,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
         <!--Row 1-->
         <LinearLayout
             android:id="@+id/mod_bus_Row1_isc"
             style="@style/config_rowLl">
 
             <!--Back Arrow-->
-
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -35,6 +33,7 @@
                     android:layout_margin="20dp"
                     android:background="@drawable/ic_back" />
             </LinearLayout>
+
             <!--Input Number-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_inputNumber"
@@ -52,17 +51,18 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
+            <!--Sequence Number-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_sequence_number"
                 style="@style/config_AtxTil"
-                android:visibility="visible"
+                android:visibility="invisible"
                 android:enabled="false">
 
                 <AutoCompleteTextView
                     android:id="@+id/modbus_sequence_number_tie"
                     style="@style/config_Atxt"
                     android:hint="Sequence Number" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -567,7 +567,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
 
     </LinearLayout>
 

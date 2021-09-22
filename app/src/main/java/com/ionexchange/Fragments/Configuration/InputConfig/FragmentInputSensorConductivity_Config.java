@@ -38,6 +38,7 @@ import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
 import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
+import static com.ionexchange.Others.ApplicationClass.toStringValue;
 import static com.ionexchange.Others.ApplicationClass.unitArr;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
@@ -131,8 +132,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
                 getStringValue(2, mBinding.conInputNumberEdtIsc) + SPILT_CHAR +
-                getPositionFromAtxt(2, getStringValue(mBinding.conSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
-                "1" + SPILT_CHAR +
+                getPositionFromAtxt(2, getStringValue(mBinding.conSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR + "1" + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.conSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
                 getStringValue(0, mBinding.conInputLabelEdtIsc) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.conTempLinkedAtxtIsc), tempLinkedArr) + SPILT_CHAR +
@@ -157,8 +157,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
                 getStringValue(2, mBinding.conInputNumberEdtIsc) + SPILT_CHAR +
-                getPositionFromAtxt(2, getStringValue(mBinding.conSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
-                "1" + SPILT_CHAR +
+                getPositionFromAtxt(2, getStringValue(mBinding.conSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR + "1" + SPILT_CHAR +
                 getPositionFromAtxt(2, getStringValue(mBinding.conSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
                 getStringValue(0, mBinding.conInputLabelEdtIsc) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.conTempLinkedAtxtIsc), tempLinkedArr) + SPILT_CHAR +
@@ -203,9 +202,6 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
         } else if (isFieldEmpty(mBinding.conCompensationAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), "Comp Type Cannot be Empty");
             return false;
-        } else if (isFieldEmpty(mBinding.conCompFactorEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Temperature Compensation Factor Cannot be Empty");
-            return false;
         } else if (isFieldEmpty(mBinding.conDefaultTemperatureEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Temperature Value Cannot be Empty");
             return false;
@@ -225,11 +221,14 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 Float.parseFloat(getDecimalValue(mBinding.conAlarmhighEdtIsc, 6, mBinding.conHighAlarmDeciIsc, 2))) {
             mAppClass.showSnackBar(getContext(), "Alarm High Should be Greater Than Alarm Low");
             return false;
-        } else if (Float.parseFloat(getDecimalValue(mBinding.conDefaultTempValueTBtn, mBinding.conAlarmLowEdtIsc, 3, mBinding.conAlarmLowDeciIsc, 2)) > -20) {
-            mAppClass.showSnackBar(getContext(), "Default Temperature Value should be -20°C to 500°C");
-            return false;
         }
 
+        if (getPositionFromAtxt(0, toStringValue(mBinding.conCompensationAtxtIsc), TemperatureCompensationType).equals("0")) {
+            if (isFieldEmpty(mBinding.conCompFactorEdtIsc)) {
+                mAppClass.showSnackBar(getContext(), "Temperature Compensation Factor Cannot be Empty");
+                return false;
+            }
+        }
 
         return true;
     }

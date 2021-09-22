@@ -196,6 +196,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
     void frameLayout(String inputNumber, String sensorType) {
         mBinding.inputsRv.setVisibility(View.GONE);
         mBinding.view8.setVisibility(View.GONE);
+        mBinding.addsensorIsBtn.setVisibility(View.GONE);
         switch (sensorType) {
             case "pH":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorPh_Config(inputNumber, 1)).commit();
@@ -233,6 +234,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
     void frameLayout(String inputNumber, String sensorName, String dumString) {
         mBinding.inputsRv.setVisibility(View.GONE);
         mBinding.view8.setVisibility(View.GONE);
+        mBinding.addsensorIsBtn.setVisibility(View.GONE);
         switch (sensorName) {
             case "pH":
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorPh_Config(inputNumber, sensorName, 0)).commit();
@@ -268,7 +270,6 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
     }
 
     boolean dialogValidation() {
-
         if (inputNumber.getText().toString().isEmpty()) {
             inputNumber.requestFocus();
             mAppClass.showSnackBar(getContext(), "Input Number Cannot be Empty");

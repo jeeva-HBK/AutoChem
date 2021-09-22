@@ -77,10 +77,8 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
         dao = db.inputConfigurationDao();
         initAdapter();
         changeUi();
-
         mBinding.tankLevelSaveFabIsc.setOnClickListener(this::save);
         mBinding.tankLevelDeleteFabIsc.setOnClickListener(this::delete);
-
         mBinding.backArrowIsc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,6 +114,7 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                 getPositionFromAtxt(1, getStringValue(mBinding.tankLevelInputSensorResetTimeAct), resetCalibrationArr) + SPILT_CHAR +
                 sensorStatus);
     }
+
 
     private void initAdapter() {
         mBinding.tankLevelInputSensorTypeTie.setAdapter(getAdapter(inputTypeArr, getContext()));
