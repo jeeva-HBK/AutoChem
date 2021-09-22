@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments;
+package com.ionexchange.Fragments.Configuration;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,6 +36,11 @@ public class FragmentRoot_Config extends Fragment implements View.OnClickListene
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        init();
+    }
+
+    void init() {
         mAppClass = (ApplicationClass) getActivity().getApplication();
         mActivity = (BaseActivity) getActivity();
 
@@ -52,10 +57,7 @@ public class FragmentRoot_Config extends Fragment implements View.OnClickListene
         mBinding.h2Subtext2.setOnClickListener(this);
         mBinding.h2Subtext3.setOnClickListener(this);
         mBinding.h2Subtext4.setOnClickListener(this);
-        initState();
-    }
 
-    void initState() {
         mBinding.setItem1IsVisible(!mBinding.getItem1IsVisible());
         mBinding.setSelected("1-1");
         mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentUnitIpSettings_Config());

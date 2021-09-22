@@ -1,5 +1,6 @@
 package com.ionexchange.Adapters;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,14 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
         holder.outputNumber.setText(outputConfigurationEntityList.get(position).outputHardwareNo+"");
         holder.outputStatus.setText(outputConfigurationEntityList.get(position).outputStatus);
         holder.outputLabel.setText(outputConfigurationEntityList.get(position).outputLabel);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            holder.outputHeader.setTooltipText(outputConfigurationEntityList.get(position).outputLabel);
+            holder.outputModeValue.setTooltipText(outputConfigurationEntityList.get(position).outputMode);
+            holder.outputNumber.setTooltipText(outputConfigurationEntityList.get(position).outputHardwareNo+"");
+            holder.outputStatus.setTooltipText(outputConfigurationEntityList.get(position).outputStatus);
+            holder.outputLabel.setTooltipText(outputConfigurationEntityList.get(position).outputLabel);
+        }
     }
 
 

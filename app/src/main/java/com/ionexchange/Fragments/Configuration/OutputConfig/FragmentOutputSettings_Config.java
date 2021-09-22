@@ -15,6 +15,7 @@ import com.ionexchange.Adapters.OutputIndexRvAdapter;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Fragments.FragmentHostDashboard;
 import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentOutputsettingsBinding;
@@ -26,8 +27,8 @@ import java.util.List;
 
 public class FragmentOutputSettings_Config extends Fragment implements RvOnClick {
 
-    FragmentOutputsettingsBinding mBinding;
-    WaterTreatmentDb dB;
+    static FragmentOutputsettingsBinding mBinding;
+
     OutputConfigurationDao dao;
     int pageOffset = 0, currentPage = 0;
 
@@ -42,21 +43,9 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        dB = WaterTreatmentDb.getDatabase(getContext());
-        dao = dB.outputConfigurationDao();
-        if (dao.getOutputConfigurationEntityList().isEmpty()) {
-            for (int i = 1; i < 23; i++) {
-                OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
-                        (i, "output-" + i, "N/A",
-                                "N/A",
-                                "N/A");
-                List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
-                entryListUpdate.add(entityUpdate);
-                updateToDb(entryListUpdate);
-            }
-        }
-        mBinding.rightArrowOsBtn.setVisibility(View.VISIBLE);
 
+        mBinding.rightArrowOsBtn.setVisibility(View.VISIBLE);
+        dao = FragmentHostDashboard.outputDAO;
         mBinding.outputRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(this, dao.getOutputConfigurationEntityList(9, pageOffset)));
 
@@ -82,6 +71,11 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
 
     }
 
+    public static void hideArrows() {
+        mBinding.rightArrowOsBtn.setVisibility(View.GONE);
+        mBinding.leftArrowOsBtn.setVisibility(View.GONE);
+    }
+
     @Override
     public void onClick(int sensorInputNo) {
         mBinding.outputRv.setVisibility(View.GONE);
@@ -99,10 +93,6 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
 
     }
 
-    public void updateToDb(List<OutputConfigurationEntity> entryList) {
-        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
-        OutputConfigurationDao dao = db.outputConfigurationDao();
-        dao.insert(entryList.toArray(new OutputConfigurationEntity[0]));
-    }
+
 
 }

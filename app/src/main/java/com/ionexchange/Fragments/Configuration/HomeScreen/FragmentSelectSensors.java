@@ -96,6 +96,7 @@ public class FragmentSelectSensors extends Fragment implements CompoundButton.On
 
         mBinding.selectSensorRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mBinding.inputRb.performClick();
+
     }
 
     private void setAdapter(int mode, boolean b, String type, List configurationList, int adapterType) {

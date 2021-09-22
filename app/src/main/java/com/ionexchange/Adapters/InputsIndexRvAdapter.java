@@ -1,5 +1,6 @@
 package com.ionexchange.Adapters;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,6 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
     public InputRvOnClick rvOnClick;
     List<InputConfigurationEntity> inputConfigurationEntityList;
 
-
     public InputsIndexRvAdapter(InputRvOnClick rvOnClick, List<InputConfigurationEntity> inputConfigurationEntityList) {
         this.rvOnClick = rvOnClick;
         this.inputConfigurationEntityList = inputConfigurationEntityList;
@@ -34,6 +34,7 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
     @Override
     public InputsIndexRvAdapter.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.input_rv_item, parent, false);
+
         return new ViewHolder(view);
     }
 
@@ -44,8 +45,15 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
         holder.label.setText(inputConfigurationEntityList.get(position).inputLabel);
         holder.lowAlarm.setText(inputConfigurationEntityList.get(position).subValueOne);
         holder.highAlarm.setText(inputConfigurationEntityList.get(position).subValueTwo);
-    }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            holder.inputNumber.setTooltipText(inputConfigurationEntityList.get(position).hardwareNo+"");
+            holder.inputType.setTooltipText(inputConfigurationEntityList.get(position).inputType);
+            holder.label.setTooltipText(inputConfigurationEntityList.get(position).inputLabel);
+            holder.lowAlarm.setTooltipText(inputConfigurationEntityList.get(position).subValueOne);
+            holder.highAlarm.setTooltipText(inputConfigurationEntityList.get(position).subValueTwo);
+        }
+    }
 
     @Override
     public int getItemCount() {

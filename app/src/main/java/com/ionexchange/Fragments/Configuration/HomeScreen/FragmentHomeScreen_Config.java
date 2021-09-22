@@ -33,6 +33,4 @@ public class FragmentHomeScreen_Config extends Fragment {
         getParentFragmentManager().beginTransaction().replace(mBinding.setHomeScreenHost.getId(), new FragmentSetHomeScreen()).commit();
 
     }
-
-
 }

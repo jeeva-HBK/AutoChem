@@ -24,7 +24,9 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Database.Dao.OutputConfigurationDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
+import com.ionexchange.Database.Entity.OutputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
@@ -32,6 +34,8 @@ import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentTimerstatusConfigBinding;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.accessoryTimerMode;
 import static com.ionexchange.Others.ApplicationClass.accessoryType;
@@ -62,11 +66,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
 
     int loopWeeklyPacket;
     String week;
-    String[] timerOne;
-    String[] timerTwo;
-    String[] timerThree;
-    String[] timerFour;
-    String[] accessoryTimer;
+    String[] timerOne, timerTwo, timerThree, timerFour, accessoryTimer, outputNames;
 
     EditText startHour;
     EditText startMin;
@@ -83,6 +83,8 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
     EditText endHourDay;
     EditText endMinDay;
     EditText endSecDay;
+    WaterTreatmentDb dB;
+    OutputConfigurationDao dao;
 
     public FragmentTimerStatus_Config(String week1, String week2, String week3, String week4, String timerNo) {
         this.timerNo = timerNo;
@@ -105,6 +107,8 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
         mActivity = (BaseActivity) getActivity();
+        dB = WaterTreatmentDb.getDatabase(getContext());
+        dao = dB.outputConfigurationDao();
         week = "Week-1";
         initAdapter();
         enableWeek();
@@ -182,9 +186,18 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         }
     }
 
-
     private void initAdapter() {
-        mBinding.txtOutputNameValueAct.setAdapter(getAdapter(bleedRelay));
+        List<OutputConfigurationEntity> outputNameList = dao.getOutputHardWareNoConfigurationEntityList(1, 14);
+        outputNames = new String[14];
+        if (!outputNameList.isEmpty()) {
+            for (int i = 0; i < outputNameList.size(); i++) {
+                outputNames[i] = "Output- " + outputNameList.get(i).getOutputHardwareNo() + " (" + outputNameList.get(i).getOutputLabel() + ")";
+            }
+        }
+        if (outputNames.length == 0) {
+            outputNames = bleedRelay;
+        }
+        mBinding.txtOutputNameValueAct.setAdapter(getAdapter(outputNames));
         mBinding.txtModeValueAct.setAdapter(getAdapter(timerOutputMode));
         mBinding.txtFlowSensorValueAct.setAdapter(getAdapter(timerFlowSensor));
         mBinding.txtModeValueAct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -575,7 +588,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         outputName = dialogView.findViewById(R.id.output_act);
         mode.setAdapter(getAdapter(accessoryTimerMode));
         type.setAdapter(getAdapter(accessoryType));
-        outputName.setAdapter(getAdapter(bleedRelay));
+        outputName.setAdapter(getAdapter(outputNames));
 
         txt_header.setText(getString(R.string.accessories_timer_header) + " " + timer);
 
@@ -627,7 +640,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                         }
                         accessoryTimer[10] = getPosition(1, toStringValue(mode), accessoryTimerMode);
                         accessoryTimer[11] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
-                        accessoryTimer[12] = getPosition(2, toStringValue(outputName), bleedRelay);
+                        accessoryTimer[12] = getPosition(2, toStringValue(outputName), outputNames);
                         accessoryTimer[13] = getPosition(1, toStringValue(type), accessoryType);
                         alertDialog.dismiss();
                     }
@@ -643,7 +656,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                         }
                         accessoryTimer[16] = getPosition(1, toStringValue(mode), accessoryTimerMode);
                         accessoryTimer[17] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
-                        accessoryTimer[18] = getPosition(2, toStringValue(outputName), bleedRelay);
+                        accessoryTimer[18] = getPosition(2, toStringValue(outputName), outputNames);
                         accessoryTimer[19] = getPosition(1, toStringValue(type), accessoryType);
                         alertDialog.dismiss();
                     }
@@ -661,7 +674,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                         }
                         accessoryTimer[22] = getPosition(1, toStringValue(mode), accessoryTimerMode);
                         accessoryTimer[23] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
-                        accessoryTimer[24] = getPosition(2, toStringValue(outputName), bleedRelay);
+                        accessoryTimer[24] = getPosition(2, toStringValue(outputName), outputNames);
                         accessoryTimer[25] = getPosition(1, toStringValue(type), accessoryType);
                         alertDialog.dismiss();
                     }
@@ -678,7 +691,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                         }
                         accessoryTimer[28] = getPosition(1, toStringValue(mode), accessoryTimerMode);
                         accessoryTimer[29] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
-                        accessoryTimer[30] = getPosition(2, toStringValue(outputName), bleedRelay);
+                        accessoryTimer[30] = getPosition(2, toStringValue(outputName), outputNames);
                         accessoryTimer[31] = getPosition(1, toStringValue(type), accessoryType);
                         alertDialog.dismiss();
                     }
@@ -690,7 +703,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
 
         mode.setAdapter(getAdapter(accessoryTimerMode));
         type.setAdapter(getAdapter(accessoryType));
-        outputName.setAdapter(getAdapter(bleedRelay));
+        outputName.setAdapter(getAdapter(outputNames));
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1029,10 +1042,10 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
     void writeTimerConfiguration() {
         mActivity.showProgress();
         try {
-            Log.e("update",DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
+            Log.e("update", DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                     SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                     PCK_TIMER_CONFIG + SPILT_CHAR + timerNo + SPILT_CHAR + mBinding.timerNameTxt.getText().toString()
-                    + SPILT_CHAR + getPosition(2, toStringValue(mBinding.txtOutputNameValueAct), bleedRelay)
+                    + SPILT_CHAR + getPosition(2, toStringValue(mBinding.txtOutputNameValueAct), outputNames)
                     + SPILT_CHAR + getPosition(2, toStringValue(mBinding.txtModeValueAct), timerOutputMode)
                     + SPILT_CHAR + getPosition(1, toStringValue(mBinding.txtFlowSensorValueAct), timerFlowSensor)
                     + SPILT_CHAR + "1"
@@ -1064,7 +1077,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                     SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                     PCK_TIMER_CONFIG + SPILT_CHAR + timerNo + SPILT_CHAR + mBinding.timerNameTxt.getText().toString()
-                    + SPILT_CHAR + getPosition(2, toStringValue(mBinding.txtOutputNameValueAct), bleedRelay)
+                    + SPILT_CHAR + getPosition(2, toStringValue(mBinding.txtOutputNameValueAct), outputNames)
                     + SPILT_CHAR + getPosition(2, toStringValue(mBinding.txtModeValueAct), timerOutputMode)
                     + SPILT_CHAR + getPosition(1, toStringValue(mBinding.txtFlowSensorValueAct), timerFlowSensor)
                     + SPILT_CHAR + "1"

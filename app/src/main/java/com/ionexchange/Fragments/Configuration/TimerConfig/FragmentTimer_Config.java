@@ -15,6 +15,7 @@ import com.ionexchange.Adapters.TimerIndexRvAdapter;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
 import com.ionexchange.Database.Entity.TimerConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Fragments.FragmentHostDashboard;
 import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentTimerconfigurationBinding;
@@ -44,19 +45,7 @@ public class FragmentTimer_Config extends Fragment implements RvOnClick {
         super.onViewCreated(view, savedInstanceState);
 
         timerConfigurationEntityList = new ArrayList<>();
-        dB = WaterTreatmentDb.getDatabase(getContext());
-        dao = dB.timerConfigurationDao();
-        if (dao.geTimerConfigurationEntityList().isEmpty()) {
-            for (int i = 1; i < 7; i++) {
-                TimerConfigurationEntity entityUpdate = new TimerConfigurationEntity
-                        (i, "N/A",
-                                "N/A",
-                                "N/A", 0, 0, "N/A");
-                List<TimerConfigurationEntity> entryListUpdate = new ArrayList<>();
-                entryListUpdate.add(entityUpdate);
-                updateToDb(entryListUpdate);
-            }
-        }
+        dao = FragmentHostDashboard.timerDAO;
         timerConfigurationEntityList = dao.geTimerConfigurationEntityList();
         mAdapter = new TimerIndexRvAdapter(this, timerConfigurationEntityList);
         mBinding.timerRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
@@ -65,10 +54,7 @@ public class FragmentTimer_Config extends Fragment implements RvOnClick {
     }
 
     @Override
-    public void onClick(int sensorInputNo) {
-
-
-    }
+    public void onClick(int sensorInputNo) { }
 
     @Override
     public void onClick(String sensorInputNo) {
@@ -97,13 +83,5 @@ public class FragmentTimer_Config extends Fragment implements RvOnClick {
     }
 
     @Override
-    public void onClick(String sensorInputNo, String type, int position) {
-
-    }
-
-    public void updateToDb(List<TimerConfigurationEntity> entryList) {
-        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
-        TimerConfigurationDao dao = db.timerConfigurationDao();
-        dao.insert(entryList.toArray(new TimerConfigurationEntity[0]));
-    }
+    public void onClick(String sensorInputNo, String type, int position) { }
 }

@@ -21,6 +21,7 @@ import com.ionexchange.Adapters.InputsIndexRvAdapter;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Fragments.FragmentHostDashboard;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Interface.InputRvOnClick;
 import com.ionexchange.Others.ApplicationClass;
@@ -66,29 +67,18 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
-        dB = WaterTreatmentDb.getDatabase(getContext());
-        dao = dB.inputConfigurationDao();
-        if (dao.getInputConfigurationEntityList().isEmpty()) {
-            for (int i = 1; i < 46; i++) {
-                InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                        (i, "N/A", 0, "N/A",
-                                "N/A", "N/A", 0);
-                List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
-                entryListUpdate.add(entityUpdate);
-                updateToDb(entryListUpdate);
-            }
-        }
+        dao = FragmentHostDashboard.inputDAO;
         mBinding.rightArrowIsBtn.setVisibility((dao.getInputConfigurationEntityFlagKeyList(0).size() / 9) > 0 ? View.VISIBLE : View.INVISIBLE);
         mBinding.addsensorIsBtn.setOnClickListener(this);
 
         mBinding.inputsRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(this, dao.getInputConfigurationEntityFlagKeyList(0, 9, pageOffset)));
+        mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(this, dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset)));
 
         mBinding.leftArrowIsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 currentPage--;
-                mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this, dao.getInputConfigurationEntityFlagKeyList(0, 9, pageOffset = pageOffset - 9)));
+                mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this, dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset = pageOffset - 9)));
                 mBinding.leftArrowIsBtn.setVisibility(currentPage <= 0 ? View.INVISIBLE : View.VISIBLE);
                 mBinding.rightArrowIsBtn.setVisibility(View.VISIBLE);
             }
@@ -99,8 +89,8 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
             public void onClick(View view) {
                 currentPage++;
                 mBinding.leftArrowIsBtn.setVisibility(View.VISIBLE);
-                mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this, dao.getInputConfigurationEntityFlagKeyList(0, 9, pageOffset = pageOffset + 9)));
-                mBinding.rightArrowIsBtn.setVisibility(dao.getInputConfigurationEntityFlagKeyList(0, 9, pageOffset + 9).isEmpty() ? View.INVISIBLE : View.VISIBLE);
+                mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this, dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset = pageOffset + 9)));
+                mBinding.rightArrowIsBtn.setVisibility(dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset + 9).isEmpty() ? View.INVISIBLE : View.VISIBLE);
             }
         });
     }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,6 +16,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Output Configuration"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/view8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view8" />
+
         <!--ButtonLeft-->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/leftArrow_os_btn"
@@ -25,7 +36,7 @@
             android:layout_marginStart="3dp"
             android:backgroundTint="@color/colorSecondary"
             android:text=""
-            android:visibility="visible"
+            android:visibility="gone"
             app:cornerRadius="10dp"
             app:icon="@drawable/ic_back"
             app:iconGravity="textStart"
@@ -65,7 +76,6 @@
             android:id="@+id/outputHost"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginLeft="5dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -73,4 +83,5 @@
             app:layout_constraintTop_toBottomOf="@+id/view8" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

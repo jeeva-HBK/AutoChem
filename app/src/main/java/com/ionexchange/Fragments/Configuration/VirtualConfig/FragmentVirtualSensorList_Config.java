@@ -15,6 +15,7 @@ import com.ionexchange.Adapters.VirtualSensorIndexRvAdapter;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Fragments.FragmentHostDashboard;
 import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentVirtualsensorBinding;
@@ -27,7 +28,7 @@ import java.util.List;
 public class FragmentVirtualSensorList_Config extends Fragment implements RvOnClick {
     RvOnClick rvOnClick;
     FragmentVirtualsensorBinding mBinding;
-    WaterTreatmentDb db;
+
     VirtualConfigurationDao dao;
     List<VirtualConfigurationEntity> virtualConfigurationEntityList;
 
@@ -42,27 +43,11 @@ public class FragmentVirtualSensorList_Config extends Fragment implements RvOnCl
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        db = WaterTreatmentDb.getDatabase(getContext());
-        dao = db.virtualConfigurationDao();
-        if (dao.getVirtualConfigurationEntityList().isEmpty()) {
-            for (int i = 46; i < 54; i++) {
-                VirtualConfigurationEntity entityUpdate = new VirtualConfigurationEntity
-                        (i, "virtual-" + (i - 45), 0, "N/A",
-                                "N/A", "N/A");
-                List<VirtualConfigurationEntity> entryListUpdate = new ArrayList<>();
-                entryListUpdate.add(entityUpdate);
-                updateToDb(entryListUpdate);
-            }
-        }
+
+        dao = FragmentHostDashboard.virtualDAO;
         virtualConfigurationEntityList = dao.getVirtualConfigurationEntityList();
         mBinding.viRv.setLayoutManager(new GridLayoutManager(getContext(), 4));
         mBinding.viRv.setAdapter(new VirtualSensorIndexRvAdapter(this, virtualConfigurationEntityList));
-    }
-
-    public void updateToDb(List<VirtualConfigurationEntity> entryList) {
-        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
-        VirtualConfigurationDao dao = db.virtualConfigurationDao();
-        dao.insert(entryList.toArray(new VirtualConfigurationEntity[0]));
     }
 
     @Override

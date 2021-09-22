@@ -294,7 +294,8 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                 window = window.substring(window.length() - 1);
                 windowNo = Integer.parseInt(window);
                 FragmentSelectSensors fragmentSetLayout = new FragmentSelectSensors(fragment, screenNo, layoutNo, windowNo, pageNo);
-                fragment.init(fragmentSetLayout, "Layout", new DialogDismissListener() {
+
+                fragment.init(fragmentSetLayout, "Layout-" + layoutNo + " | " + "Window-" + windowNo, new DialogDismissListener() {
                     @Override
                     public void OnDismiss() {
                         windowNextPage();
@@ -303,10 +304,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
 
                 fragment.show(getChildFragmentManager(), null);
                 break;
-
         }
-
-
     }
 
 

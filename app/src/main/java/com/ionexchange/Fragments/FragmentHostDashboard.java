@@ -12,10 +12,23 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
+import com.ionexchange.Database.Dao.OutputConfigurationDao;
+import com.ionexchange.Database.Dao.TimerConfigurationDao;
+import com.ionexchange.Database.Dao.VirtualConfigurationDao;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.Entity.OutputConfigurationEntity;
+import com.ionexchange.Database.Entity.TimerConfigurationEntity;
+import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Fragments.Configuration.FragmentRoot_Config;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentMainhostBinding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.macAddress;
 import static com.ionexchange.Others.PacketControl.ADMIN;
@@ -34,7 +47,15 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
     BaseActivity mActivity;
     ApplicationClass mAppClass;
 
+    public static WaterTreatmentDb DB;
+    public static InputConfigurationDao inputDAO;
+    public static OutputConfigurationDao outputDAO;
+    public static VirtualConfigurationDao virtualDAO;
+    public static TimerConfigurationDao timerDAO;
+
+
     private static final String TAG = "FragmentMainHost";
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -119,10 +140,89 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
 
             case R.id.config_screen_btn:
                 // mActivity.changeProgress(View.VISIBLE);
+                initDB();
                 setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText, new FragmentRoot_Config(), "Configuration");
                 break;
         }
     }
+
+    private void initDB() {
+        DB = WaterTreatmentDb.getDatabase(getContext());
+        /*Input_DB*/
+        inputDAO = DB.inputConfigurationDao();
+        if (inputDAO.getInputConfigurationEntityList().isEmpty()) {
+            for (int i = 1; i < 46; i++) {
+                InputConfigurationEntity entityUpdate = new InputConfigurationEntity
+                        (i, "N/A", 0, "N/A",
+                                "N/A", "N/A", 0);
+                List<InputConfigurationEntity> inputentryList = new ArrayList<>();
+                inputentryList.add(entityUpdate);
+                updateInputDB(inputentryList);
+            }
+        }
+
+        /*Output_DB*/
+        outputDAO = DB.outputConfigurationDao();
+        if (outputDAO.getOutputConfigurationEntityList().isEmpty()) {
+            for (int i = 1; i < 23; i++) {
+                OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
+                        (i, "output-" + i, "N/A",
+                                "N/A",
+                                "N/A");
+                List<OutputConfigurationEntity> outputEntryList = new ArrayList<>();
+                outputEntryList.add(entityUpdate);
+                updateOutPutDB(outputEntryList);
+            }
+        }
+
+        /*Virtual_DB*/
+        virtualDAO = DB.virtualConfigurationDao();
+        if (virtualDAO.getVirtualConfigurationEntityList().isEmpty()) {
+            for (int i = 46; i < 54; i++) {
+                VirtualConfigurationEntity entityUpdate = new VirtualConfigurationEntity
+                        (i, "virtual-" + (i - 45), 0, "N/A",
+                                "N/A", "N/A");
+                List<VirtualConfigurationEntity> virtualEntryList = new ArrayList<>();
+                virtualEntryList.add(entityUpdate);
+                updateVirtualDB(virtualEntryList);
+            }
+        }
+
+        /*Timer_DB*/
+        timerDAO = DB.timerConfigurationDao();
+        if (timerDAO.geTimerConfigurationEntityList().isEmpty()) {
+            for (int i = 1; i < 7; i++) {
+                TimerConfigurationEntity entityUpdate = new TimerConfigurationEntity
+                        (i, "N/A",
+                                "N/A",
+                                "N/A", 0, 0, "N/A");
+                List<TimerConfigurationEntity> entryListUpdate = new ArrayList<>();
+                entryListUpdate.add(entityUpdate);
+                updateTimerDB(entryListUpdate);
+            }
+        }
+    }
+
+    private void updateTimerDB(List<TimerConfigurationEntity> entryList) {
+        TimerConfigurationDao dao = DB.timerConfigurationDao();
+        dao.insert(entryList.toArray(new TimerConfigurationEntity[0]));
+    }
+
+    private void updateVirtualDB(List<VirtualConfigurationEntity> entryList) {
+        VirtualConfigurationDao dao = DB.virtualConfigurationDao();
+        dao.insert(entryList.toArray(new VirtualConfigurationEntity[0]));
+    }
+
+    private void updateInputDB(List<InputConfigurationEntity> entryList) {
+        InputConfigurationDao dao = DB.inputConfigurationDao();
+        dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
+    }
+
+    public void updateOutPutDB(List<OutputConfigurationEntity> entryList) {
+        OutputConfigurationDao dao = DB.outputConfigurationDao();
+        dao.insert(entryList.toArray(new OutputConfigurationEntity[0]));
+    }
+
 
     @Override
     public void OnDataReceive(String data) {

@@ -135,8 +135,7 @@
 
         </LinearLayout>
 
-        <!--Row 3 (INHIBITOR - continuous)
-        android:visibility="@{functionMode.equals(`layoutInhibitorContinuous`) ? View.VISIBLE : View.GONE}" -->
+        <!--Row 3 (INHIBITOR - continuous)-->
         <LinearLayout
             android:id="@+id/outputRow3_inhibitor_cont"
             android:layout_width="match_parent"
@@ -289,10 +288,7 @@
 
         </LinearLayout>
 
-        <!--*********************************************************************************************-->
-
-        <!--Row 4 (INHIBITOR - Bleed/BleedDown)
-        android:visibility="@{functionMode.equals(`layoutInhibitorBleedDown`) ? View.VISIBLE : View.GONE}"-->
+        <!--Row 4 (INHIBITOR - Bleed/BleedDown)-->
         <LinearLayout
             android:id="@+id/bleed_outputRow4_osc"
             android:layout_width="match_parent"
@@ -481,8 +477,7 @@
 
         </LinearLayout>
 
-        <!--Row 5 (INHIBITOR - Bleed/BleedDown)
-       android:visibility="@{functionMode.equals(`layoutInhibitorBleedDown`) ? View.VISIBLE : View.GONE}"-->
+        <!--Row 5 (INHIBITOR - Bleed/BleedDown)-->
         <LinearLayout
             android:id="@+id/outputRow5_inhibitor_bleed"
             android:layout_width="match_parent"
@@ -593,10 +588,7 @@
 
         </LinearLayout>
 
-        <!--*********************************************************************************************-->
-
-        <!--Row 6 (Inhibitor - Water Meter/ Biocide)
-       android:visibility="@{functionMode.equals(`layoutInhibitorWaterFlow`) ? View.VISIBLE : View.GONE}" -->
+        <!--Row 6 (Inhibitor - Water Meter/ Biocide)-->
         <LinearLayout
             android:id="@+id/outputRow6_inhibitor_water"
             android:layout_width="match_parent"
@@ -768,8 +760,7 @@
 
         </LinearLayout>
 
-        <!--Row 7 (Inhibitor - Water Meter/ Biocide)
-       android:visibility="@{functionMode.equals(`layoutInhibitorWaterFlow`) ? View.VISIBLE : View.GONE}" -->
+        <!--Row 7 (Inhibitor - Water Meter/ Biocide)-->
         <LinearLayout
             android:id="@+id/outputRow7_inhibitor_water"
             android:layout_width="match_parent"
@@ -880,10 +871,7 @@
 
         </LinearLayout>
 
-        <!--*********************************************************************************************-->
-
-        <!--Row 8 (Sensor - On/Off)
-       android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}" -->
+        <!--Row 8 (Sensor - On/Off)-->
         <LinearLayout
             android:id="@+id/outputRow8_sensor_onOff"
             android:layout_width="match_parent"
@@ -971,31 +959,28 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--Hysteresis-->
+            <!--Link Input Sensor-->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/sensor_hysteresis_root_osc"
-                style="@style/appEdtTxt"
+                android:id="@+id/sensor_linkInputSensor_til_osc"
+                style="@style/appAutoTxt"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_margin="3dp"
                 android:layout_weight="1">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/sensor_hysteresis_edt_osc"
+                <AutoCompleteTextView
+                    android:id="@+id/sensor_linkInputSensor_atxt_osc"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Hysteresis"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="5"
-                    android:maxLines="1" />
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Link Input Sensor" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
-        <!--Row 9 (Sensor - On/Off)
-       android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}" -->
+        <!--Row 9 (Sensor - On/Off)-->
         <LinearLayout
             android:id="@+id/outputRow9_sensor_onOff"
             android:layout_width="match_parent"
@@ -1070,8 +1055,7 @@
 
         </LinearLayout>
 
-        <!--Row 10 (Sensor - On/Off)
-      android:visibility="@{functionMode.equals(`layoutSensorOnOff`) ? View.VISIBLE : View.GONE}" -->
+        <!--Row 10 (Sensor - On/Off)-->
         <LinearLayout
             android:id="@+id/outputRow10_sensor_onOff"
             android:layout_width="match_parent"
@@ -1102,31 +1086,30 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--Link Input Sensor-->
+            <!--Hysteresis-->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/sensor_linkInputSensor_til_osc"
-                style="@style/appAutoTxt"
+                android:id="@+id/sensor_hysteresis_root_osc"
+                style="@style/appEdtTxt"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_margin="3dp"
                 android:layout_weight="1">
 
-                <AutoCompleteTextView
-                    android:id="@+id/sensor_linkInputSensor_atxt_osc"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/sensor_hysteresis_edt_osc"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:hint="Link Input Sensor" />
+                    android:hint="Hysteresis"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
-        <!--*********************************************************************************************-->
-
-        <!--Row 11 (Sensor - PID)
-       android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}"-->
+        <!--Row 11 (Sensor - PID)-->
         <LinearLayout
             android:id="@+id/outputRow11_sensor_PID"
             android:layout_width="match_parent"
@@ -1374,8 +1357,7 @@
 
         </LinearLayout>
 
-        <!--Row 12 (Sensor - PID)
-      android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}"-->
+        <!--Row 12 (Sensor - PID)-->
         <LinearLayout
             android:id="@+id/outputRow12_sensor_PID"
             android:layout_width="match_parent"
@@ -1471,8 +1453,7 @@
 
         </LinearLayout>
 
-        <!--Row 13 (Sensor - PID)
-     android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}"-->
+        <!--Row 13 (Sensor - PID)-->
         <LinearLayout
             android:id="@+id/outputRow13_sensor_PID"
             android:layout_width="match_parent"
@@ -1566,8 +1547,7 @@
 
         </LinearLayout>
 
-        <!--Row 14 (Sensor - PID)
-     android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}"-->
+        <!--Row 14 (Sensor - PID)-->
         <LinearLayout
             android:id="@+id/outputRow14_sensor_PID"
             android:layout_width="match_parent"
@@ -1617,10 +1597,7 @@
 
         </LinearLayout>
 
-        <!--*********************************************************************************************-->
-
-        <!--Row 15 (Analog - probe/pump/dosing)
-                android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}"-->
+        <!--Row 15 (Analog - probe/pump/dosing)-->
         <LinearLayout
             android:id="@+id/outputRow15_analog_main"
             android:layout_width="match_parent"
@@ -1769,8 +1746,7 @@
 
         </LinearLayout>
 
-        <!--Row 16 (Analog - probe/pump/dosing)
-               android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}"-->
+        <!--Row 16 (Analog - probe/pump/dosing)-->
         <LinearLayout
             android:id="@+id/outputRow16_analog_main"
             android:layout_width="match_parent"
@@ -1900,10 +1876,7 @@
 
         </LinearLayout>
 
-        <!--*********************************************************************************************-->
-
-        <!--Row 17 (Analog - test)
-               android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}"-->
+        <!--Row 17 (Analog - test)-->
         <LinearLayout
             android:id="@+id/outputRow17_analog_test"
             android:layout_width="match_parent"
@@ -1993,10 +1966,7 @@
 
         </LinearLayout>
 
-        <!--*********************************************************************************************-->
-
-        <!--Row 18 (Analog - Disabled)
-               android:visibility="@{functionMode.equals(`layoutAnalogMain`) ? View.VISIBLE : View.GONE}"-->
+        <!--Row 18 (Analog - Disabled)-->
         <LinearLayout
             android:id="@+id/outputRow18_analog_disabled"
             android:layout_width="match_parent"
@@ -2013,8 +1983,6 @@
                 android:text="DISABLED" />
 
         </LinearLayout>
-
-        <!--*********************************************************************************************-->
 
         <!--Row U/D save Btn-->
         <LinearLayout
