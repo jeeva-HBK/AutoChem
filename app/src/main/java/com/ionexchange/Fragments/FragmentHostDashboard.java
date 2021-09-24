@@ -54,7 +54,6 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
     public static VirtualConfigurationDao virtualDAO;
     public static TimerConfigurationDao timerDAO;
 
-
     private static final String TAG = "FragmentMainHost";
 
     @Nullable
@@ -73,8 +72,8 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
         mBinding.trendScreenBtn.setOnClickListener(this);
         mBinding.eventLogsScreenBtn.setOnClickListener(this);
         mBinding.configScreenBtn.setOnClickListener(this);
-        // Connect_Packet
 
+        /* Connect_Packet */
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_connectPacket + SPILT_CHAR + APP_VERSION + SPILT_CHAR + CONNECT_COMMAND + SPILT_CHAR + ADMIN);
         setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentRoot_MainScreen(), "Dashboard");
     }

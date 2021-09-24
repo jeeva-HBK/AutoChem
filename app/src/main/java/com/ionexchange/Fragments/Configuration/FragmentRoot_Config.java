@@ -4,12 +4,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Adapters.ExpandableListAdapter;
 import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentCommonSettings_Config;
 import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentTargetIpSettings_Config;
 import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentUnitIpSettings_Config;
@@ -22,11 +24,18 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentConfigurationBinding;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-public class FragmentRoot_Config extends Fragment implements View.OnClickListener {
+
+public class FragmentRoot_Config extends Fragment implements ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupClickListener, ExpandableListView.OnChildClickListener {
     FragmentConfigurationBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;
+    private int lastPosition = -1;
+    HashMap<String, List<String>> childList;
+    List<String> generaList, ioList, homescreenList, headerList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,7 +45,7 @@ public class FragmentRoot_Config extends Fragment implements View.OnClickListene
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        mAppClass = (ApplicationClass) getActivity().getApplication();
         init();
     }
 
@@ -44,87 +53,103 @@ public class FragmentRoot_Config extends Fragment implements View.OnClickListene
         mAppClass = (ApplicationClass) getActivity().getApplication();
         mActivity = (BaseActivity) getActivity();
 
+        childList = new HashMap<>();
+
+        generaList = new ArrayList<>();
+        ioList = new ArrayList<>();
+        homescreenList = new ArrayList<>();
+        headerList = new ArrayList<>();
+
+        generaList.add("- Unit IP Settings");
+        generaList.add("- Target IP Settings");
+        generaList.add("- Site Settings");
+
+        ioList.add("- Input Settings");
+        ioList.add("- Output Settings");
+        ioList.add("- Timer Settings");
+        ioList.add("- Virtual Settings");
+
+        headerList.add("General Settings");
+        headerList.add("I/O Settings");
+        headerList.add("Home Settings");
+
+        childList.put("General Settings", generaList);
+        childList.put("I/O Settings", ioList);
+        childList.put("Home Settings", homescreenList);
+
+        mBinding.expList.setAdapter(new ExpandableListAdapter(getContext(), headerList, childList));
+        mBinding.expList.setOnGroupExpandListener(this);
+        mBinding.expList.setOnGroupClickListener(this);
+        mBinding.expList.setOnChildClickListener(this);
+        mBinding.expList.setChildDivider(getResources().getDrawable(R.color.primary));
+        mBinding.expList.setDivider(getResources().getDrawable(R.color.primary));
+
         mActivity.changeToolBarVisibility(View.GONE);
 
-        mBinding.headerText1.setOnClickListener(this::newOnClick);
-        mBinding.headerText2.setOnClickListener(this::newOnClick);
-        mBinding.headerText3.setOnClickListener(this::newOnClick);
-        mBinding.h1Subtext1.setOnClickListener(this);
-        mBinding.h1Subtext2.setOnClickListener(this);
-        mBinding.h1Subtext3.setOnClickListener(this);
-
-        mBinding.h2Subtext1.setOnClickListener(this);
-        mBinding.h2Subtext2.setOnClickListener(this);
-        mBinding.h2Subtext3.setOnClickListener(this);
-        mBinding.h2Subtext4.setOnClickListener(this);
-
-        mBinding.setItem1IsVisible(!mBinding.getItem1IsVisible());
-        mBinding.setSelected("1-1");
         mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentUnitIpSettings_Config());
     }
 
-    private void newOnClick(View view) {
-        setNormalState();
-        switch (view.getId()) {
-            case R.id.headerText1:
-                mBinding.setItem1IsVisible(!mBinding.getItem1IsVisible());
-                mBinding.setSelected("1-1");
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentUnitIpSettings_Config());
-                break;
-
-            case R.id.headerText2:
-                mBinding.setItem2IsVisible(!mBinding.getItem2IsVisible());
-                mBinding.setSelected("2-1");
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
-                break;
-
-            case R.id.headerText3:
-                mBinding.setItem3IsVisible(!mBinding.getItem3IsVisible());
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentHomeScreen_Config());
-                break;
-        }
-    }
-
-    private void setNormalState() {
-        mBinding.setItem1IsVisible(false);
-        mBinding.setItem2IsVisible(false);
-        mBinding.setItem3IsVisible(false);
+    void cast(Fragment fragment) {
+        mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, fragment);
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            // Header 1
-            case R.id.h1_subtext1:
-                mBinding.setSelected("1-1");
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentUnitIpSettings_Config());
-                break;
-            case R.id.h1_subtext2:
-                mBinding.setSelected("1-2");
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentTargetIpSettings_Config());
-                break;
-            case R.id.h1_subtext3:
-                mBinding.setSelected("1-3");
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentCommonSettings_Config());
+    public void onGroupExpand(int pos) {
+        if (lastPosition != -1 && pos != lastPosition) {
+            mBinding.expList.collapseGroup(lastPosition);
+        }
+        lastPosition = pos;
+    }
+
+    @Override
+    public boolean onGroupClick(ExpandableListView expandableListView, View view, int pos, long l) {
+        expandableListView.setItemChecked(pos, true);
+        if (pos == 2) {
+            cast(new FragmentHomeScreen_Config());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onChildClick(ExpandableListView expandableListView, View view, int pos, int pos1, long pos2) {
+
+        expandableListView.getChildAt((pos == 0) ? pos1 + 1 : pos1 + 2).setActivated(true);
+
+        switch (pos) {
+
+            case 0:
+                switch (pos1) {
+                    case 0:
+                        cast(new FragmentUnitIpSettings_Config());
+                        break;
+                    case 1:
+                        cast(new FragmentTargetIpSettings_Config());
+                        break;
+                    case 2:
+                        cast(new FragmentCommonSettings_Config());
+                        break;
+                }
                 break;
 
-            // Header 2
-            case R.id.h2_subtext1:
-                mBinding.setSelected("2-1");
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
-                break;
-            case R.id.h2_subtext2:
-                mBinding.setSelected("2-2");
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentOutputSettings_Config());
-                break;
-            case R.id.h2_subtext3:
-                mBinding.setSelected("2-3");
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentTimer_Config());
-                break;
-            case R.id.h2_subtext4:
-                mBinding.setSelected("2-4");
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentVirtualSensorList_Config());
+
+            case 1:
+                switch (pos1) {
+                    case 0:
+                        cast(new FragmentInputSensorList_Config());
+                        break;
+                    case 1:
+                        cast(new FragmentOutputSettings_Config());
+                        break;
+                    case 2:
+                        cast(new FragmentTimer_Config());
+                        break;
+
+                    case 3:
+                        cast(new FragmentVirtualSensorList_Config());
+                        break;
+                }
                 break;
         }
+        return false;
     }
 }
