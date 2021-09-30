@@ -45,7 +45,7 @@
                     android:digits="0123456789"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="Input Number"
+                    android:hint="@string/input_number"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
@@ -69,7 +69,7 @@
                     android:editable="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="Sequence Number" />
+                    android:hint="@string/sequence_number" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,7 +90,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/cand_inputLabel_edt_isc"
                     style="@style/config_Edt"
-                    android:hint="Input Label"
+                    android:hint="@string/input_name"
                     android:imeOptions="actionNext"
                     android:inputType="textPersonName"
                     android:maxLength="20"
@@ -107,7 +107,7 @@
                 <AutoCompleteTextView
                     android:id="@+id/cand_SensorType_atxt_isc"
                     style="@style/config_Atxt"
-                    android:hint="Sensor Type" />
+                    android:hint="@string/sensor_type" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -127,7 +127,7 @@
                     android:editable="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="Sensor Activation" />
+                    android:hint="@string/sensor_activation" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -148,7 +148,7 @@
                     android:clickable="false"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="Temperature Linked"
+                    android:hint="@string/temp_linked"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -161,7 +161,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/cand_smoothingFactor_edt_isc"
                     style="@style/config_Edt"
-                    android:hint="Smoothing Factor"
+                    android:hint="@string/smoothing_factor"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="3" />
@@ -178,7 +178,7 @@
                     android:clickable="false"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="Reset Calibration"
+                    android:hint="@string/reset_calibration"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -210,7 +210,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/cand_lowAlarm_edt_isc"
                         style="@style/config_Edt"
-                        android:hint="Low Alarm"
+                        android:hint="@string/low_alarm"
                         android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="7"
@@ -238,9 +238,10 @@
                     android:layout_marginBottom="2dp"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/double_zero"
                     android:inputType="number"
                     android:maxLength="2"
+                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/ph_lowAlarm_til_isc"
                     app:layout_constraintEnd_toEndOf="@+id/ph_lowAlarm_til_isc"
@@ -269,9 +270,9 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/cand_highAlarm_edt_isc"
                         style="@style/config_Edt"
-                        android:hint="High Alarm"
+                        android:hint="@string/high_alarm"
                         android:imeOptions="actionNext"
-                        android:inputType="numberDecimal"
+                        android:inputType="number"
                         android:maxLength="7" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -295,9 +296,10 @@
                     android:layout_marginBottom="2dp"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/double_zero"
                     android:inputType="number"
                     android:maxLength="2"
+                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/cand_highalarm_til_isc"
                     app:layout_constraintEnd_toEndOf="@+id/cand_highalarm_til_isc"
@@ -315,7 +317,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/cand_calibRequiredAlarm_edt_isc"
                     style="@style/config_Edt"
-                    android:hint="Calibration Required Alarm"
+                    android:hint="@string/calibration_req_alarm"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="3" />
@@ -340,7 +342,7 @@
                     android:clickable="false"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="Compensation Type"
+                    android:hint="@string/comp_type"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -365,9 +367,9 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/cand_compFactor_edt_isc"
                         style="@style/config_Edt"
-                        android:hint="comp Factor"
+                        android:hint="@string/comp_factor"
                         android:imeOptions="actionNext"
-                        android:inputType="numberDecimal"
+                        android:inputType="number"
                         android:maxLength="2" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -391,9 +393,10 @@
                     android:layout_marginBottom="2dp"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/double_zero"
                     android:inputType="number"
                     android:maxLength="2"
+                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/cand_compFactor_til_isc"
                     app:layout_constraintEnd_toEndOf="@+id/cand_compFactor_til_isc"
@@ -422,7 +425,7 @@
                     android:editable="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="Unit"
+                    android:hint="@string/unit"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -450,7 +453,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/cand_defaultTemperatureValue_til_isc"
                     style="@style/config_Til"
-                    android:hint="Temp Value"
+                    android:hint="@string/defaullt_temp_value"
                     app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -461,6 +464,7 @@
                         android:id="@+id/cand_temperature_edt_isc"
                         style="@style/config_Edt"
                         android:inputType="number"
+                        android:imeOptions="actionNext"
                         android:maxLength="3"
                         android:textAlignment="center"
                         app:textInputLayoutFocusedRectEnabled="true" />
@@ -486,7 +490,8 @@
                     android:layout_marginBottom="2dp"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/double_zero"
+                    android:imeOptions="actionDone"
                     android:inputType="number"
                     android:maxLength="2"
                     android:textColorHint="@color/colorPrimary"
@@ -523,7 +528,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:gravity="center_vertical"
-                    android:text="Save"
+                    android:text="@string/save"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -558,7 +563,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:gravity="center"
-                    android:text="Delete"
+                    android:text="@string/delete"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />

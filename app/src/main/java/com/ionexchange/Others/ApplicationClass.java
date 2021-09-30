@@ -34,33 +34,51 @@ import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
 public class ApplicationClass extends Application {
     private static final String TAG = "ApplicationClass";
 
-    public static int userType = 3; // 0 - None | 1 - Basic | 2 - intermediate | 3 - Advanced
+    public static int userType = 0; // 0 - None | 1 - Basic | 2 - intermediate | 3 - Advanced
 
     public static String[] sensorActivationArr = {"ENABLE", "DISABLE"},
-            inputTypeArr = {"pH", "ORP", "Temperature", "Flow/Water Meter", "Contacting Conductivity", "Toroidal Conductivity", "Analog Input", "Tank Level", "Digital Input", "Modbus Sensor"},
-            analogInputArr = {"pH", "ORP", "Temperature", "Contacting Conductivity", "Toroidal Conductivity", "Analog Input"},
+            sensorTypeArr = {"Sensor", "Temperature", "Modbus", "Analog Input", "Flow/Water Meter",
+                   "Digital Input", "Tank Level", },
+            inputTypeArr = {"pH", "ORP", "Temperature", "Flow/Water Meter", "Contacting Conductivity",
+                    "Toroidal Conductivity", "Analog Input", "Tank Level", "Digital Input", "Modbus Sensor"},
+            analogInputArr = {"Analog Input","pH", "ORP", "Temperature", "Flow/Water Meter",
+                    "Contacting Conductivity", "Toroidal Conductivity", "Tank Level"},
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},
-            unitArr = {"µS/cm", " mS/cm", "S/cm"},
+            unitArr = {"ÂµS/cm", " mS/cm", "S/cm"},
             resetFlowTotalArr = {"No reset", "Reset"},
             sensorSequenceNumber = {"1-Sensor", "2-Sensor", "3-Sensor", "4-Sensor", "5-Sensor", "6-Sensor"},
-            typeOfValueRead = {"None", "Fluorescence value", "Turbidity Value", "Corrosion rate", "Pitting rate", "Fluorescence value", "Tagged Polymer value"},
+            levelsensorSequenceNumber = {"None", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4",
+                    "Tank Level - 5", "Tank Level - 6","Tank Level - 7","Tank Level - 8"},
+            digitalsensorSequenceNumber = {"None", "Digital Sensor - 1", "Digital Sensor - 2", "Digital Sensor - 3", "Digital Sensor - 4",
+                    "Digital Sensor - 5", "Digital Sensor - 6","Digital Sensor - 7","Digital Sensor - 8"},
+            flowmeterSequenceNumber = {"None", "Flow Meter - 1", "Flow Meter - 2", "Flow Meter - 3", "Flow Meter - 4",
+                    "Flow Meter - 5", "Flow Meter - 6","Flow Meter - 7","Flow Meter - 8"},
+            analogSequenceNumber = {"None", "Analog - 1", "Analog - 2", "Analog - 3", "Analog - 4",
+                    "Analog - 5", "Analog - 6","Analog - 7","Analog - 8"},
+            typeOfValueRead = {"None", "Fluorescence", "Turbidity", "Corrosion rate", "Pitting rate", "Fluorescence", "Tagged Polymer"},
 
-    flowMeterTypeArr = {"Analog Flow Meter", "Contactor", "Paddle Wheel", "Feed Monitor"},
+            flowMeterTypeArr = {"Analog", "Contactor", "Paddle Wheel", "Feed Monitor"},
             flowUnitArr = {"Volume", "Gallons", "Litres", "Cubic Meters", "Millions of Gallons"},
             scheduleResetArr = {"No Schedule Reset", "Daily", "Monthly", "Annually"},
             totalAlarmMode = {"Interlock", "Maintain"},
             flowAlarmMode = {"Disable", "Interlock", "Maintain"},
 
-    digitalArr = {"NC", "NO"},
-            modBusTypeArr = {"ST500", "CR300CS", "CR-300 CU", "ST-590", "ST-588", "ST-500 RO"},
+            digitalArr = {"NC", "NO"},
+            modBusTypeArr = {"ST500", "CR300 CS", "CR-300 CU", "ST-590", "ST-588", "ST-500 RO"},
             modBusUnitArr = {"ppb", "ppm", "mpy"},
-            analogTypeArr = {"(4-20mA)", "(0 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ 10V)"},
+            analogTypeArr = {"(4-20mA)", "(0-10V)"},
             analogUnitArr = {"ma", "V"},
 
     calculationArr = {"Difference", "Ratio", "Total", "% Difference"},
-            sensorsViArr = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45"},
+            sensorArr = {"1", "2", "3", "4"}, temperatureArr = {"15", "16", "17"},
+            modbusArr = {"5", "6", "7", "8", "9", "10", "11", "12", "13", "14"},
+            analogArr = {"18", "19", "20", "21", "22", "23", "24", "25"},
+            flowmeterArr = {"26", "27", "28", "29", "30", "31", "32", "33"},
+            digitalSensorArr = {"34", "35", "36", "37", "38", "39", "40", "41"},
+            tankArr = {"42", "43", "44", "45", "46", "47", "48", "49"},
+            sensorsViArr = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49"},
             interlockChannel = {"Digital Input - 1", "Digital Input - 2", "Digital Input - 3", "Digital Input - 4", "Digital Input - 5", "Digital Input - 6", "Digital Input - 7", "Digital Input - 8", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4", "Tank Level - 5", "Tank Level - 6", "Tank Level - 7", "Tank Level - 8"},
             functionMode, modeInhibitor = {"Continuous", "Bleed/Blow Down", "Water Meter/Biocide"},
             modeSensor = {"On/Off", "PID", "Fuzzy"}, modeAnalog = {"Disable", "Probe", "Test", "Pump Status", "Dosing"},
@@ -230,32 +248,16 @@ public class ApplicationClass extends Application {
         return finalDigits;
     }
 
-    public static Integer findDecimal(EditText editText) {
-        int throwError = 0;
-        String[] findDecimalEdtTxt = editText.getText().toString().split("\\.");
-        try {
-            if (!editText.getText().toString().contains(".") && editText.getText().toString().length() > 4) {
-                return 1;
-            }else if (findDecimalEdtTxt[0].length() > 4) {
-                return 1;
-            } else if (findDecimalEdtTxt[1].isEmpty()) {
-                return 1;
-            } else if (findDecimalEdtTxt[1].length() > 2) {
-                return 1;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throwError = 1;
-        }
-        return throwError;
-    }
-
     public static String toStringValue(int digits, EditText editText) {
         return formDigits(digits, editText.getText().toString());
     }
 
     public static String toStringValue(AutoCompleteTextView editText) {
         return editText.getText().toString();
+    }
+
+    public static String getValueFromArr(String value, String[] arr) {
+        return arr[Integer.parseInt(value)];
     }
 
     public static String getPosition(int digit, String string, String[] strArr) {

@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IonExchange">
         <activity
+            android:windowSoftInputMode="adjustNothing"
             android:name=".Activity.BaseActivity"
             android:screenOrientation="landscape">
             <intent-filter>
@@ -25,5 +26,4 @@
 
         <service android:name=".Others.TCP" />
     </application>
-
 </manifest>

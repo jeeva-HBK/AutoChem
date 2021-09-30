@@ -2,26 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-        <import type="android.view.View" />
-
-        <variable
-            name="item1_isVisible"
-            type="boolean" />
-
-        <variable
-            name="item2_isVisible"
-            type="boolean" />
-
-        <variable
-            name="item3_isVisible"
-            type="boolean" />
-        <variable
-            name="selected"
-            type="String" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"

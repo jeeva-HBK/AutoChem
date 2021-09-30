@@ -54,6 +54,7 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
     public static VirtualConfigurationDao virtualDAO;
     public static TimerConfigurationDao timerDAO;
 
+
     private static final String TAG = "FragmentMainHost";
 
     @Nullable
@@ -72,8 +73,8 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
         mBinding.trendScreenBtn.setOnClickListener(this);
         mBinding.eventLogsScreenBtn.setOnClickListener(this);
         mBinding.configScreenBtn.setOnClickListener(this);
+        // Connect_Packet
 
-        /* Connect_Packet */
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_connectPacket + SPILT_CHAR + APP_VERSION + SPILT_CHAR + CONNECT_COMMAND + SPILT_CHAR + ADMIN);
         setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle, mBinding.homeText, new FragmentRoot_MainScreen(), "Dashboard");
     }
@@ -153,9 +154,9 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
         /*Input_DB*/
         inputDAO = DB.inputConfigurationDao();
         if (inputDAO.getInputConfigurationEntityList().isEmpty()) {
-            for (int i = 1; i < 46; i++) {
+            for (int i = 1; i < 50; i++) {
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                        (i, "N/A", 0, "N/A",
+                        (i, "N/A", "N/A","N/A",0, "N/A",
                                 "N/A", "N/A", 0);
                 List<InputConfigurationEntity> inputentryList = new ArrayList<>();
                 inputentryList.add(entityUpdate);
@@ -180,9 +181,9 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
         /*Virtual_DB*/
         virtualDAO = DB.virtualConfigurationDao();
         if (virtualDAO.getVirtualConfigurationEntityList().isEmpty()) {
-            for (int i = 46; i < 54; i++) {
+            for (int i = 50; i < 57; i++) {
                 VirtualConfigurationEntity entityUpdate = new VirtualConfigurationEntity
-                        (i, "virtual-" + (i - 45), 0, "N/A",
+                        (i, "virtual-" + (i - 49), 0, "N/A",
                                 "N/A", "N/A");
                 List<VirtualConfigurationEntity> virtualEntryList = new ArrayList<>();
                 virtualEntryList.add(entityUpdate);

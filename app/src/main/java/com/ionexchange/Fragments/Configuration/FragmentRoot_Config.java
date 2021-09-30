@@ -1,6 +1,7 @@
 package com.ionexchange.Fragments.Configuration;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,6 +87,10 @@ public class FragmentRoot_Config extends Fragment implements ExpandableListView.
 
         mActivity.changeToolBarVisibility(View.GONE);
 
+        mBinding.expList.expandGroup(0);
+        onGroupClick(mBinding.expList, null, 0, 0);
+//        onChildClick(mBinding.expList, mBinding.expList.getChildAt(0).getRootView(), 0, 0, 0);
+
         mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentUnitIpSettings_Config());
     }
 
@@ -112,11 +117,10 @@ public class FragmentRoot_Config extends Fragment implements ExpandableListView.
 
     @Override
     public boolean onChildClick(ExpandableListView expandableListView, View view, int pos, int pos1, long pos2) {
-
+        Log.e("TAG", "onChildClick: " + expandableListView + "|" + view + "|" + pos + "|" + pos1 + "|" + pos2);
         expandableListView.getChildAt((pos == 0) ? pos1 + 1 : pos1 + 2).setActivated(true);
 
         switch (pos) {
-
             case 0:
                 switch (pos1) {
                     case 0:
@@ -130,7 +134,6 @@ public class FragmentRoot_Config extends Fragment implements ExpandableListView.
                         break;
                 }
                 break;
-
 
             case 1:
                 switch (pos1) {

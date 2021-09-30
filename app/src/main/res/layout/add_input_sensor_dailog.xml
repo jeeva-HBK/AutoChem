@@ -23,15 +23,34 @@
         app:layout_constraintTop_toTopOf="@id/view" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/add_input_number_dialog_til"
+        android:id="@+id/add_input_type_dialog_til"
         style="@style/appAutoTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view">
+
+        <AutoCompleteTextView
+            android:id="@+id/add_input_type_dialog_act"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="false"
+            android:editable="false"
+            android:focusable="false"
+            android:hint="@string/sensor_type" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/add_input_number_dialog_til"
+        style="@style/appAutoTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="@+id/add_input_type_dialog_til"
+        app:layout_constraintStart_toStartOf="@+id/add_input_type_dialog_til"
+        app:layout_constraintTop_toBottomOf="@+id/add_input_type_dialog_til">
 
         <AutoCompleteTextView
             android:id="@+id/add_input_number_dialog_act"
@@ -40,7 +59,7 @@
             android:clickable="false"
             android:editable="false"
             android:focusable="false"
-            android:hint="Input Number" />
+            android:hint="@string/input_number" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -63,7 +82,6 @@
             android:focusable="false"
             android:hint="Sensor" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/add_sensor_dialog_btn"

@@ -41,7 +41,7 @@
                     android:digits="0123456789"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="Input Number"
+                    android:hint="@string/input_number"
                     android:inputType="number"
                     android:maxLength="2" />
 
@@ -52,7 +52,6 @@
                 android:id="@+id/temp_seqNumber_til_isc"
                 style="@style/config_AtxTil"
                 android:enabled="false"
-                android:visibility="invisible"
                 android:layout_weight="1">
 
                 <AutoCompleteTextView
@@ -62,7 +61,7 @@
                     android:editable="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="Sequence Number" />
+                    android:hint="@string/sequence_number" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,9 +80,10 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/temp_inputLabel_edt_isc"
                     style="@style/config_Edt"
-                    android:hint="Input Label"
+                    android:hint="@string/input_name"
                     android:imeOptions="actionNext"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:maxLength="20"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -100,7 +100,7 @@
                     android:editable="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="Sensor Type" />
+                    android:hint="@string/sensor_type" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -122,7 +122,7 @@
                     android:editable="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="Sensor Activation" />
+                    android:hint="@string/sensor_activation" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -155,7 +155,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/temp_lowAlarm_til_isc"
                     style="@style/config_Til"
-                    android:hint="low Alarm"
+                    android:hint="@string/low_alarm"
                     app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -167,6 +167,7 @@
                         style="@style/config_Edt"
                         android:inputType="number"
                         android:maxLength="3"
+                        android:imeOptions="actionNext"
                         android:textAlignment="center"
                         app:textInputLayoutFocusedRectEnabled="true" />
 
@@ -191,9 +192,10 @@
                     android:layout_marginBottom="2dp"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/double_zero"
                     android:inputType="number"
                     android:maxLength="2"
+                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/temp_lowAlarm_til_isc"
                     app:layout_constraintEnd_toEndOf="@+id/temp_lowAlarm_til_isc"
@@ -225,7 +227,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/temp_highAlarm_til_isc"
                     style="@style/config_Til"
-                    android:hint="high Alarm"
+                    android:hint="@string/high_alarm"
                     app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -237,6 +239,7 @@
                         style="@style/config_Edt"
                         android:inputType="number"
                         android:maxLength="3"
+                        android:imeOptions="actionNext"
                         android:textAlignment="center"
                         app:textInputLayoutFocusedRectEnabled="true" />
 
@@ -261,9 +264,10 @@
                     android:layout_marginBottom="2dp"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/double_zero"
                     android:inputType="number"
                     android:maxLength="2"
+                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/temp_highAlarm_til_isc"
                     app:layout_constraintEnd_toEndOf="@+id/temp_highAlarm_til_isc"
@@ -295,7 +299,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/temp_defaultTemperatureValue_til_isc"
                     style="@style/config_Til"
-                    android:hint="Temp Value"
+                    android:hint="@string/temp_value"
                     app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -307,6 +311,7 @@
                         style="@style/config_Edt"
                         android:inputType="number"
                         android:maxLength="3"
+                        android:imeOptions="actionNext"
                         android:textAlignment="center"
                         app:textInputLayoutFocusedRectEnabled="true" />
 
@@ -331,8 +336,9 @@
                     android:layout_marginBottom="2dp"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/double_zero"
                     android:inputType="number"
+                    android:imeOptions="actionNext"
                     android:maxLength="2"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/temp_defaultTemperatureValue_til_isc"
@@ -358,7 +364,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/temp_smoothingFactor_edt_isc"
                     style="@style/config_Edt"
-                    android:hint="Smoothing Factor"
+                    android:hint="@string/smoothing_factor"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="3"
@@ -379,8 +385,8 @@
                     android:id="@+id/temp_calibRequiredAlarm_edt_isc"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Calibration Required Alarm"
-                    android:imeOptions="actionNext"
+                    android:hint="@string/calibration_req_alarm"
+                    android:imeOptions="actionDone"
                     android:inputType="number"
                     android:maxLength="3"
                     android:maxLines="1" />
@@ -398,7 +404,7 @@
                     style="@style/config_Atxt"
                     android:editable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="Reset Calibration" />
+                    android:hint="@string/reset_calibration" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -425,7 +431,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:gravity="center_vertical"
-                    android:text="Save"
+                    android:text="@string/save"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -460,7 +466,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:gravity="center"
-                    android:text="Delete"
+                    android:text="@string/delete"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,6 +41,7 @@ import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
@@ -109,7 +111,11 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
                 mBinding.orpInputLabelTilIsc.setEnabled(false);
                 mBinding.orpSensorTypeTilIsc.setEnabled(false);
                 mBinding.orpAlarmLowTilIsc.setEnabled(false);
+                mBinding.orpAlarmLowDeciIsc.setEnabled(false);
+                mBinding.orpAlarmLowTBtn.setEnabled(false);
                 mBinding.orpAlarmHighTilIsc.setEnabled(false);
+                mBinding.orpAlarmHighDeciIsc.setEnabled(false);
+                mBinding.orpAlarmHighTBtn.setEnabled(false);
                 mBinding.orpSmoothingFactorTilIsc.setVisibility(View.GONE);
                 mBinding.orpCalibrationAlarmRequiredTilIsc.setEnabled(false);
                 mBinding.orpResetCalibrationTilIsc.setEnabled(false);
@@ -119,6 +125,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
                 mBinding.orpSmoothingFactorTilIsc.setEnabled(false);
                 mBinding.orpSensorActTilIsc.setVisibility(View.GONE);
                 mBinding.orpDeleteLayoutIsc.setVisibility(View.GONE);
+                mBinding.orpCalibrationAlarmRequiredEdtIsc.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 break;
         }
     }
@@ -167,19 +174,19 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     public void OnDataReceive(String data) {
         mActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
         }
         if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
         }
         if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getContext(), "TimeOut");
+            mAppClass.showSnackBar(getContext(),  getString(R.string.timeout));
         }
         if (data != null) {
-            handleResponse(data.split("\\*")[1].split("\\$"));
+            handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
         }
     }
 
@@ -197,65 +204,65 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
                     mBinding.orpSmoothingFactorEdtIsc.setText(data[8]);
 
                     mBinding.orpAlarmLowTBtn.setChecked((data[9].substring(0, 1)).equals("+"));
-                    mBinding.orpAlarmLowEdtIsc.setText(data[9].substring(1, 4));
-                    mBinding.orpAlarmLowDeciIsc.setText(data[9].substring(6, 7));
+                    mBinding.orpAlarmLowEdtIsc.setText(data[9].substring(1, 5));
+                    mBinding.orpAlarmLowDeciIsc.setText(data[9].substring(6, 8));
 
                     mBinding.orpAlarmHighTBtn.setChecked(data[10].substring(0, 1).equals("+"));
-                    mBinding.orpAlarmHighEdtIsc.setText(data[10].substring(1, 4));
-                    mBinding.orpAlarmHighDeciIsc.setText(data[10].substring(6, 7));
+                    mBinding.orpAlarmHighEdtIsc.setText(data[10].substring(1, 5));
+                    mBinding.orpAlarmHighDeciIsc.setText(data[10].substring(6, 8));
 
                     mBinding.orpCalibrationAlarmRequiredEdtIsc.setText(data[11]);
                     mBinding.orpResetCalibrationAtxtIsc.setText(mBinding.orpResetCalibrationAtxtIsc.getAdapter().getItem(Integer.parseInt(data[12])).toString());
                     initAdapter();
                 } else if (data[2].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), "READ FAILED");
+                    mAppClass.showSnackBar(getContext(), getString(R.string.readFailed));
                 }
                 // *0$ 04$ 0$ *0}
             } else if (data[0].equals(WRITE_PACKET)) {
                 if (data[3].equals(RES_SUCCESS)) {
                     orpEntity(Integer.parseInt(data[2]));
-                    mAppClass.showSnackBar(getContext(), "WRITE SUCCESS");
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 } else if (data[3].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), "WRITE FAILED");
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }
             }
         } else {
-            mAppClass.showSnackBar(getContext(), "Received Wrong Pack !");
+            mAppClass.showSnackBar(getContext(), getString(R.string.wrongPack));
         }
 
     }
 
     boolean validation() {
         if (isFieldEmpty(mBinding.orpInputLabelEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Input Label Cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.input_name_validation));
             return false;
         } else if (isFieldEmpty(mBinding.orpSensorActAtxtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Sensor Activation Cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.sensor_activation_validation));
             return false;
         } else if (isFieldEmpty(mBinding.orpAlarmLowEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Alarm Low Factor Cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.alarm_low_validation));
             return false;
         } else if (isFieldEmpty(mBinding.orpAlarmHighEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Alarm High Factor Cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.alarm_high_validation));
             return false;
         } else if (isFieldEmpty(mBinding.orpResetCalibrationAtxtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Reset Calibration Cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.reset_calibration_validation));
             return false;
         } else if (isFieldEmpty(mBinding.orpCalibrationAlarmRequiredEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Calibration Required Alarm Cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.orpSmoothingFactorEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Smoothing Factor Cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.calibration_alarm_vali));
             return false;
         } else if (Integer.parseInt(getStringValue(3, mBinding.orpCalibrationAlarmRequiredEdtIsc)) > 365) {
-            mBinding.orpCalibrationAlarmRequiredEdtIsc.setError("Should be less than 365");
+            mBinding.orpCalibrationAlarmRequiredEdtIsc.setError(getString(R.string.calibration_alarm_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.orpSmoothingFactorEdtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_validation));
             return false;
         } else if (Integer.parseInt(getStringValue(3, mBinding.orpSmoothingFactorEdtIsc)) > 100) {
-            mBinding.orpSmoothingFactorEdtIsc.setError("Should be less than 100");
+            mBinding.orpSmoothingFactorEdtIsc.setError(getString(R.string.smoothing_factor_vali));
             return false;
         } else if (Float.parseFloat(getDecimalValue(mBinding.orpAlarmLowTBtn, mBinding.orpAlarmLowEdtIsc, 4, mBinding.orpAlarmLowDeciIsc, 2)) >=
                 Float.parseFloat(getDecimalValue(mBinding.orpAlarmHighTBtn, mBinding.orpAlarmHighEdtIsc, 4, mBinding.orpAlarmHighDeciIsc, 2))) {
-            mAppClass.showSnackBar(getContext(), "Alarm High Should be Greater Than Alarm Low");
+            mAppClass.showSnackBar(getContext(), getString(R.string.alarm_limit_validation));
             return false;
         }
         return true;
@@ -271,7 +278,9 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
         switch (flagValue) {
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(getStringValue(2, mBinding.orpInputNumberEdtIsc)), "0", 1, "0", "0", "0", 0);
+                        (Integer.parseInt(getStringValue(2, mBinding.orpInputNumberEdtIsc)), "N/A",
+                                "SENSOR","N/A",
+                                1, "N/A", "N/A", "N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
@@ -283,6 +292,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.orpInputNumberEdtIsc)),
                                 mBinding.orpSensorTypeAtxtIsc.getText().toString(),
+                                "SENSOR",mBinding.orpSensorTypeAtxtIsc.getText().toString(),
                                 1, getStringValue(0, mBinding.orpInputLabelEdtIsc),
                                 getDecimalValue(mBinding.orpAlarmLowTBtn, mBinding.orpAlarmLowEdtIsc, 4, mBinding.orpAlarmLowDeciIsc, 2),
                                 getDecimalValue(mBinding.orpAlarmHighTBtn, mBinding.orpAlarmHighEdtIsc, 4, mBinding.orpAlarmHighDeciIsc, 2), 1);

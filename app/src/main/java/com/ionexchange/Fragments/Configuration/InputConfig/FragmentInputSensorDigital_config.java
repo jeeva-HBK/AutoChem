@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.digitalArr;
+import static com.ionexchange.Others.ApplicationClass.digitalsensorSequenceNumber;
 import static com.ionexchange.Others.ApplicationClass.getAdapter;
 import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
 import static com.ionexchange.Others.ApplicationClass.getStringValue;
@@ -31,13 +33,13 @@ import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
@@ -52,17 +54,18 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
     int sensorStatus;
     WaterTreatmentDb db;
     InputConfigurationDao dao;
-    String sensorSequence = "1"; // Todo SequenceNumber
+    String sensorSequence = "1";
 
     public FragmentInputSensorDigital_config(String inputNumber, int sensorStatus) {
         this.inputNumber = inputNumber;
         this.sensorStatus = sensorStatus;
     }
 
-    public FragmentInputSensorDigital_config(String inputNumber, String sensorName, int sensorStatus) {
+    public FragmentInputSensorDigital_config(String inputNumber, String sensorName, int sensorStatus,String sensorSequence) {
         this.inputNumber = inputNumber;
         this.sensorName = sensorName;
         this.sensorStatus = sensorStatus;
+        this.sensorSequence = sensorSequence;
     }
 
     @Nullable
@@ -116,7 +119,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
                 mBinding.digitalInnerLock.setEnabled(false);
                 mBinding.digitalAlarm.setEnabled(false);
                 mBinding.digitalTotalTime.setEnabled(false);
-
+                mBinding.digitalInputSensorCloseMessageTie.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 mBinding.digitalSensorActivation.setVisibility(View.GONE);
                 mBinding.digitalLevelDeleteLayoutIsc.setVisibility(View.GONE);
                 break;
@@ -136,7 +139,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
     void sendData(int sensorStatus) {
         mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
-                "0" + SPILT_CHAR +
+                CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
                 getStringValue(2, mBinding.digitalInputNumberTie) + SPILT_CHAR +
@@ -160,26 +163,26 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
         mBinding.digitalInputSensorInnerLockAct.setAdapter(getAdapter(digitalArr, getContext()));
         mBinding.digitalInputSensorAlarmAct.setAdapter(getAdapter(digitalArr, getContext()));
         mBinding.digitalInputSensorResetTimeAct.setAdapter(getAdapter(resetCalibrationArr, getContext()));
-        mBinding.digitalLevelSequenceNumberTie.setAdapter(getAdapter(sensorSequenceNumber, getContext()));
+        mBinding.digitalLevelSequenceNumberTie.setAdapter(getAdapter(digitalsensorSequenceNumber, getContext()));
     }
 
     @Override
     public void OnDataReceive(String data) {
         mActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getContext(), "TimeOut");
+            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
         }
         if (data != null) {
-            handleResponse(data.split("\\*")[1].split("\\$"));
+            handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
         }
     }
 
@@ -194,7 +197,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
                     mBinding.digitalInputSensorTypeTie.setText(mBinding.digitalInputSensorTypeTie.getAdapter().getItem(Integer.parseInt(data[4])).toString());
                     mBinding.digitalLevelSequenceNumberTie.setText(mBinding.digitalLevelSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[5])).toString());
                     mBinding.digitalInputSensorSensorActivationTie.setText(mBinding.digitalInputSensorSensorActivationTie.getAdapter().getItem(Integer.parseInt(data[6])).toString());
-
+                    sensorSequence = data[5];
                     mBinding.digitalInputSensorLabelTie.setText(data[7]);
                     mBinding.digitalInputSensorOpenMessageTie.setText(data[8]);
                     mBinding.digitalInputSensorCloseMessageTie.setText(data[9]);
@@ -206,46 +209,46 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
 
                     initAdapter();
                 } else if (data[2].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), "READ FAILED");
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }
             } else if (data[0].equals(WRITE_PACKET)) {
                 if (data[3].equals(RES_SUCCESS)) {
                     analogEntity(Integer.parseInt(data[2]));
-                    mAppClass.showSnackBar(getContext(), "WRITE SUCCESS");
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 } else if (data[3].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), "WRITE FAILED");
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }
             }
         } else {
-            mAppClass.showSnackBar(getContext(), "Received Wrong Pack !");
+            mAppClass.showSnackBar(getContext(), getString(R.string.wrongPack));
         }
     }
 
 
     private boolean validField() {
         if (isFieldEmpty(mBinding.digitalInputSensorLabelTie)) {
-            mAppClass.showSnackBar(getContext(), "InputLabel cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.digitalInputSensorInnerLockAct)) {
-            mAppClass.showSnackBar(getContext(), "Interlock Channel cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.digitalInputSensorOpenMessageTie)) {
-            mAppClass.showSnackBar(getContext(), "Open message cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.digitalInputSensorCloseMessageTie)) {
-            mAppClass.showSnackBar(getContext(), "Close message cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.digitalInputSensorResetTimeAct)) {
-            mAppClass.showSnackBar(getContext(), "Reset time cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.digitalInputSensorAlarmAct)) {
-            mAppClass.showSnackBar(getContext(), "Alarm cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.digitalInputSensorTotalTimeTie)) {
-            mAppClass.showSnackBar(getContext(), "Total time cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.input_name_validation));
             return false;
         } else if (isFieldEmpty(mBinding.digitalInputSensorSensorActivationTie)) {
-            mAppClass.showSnackBar(getContext(), "Sensor Activation cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.sensor_activation_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.digitalInputSensorOpenMessageTie)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.openmessage_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.digitalInputSensorCloseMessageTie)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.closemessage_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.digitalInputSensorResetTimeAct)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.reset_time_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.digitalInputSensorTotalTimeTie)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.total_time_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.digitalInputSensorAlarmAct)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.alarm_mode_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.digitalInputSensorInnerLockAct)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.interlock_validation));
             return false;
         }
         return true;
@@ -256,11 +259,13 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
         super.onResume();
         if (sensorName == null) {
             mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + inputNumber);
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
+                    READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + inputNumber);
         } else {
             mBinding.digitalInputNumberTie.setText(inputNumber);
             mBinding.digitalInputSensorTypeTie.setText(sensorName);
             mBinding.digitalLevelDeleteLayoutIsc.setVisibility(View.GONE);
+            mBinding.digitalLevelSequenceNumberTie.setText(mBinding.digitalLevelSequenceNumberTie.getAdapter().getItem(Integer.parseInt(sensorSequence)).toString());
             mBinding.digitalLevelSaveTxtIsc.setText("ADD");
         }
     }
@@ -277,7 +282,8 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.digitalInputNumberTie)),
-                                "0", 0, "0", "0", "0", 0);
+                                "N/A", "DIGITAL","N/A",1,
+                                "N/A", "N/A", "N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
@@ -288,8 +294,9 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.digitalInputNumberTie)),
-                                mBinding.digitalInputSensorTypeTie.getText().toString(),
-                                0, getStringValue(0, mBinding.digitalInputSensorLabelTie),
+                                mBinding.digitalInputSensorTypeTie.getText().toString(),"DIGITAL",
+                                mBinding.digitalLevelSequenceNumberTie.getText().toString(),
+                                Integer.parseInt(sensorSequence), getStringValue(0, mBinding.digitalInputSensorLabelTie),
                                 "N/A",
                                 "N/A", 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();

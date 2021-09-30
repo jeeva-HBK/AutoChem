@@ -47,7 +47,7 @@
                     android:clickable="false"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="Input Number" />
+                    android:hint="@string/input_number" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,7 +61,7 @@
                 <AutoCompleteTextView
                     android:id="@+id/modbus_sequence_number_tie"
                     style="@style/config_Atxt"
-                    android:hint="Sequence Number" />
+                    android:hint="@string/sequence_number" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -82,9 +82,10 @@
                     android:id="@+id/mod_bus_input_label_tie"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Input Label"
+                    android:hint="@string/input_name"
                     android:imeOptions="actionNext"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:maxLength="20"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--Sensor Type-->
@@ -96,19 +97,20 @@
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_sensor_type_tie"
                     style="@style/config_Atxt"
-                    android:hint="SensorType" />
+                    android:hint="@string/sensor_type" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--Modbus Type-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_modbusType"
-                style="@style/config_AtxTil">
+                style="@style/config_AtxTil"
+                android:enabled="false">
 
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_type_tie"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Modbus Type"
+                    android:hint="@string/modbus_type"
                     android:enabled="false"
                     style="@style/config_Atxt"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -135,7 +137,7 @@
                     style="@style/appEdtTxt"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:hint="Min Value"
+                    android:hint="@string/min_value"
                     app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -148,7 +150,7 @@
                         android:inputType="number"
                         android:maxLength="3"
                         android:maxLines="1"
-                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
                         app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -172,9 +174,10 @@
                     android:layout_marginBottom="2dp"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/double_zero"
                     android:inputType="number"
                     android:maxLength="2"
+                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/modbus_minValue"
                     app:layout_constraintEnd_toEndOf="@+id/modbus_minValue"
@@ -196,7 +199,7 @@
                     style="@style/appEdtTxt"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:hint="Max Value"
+                    android:hint="@string/max_value"
                     app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -209,7 +212,7 @@
                         android:inputType="number"
                         android:maxLength="3"
                         android:maxLines="1"
-                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
                         app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -233,9 +236,10 @@
                     android:layout_marginBottom="2dp"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/double_zero"
                     android:inputType="number"
                     android:maxLength="2"
+                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/modbus_maxValue"
                     app:layout_constraintEnd_toEndOf="@+id/modbus_maxValue"
@@ -253,7 +257,7 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_diagnostic_sweep_tie"
-                    android:hint="Diagnostic sweep"
+                    android:hint="@string/diagnostic_sweep"
                     style="@style/config_Atxt"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -266,8 +270,11 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/mod_bus_time_tie"
                     style="@style/config_Atxt"
-                    android:hint="Time"
+                    android:hint="@string/time"
                     android:imeOptions="actionNext"
+                    android:editable="true"
+                    android:focusableInTouchMode="true"
+                    app:textInputLayoutFocusedRectEnabled="true"
                     android:inputType="number"
                     android:maxLength="6" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -292,7 +299,7 @@
                     style="@style/appEdtTxt"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:hint="Alarm low"
+                    android:hint="@string/low_alarm"
                     app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -305,7 +312,7 @@
                         android:inputType="number"
                         android:maxLength="3"
                         android:maxLines="1"
-                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
                         app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -329,9 +336,10 @@
                     android:layout_marginBottom="2dp"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/double_zero"
                     android:inputType="number"
                     android:maxLength="2"
+                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/modbus_alarmLow"
                     app:layout_constraintEnd_toEndOf="@+id/modbus_alarmLow"
@@ -354,7 +362,7 @@
                     style="@style/appEdtTxt"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:hint="Alarm High"
+                    android:hint="@string/high_alarm"
                     app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -367,7 +375,7 @@
                         android:inputType="number"
                         android:maxLength="3"
                         android:maxLines="1"
-                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
                         app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -391,9 +399,10 @@
                     android:layout_marginBottom="2dp"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/double_zero"
                     android:inputType="number"
                     android:maxLength="2"
+                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/modbus_alarmHigh"
                     app:layout_constraintEnd_toEndOf="@+id/modbus_alarmHigh"
@@ -412,10 +421,10 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/mod_bus_calibration_required_alarm_tie"
                     style="@style/config_Edt"
-                    android:hint="Calibration Required Alarm"
-                    android:imeOptions="actionDone"
+                    android:hint="@string/calibration_req_alarm"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
-                    android:maxLength="4"
+                    android:maxLength="3"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -428,7 +437,7 @@
                     android:id="@+id/mod_bus_reset_calibration_tie"
                     style="@style/config_Atxt"
 
-                    android:hint="Reset Calibration" />
+                    android:hint="@string/reset_calibration" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
@@ -441,13 +450,14 @@
             <!--Type of value Read-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_typeOfValueRead"
-                style="@style/config_AtxTil">
+                style="@style/config_AtxTil"
+                android:enabled="false">
 
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_typeOfValueRead_tie"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Type of value Read"
+                    android:hint="@string/value_type"
                     style="@style/config_Atxt"/>
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -462,8 +472,8 @@
                     android:id="@+id/mod_bus_smoothing_factor_tie"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Smoothing Factor"
-                    android:imeOptions="actionNext"
+                    android:hint="@string/smoothing_factor"
+                    android:imeOptions="actionDone"
                     android:inputType="number"
                     android:maxLength="3" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -475,7 +485,7 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_unit_measurement_tie"
-                    android:hint="Measurement Unit"
+                    android:hint="@string/measurement_unit"
                     style="@style/config_Atxt"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -487,7 +497,7 @@
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_sensor_activation_tie"
                     style="@style/config_Atxt"
-                    android:hint="SensorActivation" />
+                    android:hint="@string/sensor_activation" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -514,7 +524,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:gravity="center_vertical"
-                    android:text="Save"
+                    android:text="@string/save"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -549,7 +559,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:gravity="center"
-                    android:text="Delete"
+                    android:text="@string/delete"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />

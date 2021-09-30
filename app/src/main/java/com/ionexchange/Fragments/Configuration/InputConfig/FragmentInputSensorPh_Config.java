@@ -42,6 +42,7 @@ import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
@@ -183,44 +184,44 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     boolean validField() {
 
         if (isFieldEmpty(mBinding.phInputLabelEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Input Label cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.input_name_validation));
             return false;
-        } else if (isFieldEmpty(mBinding.phBufferTypeAtxtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Choose any mode of Buffer Type");
-            return false;
-        } else if (isFieldEmpty(mBinding.phCalibrationRequiredEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Calibration Required Alarm cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.phAlarmLowEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Alarm low cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.phAlarmhighEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Alarm high cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.phTempLinkedAtxtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Select Temperature Sensor Linked value");
+        } else if (isFieldEmpty(mBinding.phSensorActivationAtxtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.sensor_activation_validation));
             return false;
         } else if (isFieldEmpty(mBinding.phTemperatureEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "Temperature value cannot be Empty");
             return false;
-        } else if (isFieldEmpty(mBinding.phResetCalibrationAtxtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Select Reset Calibration value");
+        } else if (isFieldEmpty(mBinding.phAlarmLowEdtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.alarm_low_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.phAlarmhighEdtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.alarm_high_validation));
             return false;
         } else if (isFieldEmpty(mBinding.phSmoothingFactorEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Smoothing factor cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.phSensorActivationAtxtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Select Sensor Activation value");
-            return false;
-        } else if (Integer.parseInt(getStringValue(3, mBinding.phCalibrationRequiredEdtIsc)) > 365) {
-            mBinding.phCalibrationRequiredEdtIsc.setError("Should be less than 365");
+            mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_validation));
             return false;
         } else if (Integer.parseInt(getStringValue(3, mBinding.phSmoothingFactorEdtIsc)) > 100) {
-            mBinding.phSmoothingFactorEdtIsc.setError("Should be less than 100");
+            mBinding.phSmoothingFactorEdtIsc.setError(getString(R.string.smoothing_factor_vali));
+            return false;
+        } else if (isFieldEmpty(mBinding.phCalibrationRequiredEdtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.calibration_alarm_vali));
+            return false;
+        } else if (Integer.parseInt(getStringValue(3, mBinding.phCalibrationRequiredEdtIsc)) > 365) {
+            mBinding.phCalibrationRequiredEdtIsc.setError(getString(R.string.calibration_alarm_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.phResetCalibrationAtxtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.reset_calibration_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.phBufferTypeAtxtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.buffertype_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.phTempLinkedAtxtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.temp_sensor_linked_valid));
             return false;
         } else if (Float.parseFloat(getDecimalValue(mBinding.phAlarmLowEdtIsc, 4, mBinding.phAlarmLowDeciIsc, 2)) >=
                 Float.parseFloat(getDecimalValue(mBinding.phAlarmhighEdtIsc, 4, mBinding.phHighAlarmDeciIsc, 2))) {
-            mAppClass.showSnackBar(getContext(), "Alarm High Should be Greater Than Alarm Low");
+            mAppClass.showSnackBar(getContext(), getString(R.string.alarm_limit_validation));
             return false;
         }
         return true;
@@ -230,19 +231,19 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     public void OnDataReceive(String data) {
         mActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getContext(), "TimeOut");
+            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
         }
         if (data != null) {
-            handleResponce(data.split("\\*")[1].split("\\$"));
+            handleResponce(data.split("\\*")[1].split(RES_SPILT_CHAR));
         }
     }
 
@@ -330,18 +331,18 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.phInputNumberEdtIsc)),
-                                "N/A", 1, "N/A", "N/A", "N/A", 0);
+                                "N/A","SENSOR" , "N/A",
+                                1, "N/A", "N/A", "N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
                 mBinding.phBackArrowIsc.performClick();
                 break;
-
             case 0:
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.phInputNumberEdtIsc)),
-                                mBinding.phSensorTypeAtxtIsc.getText().toString(),
+                                mBinding.phSensorTypeAtxtIsc.getText().toString(),"SENSOR",mBinding.phSensorTypeAtxtIsc.getText().toString(),
                                 1, getStringValue(0, mBinding.phInputLabelEdtIsc),
                                 getStringValue(2, mBinding.phAlarmLowEdtIsc) + "." + getStringValue(2, mBinding.phAlarmLowDeciIsc),
                                 getStringValue(2, mBinding.phAlarmhighEdtIsc) + "." + getStringValue(2, mBinding.phHighAlarmDeciIsc), 1);

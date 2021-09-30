@@ -23,4 +23,7 @@ public interface OutputConfigurationDao {
 
     @Query("select * FROM outputConfigurationEntity  WHERE outputNumber BETWEEN :hardwareTo AND :hardwareNo")
     List<OutputConfigurationEntity> getOutputHardWareNoConfigurationEntityList(int hardwareTo, int hardwareNo);
+
+    @Query("select * FROM outputConfigurationEntity  WHERE outputNumber BETWEEN :fromHardwareNo AND :toHardwareNo LIMIT  :limit OFFSET :offset")
+    List<OutputConfigurationEntity> getOutputHardWareNoConfigurationEntityList(int fromHardwareNo, int toHardwareNo, int limit, int offset);
 }

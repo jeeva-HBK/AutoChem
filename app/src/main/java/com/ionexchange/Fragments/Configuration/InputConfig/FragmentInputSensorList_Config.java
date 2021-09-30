@@ -33,27 +33,37 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ionexchange.Others.ApplicationClass.analogArr;
 import static com.ionexchange.Others.ApplicationClass.analogInputArr;
+import static com.ionexchange.Others.ApplicationClass.digitalArr;
+import static com.ionexchange.Others.ApplicationClass.digitalSensorArr;
+import static com.ionexchange.Others.ApplicationClass.flowmeterArr;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.modbusArr;
+import static com.ionexchange.Others.ApplicationClass.sensorArr;
+import static com.ionexchange.Others.ApplicationClass.sensorTypeArr;
 import static com.ionexchange.Others.ApplicationClass.sensorsViArr;
+import static com.ionexchange.Others.ApplicationClass.tankArr;
+import static com.ionexchange.Others.ApplicationClass.temperatureArr;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 
 public class FragmentInputSensorList_Config extends Fragment implements View.OnClickListener, InputRvOnClick {
     FragmentInputsettingsBinding mBinding;
-    AutoCompleteTextView inputNumber;
-    AutoCompleteTextView sensorName;
+    AutoCompleteTextView sensorType, inputNumber, sensorName;
     ApplicationClass mAppClass;
     WaterTreatmentDb dB;
     InputConfigurationDao dao;
     private static final String TAG = "FragmentInputSettings";
-    int pageOffset = 0, currentPage = 0;
+    int pageOffset = 0, currentPage = 0, sequenceNo=0, sequenceType = 0, sequenceValueRead = 0,analogType = 0,
+            flowmeterType=0;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -68,7 +78,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
         dao = FragmentHostDashboard.inputDAO;
-        mBinding.rightArrowIsBtn.setVisibility((dao.getInputConfigurationEntityFlagKeyList(0).size() / 9) > 0 ? View.VISIBLE : View.INVISIBLE);
+        mBinding.rightArrowIsBtn.setVisibility((dao.getInputConfigurationEntityFlagKeyList(1).size() / 9) > 0 ? View.VISIBLE : View.INVISIBLE);
         mBinding.addsensorIsBtn.setOnClickListener(this);
 
         mBinding.inputsRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
@@ -112,40 +122,51 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
                     dialogBuilder.setView(dialogView);
                     AlertDialog alertDialog = dialogBuilder.create();
 
+                    sensorType = dialogView.findViewById(R.id.add_input_type_dialog_act);
                     inputNumber = dialogView.findViewById(R.id.add_input_number_dialog_act);
                     sensorName = dialogView.findViewById(R.id.add_sensor_name_dialog_act);
                     Button btn = dialogView.findViewById(R.id.add_sensor_dialog_btn);
+                    sensorType.setAdapter(getAdapter(sensorTypeArr));
                     inputNumber.setAdapter(getAdapter(sensorsViArr));
                     sensorName.setAdapter(getAdapter(inputTypeArr));
+                    sensorType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            String sensor_type = sensorType.getText().toString();
+                            switch (sensor_type){
+                                case "Sensor":
+                                    inputNumber.setAdapter(getAdapter(sensorArr));
+                                    break;
+                                case "Temperature":
+                                    inputNumber.setAdapter(getAdapter(temperatureArr));
+                                    break;
+                                case "Modbus":
+                                    inputNumber.setAdapter(getAdapter(modbusArr));
+                                    break;
+                                case "Analog Input":
+                                    inputNumber.setAdapter(getAdapter(analogArr));
+                                    break;
+                                case "Flow/Water Meter":
+                                    inputNumber.setAdapter(getAdapter(flowmeterArr));
+                                    break;
+                                case "Digital Input":
+                                    inputNumber.setAdapter(getAdapter(digitalSensorArr));
+                                    break;
+                                case "Tank Level":
+                                    inputNumber.setAdapter(getAdapter(tankArr));
+                                    break;
+                            }
+                            inputNumber.setText("");
+                            inputNumber.setHint(getString(R.string.input_number));
+                        }
+                    });
                     inputNumber.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             int inputNo = Integer.parseInt(inputNumber.getText().toString());
-                            if (inputNo >= 1 && inputNo <= 13) {
-                                sensorName.setAdapter(getAdapter(inputTypeArr));
-                                getSensorName(inputNo); // todo sequenceNumber
-                                sensorName.setAdapter(getAdapter(inputTypeArr));
-
-                            } else if (inputNo >= 14 && inputNo <= 21) {
-                                sensorName.setAdapter(getAdapter(inputTypeArr));
-                                sensorName.setText(sensorName.getAdapter().getItem(6).toString());
-                                sensorName.setAdapter(getAdapter(analogInputArr));
-
-                            } else if (inputNo >= 22 && inputNo <= 29) {
-                                sensorName.setAdapter(getAdapter(inputTypeArr));
-                                sensorName.setAdapter(getAdapter(inputTypeArr));
-                                sensorName.setText(sensorName.getAdapter().getItem(3).toString());
-
-                            } else if (inputNo >= 30 && inputNo <= 37) {
-                                sensorName.setAdapter(getAdapter(inputTypeArr));
-                                sensorName.setAdapter(getAdapter(inputTypeArr));
-                                sensorName.setText(sensorName.getAdapter().getItem(8).toString());
-
-                            } else if (inputNo >= 38 && inputNo <= 45) {
-                                sensorName.setAdapter(getAdapter(inputTypeArr));
-                                sensorName.setAdapter(getAdapter(inputTypeArr));
-                                sensorName.setText(sensorName.getAdapter().getItem(7).toString());
-                            }
+                            sensorName.setAdapter(getAdapter(inputTypeArr));
+                            getSensorName(inputNo);
+                            sensorName.setAdapter(getAdapter(inputTypeArr));
                         }
                     });
 
@@ -153,14 +174,14 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
                         @Override
                         public void onClick(View v) {
                             if (dialogValidation()) {
-                                frameLayout(inputNumber.getText().toString(), sensorName.getText().toString(),"");
+                                frameLayout(inputNumber.getText().toString(), sensorName.getText().toString(),"",sequenceNo,sequenceType,sequenceValueRead,analogType);
                                 alertDialog.dismiss();
                             }
                         }
                     });
                     alertDialog.show();
                     int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.50);
-                    int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.50);
+                    int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.65);
                     alertDialog.getWindow().setLayout(width, height);
 
                 } else {
@@ -175,18 +196,41 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
         mAppClass.sendPacket(new DataReceiveCallback() {
             @Override
             public void OnDataReceive(String data) {
-                if (sensorNum <= 13) {
-                    String[] tempRes = data.split("\\*")[1].split("\\$");
+                if (sensorNum <= 17) {
+                    String[] tempRes = data.split("\\*")[1].split(RES_SPILT_CHAR);
                     if (tempRes[0].equals(READ_PACKET)) {
                         if (tempRes[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
                             if (tempRes[2].equals(RES_SUCCESS)) {
                                 sensorName.setText(inputTypeArr[Integer.parseInt(tempRes[4])]);
+                                sequenceNo = Integer.parseInt(tempRes[5]);
+                                if(sensorNum >= 5 && sensorNum <= 14){
+                                    sequenceType = Integer.parseInt(tempRes[6]);
+                                    sequenceValueRead = Integer.parseInt(tempRes[7]);
+                                }
+                            }
+                        }
+                    }
+                } else if (sensorNum >= 18 && sensorNum <= 49) {
+                    String[] tempRes = data.split("\\*")[1].split(RES_SPILT_CHAR);
+                    if (tempRes[0].equals(READ_PACKET)) {
+                        if (tempRes[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
+                            if (tempRes[2].equals(RES_SUCCESS)) {
+                                sensorName.setText(inputTypeArr[Integer.parseInt(tempRes[4])]);
+                                sequenceNo = Integer.parseInt(tempRes[5]);
+                                if(sensorNum <= 33){
+                                    sequenceNo = Integer.parseInt(tempRes[6]);
+                                    sequenceType = Integer.parseInt(tempRes[5]);
+                                    if (sensorNum <= 25) {
+                                        analogType = Integer.parseInt(tempRes[7]);
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
-        }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + formDigits(2, String.valueOf(sensorNum)));
+        }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR +
+                PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + formDigits(2, String.valueOf(sensorNum)));
     }
 
     public ArrayAdapter<String> getAdapter(String[] strArr) {
@@ -231,7 +275,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
         }
     }
 
-    void frameLayout(String inputNumber, String sensorName, String dumString) {
+    void frameLayout(String inputNumber, String sensorName, String dumString,int sequenceNo,int sequenceType,int sequenceValueRead,int analogType) {
         mBinding.inputsRv.setVisibility(View.GONE);
         mBinding.view8.setVisibility(View.GONE);
         mBinding.addsensorIsBtn.setVisibility(View.GONE);
@@ -249,27 +293,32 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
                 getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorToroidalConductivity_config(inputNumber, sensorName, 0)).commit();
                 break;
             case "Temperature":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorTemp_config(inputNumber, sensorName, 0)).commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorTemp_config(inputNumber, sensorName, 0,Integer.toString(sequenceNo))).commit();
                 break;
             case "Flow/Water Meter":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorFlow_config(inputNumber, sensorName, 0)).commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorFlow_config(inputNumber, sensorName, 0,Integer.toString(sequenceNo),sequenceType)).commit();
                 break;
             case "Digital Input":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorDigital_config(inputNumber, sensorName, 0)).commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorDigital_config(inputNumber, sensorName, 0,Integer.toString(sequenceNo))).commit();
                 break;
             case "Tank Level":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorTankLevel_Config(inputNumber, sensorName, 0)).commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorTankLevel_Config(inputNumber, sensorName, 0,Integer.toString(sequenceNo))).commit();
                 break;
             case "Modbus Sensor":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorModbus_Config(inputNumber, sensorName, 0)).commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorModbus_Config(inputNumber, sensorName, 0,sequenceType,sequenceValueRead)).commit();
                 break;
             case "Analog Input":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorAnalog_Config(inputNumber, sensorName, 0)).commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorAnalog_Config(inputNumber, sensorName, 0,Integer.toString(sequenceNo),sequenceType,analogType)).commit();
                 break;
         }
     }
 
     boolean dialogValidation() {
+        if (sensorType.getText().toString().isEmpty()) {
+            sensorType.requestFocus();
+            mAppClass.showSnackBar(getContext(), "Select Sensor Type");
+            return false;
+        }
         if (inputNumber.getText().toString().isEmpty()) {
             inputNumber.requestFocus();
             mAppClass.showSnackBar(getContext(), "Input Number Cannot be Empty");

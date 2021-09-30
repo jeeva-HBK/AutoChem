@@ -10,12 +10,11 @@
         <View
             android:id="@+id/view8"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/mActionBarSize"
+            android:layout_height="55dp"
             android:visibility="visible"
             android:background="@color/primary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <TextView
             android:id="@+id/textView8"
@@ -65,6 +64,43 @@
             app:layout_constraintTop_toTopOf="@+id/view8"
             app:layout_constraintVertical_bias="0.0" />
 
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_margin="0.5dp"
+            android:checkedButton="@id/relayRb"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/view8">
+
+            <RadioButton
+                android:id="@+id/relayRb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/radio_flat_selector"
+                android:button="@null"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:text="Relay OutPut"
+                android:textColor="@color/radio_flat_text_selector"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/analogRb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/radio_flat_selector"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Analog OutPut"
+                android:textColor="@color/radio_flat_text_selector"
+                android:textStyle="bold" />
+
+        </RadioGroup>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/outputRv"
             android:layout_width="0dp"
@@ -72,7 +108,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view8" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
         <FrameLayout
             android:id="@+id/outputHost"
@@ -82,7 +118,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view8" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

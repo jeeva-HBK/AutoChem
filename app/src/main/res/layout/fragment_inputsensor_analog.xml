@@ -40,7 +40,7 @@
                     android:clickable="false"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="Input Number">
+                    android:hint="@string/input_number">
 
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
@@ -49,12 +49,14 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/analog_sequence_number"
                 style="@style/config_AtxTil"
-                android:visibility="invisible">
+                android:enabled="false">
 
                 <AutoCompleteTextView
                     android:id="@+id/analog_sequence_number_tie"
                     style="@style/config_Atxt"
-                    android:hint="Sequence Number" />
+                    android:enabled="false"
+                    android:editable="false"
+                    android:hint="@string/sequence_number" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
@@ -74,8 +76,9 @@
                     android:id="@+id/analog_input_label_tie"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Input Label"
+                    android:hint="@string/input_name"
                     android:imeOptions="actionNext"
+                    android:inputType="textPersonName"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -84,16 +87,17 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/analog_sensorType"
                 style="@style/config_AtxTil"
-                android:enabled="false">
+                android:enabled="false"
+                >
 
                 <AutoCompleteTextView
                     android:id="@+id/analog_sensor_type_tie"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:hint="@string/sensor_type"
                     android:clickable="false"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="Sensor Type"
                     android:maxLines="1">
 
                 </AutoCompleteTextView>
@@ -111,7 +115,7 @@
                     android:clickable="false"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="Analog Type"
+                    android:hint="@string/analog_type"
                     android:maxLines="1">
 
                 </AutoCompleteTextView>
@@ -136,7 +140,7 @@
                     android:clickable="false"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="Unit Measurement"
+                    android:hint="@string/measurement_unit"
                     android:maxLines="1">
 
                 </AutoCompleteTextView>
@@ -147,13 +151,24 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:layout_weight="1">
-
+                <ToggleButton
+                    android:id="@+id/analogminvalue_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/analog_minValue" />
 
                 <!--Min Value-->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/analog_minValue"
                     style="@style/config_Til"
-                    android:hint="Min Value"
+                    android:hint="@string/min_value"
                     app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -162,12 +177,13 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/analog_min_value_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        style="@style/config_Edt"
                         android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="2"
-                        android:maxLines="1">
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true">
 
                     </com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -192,9 +208,10 @@
                     android:layout_marginBottom="2dp"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/double_zero"
                     android:inputType="number"
                     android:maxLength="2"
+                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/analog_minValue"
                     app:layout_constraintEnd_toEndOf="@+id/analog_minValue"
@@ -210,11 +227,22 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1">
 
-
+                <ToggleButton
+                    android:id="@+id/analogmaxvalue_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/analog_maxValue" />
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/analog_maxValue"
                     style="@style/config_Til"
-                    android:hint="Max Value"
+                    android:hint="@string/max_value"
                     app:expandedHintEnabled="false"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -223,12 +251,13 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/analog_max_value_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        style="@style/config_Edt"
                         android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="2"
-                        android:maxLines="1">
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true">
 
                     </com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -253,9 +282,10 @@
                     android:layout_marginBottom="2dp"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/double_zero"
                     android:inputType="number"
                     android:maxLength="2"
+                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/analog_maxValue"
                     app:layout_constraintEnd_toEndOf="@+id/analog_maxValue"
@@ -277,11 +307,22 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:layout_weight="1">
-
+                <ToggleButton
+                    android:id="@+id/analog_lowAlarm_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/analog_alarmLow" />
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/analog_alarmLow"
                     style="@style/config_Til"
-                    android:hint="Low Alarm"
+                    android:hint="@string/low_alarm"
                     app:expandedHintEnabled="false"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -290,16 +331,16 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/analog_alarm_low_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        style="@style/config_Edt"
                         android:imeOptions="actionNext"
-                        android:inputType="numberDecimal"
+                        android:inputType="number"
                         android:maxLength="2"
-                        android:maxLines="1">
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true">
 
                     </com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
-
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -320,9 +361,10 @@
                     android:layout_marginBottom="2dp"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/double_zero"
                     android:inputType="number"
                     android:maxLength="2"
+                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/analog_alarmLow"
                     app:layout_constraintEnd_toEndOf="@+id/analog_alarmLow"
@@ -337,11 +379,22 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:layout_weight="1">
-
+                <ToggleButton
+                    android:id="@+id/analog_highAlarm_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/analog_alarmHigh" />
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/analog_alarmHigh"
                     style="@style/config_Til"
-                    android:hint="High Alarm"
+                    android:hint="@string/high_alarm"
                     app:expandedHintEnabled="false"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -350,12 +403,13 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/analog_high_low_tie"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberDecimal"
+                        style="@style/config_Edt"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
                         android:maxLength="2"
-                        android:maxLines="1">
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true">
 
                     </com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -379,8 +433,9 @@
                     android:layout_marginBottom="2dp"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/double_zero"
                     android:inputType="number"
+                    android:imeOptions="actionNext"
                     android:maxLength="2"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/analog_alarmHigh"
@@ -402,7 +457,7 @@
                     android:id="@+id/analog_calibration_required_alarm_tie"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Calibration Required Alarm"
+                    android:hint="@string/calibration_req_alarm"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="3">
@@ -426,8 +481,8 @@
                     android:id="@+id/analog_smoothing_factor_tie"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Smoothing Factor"
-                    android:imeOptions="actionNext"
+                    android:hint="@string/smoothing_factor"
+                    android:imeOptions="actionDone"
                     android:inputType="number"
                     android:maxLength="3"
                     android:maxLines="1" />
@@ -446,7 +501,7 @@
                     android:clickable="false"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="Reset Calibration">
+                    android:hint="@string/reset_calibration">
 
                 </AutoCompleteTextView>
             </com.google.android.material.textfield.TextInputLayout>
@@ -463,7 +518,7 @@
                     android:clickable="false"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="Sensor Activation"
+                    android:hint="@string/sensor_activation"
                     android:maxLines="1">
 
                 </AutoCompleteTextView>
@@ -492,7 +547,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:gravity="center_vertical"
-                    android:text="Save"
+                    android:text="@string/save"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -527,7 +582,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:gravity="center"
-                    android:text="Delete"
+                    android:text="@string/delete"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />

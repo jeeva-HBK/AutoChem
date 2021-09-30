@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
@@ -54,8 +56,8 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
     BaseActivity mActivity;
     String inputNumber;
     String sensorName;
-    int sensorStatus;
-    String sensorSequence; // Todo should verify
+    int sensorStatus, modbusType, modbusValue;
+    String sensorSequence;
     WaterTreatmentDb db;
     InputConfigurationDao dao;
 
@@ -64,10 +66,13 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
         this.sensorStatus = sensorStatus;
     }
 
-    public FragmentInputSensorModbus_Config(String inputNumber, String sensorName, int sensorStatus) {
+    public FragmentInputSensorModbus_Config(String inputNumber, String sensorName, int sensorStatus,
+                                            int modbusType,int modbusValue) {
         this.inputNumber = inputNumber;
         this.sensorName = sensorName;
         this.sensorStatus = sensorStatus;
+        this.modbusType = modbusType;
+        this.modbusValue = modbusValue;
     }
 
     @Nullable
@@ -173,6 +178,8 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
             mBinding.modBusInputNumberTie.setText(inputNumber);
             mBinding.modBusSensorTypeTie.setText(sensorName);
             mBinding.modbusDeleteLayoutIsc.setVisibility(View.GONE);
+            mBinding.modBusTypeTie.setText(mBinding.modBusTypeTie.getAdapter().getItem(modbusType).toString());
+            mBinding.modBusTypeOfValueReadTie.setText(mBinding.modBusTypeOfValueReadTie.getAdapter().getItem(modbusValue).toString());
             mBinding.modbusSaveTxtIsc.setText("ADD");
         }
     }
@@ -181,19 +188,19 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
     public void OnDataReceive(String data) {
         mActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getContext(), "TimeOut");
+            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
         }
         if (data != null) {
-            handleResponse(data.split("\\*")[1].split("\\$"));
+            handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
         }
     }
 
@@ -216,7 +223,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                     mBinding.modbusMinDeciIsc.setText(data[11].substring(4, 6));
                     mBinding.modBusMaxValueTie.setText(data[12].substring(0, 3));
                     mBinding.modbusMaxDeciIsc.setText(data[12].substring(4, 6));
-                    mBinding.setModbusType(data[13]);
+                    mBinding.setModbusType(data[13].substring(0,1));
                     mBinding.modBusDiagnosticSweepTie.setText(mBinding.modBusDiagnosticSweepTie.getAdapter().getItem(Integer.parseInt(data[13].substring(0, 1))).toString());
                     mBinding.modBusTimeTie.setText(data[13].substring(1, 7));
                     mBinding.modBusSmoothingFactorTie.setText(data[14]);
@@ -228,65 +235,72 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                     mBinding.modBusResetCalibrationTie.setText(mBinding.modBusResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[18])).toString());
                     initAdapter();
                 } else if (data[2].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), "READ FAILED");
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }
             } else if (data[0].equals(WRITE_PACKET)) {
                 if (data[3].equals(RES_SUCCESS)) {
                     modBusEntity(Integer.parseInt(data[2]));
-                    mAppClass.showSnackBar(getContext(), "WRITE SUCCESS");
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 } else if (data[3].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), "WRITE FAILED");
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }
             }
         } else {
-            mAppClass.showSnackBar(getContext(), "Received Wrong Pack !");
+            mAppClass.showSnackBar(getContext(), getString(R.string.wrongPack));
         }
     }
 
     private boolean validField() {
         if (isFieldEmpty(mBinding.modBusInputLabelTie)) {
-            mAppClass.showSnackBar(getContext(), "InputLabel cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.input_name_validation));
             return false;
         } else if (isFieldEmpty(mBinding.modBusTypeTie)) {
-            mAppClass.showSnackBar(getContext(), "Modbus Type cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.modbus_type_validation));
             return false;
         } else if (isFieldEmpty(mBinding.modBusTypeOfValueReadTie)) {
             mAppClass.showSnackBar(getContext(), "Type value of read cannot be Empty");
             return false;
         } else if (isFieldEmpty(mBinding.modBusMinValueTie)) {
-            mAppClass.showSnackBar(getContext(), "Min Value cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.min_validation));
             return false;
         } else if (isFieldEmpty(mBinding.modBusMaxValueTie)) {
-            mAppClass.showSnackBar(getContext(), "Max Value cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.max_validation));
             return false;
         } else if (isFieldEmpty(mBinding.modBusDiagnosticSweepTie)) {
-            mAppClass.showSnackBar(getContext(), "Diagnostic sweep cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.diagnostic_validation));
             return false;
         } else if (isFieldEmpty(mBinding.modBusAlarmLowTie)) {
-            mAppClass.showSnackBar(getContext(), "Alarm low cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.alarm_low_validation));
             return false;
         } else if (isFieldEmpty(mBinding.modBusAlarmHighTie)) {
-            mAppClass.showSnackBar(getContext(), "Alarm High cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.alarm_high_validation));
             return false;
         } else if (isFieldEmpty(mBinding.modBusCalibrationRequiredAlarmTie)) {
-            mAppClass.showSnackBar(getContext(), "Calibration Required cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.calibration_alarm_vali));
+            return false;
+        } else if (Integer.parseInt(getStringValue(3, mBinding.modBusCalibrationRequiredAlarmTie)) > 365) {
+            mBinding.modBusCalibrationRequiredAlarmTie.setError(getString(R.string.calibration_alarm_validation));
             return false;
         } else if (isFieldEmpty(mBinding.modBusResetCalibrationTie)) {
-            mAppClass.showSnackBar(getContext(), "Reset Calibration cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.reset_calibration_validation));
             return false;
         } else if (isFieldEmpty(mBinding.modBusSmoothingFactorTie)) {
-            mAppClass.showSnackBar(getContext(), "Smoothing Factor cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_validation));
+            return false;
+        } else if (Integer.parseInt(getStringValue(3, mBinding.modBusSmoothingFactorTie)) > 100) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_vali));
             return false;
         } else if (isFieldEmpty(mBinding.modBusUnitMeasurementTie)) {
-            mAppClass.showSnackBar(getContext(), "Measurement Unit cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.unit_validation));
             return false;
         } else if (isFieldEmpty(mBinding.modBusSensorActivationTie)) {
-            mAppClass.showSnackBar(getContext(), "Sensor Activation cannot be Empty");
-            return false;
-        } else if (mBinding.modBusTimeTie.getText().toString().length() > 6) {
-            mAppClass.showSnackBar(getContext(), "Invalid Time ");
+            mAppClass.showSnackBar(getContext(), getString(R.string.sensor_activation_validation));
             return false;
         }
+        /*else if (isFieldEmpty(mBinding.modBusTimeTie) || mBinding.modBusTimeTie.getText().toString().length() > 6) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.time_validation));
+            return false;
+        }*/
         return true;
     }
 
@@ -298,11 +312,15 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                 mBinding.modbusTypeOfValueRead.setEnabled(false);
                 mBinding.modbusUnit.setEnabled(false);
                 mBinding.modbusMinValue.setEnabled(false);
+                mBinding.modbusMinDeciIsc.setEnabled(false);
                 mBinding.modbusMaxValue.setEnabled(false);
+                mBinding.modbusMaxDeciIsc.setEnabled(false);
                 mBinding.modbusDiagnosticSweep.setEnabled(false);
                 mBinding.modbusDiagnosticTime.setEnabled(false);
                 mBinding.modbusAlarmLow.setEnabled(false);
+                mBinding.modbusAlarmLowIsc.setEnabled(false);
                 mBinding.modbusAlarmHigh.setEnabled(false);
+                mBinding.modbusAlarmHighIsc.setEnabled(false);
                 mBinding.modbusCalibrationRequiredAlarm.setEnabled(false);
                 mBinding.modbusResetCalibration.setEnabled(false);
                 mBinding.modbusSmoothingFactor.setVisibility(View.GONE);
@@ -318,7 +336,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                 mBinding.modbusDiagnosticSweep.setEnabled(false);
                 mBinding.modbusDiagnosticTime.setEnabled(false);
                 mBinding.modbusSmoothingFactor.setEnabled(false);
-
+                mBinding.modBusCalibrationRequiredAlarmTie.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 mBinding.modbusSensorActivation.setVisibility(View.GONE);
                 mBinding.modbusDeleteLayoutIsc.setVisibility(View.GONE);
                 break;
@@ -336,8 +354,9 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.modBusInputNumberTie)),
-                                "0", 0, "0", "0",
-                                "0", 0);
+                                "N/A", "MODBUS","N/A",1,
+                                "N/A", "N/A",
+                                "N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
@@ -348,8 +367,9 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.modBusInputNumberTie)),
-                                mBinding.modBusSensorTypeTie.getText().toString(),
-                                0, getStringValue(0, mBinding.modBusInputLabelTie),
+                                mBinding.modBusSensorTypeTie.getText().toString(),"MODBUS",
+                                mBinding.modBusTypeTie.getText().toString()+" - "+mBinding.modBusTypeOfValueReadTie.getText().toString(),
+                                1, getStringValue(0, mBinding.modBusInputLabelTie),
                                 getDecimalValue(mBinding.modBusAlarmLowTie, 3, mBinding.modbusAlarmLowIsc, 2),
                                 getDecimalValue(mBinding.modBusAlarmHighTie, 3, mBinding.modbusAlarmHighIsc, 2), 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();

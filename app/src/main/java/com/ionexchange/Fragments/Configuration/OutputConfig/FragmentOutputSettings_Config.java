@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ionexchange.Adapters.OutputIndexRvAdapter;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
+import com.ionexchange.Enum.AppEnum;
 import com.ionexchange.Fragments.FragmentHostDashboard;
 import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.Others.ApplicationClass;
@@ -27,6 +29,7 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
     ApplicationClass mAppClass;
     OutputConfigurationDao dao;
     int pageOffset = 0, currentPage = 0;
+    AppEnum outpuType = AppEnum.RELAY_OUTPUT;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -40,18 +43,40 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mBinding.rightArrowOsBtn.setVisibility(View.VISIBLE);
-        dao = FragmentHostDashboard.outputDAO;
         mBinding.outputRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(this, dao.getOutputConfigurationEntityList(9, pageOffset)));
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        dao = FragmentHostDashboard.outputDAO;
+        setOutputRvData(AppEnum.RELAY_OUTPUT);
+
+        mBinding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                pageOffset = 0;
+                if (radioGroup.getCheckedRadioButtonId() == mBinding.analogRb.getId()) {
+                    outpuType = AppEnum.ANALOG_OUTPUT;
+                    setOutputRvData(AppEnum.ANALOG_OUTPUT);
+                    mBinding.leftArrowOsBtn.setVisibility(View.GONE);
+                    mBinding.rightArrowOsBtn.setVisibility(View.GONE);
+                } else {
+                    outpuType = AppEnum.RELAY_OUTPUT;
+                    setOutputRvData(AppEnum.RELAY_OUTPUT);
+                    mBinding.leftArrowOsBtn.setVisibility(View.GONE);
+                    mBinding.rightArrowOsBtn.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
 
         mBinding.leftArrowOsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 currentPage--;
-                mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this, dao.getOutputConfigurationEntityList(9, pageOffset = pageOffset - 9)));
-                mBinding.leftArrowOsBtn.setVisibility(currentPage <= 0 ? View.GONE : View.VISIBLE);
+                //mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this, dao.getOutputConfigurationEntityList(9, pageOffset = pageOffset - 9)));
+
+                mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this,
+                        dao.getOutputHardWareNoConfigurationEntityList((outpuType == AppEnum.RELAY_OUTPUT ? 1 : 15), (outpuType == AppEnum.RELAY_OUTPUT ? 14 : 22), 9, pageOffset = pageOffset - 9)));
+
+                mBinding.leftArrowOsBtn.setVisibility(View.GONE);
                 mBinding.rightArrowOsBtn.setVisibility(View.VISIBLE);
             }
         });
@@ -61,15 +86,26 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
             public void onClick(View view) {
                 currentPage++;
                 mBinding.leftArrowOsBtn.setVisibility(View.VISIBLE);
-                mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this, dao.getOutputConfigurationEntityList(9, pageOffset = pageOffset + 9)));
-                mBinding.rightArrowOsBtn.setVisibility(dao.getOutputConfigurationEntityList(9, pageOffset + 9).isEmpty() ? View.GONE : View.VISIBLE);
+                // mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this, dao.getOutputConfigurationEntityList(9, pageOffset = pageOffset + 9)));
+
+                mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this,
+                        dao.getOutputHardWareNoConfigurationEntityList((outpuType == AppEnum.RELAY_OUTPUT ? 1 : 15), (outpuType == AppEnum.RELAY_OUTPUT ? 14 : 22), 9, pageOffset = pageOffset + 9)));
+
+                mBinding.leftArrowOsBtn.setVisibility(View.VISIBLE);
+                mBinding.rightArrowOsBtn.setVisibility(View.GONE);
             }
         });
 
     }
 
+    private void setOutputRvData(AppEnum outpuType) {
+        mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(this,
+                dao.getOutputHardWareNoConfigurationEntityList((outpuType == AppEnum.RELAY_OUTPUT ? 1 : 15), (outpuType == AppEnum.RELAY_OUTPUT ? 14 : 22), 9, pageOffset)));
+    }
+
     public static void hideToolbar() {
         mBinding.view8.setVisibility(View.GONE);
+        mBinding.radioGroup.setVisibility(View.GONE);
     }
 
     @Override

@@ -46,6 +46,7 @@ import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
@@ -176,56 +177,56 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
 
     boolean validation() {
         if (isFieldEmpty(mBinding.conInputLabelEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Input Label Cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.input_name_validation));
             return false;
         } else if (isFieldEmpty(mBinding.conSensorActivationAtxtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Sensor Activation Cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.sensor_activation_validation));
             return false;
         } else if (isFieldEmpty(mBinding.conSmoothingFactorEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Smoothing Factor Cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.conCalibRequiredAlarmEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Calibration Required Alarm Cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.conResetCalibAtxtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Reset Calibration Cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.conAlarmLowEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Alarm Low Cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.conAlarmhighEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Alarm High Cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.conCellConstantEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Cell Constant Cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.conCompensationAtxtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Comp Type Cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.conDefaultTemperatureEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Temperature Value Cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.conUnitOfMeasureAxtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Unit Of Measurement Cannot be Empty");
-            return false;
-        } else if (isFieldEmpty(mBinding.conTempLinkedAtxtIsc)) {
-            mAppClass.showSnackBar(getContext(), "Temperature Linked Cannot be Empty");
+            mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_validation));
             return false;
         } else if (Integer.parseInt(getStringValue(3, mBinding.conSmoothingFactorEdtIsc)) > 100) {
-            mAppClass.showSnackBar(getContext(), "Smoothing Factor Should be less than 100");
+            mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_vali));
+            return false;
+        } else if (isFieldEmpty(mBinding.conCalibRequiredAlarmEdtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.calibration_alarm_vali));
             return false;
         } else if (Integer.parseInt(getStringValue(3, mBinding.conCalibRequiredAlarmEdtIsc)) > 365) {
-            mAppClass.showSnackBar(getContext(), "Calibration required Alarm Should be less than 365");
+            mAppClass.showSnackBar(getContext(), getString(R.string.calibration_alarm_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.conResetCalibAtxtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.reset_calibration_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.conAlarmLowEdtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.alarm_low_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.conAlarmhighEdtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.alarm_high_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.conCellConstantEdtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.call_constant_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.conCompensationAtxtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.compensation_type_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.conDefaultTemperatureEdtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.temperature_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.conUnitOfMeasureAxtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.unit_validation));
+            return false;
+        } else if (isFieldEmpty(mBinding.conTempLinkedAtxtIsc)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.temperature_linked_validation));
             return false;
         } else if (Float.parseFloat(getDecimalValue(mBinding.conAlarmLowEdtIsc, 6, mBinding.conAlarmLowDeciIsc, 2)) >=
                 Float.parseFloat(getDecimalValue(mBinding.conAlarmhighEdtIsc, 6, mBinding.conHighAlarmDeciIsc, 2))) {
-            mAppClass.showSnackBar(getContext(), "Alarm High Should be Greater Than Alarm Low");
+            mAppClass.showSnackBar(getContext(), getString(R.string.alarm_limit_validation));
             return false;
         }
 
         if (getPositionFromAtxt(0, toStringValue(mBinding.conCompensationAtxtIsc), TemperatureCompensationType).equals("0")) {
             if (isFieldEmpty(mBinding.conCompFactorEdtIsc)) {
-                mAppClass.showSnackBar(getContext(), "Temperature Compensation Factor Cannot be Empty");
+                mAppClass.showSnackBar(getContext(), getString(R.string.compensation_factor_validation));
                 return false;
             }
         }
@@ -261,19 +262,19 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     public void OnDataReceive(String data) {
         mActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getContext(), "TimeOut");
+            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
         }
         if (data != null) {
-            handleResponse(data.split("\\*")[1].split("\\$"));
+            handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
         }
     }
 
@@ -298,6 +299,13 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                     mBinding.conCompensationAtxtIsc.setText(mBinding.conCompensationAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[12])).toString());
                     mBinding.conCompFactorEdtIsc.setEnabled(spiltData[12].equals("0"));
                     mBinding.conCompFactorDeciIsc.setEnabled(spiltData[12].equals("0"));
+                    switch (userType) {
+                        case 1:
+                        case 2:
+                            mBinding.conCompFactorEdtIsc.setEnabled(false);
+                            mBinding.conCompFactorDeciIsc.setEnabled(false);
+                            break;
+                    }
                     if (spiltData[12].equals("0")) {
                         mBinding.conCompFactorEdtIsc.setText(spiltData[13].substring(0, 2));
                         mBinding.conCompFactorDeciIsc.setText(spiltData[13].substring(3, 5));
@@ -326,19 +334,19 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
 
                     initAdapters();
                 } else if (spiltData[2].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), "READ FAILED");
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }
                 //   {*0$ 04$ 1$ 0*}
             } else if (spiltData[0].equals(WRITE_PACKET)) {
                 if (spiltData[3].equals(RES_SUCCESS)) {
                     conductivityEntity(Integer.parseInt(spiltData[2]));
-                    mAppClass.showSnackBar(getContext(), "WRITE SUCCESS");
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 } else if (spiltData[3].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), "WRITE FAILED");
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }
             }
         } else {
-            Log.e(TAG, "handleResponse: Wrong Packet");
+            Log.e(TAG, getString(R.string.wrongPack));
         }
     }
 
@@ -353,8 +361,9 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
         switch (flagValue) {
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(getStringValue(2, mBinding.conInputNumberEdtIsc)), "0",
-                                0, "0", "0", "0", 0);
+                        (Integer.parseInt(getStringValue(2, mBinding.conInputNumberEdtIsc)), "N/A",
+                                "SENSOR","N/A",
+                                1, "N/A", "N/A", "N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
@@ -365,8 +374,9 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.conInputNumberEdtIsc)),
+                                mBinding.conSensorTypeAtxtIsc.getText().toString(),"SENSOR",
                                 mBinding.conSensorTypeAtxtIsc.getText().toString(),
-                                0, getStringValue(0, mBinding.conInputLabelEdtIsc),
+                                1, getStringValue(0, mBinding.conInputLabelEdtIsc),
                                 getDecimalValue(mBinding.conAlarmLowEdtIsc, 6, mBinding.conAlarmLowDeciIsc, 2),
                                 getDecimalValue(mBinding.conAlarmhighEdtIsc, 6, mBinding.conHighAlarmDeciIsc, 2), 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
@@ -382,19 +392,23 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 mBinding.conInputLabelTilSic.setEnabled(false);
                 mBinding.conTempLinkedTilIsc.setEnabled(false);
                 mBinding.conDefaultTemperatureValueTilIsc.setEnabled(false);
+                mBinding.conDefaultTempDeciIsc.setEnabled(false);
+                mBinding.conDefaultTempValueTBtn.setEnabled(false);
                 mBinding.conUnitOfMeasureTilIsc.setEnabled(false);
                 mBinding.conCellConstantTilIsc.setEnabled(false);
+                mBinding.conCellConstantDeciIsc.setEnabled(false);
                 mBinding.conLowAlarmTilIsc.setEnabled(false);
-
+                mBinding.conAlarmLowDeciIsc.setEnabled(false);
                 mBinding.conCompensationTilIsc.setVisibility(View.GONE);
                 mBinding.conCompFactorRootIsc.setVisibility(View.GONE);
                 mBinding.conSensorActivationTilIsc.setVisibility(View.VISIBLE);
                 mBinding.conSmoothingFactorTilIsc.setVisibility(View.GONE);
                 mBinding.conHighAlarmTilIsc.setEnabled(false);
+                mBinding.conHighAlarmDeciIsc.setEnabled(false);
                 mBinding.conCalibRequiredAlarmTilIsc.setEnabled(false);
                 mBinding.conResetCalibTilIsc.setEnabled(false);
-                mBinding.conSensorActivationTilIsc.setVisibility(View.GONE);
                 mBinding.conRow7Isc.setVisibility(View.GONE);
+                mBinding.conSensorActivationTilIsc.setVisibility(View.GONE);
 
                 break;
 
@@ -402,14 +416,14 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 //View
                 mBinding.conSensorActivationTilIsc.setVisibility(View.GONE);
                 mBinding.conCellConstantEdtIsc.setEnabled(false);
+                mBinding.conCellConstantDeciIsc.setEnabled(false);
                 mBinding.conCompFactorTilIsc.setEnabled(false);
                 mBinding.conCompFactorDeciIsc.setEnabled(false);
                 mBinding.conCompensationTilIsc.setEnabled(false);
                 mBinding.conSmoothingFactorTilIsc.setEnabled(false);
                 mBinding.conSensorActivationTilIsc.setVisibility(View.GONE);
                 mBinding.conDeleteLayoutIsc.setVisibility(View.GONE);
-                mBinding.conSensorActivationTilIsc.setVisibility(View.VISIBLE);
-
+                mBinding.conSensorActivationTilIsc.setVisibility(View.GONE);
                 break;
         }
     }
