@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
 import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentSethomescreenBinding;
 
@@ -28,9 +29,10 @@ import java.util.List;
 
 public class FragmentSetHomeScreen extends Fragment implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
     FragmentSethomescreenBinding mBinding;
+    ApplicationClass mAppClass;
     WaterTreatmentDb dB;
     DefaultLayoutConfigurationDao dao;
-    int enableScreenNo = 0, screenNo =0;
+    int enableScreenNo = 0, screenNo = 0;
 
 
     @Nullable
@@ -45,6 +47,7 @@ public class FragmentSetHomeScreen extends Fragment implements RadioGroup.OnChec
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         dB = WaterTreatmentDb.getDatabase(getContext());
+        mAppClass = (ApplicationClass) getActivity().getApplication();
         dao = dB.defaultLayoutConfigurationDao();
         screenNo = 1;
         setDefaultDb();
@@ -57,39 +60,39 @@ public class FragmentSetHomeScreen extends Fragment implements RadioGroup.OnChec
                 if (buttonView.isChecked()) {
                     switch (screenNo) {
                         case 1:
-                            dao.update(1,  1);
-                            dao.update(0,  2);
-                            dao.update(0,  3);
-                            dao.update(0,  4);
-                            dao.update(0,  5);
+                            dao.update(1, 1);
+                            dao.update(0, 2);
+                            dao.update(0, 3);
+                            dao.update(0, 4);
+                            dao.update(0, 5);
                             break;
                         case 2:
-                            dao.update(0,  1);
-                            dao.update(1,  2);
-                            dao.update(0,  3);
-                            dao.update(0,  4);
-                            dao.update(0,  5);
+                            dao.update(0, 1);
+                            dao.update(1, 2);
+                            dao.update(0, 3);
+                            dao.update(0, 4);
+                            dao.update(0, 5);
                             break;
                         case 3:
-                            dao.update(0,  1);
-                            dao.update(0,  2);
-                            dao.update(1,  3);
-                            dao.update(0,  4);
-                            dao.update(0,  5);
+                            dao.update(0, 1);
+                            dao.update(0, 2);
+                            dao.update(1, 3);
+                            dao.update(0, 4);
+                            dao.update(0, 5);
                             break;
                         case 4:
-                            dao.update(0,  1);
-                            dao.update(0,  2);
-                            dao.update(0,  3);
-                            dao.update(1,  4);
-                            dao.update(0,  5);
+                            dao.update(0, 1);
+                            dao.update(0, 2);
+                            dao.update(0, 3);
+                            dao.update(1, 4);
+                            dao.update(0, 5);
                             break;
                         case 5:
-                            dao.update(0,  1);
-                            dao.update(0,  2);
-                            dao.update(0,  3);
-                            dao.update(0,  4);
-                            dao.update(1,  5);
+                            dao.update(0, 1);
+                            dao.update(0, 2);
+                            dao.update(0, 3);
+                            dao.update(0, 4);
+                            dao.update(1, 5);
                             break;
                     }
                 }
@@ -189,6 +192,13 @@ public class FragmentSetHomeScreen extends Fragment implements RadioGroup.OnChec
 
     @Override
     public void onClick(View v) {
-        getParentFragmentManager().beginTransaction().replace(R.id.setHomeScreenHost, new FragmentSetLayout(screenNo)).commit();
+        mAppClass.navigateToBundle(getActivity(), R.id.action_homeScreen_to_setlayout, putBundle(screenNo));
+    }
+
+    Bundle putBundle(int screenNo) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("screenNo", screenNo);
+        Log.e("TAG", "putBundle: "+screenNo );
+        return bundle;
     }
 }

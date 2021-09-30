@@ -76,7 +76,6 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
     AutoCompleteTextView outputName;
     CheckBox accessory;
 
-
     EditText startHourDay;
     EditText startMinDay;
     EditText startSecDay;
@@ -85,14 +84,6 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
     EditText endSecDay;
     WaterTreatmentDb dB;
     OutputConfigurationDao dao;
-
-    public FragmentTimerStatus_Config(String week1, String week2, String week3, String week4, String timerNo) {
-        this.timerNo = timerNo;
-        this.week1 = week1;
-        this.week2 = week2;
-        this.week3 = week3;
-        this.week4 = week4;
-    }
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -107,6 +98,12 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
         mActivity = (BaseActivity) getActivity();
+        Bundle bundle = getArguments();
+        week1 = bundle.getString("week1");
+        week2 = bundle.getString("week2");
+        week3 = bundle.getString("week3");
+        week4 = bundle.getString("week4");
+        timerNo = bundle.getString("timerNo");
         dB = WaterTreatmentDb.getDatabase(getContext());
         dao = dB.outputConfigurationDao();
         week = "Week-1";

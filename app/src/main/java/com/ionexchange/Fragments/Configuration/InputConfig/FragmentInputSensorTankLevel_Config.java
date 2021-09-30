@@ -54,18 +54,6 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
     WaterTreatmentDb db;
     InputConfigurationDao dao;
 
-    public FragmentInputSensorTankLevel_Config(String inputNumber, int sensorStatus) {
-        this.inputNumber = inputNumber;
-        this.sensorStatus = sensorStatus;
-    }
-
-    public FragmentInputSensorTankLevel_Config(String inputNumber, String sensorName, int sensorStatus,String sensorSequence) {
-        this.inputNumber = inputNumber;
-        this.sensorName = sensorName;
-        this.sensorStatus = sensorStatus;
-        this.sensorSequence = sensorSequence;
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -79,6 +67,10 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
         mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
+        inputNumber = getArguments().getString("inputNumber");
+        sensorName = getArguments().getString("sensorName");
+        sensorStatus = getArguments().getInt("sensorStatus");
+        sensorSequence = getArguments().getString("sequenceNo");
         initAdapter();
         changeUi();
         mBinding.tankLevelSaveFabIsc.setOnClickListener(this::save);

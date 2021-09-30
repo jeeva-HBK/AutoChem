@@ -32,4 +32,7 @@ public interface DefaultLayoutConfigurationDao {
     @Query("UPDATE DefaultLayoutConfigurationEntity SET default_layout_no=:default_layout_no  WHERE screen_no = :screen_no")
     void updateEnabledLayout(int default_layout_no, int screen_no);
 
+    @Query("select screen_no FROM  DefaultLayoutConfigurationEntity WHERE default_screen_enable = :default_screen_enable")
+    Integer enabled(int default_screen_enable);
+
 }

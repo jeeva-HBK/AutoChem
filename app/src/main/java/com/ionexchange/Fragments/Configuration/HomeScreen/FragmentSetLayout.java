@@ -3,6 +3,7 @@ package com.ionexchange.Fragments.Configuration.HomeScreen;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.ionexchange.Database.Dao.MainConfigurationDao;
 import com.ionexchange.Database.Entity.MainConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DialogDismissListener;
+import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.DialogFrag;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentSetlayoutBinding;
@@ -33,6 +35,7 @@ import java.util.List;
 //Created by Silambu
 public class FragmentSetLayout extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
     FragmentSetlayoutBinding mBinding;
+    ApplicationClass mAppClass;
     int screenNo, layoutNo = 1, windowNo = 1;
     String window;
     WaterTreatmentDb dB;
@@ -42,10 +45,6 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
     BaseActivity mActivity;
     private static final String TAG = "SetLayout";
     String sensorNotAdded = "Sensor not Added";
-
-    public FragmentSetLayout(int screenNo) {
-        this.screenNo = screenNo;
-    }
 
 
     @Nullable
@@ -61,6 +60,8 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
         super.onViewCreated(view, savedInstanceState);
         dB = WaterTreatmentDb.getDatabase(getContext());
         mActivity = (BaseActivity) getActivity();
+        mAppClass = (ApplicationClass) getActivity().getApplication();
+        getBundleValue();
         dao = dB.defaultLayoutConfigurationDao();
         mainConfigurationDao = dB.mainConfigurationDao();
         enableDefaultLayout();
@@ -118,6 +119,12 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
         mBinding.layout6Delete6.setOnClickListener(this);
         mBinding.saveBtn.setOnClickListener(this);
         getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
+    }
+
+    private void getBundleValue() {
+        Bundle bundle = getArguments();
+        screenNo = bundle.getInt("screenNo");
+        Log.e(TAG, "getBundleValue: " + screenNo);
     }
 
 
@@ -266,8 +273,10 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                 break;
 
             case R.id.save_btn:
-                dao.updateEnabledLayout(layoutNo, screenNo);
-                getParentFragmentManager().beginTransaction().replace(R.id.setHomeScreenHost, new FragmentSetHomeScreen()).commit();
+                if (emptyNextSensorValidation(getTextViewNo())) {
+                    dao.updateEnabledLayout(layoutNo, screenNo);
+                    mAppClass.popStackBack(getActivity());
+                }
                 break;
             case R.id.layout1_view1:
             case R.id.layout2_view1:
@@ -294,8 +303,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                 window = window.substring(window.length() - 1);
                 windowNo = Integer.parseInt(window);
                 FragmentSelectSensors fragmentSetLayout = new FragmentSelectSensors(fragment, screenNo, layoutNo, windowNo, pageNo);
-
-                fragment.init(fragmentSetLayout, "Layout-" + layoutNo + " | " + "Window-" + windowNo, new DialogDismissListener() {
+                fragment.init(fragmentSetLayout, "Layout", new DialogDismissListener() {
                     @Override
                     public void OnDismiss() {
                         windowNextPage();
@@ -304,48 +312,56 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
 
                 fragment.show(getChildFragmentManager(), null);
                 break;
+
         }
+
+
     }
 
 
     void enableDefaultLayout() {
-        switch (dao.enableLayout(screenNo)) {
-            case 1:
-                mBinding.radioLyOne.setChecked(true);
-                mBinding.setSelected("layout1");
-                layoutNo = 1;
-                loopLayoutDetails();
-                break;
-            case 2:
-                mBinding.radioLyTwo.setChecked(true);
-                mBinding.setSelected("layout2");
-                layoutNo = 2;
-                loopLayoutDetails();
-                break;
-            case 3:
-                mBinding.radioLyThree.setChecked(true);
-                mBinding.setSelected("layout3");
-                layoutNo = 3;
-                loopLayoutDetails();
-                break;
-            case 4:
-                mBinding.radioLyFour.setChecked(true);
-                mBinding.setSelected("layout4");
-                layoutNo = 4;
-                loopLayoutDetails();
-                break;
-            case 5:
-                mBinding.radioLyFive.setChecked(true);
-                mBinding.setSelected("layout5");
-                layoutNo = 5;
-                loopLayoutDetails();
-                break;
-            case 6:
-                mBinding.radioLySix.setChecked(true);
-                mBinding.setSelected("layout6");
-                layoutNo = 6;
-                loopLayoutDetails();
-                break;
+        if (dao.enableLayout(screenNo) != null) {
+            switch (dao.enableLayout(screenNo)) {
+                case 1:
+                    mBinding.radioLyOne.setChecked(true);
+                    mBinding.setSelected("layout1");
+                    layoutNo = 1;
+                    loopLayoutDetails();
+                    break;
+                case 2:
+                    mBinding.radioLyTwo.setChecked(true);
+                    mBinding.setSelected("layout2");
+                    layoutNo = 2;
+                    loopLayoutDetails();
+                    break;
+                case 3:
+                    mBinding.radioLyThree.setChecked(true);
+                    mBinding.setSelected("layout3");
+                    layoutNo = 3;
+                    loopLayoutDetails();
+                    break;
+                case 4:
+                    mBinding.radioLyFour.setChecked(true);
+                    mBinding.setSelected("layout4");
+                    layoutNo = 4;
+                    loopLayoutDetails();
+                    break;
+                case 5:
+                    mBinding.radioLyFive.setChecked(true);
+                    mBinding.setSelected("layout5");
+                    layoutNo = 5;
+                    loopLayoutDetails();
+                    break;
+                case 6:
+                    mBinding.radioLySix.setChecked(true);
+                    mBinding.setSelected("layout6");
+                    layoutNo = 6;
+                    loopLayoutDetails();
+                    break;
+            }
+        } else {
+            mBinding.radioLyOne.setChecked(true);
+            mBinding.setSelected("layout1");
         }
     }
 
@@ -992,7 +1008,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                         MainConfigurationEntity mainConfigurationEntity = new MainConfigurationEntity
                                 (mainConfigurationDao.getLastSno() + 1,
                                         screenNo, layoutNo, window, pageNo,
-                                        0, "Sensor not Added", 0, "N/A");
+                                        0, "Sensor not Added", 0, "N/A", 0);
                         List<MainConfigurationEntity> entryListUpdate = new ArrayList<>();
                         entryListUpdate.add(mainConfigurationEntity);
                         updateToDb(entryListUpdate);

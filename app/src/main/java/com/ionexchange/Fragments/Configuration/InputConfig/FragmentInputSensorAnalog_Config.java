@@ -91,6 +91,13 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         initAdapter();
         changeUi();
 
+        inputNumber = getArguments().getString("inputNumber");
+        sensorName = getArguments().getString("sensorName");
+        sensorStatus = getArguments().getInt("sensorStatus");
+        sequenceNo = getArguments().getString("sequenceNo");
+        sequenceType = getArguments().getInt("sequenceType");
+        analogType = getArguments().getInt("sequenceValueRead");
+
         mBinding.analogSaveFabIsc.setOnClickListener(this::save);
         mBinding.analogDeleteFabIsc.setOnClickListener(this::delete);
 

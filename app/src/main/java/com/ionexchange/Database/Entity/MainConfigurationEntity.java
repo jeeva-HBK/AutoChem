@@ -33,8 +33,13 @@ public class MainConfigurationEntity {
     @ColumnInfo(name = "sensor_name")
     public String sensorName;
 
-    public MainConfigurationEntity(int sNo, int screenNo, int layoutNo,
-                                   int windowNo, int pageNo, int hardware_no, String inputType, int sensorSequenceNo, String sensorName) {
+
+    @ColumnInfo(name = "flag_Value")
+    public int flag_Value;
+
+    public MainConfigurationEntity(int sNo, int screenNo,
+                                   int layoutNo, int windowNo, int pageNo, int hardware_no,
+                                   String inputType, int sensorSequenceNo, String sensorName, int flag_Value) {
         this.sNo = sNo;
         this.screenNo = screenNo;
         this.layoutNo = layoutNo;
@@ -44,6 +49,7 @@ public class MainConfigurationEntity {
         this.inputType = inputType;
         this.sensorSequenceNo = sensorSequenceNo;
         this.sensorName = sensorName;
+        this.flag_Value = flag_Value;
     }
 
     public int getsNo() {
@@ -116,5 +122,13 @@ public class MainConfigurationEntity {
 
     public void setSensorName(String sensorName) {
         this.sensorName = sensorName;
+    }
+
+    public int getFlag_Value() {
+        return flag_Value;
+    }
+
+    public void setFlag_Value(int flag_Value) {
+        this.flag_Value = flag_Value;
     }
 }

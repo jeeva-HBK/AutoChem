@@ -3,11 +3,246 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/fragmentFirst">
+    app:startDestination="@id/Dashboard">
 
 
     <fragment
-        android:id="@+id/fragmentFirst"
-        android:name="com.ionexchange.Fragment.FragmentFirst"
-        android:label="FragmentFirst" />
+        android:id="@+id/Dashboard"
+        android:name="com.ionexchange.Fragments.Dashboard.FragmentDashboard"
+        android:label="Dashboard"
+        tools:layout="@layout/fragment_dashboard">
+
+        <action
+            android:id="@+id/action_Dashboard_to_sensorDetails1"
+            app:destination="@id/sensorDetails" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/sensorDetails"
+        android:name="com.ionexchange.Fragments.MainScreen.FragmentSensorDetails"
+        android:label="sensorDetails"
+        tools:layout="@layout/fragment_sensor_details" />
+
+
+    <fragment
+        android:id="@+id/trend"
+        android:name="com.ionexchange.Fragments.FragmentRoot_Trend"
+        android:label="Trend"
+        tools:layout="@layout/fragment_trend" />
+
+    <fragment
+        android:id="@+id/event_log"
+        android:name="com.ionexchange.Fragments.FragmentRoot_EventLogs"
+        android:label="EventLog"
+        tools:layout="@layout/fragment_logs" />
+
+
+    <fragment
+        android:id="@+id/configuration"
+        android:name="com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentUnitIpSettings_Config"
+        android:label="unitIp"
+        tools:layout="@layout/fragment_unitipsettings" />
+
+
+    <fragment
+        android:id="@+id/targetIpSetting"
+        android:name="com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentTargetIpSettings_Config"
+        android:label="TargetIP"
+        tools:layout="@layout/fragment_targetipsettings" />
+
+
+    <fragment
+        android:id="@+id/siteSetting"
+        android:name="com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentCommonSettings_Config"
+        android:label="SiteSetting"
+        tools:layout="@layout/fragment_commonsettings" />
+
+
+    <!--Root-->
+    <fragment
+        android:id="@+id/inputSetting"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorList_Config"
+        android:label="InputSensorList"
+        tools:layout="@layout/fragment_inputsettings">
+        <action
+            android:id="@+id/action_inputSetting_to_phConfig"
+            app:destination="@id/phConfig" />
+        <action
+            android:id="@+id/action_inputSetting_to_orpConfig"
+            app:destination="@id/orpConfig" />
+        <action
+            android:id="@+id/action_inputSetting_to_tempConfig"
+            app:destination="@id/tempConfig" />
+        <action
+            android:id="@+id/action_inputSetting_to_ToroidalConfig"
+            app:destination="@id/ToroidalConfig" />
+        <action
+            android:id="@+id/action_inputSetting_to_flowConfig"
+            app:destination="@id/flowConfig" />
+        <action
+            android:id="@+id/action_inputSetting_to_AnalogConfig"
+            app:destination="@id/AnalogConfig" />
+        <action
+            android:id="@+id/action_inputSetting_to_tankLevel"
+            app:destination="@id/tankLevel" />
+        <action
+            android:id="@+id/action_inputSetting_to_conductivityConfig"
+            app:destination="@id/conductivityConfig" />
+        <action
+            android:id="@+id/action_inputSetting_to_modBusConfig"
+            app:destination="@id/modBusConfig" />
+        <action
+            android:id="@+id/action_inputSetting_to_digitalConfig"
+            app:destination="@id/digitalConfig" />
+    </fragment>
+
+
+    <!--Child-->
+
+
+    <fragment
+        android:id="@+id/phConfig"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorPh_Config"
+        android:label="phConfig"
+        tools:layout="@layout/fragment_inputsensor_ph" />
+
+    <fragment
+        android:id="@+id/orpConfig"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorORP_Config"
+        android:label="orpConfig"
+        tools:layout="@layout/fragment_inputsensor_orp" />
+
+    <fragment
+        android:id="@+id/tempConfig"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorTemp_config"
+        android:label="tempConfig"
+        tools:layout="@layout/fragment_inputsensor_temp" />
+
+
+    <fragment
+        android:id="@+id/conductivityConfig"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorConductivity_Config"
+        android:label="tempConfig"
+        tools:layout="@layout/fragment_inputsensor_cond" />
+
+
+    <fragment
+        android:id="@+id/ToroidalConfig"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorToroidalConductivity_config"
+        android:label="FragmentInputSensorToroidalConductivity_config"
+        tools:layout="@layout/fragment_inputsensor_toraidalconductivity" />
+
+    <fragment
+        android:id="@+id/modBusConfig"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorModbus_Config"
+        android:label="FragmentInputSensorModbus_Config"
+        tools:layout="@layout/fragment_inputsensor_modbus" />
+
+
+    <fragment
+        android:id="@+id/tankLevel"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorTankLevel_Config"
+        android:label="FragmentInputSensorTankLevel_Config"
+        tools:layout="@layout/fragment_input_sensor_tank_level" />
+
+
+    <fragment
+        android:id="@+id/digitalConfig"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorDigital_config"
+        android:label="FragmentInputSensorDigital_config"
+        tools:layout="@layout/fragment_inputsensor_digital" />
+
+
+    <fragment
+        android:id="@+id/AnalogConfig"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorAnalog_Config"
+        android:label="FragmentInputSensorAnalog_Config"
+        tools:layout="@layout/fragment_inputsensor_analog" />
+
+    <fragment
+        android:id="@+id/flowConfig"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorFlow_config"
+        android:label="FragmentInputSensorFlow_config"
+        tools:layout="@layout/fragment_inputsensor_flow" />
+
+    <!--Child-->
+
+    <!--Root-->
+
+    <!--Root-->
+    <fragment
+        android:id="@+id/outputSetting"
+        android:name="com.ionexchange.Fragments.Configuration.OutputConfig.FragmentOutputSettings_Config"
+        android:label="FragmentOutput_Config"
+        tools:layout="@layout/fragment_outputsettings">
+        <action
+            android:id="@+id/action_outputSetting_to_output"
+            app:destination="@id/output" />
+    </fragment>
+
+    <!--Child-->
+
+    <fragment
+        android:id="@+id/output"
+        android:name="com.ionexchange.Fragments.Configuration.OutputConfig.FragmentOutput_Config"
+        android:label="FragmentOutput_Config"
+        tools:layout="@layout/fragment_output_config" />
+
+    <!--Child-->
+
+    <!--Root-->
+
+    <fragment
+        android:id="@+id/virtualSetting"
+        android:name="com.ionexchange.Fragments.Configuration.VirtualConfig.FragmentVirtualSensorList_Config"
+        android:label="FragmentVirtualSensorList_Config"
+        tools:layout="@layout/fragment_virtualsensor">
+        <action
+            android:id="@+id/action_virtualSetting_to_virtual"
+            app:destination="@id/virtual" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/virtual"
+        android:name="com.ionexchange.Fragments.Configuration.VirtualConfig.FragmentVirtualSensor_config"
+        android:label="FragmentVirtualSensorList_Config"
+        tools:layout="@layout/fragment_virtualsensor_config" />
+
+
+    <fragment
+        android:id="@+id/TimerSetting"
+        android:name="com.ionexchange.Fragments.Configuration.TimerConfig.FragmentTimer_Config"
+        android:label="FragmentTimer_Config"
+        tools:layout="@layout/fragment_timerconfiguration">
+        <action
+            android:id="@+id/action_TimerSetting_to_Timer"
+            app:destination="@id/Timer" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/Timer"
+        android:name="com.ionexchange.Fragments.Configuration.TimerConfig.FragmentTimerStatus_Config"
+        android:label="FragmentTimer_Config"
+        tools:layout="@layout/fragment_timerstatus_config" />
+
+
+    <fragment
+        android:id="@+id/homeScreen"
+        android:name="com.ionexchange.Fragments.Configuration.HomeScreen.FragmentSetHomeScreen"
+        android:label="FragmentSetHomeScreen"
+        tools:layout="@layout/fragment_sethomescreen" >
+        <action
+            android:id="@+id/action_homeScreen_to_setlayout"
+            app:destination="@id/setlayout" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/setlayout"
+        android:name="com.ionexchange.Fragments.Configuration.HomeScreen.FragmentSetLayout"
+        android:label="FragmentSetLayout"
+        tools:layout="@layout/fragment_setlayout" />
+
+
 </navigation>

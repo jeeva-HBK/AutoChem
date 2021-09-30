@@ -56,16 +56,6 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     WaterTreatmentDb db;
     InputConfigurationDao dao;
 
-    public FragmentInputSensorORP_Config(String inputNumber, int sensorStatus) {
-        this.inputNumber = inputNumber;
-        this.sensorStatus = sensorStatus;
-    }
-
-    public FragmentInputSensorORP_Config(String inputNumber, String sensorName, int sensorStatus) {
-        this.inputNumber = inputNumber;
-        this.sensorName = sensorName;
-        this.sensorStatus = sensorStatus;
-    }
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -81,6 +71,9 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
         mAppClass = (ApplicationClass) getActivity().getApplication();
         mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
+        inputNumber = getArguments().getString("inputNumber");
+        sensorName = getArguments().getString("sensorName");
+        sensorStatus = getArguments().getInt("sensorStatus");
         dao = db.inputConfigurationDao();
         initAdapter();
         changeUI();

@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.ionexchange.Adapters.TimerIndexRvAdapter;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
 import com.ionexchange.Database.Entity.TimerConfigurationEntity;
-import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Fragments.FragmentHostDashboard;
 import com.ionexchange.Interface.RvOnClick;
+import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentTimerconfigurationBinding;
 
@@ -28,7 +28,7 @@ import java.util.List;
 public class FragmentTimer_Config extends Fragment implements RvOnClick {
     FragmentTimerconfigurationBinding mBinding;
     TimerIndexRvAdapter mAdapter;
-    WaterTreatmentDb dB;
+    ApplicationClass mAppClass;
     TimerConfigurationDao dao;
     List<TimerConfigurationEntity> timerConfigurationEntityList;
 
@@ -43,9 +43,9 @@ public class FragmentTimer_Config extends Fragment implements RvOnClick {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        mAppClass = (ApplicationClass) getActivity().getApplication();
         timerConfigurationEntityList = new ArrayList<>();
-        dao = FragmentHostDashboard.timerDAO;
+        dao = ApplicationClass.timerDAO;
         timerConfigurationEntityList = dao.geTimerConfigurationEntityList();
         mAdapter = new TimerIndexRvAdapter(this, timerConfigurationEntityList);
         mBinding.timerRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
@@ -58,30 +58,42 @@ public class FragmentTimer_Config extends Fragment implements RvOnClick {
 
     @Override
     public void onClick(String sensorInputNo) {
-        mBinding.frameTimer.setVisibility(View.VISIBLE);
-        mBinding.timerRv.setVisibility(View.GONE);
-        switch (sensorInputNo){
+        switch (sensorInputNo) {
             case "1":
-                getParentFragmentManager().beginTransaction().replace(R.id.frame_timer, new FragmentTimerStatus_Config("00", "01", "02", "03", "0")).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_TimerSetting_to_Timer, putBundle("00", "01", "02", "03", "0"));
                 break;
             case "2":
-                getParentFragmentManager().beginTransaction().replace(R.id.frame_timer, new FragmentTimerStatus_Config("04", "05", "06", "07", "1")).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_TimerSetting_to_Timer, putBundle("04", "05", "06", "07", "1"));
                 break;
             case "3":
-                getParentFragmentManager().beginTransaction().replace(R.id.frame_timer, new FragmentTimerStatus_Config("08", "09", "10", "11", "2")).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_TimerSetting_to_Timer, putBundle("08", "09", "10", "11", "2"));
                 break;
             case "4":
-                getParentFragmentManager().beginTransaction().replace(R.id.frame_timer, new FragmentTimerStatus_Config("12", "13", "14", "15", "3")).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_TimerSetting_to_Timer, putBundle("12", "13", "14", "15", "3"));
                 break;
             case "5":
-                getParentFragmentManager().beginTransaction().replace(R.id.frame_timer, new FragmentTimerStatus_Config("16", "17", "18", "19", "4")).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_TimerSetting_to_Timer, putBundle("16", "17", "18", "19", "4"));
                 break;
             case "6":
-                getParentFragmentManager().beginTransaction().replace(R.id.frame_timer, new FragmentTimerStatus_Config("20", "21", "22", "23", "5")).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_TimerSetting_to_Timer, putBundle("20", "21", "22", "23", "5"));
                 break;
         }
     }
 
+
+    Bundle putBundle(String week1, String week2, String week3, String week4, String timerNo) {
+        Bundle bundle = new Bundle();
+        bundle.putString("week1", week1);
+        bundle.putString("week2", week2);
+        bundle.putString("week3", week3);
+        bundle.putString("week4", week4);
+        bundle.putString("timerNo", timerNo);
+
+
+        return bundle;
+    }
+
     @Override
-    public void onClick(String sensorInputNo, String type, int position) { }
+    public void onClick(String sensorInputNo, String type, int position) {
+    }
 }

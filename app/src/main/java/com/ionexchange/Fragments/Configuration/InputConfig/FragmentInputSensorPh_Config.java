@@ -53,23 +53,12 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     BaseActivity mActivity;
     WaterTreatmentDb db;
     InputConfigurationDao dao;
-    boolean primary;
+
     private static final String TAG = "FragmentInputSensor";
 
     String inputNumber, sensorName;
     int sensorStatus;
 
-    public FragmentInputSensorPh_Config(String inputNumber, int sensorStatus) {
-        this.inputNumber = inputNumber;
-        this.sensorStatus = sensorStatus;
-        primary = true;
-    }
-
-    public FragmentInputSensorPh_Config(String inputNumber, String sensorName, int sensorStatus) {
-        this.inputNumber = inputNumber;
-        this.sensorName = sensorName;
-        this.sensorStatus = sensorStatus;
-    }
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -84,7 +73,6 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         super.onViewCreated(view, savedInstanceState);
         mActivity = (BaseActivity) getActivity();
         mAppClass = (ApplicationClass) getActivity().getApplication();
-
         init();
     }
 
@@ -92,6 +80,10 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         // initializing DB
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
+
+        inputNumber = getArguments().getString("inputNumber");
+        sensorName = getArguments().getString("sensorName");
+        sensorStatus = getArguments().getInt("sensorStatus");
 
         // initializing ATXT adapters
         mBinding.phSensorActivationAtxtIsc.setAdapter(getAdapter(sensorActivationArr, getContext()));
@@ -112,6 +104,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         mBinding.phBackArrowIsc.setOnClickListener(v -> {
             mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
         });
+
     }
 
     void changeUI(int userRole) {

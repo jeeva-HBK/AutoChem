@@ -14,19 +14,19 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.ionexchange.Adapters.VirtualSensorIndexRvAdapter;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
-import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Fragments.FragmentHostDashboard;
 import com.ionexchange.Interface.RvOnClick;
+import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentVirtualsensorBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentVirtualSensorList_Config extends Fragment implements RvOnClick {
     RvOnClick rvOnClick;
+    ApplicationClass mAppClass;
     FragmentVirtualsensorBinding mBinding;
 
     VirtualConfigurationDao dao;
@@ -43,8 +43,8 @@ public class FragmentVirtualSensorList_Config extends Fragment implements RvOnCl
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        dao = FragmentHostDashboard.virtualDAO;
+        mAppClass = (ApplicationClass) getActivity().getApplication();
+        dao = ApplicationClass.virtualDAO;
         virtualConfigurationEntityList = dao.getVirtualConfigurationEntityList();
         mBinding.viRv.setLayoutManager(new GridLayoutManager(getContext(), 4));
         mBinding.viRv.setAdapter(new VirtualSensorIndexRvAdapter(this, virtualConfigurationEntityList));
@@ -52,11 +52,11 @@ public class FragmentVirtualSensorList_Config extends Fragment implements RvOnCl
 
     @Override
     public void onClick(int sensorInputNo) {
-        mBinding.viRv.setVisibility(View.GONE);
-        mBinding.toolBar.setVisibility(View.GONE);
-        getParentFragmentManager().beginTransaction().replace(mBinding.viHost.getId(), new FragmentVirtualSensor_config(sensorInputNo)).commit();
-
+        Bundle bundle = new Bundle();
+        bundle.putInt("virtualInputNo", sensorInputNo);
+        mAppClass.navigateToBundle(getActivity(), R.id.action_virtualSetting_to_virtual, bundle);
     }
+
 
     @Override
     public void onClick(String sensorInputNo) {

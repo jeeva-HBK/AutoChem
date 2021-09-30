@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -18,13 +19,31 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.Navigation;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
+import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
+import com.ionexchange.Database.Dao.OutputConfigurationDao;
+import com.ionexchange.Database.Dao.TimerConfigurationDao;
+import com.ionexchange.Database.Dao.VirtualConfigurationDao;
+import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
+import com.ionexchange.Database.Entity.OutputConfigurationEntity;
+import com.ionexchange.Database.Entity.TimerConfigurationEntity;
+import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.R;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 
 import static android.util.Patterns.IP_ADDRESS;
@@ -110,6 +129,12 @@ public class ApplicationClass extends Application {
     Context mContext;
     public TCP tcp;
 
+    public static WaterTreatmentDb DB;
+    public static InputConfigurationDao inputDAO;
+    public static OutputConfigurationDao outputDAO;
+    public static VirtualConfigurationDao virtualDAO;
+    public static TimerConfigurationDao timerDAO;
+
     DataReceiveCallback listener;
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -136,10 +161,12 @@ public class ApplicationClass extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        initDB();
+        setDefaultDb();
+        setCurrentValueDb();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-
                 try {
                     mContext = activity;
                     registerReceiver();
@@ -270,6 +297,24 @@ public class ApplicationClass extends Application {
         return formDigits(digit, j);
     }
 
+
+    public void navigateTo(FragmentActivity fragAct, int desID) {
+        try {
+            Navigation.findNavController((Activity) fragAct, R.id.nav_host_frag).navigate(desID);
+        } catch (Exception e) { Log.e("TAG", "navigateToBundle: " + e); }
+    }
+
+
+    public void navigateToBundle(FragmentActivity activity, int fragmentIDinNavigation, Bundle b) {
+        try {
+            Navigation.findNavController((Activity) activity, R.id.nav_host_frag).navigate(fragmentIDinNavigation, b);
+        } catch (Exception e) { Log.e("TAG", "navigateToBundle: " + e); }
+    }
+
+    public void popStackBack(FragmentActivity activity) {
+        Navigation.findNavController((Activity) activity, R.id.nav_host_frag).popBackStack();
+    }
+
     public void sendPacket(final DataReceiveCallback listener, String packet) {
         tcp = new TCP();
         this.listener = listener;
@@ -389,6 +434,129 @@ public class ApplicationClass extends Application {
 
     public static ArrayAdapter<String> getAdapter(String[] strArr, Context context) {
         return new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, strArr);
+    }
+
+    private void initDB() {
+        DB = WaterTreatmentDb.getDatabase(getApplicationContext());
+        /*Input_DB*/
+        inputDAO = DB.inputConfigurationDao();
+        if (inputDAO.getInputConfigurationEntityList().isEmpty()) {
+            for (int i = 1; i < 50; i++) {
+                InputConfigurationEntity entityUpdate = new InputConfigurationEntity
+                        (i, "N/A", "N/A","N/A",0, "N/A",
+                                "N/A", "N/A", 0);
+                List<InputConfigurationEntity> inputentryList = new ArrayList<>();
+                inputentryList.add(entityUpdate);
+                updateInputDB(inputentryList);
+            }
+        }
+
+        /*Output_DB*/
+        outputDAO = DB.outputConfigurationDao();
+        if (outputDAO.getOutputConfigurationEntityList().isEmpty()) {
+            for (int i = 1; i < 23; i++) {
+                OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
+                        (i, "output-" + i, "N/A",
+                                "N/A",
+                                "N/A");
+                List<OutputConfigurationEntity> outputEntryList = new ArrayList<>();
+                outputEntryList.add(entityUpdate);
+                updateOutPutDB(outputEntryList);
+            }
+        }
+
+        /*Virtual_DB*/
+        virtualDAO = DB.virtualConfigurationDao();
+        if (virtualDAO.getVirtualConfigurationEntityList().isEmpty()) {
+            for (int i = 50; i <= 57; i++) {
+                VirtualConfigurationEntity entityUpdate = new VirtualConfigurationEntity
+                        (i, "virtual-" + (i - 49), 0, "N/A",
+                                "N/A", "N/A");
+                List<VirtualConfigurationEntity> virtualEntryList = new ArrayList<>();
+                virtualEntryList.add(entityUpdate);
+                updateVirtualDB(virtualEntryList);
+            }
+        }
+
+        /*Timer_DB*/
+        timerDAO = DB.timerConfigurationDao();
+        if (timerDAO.geTimerConfigurationEntityList().isEmpty()) {
+            for (int i = 1; i < 7; i++) {
+                TimerConfigurationEntity entityUpdate = new TimerConfigurationEntity
+                        (i, "N/A",
+                                "N/A",
+                                "N/A", 0, 0, "N/A");
+                List<TimerConfigurationEntity> entryListUpdate = new ArrayList<>();
+                entryListUpdate.add(entityUpdate);
+                updateTimerDB(entryListUpdate);
+            }
+        }
+    }
+
+    private void updateTimerDB(List<TimerConfigurationEntity> entryList) {
+        TimerConfigurationDao dao = DB.timerConfigurationDao();
+        dao.insert(entryList.toArray(new TimerConfigurationEntity[0]));
+    }
+
+    private void updateVirtualDB(List<VirtualConfigurationEntity> entryList) {
+        VirtualConfigurationDao dao = DB.virtualConfigurationDao();
+        dao.insert(entryList.toArray(new VirtualConfigurationEntity[0]));
+    }
+
+    private void updateInputDB(List<InputConfigurationEntity> entryList) {
+        InputConfigurationDao dao = DB.inputConfigurationDao();
+        dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
+    }
+
+    public void updateOutPutDB(List<OutputConfigurationEntity> entryList) {
+        OutputConfigurationDao dao = DB.outputConfigurationDao();
+        dao.insert(entryList.toArray(new OutputConfigurationEntity[0]));
+    }
+
+    void setDefaultDb() {
+        DefaultLayoutConfigurationDao dao;
+        WaterTreatmentDb dB;
+        dB = WaterTreatmentDb.getDatabase(getApplicationContext());
+        dao = dB.defaultLayoutConfigurationDao();
+        if (dao.getDefaultLayoutConfigurationEntityList().isEmpty()) {
+            for (int i = 1; i < 6; i++) {
+                DefaultLayoutConfigurationEntity entityUpdate = new DefaultLayoutConfigurationEntity
+                        (i, i, 0, macAddress, 1);
+                List<DefaultLayoutConfigurationEntity> entryListUpdate = new ArrayList<>();
+                entryListUpdate.add(entityUpdate);
+                insertToDb(entryListUpdate);
+            }
+            dao.update(1, 1);
+        }
+    }
+
+    void setCurrentValueDb() {
+        KeepAliveCurrentValueDao dao;
+        WaterTreatmentDb dB;
+        dB = WaterTreatmentDb.getDatabase(getApplicationContext());
+        dao = dB.keepAliveCurrentValueDao();
+        if (dao.getKeepAliveList()!=null){
+            for (int i = 1; i < 54; i++) {
+                KeepAliveCurrentEntity keepAliveCurrentEntity =
+                        new KeepAliveCurrentEntity(i,String.valueOf(i));
+                List<KeepAliveCurrentEntity> entryListUpdate = new ArrayList<>();
+                entryListUpdate.add(keepAliveCurrentEntity);
+                insertKeepAliveDb(entryListUpdate);
+            }
+        }
+    }
+
+    public void insertToDb(List<DefaultLayoutConfigurationEntity> entryList) {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getApplicationContext());
+        DefaultLayoutConfigurationDao dao = db.defaultLayoutConfigurationDao();
+        dao.insert(entryList.toArray(new DefaultLayoutConfigurationEntity[0]));
+    }
+
+
+    public void insertKeepAliveDb(List<KeepAliveCurrentEntity> entryList) {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getApplicationContext());
+        KeepAliveCurrentValueDao dao = db.keepAliveCurrentValueDao();
+        dao.insert(entryList.toArray(new KeepAliveCurrentEntity[0]));
     }
 
 }

@@ -59,18 +59,6 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     InputConfigurationDao dao;
     String sensorSequence = "1";
 
-    public FragmentInputSensorTemp_config(String inputNumber, int sensorStatus) {
-        this.inputNumber = inputNumber;
-        this.sensorStatus = sensorStatus;
-    }
-
-    public FragmentInputSensorTemp_config(String inputNumber, String sensorName, int sensorStatus,String sensorSequence) {
-        this.inputNumber = inputNumber;
-        this.sensorName = sensorName;
-        this.sensorStatus = sensorStatus;
-        this.sensorSequence = sensorSequence;
-    }
-
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
@@ -86,6 +74,10 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
+        inputNumber = getArguments().getString("inputNumber");
+        sensorName = getArguments().getString("sensorName");
+        sensorStatus = getArguments().getInt("sensorStatus");
+        sensorSequence = getArguments().getString("sequenceNo");
         mBinding.temSeqNumberAtxtIsc.setText(sensorSequence);
         initAdapter();
         changeUi();

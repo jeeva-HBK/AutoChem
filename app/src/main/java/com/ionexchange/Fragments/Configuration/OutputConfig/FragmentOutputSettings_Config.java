@@ -45,7 +45,7 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
 
         mBinding.outputRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mAppClass = (ApplicationClass) getActivity().getApplication();
-        dao = FragmentHostDashboard.outputDAO;
+        dao = ApplicationClass.outputDAO;
         setOutputRvData(AppEnum.RELAY_OUTPUT);
 
         mBinding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -110,9 +110,9 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
 
     @Override
     public void onClick(int sensorInputNo) {
-        mBinding.outputRv.setVisibility(View.GONE);
-        mBinding.outputHost.setVisibility(View.VISIBLE);
-        getParentFragmentManager().beginTransaction().replace(mBinding.outputHost.getId(), new FragmentOutput_Config(sensorInputNo)).commit();
+        Bundle bundle = new Bundle();
+        bundle.putInt("sensorInputNo", sensorInputNo);
+        mAppClass.navigateToBundle(getActivity(), R.id.action_outputSetting_to_output, bundle);
     }
 
     @Override

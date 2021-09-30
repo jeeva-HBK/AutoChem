@@ -56,18 +56,6 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
     InputConfigurationDao dao;
     String sensorSequence = "1";
 
-    public FragmentInputSensorDigital_config(String inputNumber, int sensorStatus) {
-        this.inputNumber = inputNumber;
-        this.sensorStatus = sensorStatus;
-    }
-
-    public FragmentInputSensorDigital_config(String inputNumber, String sensorName, int sensorStatus,String sensorSequence) {
-        this.inputNumber = inputNumber;
-        this.sensorName = sensorName;
-        this.sensorStatus = sensorStatus;
-        this.sensorSequence = sensorSequence;
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -82,6 +70,11 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
         mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
+        inputNumber = getArguments().getString("inputNumber");
+        sensorName = getArguments().getString("sensorName");
+        sensorStatus = getArguments().getInt("sensorStatus");
+        sensorSequence = getArguments().getString("sequenceNo");
+
         initAdapter();
         changeUi();
 

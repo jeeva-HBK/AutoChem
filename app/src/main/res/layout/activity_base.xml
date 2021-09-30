@@ -13,34 +13,389 @@
             android:layout_height="match_parent"
             tools:context=".Activity.BaseActivity">
 
-            <!--toolBar-->
-            <RelativeLayout
-                android:id="@+id/toolBar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
-                app:layout_constraintEnd_toEndOf="parent"
+
+
+            <!--NavigationDrawer-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/view"
+                android:layout_width="250dp"
+                android:layout_height="0dp"
+                android:background="@color/primary"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <View
+                    android:id="@+id/view4"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/ic_half_circle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/view"
+                    app:layout_constraintStart_toStartOf="@id/view"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <View
+                    android:id="@+id/view5"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/drawer_setting_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/view4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.15" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_gear"
+                    android:backgroundTint="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@+id/view5"
+                    app:layout_constraintEnd_toEndOf="@+id/view5"
+                    app:layout_constraintStart_toStartOf="@+id/view5"
+                    app:layout_constraintTop_toTopOf="@+id/view5" />
+
                 <TextView
-                    android:id="@+id/toolbarText"
+                    android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="DashBoard"
-                    android:textColor="@color/white"
-                    android:textSize="25dp" />
-            </RelativeLayout>
+                    android:layout_marginTop="10dp"
+                    android:text="Settings"
+                    android:textColor="@color/black"
+                    android:textSize="25sp"
+                    app:layout_constraintBottom_toTopOf="@+id/view5"
+                    app:layout_constraintEnd_toEndOf="@+id/view"
+                    app:layout_constraintStart_toStartOf="@id/view"
+                    app:layout_constraintTop_toTopOf="@+id/view" />
 
-            <FrameLayout
-                android:id="@+id/baseFrameLayout"
+                <View
+                    android:id="@+id/view10"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline7"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.3" />
+
+                <ExpandableListView
+                    android:id="@+id/expList"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:choiceMode="singleChoice"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/guideline7" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <fragment
+                android:id="@+id/nav_host_frag"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@id/view2"
+                app:layout_constraintStart_toEndOf="@id/view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:navGraph="@navigation/navigation" />
+
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/bottom_naviagtion_bg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline3" />
+
+            <View
+                android:id="@+id/homeMain"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_home_blue"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/view2"
+                app:layout_constraintEnd_toStartOf="@+id/statisticsMain"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/view2" />
+
+            <View
+                android:id="@+id/homeBigCircle"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_circle"
+                app:layout_constraintBottom_toTopOf="@id/guideline2"
+                app:layout_constraintEnd_toEndOf="@id/homeMain"
+                app:layout_constraintStart_toStartOf="@id/homeMain" />
+
+            <View
+                android:id="@+id/homeSmallCircle"
+                android:layout_width="53dp"
+                android:layout_height="53dp"
+                android:background="@drawable/green_circle"
+                app:layout_constraintBottom_toBottomOf="@id/homeBigCircle"
+                app:layout_constraintEnd_toEndOf="@id/homeBigCircle"
+                app:layout_constraintStart_toStartOf="@id/homeBigCircle"
+                app:layout_constraintTop_toTopOf="@id/statisticsBigCircle" />
+
+            <View
+                android:id="@+id/homeSub"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/ic_home_white"
+                app:layout_constraintBottom_toBottomOf="@id/homeSmallCircle"
+                app:layout_constraintEnd_toEndOf="@id/homeSmallCircle"
+                app:layout_constraintStart_toStartOf="@id/homeSmallCircle"
+                app:layout_constraintTop_toTopOf="@id/homeSmallCircle" />
+
+
+            <TextView
+                android:id="@+id/homeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:text="Main Screen"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@id/view2"
+                app:layout_constraintEnd_toEndOf="@id/homeBigCircle"
+                app:layout_constraintStart_toStartOf="@id/homeBigCircle"
+                app:layout_constraintTop_toTopOf="@id/guideline2" />
+
+
+            <View
+                android:id="@+id/main_screen_btn"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolBar" />
+                app:layout_constraintEnd_toEndOf="@+id/homeText"
+                app:layout_constraintStart_toStartOf="@+id/homeText"
+                app:layout_constraintTop_toTopOf="@+id/guideline3" />
+
+            <View
+                android:id="@+id/statisticsMain"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/ic_trend_blue"
+                app:layout_constraintBottom_toBottomOf="@id/view2"
+                app:layout_constraintEnd_toStartOf="@+id/supportMain"
+                app:layout_constraintStart_toEndOf="@+id/homeMain"
+                app:layout_constraintTop_toTopOf="@+id/view2" />
+
+
+            <View
+                android:id="@+id/statisticsBigCircle"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_circle"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@id/guideline2"
+                app:layout_constraintEnd_toEndOf="@id/statisticsMain"
+                app:layout_constraintStart_toStartOf="@id/statisticsMain" />
+
+            <View
+                android:id="@+id/statisticsSmallCircle"
+                android:layout_width="53dp"
+                android:layout_height="53dp"
+                android:background="@drawable/green_circle"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/statisticsBigCircle"
+                app:layout_constraintEnd_toEndOf="@id/statisticsBigCircle"
+                app:layout_constraintStart_toStartOf="@id/statisticsBigCircle"
+                app:layout_constraintTop_toTopOf="@id/statisticsBigCircle" />
+
+            <View
+                android:id="@+id/trend_screen_btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/statisticsText"
+                app:layout_constraintStart_toStartOf="@+id/statisticsText"
+                app:layout_constraintTop_toTopOf="@+id/guideline3" />
+
+            <View
+                android:id="@+id/statisticsSub"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/ic_trend_white"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/statisticsSmallCircle"
+                app:layout_constraintEnd_toEndOf="@id/statisticsSmallCircle"
+                app:layout_constraintStart_toStartOf="@id/statisticsSmallCircle"
+                app:layout_constraintTop_toTopOf="@id/statisticsSmallCircle" />
+
+            <TextView
+                android:id="@+id/statisticsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:text="Trend"
+                android:textColor="@color/black"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/view2"
+                app:layout_constraintEnd_toEndOf="@id/statisticsMain"
+                app:layout_constraintStart_toStartOf="@id/statisticsMain"
+                app:layout_constraintTop_toTopOf="@id/guideline2" />
+
+            <View
+                android:id="@+id/supportMain"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/ic_event_blue"
+                app:layout_constraintBottom_toBottomOf="@id/view2"
+                app:layout_constraintEnd_toStartOf="@+id/configMain"
+                app:layout_constraintStart_toEndOf="@+id/statisticsMain"
+                app:layout_constraintTop_toTopOf="@+id/view2" />
+
+            <TextView
+                android:id="@+id/supportText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:text="Events &amp; Logs"
+                android:textColor="@color/black"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/view2"
+                app:layout_constraintEnd_toEndOf="@id/supportBigCircle"
+                app:layout_constraintStart_toStartOf="@id/supportBigCircle"
+                app:layout_constraintTop_toTopOf="@id/guideline2" />
+
+            <View
+                android:id="@+id/supportBigCircle"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_circle"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@id/guideline2"
+                app:layout_constraintEnd_toEndOf="@id/supportMain"
+                app:layout_constraintStart_toStartOf="@id/supportMain" />
+
+            <View
+                android:id="@+id/supportSmallCircle"
+                android:layout_width="53dp"
+                android:layout_height="53dp"
+                android:background="@drawable/green_circle"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/supportBigCircle"
+                app:layout_constraintEnd_toEndOf="@id/supportBigCircle"
+                app:layout_constraintStart_toStartOf="@id/supportBigCircle"
+                app:layout_constraintTop_toTopOf="@id/supportBigCircle" />
+
+            <View
+                android:id="@+id/event_logs_screen_btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/supportText"
+                app:layout_constraintStart_toStartOf="@+id/supportText"
+                app:layout_constraintTop_toTopOf="@+id/guideline3" />
+
+            <View
+                android:id="@+id/supportSub"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/ic_event_white"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/supportSmallCircle"
+                app:layout_constraintEnd_toEndOf="@id/supportSmallCircle"
+                app:layout_constraintStart_toStartOf="@id/supportSmallCircle"
+                app:layout_constraintTop_toTopOf="@id/supportSmallCircle" />
+
+
+            <View
+                android:id="@+id/configMain"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_gear_blue"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@id/view2"
+                app:layout_constraintEnd_toEndOf="@+id/view2"
+                app:layout_constraintStart_toEndOf="@+id/supportMain"
+                app:layout_constraintTop_toTopOf="@+id/view2" />
+
+            <View
+                android:id="@+id/config_screen_btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/configText"
+                app:layout_constraintStart_toStartOf="@+id/configText"
+                app:layout_constraintTop_toTopOf="@+id/guideline3" />
+
+            <View
+                android:id="@+id/configBigCircle"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_circle"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintEnd_toEndOf="@+id/configMain"
+                app:layout_constraintStart_toStartOf="@+id/configMain" />
+
+
+            <View
+                android:id="@+id/configSmallCircle"
+                android:layout_width="53dp"
+                android:layout_height="53dp"
+                android:background="@drawable/green_circle"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/configBigCircle"
+                app:layout_constraintEnd_toEndOf="@+id/configBigCircle"
+                app:layout_constraintStart_toStartOf="@+id/configBigCircle"
+                app:layout_constraintTop_toTopOf="@+id/configBigCircle" />
+
+
+            <View
+                android:id="@+id/configSub"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/ic_gear_white"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/configSmallCircle"
+                app:layout_constraintEnd_toEndOf="@+id/configSmallCircle"
+                app:layout_constraintStart_toStartOf="@+id/configSmallCircle"
+                app:layout_constraintTop_toTopOf="@+id/configSmallCircle" />
+
+            <TextView
+                android:id="@+id/configText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:text="Configuration"
+                android:textColor="@color/black"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/view2"
+                app:layout_constraintEnd_toEndOf="@+id/configBigCircle"
+                app:layout_constraintStart_toStartOf="@+id/configSmallCircle"
+                app:layout_constraintTop_toTopOf="@id/guideline2" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.95" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.90" />
+
 
             <RelativeLayout
                 android:id="@+id/progress_circular"

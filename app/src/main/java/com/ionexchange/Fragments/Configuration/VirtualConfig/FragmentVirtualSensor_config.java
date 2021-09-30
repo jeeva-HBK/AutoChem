@@ -51,10 +51,6 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
 
     private static final String TAG = "FragmentVirtualSensor_c";
 
-    public FragmentVirtualSensor_config(int sensorInputNo) {
-        this.sensorInputNo = sensorInputNo;
-    }
-
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
@@ -67,6 +63,8 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        Bundle bundle = getArguments();
+        sensorInputNo = bundle.getInt("virtualInputNo");
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.virtualConfigurationDao();
 
@@ -105,7 +103,7 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
         mBinding.toolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentVirtualSensorList_Config());
+
             }
         });
     }

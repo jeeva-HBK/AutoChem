@@ -19,10 +19,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+///Created By silambu
 public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdapter.ViewHolder> {
 
     public InputRvOnClick rvOnClick;
     List<InputConfigurationEntity> inputConfigurationEntityList;
+
 
     public InputsIndexRvAdapter(InputRvOnClick rvOnClick, List<InputConfigurationEntity> inputConfigurationEntityList) {
         this.rvOnClick = rvOnClick;
@@ -34,7 +36,6 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
     @Override
     public InputsIndexRvAdapter.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.input_rv_item, parent, false);
-
         return new ViewHolder(view);
     }
 
@@ -54,6 +55,7 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
             holder.highAlarm.setTooltipText(inputConfigurationEntityList.get(position).subValueTwo);
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -80,5 +82,6 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
                 }
             });
         }
+
     }
 }

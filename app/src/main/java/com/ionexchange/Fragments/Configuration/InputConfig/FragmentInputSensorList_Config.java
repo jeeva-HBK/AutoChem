@@ -9,7 +9,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,7 +20,6 @@ import com.ionexchange.Adapters.InputsIndexRvAdapter;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
-import com.ionexchange.Fragments.FragmentHostDashboard;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Interface.InputRvOnClick;
 import com.ionexchange.Others.ApplicationClass;
@@ -30,12 +28,9 @@ import com.ionexchange.databinding.FragmentInputsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.analogArr;
-import static com.ionexchange.Others.ApplicationClass.analogInputArr;
-import static com.ionexchange.Others.ApplicationClass.digitalArr;
 import static com.ionexchange.Others.ApplicationClass.digitalSensorArr;
 import static com.ionexchange.Others.ApplicationClass.flowmeterArr;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
@@ -77,7 +72,8 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
-        dao = FragmentHostDashboard.inputDAO;
+        dao = ApplicationClass.inputDAO;
+
         mBinding.rightArrowIsBtn.setVisibility((dao.getInputConfigurationEntityFlagKeyList(1).size() / 9) > 0 ? View.VISIBLE : View.INVISIBLE);
         mBinding.addsensorIsBtn.setOnClickListener(this);
 
@@ -238,77 +234,116 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
     }
 
     void frameLayout(String inputNumber, String sensorType) {
-        mBinding.inputsRv.setVisibility(View.GONE);
-        mBinding.view8.setVisibility(View.GONE);
-        mBinding.addsensorIsBtn.setVisibility(View.GONE);
         switch (sensorType) {
             case "pH":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorPh_Config(inputNumber, 1)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_phConfig, updateBundle(inputNumber, 1));
                 break;
             case "ORP":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorORP_Config(inputNumber, 1)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_orpConfig, updateBundle(inputNumber, 1));
                 break;
             case "Contacting Conductivity":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorConductivity_Config(inputNumber, 1)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_conductivityConfig, updateBundle(inputNumber, 1));
                 break;
             case "Toroidal Conductivity":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorToroidalConductivity_config(inputNumber, 1)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_ToroidalConfig, updateBundle(inputNumber, 1));
                 break;
             case "Temperature":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorTemp_config(inputNumber, 1)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_tempConfig, updateBundle(inputNumber, 1));
                 break;
             case "Flow/Water Meter":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorFlow_config(inputNumber, 1)).commit();
-                break;
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_flowConfig, updateBundle(inputNumber, 1));
             case "Digital Input":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorDigital_config(inputNumber, 1)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_digitalConfig, updateBundle(inputNumber, 1));
                 break;
             case "Tank Level":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorTankLevel_Config(inputNumber, 1)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_tankLevel, updateBundle(inputNumber, 1));
                 break;
             case "Modbus Sensor":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorModbus_Config(inputNumber, 1)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_modBusConfig, updateBundle(inputNumber, 1));
                 break;
             case "Analog Input":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorAnalog_Config(inputNumber, 1)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_AnalogConfig, updateBundle(inputNumber, 1));
                 break;
         }
     }
 
-    void frameLayout(String inputNumber, String sensorName, String dumString,int sequenceNo,int sequenceType,int sequenceValueRead,int analogType) {
-        mBinding.inputsRv.setVisibility(View.GONE);
-        mBinding.view8.setVisibility(View.GONE);
-        mBinding.addsensorIsBtn.setVisibility(View.GONE);
+
+    Bundle updateBundle(String inputNumber, int sensorStatus) {
+        Bundle bundle = new Bundle();
+        bundle.putString("inputNumber", inputNumber);
+        bundle.putInt("sensorStatus", sensorStatus);
+        return bundle;
+    }
+
+    Bundle AddBundle(String inputNumber, String sensorName, int sensorStatus) {
+        Bundle bundle = new Bundle();
+        bundle.putString("inputNumber", inputNumber);
+        bundle.putString("sensorName", sensorName);
+        bundle.putInt("sensorStatus", sensorStatus);
+        return bundle;
+    }
+
+    Bundle AddBundle(String inputNumber, String sensorName, int sensorStatus, String sequenceNo) {
+        Bundle bundle = new Bundle();
+        bundle.putString("inputNumber", inputNumber);
+        bundle.putString("sensorName", sensorName);
+        bundle.putInt("sensorStatus", sensorStatus);
+        bundle.putString("sequenceNo", sequenceNo);
+        return bundle;
+    }
+
+    Bundle AddBundle(String inputNumber, String sensorName, int sensorStatus, int sequenceType, int sequenceValueRead) {
+        Bundle bundle = new Bundle();
+        bundle.putString("inputNumber", inputNumber);
+        bundle.putString("sensorName", sensorName);
+        bundle.putInt("sensorStatus", sensorStatus);
+        bundle.putInt("sequenceType", sequenceType);
+        bundle.putInt("sequenceValueRead", sequenceValueRead);
+        return bundle;
+    }
+
+    Bundle AddBundle(String inputNumber, String sensorName, int sensorStatus, String sequenceNo, int sequenceType, int sequenceValueRead) {
+        Bundle bundle = new Bundle();
+        bundle.putString("inputNumber", inputNumber);
+        bundle.putString("sensorName", sensorName);
+        bundle.putInt("sensorStatus", sensorStatus);
+        bundle.putString("sequenceNo", sequenceNo);
+        bundle.putInt("sequenceType", sequenceType);
+        bundle.putInt("sequenceValueRead", sequenceValueRead);
+        return bundle;
+    }
+
+    void frameLayout(String inputNumber, String sensorName, String dumString, int sequenceNo, int sequenceType, int sequenceValueRead, int analogType) {
         switch (sensorName) {
             case "pH":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorPh_Config(inputNumber, sensorName, 0)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_phConfig, AddBundle(inputNumber, sensorName, 0));
                 break;
             case "ORP":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorORP_Config(inputNumber, sensorName, 0)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_orpConfig, AddBundle(inputNumber, sensorName, 0));
                 break;
             case "Contacting Conductivity":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorConductivity_Config(inputNumber, sensorName, 0)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_conductivityConfig, AddBundle(inputNumber, sensorName, 0));
                 break;
             case "Toroidal Conductivity":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorToroidalConductivity_config(inputNumber, sensorName, 0)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_ToroidalConfig, AddBundle(inputNumber, sensorName, 0));
                 break;
             case "Temperature":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorTemp_config(inputNumber, sensorName, 0,Integer.toString(sequenceNo))).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_tempConfig, AddBundle(inputNumber, sensorName, 0, Integer.toString(sequenceNo)));
                 break;
             case "Flow/Water Meter":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorFlow_config(inputNumber, sensorName, 0,Integer.toString(sequenceNo),sequenceType)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_flowConfig, AddBundle(inputNumber, sensorName, 0, Integer.toString(sequenceNo), sequenceType, 0));
                 break;
             case "Digital Input":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorDigital_config(inputNumber, sensorName, 0,Integer.toString(sequenceNo))).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_digitalConfig, AddBundle(inputNumber, sensorName, 0, Integer.toString(sequenceNo)));
                 break;
             case "Tank Level":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorTankLevel_Config(inputNumber, sensorName, 0,Integer.toString(sequenceNo))).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_tankLevel, AddBundle(inputNumber, sensorName, 0, Integer.toString(sequenceNo)));
                 break;
             case "Modbus Sensor":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorModbus_Config(inputNumber, sensorName, 0,sequenceType,sequenceValueRead)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_modBusConfig, AddBundle(inputNumber, sensorName, 0, sequenceType, sequenceValueRead));
                 break;
             case "Analog Input":
-                getParentFragmentManager().beginTransaction().replace(R.id.inputHostFrame, new FragmentInputSensorAnalog_Config(inputNumber, sensorName, 0,Integer.toString(sequenceNo),sequenceType,analogType)).commit();
+                mAppClass.navigateToBundle(getActivity(), R.id.action_inputSetting_to_AnalogConfig, AddBundle(inputNumber, sensorName, 0, Integer.toString(sequenceNo), sequenceType, analogType));
                 break;
         }
     }

@@ -48,11 +48,7 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
     BaseActivity mActivity;
     ApplicationClass mAppClass;
 
-    public static WaterTreatmentDb DB;
-    public static InputConfigurationDao inputDAO;
-    public static OutputConfigurationDao outputDAO;
-    public static VirtualConfigurationDao virtualDAO;
-    public static TimerConfigurationDao timerDAO;
+
 
 
     private static final String TAG = "FragmentMainHost";
@@ -140,7 +136,7 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
                     break;
 
                 case R.id.config_screen_btn:
-                    initDB();
+
                     setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText, new FragmentRoot_Config(), "Configuration");
                     break;
             }
@@ -149,82 +145,6 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
         }
     }
 
-    private void initDB() {
-        DB = WaterTreatmentDb.getDatabase(getContext());
-        /*Input_DB*/
-        inputDAO = DB.inputConfigurationDao();
-        if (inputDAO.getInputConfigurationEntityList().isEmpty()) {
-            for (int i = 1; i < 50; i++) {
-                InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                        (i, "N/A", "N/A","N/A",0, "N/A",
-                                "N/A", "N/A", 0);
-                List<InputConfigurationEntity> inputentryList = new ArrayList<>();
-                inputentryList.add(entityUpdate);
-                updateInputDB(inputentryList);
-            }
-        }
-
-        /*Output_DB*/
-        outputDAO = DB.outputConfigurationDao();
-        if (outputDAO.getOutputConfigurationEntityList().isEmpty()) {
-            for (int i = 1; i < 23; i++) {
-                OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
-                        (i, "output-" + i, "N/A",
-                                "N/A",
-                                "N/A");
-                List<OutputConfigurationEntity> outputEntryList = new ArrayList<>();
-                outputEntryList.add(entityUpdate);
-                updateOutPutDB(outputEntryList);
-            }
-        }
-
-        /*Virtual_DB*/
-        virtualDAO = DB.virtualConfigurationDao();
-        if (virtualDAO.getVirtualConfigurationEntityList().isEmpty()) {
-            for (int i = 50; i < 57; i++) {
-                VirtualConfigurationEntity entityUpdate = new VirtualConfigurationEntity
-                        (i, "virtual-" + (i - 49), 0, "N/A",
-                                "N/A", "N/A");
-                List<VirtualConfigurationEntity> virtualEntryList = new ArrayList<>();
-                virtualEntryList.add(entityUpdate);
-                updateVirtualDB(virtualEntryList);
-            }
-        }
-
-        /*Timer_DB*/
-        timerDAO = DB.timerConfigurationDao();
-        if (timerDAO.geTimerConfigurationEntityList().isEmpty()) {
-            for (int i = 1; i < 7; i++) {
-                TimerConfigurationEntity entityUpdate = new TimerConfigurationEntity
-                        (i, "N/A",
-                                "N/A",
-                                "N/A", 0, 0, "N/A");
-                List<TimerConfigurationEntity> entryListUpdate = new ArrayList<>();
-                entryListUpdate.add(entityUpdate);
-                updateTimerDB(entryListUpdate);
-            }
-        }
-    }
-
-    private void updateTimerDB(List<TimerConfigurationEntity> entryList) {
-        TimerConfigurationDao dao = DB.timerConfigurationDao();
-        dao.insert(entryList.toArray(new TimerConfigurationEntity[0]));
-    }
-
-    private void updateVirtualDB(List<VirtualConfigurationEntity> entryList) {
-        VirtualConfigurationDao dao = DB.virtualConfigurationDao();
-        dao.insert(entryList.toArray(new VirtualConfigurationEntity[0]));
-    }
-
-    private void updateInputDB(List<InputConfigurationEntity> entryList) {
-        InputConfigurationDao dao = DB.inputConfigurationDao();
-        dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
-    }
-
-    public void updateOutPutDB(List<OutputConfigurationEntity> entryList) {
-        OutputConfigurationDao dao = DB.outputConfigurationDao();
-        dao.insert(entryList.toArray(new OutputConfigurationEntity[0]));
-    }
 
 
     @Override

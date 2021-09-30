@@ -40,7 +40,6 @@ import static com.ionexchange.Others.PacketControl.RES_FAILED;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 
-
 public class FragmentSensorDetails extends Fragment {
     FragmentSensorDetailsBinding mBinding;
     Context mContext;
@@ -89,6 +88,7 @@ public class FragmentSensorDetails extends Fragment {
                 if (currentPage < printablePages.size() - 1) {
                     currentPage = ++currentPage;
                 } else {
+                    mBinding.btnNext.setBackgroundColor(getResources().getColor(R.color.ash));
                     mAppClass.showSnackBar(getContext(), "End of Page");
                 }
                 if (currentPage < printablePages.size()) {
@@ -198,6 +198,5 @@ public class FragmentSensorDetails extends Fragment {
         }
         return splittedList;
     }
-
 
 }

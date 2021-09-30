@@ -96,7 +96,6 @@ public class FragmentSelectSensors extends Fragment implements CompoundButton.On
 
         mBinding.selectSensorRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mBinding.inputRb.performClick();
-
     }
 
     private void setAdapter(int mode, boolean b, String type, List configurationList, int adapterType) {
@@ -168,26 +167,26 @@ public class FragmentSelectSensors extends Fragment implements CompoundButton.On
             switch (mode) {
                 case 0:
                     InputConfigurationEntity inputObj = (InputConfigurationEntity) mObj;
-                    confirmDialog(compoundButton, inputObj.hardwareNo, inputObj.inputType, 0, sensorType);
+                    confirmDialog(compoundButton, inputObj.hardwareNo, inputObj.inputType, 0, sensorType, inputObj.subValueOne, inputObj.subValueTwo, inputObj.flagKey);
                     break;
                 case 1:
                     VirtualConfigurationEntity virtualObj = (VirtualConfigurationEntity) mObj;
-                    confirmDialog(compoundButton, virtualObj.hardwareNo, virtualObj.virtualType, 0, sensorType);
+                    confirmDialog(compoundButton, virtualObj.hardwareNo, virtualObj.virtualType, 0, sensorType, virtualObj.subValueOne, virtualObj.subValueTwo, 1);
                     break;
 
                 case 2:
                     OutputConfigurationEntity outputObj = (OutputConfigurationEntity) mObj;
-                    confirmDialog(compoundButton, outputObj.outputHardwareNo, outputObj.outputType, 0, sensorType);
+                    confirmDialog(compoundButton, outputObj.outputHardwareNo, outputObj.outputType, 0, sensorType, outputObj.outputStatus, outputObj.outputMode, 1);
                     break;
             }
 
         }
     }
 
-    void mainConfigurationEntity(int hardwareNo, String inputType, int SeqNo, String sensorName) {
+    void mainConfigurationEntity(int hardwareNo, String inputType, int SeqNo, String sensorName, String low, String high, int flag) {
         MainConfigurationEntity mainConfigurationEntity = new MainConfigurationEntity
                 (mainConfigurationDao.getLastSno() + 1,
-                        screenNo, layoutNo, windowNo, pageNo, hardwareNo, inputType, SeqNo, sensorName);
+                        screenNo, layoutNo, windowNo, pageNo, hardwareNo, inputType, SeqNo, sensorName, flag);
         List<MainConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(mainConfigurationEntity);
         updateToDb(entryListUpdate);
@@ -200,7 +199,7 @@ public class FragmentSelectSensors extends Fragment implements CompoundButton.On
     }
 
 
-    void confirmDialog(CompoundButton compoundButton, int hardwareNo, String inputType, int SeqNo, String sensorName) {
+    void confirmDialog(CompoundButton compoundButton, int hardwareNo, String inputType, int SeqNo, String sensorName, String low, String high, int flag) {
         new MaterialAlertDialogBuilder(getContext()).setTitle("Confirmation").
                 setMessage("Please confirm your selected sensor is - " + compoundButton.getText().toString())
                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
@@ -210,7 +209,7 @@ public class FragmentSelectSensors extends Fragment implements CompoundButton.On
                                 && mainConfigurationDao.getInputType(screenNo, layoutNo, windowNo, pageNo).equals("Sensor not Added")) {
                             mainConfigurationDao.delete(screenNo, layoutNo, windowNo, pageNo);
                         }
-                        mainConfigurationEntity(hardwareNo, inputType, SeqNo, sensorName);
+                        mainConfigurationEntity(hardwareNo, inputType, SeqNo, sensorName, low, high, flag);
                         dialog.dismiss();
                         fragment.dismiss();
                     }

@@ -71,7 +71,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     int packetId;
     WaterTreatmentDb db;
     InputConfigurationDao dao;
-    String sequenceNumber = "1";
+    String sequenceNumber;
     OutputConfigurationDao output_dao;
     String[] outputNames;
 
@@ -103,6 +103,13 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         mAppClass = (ApplicationClass) getActivity().getApplication();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
+
+        inputNumber = getArguments().getString("inputNumber");
+        sensorName = getArguments().getString("sensorName");
+        sensorStatus = getArguments().getInt("sensorStatus");
+        sequenceNumber = getArguments().getString("sequenceNo");
+        flowmeterType = getArguments().getInt("sequenceType");
+
         output_dao = db.outputConfigurationDao();
         checkUser();
         initAdapter();

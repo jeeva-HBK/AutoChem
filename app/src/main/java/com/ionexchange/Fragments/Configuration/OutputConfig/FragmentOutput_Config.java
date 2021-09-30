@@ -64,10 +64,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             currentFunctionMode = "", analogMode = "3";
     private static final String TAG = "FragmentOutput_Config";
 
-    public FragmentOutput_Config(int outputSensorNo) {
-        this.outputSensorNo = outputSensorNo;
-    }
-
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
@@ -80,6 +76,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        outputSensorNo = getArguments().getInt("sensorInputNo");
         FragmentOutputSettings_Config.hideToolbar();
         initAdapter();
         mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(1).toString());

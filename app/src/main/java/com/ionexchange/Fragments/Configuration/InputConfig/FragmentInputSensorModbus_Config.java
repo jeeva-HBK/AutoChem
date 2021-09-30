@@ -61,20 +61,6 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
     WaterTreatmentDb db;
     InputConfigurationDao dao;
 
-    public FragmentInputSensorModbus_Config(String inputNumber, int sensorStatus) {
-        this.inputNumber = inputNumber;
-        this.sensorStatus = sensorStatus;
-    }
-
-    public FragmentInputSensorModbus_Config(String inputNumber, String sensorName, int sensorStatus,
-                                            int modbusType,int modbusValue) {
-        this.inputNumber = inputNumber;
-        this.sensorName = sensorName;
-        this.sensorStatus = sensorStatus;
-        this.modbusType = modbusType;
-        this.modbusValue = modbusValue;
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -90,6 +76,13 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
         initAdapter();
+
+        inputNumber = getArguments().getString("inputNumber");
+        sensorName = getArguments().getString("sensorName");
+        sensorStatus = getArguments().getInt("sensorStatus");
+        sensorSequence = getArguments().getString("sequenceNo");
+        modbusType = getArguments().getInt("sequenceType");
+        modbusValue = getArguments().getInt("sequenceValueRead");
 
         mBinding.modBusDiagnosticSweepTie.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
