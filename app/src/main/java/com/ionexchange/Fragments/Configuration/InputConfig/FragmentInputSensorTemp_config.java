@@ -84,7 +84,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         mBinding.tempSaveFabIsc.setOnClickListener(this::save);
         mBinding.tempDeleteFabSic.setOnClickListener(this::delete);
         mBinding.tempBackArrowIsc.setOnClickListener(v -> {
-            mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+            mAppClass.popStackBack(getActivity());
         });
     }
 

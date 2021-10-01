@@ -58,22 +58,6 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
     WaterTreatmentDb db;
     InputConfigurationDao dao;
 
-    public FragmentInputSensorAnalog_Config(String inputNumber, int sensorStatus) {
-        this.inputNumber = inputNumber;
-        this.sensorStatus = sensorStatus;
-    }
-
-    public FragmentInputSensorAnalog_Config(String inputNumber, String sensorName, int sensorStatus,
-                                            String sequenceNo,int sequenceType,int analogType) {
-        this.inputNumber = inputNumber;
-        this.sensorName = sensorName;
-        this.sensorStatus = sensorStatus;
-        this.sequenceNo = sequenceNo;
-        this.sequenceType = sequenceType;
-        this.analogType = analogType;
-    }
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -104,7 +88,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         mBinding.backArrowIsc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+                mAppClass.popStackBack(getActivity());
             }
         });
 

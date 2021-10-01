@@ -166,7 +166,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.backArrowOsc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentOutputSettings_Config());
+                mAppClass.popStackBack(getActivity());
             }
         });
 
@@ -191,7 +191,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     }
 
     private void checkUser() {
-
         switch (userType) {
             case 1:
                 if (outputSensorNo < 15) {

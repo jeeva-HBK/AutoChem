@@ -35,14 +35,5 @@ public class FragmentRoot_MainScreen extends Fragment {
         mActivity = (BaseActivity) getActivity();
         mActivity.changeToolBarVisibility(View.GONE);
 
-        mBinding.userTypeAct.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line,
-                new String[]{"None", "Basic", "Intermediate", "Advanced"}));
-
-        mBinding.userTypeAct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                userType = position;
-            }
-        });
     }
 }

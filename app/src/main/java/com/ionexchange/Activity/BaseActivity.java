@@ -1,6 +1,5 @@
 package com.ionexchange.Activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,6 +21,8 @@ import com.ionexchange.databinding.ActivityBaseBinding;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.ionexchange.Others.ApplicationClass.userType;
 
 ///Created By silambu
 public class BaseActivity extends AppCompatActivity implements View.OnClickListener, ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupClickListener, ExpandableListView.OnChildClickListener {
@@ -149,32 +150,33 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.main_screen_btn:
-                setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle,
-                        mBinding.homeText, navGraph, R.id.Dashboard, mNavController);
-                mBinding.view.setVisibility(View.GONE);
-                break;
+            switch (v.getId()) {
+                case R.id.main_screen_btn:
+                    setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle,
+                            mBinding.homeText, navGraph, R.id.Dashboard, mNavController);
+                    mBinding.view.setVisibility(View.GONE);
+                    break;
 
-            case R.id.trend_screen_btn:
-                setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle,
-                        mBinding.statisticsText, navGraph, R.id.trend, mNavController);
-                mBinding.view.setVisibility(View.GONE);
+                case R.id.trend_screen_btn:
+                    setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle,
+                            mBinding.statisticsText, navGraph, R.id.trend, mNavController);
+                    mBinding.view.setVisibility(View.GONE);
 
-                break;
+                    break;
 
-            case R.id.event_logs_screen_btn:
-                setNewState(mBinding.supportBigCircle, mBinding.supportMain, mBinding.supportSub, mBinding.supportSmallCircle, mBinding.supportText,
-                        navGraph, R.id.event_log, mNavController);
-                mBinding.view.setVisibility(View.GONE);
-                break;
+                case R.id.event_logs_screen_btn:
+                    setNewState(mBinding.supportBigCircle, mBinding.supportMain, mBinding.supportSub, mBinding.supportSmallCircle, mBinding.supportText,
+                            navGraph, R.id.event_log, mNavController);
+                    mBinding.view.setVisibility(View.GONE);
+                    break;
 
-            case R.id.config_screen_btn:
-                setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText,
-                        navGraph, R.id.configuration, mNavController);
-                expandedListView();
-                mBinding.view.setVisibility(View.VISIBLE);
-                break;
+                case R.id.config_screen_btn:
+                    setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText,
+                            navGraph, R.id.configuration, mNavController);
+                    expandedListView();
+                    mBinding.view.setVisibility(View.VISIBLE);
+                    break;
+
         }
     }
 

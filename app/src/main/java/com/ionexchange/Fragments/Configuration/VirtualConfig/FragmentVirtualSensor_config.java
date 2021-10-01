@@ -69,36 +69,36 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
         dao = db.virtualConfigurationDao();
 
         switch (userType) {
-            case 1:
+            case 1: // Basic
                 mBinding.lowRangeVi.setEnabled(false);
                 mBinding.highRangeVi.setEnabled(false);
                 mBinding.lowAlarmVi.setEnabled(false);
                 mBinding.highAlarmVi.setEnabled(false);
-                mBinding.vsRow1Isc.setVisibility(View.GONE);
+                mBinding.sensorlabelVi.setEnabled(false);
+                //mBinding.vsRow1Isc.setVisibility(View.GONE);
+                mBinding.sensorActivationVi.setVisibility(View.GONE);
+                mBinding.calculationVi.setVisibility(View.GONE);
+                mBinding.smoothingFactorVi.setVisibility(View.GONE);
                 mBinding.vsRow2Isc.setVisibility(View.GONE);
                 mBinding.vsRow4Isc.setVisibility(View.GONE);
                 break;
 
-            case 2:
+            case 2: // Intermediate
                 mBinding.lowRangeVi.setEnabled(false);
                 mBinding.highRangeVi.setEnabled(false);
                 mBinding.smoothingFactorVi.setEnabled(false);
-
                 mBinding.calculationVi.setVisibility(View.GONE);
                 mBinding.sensorActivationVi.setVisibility(View.GONE);
                 mBinding.vsRow2Isc.setVisibility(View.GONE);
-
                 break;
 
             case 3:
-
                 break;
         }
 
         initAdapters();
         mBinding.saveFabInputSettings.setOnClickListener(this::save);
         mBinding.saveLayoutInputSettings.setOnClickListener(this::save);
-
 
         mBinding.toolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,9 +108,7 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
         });
     }
 
-    private void delete(View view) {
-
-    }
+    private void delete(View view) { }
 
     private void save(View view) {
         if (validField()) {
@@ -131,13 +129,6 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
                     getPosition(0, toString(mBinding.calculationViEDT), calculationArr) + SPILT_CHAR + "1"
             );
         }
-    }
-
-    private String toStringSplit(int digits, int digitPoint, EditText editText) {
-        if (editText.getText().toString().split("\\.").length == 1) {
-            return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, "00");
-        }
-        return mAppClass.formDigits(digits, editText.getText().toString().split("\\.")[0]) + mAppClass.formDigits(digitPoint, editText.getText().toString().split("\\.")[1]);
     }
 
     private void initAdapters() {
@@ -213,10 +204,6 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
         return mAppClass.formDigits(digits, editText.getText().toString());
     }
 
-    private String toString(int digits, int value) {
-        return mAppClass.formDigits(digits, String.valueOf(value));
-    }
-
     private String toString(AutoCompleteTextView editText) {
         return editText.getText().toString();
     }
@@ -224,7 +211,6 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
     public ArrayAdapter<String> getAdapter(String[] strArr) {
         return new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, strArr);
     }
-
 
     @Override
     public void onResume() {
@@ -240,8 +226,6 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
     }
 
     private void handleResponse(String[] spiltData) {
-        // READ Res - {*1# 05# 0# | 01# 0# VirtualInput3# 01# 2345# 02# 3214# 1100# 2200# 100# 120000# 240000# 1*}
-        // WRITE Res -
         if (spiltData[1].equals(VIRTUAL_INPUT)) {
             if (spiltData[0].equals(READ_PACKET)) {
                 if (spiltData[2].equals(RES_SUCCESS)) {

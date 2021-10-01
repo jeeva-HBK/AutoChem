@@ -393,7 +393,6 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 mBinding.conAlarmLowDeciIsc.setEnabled(false);
                 mBinding.conCompensationTilIsc.setVisibility(View.GONE);
                 mBinding.conCompFactorRootIsc.setVisibility(View.GONE);
-                mBinding.conSensorActivationTilIsc.setVisibility(View.VISIBLE);
                 mBinding.conSmoothingFactorTilIsc.setVisibility(View.GONE);
                 mBinding.conHighAlarmTilIsc.setEnabled(false);
                 mBinding.conHighAlarmDeciIsc.setEnabled(false);
@@ -401,11 +400,9 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 mBinding.conResetCalibTilIsc.setEnabled(false);
                 mBinding.conRow7Isc.setVisibility(View.GONE);
                 mBinding.conSensorActivationTilIsc.setVisibility(View.GONE);
-
                 break;
 
-            case 2:
-                //View
+            case 2: // View
                 mBinding.conSensorActivationTilIsc.setVisibility(View.GONE);
                 mBinding.conCellConstantEdtIsc.setEnabled(false);
                 mBinding.conCellConstantDeciIsc.setEnabled(false);
@@ -413,9 +410,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 mBinding.conCompFactorDeciIsc.setEnabled(false);
                 mBinding.conCompensationTilIsc.setEnabled(false);
                 mBinding.conSmoothingFactorTilIsc.setEnabled(false);
-                mBinding.conSensorActivationTilIsc.setVisibility(View.GONE);
                 mBinding.conDeleteLayoutIsc.setVisibility(View.GONE);
-                mBinding.conSensorActivationTilIsc.setVisibility(View.GONE);
                 break;
         }
     }

@@ -81,7 +81,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
 
         mBinding.orpDeleteFabIsc.setOnClickListener(this::delete);
         mBinding.orpBackArrowIsc.setOnClickListener(v -> {
-            mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+            mAppClass.popStackBack(getActivity());
         });
     }
 

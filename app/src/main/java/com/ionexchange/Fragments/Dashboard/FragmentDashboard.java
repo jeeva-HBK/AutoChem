@@ -38,7 +38,6 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     int girdCount, layout, screenNo, pageNo = 1;
     int maxPage;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -106,9 +105,11 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
             }
 
             mBinding.rvDashboard.setAdapter(new DashboardRvAdapter(layout, mainConfigurationEntityList, this));
+        } else {
+            mBinding.rvDashboard.setLayoutManager(new GridLayoutManager(getContext(), girdCount));
+            mBinding.rvDashboard.setAdapter(new DashboardRvAdapter(layout, mainConfigurationEntityList, this));
         }
     }
-
 
     @Override
     public void onClick(View v) {
@@ -142,16 +143,22 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
 
     @Override
     public void onClick(int sensorInputNo) {
-
     }
 
     @Override
     public void onClick(String sensorInputNo) {
-
     }
 
     @Override
     public void onClick(String sensorInputNo, String type, int position) {
-        mAppClass.navigateTo(getActivity(), R.id.action_Dashboard_to_sensorDetails1);
+        if (!sensorInputNo.equals("0")) {
+            Bundle bundle = new Bundle();
+            bundle.putString("inputNumber", sensorInputNo);
+            bundle.putString("inpuType", type);
+            mAppClass.navigateToBundle(getActivity(), R.id.action_Dashboard_to_sensorDetails1, bundle);
+        } else {
+            mAppClass.showSnackBar(getContext(), "Sensor Not Added");
+        }
+
     }
 }

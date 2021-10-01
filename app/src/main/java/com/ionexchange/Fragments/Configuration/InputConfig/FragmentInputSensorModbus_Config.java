@@ -113,7 +113,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
         mBinding.backArrowIsc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+                mAppClass.popStackBack(getActivity());
             }
         });
     }

@@ -102,7 +102,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
 
         // Back btn
         mBinding.phBackArrowIsc.setOnClickListener(v -> {
-            mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+            mAppClass.popStackBack(getActivity());
         });
 
     }

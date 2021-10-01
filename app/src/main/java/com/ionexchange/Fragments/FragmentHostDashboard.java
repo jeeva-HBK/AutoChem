@@ -48,9 +48,6 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
     BaseActivity mActivity;
     ApplicationClass mAppClass;
 
-
-
-
     private static final String TAG = "FragmentMainHost";
 
     @Nullable

@@ -75,20 +75,6 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     OutputConfigurationDao output_dao;
     String[] outputNames;
 
-    public FragmentInputSensorFlow_config(String inputNumber, int sensorStatus) {
-        this.inputNumber = inputNumber;
-        this.sensorStatus = sensorStatus;
-    }
-
-    public FragmentInputSensorFlow_config(String inputNumber, String sensorName, int sensorStatus,
-                                          String sequenceNumber, int flowmeterType) {
-        this.inputNumber = inputNumber;
-        this.sensorName = sensorName;
-        this.sensorStatus = sensorStatus;
-        this.sequenceNumber = sequenceNumber;
-        this.flowmeterType = flowmeterType;
-    }
-
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
@@ -141,7 +127,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         });
 
         mBinding.orpBackArrowIsc.setOnClickListener(v -> {
-            mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+            mAppClass.popStackBack(getActivity());
         });
         mBinding.flowSaveFab.setOnClickListener(this::save);
         mBinding.flowDeleteFab.setOnClickListener(this::delete);
@@ -524,7 +510,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 getPositionFromAtxt(0, getStringValue(mBinding.flowAlarmModeAtxtIsc), flowAlarmMode) + SPILT_CHAR +
                 getStringValue(4, mBinding.flowAlarmDelayEdtIsc) + SPILT_CHAR +
                 getStringValue(6, mBinding.flowAlarmClearEdtIsc) + SPILT_CHAR +
-                formDigits(2, Integer.parseInt(getPosition(2, getStringValue(mBinding.flowOutputRelayEdtIsc), outputNames) + 1) + "") + SPILT_CHAR +
+                formDigits(2, Integer.parseInt(getPosition(2, getStringValue(mBinding.flowOutputRelayEdtIsc), outputNames)) + "") + SPILT_CHAR +
                 getDecimalValue(mBinding.flowTotalizerAlarmEdtIsc, 10, mBinding.flowTotalizerAlarmDeciIsc, 2) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowResetFlowTotalAtxtIsc), resetFlowTotalArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowSetFlowTotalEdtIsc, 10, mBinding.flowSetFlowTotalDeciIsc, 2) + SPILT_CHAR +
@@ -662,7 +648,6 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
                     mBinding.setFlowMeterType(splitData[5]);
-
                     // Alarm Low/Alarm High
                     mBinding.flowInputNumberEdtIsc.setText(splitData[3]);
                     mBinding.flowSensorTypeAtxtIsc.setText(mBinding.flowSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
@@ -742,7 +727,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                         mBinding.flowAlarmModeAtxtIsc.setText(mBinding.flowAlarmModeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
                         mBinding.flowAlarmDelayEdtIsc.setText(splitData[14]);
                         mBinding.flowAlarmClearEdtIsc.setText(splitData[15]);
-                        mBinding.flowOutputRelayEdtIsc.setText(splitData[16]);
+                        mBinding.flowOutputRelayEdtIsc.setText(mBinding.flowOutputRelayEdtIsc.getAdapter().getItem(Integer.parseInt(splitData[16])).toString());
                         mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[17].substring(0, 10));
                         mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[17].substring(11, 13));
                         mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[18])).toString());

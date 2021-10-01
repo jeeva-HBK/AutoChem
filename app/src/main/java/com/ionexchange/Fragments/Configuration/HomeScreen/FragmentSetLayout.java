@@ -683,7 +683,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                         }
                         if (windowNo == 6) {
                             textViewList.get(5).setText(mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo));
-                            viewList.get(5).setEnabled(textViewList.get(4).getText().toString().equals(sensorNotAdded));
+                            viewList.get(5).setEnabled(textViewList.get(5).getText().toString().equals(sensorNotAdded));
                             if (textViewList.get(5).getText().toString().equals(sensorNotAdded)) {
                                 mBinding.layout6Delete6.setVisibility(View.GONE);
                             } else {

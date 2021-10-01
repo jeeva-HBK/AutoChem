@@ -84,7 +84,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
         mBinding.candSaveFabIsc.setOnClickListener(this::save);
         mBinding.candDeleteFabIsc.setOnClickListener(this::delete);
         mBinding.candBackArrowIsc.setOnClickListener(v -> {
-            mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+            mAppClass.popStackBack(getActivity());
         });
         mBinding.candCompensationAtxtIsc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -25,7 +25,6 @@ import androidx.navigation.Navigation;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
@@ -53,14 +52,15 @@ import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
 public class ApplicationClass extends Application {
     private static final String TAG = "ApplicationClass";
 
-    public static int userType = 0; // 0 - None | 1 - Basic | 2 - intermediate | 3 - Advanced
+    public static int userType = 2; // 0 - None | 1 - Basic | 2 - intermediate | 3 - Advanced
 
     public static String[] sensorActivationArr = {"ENABLE", "DISABLE"},
+            roleType = {"None", "Basic", "Intermediate", "Advanced"},
             sensorTypeArr = {"Sensor", "Temperature", "Modbus", "Analog Input", "Flow/Water Meter",
-                   "Digital Input", "Tank Level", },
+                    "Digital Input", "Tank Level",},
             inputTypeArr = {"pH", "ORP", "Temperature", "Flow/Water Meter", "Contacting Conductivity",
                     "Toroidal Conductivity", "Analog Input", "Tank Level", "Digital Input", "Modbus Sensor"},
-            analogInputArr = {"Analog Input","pH", "ORP", "Temperature", "Flow/Water Meter",
+            analogInputArr = {"Analog Input", "pH", "ORP", "Temperature", "Flow/Water Meter",
                     "Contacting Conductivity", "Toroidal Conductivity", "Tank Level"},
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
@@ -99,7 +99,9 @@ public class ApplicationClass extends Application {
             tankArr = {"42", "43", "44", "45", "46", "47", "48", "49"},
             sensorsViArr = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49"},
             interlockChannel = {"Digital Input - 1", "Digital Input - 2", "Digital Input - 3", "Digital Input - 4", "Digital Input - 5", "Digital Input - 6", "Digital Input - 7", "Digital Input - 8", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4", "Tank Level - 5", "Tank Level - 6", "Tank Level - 7", "Tank Level - 8"},
-            functionMode, modeInhibitor = {"Continuous", "Bleed/Blow Down", "Water Meter/Biocide"},
+            functionMode,
+            fMode = {"Disable","Inhibitor", "sensor", "Analog"},
+            modeInhibitor = {"Continuous", "Bleed/Blow Down", "Water Meter/Biocide"},
             modeSensor = {"On/Off", "PID", "Fuzzy"}, modeAnalog = {"Disable", "Probe", "Test", "Pump Status", "Dosing"},
             flowMeters = {"Flow Meter 1", "Flow Meter 2", "Flow Meter 3", "Flow Meter 4", "Flow Meter 5", "Flow Meter 6", "Flow Meter 7", "Flow Meter 8"},
             bleedRelay = {"Output 01", "Output 02", "Output 03", "Output 04", "Output 05", "Output 06", "Output 07", "Output 08", "Output 09", "Output 10", "Output 11", "Output 12", "Output 13", "Output 14"},
