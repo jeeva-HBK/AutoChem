@@ -1,6 +1,8 @@
 package com.ionexchange.Fragments.Dashboard;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +17,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Adapters.DashboardRvAdapter;
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
+import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.MainConfigurationDao;
 import com.ionexchange.Database.Entity.MainConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
@@ -25,18 +29,37 @@ import com.ionexchange.databinding.FragmentDashboardBinding;
 
 import java.util.List;
 
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_DIAGNOSTIC;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 
-public class FragmentDashboard extends Fragment implements View.OnClickListener, RvOnClick {
-
+public class FragmentDashboard extends Fragment implements View.OnClickListener, RvOnClick, DataReceiveCallback {
     FragmentDashboardBinding mBinding;
     List<MainConfigurationEntity> mainConfigurationEntityList;
     DefaultLayoutConfigurationDao defaultLayoutConfigurationDao;
     MainConfigurationDao mainConfigurationDao;
+    KeepAliveCurrentValueDao keepAliveCurrentValueDao;
     WaterTreatmentDb db;
     BaseActivity baseActivity;
     ApplicationClass mAppClass;
     int girdCount, layout, screenNo, pageNo = 1;
     int maxPage;
+    String mData = "{*1$11$0$012500$05212125$2401212$3540$07007$2729$2594$3425$2945$2345*}";
+    CountDownTimer mTimer = new CountDownTimer(5000, 0) {
+        @Override
+        public void onTick(long l) {
+            Log.e("mTimer", "onTick: " + l);
+        }
+
+        @Override
+        public void onFinish() {
+            mAppClass.sendPacket(FragmentDashboard.this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + "0");
+        }
+    }.start();
 
     @Nullable
     @Override
@@ -160,5 +183,45 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
             mAppClass.showSnackBar(getContext(), "Sensor Not Added");
         }
 
+    }
+
+    @Override
+    public void OnDataReceive(String data) {
+        if (data.equals("FailedToConnect")) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
+        }
+        if (data.equals("pckError")) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
+        }
+        if (data.equals("sendCatch")) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
+        }
+        if (data.equals("Timeout")) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
+        }
+        if (data != null) {
+            handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
+        }
+    }
+
+    private void handleResponse(String[] splitData) {
+        Log.e("TAG", "handleResponse: ");
+        keepAliveCurrentValueDao = db.keepAliveCurrentValueDao();
+        if (splitData[0].equals(READ_PACKET)) {
+            if (splitData[1].equals(PCK_DIAGNOSTIC)) {
+                if (splitData[2].equals(RES_SUCCESS)) {
+                    keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[3].substring(0, 2)), splitData[3].substring(2, splitData[3].length()));
+                    keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[4].substring(0, 2)), splitData[4].substring(2, splitData[4].length()));
+                    keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[5].substring(0, 2)), splitData[5].substring(2, splitData[5].length()));
+                    keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[6].substring(0, 2)), splitData[6].substring(2, splitData[6].length()));
+                    keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[7].substring(0, 2)), splitData[7].substring(2, splitData[7].length()));
+                    keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[8].substring(0, 2)), splitData[8].substring(2, splitData[8].length()));
+                    keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[9].substring(0, 2)), splitData[9].substring(2, splitData[9].length()));
+                    keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[10].substring(0, 2)), splitData[10].substring(2, splitData[10].length()));
+                    keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[11].substring(0, 2)), splitData[11].substring(2, splitData[11].length()));
+                    keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[12].substring(0, 2)), splitData[12].substring(2, splitData[12].length()));
+                }
+            }
+        }
     }
 }

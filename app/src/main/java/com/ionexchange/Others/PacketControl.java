@@ -15,7 +15,7 @@ public class PacketControl {
     /* Packet Identifier */
     public static String PCK_connectPacket = "00", PCK_panelIpConfig = "01", PCK_target_ip = "02", PCK_GENERAL = "03",
             PCK_INPUT_SENSOR_CONFIG = "04", VIRTUAL_INPUT = "05",
-            PCK_OUTPUT_CONFIG = "06", PCK_TIMER_CONFIG = "08", PCK_WEEKLY_CONFIG = "09",
+            PCK_OUTPUT_CONFIG = "06", PCK_TIMER_CONFIG = "08", PCK_WEEKLY_CONFIG = "09", PCK_DIAGNOSTIC = "11",
 
     /* Connect Packet */
     APP_VERSION = BuildConfig.VERSION_NAME, CONNECT_COMMAND = "0", DISCONNECT_COMMAND = "1",

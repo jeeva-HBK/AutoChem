@@ -5,7 +5,6 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
 import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 
 import java.util.List;
@@ -21,4 +20,7 @@ public interface KeepAliveCurrentValueDao {
 
     @Query("select currentValue  FROM KeepAliveCurrentEntity WHERE  hardwareNo = :hardwareNo ")
     String getCurrentValue(int hardwareNo);
+
+    @Query("Update KeepAliveCurrentEntity SET currentValue = :cValue WHERE hardwareNo = :hardwareNo")
+    void updateCurrentValue(int hardwareNo, String cValue);
 }

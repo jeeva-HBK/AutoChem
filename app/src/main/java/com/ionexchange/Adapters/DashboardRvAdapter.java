@@ -122,7 +122,6 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
 
     void defaultLayout(TextView seq, TextView hardwareNoOne, TextView lowAlarmOne, TextView highAlarmOne, TextView currentValue, int position) {
         seq.setText(mainConfigurationEntityList.get(position).inputType);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             seq.setTooltipText(mainConfigurationEntityList.get(position).inputType);
         }

@@ -64,7 +64,8 @@ public class SelectSensorListAdapter extends RecyclerView.Adapter<SelectSensorLi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         switch (adapterType) {
             case 0:
-                holder.sensorItem.setText(inputConfigurationEntityList.get(position).inputType);
+                holder.sensorItem.setText(inputConfigurationEntityList.get(position).inputType
+                        + "(" + "Input No: " + inputConfigurationEntityList.get(position).getHardwareNo() + ")");
                 break;
             case 1:
                 holder.sensorItem.setText(virtualConfigurationEntityList.get(position).virtualType

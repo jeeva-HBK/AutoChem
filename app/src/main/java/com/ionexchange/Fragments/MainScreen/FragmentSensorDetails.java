@@ -121,7 +121,6 @@ public class FragmentSensorDetails extends Fragment {
                     }
                 }
             }
-
         });
 
         mBinding.btnPerv.setOnClickListener(new View.OnClickListener() {
@@ -218,7 +217,6 @@ public class FragmentSensorDetails extends Fragment {
                                 setAdapter(formVirtualMap(data.split("\\*")[1].split("\\$")));
                             }
                         }
-
                     } else {
                         mAppClass.showSnackBar(getContext(), getString(R.string.wrongPack));
                     }
@@ -428,6 +426,11 @@ public class FragmentSensorDetails extends Fragment {
                 tempMap.remove(smoothingFactor);
                 tempMap.remove(tempSensorLinked);
                 break;
+
+            case 2:
+                tempMap.remove(seqNumber);
+                tempMap.remove(sensorActivation);
+                break;
         }
         finalSensorParamList = splitIntoParts(convertMap(tempMap), pageMax);
         return finalSensorParamList.get(0);
@@ -450,6 +453,12 @@ public class FragmentSensorDetails extends Fragment {
             case 1:
                 tempMap.remove(sensorActivation);
                 tempMap.remove(smoothingFactor);
+                tempMap.remove(seqNumber);
+                break;
+
+            case 2:
+                tempMap.remove(seqNumber);
+                tempMap.remove(sensorActivation);
                 break;
         }
         finalSensorParamList = splitIntoParts(convertMap(tempMap), pageMax);
@@ -517,11 +526,13 @@ public class FragmentSensorDetails extends Fragment {
                 tempMap.put(compFactor, "0");
                 tempMap.remove(compFactor);
                 tempMap.remove(smoothingFactor);
+                tempMap.remove(seqNumber);
                 tempMap.remove(sensorActivation);
                 break;
 
             case 2:
-
+                tempMap.remove(seqNumber);
+                tempMap.remove(sensorActivation);
                 break;
         }
         finalSensorParamList = splitIntoParts(convertMap(tempMap), pageMax);
@@ -559,13 +570,15 @@ public class FragmentSensorDetails extends Fragment {
         switch (userType) {
             case 1:
                 tempMap.remove(compType);
+                tempMap.remove(seqNumber);
                 tempMap.remove(compFactor);
                 tempMap.remove(smoothingFactor);
                 tempMap.remove(sensorActivation);
                 break;
 
             case 2:
-
+                tempMap.remove(seqNumber);
+                tempMap.remove(sensorActivation);
                 break;
         }
         finalSensorParamList = splitIntoParts(convertMap(tempMap), pageMax);
@@ -688,7 +701,7 @@ public class FragmentSensorDetails extends Fragment {
         tempMap.put(inpuType, getValueFromArr(splitData[4], inputTypeArr));
         tempMap.put("Flow Meter Type", getValueFromArr(splitData[5], flowMeterTypeArr));
         tempMap.put(seqNumber, splitData[6]);
-        tempMap.put(sensorActivation, splitData[7]);
+        tempMap.put(sensorActivation, getValueFromArr(splitData[7], sensorActivationArr));
         tempMap.put(inputLabel, splitData[8]);
         tempMap.put("Flow Unit", getValueFromArr(splitData[9], flowUnitArr));
 
@@ -744,6 +757,11 @@ public class FragmentSensorDetails extends Fragment {
         switch (userType) {
             case 1:
                 tempMap.remove(smoothingFactor);
+                tempMap.remove(sensorActivation);
+                tempMap.remove(seqNumber);
+                break;
+            case 2:
+                tempMap.remove(seqNumber);
                 tempMap.remove(sensorActivation);
                 break;
         }

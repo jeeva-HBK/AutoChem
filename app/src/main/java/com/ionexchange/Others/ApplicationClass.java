@@ -537,10 +537,10 @@ public class ApplicationClass extends Application {
         WaterTreatmentDb dB;
         dB = WaterTreatmentDb.getDatabase(getApplicationContext());
         dao = dB.keepAliveCurrentValueDao();
-        if (dao.getKeepAliveList()!=null){
+        if (dao.getKeepAliveList() != null) {
             for (int i = 1; i < 54; i++) {
                 KeepAliveCurrentEntity keepAliveCurrentEntity =
-                        new KeepAliveCurrentEntity(i,String.valueOf(i));
+                        new KeepAliveCurrentEntity(i, "Nill");
                 List<KeepAliveCurrentEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(keepAliveCurrentEntity);
                 insertKeepAliveDb(entryListUpdate);
@@ -553,7 +553,6 @@ public class ApplicationClass extends Application {
         DefaultLayoutConfigurationDao dao = db.defaultLayoutConfigurationDao();
         dao.insert(entryList.toArray(new DefaultLayoutConfigurationEntity[0]));
     }
-
 
     public void insertKeepAliveDb(List<KeepAliveCurrentEntity> entryList) {
         WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getApplicationContext());

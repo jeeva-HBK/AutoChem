@@ -25,7 +25,6 @@ public class FragmentSensorCalibration extends Fragment implements CompoundButto
         return mBinding.getRoot();
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

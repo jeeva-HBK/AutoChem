@@ -85,7 +85,6 @@
             app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
 
-
         <RadioGroup
             android:id="@+id/radio_group"
             android:layout_width="match_parent"

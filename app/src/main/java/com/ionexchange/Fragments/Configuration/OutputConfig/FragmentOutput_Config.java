@@ -214,7 +214,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                     mBinding.outputRow14SensorPID.setVisibility(View.GONE);
                     mBinding.outputRow17AnalogTest.setVisibility(View.GONE);
                     mBinding.outputRow18AnalogDisabled.setVisibility(View.GONE);
-
                 } else {
                     mBinding.outputLabelOs.setEnabled(false);
                     mBinding.outputRow2.setVisibility(View.GONE);
