@@ -33,6 +33,7 @@ import static com.ionexchange.Others.ApplicationClass.analogInputArr;
 import static com.ionexchange.Others.ApplicationClass.bleedRelay;
 import static com.ionexchange.Others.ApplicationClass.bufferArr;
 import static com.ionexchange.Others.ApplicationClass.calculationArr;
+import static com.ionexchange.Others.ApplicationClass.doseTypeArr;
 import static com.ionexchange.Others.ApplicationClass.fMode;
 import static com.ionexchange.Others.ApplicationClass.flowAlarmMode;
 import static com.ionexchange.Others.ApplicationClass.flowMeterTypeArr;
@@ -280,10 +281,10 @@ public class FragmentSensorDetails extends Fragment {
         if (splitData[4].equals("0")) {
             // Disable
         } else if (splitData[4].equals("1")) { // inhibitor
+            tempMap.put("Output Mode", getValueFromArr(splitData[8], modeInhibitor));
             tempMap.put("Output Label", splitData[5]);
             tempMap.put("Interlock channel", getValueFromArr(splitData[6], interlockChannel));
             tempMap.put("Activate channel", getValueFromArr(splitData[7], interlockChannel));
-            tempMap.put("Output Mode", getValueFromArr(splitData[8], modeInhibitor));
             if (userType == 3) {
                 if (splitData[8].equals("0")) { // Continuous
                     tempMap.put("Pump Flow Rate", splitData[9]);
@@ -307,15 +308,15 @@ public class FragmentSensorDetails extends Fragment {
                 }
             }
         } else if (splitData[4].equals("2")) { // Sensor
+            tempMap.put("Sensor Mode", getValueFromArr(splitData[9], modeSensor));
             tempMap.put("Output Label", splitData[5]);
             tempMap.put("Interlock channel", getValueFromArr((Integer.parseInt(splitData[6]) - 30) + "", interlockChannel));
             tempMap.put("Activate channel", getValueFromArr((Integer.parseInt(splitData[7]) - 30) + "", interlockChannel));
-            tempMap.put("Link Input Sensor", getValueFromArr(splitData[8], getSensorInputArray()));
-            tempMap.put("Sensor Mode", getValueFromArr(splitData[9], modeSensor));
             if (userType == 3) {
                 if (splitData[9].equals("0")) { // On/Off
                     tempMap.put("Set Point", splitData[10]);
-                    tempMap.put("Dose Type", splitData[11]);
+                    tempMap.put("Dose Type", getValueFromArr(splitData[11],doseTypeArr));
+                    tempMap.put("Link Input Sensor", getValueFromArr(splitData[8], getSensorInputArray()));
                     tempMap.put("Hysteresis", splitData[12]);
                     tempMap.put("Duty Cycle", splitData[13]);
                     tempMap.put("Lock Out Delay Time", splitData[14]);
@@ -340,7 +341,7 @@ public class FragmentSensorDetails extends Fragment {
 
             }
         } else if (splitData[4].equals("3")) { // Analog
-            tempMap.put("Mode", getValueFromArr(splitData[5], modeAnalog));
+            tempMap.put("Sensor Mode", getValueFromArr(splitData[5], modeAnalog));
             tempMap.put("Link Input Relay", getValueFromArr(splitData[6], getSensorInputArray()));
             if (splitData[5].equals("0")) {
 
@@ -678,17 +679,22 @@ public class FragmentSensorDetails extends Fragment {
         tempMap.put(unitOfMeasurement, getValueFromArr(splitData[10], modBusUnitArr));
         tempMap.put(minValue, splitData[11]);
         tempMap.put(maxValue, splitData[12]);
-        tempMap.put(alarmLow, splitData[13]);
-        tempMap.put(alarmHigh, splitData[14]);
-        tempMap.put(calibrationRequiredAlarm, splitData[15]);
-        tempMap.put(resetCalibration, splitData[16]);
+        tempMap.put("Diagnostic Sweep",splitData[13]); // todo need 2 change
+        tempMap.put(smoothingFactor,splitData[14]);
+        tempMap.put(alarmLow, splitData[15]);
+        tempMap.put(alarmHigh, splitData[16]);
+        tempMap.put(calibrationRequiredAlarm, splitData[17]);
+        tempMap.put(resetCalibration, splitData[18]);
 
         switch (userType) {
             case 1:
                 tempMap.remove(smoothingFactor);
                 tempMap.remove(sensorActivation);
+                tempMap.remove(seqNumber);
                 break;
             case 2:
+                tempMap.remove(sensorActivation);
+                tempMap.remove(seqNumber);
                 break;
         }
         finalSensorParamList = splitIntoParts(convertMap(tempMap), pageMax);

@@ -48,7 +48,7 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     ApplicationClass mAppClass;
     int girdCount, layout, screenNo, pageNo = 1;
     int maxPage;
-    String mData = "{*1$11$0$012500$05212125$2401212$3540$07007$2729$2594$3425$2945$2345*}";
+    /*  String mData = "{*1$11$0$012500$05212125$2401212$3540$07007$2729$2594$3425$2945$2345*}";
     CountDownTimer mTimer = new CountDownTimer(5000, 0) {
         @Override
         public void onTick(long l) {
@@ -59,7 +59,7 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         public void onFinish() {
             mAppClass.sendPacket(FragmentDashboard.this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + "0");
         }
-    }.start();
+    }.start();*/
 
     @Nullable
     @Override
