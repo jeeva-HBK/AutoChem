@@ -245,6 +245,68 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                     mBinding.analogMinMaDeciOsc.setEnabled(false);
                     mBinding.analogMaxMaEdtOsc.setEnabled(false);
                     mBinding.analogMaxMaDeciOsc.setEnabled(false);
+                } else {
+                    mBinding.outputLabelOs.setEnabled(false);
+                    // mBinding.functionModeOs.setEnabled(false);
+                    //  mBinding.modeOs.setEnabled(false);
+                    mBinding.outputInterLockChannelOs.setEnabled(false);
+                    mBinding.outputActivateChannelOs.setEnabled(false);
+
+                    // Inhibitor
+                    mBinding.contFlowRateTilOsc.setEnabled(false);
+                    mBinding.contFlowRateDeciOsc.setEnabled(false);
+                    mBinding.contDoseRateTilOsc.setEnabled(false);
+                    mBinding.contDoseRateDeciOsc.setEnabled(false);
+                    mBinding.contDosePeriodTilOsc.setEnabled(false);
+                    mBinding.bleedPumpFlowRateTilOsc.setEnabled(false);
+                    mBinding.bleedPumpFlowRateDeciOsc.setEnabled(false);
+                    mBinding.bleedBleedFlowRateTilOsc.setEnabled(false);
+                    mBinding.bleedBleedFlowrateDeciOsc.setEnabled(false);
+                    mBinding.bleedTargetPPMTilOsc.setEnabled(false);
+                    mBinding.bleedTargetPPMDeciOsc.setEnabled(false);
+                    mBinding.bleedLinkBleedRelayTilOsc.setEnabled(false);
+                    mBinding.bleedSpecificGravityTilOsc.setEnabled(false);
+                    mBinding.bleedSpecificGravityDeciOsc.setEnabled(false);
+                    mBinding.bleedConcentrationTilOsc.setEnabled(false);
+                    mBinding.waterFlowMeterTypeTilOsc.setEnabled(false);
+                    mBinding.waterPumpFlowRateTilOsc.setEnabled(false);
+                    mBinding.waterPumpFlowRateDeciOsc.setEnabled(false);
+                    mBinding.waterTargetPPMTilOsc.setEnabled(false);
+                    mBinding.waterTargetPPMDeciOsc.setEnabled(false);
+                    mBinding.waterConcentrationTilOsc.setEnabled(false);
+                    mBinding.waterBleedRelayTilOsc.setEnabled(false);
+                    mBinding.waterSpecificGravityTilOsc.setEnabled(false);
+                    mBinding.waterSpecificGravityDeciOsc.setEnabled(false);
+                    mBinding.waterFlowMeterInputTilOsc.setEnabled(false);
+
+                    //sensor
+                    mBinding.sensorLinkInputSensorTilOsc.setEnabled(false);
+                    mBinding.sensorSetPointTilOsc.setEnabled(false);
+                    mBinding.sensorSetPointDeciOsc.setEnabled(false);
+                    mBinding.sensorDoseTypeTilOsc.setEnabled(false);
+                    mBinding.sensorDutyCycleTilOsc.setEnabled(false);
+                    mBinding.sensorSafetyMinTilOsc.setEnabled(false);
+                    mBinding.sensorSafetyMaxTilOsc.setEnabled(false);
+                    mBinding.sensorLockoutTimeDelayTilOsc.setEnabled(false);
+                    mBinding.sensorHysteresisRootOsc.setEnabled(false);
+                    mBinding.pidSetPointTilOsc.setEnabled(false);
+                    mBinding.pidSetPointDeciOsc.setEnabled(false);
+                    mBinding.pidGainTilOsc.setEnabled(false);
+                    mBinding.pidGainDeciOsc.setEnabled(false);
+                    mBinding.pidIntegeralTimeTilOsc.setEnabled(false);
+                    mBinding.pidIntegeralTimeDeciOsc.setEnabled(false);
+                    mBinding.pidDerivativeTimeTilOsc.setEnabled(false);
+                    mBinding.pidDerivativeTimeDeciOsc.setEnabled(false);
+                    mBinding.pidInputMinTilOsc.setEnabled(false);
+                    mBinding.pidInputMaxTilOsc.setEnabled(false);
+                    mBinding.pidMinOutputTilOsc.setEnabled(false);
+                    mBinding.pidMaxOutputTilOsc.setEnabled(false);
+                    mBinding.pidSafetyMinTilOsc.setEnabled(false);
+                    mBinding.pidSafetyMaxTilOsc.setEnabled(false);
+                    mBinding.pidResetPidTilOsc.setEnabled(false);
+                    mBinding.pidLockoutDelayTilOsc.setEnabled(false);
+                    mBinding.pidDoseTypeTilOsc.setEnabled(false);
+                    mBinding.pidLinkInputTilOsc.setEnabled(false);
                 }
                 break;
         }
