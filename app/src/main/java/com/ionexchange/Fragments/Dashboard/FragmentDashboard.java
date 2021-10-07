@@ -117,7 +117,6 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         // startKeepAlive();
     }
 
-
     private void setDefaultPage() {
         mBinding.pageNo.setText("PageNo - " + pageNo);
         maxPage = mainConfigurationDao.maxPageNo(screenNo, layout);
