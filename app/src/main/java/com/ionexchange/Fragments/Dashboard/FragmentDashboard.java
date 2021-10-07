@@ -2,6 +2,7 @@ package com.ionexchange.Fragments.Dashboard;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,15 +49,16 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     static ApplicationClass mAppClass;
     int girdCount, layout, screenNo, pageNo = 1;
     int maxPage;
+    Handler handler;
     private static final String TAG = "FragmentDashboard";
-
-    CountDownTimer timer = new CountDownTimer(10000, 1000) {
-        public void onTick(long millisUntilFinished) {
-            Log.e(TAG, "onTick: " + millisUntilFinished);
+    CountDownTimer timer = new CountDownTimer(10000, 500) {
+        @Override
+        public void onTick(long l) {
         }
 
+        @Override
         public void onFinish() {
-            mAppClass.sendPacket(FragmentDashboard.this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + "0");
+            sendKeepAlive();
             start();
         }
     };
@@ -80,15 +82,41 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         setDefaultPage();
         mBinding.rightArrowIsBtn.setOnClickListener(this);
         mBinding.leftArrowIsBtn.setOnClickListener(this);
+        mBinding.rvDashboard.setNestedScrollingEnabled(false);
+
+        // sendKeepAlive();
     }
 
-    public void startKeepAlive() {
+    @Override
+    public void onResume() {
+        super.onResume();
         timer.start();
+        Log.e(TAG, "Timer Started !");
     }
 
-    public void stopKeepAlive() {
-        timer.start();
+    @Override
+    public void onPause() {
+        super.onPause();
+        timer.cancel();
+        Log.e(TAG, "Timer Canceled !");
     }
+
+    private void startKeepAlive() {
+        handler = null;
+        handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sendKeepAlive();
+            }
+        }, 10000);
+    }
+
+    private void sendKeepAlive() {
+        mAppClass.sendPacket(FragmentDashboard.this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + "0");
+        // startKeepAlive();
+    }
+
 
     private void setDefaultPage() {
         mBinding.pageNo.setText("PageNo - " + pageNo);
@@ -210,7 +238,6 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
 
     private void handleResponse(String[] splitData) {
         // {*1$ 11$ 0$ | 0125.00$ 02$ 03$ 04200.00$ 05$ 060.000000$ 070.000000$ 08$ 090.000000$ 10*}
-        Log.e("TAG", "handleResponse: ");
         keepAliveCurrentValueDao = db.keepAliveCurrentValueDao();
         if (splitData[0].equals(READ_PACKET)) {
             if (splitData[1].equals(PCK_DIAGNOSTIC)) {

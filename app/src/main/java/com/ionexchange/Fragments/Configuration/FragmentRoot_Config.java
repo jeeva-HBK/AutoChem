@@ -86,7 +86,7 @@ public class FragmentRoot_Config extends Fragment implements ExpandableListView.
         mBinding.expList.setDivider(getResources().getDrawable(R.color.primary));
 
         mActivity.changeToolBarVisibility(View.GONE);
-
+        mBinding.expList.setGroupIndicator(null);
         mBinding.expList.expandGroup(0);
         onGroupClick(mBinding.expList, null, 0, 0);
 //        onChildClick(mBinding.expList, mBinding.expList.getChildAt(0).getRootView(), 0, 0, 0);
