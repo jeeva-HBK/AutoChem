@@ -443,9 +443,26 @@ public class ApplicationClass extends Application {
         /*Input_DB*/
         inputDAO = DB.inputConfigurationDao();
         if (inputDAO.getInputConfigurationEntityList().isEmpty()) {
+            String sensorType = "SENSOR";
             for (int i = 1; i < 50; i++) {
+                if(i < 5){
+                    sensorType = "SENSOR";
+                }else if(i > 4 && i < 15){
+                    sensorType = "MODBUS";
+                }else if(i > 14 && i < 18){
+                    sensorType = "SENSOR";
+                }else if(i > 17 && i < 27){
+                    sensorType = "Analog";
+                }else if(i > 26 && i < 34){
+                    sensorType = "FLOWMETER";
+                }else if(i > 33 && i < 42){
+                    sensorType = "DIGITAL";
+                }else if(i > 41 && i < 50){
+                    sensorType = "TANK";
+                }
+
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                        (i, "N/A", "N/A","N/A",0, "N/A",
+                        (i, "N/A", sensorType, 0,"N/A",0, "N/A",
                                 "N/A", "N/A", 0);
                 List<InputConfigurationEntity> inputentryList = new ArrayList<>();
                 inputentryList.add(entityUpdate);

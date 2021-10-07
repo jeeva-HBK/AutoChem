@@ -347,7 +347,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.candInputNumberEdtIsc)),
-                                "N/A", "SENSOR","N/A",
+                                "N/A", "SENSOR", 0, "N/A",
                                 1, "N/A", "N/A", "N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
@@ -359,7 +359,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.candInputNumberEdtIsc)),
-                                mBinding.candSensorTypeAtxtIsc.getText().toString(),"SENSOR",
+                                mBinding.candSensorTypeAtxtIsc.getText().toString(),"SENSOR", 0,
                                 mBinding.candSensorTypeAtxtIsc.getText().toString(),
                                 1, getStringValue(0, mBinding.candInputLabelEdtIsc),
                                 getDecimalValue(mBinding.candLowAlarmEdtIsc, 7, mBinding.candAlarmlowDeciIsc, 2),

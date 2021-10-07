@@ -347,7 +347,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.modBusInputNumberTie)),
-                                "N/A", "MODBUS","N/A",1,
+                                "N/A", "MODBUS", 0, "N/A",1,
                                 "N/A", "N/A",
                                 "N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
@@ -360,7 +360,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.modBusInputNumberTie)),
-                                mBinding.modBusSensorTypeTie.getText().toString(),"MODBUS",
+                                mBinding.modBusSensorTypeTie.getText().toString(),"MODBUS", 0,
                                 mBinding.modBusTypeTie.getText().toString()+" - "+mBinding.modBusTypeOfValueReadTie.getText().toString(),
                                 1, getStringValue(0, mBinding.modBusInputLabelTie),
                                 getDecimalValue(mBinding.modBusAlarmLowTie, 3, mBinding.modbusAlarmLowIsc, 2),

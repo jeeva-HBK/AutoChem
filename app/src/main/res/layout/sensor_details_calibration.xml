@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
-            android:text="10-06-2021 |"
+            android:text="nill |"
             android:textSize="12dp"
             app:layout_constraintBottom_toBottomOf="@id/txt_last_calibration"
             app:layout_constraintStart_toEndOf="@id/txt_last_calibration"
@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
-            android:text="11:24:00IST |"
+            android:text="nill"
             android:textSize="12dp"
             app:layout_constraintBottom_toBottomOf="@id/txt_calibration_date"
             app:layout_constraintStart_toEndOf="@id/txt_calibration_date"
@@ -58,6 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
             android:text="SUCCESS"
+            android:visibility="gone"
             android:textColor="@color/green"
             android:textSize="12dp"
             app:layout_constraintBottom_toBottomOf="@id/txt_calibration_time"
@@ -93,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
-            android:text="- 0.7 |"
+            android:text="nill |"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/txt_gain"
             app:layout_constraintStart_toEndOf="@id/txt_gain"
@@ -116,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
-            android:text="-0.2"
+            android:text="nill"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/txt_offset"
             app:layout_constraintStart_toEndOf="@id/txt_offset"
@@ -135,6 +136,7 @@
             app:layout_constraintTop_toBottomOf="@id/txt_calibration_value" />
 
         <TextView
+            android:id="@+id/calibrationTypeTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
@@ -175,7 +177,6 @@
                     android:layout_weight="1"
                     android:background="@drawable/radio_flat_selector"
                     android:button="@null"
-                    android:checked="true"
                     android:gravity="center"
                     android:text="QUICK"
                     android:textColor="@color/radio_flat_text_selector"
@@ -209,7 +210,7 @@
             app:cardCornerRadius="8dp"
             app:cardElevation="5dp"
             app:cardMaxElevation="5dp"
-            app:layout_constraintBottom_toTopOf="@id/btn_precise_start_calibration"
+            app:layout_constraintBottom_toTopOf="@id/start_calibration_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_change">
@@ -229,7 +230,7 @@
                     android:gravity="center"
                     android:imeOptions="actionDone"
                     android:inputType="number"
-                    android:text="4.5"
+                    android:text="nill"
                     android:textColor="@color/colorSecondary"
                     android:textSize="30sp"
                     android:textStyle="bold"
@@ -243,7 +244,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_precise_start_calibration"
+            android:id="@+id/start_calibration_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorSecondary"

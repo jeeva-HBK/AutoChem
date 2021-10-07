@@ -324,7 +324,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.phInputNumberEdtIsc)),
-                                "N/A","SENSOR" , "N/A",
+                                "N/A","SENSOR" , 0,"N/A",
                                 1, "N/A", "N/A", "N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
@@ -335,7 +335,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.phInputNumberEdtIsc)),
-                                mBinding.phSensorTypeAtxtIsc.getText().toString(),"SENSOR",mBinding.phSensorTypeAtxtIsc.getText().toString(),
+                                mBinding.phSensorTypeAtxtIsc.getText().toString(),"SENSOR",0,mBinding.phSensorTypeAtxtIsc.getText().toString(),
                                 1, getStringValue(0, mBinding.phInputLabelEdtIsc),
                                 getStringValue(2, mBinding.phAlarmLowEdtIsc) + "." + getStringValue(2, mBinding.phAlarmLowDeciIsc),
                                 getStringValue(2, mBinding.phAlarmhighEdtIsc) + "." + getStringValue(2, mBinding.phHighAlarmDeciIsc), 1);

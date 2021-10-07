@@ -74,7 +74,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
         mAppClass = (ApplicationClass) getActivity().getApplication();
         dao = ApplicationClass.inputDAO;
 
-        mBinding.rightArrowIsBtn.setVisibility((dao.getInputConfigurationEntityFlagKeyList(1).size() / 9) > 0 ? View.VISIBLE : View.INVISIBLE);
+        mBinding.rightArrowIsBtn.setVisibility((dao.getInputConfigurationEntityFlagKeyList(1).size() / 9) > 0 ? View.VISIBLE : View.GONE);
         mBinding.addsensorIsBtn.setOnClickListener(this);
 
         mBinding.inputsRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
@@ -85,7 +85,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
             public void onClick(View view) {
                 currentPage--;
                 mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this, dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset = pageOffset - 9)));
-                mBinding.leftArrowIsBtn.setVisibility(currentPage <= 0 ? View.INVISIBLE : View.VISIBLE);
+                mBinding.leftArrowIsBtn.setVisibility(currentPage <= 0 ? View.GONE : View.VISIBLE);
                 mBinding.rightArrowIsBtn.setVisibility(View.VISIBLE);
             }
         });
@@ -96,7 +96,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
                 currentPage++;
                 mBinding.leftArrowIsBtn.setVisibility(View.VISIBLE);
                 mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this, dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset = pageOffset + 9)));
-                mBinding.rightArrowIsBtn.setVisibility(dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset + 9).isEmpty() ? View.INVISIBLE : View.VISIBLE);
+                mBinding.rightArrowIsBtn.setVisibility(dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset + 9).isEmpty() ? View.GONE : View.VISIBLE);
             }
         });
     }

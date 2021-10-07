@@ -493,6 +493,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     }
 
     private void sendFeedMonitorPacket(int sensorStatus) {
+        mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -521,6 +522,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     }
 
     private void sendPaddleWheelPacket(int sensorStatus) {
+        mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -544,6 +546,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     }
 
     private void sendContactorPacket(int sensorStatus) {
+        mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -566,6 +569,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     }
 
     private void sendAnalogPacket(int sensorStatus) {
+        mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -768,7 +772,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.flowInputNumberEdtIsc)),
-                                "N/A", "FLOWMETER", "N/A", 1,
+                                "N/A", "FLOWMETER", 0,"N/A", 1,
                                 "N/A", "N/A",
                                 "N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
@@ -782,6 +786,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 InputConfigurationEntity flowEntityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.flowInputNumberEdtIsc)),
                                 mBinding.flowSensorTypeAtxtIsc.getText().toString(), "FLOWMETER",
+                                Integer.parseInt(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr)),
                                 mBinding.flowSeqNumberAtxtIsc.getText().toString(),
                                 Integer.parseInt(sequenceNumber), getStringValue(0, mBinding.flowInputLabelEdtIsc),
                                 getDecimalValue(mBinding.flowAlarmLowEdtIsc, 10, mBinding.flowAlarmLowDeciIsc, 2),

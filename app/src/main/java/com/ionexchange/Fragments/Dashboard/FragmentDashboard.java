@@ -45,12 +45,12 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     KeepAliveCurrentValueDao keepAliveCurrentValueDao;
     WaterTreatmentDb db;
     BaseActivity baseActivity;
-    ApplicationClass mAppClass;
+    static ApplicationClass mAppClass;
     int girdCount, layout, screenNo, pageNo = 1;
     int maxPage;
     private static final String TAG = "FragmentDashboard";
 
-    CountDownTimer timer = new CountDownTimer(5000, 1000) {
+    CountDownTimer timer = new CountDownTimer(10000, 1000) {
         public void onTick(long millisUntilFinished) {
             Log.e(TAG, "onTick: " + millisUntilFinished);
         }
@@ -59,7 +59,7 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
             mAppClass.sendPacket(FragmentDashboard.this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + "0");
             start();
         }
-    }.start();
+    };
 
     @Nullable
     @Override
@@ -80,6 +80,14 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         setDefaultPage();
         mBinding.rightArrowIsBtn.setOnClickListener(this);
         mBinding.leftArrowIsBtn.setOnClickListener(this);
+    }
+
+    public void startKeepAlive() {
+        timer.start();
+    }
+
+    public void stopKeepAlive() {
+        timer.start();
     }
 
     private void setDefaultPage() {
@@ -163,14 +171,11 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         }
     }
 
+    @Override
+    public void onClick(int sensorInputNo) {}
 
     @Override
-    public void onClick(int sensorInputNo) {
-    }
-
-    @Override
-    public void onClick(String sensorInputNo) {
-    }
+    public void onClick(String sensorInputNo) {}
 
     @Override
     public void onClick(String sensorInputNo, String type, int position) {
@@ -182,7 +187,6 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         } else {
             mAppClass.showSnackBar(getContext(), "Sensor Not Added");
         }
-
     }
 
     @Override
@@ -261,9 +265,7 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
                     } else {
                         keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[12].substring(0, 2)), "N/A");
                     }
-                    if (mBinding.rvDashboard.getAdapter() != null) {
-                        mBinding.rvDashboard.getAdapter().notifyDataSetChanged();
-                    }
+                    setGridCount(pageNo);
                 }
             }
         }

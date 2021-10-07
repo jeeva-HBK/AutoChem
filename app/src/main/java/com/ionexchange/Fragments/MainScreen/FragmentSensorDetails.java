@@ -69,7 +69,7 @@ public class FragmentSensorDetails extends Fragment {
     ApplicationClass mAppClass;
     List<List<String[]>> finalSensorParamList;
     int currentPage = 0, pageMax = 8;
-    // String inputNumber;
+    String inputNumber, inputType, sensorType = "null", spareKey = "null";
     String inNumber = "Input Number", inpuType = "Input Type", seqNumber = "Sequence Number", sensorActivation = "Sensor Activation",
             inputLabel = "Input Label", bufferType = "Buffer Type", tempSensorLinked = "Temperature Sensor Linked", defTempValue = "Default Temperature Value",
             smoothingFactor = "Smoothing Factor", alarmLow = "Alarm Low", alarmHigh = "Alarm High", calibrationRequiredAlarm = "Calibration Required Alarm",
@@ -90,10 +90,12 @@ public class FragmentSensorDetails extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mContext = getActivity().getApplicationContext();
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        inputNumber = getArguments().getString("inputNumber");
+        inputType = getArguments().getString("inpuType");
         mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        getTCPData(getArguments().getString("inputNumber"), getArguments().getString("inpuType"));
+        getTCPData(inputNumber, inputType);
         mBinding.btnTrendCalibartion.setChecked(true);
-        getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), new FragmentSensorCalibration()).commit();
+
         mBinding.btnTrendCalibartion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -160,8 +162,11 @@ public class FragmentSensorDetails extends Fragment {
                     if (splitData[1].equals("04")) {
                         if (splitData[0].equals(READ_PACKET)) {
                             if (splitData[2].equals(RES_SUCCESS)) {
+                                Bundle mBundle = new Bundle();
+                                mBundle.putString("sensorType", getValueFromArr(splitData[4], inputTypeArr));
                                 switch (getValueFromArr(splitData[4], inputTypeArr)) {
                                     case "pH":
+                                        mBundle.putString("bufferType", splitData[8]);
                                         setAdapter(formpHMap(data.split("\\*")[1].split("\\$")));
                                         break;
 
@@ -200,8 +205,10 @@ public class FragmentSensorDetails extends Fragment {
                                     case "Modbus Sensor":
                                         setAdapter(formModbusMap(data.split("\\*")[1].split("\\$")));
                                         break;
-
                                 }
+
+                                getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), new FragmentSensorCalibration(mBundle)).commit();
+
                             } else if (splitData[2].equals(RES_FAILED)) {
                                 mAppClass.showSnackBar(getContext(), getString(R.string.readFailed));
                             }
@@ -602,7 +609,7 @@ public class FragmentSensorDetails extends Fragment {
         tempMap.put(alarmLow, splitData[14]);
         tempMap.put(alarmHigh, splitData[15]);
         tempMap.put(calibrationRequiredAlarm, splitData[16]);
-        tempMap.put(resetCalibration, splitData[17]);
+        tempMap.put(resetCalibration, getValueFromArr(splitData[17], resetCalibrationArr));
 
         switch (userType) {
             case 1:
@@ -611,6 +618,8 @@ public class FragmentSensorDetails extends Fragment {
                 break;
 
             case 2:
+                tempMap.remove(sensorActivation);
+                tempMap.remove(seqNumber);
                 break;
         }
         finalSensorParamList = splitIntoParts(convertMap(tempMap), pageMax);

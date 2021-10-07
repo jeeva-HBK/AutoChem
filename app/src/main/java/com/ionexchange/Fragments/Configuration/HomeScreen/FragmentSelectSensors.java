@@ -122,31 +122,31 @@ public class FragmentSelectSensors extends Fragment implements CompoundButton.On
         virtualConfigurationEntityList = new ArrayList<>();
         switch (compoundButton.getId()) {
             case R.id.inputRb:
-                setAdapter(0, b, "Sensor", inputConfigurationDao.getInputHardWareNoConfigurationEntityList(1, 13), 0);
+                setAdapter(0, b, "Sensor", inputConfigurationDao.getSensorTypeConfigurationEntityList("SENSOR"), 0);
                 break;
 
             case R.id.analogRb:
-                setAdapter(0, b, "Analog", inputConfigurationDao.getInputHardWareNoConfigurationEntityList(14, 21), 0);
+                setAdapter(0, b, "Analog", inputConfigurationDao.getSensorTypeConfigurationEntityList("Analog"), 0);
                 break;
 
             case R.id.flowMeterRb:
-                setAdapter(0, b, "Flowmeter", inputConfigurationDao.getInputHardWareNoConfigurationEntityList(22, 29), 0);
+                setAdapter(0, b, "Flowmeter", inputConfigurationDao.getSensorTypeConfigurationEntityList("FLOWMETER"), 0);
                 break;
 
             case R.id.digitalRb:
-                setAdapter(0, b, "Digital", inputConfigurationDao.getInputHardWareNoConfigurationEntityList(30, 37), 0);
+                setAdapter(0, b, "Digital", inputConfigurationDao.getSensorTypeConfigurationEntityList("DIGITAL"), 0);
                 break;
 
             case R.id.modbusRb:
-                setAdapter(0, b, "Modbus", inputConfigurationDao.getInputHardWareNoConfigurationEntityList(3, 13), 0);
+                setAdapter(0, b, "Modbus", inputConfigurationDao.getSensorTypeConfigurationEntityList("MODBUS"), 0);
                 break;
 
             case R.id.tankRb:
-                setAdapter(0, b, "Tank", inputConfigurationDao.getInputHardWareNoConfigurationEntityList(38, 45), 0);
+                setAdapter(0, b, "Tank", inputConfigurationDao.getSensorTypeConfigurationEntityList("TANK"), 0);
                 break;
 
             case R.id.virtualSensorRb:
-                setAdapter(1, b, "Virtual", virtualConfigurationDao.getVirtualHardWareNoConfigurationEntityList(46, 53), 1);
+                setAdapter(1, b, "Virtual", virtualConfigurationDao.getVirtualHardWareNoConfigurationEntityList(50, 57), 1);
                 break;
 
             case R.id.outputRb:

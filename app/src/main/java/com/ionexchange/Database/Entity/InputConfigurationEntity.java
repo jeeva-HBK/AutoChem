@@ -15,6 +15,9 @@ public class InputConfigurationEntity {
     @ColumnInfo(name = "sensorType")
     public String sensorType;
 
+    @ColumnInfo(name = "signalType")
+    public int signalType;
+
     @ColumnInfo(name = "inputsequenceName")
     public String inputsequenceName;
 
@@ -33,11 +36,12 @@ public class InputConfigurationEntity {
     @ColumnInfo(name = "flagKey")
     public int flagKey;
 
-    public InputConfigurationEntity(int hardwareNo, String inputType, String sensorType,String inputsequenceName,
+    public InputConfigurationEntity(int hardwareNo, String inputType, String sensorType, int signalType, String inputsequenceName,
                                     int inputSequenceNumber, String inputLabel, String subValueOne, String subValueTwo, int flagKey) {
         this.hardwareNo = hardwareNo;
         this.inputType = inputType;
         this.sensorType = sensorType;
+        this.signalType = signalType;
         this.inputsequenceName = inputsequenceName;
         this.inputSequenceNumber = inputSequenceNumber;
         this.inputLabel = inputLabel;
@@ -68,6 +72,14 @@ public class InputConfigurationEntity {
 
     public void setSensorType(String sensorType) {
         this.sensorType = sensorType;
+    }
+
+    public int getSignalType() {
+        return signalType;
+    }
+
+    public void setSignalType(int signalType) {
+        this.signalType = signalType;
     }
 
     public String getInputsequenceName() {

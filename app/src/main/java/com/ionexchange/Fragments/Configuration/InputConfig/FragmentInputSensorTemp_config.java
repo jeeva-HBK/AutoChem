@@ -292,7 +292,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         switch (flagValue) {
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(getStringValue(2, mBinding.tempInputNumberEdtIsc)), "N/A", "SENSOR","0",
+                        (Integer.parseInt(getStringValue(2, mBinding.tempInputNumberEdtIsc)), "N/A", "SENSOR",0,"0",
                                 1, "N/A", "N/A", "N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
@@ -303,7 +303,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.tempInputNumberEdtIsc)),
-                                mBinding.temSensorTypeAtxtIsc.getText().toString(),"SENSOR",mBinding.temSeqNumberAtxtIsc.getText().toString(),
+                                mBinding.temSensorTypeAtxtIsc.getText().toString(),"SENSOR",0, mBinding.temSeqNumberAtxtIsc.getText().toString(),
                                 Integer.parseInt(sensorSequence), getStringValue(0, mBinding.tempInputLabelEdtIsc),
                                 getDecimalValue(mBinding.tempLowAlarmTBtn, mBinding.tempLowAlarmEdtIsc, 3, mBinding.tempLowAlarmDeciIsc, 2),
                                 getDecimalValue(mBinding.tempHighAlarmTBtn, mBinding.tempHighAlarmEdtIsc, 3, mBinding.tempHighAlarmDeciIsc, 2), 1);

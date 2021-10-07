@@ -391,7 +391,8 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         } else if (isFieldEmpty(mBinding.analogSensorActivationTie)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.sensor_activation_validation));
             return false;
-        } else if (Float.parseFloat(getDecimalValue(mBinding.analogAlarmLowTie, 2, mBinding.lowAlarmMinValueIsc, 2)) >=
+        }
+        /*else if (Float.parseFloat(getDecimalValue(mBinding.analogAlarmLowTie, 2, mBinding.lowAlarmMinValueIsc, 2)) >=
                 Float.parseFloat(getDecimalValue(mBinding.analogHighLowTie, 2, mBinding.highAlarmMinValueIsc, 2))) {
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_limit_validation));
             return false;
@@ -399,7 +400,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                 Float.parseFloat(getDecimalValue(mBinding.analogMaxValueTie, 2, mBinding.analogMaxValueIsc, 2))) {
             mAppClass.showSnackBar(getContext(), getString(R.string.maxmin_validation));
             return false;
-        }
+        }*/
         return true;
     }
 
@@ -414,7 +415,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.analogInputNumberTie)), "N/A",
-                                "Analog","N/A",
+                                "Analog", 0, "N/A",
                                 1, "N/A", "N/A", "N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
@@ -429,7 +430,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                         (getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr).equals("3"))){
                     entityUpdate = new InputConfigurationEntity
                             (Integer.parseInt(getStringValue(2, mBinding.analogInputNumberTie)),
-                                    mBinding.analogSensorTypeTie.getText().toString(), "ANALOG",
+                                    mBinding.analogSensorTypeTie.getText().toString(), "ANALOG", 0,
                                     mBinding.analogSequenceNumberTie.getText().toString(),
                                     Integer.parseInt(sequenceNo), getStringValue(0, mBinding.analogInputLabelTie),
                                     (mBinding.analogLowAlarmTBtn.isChecked() ? "+" : "-") +mBinding.analogAlarmLowTie.getText().toString() + "." + mBinding.lowAlarmMinValueIsc.getText().toString(),
@@ -437,7 +438,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                 } else {
                     entityUpdate = new InputConfigurationEntity
                             (Integer.parseInt(getStringValue(2, mBinding.analogInputNumberTie)),
-                                    mBinding.analogSensorTypeTie.getText().toString(), "ANALOG",
+                                    mBinding.analogSensorTypeTie.getText().toString(), "ANALOG", 0,
                                     mBinding.analogSequenceNumberTie.getText().toString(),
                                     Integer.parseInt(sequenceNo), getStringValue(0, mBinding.analogInputLabelTie),
                                     mBinding.analogAlarmLowTie.getText().toString() + "." + mBinding.lowAlarmMinValueIsc.getText().toString(),

@@ -272,7 +272,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.orpInputNumberEdtIsc)), "N/A",
-                                "SENSOR","N/A",
+                                "SENSOR", 0, "N/A",
                                 1, "N/A", "N/A", "N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
@@ -285,7 +285,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.orpInputNumberEdtIsc)),
                                 mBinding.orpSensorTypeAtxtIsc.getText().toString(),
-                                "SENSOR",mBinding.orpSensorTypeAtxtIsc.getText().toString(),
+                                "SENSOR", 0, mBinding.orpSensorTypeAtxtIsc.getText().toString(),
                                 1, getStringValue(0, mBinding.orpInputLabelEdtIsc),
                                 getDecimalValue(mBinding.orpAlarmLowTBtn, mBinding.orpAlarmLowEdtIsc, 4, mBinding.orpAlarmLowDeciIsc, 2),
                                 getDecimalValue(mBinding.orpAlarmHighTBtn, mBinding.orpAlarmHighEdtIsc, 4, mBinding.orpAlarmHighDeciIsc, 2), 1);
