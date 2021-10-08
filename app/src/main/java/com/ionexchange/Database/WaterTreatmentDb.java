@@ -11,6 +11,7 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
+import com.ionexchange.Database.Dao.DiagnosticDataDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.MainConfigurationDao;
@@ -18,6 +19,7 @@ import com.ionexchange.Database.Dao.OutputConfigurationDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
+import com.ionexchange.Database.Entity.DiagnosticDataEntity;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 import com.ionexchange.Database.Entity.MainConfigurationEntity;
@@ -29,7 +31,7 @@ import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 @Database(entities = {InputConfigurationEntity.class, OutputConfigurationEntity.class,
         VirtualConfigurationEntity.class, TimerConfigurationEntity.class,
         DefaultLayoutConfigurationEntity.class, MainConfigurationEntity.class,
-        KeepAliveCurrentEntity.class},
+        KeepAliveCurrentEntity.class, DiagnosticDataEntity.class},
         version = 2, exportSchema = false)
 @TypeConverters(Converters.class)
 
@@ -73,5 +75,7 @@ public abstract class WaterTreatmentDb extends RoomDatabase {
     public abstract MainConfigurationDao mainConfigurationDao();
 
     public abstract KeepAliveCurrentValueDao keepAliveCurrentValueDao();
+
+    public abstract DiagnosticDataDao diagnosticDataDao();
 
 }

@@ -33,10 +33,13 @@ public interface InputConfigurationDao {
     @Query("select * FROM inputConfigurationEntity WHERE  hardwareNo BETWEEN :hardwareTo AND :hardwareNo")
     List<InputConfigurationEntity> getInputFlowHardWareNoConfigurationEntityList(int hardwareTo, int hardwareNo);
 
-    @Query("select subValueOne  FROM inputConfigurationEntity WHERE  hardwareNo = :hardwareNo ")
+    @Query("select subValueOne FROM inputConfigurationEntity WHERE hardwareNo = :hardwareNo ")
     String getLowAlarm(int hardwareNo);
 
-    @Query("select subValueTwo  FROM inputConfigurationEntity WHERE  hardwareNo = :hardwareNo ")
+    @Query("select subValueTwo FROM inputConfigurationEntity WHERE hardwareNo = :hardwareNo ")
     String getHighAlarm(int hardwareNo);
+
+    @Query("select inputLabel FROM inputConfigurationEntity WHERE hardwareNo = :hardwareNo ")
+    String getInputLabel(int hardwareNo);
 
 }

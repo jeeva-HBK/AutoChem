@@ -26,12 +26,14 @@ import androidx.navigation.Navigation;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
+import com.ionexchange.Database.Dao.DiagnosticDataDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
+import com.ionexchange.Database.Entity.DiagnosticDataEntity;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
@@ -65,7 +67,7 @@ public class ApplicationClass extends Application {
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},
-            unitArr = {"Ã‚ÂµS/cm", " mS/cm", "S/cm"},
+            unitArr = {"µS/cm", " mS/cm", "S/cm"},
             resetFlowTotalArr = {"No reset", "Reset"},
             sensorSequenceNumber = {"1-Sensor", "2-Sensor", "3-Sensor", "4-Sensor", "5-Sensor", "6-Sensor"},
             levelsensorSequenceNumber = {"None", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4",
@@ -166,6 +168,7 @@ public class ApplicationClass extends Application {
         initDB();
         setDefaultDb();
         setCurrentValueDb();
+
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
@@ -207,7 +210,6 @@ public class ApplicationClass extends Application {
             }
         });
     }
-
 
     public void registerReceiver() {
         IntentFilter intentFilter = new IntentFilter(ACTION_MyIntentService);
@@ -299,13 +301,11 @@ public class ApplicationClass extends Application {
         return formDigits(digit, j);
     }
 
-
     public void navigateTo(FragmentActivity fragAct, int desID) {
         try {
             Navigation.findNavController((Activity) fragAct, R.id.nav_host_frag).navigate(desID);
         } catch (Exception e) { Log.e("TAG", "navigateToBundle: " + e); }
     }
-
 
     public void navigateToBundle(FragmentActivity activity, int fragmentIDinNavigation, Bundle b) {
         try {
@@ -576,5 +576,4 @@ public class ApplicationClass extends Application {
         KeepAliveCurrentValueDao dao = db.keepAliveCurrentValueDao();
         dao.insert(entryList.toArray(new KeepAliveCurrentEntity[0]));
     }
-
 }

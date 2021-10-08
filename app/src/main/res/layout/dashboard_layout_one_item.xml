@@ -59,16 +59,27 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/layout_1_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLength="11"
+        android:text="N/A"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/layout_1_seq_number"
+        app:layout_constraintTop_toBottomOf="@+id/layout_1_seq_number" />
+
+
+    <TextView
         android:id="@+id/layout_1_hardware_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="N/A"
-        android:layout_marginTop="10sp"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/layout_1_seq_number"
-        app:layout_constraintTop_toBottomOf="@+id/layout_1_seq_number" />
+        app:layout_constraintStart_toStartOf="@+id/layout_1_label"
+        app:layout_constraintTop_toBottomOf="@+id/layout_1_label" />
 
     <TextView
         android:id="@+id/txt_layout_1_alarm_low"
@@ -153,7 +164,8 @@
         android:layout_height="wrap_content"
         android:text="N/A"
         android:textColor="@color/white"
-        android:textSize="50dp"
+        android:textSize="40sp"
+        android:maxLength="5"
         android:textStyle="bold"
         android:layout_margin="30dp"
         app:layout_constraintEnd_toEndOf="parent"

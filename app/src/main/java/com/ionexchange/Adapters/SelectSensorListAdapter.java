@@ -77,8 +77,6 @@ public class SelectSensorListAdapter extends RecyclerView.Adapter<SelectSensorLi
                         + "(" + outputConfigurationEntityList.get(position).outputLabel + ")");
                 break;
         }
-
-
     }
 
     @Override

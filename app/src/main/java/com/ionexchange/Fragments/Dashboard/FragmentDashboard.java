@@ -83,13 +83,12 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         mBinding.rightArrowIsBtn.setOnClickListener(this);
         mBinding.leftArrowIsBtn.setOnClickListener(this);
         mBinding.rvDashboard.setNestedScrollingEnabled(false);
-
-        // sendKeepAlive();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        sendKeepAlive();
         timer.start();
         Log.e(TAG, "Timer Started !");
     }
@@ -113,7 +112,7 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     }
 
     private void sendKeepAlive() {
-        mAppClass.sendPacket(FragmentDashboard.this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + "0");
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + "0");
         // startKeepAlive();
     }
 
@@ -220,17 +219,13 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     public void OnDataReceive(String data) {
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        }
-        if (data.equals("pckError")) {
+        } else if (data.equals("pckError")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        }
-        if (data.equals("sendCatch")) {
+        } else if (data.equals("sendCatch")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        }
-        if (data.equals("Timeout")) {
+        } else if (data.equals("Timeout")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
-        }
-        if (data != null) {
+        } else if (data != null) {
             handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
         }
     }

@@ -20,10 +20,7 @@ import com.ionexchange.R;
 
 import java.util.List;
 
-///Created By silambu
 public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.itemHolder> {
-
-
     int layout;
     List<MainConfigurationEntity> mainConfigurationEntityList;
     RvOnClick rvOnClick;
@@ -82,7 +79,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 holder.highAlarmOne.setTextSize(30);
                 holder.lowKeyOne.setTextSize(20);
                 holder.highKeyOne.setTextSize(20);
-                defaultLayout(holder.labeLOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne, holder.currentValueOne, position);
+                defaultLayout(holder.labeLOne, holder.sensorLabelOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne, holder.currentValueOne, position);
                 break;
 
             case 2:
@@ -94,7 +91,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 holder.highAlarmOne.setTextSize(30);
                 holder.lowKeyOne.setTextSize(20);
                 holder.highKeyOne.setTextSize(20);
-                defaultLayout(holder.labeLOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne, holder.currentValueOne, position);
+                defaultLayout(holder.labeLOne, holder.sensorLabelOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne, holder.currentValueOne, position);
                 break;
 
             case 3:
@@ -108,20 +105,20 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             case 5:
                 holder.lowKeyOne.setTextSize(20);
                 holder.highKeyOne.setTextSize(20);
-                defaultLayout(holder.labeLOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne, holder.currentValueOne, position);
+                defaultLayout(holder.labeLOne, holder.sensorLabelOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne, holder.currentValueOne, position);
                 break;
 
             case 6:
-                defaultLayout(holder.labeLOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne, holder.currentValueOne, position);
+                defaultLayout(holder.labeLOne, holder.sensorLabelOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne, holder.currentValueOne, position);
                 break;
 
         }
 
-
     }
 
-    void defaultLayout(TextView seq, TextView hardwareNoOne, TextView lowAlarmOne, TextView highAlarmOne, TextView currentValue, int position) {
+    void defaultLayout(TextView seq, TextView label, TextView hardwareNoOne, TextView lowAlarmOne, TextView highAlarmOne, TextView currentValue, int position) {
         seq.setText(mainConfigurationEntityList.get(position).inputType);
+        label.setText(inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(position).hardware_no));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             seq.setTooltipText(mainConfigurationEntityList.get(position).inputType);
         }
@@ -175,7 +172,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
     public class itemHolder extends RecyclerView.ViewHolder {
         ConstraintLayout constraintLayout;
         View layoutOne, layoutTwo, layoutThree;
-        TextView labeLOne, hardwareNoOne, currentValueOne, lowAlarmOne, highAlarmOne, lowKeyOne, highKeyOne, currentKeyOne;
+        TextView labeLOne, sensorLabelOne, hardwareNoOne, currentValueOne, lowAlarmOne, highAlarmOne, lowKeyOne, highKeyOne, currentKeyOne;
         TextView labeLTwo, hardwareNoTwo, currentValueTwo, lowAlarmTwo, highAlarmTwo, lowKeyTwo, highKeyTwo, currentKeyTwo;
         TextView labeLThree, hardwareNoThree, currentValueThree, lowAlarmThree, highAlarmThree, lowKeyThree, highKeyThree, currentKeyThree;
 
@@ -186,6 +183,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             layoutTwo = itemView.findViewById(R.id.layout_two);
             layoutThree = itemView.findViewById(R.id.layout_three);
             labeLOne = itemView.findViewById(R.id.layout_1_seq_number);
+            sensorLabelOne = itemView.findViewById(R.id.layout_1_label);
             hardwareNoOne = itemView.findViewById(R.id.layout_1_hardware_no);
             currentValueOne = itemView.findViewById(R.id.layout_one_current_value);
             highAlarmOne = itemView.findViewById(R.id.layout_1_high_alarm_value);
@@ -202,7 +200,6 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             lowKeyTwo = itemView.findViewById(R.id.txt_layout_2_alarm_low);
             highKeyTwo = itemView.findViewById(R.id.txt_layout_2_alarm_high);
             currentKeyTwo = itemView.findViewById(R.id.txt_layout_2_current);
-
 
             labeLThree = itemView.findViewById(R.id.layout_3_seq_number);
             hardwareNoThree = itemView.findViewById(R.id.layout_3_hardware_no);
