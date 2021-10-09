@@ -120,15 +120,12 @@ public class ApplicationClass extends Application {
             timerFlowSensor = {"Flow Sensor - 1", "Flow Sensor - 2", "Flow Sensor - 3", "Flow Sensor - 4", "Flow Sensor - 5", "Flow Sensor - 6",
                     "Flow Sensor - 7", "Flow Sensor - 8"},
             accessoryTimerMode = {"Timer Safety", "Timer Safety Flow", "Disabled"},
-            accessoryType = {" ON Before", "OFF Before", "ON After", " OFF After", "ON With", "OFF with"};
-
-
+            accessoryType = {" ON Before", "OFF Before", "ON After", " OFF After", " ON With", " OFF with"};
     /* Static Variables */
-    static String mIPAddress = "192.168.1.107", Packet;
-    public static String macAddress; //mac address of the unit controller
+    static String mIPAddress = "192.168.1.115", Packet;
+    public static String macAddress; // Mac address of the unit controller
     //static String mIPAddress = "192.168.2.37", Packet;
     static int mPortNumber = 9760;
-
     public static CountDownTimer packetTimeOut;
     Context mContext;
     public TCP tcp;

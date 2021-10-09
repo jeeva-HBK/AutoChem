@@ -110,16 +110,14 @@ public class FragmentRoot_EventLogs extends Fragment implements DataReceiveCallb
         if (splitData[1].equals("12")) {
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
-                    int i = 0, j = 4;
+                    int i = 0;
                     String currentTime = new SimpleDateFormat("yyyy.MM.dd | HH.mm.ss", Locale.getDefault()).format(new Date());
-                    while (i < splitData.length) {
-                        if (i < 4) {
-                            if (splitData[i].length() > 2) {
-                                setDiagnosticsDb(splitData[i].substring(0, 2),
-                                        splitData[i].substring(2, splitData[i].length()), currentTime);
-                            } else {
-                                setDiagnosticsDb(splitData[i], "Sensor Connected, No Data Received", currentTime);
-                            }
+                    while (i < 9) {
+                        if (splitData[i + 4].length() > 2) {
+                            setDiagnosticsDb(splitData[i + 4].substring(0, 2),
+                                    splitData[i + 4].substring(2, splitData[i + 4].length()), currentTime);
+                        } else {
+                            setDiagnosticsDb(splitData[i + 4], "No Data Received", currentTime);
                         }
                         i++;
                     }
