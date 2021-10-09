@@ -207,9 +207,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onBackPressed() {
-
-    }
+    public void onBackPressed() { }
 
     @Override
     public void onGroupExpand(int pos) {

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--Ip Address-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ipAdress"
+            style="@style/config_Til"
+            android:layout_width="300dp"
+            app:layout_constraintBottom_toTopOf="@+id/port"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ipAdressEdt"
+                style="@style/config_Edt"
+                android:hint="Target IP Adress"
+                android:digits="0123456789."
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Port Number-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/port"
+            style="@style/config_Til"
+            android:layout_margin="-3dp"
+            app:layout_constraintBottom_toTopOf="@+id/button"
+            app:layout_constraintEnd_toEndOf="@+id/ipAdress"
+            app:layout_constraintStart_toStartOf="@+id/ipAdress"
+            app:layout_constraintTop_toBottomOf="@+id/ipAdress">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/portEdt"
+                style="@style/config_Edt"
+                android:hint="Target Port"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/port"
+            app:layout_constraintStart_toStartOf="@+id/port"
+            app:layout_constraintTop_toBottomOf="@+id/port" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -122,10 +122,10 @@ public class ApplicationClass extends Application {
             accessoryTimerMode = {"Timer Safety", "Timer Safety Flow", "Disabled"},
             accessoryType = {" ON Before", "OFF Before", "ON After", " OFF After", " ON With", " OFF with"};
     /* Static Variables */
-    static String mIPAddress = "192.168.1.115", Packet;
+    public static String mIPAddress = "192.168.1.115", Packet;
     public static String macAddress; // Mac address of the unit controller
     //static String mIPAddress = "192.168.2.37", Packet;
-    static int mPortNumber = 9760;
+    public static int mPortNumber = 9760;
     public static CountDownTimer packetTimeOut;
     Context mContext;
     public TCP tcp;
@@ -353,7 +353,6 @@ public class ApplicationClass extends Application {
         tv.setTextColor(Color.WHITE);
         snackbar.show();
     }
-
     public static Boolean isValidIp(String ip) {
         Matcher matcher = IP_ADDRESS.matcher(ip);
         return matcher.matches();

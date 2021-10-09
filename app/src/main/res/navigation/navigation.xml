@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/Dashboard">
-
+    app:startDestination="@id/fragmentConnection">
 
     <fragment
         android:id="@+id/Dashboard"
@@ -243,6 +242,14 @@
         android:name="com.ionexchange.Fragments.Configuration.HomeScreen.FragmentSetLayout"
         android:label="FragmentSetLayout"
         tools:layout="@layout/fragment_setlayout" />
+    <fragment
+        android:id="@+id/fragmentConnection"
+        android:name="com.ionexchange.Fragments.Configuration.FragmentConnection"
+        android:label="FragmentConnection" >
+        <action
+            android:id="@+id/action_fragmentConnection_to_Dashboard"
+            app:destination="@id/Dashboard" />
+    </fragment>
 
 
 </navigation>

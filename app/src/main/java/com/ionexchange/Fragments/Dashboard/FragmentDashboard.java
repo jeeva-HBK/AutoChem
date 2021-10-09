@@ -112,7 +112,9 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     }
 
     private void sendKeepAlive() {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + "0");
+        mAppClass.sendPacket(this,
+                DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET +
+                        SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + "0");
         // startKeepAlive();
     }
 
