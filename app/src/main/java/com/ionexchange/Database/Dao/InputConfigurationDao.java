@@ -30,8 +30,8 @@ public interface InputConfigurationDao {
     @Query("select * FROM inputConfigurationEntity WHERE  sensorType = :sensorType")
     List<InputConfigurationEntity> getSensorTypeConfigurationEntityList(String sensorType);
 
-    @Query("select * FROM inputConfigurationEntity WHERE  hardwareNo BETWEEN :hardwareTo AND :hardwareNo")
-    List<InputConfigurationEntity> getInputFlowHardWareNoConfigurationEntityList(int hardwareTo, int hardwareNo);
+    @Query("select * FROM inputConfigurationEntity WHERE  signalType = :signalType")
+    List<InputConfigurationEntity> getAnalogInputHardWareNoConfigurationEntityList(int signalType);
 
     @Query("select subValueOne FROM inputConfigurationEntity WHERE hardwareNo = :hardwareNo ")
     String getLowAlarm(int hardwareNo);
@@ -41,5 +41,14 @@ public interface InputConfigurationDao {
 
     @Query("select inputLabel FROM inputConfigurationEntity WHERE hardwareNo = :hardwareNo ")
     String getInputLabel(int hardwareNo);
+
+    @Query("select inputType  FROM inputConfigurationEntity WHERE  hardwareNo = :hardwareNo ")
+    String getInputType(int hardwareNo);
+
+    @Query("select type  FROM inputConfigurationEntity WHERE  hardwareNo = :hardwareNo ")
+    String getType(int hardwareNo);
+
+    @Query("select unit  FROM inputConfigurationEntity WHERE  hardwareNo = :hardwareNo ")
+    String getUnit(int hardwareNo);
 
 }

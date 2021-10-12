@@ -276,7 +276,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.digitalInputNumberTie)),
                                 "N/A", "DIGITAL", 1, "N/A",1,
-                                "N/A", "N/A", "N/A", 0);
+                                "N/A", "N/A", "N/A", "N/A","N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
@@ -291,7 +291,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
                                 mBinding.digitalLevelSequenceNumberTie.getText().toString(),
                                 Integer.parseInt(sensorSequence), getStringValue(0, mBinding.digitalInputSensorLabelTie),
                                 "N/A",
-                                "N/A", 1);
+                                "N/A", "N/A","N/A", 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);

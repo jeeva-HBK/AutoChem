@@ -18,6 +18,8 @@ import com.ionexchange.databinding.FragmentConnectionBinding;
 import org.jetbrains.annotations.NotNull;
 
 import static com.ionexchange.Others.ApplicationClass.editor;
+import static com.ionexchange.Others.ApplicationClass.mIPAddress;
+import static com.ionexchange.Others.ApplicationClass.mPortNumber;
 
 public class FragmentConnection extends Fragment {
 
@@ -55,6 +57,8 @@ public class FragmentConnection extends Fragment {
                 editor.putString("prefIp", mBinding.ipAdressEdt.getText().toString());
                 editor.putString("prefPort", mBinding.portEdt.getText().toString());
                 editor.apply();
+                mIPAddress = mBinding.ipAdressEdt.getText().toString();
+                mPortNumber = Integer.parseInt(mBinding.portEdt.getText().toString());
                 mActivity.setNavigation(R.navigation.navigation, R.id.Dashboard);
             }
         });

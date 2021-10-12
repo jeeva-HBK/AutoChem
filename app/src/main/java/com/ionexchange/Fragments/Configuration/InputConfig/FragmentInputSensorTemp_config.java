@@ -293,7 +293,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.tempInputNumberEdtIsc)), "N/A", "SENSOR",0,"0",
-                                1, "N/A", "N/A", "N/A", 0);
+                                1, "N/A", "N/A", "N/A", "N/A","N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
@@ -306,7 +306,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
                                 mBinding.temSensorTypeAtxtIsc.getText().toString(),"SENSOR",0, mBinding.temSeqNumberAtxtIsc.getText().toString(),
                                 Integer.parseInt(sensorSequence), getStringValue(0, mBinding.tempInputLabelEdtIsc),
                                 getDecimalValue(mBinding.tempLowAlarmTBtn, mBinding.tempLowAlarmEdtIsc, 3, mBinding.tempLowAlarmDeciIsc, 2),
-                                getDecimalValue(mBinding.tempHighAlarmTBtn, mBinding.tempHighAlarmEdtIsc, 3, mBinding.tempHighAlarmDeciIsc, 2), 1);
+                                getDecimalValue(mBinding.tempHighAlarmTBtn, mBinding.tempHighAlarmEdtIsc, 3, mBinding.tempHighAlarmDeciIsc, 2), "N/A","N/A", 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);

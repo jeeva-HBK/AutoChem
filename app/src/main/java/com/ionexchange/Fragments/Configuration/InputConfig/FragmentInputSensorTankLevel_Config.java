@@ -231,7 +231,7 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.tankLevelInputNumberTie)), "N/A",
                                 "TANK", 1, "N/A",
-                                1, "N/A", "N/A", "N/A", 0);
+                                1, "N/A", "N/A", "N/A", "N/A","N/A", 0);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
@@ -246,7 +246,7 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                                 mBinding.tankLevelSequenceNumberTie.getText().toString(),
                                 Integer.parseInt(sensorSequence), getStringValue(0, mBinding.tankLevelInputSensorLabelTie),
                                 "N/A",
-                                "N/A", 1);
+                                "N/A", "N/A","N/A", 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);

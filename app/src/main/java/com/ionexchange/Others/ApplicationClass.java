@@ -57,7 +57,7 @@ public class ApplicationClass extends Application {
     public static SharedPreferences preferences;
     public static SharedPreferences.Editor editor;
 
-    public static int userType = 2; // 0 - None | 1 - Basic | 2 - intermediate | 3 - Advanced
+    public static int userType = 3; // 0 - None | 1 - Basic | 2 - intermediate | 3 - Advanced
 
     public static String[] sensorActivationArr = {"ENABLE", "DISABLE"},
             roleType = {"None", "Basic", "Intermediate", "Advanced"},
@@ -82,7 +82,6 @@ public class ApplicationClass extends Application {
             analogSequenceNumber = {"None", "Analog - 1", "Analog - 2", "Analog - 3", "Analog - 4",
                     "Analog - 5", "Analog - 6","Analog - 7","Analog - 8"},
             typeOfValueRead = {"None", "Fluorescence", "Turbidity", "Corrosion rate", "Pitting rate", "Fluorescence", "Tagged Polymer"},
-
             flowMeterTypeArr = {"Analog", "Contactor", "Paddle Wheel", "Feed Monitor"},
             flowUnitArr = {"Volume", "Gallons", "Litres", "Cubic Meters", "Millions of Gallons"},
             scheduleResetArr = {"No Schedule Reset", "Daily", "Monthly", "Annually"},
@@ -468,7 +467,7 @@ public class ApplicationClass extends Application {
 
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (i, "N/A", sensorType, 0,"N/A",0, "N/A",
-                                "N/A", "N/A", 0);
+                                "N/A", "N/A", "N/A", "N/A",0);
                 List<InputConfigurationEntity> inputentryList = new ArrayList<>();
                 inputentryList.add(entityUpdate);
                 updateInputDB(inputentryList);
