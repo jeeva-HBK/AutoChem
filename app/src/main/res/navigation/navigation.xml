@@ -245,11 +245,8 @@
     <fragment
         android:id="@+id/fragmentConnection"
         android:name="com.ionexchange.Fragments.Configuration.FragmentConnection"
-        android:label="FragmentConnection" >
-        <action
-            android:id="@+id/action_fragmentConnection_to_Dashboard"
-            app:destination="@id/Dashboard" />
-    </fragment>
+        android:label="FragmentConnection"
+        tools:layout="@layout/fragment_connection"/>
 
 
 </navigation>

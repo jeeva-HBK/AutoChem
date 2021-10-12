@@ -61,7 +61,7 @@ public class FragmentRoot_Config extends Fragment implements ExpandableListView.
         homescreenList = new ArrayList<>();
         headerList = new ArrayList<>();
 
-        generaList.add("- Unit IP Settings");
+        generaList.add("- Unit Settings");
         generaList.add("- Target IP Settings");
         generaList.add("- Site Settings");
 
@@ -89,7 +89,6 @@ public class FragmentRoot_Config extends Fragment implements ExpandableListView.
         mBinding.expList.setGroupIndicator(null);
         mBinding.expList.expandGroup(0);
         onGroupClick(mBinding.expList, null, 0, 0);
-//        onChildClick(mBinding.expList, mBinding.expList.getChildAt(0).getRootView(), 0, 0, 0);
 
         mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentUnitIpSettings_Config());
     }

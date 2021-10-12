@@ -13,8 +13,6 @@
             android:layout_height="match_parent"
             tools:context=".Activity.BaseActivity">
 
-
-
             <!--NavigationDrawer-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/view"
@@ -100,7 +98,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
             <fragment
                 android:id="@+id/nav_host_frag"
                 android:name="androidx.navigation.fragment.NavHostFragment"
@@ -162,7 +159,6 @@
                 app:layout_constraintStart_toStartOf="@id/homeSmallCircle"
                 app:layout_constraintTop_toTopOf="@id/homeSmallCircle" />
 
-
             <TextView
                 android:id="@+id/homeText"
                 android:layout_width="wrap_content"
@@ -174,7 +170,6 @@
                 app:layout_constraintEnd_toEndOf="@id/homeBigCircle"
                 app:layout_constraintStart_toStartOf="@id/homeBigCircle"
                 app:layout_constraintTop_toTopOf="@id/guideline2" />
-
 
             <View
                 android:id="@+id/main_screen_btn"
@@ -194,7 +189,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/supportMain"
                 app:layout_constraintStart_toEndOf="@+id/homeMain"
                 app:layout_constraintTop_toTopOf="@+id/view2" />
-
 
             <View
                 android:id="@+id/statisticsBigCircle"
@@ -395,7 +389,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.90" />
-
 
             <RelativeLayout
                 android:id="@+id/progress_circular"

@@ -80,15 +80,21 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.3" />
 
-            <ExpandableListView
-                android:id="@+id/expList"
+            <ScrollView
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:choiceMode="singleChoice"
+                android:layout_height="280dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guideline7" />
+                app:layout_constraintTop_toBottomOf="@+id/view5">
+
+                <ExpandableListView
+                    android:id="@+id/expList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:groupIndicator="@null" />
+
+            </ScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

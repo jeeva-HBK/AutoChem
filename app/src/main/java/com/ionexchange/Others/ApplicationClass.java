@@ -6,9 +6,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -26,14 +28,12 @@ import androidx.navigation.Navigation;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
-import com.ionexchange.Database.Dao.DiagnosticDataDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
-import com.ionexchange.Database.Entity.DiagnosticDataEntity;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
@@ -53,6 +53,9 @@ import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
 /* Created by Jeeva on 13/07/2021 */
 public class ApplicationClass extends Application {
     private static final String TAG = "ApplicationClass";
+
+    public static SharedPreferences preferences;
+    public static SharedPreferences.Editor editor;
 
     public static int userType = 2; // 0 - None | 1 - Basic | 2 - intermediate | 3 - Advanced
 
@@ -122,7 +125,7 @@ public class ApplicationClass extends Application {
             accessoryTimerMode = {"Timer Safety", "Timer Safety Flow", "Disabled"},
             accessoryType = {" ON Before", "OFF Before", "ON After", " OFF After", " ON With", " OFF with"};
     /* Static Variables */
-    public static String mIPAddress = "192.168.1.115", Packet;
+    public static String mIPAddress = "", Packet;
     public static String macAddress; // Mac address of the unit controller
     //static String mIPAddress = "192.168.2.37", Packet;
     public static int mPortNumber = 9760;
@@ -171,6 +174,12 @@ public class ApplicationClass extends Application {
             public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
                 try {
                     mContext = activity;
+                    preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    editor = preferences.edit();
+                    if (preferences != null) {
+                        mIPAddress = preferences.getString("prefIp", "");
+                        mPortNumber = Integer.parseInt(preferences.getString("prefPort", ""));
+                    }
                     registerReceiver();
                 } catch (Exception e) {
                     e.printStackTrace();

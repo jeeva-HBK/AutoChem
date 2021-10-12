@@ -104,14 +104,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_modbusType"
                 style="@style/config_AtxTil"
-                android:enabled="false">
+                >
 
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_type_tie"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/modbus_type"
-                    android:enabled="false"
                     style="@style/config_Atxt"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -451,7 +450,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_typeOfValueRead"
                 style="@style/config_AtxTil"
-                android:enabled="false">
+                >
 
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_typeOfValueRead_tie"

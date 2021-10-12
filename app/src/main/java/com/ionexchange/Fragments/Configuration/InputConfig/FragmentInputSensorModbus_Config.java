@@ -60,7 +60,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
     String sensorSequence;
     WaterTreatmentDb db;
     InputConfigurationDao dao;
-
+    String[] typeOfValueArr = new String[]{"Fluorescence", "Turbidity"};
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -104,9 +104,29 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
         mBinding.modBusTypeTie.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getContext(), mBinding.modbusSequenceNumberTie.getAdapter().getItem(i).toString(), Toast.LENGTH_SHORT).show();
-                mBinding.modbusSequenceNumberTie.setText(mBinding.modbusSequenceNumberTie.getAdapter().getItem(i).toString());
-                mBinding.modbusSequenceNumberTie.setAdapter(getAdapter(sensorSequenceNumber, getContext()));
+               // Toast.makeText(getContext(), mBinding.modbusSequenceNumberTie.getAdapter().getItem(i).toString(), Toast.LENGTH_SHORT).show();
+                mBinding.modBusTypeOfValueReadTie.setText("");
+                switch (i){
+                    case 0:
+                        typeOfValueArr = new String[]{"Fluorescence", "Turbidity"};
+                       break;
+                    case 1:
+                    case 2:
+                        typeOfValueArr = new String[]{"Corrosion rate", "Pitting rate"};
+                        break;
+                    case 3:
+                        typeOfValueArr = new String[]{"Tagged Polymer"};
+                        break;
+                    case 4:
+                        typeOfValueArr = new String[]{"Fluorescence","Tagged Polymer"};
+                        break;
+                    case 5:
+                        typeOfValueArr = new String[]{"Fluorescence"};
+                        break;
+                }
+                mBinding.modBusTypeOfValueReadTie.setAdapter(getAdapter(typeOfValueArr, getContext()));
+                //mBinding.modbusSequenceNumberTie.setText(mBinding.modbusSequenceNumberTie.getAdapter().getItem(i).toString());
+                //mBinding.modbusSequenceNumberTie.setAdapter(getAdapter(sensorSequenceNumber, getContext()));
             }
         });
 
@@ -129,13 +149,39 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
     void sendData(int sensorStatus) {
         if (validField()) {
             mActivity.showProgress();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + "0" + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+            int typeOfValueRead = 0;
+            int typeofValueReadPos= Integer.parseInt(getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeOfValueReadTie), typeOfValueArr))+1;
+            switch (getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeTie), modBusTypeArr)){
+                case "0":
+                case "5":
+                    typeOfValueRead = typeofValueReadPos;
+                    break;
+                case "1":
+                case "2":
+                    if(typeofValueReadPos == 1){
+                        typeOfValueRead = 3;
+                    }else{
+                        typeOfValueRead = 4;
+                    }
+                    break;
+                case "3":
+                    typeOfValueRead = 6;
+                    break;
+                case "4":
+                    if(typeofValueReadPos == 1){
+                        typeOfValueRead = 5;
+                    }else{
+                        typeOfValueRead = 6;
+                    }
+                    break;
+            }
+             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + "0" + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                     PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
                     getStringValue(2, mBinding.modBusInputNumberTie) + SPILT_CHAR +
                     getPositionFromAtxt(2, getStringValue(mBinding.modBusSensorTypeTie), inputTypeArr) + SPILT_CHAR +
                     getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeTie), modBusTypeArr) + SPILT_CHAR +
                     getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeTie), modBusTypeArr) + SPILT_CHAR +
-                    getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeOfValueReadTie), typeOfValueRead) + SPILT_CHAR +
+                    typeOfValueRead + SPILT_CHAR +
                     getPositionFromAtxt(1, getStringValue(mBinding.modBusSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
                     getStringValue(0, mBinding.modBusInputLabelTie) + SPILT_CHAR +
                     getPositionFromAtxt(1, getStringValue(mBinding.modBusUnitMeasurementTie), modBusUnitArr) + SPILT_CHAR +
@@ -158,7 +204,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
         mBinding.modBusUnitMeasurementTie.setAdapter(getAdapter(modBusUnitArr, getContext()));
         mBinding.modBusDiagnosticSweepTie.setAdapter(getAdapter(sensorActivationArr, getContext()));
         mBinding.modBusResetCalibrationTie.setAdapter(getAdapter(resetCalibrationArr, getContext()));
-        mBinding.modBusTypeOfValueReadTie.setAdapter(getAdapter(typeOfValueRead, getContext()));
+        mBinding.modBusTypeOfValueReadTie.setAdapter(getAdapter(typeOfValueArr, getContext()));
         mBinding.modbusSequenceNumberTie.setAdapter(getAdapter(sensorSequenceNumber, getContext()));
     }
     @Override
@@ -172,8 +218,33 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
             mBinding.modBusSensorTypeTie.setText(sensorName);
             mBinding.modbusDeleteLayoutIsc.setVisibility(View.GONE);
             mBinding.modBusTypeTie.setText(mBinding.modBusTypeTie.getAdapter().getItem(modbusType).toString());
+            switch (getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeTie), modBusTypeArr)){
+                case "0":
+                    typeOfValueArr = new String[]{"Fluorescence", "Turbidity"};
+                    modbusValue = modbusValue - 1;
+                    break;
+                case "1":
+                case "2":
+                    typeOfValueArr = new String[]{"Corrosion rate", "Pitting rate"};
+                    modbusValue = modbusValue - 3;
+                    break;
+                case "3":
+                    typeOfValueArr = new String[]{"Tagged Polymer"};
+                    modbusValue = 0;
+                    break;
+                case "4":
+                    typeOfValueArr = new String[]{"Fluorescence","Tagged Polymer"};
+                    modbusValue = modbusValue - 5;
+                    break;
+                case "5":
+                    typeOfValueArr = new String[]{"Fluorescence"};
+                    modbusValue = 1;
+                    break;
+            }
+            mBinding.modBusTypeOfValueReadTie.setAdapter(getAdapter(typeOfValueArr, getContext()));
             mBinding.modBusTypeOfValueReadTie.setText(mBinding.modBusTypeOfValueReadTie.getAdapter().getItem(modbusValue).toString());
             mBinding.modbusSaveTxtIsc.setText("ADD");
+            initAdapter();
         }
     }
 
@@ -207,17 +278,42 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                     mBinding.modBusSensorTypeTie.setText(mBinding.modBusSensorTypeTie.getAdapter().getItem(Integer.parseInt(data[4])).toString());
                     mBinding.modbusSequenceNumberTie.setText(mBinding.modbusSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[5])).toString());
                     mBinding.modBusTypeTie.setText(mBinding.modBusTypeTie.getAdapter().getItem(Integer.parseInt(data[6])).toString());
-                    mBinding.modBusTypeOfValueReadTie.setText(mBinding.modBusTypeOfValueReadTie.getAdapter().getItem(Integer.parseInt(data[7])).toString());
-                    mBinding.modBusSensorActivationTie.setText(mBinding.modBusSensorActivationTie.getAdapter().getItem(Integer.parseInt(data[8])).toString());
 
+                    int typeOfValueRead = 0;
+                    switch (Integer.parseInt(data[5])){
+                        case 0:
+                            typeOfValueArr = new String[]{"Fluorescence", "Turbidity"};
+                            typeOfValueRead = Integer.parseInt(data[7]) - 1;
+                            break;
+                        case 1:
+                        case 2:
+                            typeOfValueArr = new String[]{"Corrosion rate", "Pitting rate"};
+                            typeOfValueRead = Integer.parseInt(data[7]) - 3;
+                            break;
+                        case 3:
+                            typeOfValueArr = new String[]{"Tagged Polymer"};
+                            typeOfValueRead = 0;
+                            break;
+                        case 4:
+                            typeOfValueArr = new String[]{"Fluorescence","Tagged Polymer"};
+                            typeOfValueRead = Integer.parseInt(data[7]) - 5;
+                            break;
+                        case 5:
+                            typeOfValueArr = new String[]{"Fluorescence"};
+                            typeOfValueRead = 0;
+                            break;
+                    }
+                    mBinding.modBusTypeOfValueReadTie.setAdapter(getAdapter(typeOfValueArr, getContext()));
+                    mBinding.modBusTypeOfValueReadTie.setText(mBinding.modBusTypeOfValueReadTie.getAdapter().getItem(typeOfValueRead).toString());
+                    mBinding.modBusSensorActivationTie.setText(mBinding.modBusSensorActivationTie.getAdapter().getItem(Integer.parseInt(data[8])).toString());
                     mBinding.modBusInputLabelTie.setText(data[9]);
                     mBinding.modBusUnitMeasurementTie.setText(mBinding.modBusUnitMeasurementTie.getAdapter().getItem(Integer.parseInt(data[10])).toString());
                     mBinding.modBusMinValueTie.setText(data[11].substring(0, 3));
                     mBinding.modbusMinDeciIsc.setText(data[11].substring(4, 6));
                     mBinding.modBusMaxValueTie.setText(data[12].substring(0, 3));
                     mBinding.modbusMaxDeciIsc.setText(data[12].substring(4, 6));
-                    mBinding.setModbusType(data[13].substring(0,1));
                     mBinding.modBusDiagnosticSweepTie.setText(mBinding.modBusDiagnosticSweepTie.getAdapter().getItem(Integer.parseInt(data[13].substring(0, 1))).toString());
+                    mBinding.setModbusType(data[13].substring(0, 1));
                     mBinding.modBusTimeTie.setText(data[13].substring(1, 7));
                     mBinding.modBusSmoothingFactorTie.setText(data[14]);
                     mBinding.modBusAlarmLowTie.setText(data[15].substring(0, 3));
@@ -302,6 +398,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
             case 1:
                 mBinding.modbusInputNumber.setEnabled(false);
                 mBinding.modbusInputLabel.setEnabled(false);
+                mBinding.modbusModbusType.setEnabled(false);
                 mBinding.modbusTypeOfValueRead.setEnabled(false);
                 mBinding.modbusUnit.setEnabled(false);
                 mBinding.modbusMinValue.setEnabled(false);
@@ -323,7 +420,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
 
             case 2:
                 mBinding.modbusInputNumber.setEnabled(false);
-
+                mBinding.modbusModbusType.setEnabled(false);
                 mBinding.modbusTypeOfValueRead.setEnabled(false);
                 mBinding.modbusUnit.setEnabled(false);
                 mBinding.modbusDiagnosticSweep.setEnabled(false);

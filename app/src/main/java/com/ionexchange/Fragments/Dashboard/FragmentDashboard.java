@@ -53,12 +53,11 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     private static final String TAG = "FragmentDashboard";
     CountDownTimer timer = new CountDownTimer(10000, 500) {
         @Override
-        public void onTick(long l) {
-        }
+        public void onTick(long l) { }
 
         @Override
         public void onFinish() {
-            sendKeepAlive();
+            sendKeepAlive("0");
             start();
         }
     };
@@ -88,7 +87,7 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     @Override
     public void onResume() {
         super.onResume();
-        sendKeepAlive();
+        sendKeepAlive("0");
         timer.start();
         Log.e(TAG, "Timer Started !");
     }
@@ -106,15 +105,15 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                sendKeepAlive();
+                sendKeepAlive("0");
             }
         }, 10000);
     }
 
-    private void sendKeepAlive() {
+    private void sendKeepAlive(String setID) {
         mAppClass.sendPacket(this,
                 DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET +
-                        SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + "0");
+                        SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + setID);
         // startKeepAlive();
     }
 

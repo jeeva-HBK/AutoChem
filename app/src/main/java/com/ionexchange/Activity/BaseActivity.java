@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.ApplicationClass.preferences;
 
 ///Created By silambu
 public class BaseActivity extends AppCompatActivity implements View.OnClickListener, ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupClickListener, ExpandableListView.OnChildClickListener {
@@ -41,7 +41,13 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_base);
-        setNavigation();
+
+        if (preferences.getBoolean("prefLoggedIn", false)) {
+            setNavigation(R.navigation.navigation, R.id.Dashboard);
+        } else {
+            setNavigation(R.navigation.connection, R.id.fragmentConnection2);
+        }
+
         expandedListView();
         mBinding.mainScreenBtn.setOnClickListener(this);
         mBinding.trendScreenBtn.setOnClickListener(this);
@@ -60,7 +66,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         homescreenList = new ArrayList<>();
         headerList = new ArrayList<>();
 
-        generaList.add("- Unit IP Settings");
+        generaList.add("- Unit Settings");
         generaList.add("- Target IP Settings");
         generaList.add("- Site Settings");
 
@@ -86,14 +92,14 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
         mBinding.expList.expandGroup(0);
         onGroupClick(mBinding.expList, null, 0, 0);
-        //      this.onChildClick(mBinding.expList, mBinding.expList.getChildAt(0).getRootView(), 0, 0, 0);
 
     }
 
-    void setNavigation() {
+    public void setNavigation(int navigation, int des) {
         mNavController = Navigation.findNavController(this, R.id.nav_host_frag);
-        navGraph = mNavController.getNavInflater().inflate(R.navigation.navigation);
-        navGraph.setStartDestination(R.id.Dashboard);
+        navGraph = mNavController.getNavInflater().inflate(navigation);
+        navGraph.setStartDestination(des);
+        mNavController.setGraph(navGraph);
     }
 
     @Override

@@ -1,5 +1,9 @@
 package com.ionexchange.Fragments.Configuration.GeneralConfig;
 
+import android.content.ComponentName;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Interface.DataReceiveCallback;
@@ -21,6 +26,7 @@ import com.ionexchange.databinding.FragmentUnitipsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.ionexchange.Others.ApplicationClass.editor;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_panelIpConfig;
@@ -52,6 +58,38 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
 
         mBinding.saveFab.setOnClickListener(this::writeData);
         mBinding.saveLayoutUnitIp.setOnClickListener(this::writeData);
+
+        mBinding.logout.setOnClickListener(View -> {
+            logOut();
+        });
+    }
+
+    private void logOut() {
+        new MaterialAlertDialogBuilder(getContext())
+                .setTitle("LOGOUT")
+                .setMessage("Are you sure, you want to Logout ?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        editor.remove("prefLoggedIn");
+                        editor.remove("prefIp");
+                        editor.remove("prefPort");
+                        editor.commit();
+                        editor.apply();
+                        PackageManager packageManager = getContext().getPackageManager();
+                        Intent intent = packageManager.getLaunchIntentForPackage(getContext().getPackageName());
+                        ComponentName componentName = intent.getComponent();
+                        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+                        getContext().startActivity(mainIntent);
+                        Runtime.getRuntime().exit(0);
+                    }
+                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        }).show();
+
     }
 
     private String toString(EditText editText) {

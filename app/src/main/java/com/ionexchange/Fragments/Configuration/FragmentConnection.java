@@ -10,15 +10,20 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentConnectionBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.ionexchange.Others.ApplicationClass.editor;
+
 public class FragmentConnection extends Fragment {
+
     FragmentConnectionBinding mBinding;
     ApplicationClass mAppClass;
+    BaseActivity mActivity;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -32,6 +37,8 @@ public class FragmentConnection extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        mActivity = (BaseActivity) getActivity();
+
         mBinding.button.setOnClickListener(View -> {
         /*  if (!mBinding.ipAdressEdt.getText().toString().trim().equals("") && !mBinding.portEdt.getText().toString().equals("")) {
                 if (ApplicationClass.isValidIp(mBinding.ipAdressEdt.getText().toString()) && ApplicationClass.isValidPort(mBinding.portEdt.getText().toString())) {
@@ -44,14 +51,13 @@ public class FragmentConnection extends Fragment {
 
             }*/
             if (validateField()) {
-                navigateToDashboard();
+                editor.putBoolean("prefLoggedIn", true);
+                editor.putString("prefIp", mBinding.ipAdressEdt.getText().toString());
+                editor.putString("prefPort", mBinding.portEdt.getText().toString());
+                editor.apply();
+                mActivity.setNavigation(R.navigation.navigation, R.id.Dashboard);
             }
         });
-
-    }
-
-    private void navigateToDashboard() {
-        mAppClass.navigateTo(getActivity(), R.id.action_fragmentConnection_to_Dashboard);
     }
 
     private boolean validateField() {
@@ -68,4 +74,5 @@ public class FragmentConnection extends Fragment {
         }*/
         return true;
     }
+
 }
