@@ -69,6 +69,15 @@
         <item name="android:textColorHint">@color/primary</item>
     </style>
 
+    <style name="con_Til" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="endIconTint">@color/primary</item>
+        <item name="android:textColorHint">@color/primary</item>
+    </style>
+
     <style name="config_Edt">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>

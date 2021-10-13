@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ionexchange.Adapters.TimerIndexRvAdapter;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
+import com.ionexchange.Database.Entity.MainConfigurationEntity;
 import com.ionexchange.Database.Entity.TimerConfigurationEntity;
 import com.ionexchange.Fragments.FragmentHostDashboard;
 import com.ionexchange.Interface.RvOnClick;
@@ -94,6 +95,6 @@ public class FragmentTimer_Config extends Fragment implements RvOnClick {
     }
 
     @Override
-    public void onClick(String sensorInputNo, String type, int position) {
+    public void onClick(MainConfigurationEntity mEntity) {
     }
 }

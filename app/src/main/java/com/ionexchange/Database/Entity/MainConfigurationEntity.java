@@ -33,7 +33,6 @@ public class MainConfigurationEntity {
     @ColumnInfo(name = "sensor_name")
     public String sensorName;
 
-
     @ColumnInfo(name = "flag_Value")
     public int flag_Value;
 

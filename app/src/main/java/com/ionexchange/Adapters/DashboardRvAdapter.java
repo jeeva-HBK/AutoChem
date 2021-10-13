@@ -115,9 +115,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 defaultLayout(holder.labeLOne, holder.sensorLabelOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne,
                         holder.currentValueOne, holder.unitOne, holder.typeOne, position);
                 break;
-
         }
-
     }
 
     void defaultLayout(TextView seq, TextView label, TextView hardwareNoOne, TextView lowAlarmOne, TextView highAlarmOne, TextView currentValue, TextView unitOne, TextView typeOne, int position) {
@@ -244,8 +242,10 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     constraintLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            rvOnClick.onClick(String.valueOf(mainConfigurationEntityList.get(getAdapterPosition()).hardware_no),
-                                    mainConfigurationEntityList.get(getAdapterPosition()).sensorName, getAdapterPosition());
+                            /*rvOnClick.onClick(String.valueOf(mainConfigurationEntityList.get(getAdapterPosition()).hardware_no),
+                                    mainConfigurationEntityList.get(getAdapterPosition()).sensorName, getAdapterPosition());*/
+
+                            rvOnClick.onClick(mainConfigurationEntityList.get(getAdapterPosition()));
                         }
                     });
                     break;
@@ -255,22 +255,30 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     layoutOne.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            rvOnClick.onClick(String.valueOf(mainConfigurationEntityList.get(getAdapterPosition()).hardware_no),
-                                    mainConfigurationEntityList.get(0).sensorName, 0);
+                           /* rvOnClick.onClick(String.valueOf(mainConfigurationEntityList.get(getAdapterPosition()).hardware_no),
+                                    mainConfigurationEntityList.get(0).sensorName, 0);*/
+
+                            rvOnClick.onClick(mainConfigurationEntityList.get(getAdapterPosition()));
+
                         }
                     });
                     layoutTwo.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            rvOnClick.onClick(String.valueOf(mainConfigurationEntityList.get(getAdapterPosition()).hardware_no),
-                                    mainConfigurationEntityList.get(1).sensorName, 1);
+                           /* rvOnClick.onClick(String.valueOf(mainConfigurationEntityList.get(getAdapterPosition()).hardware_no),
+                                    mainConfigurationEntityList.get(1).sensorName, 1);*/
+
+                            rvOnClick.onClick(mainConfigurationEntityList.get(getAdapterPosition()));
+
                         }
                     });
                     layoutThree.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            rvOnClick.onClick(String.valueOf(mainConfigurationEntityList.get(getAdapterPosition()).hardware_no),
-                                    mainConfigurationEntityList.get(2).sensorName, 2);
+                           /* rvOnClick.onClick(String.valueOf(mainConfigurationEntityList.get(getAdapterPosition()).hardware_no),
+                                    mainConfigurationEntityList.get(2).sensorName, 2);*/
+
+                            rvOnClick.onClick(mainConfigurationEntityList.get(getAdapterPosition()));
                         }
                     });
                     break;

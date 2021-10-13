@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ionexchange.Adapters.VirtualSensorIndexRvAdapter;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
+import com.ionexchange.Database.Entity.MainConfigurationEntity;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 import com.ionexchange.Fragments.FragmentHostDashboard;
 import com.ionexchange.Interface.RvOnClick;
@@ -64,7 +65,7 @@ public class FragmentVirtualSensorList_Config extends Fragment implements RvOnCl
     }
 
     @Override
-    public void onClick(String sensorInputNo, String type, int position) {
+    public void onClick(MainConfigurationEntity mEntity) {
 
     }
 }

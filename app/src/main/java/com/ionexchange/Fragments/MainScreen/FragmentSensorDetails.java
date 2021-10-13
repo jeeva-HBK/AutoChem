@@ -69,6 +69,8 @@ public class FragmentSensorDetails extends Fragment {
     ApplicationClass mAppClass;
     List<List<String[]>> finalSensorParamList;
     int currentPage = 0, pageMax = 8;
+    FragmentSensorCalibration sensorCalibration;
+    FragmentModbusCalibration modbusCalibration;
     String inputNumber, inputType, sensorType = "null", spareKey = "null";
     String inNumber = "Input Number", inpuType = "Input Type", seqNumber = "Sequence Number", sensorActivation = "Sensor Activation",
             inputLabel = "Input Label", bufferType = "Buffer Type", tempSensorLinked = "Temperature Sensor Linked", defTempValue = "Default Temperature Value",
@@ -100,13 +102,22 @@ public class FragmentSensorDetails extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), new FragmentSensorCalibration()).commit();
                     mBinding.txtTrendCalibration.setText("TREND");
                     mBinding.viewTrendCalibration.setBackground(getContext().getDrawable(R.drawable.graph));
+                    if (inputType.equals("Modbus Sensor")){
+                        if (modbusCalibration!=null){
+                            getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), modbusCalibration).commit();
+                        }
+                    } else {
+                        if (sensorCalibration!=null){
+                            getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
+                        }
+                    }
                 } else {
-                    getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), new FragmentSensorStatistics()).commit();
                     mBinding.txtTrendCalibration.setText("CALIBRATION");
-                    mBinding.viewTrendCalibration.setBackground(getContext().getDrawable(R.drawable.flask));
+                    mBinding.viewTrendCalibration.setBackground(getContext().getDrawable(R.drawable.calib_flask));
+                    getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), new FragmentSensorStatistics()).commit();
+
                 }
             }
         });
@@ -207,8 +218,15 @@ public class FragmentSensorDetails extends Fragment {
                                         break;
                                 }
 
-                                getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), new FragmentSensorCalibration(mBundle)).commit();
-
+                                if (inputType.equals("Modbus Sensor")) {
+                                    mBundle.putString("ModbusType", getValueFromArr(splitData[6], modBusTypeArr));
+                                    mBundle.putString("TypeOfValue", getValueFromArr(splitData[7], typeOfValueRead));
+                                    modbusCalibration = new FragmentModbusCalibration(mBundle);
+                                    getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(),modbusCalibration).commit();
+                                } else {
+                                    sensorCalibration = new FragmentSensorCalibration(mBundle);
+                                    getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
+                                }
                             } else if (splitData[2].equals(RES_FAILED)) {
                                 mAppClass.showSnackBar(getContext(), getString(R.string.readFailed));
                             }

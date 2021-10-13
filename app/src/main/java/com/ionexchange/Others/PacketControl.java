@@ -7,7 +7,7 @@ public class PacketControl {
     /* General */
     public static String SPILT_CHAR = "$",
                 RES_SPILT_CHAR ="\\$",
-            DEVICE_PASSWORD = "1234",
+            DEVICE_PASSWORD,
             WRITE_PACKET = "0",
             READ_PACKET = "1",
             RES_SUCCESS = "0", RES_FAILED = "1", CONN_TYPE = "0";

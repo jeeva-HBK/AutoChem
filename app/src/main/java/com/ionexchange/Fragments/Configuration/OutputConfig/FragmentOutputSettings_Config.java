@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ionexchange.Adapters.OutputIndexRvAdapter;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
+import com.ionexchange.Database.Entity.MainConfigurationEntity;
 import com.ionexchange.Enum.AppEnum;
 import com.ionexchange.Fragments.FragmentHostDashboard;
 import com.ionexchange.Interface.RvOnClick;
@@ -120,6 +121,7 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
     }
 
     @Override
-    public void onClick(String sensorInputNo, String type, int position) {
+    public void onClick(MainConfigurationEntity mEntity) {
+
     }
 }

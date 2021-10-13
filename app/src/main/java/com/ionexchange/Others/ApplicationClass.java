@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 import static android.util.Patterns.IP_ADDRESS;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
 
 /* Created by Jeeva on 13/07/2021 */
@@ -178,6 +179,7 @@ public class ApplicationClass extends Application {
                     if (preferences != null) {
                         mIPAddress = preferences.getString("prefIp", "");
                         mPortNumber = Integer.parseInt(preferences.getString("prefPort", ""));
+                        DEVICE_PASSWORD = preferences.getString("prefPassword", "");
                     }
                     registerReceiver();
                 } catch (Exception e) {

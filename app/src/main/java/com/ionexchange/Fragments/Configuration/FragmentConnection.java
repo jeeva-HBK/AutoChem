@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import static com.ionexchange.Others.ApplicationClass.editor;
 import static com.ionexchange.Others.ApplicationClass.mIPAddress;
 import static com.ionexchange.Others.ApplicationClass.mPortNumber;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 
 public class FragmentConnection extends Fragment {
 
@@ -56,9 +57,11 @@ public class FragmentConnection extends Fragment {
                 editor.putBoolean("prefLoggedIn", true);
                 editor.putString("prefIp", mBinding.ipAdressEdt.getText().toString());
                 editor.putString("prefPort", mBinding.portEdt.getText().toString());
+                editor.putString("prefPassword", mBinding.passwordEdt.getText().toString());
                 editor.apply();
                 mIPAddress = mBinding.ipAdressEdt.getText().toString();
                 mPortNumber = Integer.parseInt(mBinding.portEdt.getText().toString());
+                DEVICE_PASSWORD = mBinding.passwordEdt.getText().toString();
                 mActivity.setNavigation(R.navigation.navigation, R.id.Dashboard);
             }
         });
@@ -70,6 +73,9 @@ public class FragmentConnection extends Fragment {
             return false;
         } else if (mBinding.portEdt.getText().toString().equals("")) {
             mBinding.portEdt.setError("field should not be empty !");
+            return false;
+        } else if (mBinding.passwordEdt.getText().toString().equals("")) {
+            mBinding.passwordEdt.setError("field should not be empty !");
             return false;
         } /*else if (!ApplicationClass.isValidIp(mBinding.ipAdressEdt.getText().toString())) {
             mBinding.

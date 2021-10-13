@@ -205,11 +205,12 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     public void onClick(String sensorInputNo) {}
 
     @Override
-    public void onClick(String sensorInputNo, String type, int position) {
-        if (!sensorInputNo.equals("0")) {
+    public void onClick(MainConfigurationEntity mEntity) {
+        Log.e(TAG, "onClick: ");
+        if (mEntity.hardware_no != 0) {
             Bundle bundle = new Bundle();
-            bundle.putString("inputNumber", sensorInputNo);
-            bundle.putString("inpuType", type);
+            bundle.putString("inputNumber", String.valueOf(mEntity.hardware_no));
+            bundle.putString("inpuType", mEntity.inputType);
             mAppClass.navigateToBundle(getActivity(), R.id.action_Dashboard_to_sensorDetails1, bundle);
         } else {
             mAppClass.showSnackBar(getContext(), "Sensor Not Added");
@@ -227,6 +228,7 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         } else if (data.equals("Timeout")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
         } else if (data != null) {
+            //String mData = "{*1$11$0$0$0107.00$021900.00$03300.00$04200.00$050.000000$060.000000$070.000000$080.000000$090.000000$100.000000*}";
             handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
         }
     }
@@ -237,11 +239,6 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         if (splitData[0].equals(READ_PACKET)) {
             if (splitData[1].equals(PCK_DIAGNOSTIC)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
-                    if (splitData[3].length() > 2) {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[3].substring(0, 2)), splitData[3].substring(2, splitData[3].length()));
-                    } else {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[3].substring(0, 2)), "N/A");
-                    }
                     if (splitData[4].length() > 2) {
                         keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[4].substring(0, 2)), splitData[4].substring(2, splitData[4].length()));
                     } else {
@@ -287,7 +284,16 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
                     } else {
                         keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[12].substring(0, 2)), "N/A");
                     }
+                    if (splitData[13].length() > 2) {
+                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[13].substring(0, 2)), splitData[13].substring(2, splitData[13].length()));
+                    } else {
+                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[13].substring(0, 2)), "N/A");
+                    }
                     setGridCount(pageNo);
+
+                    if (splitData[3].equals("0")) {
+                        sendKeepAlive("1");
+                    }
                 }
             }
         }
