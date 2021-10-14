@@ -219,6 +219,7 @@ public class FragmentSensorDetails extends Fragment {
                                 }
 
                                 if (inputType.equals("Modbus Sensor")) {
+                                    mBundle.putString("InputNo", splitData[3]);
                                     mBundle.putString("ModbusType", getValueFromArr(splitData[6], modBusTypeArr));
                                     mBundle.putString("TypeOfValue", getValueFromArr(splitData[7], typeOfValueRead));
                                     modbusCalibration = new FragmentModbusCalibration(mBundle);
