@@ -288,7 +288,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
                                 "SENSOR", 0, mBinding.orpSensorTypeAtxtIsc.getText().toString(),
                                 1, getStringValue(0, mBinding.orpInputLabelEdtIsc),
                                 getDecimalValue(mBinding.orpAlarmLowTBtn, mBinding.orpAlarmLowEdtIsc, 4, mBinding.orpAlarmLowDeciIsc, 2),
-                                getDecimalValue(mBinding.orpAlarmHighTBtn, mBinding.orpAlarmHighEdtIsc, 4, mBinding.orpAlarmHighDeciIsc, 2), "N/A","N/A", 1);
+                                getDecimalValue(mBinding.orpAlarmHighTBtn, mBinding.orpAlarmHighEdtIsc, 4, mBinding.orpAlarmHighDeciIsc, 2), "mV","N/A", 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);

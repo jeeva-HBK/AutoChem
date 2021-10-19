@@ -100,7 +100,8 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             case 4:
                 changedLayout(holder.labeLOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne, holder.currentValueOne,
                         holder.labeLTwo, holder.hardwareNoTwo, holder.lowAlarmTwo, holder.highAlarmTwo, holder.currentValueTwo,
-                        holder.labeLThree, holder.hardwareNoThree, holder.lowAlarmThree, holder.highAlarmThree, holder.currentValueThree);
+                        holder.labeLThree, holder.hardwareNoThree, holder.lowAlarmThree, holder.highAlarmThree, holder.currentValueThree,
+                        holder.sensorLabelOne, holder.unitOne, holder.typeOne, holder.sensorLabelTwo, holder.uniTwo, holder.typeTwo, holder.sensorLabelThree, holder.uniThree, holder.typeThree);
 
                 break;
 
@@ -155,8 +156,49 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
     void changedLayout(TextView seqOne, TextView hardwareNoOne, TextView lowAlarmOne, TextView highAlarmOne,
                        TextView currentValueOne, TextView seqTwo, TextView hardwareNoTwo, TextView lowAlarmTwo, TextView highAlarmTwo,
                        TextView currentValueTwo, TextView seqThree, TextView hardwareNoThree, TextView lowAlarmThree, TextView highAlarmThree,
-                       TextView currentValueThree) {
+                       TextView currentValueThree,
+                       TextView sensorLabelOne, TextView unitOne, TextView typeOne,
+                       TextView sensorLabelTwo, TextView uniTwo, TextView typeTwo,
+                       TextView sensorLabelThree, TextView uniThree, TextView typeThree) {
         seqOne.setText(mainConfigurationEntityList.get(0).inputType);
+        sensorLabelOne.setText(inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(0).hardware_no));
+        if (inputConfigurationDao.getUnit((mainConfigurationEntityList.get(0).hardware_no)).equals("N/A")) {
+            unitOne.setText("");
+        } else {
+            unitOne.setText(inputConfigurationDao.getUnit((mainConfigurationEntityList.get(0).hardware_no)));
+        }
+
+        if (inputConfigurationDao.getType((mainConfigurationEntityList.get(0).hardware_no)).equals("N/A")) {
+            typeOne.setText("");
+        } else {
+            typeOne.setText(inputConfigurationDao.getType((mainConfigurationEntityList.get(0).hardware_no)));
+        }
+
+        sensorLabelTwo.setText(inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(1).hardware_no));
+        if (inputConfigurationDao.getUnit((mainConfigurationEntityList.get(1).hardware_no)).equals("N/A")) {
+            uniTwo.setText("");
+        } else {
+            uniTwo.setText(inputConfigurationDao.getUnit((mainConfigurationEntityList.get(1).hardware_no)));
+        }
+
+        if (inputConfigurationDao.getType((mainConfigurationEntityList.get(1).hardware_no)).equals("N/A")) {
+            typeTwo.setText("");
+        } else {
+            typeTwo.setText(inputConfigurationDao.getType((mainConfigurationEntityList.get(1).hardware_no)));
+        }
+
+        sensorLabelThree.setText(inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(2).hardware_no));
+        if (inputConfigurationDao.getUnit((mainConfigurationEntityList.get(2).hardware_no)).equals("N/A")) {
+            uniThree.setText("");
+        } else {
+            uniThree.setText(inputConfigurationDao.getUnit((mainConfigurationEntityList.get(2).hardware_no)));
+        }
+
+        if (inputConfigurationDao.getType((mainConfigurationEntityList.get(2).hardware_no)).equals("N/A")) {
+            typeThree.setText("");
+        } else {
+            typeThree.setText(inputConfigurationDao.getType((mainConfigurationEntityList.get(2).hardware_no)));
+        }
 
         hardwareNoOne.setText(mainConfigurationEntityList.get(0).hardware_no + "");
         lowAlarmOne.setText(inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(0).hardware_no)));
@@ -195,8 +237,8 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
         ConstraintLayout constraintLayout;
         View layoutOne, layoutTwo, layoutThree;
         TextView labeLOne, sensorLabelOne, hardwareNoOne, currentValueOne, lowAlarmOne, highAlarmOne, lowKeyOne, highKeyOne, currentKeyOne, unitOne, typeOne;
-        TextView labeLTwo, hardwareNoTwo, currentValueTwo, lowAlarmTwo, highAlarmTwo, lowKeyTwo, highKeyTwo, currentKeyTwo;
-        TextView labeLThree, hardwareNoThree, currentValueThree, lowAlarmThree, highAlarmThree, lowKeyThree, highKeyThree, currentKeyThree;
+        TextView labeLTwo, sensorLabelTwo, hardwareNoTwo, currentValueTwo, lowAlarmTwo, highAlarmTwo, lowKeyTwo, highKeyTwo, currentKeyTwo, uniTwo, typeTwo;
+        TextView labeLThree, sensorLabelThree, hardwareNoThree, currentValueThree, lowAlarmThree, highAlarmThree, lowKeyThree, highKeyThree, uniThree, typeThree, currentKeyThree;
 
         public itemHolder(@NonNull View itemView) {
             super(itemView);
@@ -204,6 +246,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             layoutOne = itemView.findViewById(R.id.layoutOne);
             layoutTwo = itemView.findViewById(R.id.layout_two);
             layoutThree = itemView.findViewById(R.id.layout_three);
+
             labeLOne = itemView.findViewById(R.id.layout_1_seq_number);
             sensorLabelOne = itemView.findViewById(R.id.layout_1_label);
             hardwareNoOne = itemView.findViewById(R.id.layout_1_hardware_no);
@@ -213,10 +256,11 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             lowKeyOne = itemView.findViewById(R.id.txt_layout_1_alarm_low);
             highKeyOne = itemView.findViewById(R.id.txt_layout_1_alarm_high);
             currentKeyOne = itemView.findViewById(R.id.txt_layout_1_current);
-            unitOne = itemView.findViewById(R.id.layout_1_unit);
-            typeOne = itemView.findViewById(R.id.layout_1_type);
+            unitOne = itemView.findViewById(R.id.layout_unit_1);
+            typeOne = itemView.findViewById(R.id.layout_type_1);
 
             labeLTwo = itemView.findViewById(R.id.layout_2_seq_number);
+            sensorLabelTwo = itemView.findViewById(R.id.layout_2_label);
             hardwareNoTwo = itemView.findViewById(R.id.layout_2_hardware_no);
             currentValueTwo = itemView.findViewById(R.id.layout_2_current_value);
             highAlarmTwo = itemView.findViewById(R.id.layout_2_high_alarm_value);
@@ -224,8 +268,11 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             lowKeyTwo = itemView.findViewById(R.id.txt_layout_2_alarm_low);
             highKeyTwo = itemView.findViewById(R.id.txt_layout_2_alarm_high);
             currentKeyTwo = itemView.findViewById(R.id.txt_layout_2_current);
+            typeTwo = itemView.findViewById(R.id.layout_type_2);
+            uniTwo = itemView.findViewById(R.id.layout_unit_2);
 
             labeLThree = itemView.findViewById(R.id.layout_3_seq_number);
+            sensorLabelThree = itemView.findViewById(R.id.layout_3_label);
             hardwareNoThree = itemView.findViewById(R.id.layout_3_hardware_no);
             currentValueThree = itemView.findViewById(R.id.layout_three_current_value);
             highAlarmThree = itemView.findViewById(R.id.layout_3_high_alarm_value);
@@ -233,6 +280,8 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             lowKeyThree = itemView.findViewById(R.id.txt_layout_3_alarm_low);
             highKeyThree = itemView.findViewById(R.id.txt_layout_3_alarm_high);
             currentKeyThree = itemView.findViewById(R.id.txt_layout_3_current);
+            typeThree = itemView.findViewById(R.id.layout_type_3);
+            uniThree = itemView.findViewById(R.id.layout_unit_3);
 
             switch (layout) {
                 case 1:
@@ -242,9 +291,6 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     constraintLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            /*rvOnClick.onClick(String.valueOf(mainConfigurationEntityList.get(getAdapterPosition()).hardware_no),
-                                    mainConfigurationEntityList.get(getAdapterPosition()).sensorName, getAdapterPosition());*/
-
                             rvOnClick.onClick(mainConfigurationEntityList.get(getAdapterPosition()));
                         }
                     });
@@ -255,9 +301,6 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     layoutOne.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                           /* rvOnClick.onClick(String.valueOf(mainConfigurationEntityList.get(getAdapterPosition()).hardware_no),
-                                    mainConfigurationEntityList.get(0).sensorName, 0);*/
-
                             rvOnClick.onClick(mainConfigurationEntityList.get(getAdapterPosition()));
 
                         }
@@ -265,9 +308,6 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     layoutTwo.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                           /* rvOnClick.onClick(String.valueOf(mainConfigurationEntityList.get(getAdapterPosition()).hardware_no),
-                                    mainConfigurationEntityList.get(1).sensorName, 1);*/
-
                             rvOnClick.onClick(mainConfigurationEntityList.get(getAdapterPosition()));
 
                         }
@@ -275,9 +315,6 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     layoutThree.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                           /* rvOnClick.onClick(String.valueOf(mainConfigurationEntityList.get(getAdapterPosition()).hardware_no),
-                                    mainConfigurationEntityList.get(2).sensorName, 2);*/
-
                             rvOnClick.onClick(mainConfigurationEntityList.get(getAdapterPosition()));
                         }
                     });

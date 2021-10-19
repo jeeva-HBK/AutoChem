@@ -17,6 +17,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/layout_1_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLength="10"
+        android:text="N/A"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/layout_1_seq_number"
+        app:layout_constraintTop_toBottomOf="@+id/layout_1_seq_number" />
+
+    <TextView
+        android:id="@+id/layout_unit_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLength="11"
+        android:text="N/A"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/layout_one_current_value"
+        app:layout_constraintTop_toBottomOf="@+id/layout_one_current_value" />
+
+    <TextView
+        android:id="@+id/layout_type_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20sp"
+        android:maxLength="11"
+        android:text="N/A"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/txt_layout_1_current"
+        app:layout_constraintEnd_toEndOf="@+id/txt_layout_1_current"
+        app:layout_constraintStart_toStartOf="@+id/txt_layout_1_current" />
+
     <View
         android:id="@+id/view_vertical"
         android:layout_width="1dp"
@@ -71,14 +106,12 @@
         android:id="@+id/layout_1_hardware_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
-        android:text="nill"
-        android:layout_marginTop="10sp"
+        android:text="N/A"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/layout_1_seq_number"
-        app:layout_constraintTop_toBottomOf="@+id/layout_1_seq_number"/>
+        app:layout_constraintTop_toBottomOf="@+id/layout_1_label" />
 
     <TextView
         android:id="@+id/txt_layout_1_alarm_low"
@@ -100,7 +133,7 @@
         android:layout_height="0dp"
         android:layout_margin="10dp"
         android:gravity="center"
-        android:text="nill"
+        android:text="N/A"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold"
@@ -128,7 +161,7 @@
         android:layout_height="0dp"
         android:layout_margin="10dp"
         android:gravity="center"
-        android:text="nill"
+        android:text="N/A"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold"
@@ -156,7 +189,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
-        android:text="nill"
+        android:text="N/A"
         android:textColor="@color/white"
         android:textSize="50dp"
         android:textStyle="bold"
@@ -174,6 +207,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/layoutOne"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/layout_2_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLength="10"
+        android:text="N/A"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/layout_2_seq_number"
+        app:layout_constraintTop_toBottomOf="@+id/layout_1_seq_number" />
+
+    <TextView
+        android:id="@+id/layout_unit_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLength="11"
+        android:text="N/A"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/layout_2_current_value"
+        app:layout_constraintTop_toBottomOf="@+id/layout_2_current_value" />
+
+    <TextView
+        android:id="@+id/layout_type_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20sp"
+        android:maxLength="11"
+        android:text="N/A"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/txt_layout_2_current"
+        app:layout_constraintEnd_toEndOf="@+id/txt_layout_2_current"
+        app:layout_constraintStart_toStartOf="@+id/txt_layout_2_current"
+        app:layout_constraintTop_toTopOf="@+id/vertical_centre" />
 
     <View
         android:id="@+id/vertical_centre"
@@ -229,14 +298,12 @@
         android:id="@+id/layout_2_hardware_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
-        android:text="nill"
-        android:layout_marginTop="10sp"
+        android:text="N/A"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/layout_2_seq_number"
-        app:layout_constraintTop_toBottomOf="@+id/layout_2_seq_number" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_2_label" />
 
     <TextView
         android:id="@+id/txt_layout_2_alarm_low"
@@ -257,7 +324,7 @@
         android:layout_height="0dp"
         android:layout_margin="10dp"
         android:gravity="center"
-        android:text="nill"
+        android:text="N/A"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold"
@@ -285,7 +352,7 @@
         android:layout_height="0dp"
         android:layout_margin="10dp"
         android:gravity="center"
-        android:text="nill"
+        android:text="N/A"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold"
@@ -313,7 +380,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
-        android:text="nill"
+        android:text="N/A"
         android:textColor="@color/white"
         android:textSize="50dp"
         android:textStyle="bold"
@@ -334,6 +401,42 @@
         app:layout_constraintStart_toStartOf="@+id/layout_two"
         app:layout_constraintTop_toBottomOf="@id/layout_two" />
 
+
+    <TextView
+        android:id="@+id/layout_3_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLength="10"
+        android:text="N/A"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/layout_2_seq_number"
+        app:layout_constraintTop_toBottomOf="@+id/layout_3_seq_number" />
+
+    <TextView
+        android:id="@+id/layout_unit_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLength="11"
+        android:text="N/A"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/layout_three_current_value"
+        app:layout_constraintTop_toBottomOf="@+id/layout_three_current_value" />
+
+    <TextView
+        android:id="@+id/layout_type_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20sp"
+        android:maxLength="11"
+        android:text="N/A"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/txt_layout_3_current"
+        app:layout_constraintEnd_toEndOf="@+id/txt_layout_2_current"
+        app:layout_constraintStart_toStartOf="@+id/txt_layout_2_current"
+        app:layout_constraintTop_toBottomOf="@+id/layout_two" />
 
     <View
         android:id="@+id/view_vertical_layout_three"
@@ -389,14 +492,12 @@
         android:id="@+id/layout_3_hardware_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
-        android:text="nill"
-        android:layout_marginTop="10sp"
+        android:text="N/A"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/layout_3_seq_number"
-        app:layout_constraintTop_toBottomOf="@+id/layout_3_seq_number"/>
+        app:layout_constraintTop_toBottomOf="@+id/layout_3_label" />
 
     <TextView
         android:id="@+id/txt_layout_3_alarm_low"
@@ -417,7 +518,7 @@
         android:layout_height="0dp"
         android:layout_margin="10dp"
         android:gravity="center"
-        android:text="nill"
+        android:text="N/A"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold"
@@ -445,7 +546,7 @@
         android:layout_height="0dp"
         android:layout_margin="10dp"
         android:gravity="center"
-        android:text="nill"
+        android:text="N/A"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold"
@@ -473,7 +574,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
-        android:text="nill"
+        android:text="N/A"
         android:textColor="@color/white"
         android:textSize="50dp"
         android:textStyle="bold"

@@ -306,7 +306,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
                                 mBinding.temSensorTypeAtxtIsc.getText().toString(),"SENSOR",0, mBinding.temSeqNumberAtxtIsc.getText().toString(),
                                 Integer.parseInt(sensorSequence), getStringValue(0, mBinding.tempInputLabelEdtIsc),
                                 getDecimalValue(mBinding.tempLowAlarmTBtn, mBinding.tempLowAlarmEdtIsc, 3, mBinding.tempLowAlarmDeciIsc, 2),
-                                getDecimalValue(mBinding.tempHighAlarmTBtn, mBinding.tempHighAlarmEdtIsc, 3, mBinding.tempHighAlarmDeciIsc, 2), "N/A","N/A", 1);
+                                getDecimalValue(mBinding.tempHighAlarmTBtn, mBinding.tempHighAlarmEdtIsc, 3, mBinding.tempHighAlarmDeciIsc, 2), "°C","N/A", 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);

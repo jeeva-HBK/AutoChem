@@ -65,50 +65,6 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
 
     }
 
-    private void getCurrentLocation() {
-       /* FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
-
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityResultLauncher<String> resultLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (!isGranted) {
-                    mAppClass.showSnackBar(getContext(), "Permission Denied !");
-                }
-            });
-
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-            @Override
-            public void onComplete(@NonNull Task<Location> task) {
-                Location location = task.getResult();
-                try {
-                    Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                    mBinding.siteLocationCommonSettingsEDT.setText(addresses.get(0).getAddressLine(0) + " " + addresses.get(0).getLocality() + addresses.get(0).getAdminArea() + " " + addresses.get(0).getPostalCode());
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(), "" + e, Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });*/
-    }
-
     private void onCLick(View view) {
         if (validateFields()) {
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +

@@ -18,7 +18,7 @@
 
 
     <TextView
-        android:id="@+id/textView30"
+        android:id="@+id/onedt_mainEdt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enter Standard Solution Value"
@@ -27,14 +27,14 @@
         android:textStyle="bold"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/dialogCalib3_edt"
+        app:layout_constraintBottom_toTopOf="@+id/onedt_edt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialToolbar" />
 
     <EditText
-        android:id="@+id/dialogCalib3_edt"
+        android:id="@+id/onedt_edt"
         android:layout_width="150dp"
         android:layout_height="130dp"
         android:background="@drawable/blue_box"
@@ -53,7 +53,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView30" />
+        app:layout_constraintTop_toBottomOf="@+id/onedt_mainEdt" />
 
     <LinearLayout
         android:id="@+id/ll2"
@@ -67,11 +67,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialogCalib3_edt">
+        app:layout_constraintTop_toBottomOf="@+id/onedt_edt">
 
 
         <Button
-            android:id="@+id/dialogCalib3_cancelBtn"
+            android:id="@+id/onedt_leftBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
@@ -82,7 +82,7 @@
             android:visibility="visible" />
 
         <Button
-            android:id="@+id/dialogCalib3_confirmBtn"
+            android:id="@+id/onedt_rightBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"

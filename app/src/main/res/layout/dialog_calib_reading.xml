@@ -18,20 +18,20 @@
 
 
     <ImageView
-        android:id="@+id/dialog2CalibCenterImage"
+        android:id="@+id/dialogType1CalibIv"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_margin="10dp"
         android:padding="10dp"
         android:src="@drawable/calib_flask"
-        app:layout_constraintBottom_toTopOf="@+id/dialogCalib2_mainText"
+        app:layout_constraintBottom_toTopOf="@+id/dialogType1Calib_mainText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialToolbar" />
 
     <TextView
-        android:id="@+id/dialogCalib2_mainText"
+        android:id="@+id/dialogType1Calib_mainText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -39,27 +39,27 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/dialogCalib2_subText"
+        app:layout_constraintBottom_toTopOf="@+id/dialogType1Calib_subText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog2CalibCenterImage" />
+        app:layout_constraintTop_toBottomOf="@+id/dialogType1CalibIv" />
 
 
     <TextView
-        android:id="@+id/dialogCalib2_subText"
+        android:id="@+id/dialogType1Calib_subText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="reading status, please wait"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/ll2"
+        app:layout_constraintBottom_toTopOf="@+id/ll"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialogCalib2_mainText" />
+        app:layout_constraintTop_toBottomOf="@+id/dialogType1Calib_mainText" />
 
     <LinearLayout
-        android:id="@+id/ll2"
+        android:id="@+id/ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -69,22 +69,22 @@
         app:layout_constraintHorizontal_bias="0.5"
         android:layout_marginBottom="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialogCalib2_subText">
+        app:layout_constraintTop_toBottomOf="@+id/dialogType1Calib_subText">
 
 
         <Button
-            android:id="@+id/dialogCalib2_retryBtn"
+            android:id="@+id/dialogType1Calib_leftBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:backgroundTint="@color/colorSecondary"
             android:text="Retry"
             android:textStyle="bold"
-            android:visibility="gone"
+            android:visibility="visible"
             android:textColor="@color/black" />
 
         <Button
-            android:id="@+id/dialogCalib2_Cancelbtn"
+            android:id="@+id/dialogType1Calib_rightBtn"
             android:layout_width="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_height="wrap_content"

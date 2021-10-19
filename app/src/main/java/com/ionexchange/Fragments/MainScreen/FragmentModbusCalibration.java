@@ -40,7 +40,7 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
     ApplicationClass mAppClass;
     Bundle mBundle;
     String calibMode = "0";
-    AlertDialog alertZeroReadingPleaseWait, alertSlopeReadingPleaseWait;
+    AlertDialog alertReading, alertSlopeReadingPleaseWait;
 
     public FragmentModbusCalibration(Bundle bundle) {
         this.mBundle = bundle;
@@ -63,6 +63,18 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
             mBinding.modbusCalibType.setText(mBundle.getString("ModbusType") + " | " + mBundle.getString("TypeOfValue"));
         }
 
+        switch (mBundle.getString("ModbusType")) {
+            case "CR-300 CU":
+            case "CR300 CS":
+                mBinding.diagCheckRb.setVisibility(View.GONE);
+                mBinding.zeroCalibRb.setVisibility(View.GONE);
+                break;
+
+            case "ST-588":
+                mBinding.diagCheckRb.setVisibility(View.GONE);
+                break;
+        }
+
         mBinding.modbusCalibStartBtn.setOnClickListener(View -> {
             switch (mBinding.modbusCalibRg.getCheckedRadioButtonId()) {
                 case -1: // No Mode selected
@@ -80,69 +92,12 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                     startSlopeCalibration();
                     break;
 
-                case R.id.diagnosticRv:
+                case R.id.diagCheckRb:
                     calibMode = "3";
-
+                    startDiagnosticsCheck();
                     break;
             }
         });
-    }
-
-    private void startSlopeCalibration() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_calib_getvalue, null);
-        dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
-
-        EditText editText = dialogView.findViewById(R.id.dialogCalib3_edt);
-        Button confirm = dialogView.findViewById(R.id.dialogCalib3_confirmBtn);
-        Button cancel = dialogView.findViewById(R.id.dialogCalib3_cancelBtn);
-
-        cancel.setOnClickListener(View -> {
-            alertDialog.dismiss();
-        });
-
-        confirm.setOnClickListener(View -> {
-            if (!editText.getText().toString().trim().equals("")) {
-                mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
-                        WRITE_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR + mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "1" + SPILT_CHAR +
-                        getPosition(0, mBundle.getString("ModbusType"), modBusTypeArr) + SPILT_CHAR +
-                        getPosition(0, mBundle.getString("TypeOfValue"), typeOfValueRead) + SPILT_CHAR + "2" + SPILT_CHAR + editText.getText().toString().trim());
-                alertDialog.dismiss();
-            } else {
-                editText.setError("Field should not be empty !");
-            }
-        });
-
-        alertDialog.show();
-    }
-
-    private void startZeroCalibration() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_zerocalib1, null);
-        dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
-
-        Button cancel = dialogView.findViewById(R.id.cancelZeroCalib1);
-        Button confirm = dialogView.findViewById(R.id.confirmZeroCalib1);
-
-        cancel.setOnClickListener(View -> {
-            alertDialog.dismiss();
-        });
-
-        confirm.setOnClickListener(View -> {
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
-                    WRITE_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR + mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "1" + SPILT_CHAR +
-                    getPosition(0, mBundle.getString("ModbusType"), modBusTypeArr) + SPILT_CHAR +
-                    getPosition(0, mBundle.getString("TypeOfValue"), typeOfValueRead) + SPILT_CHAR + "1");
-            alertDialog.dismiss();
-        });
-        alertDialog.show();
-        /*   int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.50);
-        int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.65);
-        alertDialog.getWindow().setLayout(width, height);*/
     }
 
     @Override
@@ -164,10 +119,9 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         if (splitData[1].equals("10")) {
             if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
-
                     switch (calibMode) {
                         case "1":
-                            sendZeroCalibPacket();
+                            readZeroCalibPacket();
                             break;
 
                         case "2":
@@ -175,7 +129,7 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                             break;
 
                         case "3":
-
+                            readDiagnosticCheckPacket("1021");
                             break;
                     }
                 } else {
@@ -185,15 +139,16 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                 if (splitData[2].equals(RES_SUCCESS)) {
                     switch (calibMode) {
                         case "1":
-                            alertZeroReadingPleaseWait.dismiss();
+                            alertReading.dismiss();
                             showZeroCalibResult(splitData[4]);
                             break;
                         case "2":
-                            alertZeroReadingPleaseWait.dismiss();
+                            alertReading.dismiss();
                             showSlopeCalibResult(splitData[4]);
                             break;
                         case "3":
-
+                            alertReading.dismiss();
+                            showDiagCheckResult(splitData[4]);
                             break;
                     }
 
@@ -204,65 +159,244 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         }
     }
 
-    private void showSlopeCalibResult(String result) {
+    /* Calibration Procedure */
+    /*Zero Calibration*/
+    private void startZeroCalibration() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
         dialogBuilder.setView(dialogView);
         AlertDialog alertDialog = dialogBuilder.create();
 
-        ImageView iv = dialogView.findViewById(R.id.dialog2CalibCenterImage);
-        TextView mainText = dialogView.findViewById(R.id.dialogCalib2_mainText);
-        TextView subText = dialogView.findViewById(R.id.dialogCalib2_subText);
-        Button cancelBtn = dialogView.findViewById(R.id.dialogCalib2_Cancelbtn);
-        Button retryBtn = dialogView.findViewById(R.id.dialogCalib2_retryBtn);
+        TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
+        TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
+        Button cancel = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
+        Button confirm = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
 
-        switch (result) {
-            case "0":
-                iv.setBackgroundResource(R.drawable.ic_success);
-                mainText.setText("Status - 0");
-                subText.setText("OK");
-                cancelBtn.setText("CONFIRM");
-                retryBtn.setVisibility(View.GONE);
-                cancelBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
-                });
-                break;
+        mainText.setText("\"Insert The Sensor In Distilled Water\"");
+        subText.setVisibility(View.INVISIBLE);
+        cancel.setText("Cancel");
+        confirm.setText("Confirm");
 
-            case "256":
-                iv.setBackgroundResource(R.drawable.ic_failed);
-                mainText.setText("Status - 256");
-                subText.setText("Solution is too high");
-                cancelBtn.setText("CONFIRM");
-                retryBtn.setVisibility(View.VISIBLE);
+        cancel.setOnClickListener(View -> {
+            alertDialog.dismiss();
+        });
 
-                cancelBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
-                });
-
-                retryBtn.setOnClickListener(View -> {
-                    sendZeroCalibPacket();
-                });
-                break;
-
-            case "1024":
-                iv.setBackgroundResource(R.drawable.ic_failed);
-                mainText.setText("Status - 1024");
-                subText.setText("Solution is too low");
-                cancelBtn.setText("CONFIRM");
-                retryBtn.setVisibility(View.VISIBLE);
-
-                cancelBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
-                });
-
-                retryBtn.setOnClickListener(View -> {
-                    sendZeroCalibPacket();
-                });
-                break;
-        }
+        confirm.setOnClickListener(View -> {
+            alertDialog.dismiss();
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
+                    WRITE_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR + mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "1" + SPILT_CHAR +
+                    getPosition(0, mBundle.getString("ModbusType"), modBusTypeArr) + SPILT_CHAR +
+                    getPosition(0, mBundle.getString("TypeOfValue"), typeOfValueRead) + SPILT_CHAR + "1");
+        });
+        alertDialog.show();
     }
 
+    /*Slope Calibration*/
+    private void startSlopeCalibration() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_with_onedt, null);
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+
+        EditText editText = dialogView.findViewById(R.id.onedt_edt);
+        Button confirm = dialogView.findViewById(R.id.onedt_rightBtn);
+        Button cancel = dialogView.findViewById(R.id.onedt_leftBtn);
+
+        cancel.setOnClickListener(View -> {
+            alertDialog.dismiss();
+        });
+
+        confirm.setOnClickListener(View -> {
+            if (!editText.getText().toString().trim().equals("")) {
+                mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
+                        WRITE_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR + mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "1" + SPILT_CHAR +
+                        getPosition(0, mBundle.getString("ModbusType"), modBusTypeArr) + SPILT_CHAR +
+                        getPosition(0, mBundle.getString("TypeOfValue"), typeOfValueRead) + SPILT_CHAR + "2" + SPILT_CHAR + editText.getText().toString().trim());
+                alertDialog.dismiss();
+            } else {
+                mAppClass.showSnackBar(getContext(), "Field should not be empty !");
+            }
+        });
+        alertDialog.show();
+    }
+
+    /*Diagnostic Check*/
+    private void startDiagnosticsCheck() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+
+        TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
+        TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
+        Button cancel = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
+        Button confirm = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
+
+        mainText.setText("\"Insert The Sensor In Distilled Water\"");
+        subText.setText("");
+        cancel.setText("Cancel");
+        confirm.setText("Confirm");
+
+        cancel.setOnClickListener(View -> {
+            alertDialog.dismiss();
+        });
+
+        confirm.setOnClickListener(View -> {
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
+                    WRITE_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR + mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "1" + SPILT_CHAR +
+                    getPosition(0, mBundle.getString("ModbusType"), modBusTypeArr) + SPILT_CHAR +
+                    getPosition(0, mBundle.getString("TypeOfValue"), typeOfValueRead) + SPILT_CHAR + "3"
+            );
+        });
+
+        alertDialog.show();
+    }
+
+    /* Reading Register Values */
+    private void readZeroCalibPacket() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
+        dialogBuilder.setView(dialogView);
+        alertReading = dialogBuilder.create();
+
+        TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
+        TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
+        Button cancel = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
+        Button confirm = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
+
+        mainText.setText("\"Reading Calibration Status (1031) Register From Modbus\"");
+        subText.setText("");
+        confirm.setVisibility(View.GONE);
+
+        final Boolean[] canSend = {true};
+        cancel.setOnClickListener(View -> {
+            canSend[0] = false;
+            alertReading.dismiss();
+        });
+
+        alertReading.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (canSend[0]) {
+                    mAppClass.sendPacket(FragmentModbusCalibration.this,
+                            DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR +
+                                    mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "1" + SPILT_CHAR + getPosition(0, mBundle.getString("ModbusType"), modBusTypeArr) + SPILT_CHAR +
+                                    getPosition(0, mBundle.getString("TypeOfValue"), typeOfValueRead) + SPILT_CHAR + calibMode);
+                }
+            }
+        }, 5000);
+    }
+
+    private void insertStandardSolution() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+
+        TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
+        TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
+        Button cancel = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
+        Button confirm = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
+
+        mainText.setText("\"Insert the Sensor in Standard Solution\"");
+        subText.setVisibility(View.INVISIBLE);
+        confirm.setText("Confirm");
+        cancel.setText("Cancel");
+
+        final Boolean[] canSend = {true};
+        cancel.setOnClickListener(View -> {
+            canSend[0] = false;
+            alertDialog.dismiss();
+        });
+        confirm.setOnClickListener(View -> {
+            sendSlopeCalibrationPacket();
+            alertDialog.dismiss();
+        });
+        alertDialog.show();
+    }
+
+    private void sendSlopeCalibrationPacket() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
+        dialogBuilder.setView(dialogView);
+        alertSlopeReadingPleaseWait = dialogBuilder.create();
+
+        TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
+        TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
+        Button cancel = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
+        Button confirm = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
+
+        mainText.setText("\"Reading Calibration Status (1031) Register From Modbus\"");
+        subText.setVisibility(View.INVISIBLE);
+        confirm.setVisibility(View.GONE);
+        cancel.setText("Cancel");
+
+        final boolean[] canSend = {true};
+        cancel.setOnClickListener(View -> {
+            canSend[0] = false;
+            alertSlopeReadingPleaseWait.dismiss();
+        });
+
+        alertSlopeReadingPleaseWait.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (canSend[0]) {
+                    mAppClass.sendPacket(FragmentModbusCalibration.this,
+                            DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR +
+                                    mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "1" + SPILT_CHAR + getPosition(0, mBundle.getString("ModbusType"), modBusTypeArr) + SPILT_CHAR +
+                                    getPosition(0, mBundle.getString("TypeOfValue"), typeOfValueRead) + SPILT_CHAR + calibMode);
+                }
+            }
+        }, 5000);
+
+    }
+
+    private void readDiagnosticCheckPacket(String register) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
+        dialogBuilder.setView(dialogView);
+        alertReading = dialogBuilder.create();
+
+        TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
+        TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
+        Button cancel = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
+        Button confirm = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
+
+        mainText.setText("\"Reading Calibration Status(" + register + ") Register From Modbus\"");
+        subText.setText("");
+        confirm.setVisibility(View.GONE);
+
+        final Boolean[] canSend = {true};
+        cancel.setOnClickListener(View -> {
+            canSend[0] = false;
+            alertReading.dismiss();
+        });
+
+        alertReading.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (canSend[0]) {
+                    mAppClass.sendPacket(FragmentModbusCalibration.this,
+                            DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR +
+                                    mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "3" + SPILT_CHAR + getPosition(0, mBundle.getString("ModbusType"), modBusTypeArr) + SPILT_CHAR +
+                                    getPosition(0, mBundle.getString("TypeOfValue"), typeOfValueRead) + SPILT_CHAR + calibMode);
+                }
+            }
+        }, 5000);
+
+    }
+
+    /* Calibration Results */
     private void showZeroCalibResult(String result) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = this.getLayoutInflater();
@@ -270,11 +404,11 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         dialogBuilder.setView(dialogView);
         AlertDialog alertDialog = dialogBuilder.create();
 
-        ImageView iv = dialogView.findViewById(R.id.dialog2CalibCenterImage);
-        TextView mainText = dialogView.findViewById(R.id.dialogCalib2_mainText);
-        TextView subText = dialogView.findViewById(R.id.dialogCalib2_subText);
-        Button cancelBtn = dialogView.findViewById(R.id.dialogCalib2_Cancelbtn);
-        Button retryBtn = dialogView.findViewById(R.id.dialogCalib2_retryBtn);
+        ImageView iv = dialogView.findViewById(R.id.dialogType1CalibIv);
+        TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
+        TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
+        Button cancelBtn = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
+        Button retryBtn = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
 
         switch (result) {
             case "0":
@@ -300,14 +434,15 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                 });
 
                 retryBtn.setOnClickListener(View -> {
-                    sendZeroCalibPacket();
+                    alertDialog.dismiss();
+                    readZeroCalibPacket();
                 });
                 break;
 
             case "4096":
                 iv.setBackgroundResource(R.drawable.ic_failed);
                 mainText.setText("Status - 2096");
-                subText.setText("Distilled Water has flurorescene");
+                subText.setText("Distilled Water has fluorescence");
                 cancelBtn.setText("CONFIRM");
                 retryBtn.setVisibility(View.VISIBLE);
 
@@ -316,102 +451,134 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                 });
 
                 retryBtn.setOnClickListener(View -> {
-                    sendZeroCalibPacket();
+                    alertDialog.dismiss();
+                    readZeroCalibPacket();
                 });
                 break;
         }
     }
 
-    private void sendZeroCalibPacket() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
-        dialogBuilder.setView(dialogView);
-        alertZeroReadingPleaseWait = dialogBuilder.create();
-
-        Button cancel = dialogView.findViewById(R.id.dialogCalib2_Cancelbtn);
-        final Boolean[] canSend = {true};
-        cancel.setOnClickListener(View -> {
-            canSend[0] = false;
-            alertZeroReadingPleaseWait.dismiss();
-        });
-
-        alertZeroReadingPleaseWait.show();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (canSend[0]) {
-                    mAppClass.sendPacket(FragmentModbusCalibration.this,
-                            DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR +
-                                    mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "1" + SPILT_CHAR + getPosition(0, mBundle.getString("ModbusType"), modBusTypeArr) + SPILT_CHAR +
-                                    getPosition(0, mBundle.getString("TypeOfValue"), typeOfValueRead) + SPILT_CHAR + calibMode);
-                }
-            }
-        }, 5000);
-    }
-
-    private void insertStandardSolution() {
+    private void showSlopeCalibResult(String result) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
         dialogBuilder.setView(dialogView);
         AlertDialog alertDialog = dialogBuilder.create();
-        TextView textView = dialogView.findViewById(R.id.dialogCalib2_mainText);
-        TextView subText = dialogView.findViewById(R.id.dialogCalib2_subText);
-        Button cancel = dialogView.findViewById(R.id.dialogCalib2_Cancelbtn);
-        Button confirm = dialogView.findViewById(R.id.dialogCalib2_retryBtn);
 
-        textView.setText("Insert the Sensor in Standard Solution");
-        subText.setVisibility(View.INVISIBLE);
+        ImageView iv = dialogView.findViewById(R.id.dialogType1CalibIv);
+        TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
+        TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
+        Button cancel = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
+        Button confirm = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
 
-        confirm.setText("Confirm");
-        final Boolean[] canSend = {true};
-        cancel.setOnClickListener(View -> {
-            canSend[0] = false;
-            alertDialog.dismiss();
-        });
-        confirm.setOnClickListener(View -> {
-            sendSlopeCalibrationPacket();
-            alertDialog.dismiss();
-        });
-        alertDialog.show();
+        switch (result) {
+            case "0":
+                iv.setBackgroundResource(R.drawable.ic_success);
+                mainText.setText("Status - 0");
+                subText.setText("OK");
+                cancel.setText("CONFIRM");
+                confirm.setVisibility(View.GONE);
+                cancel.setOnClickListener(View -> {
+                    alertDialog.dismiss();
+                });
+                break;
+
+            case "256":
+                iv.setBackgroundResource(R.drawable.ic_failed);
+                mainText.setText("Status - 256");
+                subText.setText("Solution is too high");
+                cancel.setText("CONFIRM");
+                confirm.setVisibility(View.VISIBLE);
+
+                cancel.setOnClickListener(View -> {
+                    alertDialog.dismiss();
+                });
+
+                confirm.setOnClickListener(View -> {
+                    alertDialog.dismiss();
+                    readZeroCalibPacket();
+                });
+                break;
+
+            case "1024":
+                iv.setBackgroundResource(R.drawable.ic_failed);
+                mainText.setText("Status - 1024");
+                subText.setText("Solution is too low");
+                cancel.setText("CONFIRM");
+                confirm.setVisibility(View.VISIBLE);
+
+                cancel.setOnClickListener(View -> {
+                    alertDialog.dismiss();
+                });
+
+                confirm.setOnClickListener(View -> {
+                    alertDialog.dismiss();
+                    readZeroCalibPacket();
+                });
+                break;
+        }
     }
 
-    private void sendSlopeCalibrationPacket() {
+    private void showDiagCheckResult(String spiltData) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
         dialogBuilder.setView(dialogView);
-        alertSlopeReadingPleaseWait = dialogBuilder.create();
-        TextView textView = dialogView.findViewById(R.id.dialogCalib2_mainText);
-        TextView subText = dialogView.findViewById(R.id.dialogCalib2_subText);
-        Button cancel = dialogView.findViewById(R.id.dialogCalib2_Cancelbtn);
-        Button confirm = dialogView.findViewById(R.id.dialogCalib2_retryBtn);
+        AlertDialog alertDialog = dialogBuilder.create();
 
-        textView.setText("Insert the sensor in standard solution");
-        subText.setVisibility(View.GONE);
-        confirm.setVisibility(View.GONE);
+        ImageView iv = dialogView.findViewById(R.id.dialogType1CalibIv);
+        TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
+        TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
+        Button cancel = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
+        Button confirm = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
 
-        final boolean[] canSend = {true};
-        cancel.setOnClickListener(View -> {
-            canSend[0] = false;
-            alertSlopeReadingPleaseWait.dismiss();
-        });
+        if (Integer.parseInt(spiltData) < 600) {
+            iv.setBackgroundResource(R.drawable.ic_verify);
+            mainText.setText("\"Inset the sensor in cooling water\"");
+            subText.setText("");
+            confirm.setText("Retry");
+            cancel.setText("CANCEL");
+            cancel.setOnClickListener(View -> {
+                alertDialog.dismiss();
+            });
+            confirm.setOnClickListener(View -> {
+                alertDialog.dismiss();
+                readDiagnosticCheckPacket("1024");
+            });
+            alertDialog.show();
 
-        alertSlopeReadingPleaseWait.show();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (canSend[0]) {
-                    mAppClass.sendPacket(FragmentModbusCalibration.this,
-                            DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR +
-                                    mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "1" + SPILT_CHAR + getPosition(0, mBundle.getString("ModbusType"), modBusTypeArr) + SPILT_CHAR +
-                                    getPosition(0, mBundle.getString("TypeOfValue"), typeOfValueRead) + SPILT_CHAR + calibMode);
-                }
-            }
-        }, 5000);
+        } else if (Integer.parseInt(spiltData) > 600) {
+            iv.setBackgroundResource(R.drawable.ic_verify);
+            mainText.setText("No Cleaning Required");
+            subText.setText("");
+            confirm.setText("CONFIRM");
+            cancel.setVisibility(View.GONE);
+            confirm.setOnClickListener(View -> {
+                alertDialog.dismiss();
+            });
+            alertDialog.show();
 
+        } else if (Integer.parseInt(spiltData) > 3000) {
+            iv.setBackgroundResource(R.drawable.ic_verify);
+            mainText.setText("Sensor Cleaning Required");
+            subText.setText("");
+            confirm.setText("CONFIRM");
+            cancel.setVisibility(View.GONE);
+            confirm.setOnClickListener(View -> {
+                alertDialog.dismiss();
+            });
+            alertDialog.show();
+
+        } else if (Integer.parseInt(spiltData) < 3000) {
+            iv.setBackgroundResource(R.drawable.ic_verify);
+            mainText.setText("No Cleaning Required");
+            subText.setText("");
+            confirm.setText("CONFIRM");
+            cancel.setVisibility(View.GONE);
+            confirm.setOnClickListener(View -> {
+                alertDialog.dismiss();
+            });
+            alertDialog.show();
+        }
     }
-
-
 }

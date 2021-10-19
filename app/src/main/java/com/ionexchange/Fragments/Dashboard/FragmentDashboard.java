@@ -99,22 +99,10 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         Log.e(TAG, "Timer Canceled !");
     }
 
-    private void startKeepAlive() {
-        handler = null;
-        handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                sendKeepAlive("0");
-            }
-        }, 10000);
-    }
-
     private void sendKeepAlive(String setID) {
         mAppClass.sendPacket(this,
                 DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET +
                         SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + setID);
-        // startKeepAlive();
     }
 
     private void setDefaultPage() {
