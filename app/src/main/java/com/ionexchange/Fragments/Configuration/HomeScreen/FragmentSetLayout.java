@@ -793,12 +793,12 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                         textViewList.get(3).setText("N/A");
                         viewList.get(3).setEnabled(true);
                     }
-                    if (windowNo == 3) {
+                    if (windowNo == 5) {
                         mBinding.layout6Delete5.setVisibility(View.GONE);
                         textViewList.get(4).setText("N/A");
                         viewList.get(4).setEnabled(true);
                     }
-                    if (windowNo == 4) {
+                    if (windowNo == 6) {
                         mBinding.layout6Delete6.setVisibility(View.GONE);
                         textViewList.get(5).setText("N/A");
                         viewList.get(5).setEnabled(true);

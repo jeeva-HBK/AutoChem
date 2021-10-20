@@ -19,7 +19,7 @@ public interface MainConfigurationDao {
     List<MainConfigurationEntity> getMainConfigurationEntityList();
 
     @Query("select * FROM MainConfigurationEntity WHERE screen_no = :screen_no and layout_no = :layout_no " +
-            " and page_No =:page_no")
+            " and page_No =:page_no order by window_no asc")
     List<MainConfigurationEntity> getPageWiseSensor(int screen_no, int layout_no, int page_no);
 
 
@@ -36,7 +36,6 @@ public interface MainConfigurationDao {
     @Query("select sNo  FROM MainConfigurationEntity WHERE  screen_no = :screen_no and layout_no = :layout_no " +
             " and window_no = :window_no   and page_No =:page_no")
     int getSno(int screen_no, int layout_no, int window_no, int page_no);
-
 
     @Query("select sum(window_no) FROM  MainConfigurationEntity WHERE screen_no = :screen_no and layout_no = :layout_no " +
             "and page_No =:page_no")

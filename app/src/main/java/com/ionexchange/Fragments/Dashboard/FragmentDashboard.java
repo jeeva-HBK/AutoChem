@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -20,6 +21,7 @@ import com.ionexchange.Adapters.DashboardRvAdapter;
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.MainConfigurationDao;
+import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 import com.ionexchange.Database.Entity.MainConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
@@ -50,6 +52,8 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     int girdCount, layout, screenNo, pageNo = 1;
     int maxPage;
     Handler handler;
+
+
     private static final String TAG = "FragmentDashboard";
     CountDownTimer timer = new CountDownTimer(10000, 500) {
         @Override
@@ -77,11 +81,22 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         db = WaterTreatmentDb.getDatabase(getContext());
         defaultLayoutConfigurationDao = db.defaultLayoutConfigurationDao();
         mainConfigurationDao = db.mainConfigurationDao();
+
         setGridCount(pageNo);
         setDefaultPage();
         mBinding.rightArrowIsBtn.setOnClickListener(this);
         mBinding.leftArrowIsBtn.setOnClickListener(this);
         mBinding.rvDashboard.setNestedScrollingEnabled(false);
+
+        // LiveData
+        keepAliveCurrentValueDao = db.keepAliveCurrentValueDao();
+        keepAliveCurrentValueDao.getLiveList().observe(getViewLifecycleOwner(), new Observer<List<KeepAliveCurrentEntity>>() {
+            @Override
+            public void onChanged(List<KeepAliveCurrentEntity> keepAliveCurrentEntities) {
+                Log.e(TAG, "onChanged: VALUE CHANGED");
+                mBinding.rvDashboard.getAdapter().notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -91,6 +106,7 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         timer.start();
         Log.e(TAG, "Timer Started !");
     }
+
 
     @Override
     public void onPause() {
@@ -223,7 +239,6 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
 
     private void handleResponse(String[] splitData) {
         // {*1$ 11$ 0$ | 0125.00$ 02$ 03$ 04200.00$ 05$ 060.000000$ 070.000000$ 08$ 090.000000$ 10*}
-        keepAliveCurrentValueDao = db.keepAliveCurrentValueDao();
         if (splitData[0].equals(READ_PACKET)) {
             if (splitData[1].equals(PCK_DIAGNOSTIC)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
@@ -277,7 +292,6 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
                     } else {
                         keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[13].substring(0, 2)), "N/A");
                     }
-                    setGridCount(pageNo);
 
                     if (splitData[3].equals("0")) {
                         sendKeepAlive("1");
@@ -286,4 +300,6 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
             }
         }
     }
+
+
 }

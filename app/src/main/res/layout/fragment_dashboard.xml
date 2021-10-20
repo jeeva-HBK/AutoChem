@@ -48,20 +48,20 @@
             app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
         <com.google.android.material.button.MaterialButton
-        android:id="@+id/rightArrow_is_btn"
-        android:layout_width="100dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="10dp"
-        android:backgroundTint="@color/colorSecondary"
-        android:text=""
-        android:visibility="gone"
-        app:cornerRadius="10dp"
-        app:icon="@drawable/ic_back_right"
-        app:iconGravity="textStart"
-        app:iconTint="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar"
-        app:layout_constraintTop_toTopOf="@+id/toolbar" />
+            android:id="@+id/rightArrow_is_btn"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="@color/colorSecondary"
+            android:text=""
+            android:visibility="gone"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_back_right"
+            app:iconGravity="textStart"
+            app:iconTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintEnd_toEndOf="@+id/toolbar"
+            app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_dashboard"
@@ -69,8 +69,6 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:nestedScrollingEnabled="false"
-            android:focusableInTouchMode="false"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 

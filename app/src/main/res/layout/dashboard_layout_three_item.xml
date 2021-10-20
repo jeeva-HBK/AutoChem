@@ -35,6 +35,7 @@
         android:text="N/A"
         android:textSize="14sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/layoutOne"
         app:layout_constraintEnd_toEndOf="@+id/layout_one_current_value"
         app:layout_constraintTop_toBottomOf="@+id/layout_one_current_value" />
 
@@ -47,9 +48,10 @@
         android:text="N/A"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/layout_1_label"
         app:layout_constraintEnd_toEndOf="@+id/txt_layout_1_current"
         app:layout_constraintStart_toStartOf="@+id/txt_layout_1_current"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/layoutOne" />
 
     <View
         android:id="@+id/view_vertical"
@@ -176,21 +178,21 @@
         android:textColor="@color/colorSecondary"
         android:textSize="25dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/layoutOne"
         app:layout_constraintEnd_toEndOf="@+id/layoutOne"
+        app:layout_constraintBottom_toTopOf="@+id/layout_one_current_value"
         app:layout_constraintStart_toStartOf="@id/view_vertical"
-        app:layout_constraintTop_toTopOf="@+id/layoutOne"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_type_1" />
 
     <TextView
         android:id="@+id/layout_one_current_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
+
         android:text="N/A"
         android:textColor="@color/white"
         android:textSize="50dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/layout_unit_1"
         app:layout_constraintEnd_toEndOf="@+id/layoutOne"
         app:layout_constraintStart_toStartOf="@id/view_vertical"
         app:layout_constraintTop_toBottomOf="@+id/txt_layout_1_current" />
@@ -227,8 +229,9 @@
         android:text="N/A"
         android:textSize="14sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/layout_two"
         app:layout_constraintEnd_toEndOf="@+id/layout_2_current_value"
-        app:layout_constraintTop_toBottomOf="@+id/layout_one_current_value" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_2_current_value" />
 
     <TextView
         android:id="@+id/layout_type_2"
@@ -241,7 +244,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/txt_layout_2_current"
         app:layout_constraintStart_toStartOf="@+id/txt_layout_2_current"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/layout_two" />
 
     <View
         android:id="@+id/vertical_centre"
@@ -368,17 +371,18 @@
         android:textColor="@color/colorSecondary"
         android:textSize="25dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/layout_two"
+        app:layout_constraintTop_toBottomOf="@+id/layout_type_2"
+       app:layout_constraintBottom_toTopOf="@+id/layout_2_current_value"
         app:layout_constraintEnd_toEndOf="@+id/layout_two"
         app:layout_constraintStart_toStartOf="@id/vertical_centre"
-        app:layout_constraintTop_toTopOf="@+id/layout_two"
-        app:layout_constraintVertical_bias="0.3" />
+
+        />
 
     <TextView
         android:id="@+id/layout_2_current_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_unit_2"
         android:text="N/A"
         android:textColor="@color/white"
         android:textSize="50dp"

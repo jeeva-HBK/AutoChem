@@ -1,5 +1,6 @@
 package com.ionexchange.Database.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -17,6 +18,9 @@ public interface KeepAliveCurrentValueDao {
 
     @Query("select * FROM KeepAliveCurrentEntity")
     List<KeepAliveCurrentEntity> getKeepAliveList();
+
+    @Query("select * FROM KeepAliveCurrentEntity")
+    LiveData<List<KeepAliveCurrentEntity>> getLiveList();
 
     @Query("select currentValue  FROM KeepAliveCurrentEntity WHERE  hardwareNo = :hardwareNo ")
     String getCurrentValue(int hardwareNo);
