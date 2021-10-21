@@ -12,23 +12,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
-import com.ionexchange.Database.Dao.InputConfigurationDao;
-import com.ionexchange.Database.Dao.OutputConfigurationDao;
-import com.ionexchange.Database.Dao.TimerConfigurationDao;
-import com.ionexchange.Database.Dao.VirtualConfigurationDao;
-import com.ionexchange.Database.Entity.InputConfigurationEntity;
-import com.ionexchange.Database.Entity.OutputConfigurationEntity;
-import com.ionexchange.Database.Entity.TimerConfigurationEntity;
-import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
-import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Fragments.Configuration.FragmentRoot_Config;
+import com.ionexchange.Fragments.Services.FragmentRootServices;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentMainhostBinding;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.macAddress;
 import static com.ionexchange.Others.ApplicationClass.userType;
@@ -132,7 +121,7 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
                     break;
 
                 case R.id.event_logs_screen_btn:
-                    setNewState(mBinding.supportBigCircle, mBinding.supportMain, mBinding.supportSub, mBinding.supportSmallCircle, mBinding.supportText, new FragmentRoot_EventLogs(), "Events & Logs");
+                    setNewState(mBinding.supportBigCircle, mBinding.supportMain, mBinding.supportSub, mBinding.supportSmallCircle, mBinding.supportText, new FragmentRootServices(), "Events & Logs");
                     break;
 
                 case R.id.config_screen_btn:

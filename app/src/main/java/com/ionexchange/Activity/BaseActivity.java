@@ -144,6 +144,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         sub.setVisibility(View.VISIBLE);
         txtView.setVisibility(View.VISIBLE);
         main.setVisibility(View.INVISIBLE);
+
         NavGraph.setStartDestination(fragment);
         navController.setGraph(navGraph);
 

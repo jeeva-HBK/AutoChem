@@ -105,7 +105,6 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                         holder.labeLTwo, holder.hardwareNoTwo, holder.lowAlarmTwo, holder.highAlarmTwo, holder.currentValueTwo,
                         holder.labeLThree, holder.hardwareNoThree, holder.lowAlarmThree, holder.highAlarmThree, holder.currentValueThree,
                         holder.sensorLabelOne, holder.unitOne, holder.typeOne, holder.sensorLabelTwo, holder.uniTwo, holder.typeTwo, holder.sensorLabelThree, holder.uniThree, holder.typeThree);
-
                 break;
 
             case 5:

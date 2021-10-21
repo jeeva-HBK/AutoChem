@@ -31,9 +31,9 @@
 
     <fragment
         android:id="@+id/event_log"
-        android:name="com.ionexchange.Fragments.FragmentRoot_EventLogs"
+        android:name="com.ionexchange.Fragments.Services.FragmentRootServices"
         android:label="EventLog"
-        tools:layout="@layout/fragment_logs" />
+        tools:layout="@layout/fragment_root_services" />
 
 
     <fragment

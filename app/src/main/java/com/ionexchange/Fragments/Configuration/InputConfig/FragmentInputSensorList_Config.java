@@ -57,8 +57,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
     WaterTreatmentDb dB;
     InputConfigurationDao dao;
     private static final String TAG = "FragmentInputSettings";
-    int pageOffset = 0, currentPage = 0, sequenceNo=0, sequenceType = 0, sequenceValueRead = 0,analogType = 0,
-            flowmeterType=0;
+    int pageOffset = 0, currentPage = 0, sequenceNo = 0, sequenceType = 0, sequenceValueRead = 0, analogType = 0, flowmeterType = 0;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -125,6 +124,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
                     sensorType.setAdapter(getAdapter(sensorTypeArr));
                     inputNumber.setAdapter(getAdapter(sensorsViArr));
                     sensorName.setAdapter(getAdapter(inputTypeArr));
+
                     sensorType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -267,7 +267,6 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
         }
     }
 
-
     Bundle updateBundle(String inputNumber, int sensorStatus) {
         Bundle bundle = new Bundle();
         bundle.putString("inputNumber", inputNumber);
@@ -375,4 +374,5 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
     public void onClick(String sensorInputNo, String sensorType) {
         frameLayout(sensorInputNo, sensorType);
     }
+
 }

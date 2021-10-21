@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RadioGroup
+            android:id="@+id/service_radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/service_diagnosticsRb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_radio_empty"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Diagnostic Data"
+                android:textColor="@color/radio_flat_text_selector" />
+
+            <RadioButton
+                android:id="@+id/service_logsRb"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_radio_empty"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Alrams &amp; Events"
+                android:textColor="@color/radio_flat_text_selector" />
+
+            <RadioButton
+                android:id="@+id/service_outputControlRb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_radio_empty"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Output Control"
+                android:textColor="@color/radio_flat_text_selector" />
+
+        </RadioGroup>
+
+        <FrameLayout
+            android:id="@+id/service_hostFrame"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/service_radioGroup" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

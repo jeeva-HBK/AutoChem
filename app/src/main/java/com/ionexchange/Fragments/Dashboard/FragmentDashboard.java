@@ -107,7 +107,6 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         Log.e(TAG, "Timer Started !");
     }
 
-
     @Override
     public void onPause() {
         super.onPause();

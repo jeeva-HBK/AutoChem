@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments;
+package com.ionexchange.Fragments.Services;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -20,7 +20,9 @@ import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
-import com.ionexchange.databinding.FragmentLogsBinding;
+import com.ionexchange.databinding.FragmentDiagnosticsBinding;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,21 +34,21 @@ import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 
-
-public class FragmentRoot_EventLogs extends Fragment implements DataReceiveCallback {
-    FragmentLogsBinding mBinding;
+public class FragmentDiagnosticsData extends Fragment implements DataReceiveCallback {
+    FragmentDiagnosticsBinding mBinding;
     ApplicationClass mAppClass;
-    private static final String TAG = "FragmentRoot_EventLogs";
+    private static final String TAG = "FragmentDiagnosticsData";
 
     @Nullable
+    @org.jetbrains.annotations.Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_logs, container, false);
+    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_diagnostics, container, false);
         return mBinding.getRoot();
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
         mBinding.readNowBtn.setOnClickListener(View -> {
@@ -131,4 +133,5 @@ public class FragmentRoot_EventLogs extends Fragment implements DataReceiveCallb
             Log.e(TAG, "handleResponse: Received Wrong Pck");
         }
     }
+
 }
