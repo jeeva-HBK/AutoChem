@@ -196,7 +196,7 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
     private void startSlopeCalibration() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_with_onedt, null);
+        View dialogView = inflater.inflate(R.layout.dialog_calib_onedt, null);
         dialogBuilder.setView(dialogView);
         AlertDialog alertDialog = dialogBuilder.create();
 

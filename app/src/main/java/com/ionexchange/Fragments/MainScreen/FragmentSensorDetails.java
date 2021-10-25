@@ -117,7 +117,6 @@ public class FragmentSensorDetails extends Fragment {
                     mBinding.txtTrendCalibration.setText("CALIBRATION");
                     mBinding.viewTrendCalibration.setBackground(getContext().getDrawable(R.drawable.calib_flask));
                     getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), new FragmentSensorStatistics()).commit();
-
                 }
             }
         });
@@ -178,6 +177,7 @@ public class FragmentSensorDetails extends Fragment {
                                 switch (getValueFromArr(splitData[4], inputTypeArr)) {
                                     case "pH":
                                         mBundle.putString("bufferType", splitData[8]);
+                                        mBundle.putString("inputNumber", splitData[3]);
                                         setAdapter(formpHMap(data.split("\\*")[1].split("\\$")));
                                         break;
 
