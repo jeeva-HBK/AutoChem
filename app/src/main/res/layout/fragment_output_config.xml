@@ -920,10 +920,22 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
-
+                <ToggleButton
+                    android:id="@+id/sensor_setpointvalue_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/sensor_setPoint_til_osc" />
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/sensor_setPoint_til_osc"
                     style="@style/config_Til"
+                    app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -936,7 +948,9 @@
                         android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="3"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -946,7 +960,7 @@
                     android:layout_gravity="center"
                     android:padding="5dp"
                     android:text="."
-                    app:layout_constraintBottom_toBottomOf="@+id/sensor_setPoint_deci_osc"
+                    app:layout_constraintBottom_toBottomOf="@+id/sensor_setPoint_til_osc"
                     app:layout_constraintEnd_toStartOf="@+id/sensor_setPoint_deci_osc"
                     app:layout_constraintTop_toTopOf="@+id/sensor_setPoint_deci_osc" />
 
@@ -1024,47 +1038,146 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--Safety Min-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/sensor_safetyMin_til_osc"
-                style="@style/appEdtTxt"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/sensor_safetyMin_root_osc"
                 android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="match_parent"
                 android:layout_margin="3dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="horizontal">
+            <ToggleButton
+                android:id="@+id/sensor_safetyMin_tBtn"
+                android:layout_width="50dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginTop="8dp"
+                android:background="@null"
+                android:textOff="-"
+                android:textOn="+"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/sensor_safetyMin_til_osc" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/sensor_safetyMin_til_osc"
+                    style="@style/config_Til"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/sensor_safetyMin_edt_osc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Safety Min"
-                    android:imeOptions="actionNext"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/sensor_safetyMin_edt_osc"
+                        style="@style/config_Edt"
+                        android:hint="Safety Min"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:text="."
+                    app:layout_constraintBottom_toBottomOf="@+id/sensor_safetyMin_til_osc"
+                    app:layout_constraintEnd_toStartOf="@+id/sensor_safetyMin_deci_osc"
+                    app:layout_constraintTop_toTopOf="@+id/sensor_safetyMin_deci_osc" />
+
+                <EditText
+                    android:id="@+id/sensor_safetyMin_deci_osc"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="00"
                     android:inputType="number"
-                    android:maxLength="6"
-                    android:maxLines="1" />
+                    android:maxLength="2"
+                    android:textColorHint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/sensor_safetyMin_til_osc"
+                    app:layout_constraintEnd_toEndOf="@+id/sensor_safetyMin_til_osc"
+                    app:layout_constraintHorizontal_bias="0.98"
+                    app:layout_constraintStart_toStartOf="@+id/sensor_safetyMin_til_osc"
+                    app:layout_constraintTop_toTopOf="@+id/sensor_safetyMin_til_osc" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <!--Safety Max-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/sensor_safetyMax_til_osc"
-                style="@style/appEdtTxt"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/sensor_safetyMax_root_osc"
                 android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="match_parent"
                 android:layout_margin="3dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="horizontal">
+            <ToggleButton
+                android:id="@+id/sensor_safetyMax_tBtn"
+                android:layout_width="50dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginTop="8dp"
+                android:background="@null"
+                android:textOff="-"
+                android:textOn="+"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/sensor_safetyMax_til_osc" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/sensor_safetyMax_til_osc"
+                    style="@style/config_Til"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/sensor_safetyMax_edt_osc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Safety Max"
-                    android:imeOptions="actionNext"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/sensor_safetyMax_edt_osc"
+                        style="@style/config_Edt"
+                        android:hint="Safety Max"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:text="."
+                    app:layout_constraintBottom_toBottomOf="@+id/sensor_safetyMax_til_osc"
+                    app:layout_constraintEnd_toStartOf="@+id/sensor_safetyMax_deci_osc"
+                    app:layout_constraintTop_toTopOf="@+id/sensor_safetyMax_deci_osc" />
+
+                <EditText
+                    android:id="@+id/sensor_safetyMax_deci_osc"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="00"
                     android:inputType="number"
-                    android:maxLength="6"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
+                    android:maxLength="2"
+                    android:textColorHint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/sensor_safetyMax_til_osc"
+                    app:layout_constraintEnd_toEndOf="@+id/sensor_safetyMax_til_osc"
+                    app:layout_constraintHorizontal_bias="0.98"
+                    app:layout_constraintStart_toStartOf="@+id/sensor_safetyMax_til_osc"
+                    app:layout_constraintTop_toTopOf="@+id/sensor_safetyMax_til_osc" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
         <!--Row 10 (Sensor - On/Off)-->
@@ -1123,6 +1236,458 @@
 
         <!--Row 11 (Sensor - PID)-->
         <LinearLayout
+            android:id="@+id/outputRow14_sensor_PID"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}">
+
+            <!--Dose Type-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pid_doseType_til_osc"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/pid_doseType_atxt_osc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Dose Type" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Link Input-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pid_linkInput_til_osc"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/pid_linkInput_atxt_osc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Link Input Sensor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 12 (Sensor - PID)-->
+        <LinearLayout
+            android:id="@+id/outputRow12_sensor_PID"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}">
+            <!--Input Min-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/pid_inputMin_root_osc"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <ToggleButton
+                    android:id="@+id/pid_inputMinvalue_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/pid_inputMin_til_osc" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/pid_inputMin_til_osc"
+                    style="@style/config_Til"
+                    app:expandedHintEnabled="false"
+                    android:hint="Input Min"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/pid_inputMin_edt_osc"
+                        style="@style/config_Edt"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:text="."
+                    app:layout_constraintBottom_toBottomOf="@+id/pid_inputMin_til_osc"
+                    app:layout_constraintEnd_toStartOf="@+id/pid_inputMin_deci_osc"
+                    app:layout_constraintTop_toTopOf="@+id/pid_inputMin_deci_osc" />
+
+                <EditText
+                    android:id="@+id/pid_inputMin_deci_osc"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textColorHint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/pid_inputMin_til_osc"
+                    app:layout_constraintEnd_toEndOf="@+id/pid_inputMin_til_osc"
+                    app:layout_constraintHorizontal_bias="0.98"
+                    app:layout_constraintStart_toStartOf="@+id/pid_inputMin_til_osc"
+                    app:layout_constraintTop_toTopOf="@+id/pid_inputMin_til_osc" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <!--Input Max-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/pid_inputMax_root_osc"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <ToggleButton
+                    android:id="@+id/pid_inputMaxvalue_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/pid_inputMax_til_osc" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/pid_inputMax_til_osc"
+                    style="@style/config_Til"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:expandedHintEnabled="false"
+                    android:hint="Input Max">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/pid_inputMax_edt_osc"
+                        style="@style/config_Edt"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:text="."
+                    app:layout_constraintBottom_toBottomOf="@+id/pid_inputMax_deci_osc"
+                    app:layout_constraintEnd_toStartOf="@+id/pid_inputMax_deci_osc"
+                    app:layout_constraintTop_toTopOf="@+id/pid_inputMax_deci_osc" />
+
+                <EditText
+                    android:id="@+id/pid_inputMax_deci_osc"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textColorHint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/pid_inputMax_til_osc"
+                    app:layout_constraintEnd_toEndOf="@+id/pid_inputMax_til_osc"
+                    app:layout_constraintHorizontal_bias="0.98"
+                    app:layout_constraintStart_toStartOf="@+id/pid_inputMax_til_osc"
+                    app:layout_constraintTop_toTopOf="@+id/pid_inputMax_til_osc" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <!--Output Min-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pid_minOutput_til_osc"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/pid_minOutput_edt_osc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Output Min"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Output Max-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pid_maxOutput_til_osc"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/pid_maxOutput_edt_osc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Output Max"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 13 (Sensor - PID)-->
+        <LinearLayout
+            android:id="@+id/outputRow13_sensor_PID"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}">
+            <!--Safety Min-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/pid_safetyMin_root_osc"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <ToggleButton
+                    android:id="@+id/pid_safetyMinvalue_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/pid_safetyMin_til_osc" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/pid_safetyMin_til_osc"
+                    style="@style/config_Til"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:hint="Safety Min"
+                    app:expandedHintEnabled="false"
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/pid_safetyMin_edt_osc"
+                        style="@style/config_Edt"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:text="."
+                    app:layout_constraintBottom_toBottomOf="@+id/pid_safetyMin_deci_osc"
+                    app:layout_constraintEnd_toStartOf="@+id/pid_safetyMin_deci_osc"
+                    app:layout_constraintTop_toTopOf="@+id/pid_safetyMin_deci_osc" />
+
+                <EditText
+                    android:id="@+id/pid_safetyMin_deci_osc"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textColorHint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/pid_safetyMin_til_osc"
+                    app:layout_constraintEnd_toEndOf="@+id/pid_safetyMin_til_osc"
+                    app:layout_constraintHorizontal_bias="0.98"
+                    app:layout_constraintStart_toStartOf="@+id/pid_safetyMin_til_osc"
+                    app:layout_constraintTop_toTopOf="@+id/pid_safetyMin_til_osc" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--Safety Max-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/pid_safetyMax_root_osc"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <ToggleButton
+                    android:id="@+id/pid_safetyMaxvalue_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/pid_safetyMax_til_osc" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/pid_safetyMax_til_osc"
+                    style="@style/config_Til"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:expandedHintEnabled="false"
+                    android:hint="Safety Max"
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/pid_safetyMax_edt_osc"
+                        style="@style/config_Edt"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:text="."
+                    app:layout_constraintBottom_toBottomOf="@+id/pid_safetyMax_deci_osc"
+                    app:layout_constraintEnd_toStartOf="@+id/pid_safetyMax_deci_osc"
+                    app:layout_constraintTop_toTopOf="@+id/pid_safetyMax_deci_osc" />
+
+                <EditText
+                    android:id="@+id/pid_safetyMax_deci_osc"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textColorHint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/pid_safetyMax_til_osc"
+                    app:layout_constraintEnd_toEndOf="@+id/pid_safetyMax_til_osc"
+                    app:layout_constraintHorizontal_bias="0.98"
+                    app:layout_constraintStart_toStartOf="@+id/pid_safetyMax_til_osc"
+                    app:layout_constraintTop_toTopOf="@+id/pid_safetyMax_til_osc" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--Reset PID Integeral-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pid_resetPid_til_osc"
+                style="@style/appAutoTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/pid_resetPid_atxt_osc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Reset PID Integral"
+                    android:editable="false"
+                    android:focusable="false" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Lockout Delay-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pid_lockoutDelay_til_osc"
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/pid_lockoutDelay_edt_osc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Lockout Delay"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--Row 14 (Sensor - PID)-->
+        <LinearLayout
             android:id="@+id/outputRow11_sensor_PID"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -1139,6 +1704,18 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
+                <ToggleButton
+                    android:id="@+id/pid_setpointvalue_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/pid_setPoint_til_osc" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/pid_setPoint_til_osc"
@@ -1146,16 +1723,20 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:expandedHintEnabled="false"
+                    android:hint="Set Point"
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/pid_setPoint_edt_osc"
                         style="@style/config_Edt"
-                        android:hint="Set Point"
                         android:imeOptions="actionNext"
                         android:inputType="number"
-                        android:maxLength="3"
-                        android:maxLines="1" />
+                        android:maxLength="2"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -1369,246 +1950,6 @@
 
         </LinearLayout>
 
-        <!--Row 12 (Sensor - PID)-->
-        <LinearLayout
-            android:id="@+id/outputRow12_sensor_PID"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}">
-
-            <!--Input Min-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/pid_inputMin_til_osc"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_margin="3dp"
-                android:layout_weight="1">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/pid_inputMin_edt_osc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Input Min"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="6"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--Input Max-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/pid_inputMax_til_osc"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_margin="3dp"
-                android:layout_weight="1">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/pid_inputMax_edt_osc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Input Max"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="6"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--Output Min-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/pid_minOutput_til_osc"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_margin="3dp"
-                android:layout_weight="1">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/pid_minOutput_edt_osc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Output Min"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--Output Max-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/pid_maxOutput_til_osc"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_margin="3dp"
-                android:layout_weight="1">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/pid_maxOutput_edt_osc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Output Max"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
-        <!--Row 13 (Sensor - PID)-->
-        <LinearLayout
-            android:id="@+id/outputRow13_sensor_PID"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}">
-
-            <!--Safety Min-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/pid_safetyMin_til_osc"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_margin="3dp"
-                android:layout_weight="1">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/pid_safetyMin_edt_osc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Safety Min"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="6"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--Safety Max-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/pid_safetyMax_til_osc"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_margin="3dp"
-                android:layout_weight="1">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/pid_safetyMax_edt_osc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Safety Max"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="6"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--Reset PID Integeral-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/pid_resetPid_til_osc"
-                style="@style/appAutoTxt"
-                android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_margin="3dp"
-                android:layout_weight="1">
-
-                <AutoCompleteTextView
-                    android:id="@+id/pid_resetPid_atxt_osc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Reset PID Integral"
-                    android:editable="false"
-                    android:focusable="false" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--Lockout Delay-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/pid_lockoutDelay_til_osc"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_margin="3dp"
-                android:layout_weight="1">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/pid_lockoutDelay_edt_osc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Lockout Delay"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="5"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
-        <!--Row 14 (Sensor - PID)-->
-        <LinearLayout
-            android:id="@+id/outputRow14_sensor_PID"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="@{functionMode.equals(`layoutSensorPID`) ? View.VISIBLE : View.GONE}">
-
-            <!--Dose Type-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/pid_doseType_til_osc"
-                style="@style/appAutoTxt"
-                android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_margin="3dp"
-                android:layout_weight="1">
-
-                <AutoCompleteTextView
-                    android:id="@+id/pid_doseType_atxt_osc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:hint="Dose Type" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--Link Input-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/pid_linkInput_til_osc"
-                style="@style/appAutoTxt"
-                android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_margin="3dp"
-                android:layout_weight="1">
-
-                <AutoCompleteTextView
-                    android:id="@+id/pid_linkInput_atxt_osc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:hint="Link Input Sensor" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
         <!--Row 15 (Analog - probe/pump/dosing)-->
         <LinearLayout
             android:id="@+id/outputRow15_analog_main"
@@ -1772,14 +2113,28 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/analog_minValue_root_osc"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
+                <ToggleButton
+                    android:id="@+id/analog_minValue_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/analog_minValue_til_osc" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/analog_minValue_til_osc"
                     style="@style/config_Til"
+                    android:hint="Min Value"
+                    app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -1788,11 +2143,12 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/analog_minValue_edt_osc"
                         style="@style/config_Edt"
-                        android:hint="Min Value"
                         android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="2"
-                        android:maxLines="1" />
+                        android:textAlignment="center"
+                        android:maxLines="1"
+                        app:textInputLayoutFocusedRectEnabled="true"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -1831,14 +2187,28 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/analog_maxValue_root_osc"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
+                <ToggleButton
+                    android:id="@+id/analog_maxValue_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/analog_maxValue_til_osc" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/analog_maxValue_til_osc"
                     style="@style/config_Til"
+                    app:expandedHintEnabled="false"
+                    android:hint="Max Value"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -1847,11 +2217,12 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/analog_maxValue_edt_osc"
                         style="@style/config_Edt"
-                        android:hint="Max Value"
                         android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="2"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 

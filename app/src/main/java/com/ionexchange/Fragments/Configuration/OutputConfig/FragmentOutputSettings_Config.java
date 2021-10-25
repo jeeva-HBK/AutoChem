@@ -1,6 +1,7 @@
 package com.ionexchange.Fragments.Configuration.OutputConfig;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,7 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
                 } else {
                     outpuType = AppEnum.RELAY_OUTPUT;
                     setOutputRvData(AppEnum.RELAY_OUTPUT);
+                    currentPage = 0;
                     mBinding.leftArrowOsBtn.setVisibility(View.GONE);
                     mBinding.rightArrowOsBtn.setVisibility(View.VISIBLE);
                 }
@@ -99,6 +101,24 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("print",""+currentPage);
+        if(mBinding.radioGroup.getCheckedRadioButtonId() == R.id.relayRb) {
+            if (currentPage == 1) {
+                mBinding.leftArrowOsBtn.setVisibility(View.VISIBLE);
+                mBinding.rightArrowOsBtn.setVisibility(View.GONE);
+            } else {
+                mBinding.leftArrowOsBtn.setVisibility(View.GONE);
+                mBinding.rightArrowOsBtn.setVisibility(View.VISIBLE);
+            }
+        }else{
+            mBinding.leftArrowOsBtn.setVisibility(View.GONE);
+            mBinding.rightArrowOsBtn.setVisibility(View.GONE);
+        }
+    }
+
     private void setOutputRvData(AppEnum outpuType) {
         mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(this,
                 dao.getOutputHardWareNoConfigurationEntityList((outpuType == AppEnum.RELAY_OUTPUT ? 1 : 15), (outpuType == AppEnum.RELAY_OUTPUT ? 14 : 22), 9, pageOffset)));
@@ -121,7 +141,8 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
     }
 
     @Override
-    public void onClick(MainConfigurationEntity mEntity) {
+    public void onClick(MainConfigurationEntity mainConfigurationEntity) {
 
     }
+
 }

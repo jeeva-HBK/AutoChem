@@ -48,7 +48,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 import static android.util.Patterns.IP_ADDRESS;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
 
 /* Created by Jeeva on 13/07/2021 */
@@ -71,7 +70,7 @@ public class ApplicationClass extends Application {
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},
-            unitArr = {"µS/cm", " mS/cm", "S/cm"},
+            unitArr = {"ÂµS/cm", "mS/cm", "S/cm"},
             resetFlowTotalArr = {"No reset", "Reset"},
             sensorSequenceNumber = {"1-Sensor", "2-Sensor", "3-Sensor", "4-Sensor", "5-Sensor", "6-Sensor"},
             levelsensorSequenceNumber = {"None", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4",
@@ -95,7 +94,7 @@ public class ApplicationClass extends Application {
             analogTypeArr = {"(4-20mA)", "(0-10V)"},
             analogUnitArr = {"ma", "V"},
 
-    calculationArr = {"Difference", "Ratio", "Total", "% Difference"},
+            calculationArr = {"Difference", "Ratio", "Total", "% Difference"},
             sensorArr = {"1", "2", "3", "4"}, temperatureArr = {"15", "16", "17"},
             modbusArr = {"5", "6", "7", "8", "9", "10", "11", "12", "13", "14"},
             analogArr = {"18", "19", "20", "21", "22", "23", "24", "25"},
@@ -179,7 +178,6 @@ public class ApplicationClass extends Application {
                     if (preferences != null) {
                         mIPAddress = preferences.getString("prefIp", "");
                         mPortNumber = Integer.parseInt(preferences.getString("prefPort", ""));
-                        DEVICE_PASSWORD = preferences.getString("prefPassword", "");
                     }
                     registerReceiver();
                 } catch (Exception e) {
@@ -496,7 +494,7 @@ public class ApplicationClass extends Application {
             for (int i = 50; i <= 57; i++) {
                 VirtualConfigurationEntity entityUpdate = new VirtualConfigurationEntity
                         (i, "virtual-" + (i - 49), 0, "N/A",
-                                "N/A", "N/A");
+                                "N/A", "N/A","N/A");
                 List<VirtualConfigurationEntity> virtualEntryList = new ArrayList<>();
                 virtualEntryList.add(entityUpdate);
                 updateVirtualDB(virtualEntryList);

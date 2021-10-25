@@ -7,7 +7,7 @@ public interface RvOnClick {
     void onClick(String sensorInputNo);
 
     // For Calibration
-   // void onClick(String sensorInputNo,String type,int position);
+    // void onClick(String sensorInputNo,String type,int position);
     void onClick(MainConfigurationEntity mainConfigurationEntity);
 }
 

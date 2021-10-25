@@ -129,6 +129,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         mBinding.orpBackArrowIsc.setOnClickListener(v -> {
             mAppClass.popStackBack(getActivity());
         });
+
         mBinding.flowSaveFab.setOnClickListener(this::save);
         mBinding.flowDeleteFab.setOnClickListener(this::delete);
     }

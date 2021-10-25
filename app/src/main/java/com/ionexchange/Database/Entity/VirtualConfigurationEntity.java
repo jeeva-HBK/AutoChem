@@ -17,6 +17,9 @@ public class VirtualConfigurationEntity {
     @ColumnInfo(name = "inputLabel")
     public String inputLabel;
 
+    @ColumnInfo(name = "inputType")
+    public String inputType;
+
     @ColumnInfo(name = "subValueOne")
     public String subValueOne;
 
@@ -25,11 +28,13 @@ public class VirtualConfigurationEntity {
 
 
     public VirtualConfigurationEntity(int hardwareNo, String virtualType,
-                                      int inputSequenceNumber, String inputLabel, String subValueOne, String subValueTwo) {
+                                      int inputSequenceNumber, String inputLabel, String inputType,
+                                      String subValueOne, String subValueTwo) {
         this.hardwareNo = hardwareNo;
         this.virtualType = virtualType;
         this.inputSequenceNumber = inputSequenceNumber;
         this.inputLabel = inputLabel;
+        this.inputType = inputType;
         this.subValueOne = subValueOne;
         this.subValueTwo = subValueTwo;
     }
@@ -65,6 +70,14 @@ public class VirtualConfigurationEntity {
 
     public void setInputLabel(String inputLabel) {
         this.inputLabel = inputLabel;
+    }
+
+    public String getInputType() {
+        return inputType;
+    }
+
+    public void setInputType(String inputType) {
+        this.inputType = inputType;
     }
 
     public String getSubValueOne() {

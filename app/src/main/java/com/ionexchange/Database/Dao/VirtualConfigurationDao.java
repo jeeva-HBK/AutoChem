@@ -20,4 +20,7 @@ public interface VirtualConfigurationDao {
 
     @Query("select * FROM virtualconfigurationentity WHERE  hardwareNo BETWEEN :hardwareTo AND :hardwareNo")
     List<VirtualConfigurationEntity> getVirtualHardWareNoConfigurationEntityList(int hardwareTo, int hardwareNo);
+
+    @Query("select inputType  FROM virtualconfigurationentity WHERE  hardwareNo = :hardwareNo ")
+    String getInputType(int hardwareNo);
 }
