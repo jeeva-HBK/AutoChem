@@ -294,6 +294,14 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
 
                     if (splitData[3].equals("0")) {
                         sendKeepAlive("1");
+                    } else if (splitData[3].equals("1")) {
+                        sendKeepAlive("2");
+                    } else if (splitData[3].equals("2")){
+                        sendKeepAlive("3");
+                    } else if (splitData[3].equals("3")){
+                        sendKeepAlive("4");
+                    } else if (splitData[3].equals("4")){
+                        sendKeepAlive("5");
                     }
                 }
             }

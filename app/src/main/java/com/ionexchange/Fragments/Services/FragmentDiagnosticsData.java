@@ -123,8 +123,17 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
                         }
                         i++;
                     }
+
                     if (splitData[3].equals("0")) {
                         sendPacket("1");
+                    } else if (splitData[3].equals("1")) {
+                        sendPacket("2");
+                    } else if (splitData[3].equals("2")) {
+                        sendPacket("3");
+                    } else if (splitData[3].equals("3")) {
+                        sendPacket("4");
+                    } else if (splitData[3].equals("4")) {
+                        sendPacket("5");
                     }
                     setAdapter();
                 }

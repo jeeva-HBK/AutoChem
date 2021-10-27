@@ -455,9 +455,9 @@ public class ApplicationClass extends Application {
                     sensorType = "MODBUS";
                 }else if(i > 14 && i < 18){
                     sensorType = "SENSOR";
-                }else if(i > 17 && i < 27){
+                }else if(i > 17 && i < 26){
                     sensorType = "Analog";
-                }else if(i > 26 && i < 34){
+                }else if(i > 25 && i < 34){
                     sensorType = "FLOWMETER";
                 }else if(i > 33 && i < 42){
                     sensorType = "DIGITAL";

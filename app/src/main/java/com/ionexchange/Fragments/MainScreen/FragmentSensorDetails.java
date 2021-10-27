@@ -19,6 +19,7 @@ import com.ionexchange.Database.Dao.OutputConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Fragments.MainScreen.Calibration.FragmentModbusCalibration;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
@@ -69,7 +70,8 @@ public class FragmentSensorDetails extends Fragment {
     ApplicationClass mAppClass;
     List<List<String[]>> finalSensorParamList;
     int currentPage = 0, pageMax = 8;
-    FragmentSensorCalibration sensorCalibration;
+    FragmentCalibration_TypeOne sensorCalibration;
+
     FragmentModbusCalibration modbusCalibration;
     String inputNumber, inputType, sensorType = "null", spareKey = "null";
     String inNumber = "Input Number", inpuType = "Input Type", seqNumber = "Sequence Number", sensorActivation = "Sensor Activation",
@@ -103,14 +105,25 @@ public class FragmentSensorDetails extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     mBinding.txtTrendCalibration.setText("TREND");
+
+                    /* Calibration Fragment Identification
+                       For (pH/ORP/ANALOG) - FragmentCalibration_TypeOne
+                       For (TEMP) - FragmentCalibration_TypeTwo
+                       For (CONDUCTIVITY) - FragmentCalibration_TypeThree
+                     */
+
                     mBinding.viewTrendCalibration.setBackground(getContext().getDrawable(R.drawable.graph));
-                    if (inputType.equals("Modbus Sensor")){
-                        if (modbusCalibration!=null){
+                    if (inputType.equals("Modbus Sensor")) {
+                        if (modbusCalibration != null) {
                             getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), modbusCalibration).commit();
                         }
                     } else {
-                        if (sensorCalibration!=null){
-                            getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
+                        switch (inputType) {
+                            case "pH":
+                            case "ORP":
+                            case "Analog":
+                                getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
+                                break;
                         }
                     }
                 } else {
@@ -178,6 +191,8 @@ public class FragmentSensorDetails extends Fragment {
                                     case "pH":
                                         mBundle.putString("bufferType", splitData[8]);
                                         mBundle.putString("inputNumber", splitData[3]);
+                                        sensorCalibration = new FragmentCalibration_TypeOne(splitData[3], splitData[4], splitData[8]);
+                                        getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                         setAdapter(formpHMap(data.split("\\*")[1].split("\\$")));
                                         break;
 
@@ -214,19 +229,13 @@ public class FragmentSensorDetails extends Fragment {
                                         break;
 
                                     case "Modbus Sensor":
+                                        mBundle.putString("InputNo", splitData[3]);
+                                        mBundle.putString("ModbusType", getValueFromArr(splitData[6], modBusTypeArr));
+                                        mBundle.putString("TypeOfValue", getValueFromArr(splitData[7], typeOfValueRead));
+                                        modbusCalibration = new FragmentModbusCalibration(mBundle);
+                                        getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), modbusCalibration).commit();
                                         setAdapter(formModbusMap(data.split("\\*")[1].split("\\$")));
                                         break;
-                                }
-
-                                if (inputType.equals("Modbus Sensor")) {
-                                    mBundle.putString("InputNo", splitData[3]);
-                                    mBundle.putString("ModbusType", getValueFromArr(splitData[6], modBusTypeArr));
-                                    mBundle.putString("TypeOfValue", getValueFromArr(splitData[7], typeOfValueRead));
-                                    modbusCalibration = new FragmentModbusCalibration(mBundle);
-                                    getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(),modbusCalibration).commit();
-                                } else {
-                                    sensorCalibration = new FragmentSensorCalibration(mBundle);
-                                    getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                 }
                             } else if (splitData[2].equals(RES_FAILED)) {
                                 mAppClass.showSnackBar(getContext(), getString(R.string.readFailed));

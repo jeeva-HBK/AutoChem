@@ -1,4 +1,4 @@
-package com.ionexchange.Fragments.MainScreen;
+package com.ionexchange.Fragments.MainScreen.Calibration;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -151,7 +151,6 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                             showDiagCheckResult(splitData[4]);
                             break;
                     }
-
                 } else {
                     mAppClass.showSnackBar(getContext(), "Read Failed !");
                 }
