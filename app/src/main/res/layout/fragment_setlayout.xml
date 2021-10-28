@@ -73,13 +73,16 @@
             app:layout_constraintEnd_toEndOf="@+id/toolbar"
             app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
-        <ImageView
+        <Button
             android:id="@+id/save_btn"
-            android:layout_width="80dp"
-            android:layout_height="30dp"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="100dp"
             android:layout_marginEnd="10dp"
-            android:backgroundTint="@color/colorSecondary"
-            android:src="@drawable/ic_save"
+            android:layout_height="wrap_content"
+            android:text="SAVE"
+            android:textColor="@color/colorSecondary"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toStartOf="@id/rightArrow_is_btn"
             app:layout_constraintTop_toTopOf="@+id/toolbar" />

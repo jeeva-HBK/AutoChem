@@ -59,6 +59,7 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     }
 
     private void sendPacket(String setID) {
+        // todo need to change
         mAppClass.sendPacket(this, "1234$0$1$12$" + setID);
     }
 
