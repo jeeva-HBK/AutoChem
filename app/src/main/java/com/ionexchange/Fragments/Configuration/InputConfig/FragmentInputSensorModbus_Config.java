@@ -237,7 +237,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                     break;
                 case "5":
                     typeOfValueArr = new String[]{"Fluorescence"};
-                    modbusValue = 1;
+                    modbusValue = 0;
                     break;
             }
             mBinding.modBusTypeOfValueReadTie.setAdapter(getAdapter(typeOfValueArr, getContext()));

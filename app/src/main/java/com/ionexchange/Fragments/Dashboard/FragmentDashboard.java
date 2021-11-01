@@ -241,7 +241,21 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         if (splitData[0].equals(READ_PACKET)) {
             if (splitData[1].equals(PCK_DIAGNOSTIC)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
-                    if (splitData[4].length() > 2) {
+
+                    if (splitData[3].equals("0")) {
+                        sendKeepAlive("1");
+                    } else if (splitData[3].equals("1")) {
+                        sendKeepAlive("2");
+                    } else if (splitData[3].equals("2")) {
+                        sendKeepAlive("3");
+                    } else if (splitData[3].equals("3")) {
+                        sendKeepAlive("4");
+                    } else if (splitData[3].equals("4")) {
+                        sendKeepAlive("5");
+                    }
+
+                    /* Logic One */
+                    /*if (splitData[4].length() > 2) {
                         keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[4].substring(0, 2)), splitData[4].substring(2, splitData[4].length()));
                     } else {
                         keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[4].substring(0, 2)), "N/A");
@@ -290,18 +304,27 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
                         keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[13].substring(0, 2)), splitData[13].substring(2, splitData[13].length()));
                     } else {
                         keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[13].substring(0, 2)), "N/A");
-                    }
+                    }*/
 
-                    if (splitData[3].equals("0")) {
-                        sendKeepAlive("1");
-                    } else if (splitData[3].equals("1")) {
-                        sendKeepAlive("2");
-                    } else if (splitData[3].equals("2")){
-                        sendKeepAlive("3");
-                    } else if (splitData[3].equals("3")){
-                        sendKeepAlive("4");
-                    } else if (splitData[3].equals("4")){
-                        sendKeepAlive("5");
+                    /* Logic Two */
+                    int i = 0;
+                    while (i < 10) {
+                        if (!splitData[i + 4].equals("0.000000")) {
+                            if (splitData[i + 4].length() > 2) {
+                                if (Integer.parseInt(splitData[i + 4].substring(0, 2)) > 33 && Integer.parseInt(splitData[i + 4].substring(0, 2)) < 50) { // DIGITAL & TANK
+                                    if (splitData[i + 4].substring(2, splitData[i + 4].length()).equals("0")) {
+                                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[i + 4].substring(0, 2)), "OPEN");
+                                    } else {
+                                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[i + 4].substring(0, 2)), "CLOSE");
+                                    }
+                                } else {
+                                    keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[i + 4].substring(0, 2)), splitData[i + 4].substring(2, splitData[i + 4].length()));
+                                }
+                            } else {
+                                keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[i + 4].substring(0, 2)), "N/A");
+                            }
+                        }
+                        i++;
                     }
                 }
             }

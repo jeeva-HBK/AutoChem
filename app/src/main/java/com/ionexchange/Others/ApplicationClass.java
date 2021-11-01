@@ -92,7 +92,7 @@ public class ApplicationClass extends Application {
             modBusTypeArr = {"ST500", "CR300 CS", "CR-300 CU", "ST-590", "ST-588", "ST-500 RO"},
             modBusUnitArr = {"ppb", "ppm", "mpy"},
             analogTypeArr = {"(4-20mA)", "(0-10V)"},
-            analogUnitArr = {"ma", "V"},
+            analogUnitArr = {"mA", "V"},
 
             calculationArr = {"Difference", "Ratio", "Total", "% Difference"},
             sensorArr = {"1", "2", "3", "4"}, temperatureArr = {"15", "16", "17"},

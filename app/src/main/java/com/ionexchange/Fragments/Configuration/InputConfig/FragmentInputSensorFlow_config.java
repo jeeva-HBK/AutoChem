@@ -791,7 +791,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                                 mBinding.flowSeqNumberAtxtIsc.getText().toString(),
                                 Integer.parseInt(sequenceNumber), getStringValue(0, mBinding.flowInputLabelEdtIsc),
                                 getDecimalValue(mBinding.flowAlarmLowEdtIsc, 10, mBinding.flowAlarmLowDeciIsc, 2),
-                                getDecimalValue(mBinding.flowHighAlarmEdtIsc, 10, mBinding.flowHighAlarmDeciIsc, 2), "N/A","N/A",
+                                getDecimalValue(mBinding.flowHighAlarmEdtIsc, 10, mBinding.flowHighAlarmDeciIsc, 2),
+                                "N/A","N/A",
                                 1);
                 List<InputConfigurationEntity> entryFlowList = new ArrayList<>();
                 entryFlowList.add(flowEntityUpdate);

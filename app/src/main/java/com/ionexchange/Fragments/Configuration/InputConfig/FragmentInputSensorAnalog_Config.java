@@ -430,16 +430,17 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                         (getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr).equals("3"))){
                     entityUpdate = new InputConfigurationEntity
                             (Integer.parseInt(getStringValue(2, mBinding.analogInputNumberTie)),
-                                    mBinding.analogSensorTypeTie.getText().toString(), "ANALOG", 0,
+                                    mBinding.analogSensorTypeTie.getText().toString(), "Analog", 0,
                                     mBinding.analogSequenceNumberTie.getText().toString(),
                                     Integer.parseInt(sequenceNo), getStringValue(0, mBinding.analogInputLabelTie),
                                     (mBinding.analogLowAlarmTBtn.isChecked() ? "+" : "-") + mBinding.analogAlarmLowTie.getText().toString() + "." + mBinding.lowAlarmMinValueIsc.getText().toString(),
                                     (mBinding.analogHighAlarmTBtn.isChecked() ? "+" : "-") + mBinding.analogHighLowTie.getText().toString() + "." + mBinding.highAlarmMinValueIsc.getText().toString(),
                                     getStringValue(mBinding.analogUnitMeasurementTie), "N/A", 1);
+                    // todo
                 } else {
                     entityUpdate = new InputConfigurationEntity
                             (Integer.parseInt(getStringValue(2, mBinding.analogInputNumberTie)),
-                                    mBinding.analogSensorTypeTie.getText().toString(), "ANALOG", 0,
+                                    mBinding.analogSensorTypeTie.getText().toString(), "Analog", 0,
                                     mBinding.analogSequenceNumberTie.getText().toString(),
                                     Integer.parseInt(sequenceNo), getStringValue(0, mBinding.analogInputLabelTie),
                                     mBinding.analogAlarmLowTie.getText().toString() + "." + mBinding.lowAlarmMinValueIsc.getText().toString(),

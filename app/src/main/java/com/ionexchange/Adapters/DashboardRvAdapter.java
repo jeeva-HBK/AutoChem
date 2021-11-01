@@ -69,6 +69,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
     @Override
     public void onBindViewHolder(@NonNull DashboardRvAdapter.itemHolder holder, int position) {
 
+
         ConstraintLayout.LayoutParams constraintLayoutParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         switch (layout) {
             case 1:
