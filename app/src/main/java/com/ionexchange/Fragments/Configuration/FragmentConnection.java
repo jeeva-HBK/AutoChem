@@ -41,18 +41,7 @@ public class FragmentConnection extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
         mActivity = (BaseActivity) getActivity();
-
         mBinding.button.setOnClickListener(View -> {
-        /*  if (!mBinding.ipAdressEdt.getText().toString().trim().equals("") && !mBinding.portEdt.getText().toString().equals("")) {
-                if (ApplicationClass.isValidIp(mBinding.ipAdressEdt.getText().toString()) && ApplicationClass.isValidPort(mBinding.portEdt.getText().toString())) {
-                    ApplicationClass.mIPAddress = mBinding.ipAdressEdt.getText().toString();
-                    ApplicationClass.mPortNumber = Integer.parseInt(mBinding.portEdt.getText().toString());
-                } else {
-
-                }
-            } else {
-
-            }*/
             if (validateField()) {
                 editor.putBoolean("prefLoggedIn", true);
                 editor.putString("prefIp", mBinding.ipAdressEdt.getText().toString());

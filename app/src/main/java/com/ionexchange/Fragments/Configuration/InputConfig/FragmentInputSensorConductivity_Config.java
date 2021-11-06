@@ -95,7 +95,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
         });
 
         mBinding.conBackArrowIsc.setOnClickListener(v -> {
-            mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentInputSensorList_Config());
+        mAppClass.popStackBack(getActivity());
         });
     }
 

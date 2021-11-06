@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="&quot;Reading Calibration Status(1031) Register From Modbus&quot;"
+        android:text=""
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -54,7 +54,7 @@
         android:id="@+id/dialogType1Calib_subText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="reading status, please wait"
+        android:text=""
         android:textSize="16sp"
         android:layout_margin="10dp"
         android:textStyle="bold"
@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorSecondary"
-            android:text="Retry"
+            android:text=""
             android:layout_margin="10dp"
             android:textStyle="bold"
             android:visibility="visible"
@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:backgroundTint="@color/colorSecondary"
-            android:text="Cancel"
+            android:text=""
             android:textColor="@color/black" />
 
     </LinearLayout>

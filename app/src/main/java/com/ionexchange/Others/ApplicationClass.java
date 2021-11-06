@@ -48,6 +48,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 import static android.util.Patterns.IP_ADDRESS;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
 
 /* Created by Jeeva on 13/07/2021 */
@@ -579,5 +581,27 @@ public class ApplicationClass extends Application {
         WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getApplicationContext());
         KeepAliveCurrentValueDao dao = db.keepAliveCurrentValueDao();
         dao.insert(entryList.toArray(new KeepAliveCurrentEntity[0]));
+    }
+
+    private boolean isValidPck(String pckType, String data, Context context) {
+        if (data.equals("FailedToConnect")) {
+            showSnackBar(context, getString(R.string.connection_failed));
+        } else if (data.equals("pckError")) {
+            showSnackBar(context, getString(R.string.connection_failed));
+        } else if (data.equals("sendCatch")) {
+            showSnackBar(context, getString(R.string.connection_failed));
+        } else if (data.equals("Timeout")) {
+            showSnackBar(context, getString(R.string.timeout));
+        } else if (data.contains("{*")) {
+            String[] splitData = data.split("\\*")[1].split(RES_SPILT_CHAR);
+            if (splitData[1].equals("10")) {
+                if (splitData[0].equals(pckType)) {
+                    if (splitData[2].equals(RES_SUCCESS)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

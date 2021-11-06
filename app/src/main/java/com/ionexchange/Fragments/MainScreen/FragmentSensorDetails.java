@@ -72,6 +72,7 @@ public class FragmentSensorDetails extends Fragment {
     int currentPage = 0, pageMax = 8;
     FragmentCalibration_TypeOne sensorCalibration;
 
+
     FragmentModbusCalibration modbusCalibration;
     String inputNumber, inputType, sensorType = "null", spareKey = "null";
     String inNumber = "Input Number", inpuType = "Input Type", seqNumber = "Sequence Number", sensorActivation = "Sensor Activation",
@@ -100,17 +101,19 @@ public class FragmentSensorDetails extends Fragment {
         getTCPData(inputNumber, inputType);
         mBinding.btnTrendCalibartion.setChecked(true);
 
+        mBinding.viewTrendMainScreen.setOnClickListener(View -> {
+            mAppClass.popStackBack(getActivity());
+        });
+
+        mBinding.cardViewMultiMainScreen.setOnClickListener(View -> {
+            mAppClass.popStackBack(getActivity());
+        });
+
         mBinding.btnTrendCalibartion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     mBinding.txtTrendCalibration.setText("TREND");
-
-                    /* Calibration Fragment Identification
-                       For (pH/ORP/ANALOG) - FragmentCalibration_TypeOne
-                       For (TEMP) - FragmentCalibration_TypeTwo
-                       For (CONDUCTIVITY) - FragmentCalibration_TypeThree
-                     */
 
                     mBinding.viewTrendCalibration.setBackground(getContext().getDrawable(R.drawable.graph));
                     if (inputType.equals("Modbus Sensor")) {
@@ -121,8 +124,9 @@ public class FragmentSensorDetails extends Fragment {
                         switch (inputType) {
                             case "pH":
                             case "ORP":
-                            case "Analog":
+                                sensorCalibration = new FragmentCalibration_TypeOne();
                                 getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
+                            case "Analog":
                                 break;
                         }
                     }
@@ -197,6 +201,8 @@ public class FragmentSensorDetails extends Fragment {
                                         break;
 
                                     case "ORP":
+                                        sensorCalibration = new FragmentCalibration_TypeOne(splitData[3], splitData[4]);
+                                        getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                         setAdapter(formORPMap(data.split("\\*")[1].split("\\$")));
                                         break;
 

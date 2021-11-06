@@ -69,7 +69,6 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
             }
         });
 
-
         mBinding.leftArrowOsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

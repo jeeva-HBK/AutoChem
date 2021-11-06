@@ -35,35 +35,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
-            android:text="nill |"
+            android:text="nill"
             android:textSize="12dp"
             app:layout_constraintBottom_toBottomOf="@id/txt_last_calibration"
             app:layout_constraintStart_toEndOf="@id/txt_last_calibration"
             app:layout_constraintTop_toTopOf="@id/txt_last_calibration" />
-
-        <TextView
-            android:id="@+id/txt_calibration_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:text="nill"
-            android:textSize="12dp"
-            app:layout_constraintBottom_toBottomOf="@id/txt_calibration_date"
-            app:layout_constraintStart_toEndOf="@id/txt_calibration_date"
-            app:layout_constraintTop_toTopOf="@id/txt_calibration_date" />
-
-        <TextView
-            android:id="@+id/txt_calibration_success_failed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:text="SUCCESS"
-            android:visibility="gone"
-            android:textColor="@color/green"
-            android:textSize="12dp"
-            app:layout_constraintBottom_toBottomOf="@id/txt_calibration_time"
-            app:layout_constraintStart_toEndOf="@id/txt_calibration_time"
-            app:layout_constraintTop_toTopOf="@id/txt_calibration_time" />
 
         <TextView
             android:id="@+id/txt_calibration_value"

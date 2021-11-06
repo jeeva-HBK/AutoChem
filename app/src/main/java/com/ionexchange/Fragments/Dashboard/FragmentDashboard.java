@@ -53,7 +53,6 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     int maxPage;
     Handler handler;
 
-
     private static final String TAG = "FragmentDashboard";
     CountDownTimer timer = new CountDownTimer(10000, 500) {
         @Override
@@ -231,7 +230,7 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         } else if (data.equals("Timeout")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
         } else if (data != null) {
-            //String mData = "{*1$11$0$0$0107.00$021900.00$03300.00$04200.00$050.000000$060.000000$070.000000$080.000000$090.000000$100.000000*}";
+            // String mData = "{*1$11$0$0$0107.00$021900.00$03300.00$04200.00$050.000000$060.000000$070.000000$080.000000$090.000000$100.000000*}";
             handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
         }
     }
@@ -312,10 +311,12 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
                         if (!splitData[i + 4].equals("0.000000")) {
                             if (splitData[i + 4].length() > 2) {
                                 if (Integer.parseInt(splitData[i + 4].substring(0, 2)) > 33 && Integer.parseInt(splitData[i + 4].substring(0, 2)) < 50) { // DIGITAL & TANK
-                                    if (splitData[i + 4].substring(2, splitData[i + 4].length()).equals("0")) {
+                                    if (splitData[i + 4].substring(2, splitData[i + 4].length()).equals("1")) {
                                         keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[i + 4].substring(0, 2)), "OPEN");
-                                    } else {
+                                    } else if (splitData[i + 4].substring(2, splitData[i + 4].length()).equals("2")) {
                                         keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[i + 4].substring(0, 2)), "CLOSE");
+                                    } else if (splitData[i + 4].substring(2, splitData[i + 4].length()).equals("0")) {
+                                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[i + 4].substring(0, 2)), "N/A");
                                     }
                                 } else {
                                     keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[i + 4].substring(0, 2)), splitData[i + 4].substring(2, splitData[i + 4].length()));

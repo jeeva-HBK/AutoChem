@@ -21,7 +21,7 @@
             app:layout_constraintGuide_percent="0.76" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardView_multi_selection"
+            android:id="@+id/cardView_multi_mainScreen"
             android:layout_width="0dp"
             android:layout_height="140dp"
             android:layout_margin="2dp"
@@ -39,25 +39,73 @@
                 android:background="@drawable/bg_timer_retcangle">
 
                 <TextView
+                    android:id="@+id/txt_trend_mainScreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Main Screen"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view_trend_mainScreen" />
+
+                <View
+                    android:id="@+id/view_trend_mainScreen"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/ic_dashboard"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView_multi_selection"
+            android:layout_width="0dp"
+            android:layout_height="140dp"
+            android:layout_margin="2dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintVertical_bias="0.03"
+            app:cardElevation="5dp"
+            app:cardMaxElevation="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView_multi_mainScreen">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_timer_retcangle">
+
+                <TextView
                     android:id="@+id/txt_trend_calibration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="@+id/btn_trend_calibartion"
-                    app:layout_constraintStart_toStartOf="@+id/btn_trend_calibartion"
-                    app:layout_constraintEnd_toEndOf="@+id/btn_trend_calibartion"
+                    android:layout_marginBottom="5dp"
                     android:text="TREND"
                     android:textStyle="bold"
-                    android:layout_marginBottom="5dp"/>
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_trend_calibartion"
+                    app:layout_constraintEnd_toEndOf="@+id/btn_trend_calibartion"
+                    app:layout_constraintStart_toStartOf="@+id/btn_trend_calibartion" />
 
                 <View
                     android:id="@+id/view_trend_calibration"
                     android:layout_width="60dp"
                     android:layout_height="70dp"
-                    app:layout_constraintStart_toStartOf="@id/btn_trend_calibartion"
-                    app:layout_constraintEnd_toEndOf="@id/btn_trend_calibartion"
-                    app:layout_constraintTop_toTopOf="@id/btn_trend_calibartion"
+                    android:background="@drawable/graph"
                     app:layout_constraintBottom_toBottomOf="@id/btn_trend_calibartion"
-                    android:background="@drawable/graph"/>
+                    app:layout_constraintEnd_toEndOf="@id/btn_trend_calibartion"
+                    app:layout_constraintStart_toStartOf="@id/btn_trend_calibartion"
+                    app:layout_constraintTop_toTopOf="@id/btn_trend_calibartion" />
 
                 <ToggleButton
                     android:id="@+id/btn_trend_calibartion"
