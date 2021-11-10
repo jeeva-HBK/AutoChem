@@ -40,6 +40,7 @@ import static com.ionexchange.Others.ApplicationClass.flowAlarmMode;
 import static com.ionexchange.Others.ApplicationClass.flowMeterTypeArr;
 import static com.ionexchange.Others.ApplicationClass.flowUnitArr;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
+import static com.ionexchange.Others.ApplicationClass.getPosition;
 import static com.ionexchange.Others.ApplicationClass.getValueFromArr;
 import static com.ionexchange.Others.ApplicationClass.inputAnalogSensors;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
@@ -74,7 +75,7 @@ public class FragmentSensorDetails extends Fragment {
 
 
     FragmentModbusCalibration modbusCalibration;
-    String inputNumber, inputType, sensorType = "null", spareKey = "null";
+    String inputNumber, inputType, spareKey = "null";
     String inNumber = "Input Number", inpuType = "Input Type", seqNumber = "Sequence Number", sensorActivation = "Sensor Activation",
             inputLabel = "Input Label", bufferType = "Buffer Type", tempSensorLinked = "Temperature Sensor Linked", defTempValue = "Default Temperature Value",
             smoothingFactor = "Smoothing Factor", alarmLow = "Alarm Low", alarmHigh = "Alarm High", calibrationRequiredAlarm = "Calibration Required Alarm",
@@ -123,9 +124,13 @@ public class FragmentSensorDetails extends Fragment {
                     } else {
                         switch (inputType) {
                             case "pH":
-                            case "ORP":
-                                sensorCalibration = new FragmentCalibration_TypeOne();
+                                sensorCalibration = new FragmentCalibration_TypeOne(inputNumber, getPosition(2, inputType, inputTypeArr), spareKey);
                                 getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
+                                break;
+                            case "ORP":
+                                sensorCalibration = new FragmentCalibration_TypeOne(inputNumber, inputType);
+                                getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
+                                break;
                             case "Analog":
                                 break;
                         }
@@ -174,17 +179,13 @@ public class FragmentSensorDetails extends Fragment {
             public void OnDataReceive(String data) {
                 if (data.equals("FailedToConnect")) {
                     mAppClass.showSnackBar(getContext(), "Failed to connect");
-                }
-                if (data.equals("pckError")) {
+                } else if (data.equals("pckError")) {
                     mAppClass.showSnackBar(getContext(), "Failed to connect");
-                }
-                if (data.equals("sendCatch")) {
+                } else if (data.equals("sendCatch")) {
                     mAppClass.showSnackBar(getContext(), "Failed to connect");
-                }
-                if (data.equals("Timeout")) {
+                } else if (data.equals("Timeout")) {
                     mAppClass.showSnackBar(getContext(), "TimeOut");
-                }
-                if (data != null && !data.equals("")) {
+                } else if (data != null && !data.equals("")) {
                     String[] splitData = data.split("\\*")[1].split("\\$");
                     if (splitData[1].equals("04")) {
                         if (splitData[0].equals(READ_PACKET)) {
@@ -195,6 +196,7 @@ public class FragmentSensorDetails extends Fragment {
                                     case "pH":
                                         mBundle.putString("bufferType", splitData[8]);
                                         mBundle.putString("inputNumber", splitData[3]);
+                                        spareKey = splitData[8];
                                         sensorCalibration = new FragmentCalibration_TypeOne(splitData[3], splitData[4], splitData[8]);
                                         getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                         setAdapter(formpHMap(data.split("\\*")[1].split("\\$")));

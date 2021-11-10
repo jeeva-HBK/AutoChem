@@ -201,8 +201,6 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="@null"
-                    android:cursorVisible="true"
-                    android:focusableInTouchMode="false"
                     android:gravity="center"
                     android:imeOptions="actionDone"
                     android:inputType="number"
