@@ -67,8 +67,8 @@
         style="@style/appAutoTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:enabled="false"
         android:layout_marginTop="15dp"
+        android:enabled="false"
         app:layout_constraintEnd_toEndOf="@+id/add_input_number_dialog_til"
         app:layout_constraintStart_toStartOf="@+id/add_input_number_dialog_til"
         app:layout_constraintTop_toBottomOf="@+id/add_input_number_dialog_til">
@@ -87,12 +87,12 @@
         android:id="@+id/add_sensor_dialog_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
+        android:text="Add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/add_sensor_name_dialog_til"
         app:layout_constraintStart_toStartOf="@+id/add_sensor_name_dialog_til"
-       app:layout_constraintTop_toBottomOf="@id/add_sensor_name_dialog_til"/>
+        app:layout_constraintTop_toBottomOf="@id/add_sensor_name_dialog_til" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -40,7 +40,7 @@ import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 
-public class FragmentDashboard extends Fragment implements View.OnClickListener, RvOnClick, DataReceiveCallback {
+public class FragmentDashboard extends Fragment implements View.OnClickListener, RvOnClick {
     FragmentDashboardBinding mBinding;
     List<MainConfigurationEntity> mainConfigurationEntityList;
     DefaultLayoutConfigurationDao defaultLayoutConfigurationDao;
@@ -51,19 +51,8 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     static ApplicationClass mAppClass;
     int girdCount, layout, screenNo, pageNo = 1;
     int maxPage;
-    Handler handler;
 
     private static final String TAG = "FragmentDashboard";
-    CountDownTimer timer = new CountDownTimer(10000, 500) {
-        @Override
-        public void onTick(long l) { }
-
-        @Override
-        public void onFinish() {
-            sendKeepAlive("0");
-            start();
-        }
-    };
 
     @Nullable
     @Override
@@ -101,22 +90,11 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     @Override
     public void onResume() {
         super.onResume();
-        sendKeepAlive("0");
-        timer.start();
-        Log.e(TAG, "Timer Started !");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        timer.cancel();
-        Log.e(TAG, "Timer Canceled !");
-    }
-
-    private void sendKeepAlive(String setID) {
-        mAppClass.sendPacket(this,
-                DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET +
-                        SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + setID);
     }
 
     private void setDefaultPage() {
@@ -218,119 +196,5 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
             mAppClass.showSnackBar(getContext(), "Sensor Not Added");
         }
     }
-
-    @Override
-    public void OnDataReceive(String data) {
-        if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        } else if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        } else if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        } else if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
-        } else if (data != null) {
-            // String mData = "{*1$11$0$0$0107.00$021900.00$03300.00$04200.00$050.000000$060.000000$070.000000$080.000000$090.000000$100.000000*}";
-            handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
-        }
-    }
-
-    private void handleResponse(String[] splitData) {
-        // {*1$ 11$ 0$ | 0125.00$ 02$ 03$ 04200.00$ 05$ 060.000000$ 070.000000$ 08$ 090.000000$ 10*}
-        if (splitData[0].equals(READ_PACKET)) {
-            if (splitData[1].equals(PCK_DIAGNOSTIC)) {
-                if (splitData[2].equals(RES_SUCCESS)) {
-
-                    if (splitData[3].equals("0")) {
-                        sendKeepAlive("1");
-                    } else if (splitData[3].equals("1")) {
-                        sendKeepAlive("2");
-                    } else if (splitData[3].equals("2")) {
-                        sendKeepAlive("3");
-                    } else if (splitData[3].equals("3")) {
-                        sendKeepAlive("4");
-                    } else if (splitData[3].equals("4")) {
-                        sendKeepAlive("5");
-                    }
-
-                    /* Logic One */
-                    /*if (splitData[4].length() > 2) {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[4].substring(0, 2)), splitData[4].substring(2, splitData[4].length()));
-                    } else {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[4].substring(0, 2)), "N/A");
-                    }
-                    if (splitData[5].length() > 2) {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[5].substring(0, 2)), splitData[5].substring(2, splitData[5].length()));
-                    } else {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[5].substring(0, 2)), "N/A");
-                    }
-                    if (splitData[6].length() > 2) {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[6].substring(0, 2)), splitData[6].substring(2, splitData[6].length()));
-                    } else {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[6].substring(0, 2)), "N/A");
-                    }
-                    if (splitData[7].length() > 2) {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[7].substring(0, 2)), splitData[7].substring(2, splitData[7].length()));
-                    } else {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[7].substring(0, 2)), "N/A");
-                    }
-                    if (splitData[8].length() > 2) {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[8].substring(0, 2)), splitData[8].substring(2, splitData[8].length()));
-                    } else {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[8].substring(0, 2)), "N/A");
-                    }
-                    if (splitData[9].length() > 2) {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[9].substring(0, 2)), splitData[9].substring(2, splitData[9].length()));
-                    } else {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[9].substring(0, 2)), "N/A");
-                    }
-                    if (splitData[10].length() > 2) {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[10].substring(0, 2)), splitData[10].substring(2, splitData[10].length()));
-                    } else {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[10].substring(0, 2)), "N/A");
-                    }
-                    if (splitData[11].length() > 2) {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[11].substring(0, 2)), splitData[11].substring(2, splitData[11].length()));
-                    } else {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[11].substring(0, 2)), "N/A");
-                    }
-                    if (splitData[12].length() > 2) {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[12].substring(0, 2)), splitData[12].substring(2, splitData[12].length()));
-                    } else {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[12].substring(0, 2)), "N/A");
-                    }
-                    if (splitData[13].length() > 2) {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[13].substring(0, 2)), splitData[13].substring(2, splitData[13].length()));
-                    } else {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[13].substring(0, 2)), "N/A");
-                    }*/
-
-                    /* Logic Two */
-                    int i = 0;
-                    while (i < 10) {
-                        if (!splitData[i + 4].equals("0.000000")) {
-                            if (splitData[i + 4].length() > 2) {
-                                if (Integer.parseInt(splitData[i + 4].substring(0, 2)) > 33 && Integer.parseInt(splitData[i + 4].substring(0, 2)) < 50) { // DIGITAL & TANK
-                                    if (splitData[i + 4].substring(2, splitData[i + 4].length()).equals("1")) {
-                                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[i + 4].substring(0, 2)), "OPEN");
-                                    } else if (splitData[i + 4].substring(2, splitData[i + 4].length()).equals("2")) {
-                                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[i + 4].substring(0, 2)), "CLOSE");
-                                    } else if (splitData[i + 4].substring(2, splitData[i + 4].length()).equals("0")) {
-                                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[i + 4].substring(0, 2)), "N/A");
-                                    }
-                                } else {
-                                    keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[i + 4].substring(0, 2)), splitData[i + 4].substring(2, splitData[i + 4].length()));
-                                }
-                            } else {
-                                keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(splitData[i + 4].substring(0, 2)), "N/A");
-                            }
-                        }
-                        i++;
-                    }
-                }
-            }
-        }
-    }
-
 
 }

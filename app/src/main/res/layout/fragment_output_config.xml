@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="android.view.View" />
+
         <variable
             name="functionMode"
             type="String" />
@@ -29,9 +31,9 @@
                 android:id="@+id/backArrow_osc"
                 android:layout_width="38dp"
                 android:layout_height="38dp"
-                android:src="@drawable/ic_back"
-                android:layout_weight="0.2"
                 android:layout_marginStart="10dp"
+                android:layout_weight="0.2"
+                android:src="@drawable/ic_back"
                 app:layout_constraintBottom_toBottomOf="@+id/leftArrow_os_btn"
                 app:layout_constraintStart_toStartOf="@+id/view8"
                 app:layout_constraintTop_toTopOf="@+id/leftArrow_os_btn" />
@@ -920,6 +922,7 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
+
                 <ToggleButton
                     android:id="@+id/sensor_setpointvalue_tBtn"
                     android:layout_width="50dp"
@@ -932,6 +935,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/sensor_setPoint_til_osc" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/sensor_setPoint_til_osc"
                     style="@style/config_Til"
@@ -950,7 +954,7 @@
                         android:maxLength="3"
                         android:maxLines="1"
                         android:textAlignment="center"
-                        app:textInputLayoutFocusedRectEnabled="true"/>
+                        app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -1045,18 +1049,20 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
-            <ToggleButton
-                android:id="@+id/sensor_safetyMin_tBtn"
-                android:layout_width="50dp"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_marginTop="8dp"
-                android:background="@null"
-                android:textOff="-"
-                android:textOn="+"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/sensor_safetyMin_til_osc" />
+
+                <ToggleButton
+                    android:id="@+id/sensor_safetyMin_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/sensor_safetyMin_til_osc" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/sensor_safetyMin_til_osc"
                     style="@style/config_Til"
@@ -1075,9 +1081,10 @@
                         android:maxLength="6"
                         android:maxLines="1"
                         android:textAlignment="center"
-                        app:textInputLayoutFocusedRectEnabled="true"/>
+                        app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1116,18 +1123,20 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
-            <ToggleButton
-                android:id="@+id/sensor_safetyMax_tBtn"
-                android:layout_width="50dp"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_marginTop="8dp"
-                android:background="@null"
-                android:textOff="-"
-                android:textOn="+"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/sensor_safetyMax_til_osc" />
+
+                <ToggleButton
+                    android:id="@+id/sensor_safetyMax_tBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:textOff="-"
+                    android:textOn="+"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/sensor_safetyMax_til_osc" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/sensor_safetyMax_til_osc"
                     style="@style/config_Til"
@@ -1146,9 +1155,10 @@
                         android:maxLength="6"
                         android:maxLines="1"
                         android:textAlignment="center"
-                        app:textInputLayoutFocusedRectEnabled="true"/>
+                        app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1301,6 +1311,7 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
+
                 <ToggleButton
                     android:id="@+id/pid_inputMinvalue_tBtn"
                     android:layout_width="50dp"
@@ -1317,8 +1328,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/pid_inputMin_til_osc"
                     style="@style/config_Til"
-                    app:expandedHintEnabled="false"
                     android:hint="Input Min"
+                    app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -1332,7 +1343,7 @@
                         android:maxLength="2"
                         android:maxLines="1"
                         android:textAlignment="center"
-                        app:textInputLayoutFocusedRectEnabled="true"/>
+                        app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -1376,6 +1387,7 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
+
                 <ToggleButton
                     android:id="@+id/pid_inputMaxvalue_tBtn"
                     android:layout_width="50dp"
@@ -1392,12 +1404,12 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/pid_inputMax_til_osc"
                     style="@style/config_Til"
+                    android:hint="Input Max"
+                    app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:expandedHintEnabled="false"
-                    android:hint="Input Max">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/pid_inputMax_edt_osc"
@@ -1407,7 +1419,7 @@
                         android:maxLength="2"
                         android:maxLines="1"
                         android:textAlignment="center"
-                        app:textInputLayoutFocusedRectEnabled="true"/>
+                        app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -1502,6 +1514,7 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
+
                 <ToggleButton
                     android:id="@+id/pid_safetyMinvalue_tBtn"
                     android:layout_width="50dp"
@@ -1518,13 +1531,12 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/pid_safetyMin_til_osc"
                     style="@style/config_Til"
+                    android:hint="Safety Min"
+                    app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:hint="Safety Min"
-                    app:expandedHintEnabled="false"
-                    >
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/pid_safetyMin_edt_osc"
@@ -1534,7 +1546,7 @@
                         android:maxLength="2"
                         android:maxLines="1"
                         android:textAlignment="center"
-                        app:textInputLayoutFocusedRectEnabled="true"/>
+                        app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -1577,6 +1589,7 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
+
                 <ToggleButton
                     android:id="@+id/pid_safetyMaxvalue_tBtn"
                     android:layout_width="50dp"
@@ -1593,13 +1606,12 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/pid_safetyMax_til_osc"
                     style="@style/config_Til"
+                    android:hint="Safety Max"
+                    app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:expandedHintEnabled="false"
-                    android:hint="Safety Max"
-                    >
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/pid_safetyMax_edt_osc"
@@ -1609,7 +1621,7 @@
                         android:maxLength="2"
                         android:maxLines="1"
                         android:textAlignment="center"
-                        app:textInputLayoutFocusedRectEnabled="true"/>
+                        app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -1657,9 +1669,9 @@
                     android:id="@+id/pid_resetPid_atxt_osc"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Reset PID Integral"
                     android:editable="false"
-                    android:focusable="false" />
+                    android:focusable="false"
+                    android:hint="Reset PID Integral" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -1704,6 +1716,7 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
+
                 <ToggleButton
                     android:id="@+id/pid_setpointvalue_tBtn"
                     android:layout_width="50dp"
@@ -1720,13 +1733,12 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/pid_setPoint_til_osc"
                     style="@style/config_Til"
+                    android:hint="Set Point"
+                    app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:expandedHintEnabled="false"
-                    android:hint="Set Point"
-                    >
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/pid_setPoint_edt_osc"
@@ -1736,7 +1748,7 @@
                         android:maxLength="2"
                         android:maxLines="1"
                         android:textAlignment="center"
-                        app:textInputLayoutFocusedRectEnabled="true"/>
+                        app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -2117,6 +2129,7 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
+
                 <ToggleButton
                     android:id="@+id/analog_minValue_tBtn"
                     android:layout_width="50dp"
@@ -2146,9 +2159,9 @@
                         android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="2"
-                        android:textAlignment="center"
                         android:maxLines="1"
-                        app:textInputLayoutFocusedRectEnabled="true"/>
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -2191,6 +2204,7 @@
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
+
                 <ToggleButton
                     android:id="@+id/analog_maxValue_tBtn"
                     android:layout_width="50dp"
@@ -2207,8 +2221,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/analog_maxValue_til_osc"
                     style="@style/config_Til"
-                    app:expandedHintEnabled="false"
                     android:hint="Max Value"
+                    app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -2222,7 +2236,7 @@
                         android:maxLength="2"
                         android:maxLines="1"
                         android:textAlignment="center"
-                        app:textInputLayoutFocusedRectEnabled="true"/>
+                        app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

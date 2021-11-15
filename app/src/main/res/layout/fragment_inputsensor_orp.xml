@@ -64,9 +64,9 @@
                     android:clickable="false"
                     android:editable="false"
                     android:focusable="false"
-                    android:imeOptions="actionNext"
                     android:focusableInTouchMode="false"
-                    android:hint="@string/sequence_number" />
+                    android:hint="@string/sequence_number"
+                    android:imeOptions="actionNext" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -161,10 +161,10 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/orp_alarmLow_edt_isc"
                         style="@style/config_Edt"
+                        android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="4"
                         android:maxLines="1"
-                        android:imeOptions="actionNext"
                         android:textAlignment="center"
                         app:textInputLayoutFocusedRectEnabled="true" />
 
@@ -190,9 +190,9 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="@string/double_zero"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/orp_alarmLow_til_isc"
                     app:layout_constraintEnd_toEndOf="@+id/orp_alarmLow_til_isc"
@@ -236,10 +236,10 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/orp_alarmHigh_edt_isc"
                         style="@style/config_Edt"
+                        android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="4"
                         android:maxLines="1"
-                        android:imeOptions="actionNext"
                         android:textAlignment="center"
                         app:textInputLayoutFocusedRectEnabled="true" />
 
@@ -265,9 +265,9 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="@string/double_zero"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/orp_alarmHigh_til_isc"
                     app:layout_constraintEnd_toEndOf="@+id/orp_alarmHigh_til_isc"

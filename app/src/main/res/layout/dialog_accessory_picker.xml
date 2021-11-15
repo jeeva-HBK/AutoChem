@@ -17,8 +17,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ACCESSORY TIMER"
-        android:textStyle="bold"
         android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/toolbar"
         app:layout_constraintEnd_toEndOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="@id/toolbar"
@@ -32,8 +32,8 @@
         android:gravity="right|center"
         android:layoutDirection="rtl"
         android:text="@string/enable"
-        android:textStyle="bold"
         android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/toolbar"
         app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="@id/toolbar"
@@ -77,9 +77,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:editable="false"
-            android:gravity="center"
             android:focusable="false"
-            android:focusableInTouchMode="false" />
+            android:focusableInTouchMode="false"
+            android:gravity="center" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -123,9 +123,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:editable="false"
-            android:gravity="center"
             android:focusable="false"
-            android:focusableInTouchMode="false" />
+            android:focusableInTouchMode="false"
+            android:gravity="center" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -185,9 +185,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:editable="false"
-            android:gravity="center"
             android:focusable="false"
-            android:focusableInTouchMode="false" />
+            android:focusableInTouchMode="false"
+            android:gravity="center" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -220,13 +220,13 @@
         android:id="@+id/number_picker_hour"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@null"
+        android:cursorVisible="false"
         android:gravity="center"
         android:hint="@string/double_zero"
-        android:maxLength="2"
-        android:inputType="number"
         android:imeOptions="actionNext"
-        android:cursorVisible="false"
-        android:background="@null"
+        android:inputType="number"
+        android:maxLength="2"
         app:layout_constraintBottom_toBottomOf="@id/view7"
         app:layout_constraintEnd_toEndOf="@id/view7"
         app:layout_constraintStart_toStartOf="@id/view7"
@@ -261,13 +261,13 @@
         android:id="@+id/number_min_hour"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@null"
         android:cursorVisible="false"
         android:gravity="center"
-        android:background="@null"
         android:hint="@string/double_zero"
-        android:maxLength="2"
-        android:inputType="number"
         android:imeOptions="actionNext"
+        android:inputType="number"
+        android:maxLength="2"
         app:layout_constraintBottom_toBottomOf="@id/view8"
         app:layout_constraintEnd_toEndOf="@id/view8"
         app:layout_constraintStart_toStartOf="@id/view8"
@@ -314,13 +314,13 @@
         android:id="@+id/number_sec_hour"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@null"
         android:cursorVisible="false"
         android:gravity="center"
         android:hint="@string/double_zero"
-        android:maxLength="2"
-        android:inputType="number"
         android:imeOptions="actionDone"
-        android:background="@null"
+        android:inputType="number"
+        android:maxLength="2"
         app:layout_constraintBottom_toBottomOf="@id/view9"
         app:layout_constraintEnd_toEndOf="@id/view9"
         app:layout_constraintStart_toStartOf="@id/view9"
@@ -333,8 +333,8 @@
         android:layout_margin="10dp"
         android:backgroundTint="@color/colorSecondary"
         android:text="@string/ok"
-        android:textStyle="bold"
         android:textColor="@color/primary"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_cancel"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -348,8 +348,8 @@
         android:layout_margin="10dp"
         android:backgroundTint="@color/colorSecondary"
         android:text="@string/cancel"
-        android:textStyle="bold"
         android:textColor="@color/primary"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_ok"

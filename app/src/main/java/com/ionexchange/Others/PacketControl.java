@@ -5,7 +5,7 @@ import com.ionexchange.BuildConfig;
 public class PacketControl {
 
     /* General */
-    public static String SPILT_CHAR = "$",
+    public static String SPILT_CHAR = "$", CRC = "1234", ACK = "0", NCK = "1",
             RES_SPILT_CHAR = "\\$",
             DEVICE_PASSWORD = "1234",
             WRITE_PACKET = "0",
@@ -20,5 +20,8 @@ public class PacketControl {
 
     /* Connect Packet */
     APP_VERSION = BuildConfig.VERSION_NAME, CONNECT_COMMAND = "0", DISCONNECT_COMMAND = "1",
-            ADMIN = "0", ENGINEER = "1", USER;
+            ADMIN = "0", ENGINEER = "1", USER, OUTPUT_CONTROL_CONFIG = "13";
+
+    /*ServerPacketID*/
+    public static String INPUT_VOLTAGE = "01", OUTPUT_STATUS = "02";
 }

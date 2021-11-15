@@ -24,11 +24,11 @@ import static com.ionexchange.Others.ApplicationClass.mPortNumber;
 public class TCP extends IntentService {
 
     public static final String ACTION_MyIntentService = "com.ionExchange.RESPONSE";
-    private static final String TAG = "TCP";
+    private static final String TAG = "TCP_CLIENT";
     public static Socket socketDevice = null;
     public static BufferedReader _inputSteam;
 
-    public String startPacket = "{*", endPacket = "*}";
+    public static String startPacket = "{*", endPacket = "*}";
 
     public boolean dataReceived = false;
 

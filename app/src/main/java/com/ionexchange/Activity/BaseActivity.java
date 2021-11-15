@@ -1,7 +1,8 @@
 package com.ionexchange.Activity;
 
-import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
@@ -19,9 +21,11 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.ionexchange.Adapters.ExpandableListAdapter;
-import com.ionexchange.Database.Dao.UserManagementDao;
 import com.ionexchange.Database.WaterTreatmentDb;
+import static com.ionexchange.Others.ApplicationClass.editor;
+import static com.ionexchange.Others.ApplicationClass.preferences;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.TcpServer;
 import com.ionexchange.R;
 import com.ionexchange.databinding.ActivityBaseBinding;
 
@@ -29,8 +33,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.ionexchange.Others.ApplicationClass.editor;
+import static com.ionexchange.Others.ApplicationClass.DB;
 import static com.ionexchange.Others.ApplicationClass.preferences;
+import static com.ionexchange.Others.ApplicationClass.userManagementDao;
 
 ///Created By silambu
 public class BaseActivity extends AppCompatActivity implements View.OnClickListener, ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupClickListener, ExpandableListView.OnChildClickListener {
@@ -44,8 +49,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     private int lastPosition = -1;
     HashMap<String, List<String>> childList;
     List<String> generaList, ioList, homescreenList, headerList;
-    public static UserManagementDao userManagementDao;
-    public static WaterTreatmentDb DB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             setNavigation(R.navigation.connection, R.id.fragmentConnection2);
         }
+        Intent startServer = new Intent(this, TcpServer.class);
+        startServer.setAction(TcpServer.START_SERVER);
+        startService(startServer);
 
         expandedListView();
         mBinding.mainScreenBtn.setOnClickListener(this);
@@ -282,6 +289,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         }
         lastPosition = pos;
     }
+
+
+
 
     @Override
     public boolean onGroupClick(ExpandableListView expandableListView, View v, int groupPosition, long id) {

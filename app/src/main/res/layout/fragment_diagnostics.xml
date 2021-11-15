@@ -10,9 +10,9 @@
             android:id="@+id/readNowBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_refresh"
             android:layout_margin="10dp"
             android:backgroundTint="@color/primary"
+            android:src="@drawable/ic_refresh"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -35,8 +35,8 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
                 android:layout_marginTop="5dp"
+                android:layout_weight="3"
                 android:gravity="center"
                 android:text="Diagnostic Data"
                 android:textColor="@color/black"

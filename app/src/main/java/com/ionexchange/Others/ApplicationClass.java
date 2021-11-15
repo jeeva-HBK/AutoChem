@@ -1,5 +1,9 @@
 package com.ionexchange.Others;
 
+import static android.util.Patterns.IP_ADDRESS;
+import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
+import static com.ionexchange.Others.TcpServer.ACTION_MyIntent;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -31,6 +35,7 @@ import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
+import com.ionexchange.Database.Dao.OutputKeepAliveDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
 import com.ionexchange.Database.Dao.UserManagementDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
@@ -38,6 +43,7 @@ import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
+import com.ionexchange.Database.Entity.OutputKeepAliveEntity;
 import com.ionexchange.Database.Entity.TimerConfigurationEntity;
 import com.ionexchange.Database.Entity.UsermanagementEntity;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
@@ -126,9 +132,11 @@ public class ApplicationClass extends Application {
             timerFlowSensor = {"Flow Sensor - 1", "Flow Sensor - 2", "Flow Sensor - 3", "Flow Sensor - 4", "Flow Sensor - 5", "Flow Sensor - 6",
                     "Flow Sensor - 7", "Flow Sensor - 8"},
             accessoryTimerMode = {"Timer Safety", "Timer Safety Flow", "Disabled"},
-            accessoryType = {" ON Before", "OFF Before", "ON After", " OFF After", " ON With", " OFF with"};
+            accessoryType = {" ON Before", "OFF Before", "ON After", " OFF After", " ON With", " OFF with"},
+       outputStatusarr = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for","Analog Output"},
+            outputControl = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for"};
     /* Static Variables */
-    public static String mIPAddress = "", Packet;
+    public static String mIPAddress = "", Packet, Acknowledge;
     public static String macAddress; // Mac address of the unit controller
     //static String mIPAddress = "192.168.2.37", Packet;
     public static int mPortNumber = 9760;
@@ -579,6 +587,7 @@ public class ApplicationClass extends Application {
 
     void setCurrentValueDb() {
         KeepAliveCurrentValueDao dao;
+        OutputKeepAliveDao outputKeepAliveDao;
         WaterTreatmentDb dB;
         dB = WaterTreatmentDb.getDatabase(getApplicationContext());
         dao = dB.keepAliveCurrentValueDao();
@@ -591,6 +600,20 @@ public class ApplicationClass extends Application {
                 insertKeepAliveDb(entryListUpdate);
             }
         }
+
+
+        outputKeepAliveDao = dB.outputKeepAliveDao();
+        if (outputKeepAliveDao.getOutputLiveList() != null) {
+            for (int i = 1; i < 25; i++) {
+                OutputKeepAliveEntity outputKeepAliveEntity =
+                        new OutputKeepAliveEntity(i, "N/A");
+                List<OutputKeepAliveEntity> entryListUpdate = new ArrayList<>();
+                entryListUpdate.add(outputKeepAliveEntity);
+                insertOutputKeepAliveDb(entryListUpdate);
+            }
+        }
+
+
     }
 
     public void insertToDb(List<DefaultLayoutConfigurationEntity> entryList) {
@@ -625,5 +648,11 @@ public class ApplicationClass extends Application {
             }
         }
         return false;
+    }
+
+    public void insertOutputKeepAliveDb(List<OutputKeepAliveEntity> entryList) {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getApplicationContext());
+        OutputKeepAliveDao dao = db.outputKeepAliveDao();
+        dao.insert(entryList.toArray(new OutputKeepAliveEntity[0]));
     }
 }

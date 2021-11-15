@@ -35,9 +35,9 @@
             android:textColor="@color/colorSecondary"
             android:textSize="20dp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/toolbar"
             app:layout_constraintBottom_toBottomOf="@id/toolbar"
             app:layout_constraintEnd_toEndOf="@id/toolbar"
+            app:layout_constraintStart_toStartOf="@+id/toolbar"
             app:layout_constraintTop_toTopOf="@id/toolbar" />
 
         <com.google.android.material.button.MaterialButton
@@ -45,9 +45,9 @@
             android:layout_width="100dp"
 
             android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
             android:backgroundTint="@color/colorSecondary"
             android:text=""
-            android:layout_marginLeft="10dp"
             android:visibility="gone"
             app:cornerRadius="10dp"
             app:icon="@drawable/ic_back"
@@ -77,8 +77,8 @@
             android:id="@+id/save_btn"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="100dp"
-            android:layout_marginEnd="10dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:text="SAVE"
             android:textColor="@color/colorSecondary"
             android:textSize="20sp"
@@ -241,8 +241,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout1_view1Txt"
                     app:layout_constraintEnd_toEndOf="@+id/layout1_view1"
                     app:layout_constraintTop_toTopOf="@+id/layout1_view1Txt" />
@@ -305,8 +305,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout2_txt1"
                     app:layout_constraintEnd_toEndOf="@+id/layout2_view1"
                     app:layout_constraintTop_toTopOf="@+id/layout2_txt1" />
@@ -363,8 +363,6 @@
                     app:layout_constraintTop_toBottomOf="@id/layout_2_txt_2" />
 
 
-
-
                 <TextView
                     android:id="@+id/layout_2_page_2"
                     android:layout_width="wrap_content"
@@ -381,8 +379,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_2_txt_2"
                     app:layout_constraintEnd_toEndOf="@+id/layout2_view2"
                     app:layout_constraintTop_toTopOf="@+id/layout_2_txt_2" />
@@ -442,7 +440,6 @@
                     app:layout_constraintTop_toBottomOf="@id/layout3_txt_1" />
 
 
-
                 <TextView
                     android:id="@+id/layout_3_page_1"
                     android:layout_width="wrap_content"
@@ -460,8 +457,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout3_txt_1"
                     app:layout_constraintEnd_toEndOf="@+id/layout3_view1"
                     app:layout_constraintTop_toTopOf="@+id/layout3_txt_1" />
@@ -523,8 +520,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_3_txt_2"
                     app:layout_constraintEnd_toEndOf="@+id/layout3_view2"
                     app:layout_constraintTop_toTopOf="@+id/layout_3_txt_2" />
@@ -587,8 +584,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_3_txt_3"
                     app:layout_constraintEnd_toEndOf="@+id/layout3_view3"
                     app:layout_constraintTop_toTopOf="@+id/layout_3_txt_3" />
@@ -662,8 +659,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_4_txt_1"
                     app:layout_constraintEnd_toEndOf="@+id/layout4_view1"
                     app:layout_constraintTop_toTopOf="@+id/layout_4_txt_1" />
@@ -726,8 +723,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_4_txt_2"
                     app:layout_constraintEnd_toEndOf="@+id/layout4_view2"
                     app:layout_constraintTop_toTopOf="@+id/layout_4_txt_2" />
@@ -789,8 +786,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_4_txt_3"
                     app:layout_constraintEnd_toEndOf="@+id/layout4_layout3"
                     app:layout_constraintTop_toTopOf="@+id/layout_4_txt_3" />
@@ -865,8 +862,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_5_txt_1"
                     app:layout_constraintEnd_toEndOf="@+id/layout5_view1"
                     app:layout_constraintTop_toTopOf="@+id/layout_5_txt_1" />
@@ -926,8 +923,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_5_txt_2"
                     app:layout_constraintEnd_toEndOf="@+id/layout5_view2"
                     app:layout_constraintTop_toTopOf="@+id/layout_5_txt_2" />
@@ -989,8 +986,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_5_txt_3"
                     app:layout_constraintEnd_toEndOf="@+id/layout5_view3"
                     app:layout_constraintTop_toTopOf="@+id/layout_5_txt_3" />
@@ -1052,8 +1049,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_5_text_5"
                     app:layout_constraintEnd_toEndOf="@+id/layout5_view4"
                     app:layout_constraintTop_toTopOf="@+id/layout_5_text_5" />
@@ -1129,8 +1126,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_6_text_1"
                     app:layout_constraintEnd_toEndOf="@+id/layout6_view1"
                     app:layout_constraintTop_toTopOf="@+id/layout_6_text_1" />
@@ -1193,8 +1190,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_6_text_2"
                     app:layout_constraintEnd_toEndOf="@+id/layout6_view2"
                     app:layout_constraintTop_toTopOf="@+id/layout_6_text_2" />
@@ -1258,11 +1255,12 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_6_text_3"
                     app:layout_constraintEnd_toEndOf="@+id/layout6_view3"
                     app:layout_constraintTop_toTopOf="@+id/layout_6_text_3" />
+
                 <View
                     android:id="@+id/layout6_view4"
                     android:layout_width="0dp"
@@ -1320,8 +1318,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_6_text_4"
                     app:layout_constraintEnd_toEndOf="@+id/layout6_view4"
                     app:layout_constraintTop_toTopOf="@+id/layout_6_text_4" />
@@ -1381,8 +1379,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_6_text_5"
                     app:layout_constraintEnd_toEndOf="@+id/layout6_view5"
                     app:layout_constraintTop_toTopOf="@+id/layout_6_text_5" />
@@ -1444,8 +1442,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20sp"
-                    android:visibility="gone"
                     android:background="@drawable/ic_baseline_delete_filled"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/layout_6_text_6"
                     app:layout_constraintEnd_toEndOf="@+id/layout6_view6"
                     app:layout_constraintTop_toTopOf="@+id/layout_6_text_6" />

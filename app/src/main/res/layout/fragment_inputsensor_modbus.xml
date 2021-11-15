@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="android.view.View" />
+
         <variable
             name="modbusType"
             type="String" />
@@ -55,8 +57,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_sequence_number"
                 style="@style/config_AtxTil"
-                android:visibility="invisible"
-                android:enabled="false">
+                android:enabled="false"
+                android:visibility="invisible">
 
                 <AutoCompleteTextView
                     android:id="@+id/modbus_sequence_number_tie"
@@ -85,7 +87,7 @@
                     android:hint="@string/input_name"
                     android:imeOptions="actionNext"
                     android:inputType="textPersonName"
-                    android:maxLength="20"/>
+                    android:maxLength="20" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--Sensor Type-->
@@ -103,17 +105,15 @@
             <!--Modbus Type-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_modbusType"
-                style="@style/config_AtxTil"
-                >
+                style="@style/config_AtxTil">
 
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_type_tie"
+                    style="@style/config_Atxt"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/modbus_type"
-                    style="@style/config_Atxt"/>
+                    android:hint="@string/modbus_type" />
             </com.google.android.material.textfield.TextInputLayout>
-
 
 
         </LinearLayout>
@@ -146,10 +146,10 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/mod_bus_Min_value_tie"
                         style="@style/config_Edt"
+                        android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="3"
                         android:maxLines="1"
-                        android:imeOptions="actionNext"
                         app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -174,9 +174,9 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="@string/double_zero"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/modbus_minValue"
                     app:layout_constraintEnd_toEndOf="@+id/modbus_minValue"
@@ -208,10 +208,10 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/mod_bus_max_value_tie"
                         style="@style/config_Edt"
+                        android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="3"
                         android:maxLines="1"
-                        android:imeOptions="actionNext"
                         app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -236,9 +236,9 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="@string/double_zero"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/modbus_maxValue"
                     app:layout_constraintEnd_toEndOf="@+id/modbus_maxValue"
@@ -256,8 +256,8 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_diagnostic_sweep_tie"
-                    android:hint="@string/diagnostic_sweep"
-                    style="@style/config_Atxt"/>
+                    style="@style/config_Atxt"
+                    android:hint="@string/diagnostic_sweep" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--Diagnostic Sweep Time-->
@@ -269,13 +269,13 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/mod_bus_time_tie"
                     style="@style/config_Atxt"
-                    android:hint="@string/time"
-                    android:imeOptions="actionNext"
                     android:editable="true"
                     android:focusableInTouchMode="true"
-                    app:textInputLayoutFocusedRectEnabled="true"
+                    android:hint="@string/time"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
-                    android:maxLength="6" />
+                    android:maxLength="6"
+                    app:textInputLayoutFocusedRectEnabled="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
@@ -308,10 +308,10 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/mod_bus_alarm_low_tie"
                         style="@style/config_Edt"
+                        android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="3"
                         android:maxLines="1"
-                        android:imeOptions="actionNext"
                         app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -336,9 +336,9 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="@string/double_zero"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/modbus_alarmLow"
                     app:layout_constraintEnd_toEndOf="@+id/modbus_alarmLow"
@@ -371,10 +371,10 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/mod_bus_alarm_high_tie"
                         style="@style/config_Edt"
+                        android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="3"
                         android:maxLines="1"
-                        android:imeOptions="actionNext"
                         app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -399,9 +399,9 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="@string/double_zero"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/modbus_alarmHigh"
                     app:layout_constraintEnd_toEndOf="@+id/modbus_alarmHigh"
@@ -449,15 +449,14 @@
             <!--Type of value Read-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_typeOfValueRead"
-                style="@style/config_AtxTil"
-                >
+                style="@style/config_AtxTil">
 
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_typeOfValueRead_tie"
+                    style="@style/config_Atxt"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/value_type"
-                    style="@style/config_Atxt"/>
+                    android:hint="@string/value_type" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -484,8 +483,8 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/mod_bus_unit_measurement_tie"
-                    android:hint="@string/measurement_unit"
-                    style="@style/config_Atxt"/>
+                    style="@style/config_Atxt"
+                    android:hint="@string/measurement_unit" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--Sensor Activation-->

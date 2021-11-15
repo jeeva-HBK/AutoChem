@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="android.view.View" />
+
         <variable
             name="modbusType"
             type="String" />
@@ -85,7 +87,7 @@
                     android:hint="@string/input_name"
                     android:imeOptions="actionNext"
                     android:inputType="textPersonName"
-                    android:maxLength="20"/>
+                    android:maxLength="20" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--sensorType-->
@@ -222,8 +224,7 @@
                     android:clickable="false"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="@string/interlock"
-                    />
+                    android:hint="@string/interlock" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 

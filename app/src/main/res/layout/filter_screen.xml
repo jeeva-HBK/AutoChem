@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10sp"
+        android:text="FILTER"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/filter">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constrait"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/Sensor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:layout_margin="10dp"
+                android:text="Sensors"
+                android:clickable="true"
+                android:focusable="true"
+                app:chipBackgroundColor="@color/chip_color"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/tempSensor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:checkable="true"
+                android:text="Temperature"
+                android:clickable="true"
+                android:focusable="true"
+                app:chipBackgroundColor="@color/chip_color"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Sensor" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/analogSensor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Analog"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                app:chipBackgroundColor="@color/chip_color"
+                app:layout_constraintBottom_toBottomOf="@+id/tempSensor"
+                app:layout_constraintStart_toStartOf="@+id/modbusSensor"
+                app:layout_constraintTop_toTopOf="@+id/tempSensor" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/tankSensor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tank"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                app:chipBackgroundColor="@color/chip_color"
+                app:layout_constraintBottom_toBottomOf="@+id/analogSensor"
+                app:layout_constraintStart_toStartOf="@+id/flowSensor"
+                app:layout_constraintTop_toTopOf="@+id/analogSensor" />
+
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/digitalSensor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Digital"
+                app:layout_constraintBottom_toBottomOf="@+id/tankSensor"
+                android:clickable="true"
+                android:checkable="true"
+                android:focusable="true"
+                app:chipBackgroundColor="@color/chip_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tankSensor"
+                app:layout_constraintTop_toTopOf="@+id/tankSensor" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/flowSensor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Flow/Water Meter"
+                android:clickable="true"
+                android:checkable="true"
+                android:focusable="true"
+                app:chipBackgroundColor="@color/chip_color"
+                app:layout_constraintBottom_toBottomOf="@+id/modbusSensor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/modbusSensor"
+                app:layout_constraintTop_toTopOf="@+id/modbusSensor" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/modbusSensor"
+                android:layout_width="wrap_content"
+                android:checkable="true"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Modbus"
+                android:clickable="true"
+                android:focusable="true"
+                app:chipBackgroundColor="@color/chip_color"
+                app:layout_constraintBottom_toBottomOf="@+id/Sensor"
+                app:layout_constraintEnd_toStartOf="@id/flowSensor"
+                app:layout_constraintStart_toEndOf="@+id/Sensor"
+                app:layout_constraintTop_toTopOf="@+id/Sensor" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.chip.ChipGroup>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/ok"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5sp"
+        android:layout_marginBottom="10dp"
+        android:text="Ok"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/radio_group" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/cancel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5sp"
+        android:layout_marginBottom="10dp"
+        android:text="Cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ok" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

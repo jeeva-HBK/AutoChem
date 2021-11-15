@@ -1,10 +1,17 @@
 package com.ionexchange.Fragments.Services;
 
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +19,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.ionexchange.Adapters.DiagnosticDataAdapter;
 import com.ionexchange.Database.Dao.DiagnosticDataDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
@@ -30,14 +39,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-
 public class FragmentDiagnosticsData extends Fragment implements DataReceiveCallback {
     FragmentDiagnosticsBinding mBinding;
     ApplicationClass mAppClass;
     private static final String TAG = "FragmentDiagnosticsData";
+    DiagnosticDataDao dao;
+    WaterTreatmentDb dB;
+    InputConfigurationDao inputDao;
+    List<DiagnosticDataEntity> diagnosticDataEntityList;
+    int minSensor =0,
+            maxSensor=0,
+            minModbusSensor=0,
+            maxModbusSensor=0, minFlowSensor=0,
+            maxFlowSensor=0, minTemp, maxTemp=0,
+            minAnalog=0, maxAnalog=0, minTank=0, maxTank=0,
+            minDigital=0, maxDigital=0;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -51,11 +67,22 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        diagnosticDataEntityList = new ArrayList<>();
+        dB = WaterTreatmentDb.getDatabase(getContext());
+        dao = dB.diagnosticDataDao();
+        inputDao = dB.inputConfigurationDao();
+        diagnosticDataEntityList = dao.getDiagnosticDataList();
         mBinding.readNowBtn.setOnClickListener(View -> {
-            sendPacket("0");
+            //   sendPacket("0");
         });
         mBinding.readNowBtn.performClick();
-        setAdapter();
+        setAdapter(diagnosticDataEntityList);
+        mBinding.readNowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterDialog();
+            }
+        });
     }
 
     private void sendPacket(String setID) {
@@ -64,10 +91,8 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     }
 
     private void setDiagnosticsDb(String hardwareNo, String diagData, String timeStamp) {
-        DiagnosticDataDao dao;
-        WaterTreatmentDb dB;
-        dB = WaterTreatmentDb.getDatabase(getContext());
-        dao = dB.diagnosticDataDao();
+
+
         if (dao.getDiagnosticDataList() != null) {
             DiagnosticDataEntity diagnosticDataEntity =
                     new DiagnosticDataEntity(dao.getLastSno() + 1, Integer.parseInt(hardwareNo), diagData, timeStamp);
@@ -98,14 +123,11 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
         }
     }
 
-    void setAdapter() {
-        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
-        DiagnosticDataDao dao = db.diagnosticDataDao();
-        InputConfigurationDao inputDao = db.inputConfigurationDao();
+    void setAdapter(List<DiagnosticDataEntity> diagnosticDataEntityList) {
         mBinding.diagnosticRv.scrollToPosition(dao.getDiagnosticDataList().size() - 1);
         mBinding.diagnosticRv.setLayoutManager(new LinearLayoutManager(getContext()));
         if (dao.getDiagnosticDataList() != null) {
-            mBinding.diagnosticRv.setAdapter(new DiagnosticDataAdapter(dao.getDiagnosticDataList(), inputDao));
+            mBinding.diagnosticRv.setAdapter(new DiagnosticDataAdapter(diagnosticDataEntityList, inputDao));
         }
     }
 
@@ -136,12 +158,82 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
                     } else if (splitData[3].equals("4")) {
                         sendPacket("5");
                     }
-                    setAdapter();
+                    setAdapter(diagnosticDataEntityList);
                 }
             }
         } else {
             Log.e(TAG, "handleResponse: Received Wrong Pck");
         }
     }
+
+    void filterDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.filter_screen, null);
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+        Chip sensor = dialogView.findViewById(R.id.Sensor);
+        Chip modbus = dialogView.findViewById(R.id.modbusSensor);
+        Chip flowSensor = dialogView.findViewById(R.id.flowSensor);
+        Chip temp = dialogView.findViewById(R.id.tempSensor);
+        Chip analog = dialogView.findViewById(R.id.analogSensor);
+        Chip tank = dialogView.findViewById(R.id.tankSensor);
+        Chip digital = dialogView.findViewById(R.id.digitalSensor);
+        ChipGroup group = dialogView.findViewById(R.id.radio_group);
+        Button ok = dialogView.findViewById(R.id.ok);
+
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                group.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(ChipGroup group, int checkedId) {
+                        switch (group.getCheckedChipId()) {
+                            case R.id.Sensor:
+                                minSensor = 1;
+                                maxSensor = 4;
+                                break;
+                            case R.id.modbusSensor:
+                                minModbusSensor = 5;
+                                maxModbusSensor = 14;
+                                break;
+                            case R.id.flowSensor:
+                                minFlowSensor = 26;
+                                maxFlowSensor = 33;
+                                break;
+                            case R.id.tempSensor:
+                                minTemp = 15;
+                                maxTemp = 17;
+                                break;
+                            case R.id.analogSensor:
+                                minAnalog = 18;
+                                maxAnalog = 25;
+                                break;
+                            case R.id.tankSensor:
+                                minTank = 42;
+                                maxTank = 49;
+                                break;
+
+                            case R.id.digitalSensor:
+                                minDigital = 34;
+                                maxDigital = 41;
+                                break;
+                        }
+                        diagnosticDataEntityList = dao.getInputHardWareNoDiagnosticDataEntity(
+                                minSensor, maxSensor,minModbusSensor,maxModbusSensor,minTemp,maxTemp,
+                                minAnalog,maxAnalog,minFlowSensor,maxFlowSensor,minDigital,maxDigital,
+                                minTank,maxTank);
+                        setAdapter(diagnosticDataEntityList);
+                        alertDialog.dismiss();
+                    }
+                });
+
+            }
+        });
+        alertDialog.show();
+
+    }
+
 
 }

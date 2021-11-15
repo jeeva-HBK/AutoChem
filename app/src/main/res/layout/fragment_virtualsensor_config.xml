@@ -133,6 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:layout_weight="1">
+
                 <ToggleButton
                     android:id="@+id/pid_Constant1value_tBtn"
                     android:layout_width="50dp"
@@ -151,12 +152,12 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/sensor1Constant_vi"
                     style="@style/config_Til"
-                    app:expandedHintEnabled="false"
                     android:hint="Sensor 1 Constant"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/sensor1Constant_viEDT"
@@ -167,10 +168,9 @@
                         android:maxLength="6"
                         android:maxLines="1"
                         android:textAlignment="center"
-                        app:textInputLayoutFocusedRectEnabled="true"/>
+                        app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
 
 
                 <TextView
@@ -242,11 +242,13 @@
                     android:hint="Sensor 2 Input Type" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:layout_weight="1">
+
                 <ToggleButton
                     android:id="@+id/pid_Constant2value_tBtn"
                     android:layout_width="50dp"
@@ -263,12 +265,12 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/sensor2Constant_vi"
                     style="@style/config_Til"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:expandedHintEnabled="false"
                     android:hint="Sensor 2 Constant"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/sensor2Constant_viEDT"
@@ -279,7 +281,7 @@
                         android:maxLength="6"
                         android:maxLines="1"
                         android:textAlignment="center"
-                        app:textInputLayoutFocusedRectEnabled="true"/>
+                        app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -303,9 +305,9 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="00"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:imeOptions="actionNext"
                     app:layout_constraintBottom_toBottomOf="@id/sensor2Constant_vi"
                     app:layout_constraintEnd_toEndOf="@+id/sensor2Constant_vi"
                     app:layout_constraintHorizontal_bias="0.98"
@@ -328,6 +330,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:layout_weight="1">
+
                 <ToggleButton
                     android:id="@+id/lowRange_tBtn"
                     android:layout_width="50dp"
@@ -340,28 +343,30 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/lowRange_vi" />
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/lowRange_vi"
-                style="@style/config_Til"
-                app:layout_constraintStart_toStartOf="parent"
-                app:expandedHintEnabled="false"
-                android:hint="Low Range"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/lowRange_viEDT"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:textAlignment="center"
-                    app:textInputLayoutFocusedRectEnabled="true"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lowRange_vi"
+                    style="@style/config_Til"
+                    android:hint="Low Range"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/lowRange_viEDT"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -382,8 +387,8 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="00"
-                    android:inputType="number"
                     android:imeOptions="actionNext"
+                    android:inputType="number"
                     android:maxLength="2"
                     app:layout_constraintBottom_toBottomOf="@id/lowRange_vi"
                     app:layout_constraintEnd_toEndOf="@+id/lowRange_vi"
@@ -397,6 +402,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:layout_weight="1">
+
                 <ToggleButton
                     android:id="@+id/highRange_tBtn"
                     android:layout_width="50dp"
@@ -409,28 +415,30 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/highRange_vi" />
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/highRange_vi"
-                style="@style/config_Til"
-                app:layout_constraintStart_toStartOf="parent"
-                app:expandedHintEnabled="false"
-                android:hint="High Range"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/highRange_viEDT"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:textAlignment="center"
-                    app:textInputLayoutFocusedRectEnabled="true"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/highRange_vi"
+                    style="@style/config_Til"
+                    android:hint="High Range"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/highRange_viEDT"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -451,8 +459,8 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="00"
-                    android:inputType="number"
                     android:imeOptions="actionNext"
+                    android:inputType="number"
                     android:maxLength="2"
                     app:layout_constraintBottom_toBottomOf="@id/highRange_vi"
                     app:layout_constraintEnd_toEndOf="@+id/highRange_vi"
@@ -460,6 +468,7 @@
                     app:layout_constraintStart_toStartOf="@+id/highRange_vi"
                     app:layout_constraintTop_toTopOf="@+id/highRange_vi" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -482,12 +491,12 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/lowAlarm_vi"
                     style="@style/config_Til"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:expandedHintEnabled="false"
                     android:hint="Low Alarm"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/lowAlarm_viEDT"
@@ -498,7 +507,7 @@
                         android:maxLength="6"
                         android:maxLines="1"
                         android:textAlignment="center"
-                        app:textInputLayoutFocusedRectEnabled="true"/>
+                        app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -522,9 +531,9 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="00"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:imeOptions="actionNext"
                     app:layout_constraintBottom_toBottomOf="@id/lowAlarm_vi"
                     app:layout_constraintEnd_toEndOf="@+id/lowAlarm_vi"
                     app:layout_constraintHorizontal_bias="0.98"
@@ -538,6 +547,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:layout_weight="1">
+
                 <ToggleButton
                     android:id="@+id/highAlarm_tBtn"
                     android:layout_width="50dp"
@@ -554,23 +564,23 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/highAlarm_vi"
                     style="@style/config_Til"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:expandedHintEnabled="false"
                     android:hint="High Alarm"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/highAlarm_viEDT"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:imeOptions="actionNext"
-                        android:maxLength="6"
                         android:inputType="number"
+                        android:maxLength="6"
                         android:maxLines="1"
                         android:textAlignment="center"
-                        app:textInputLayoutFocusedRectEnabled="true"/>
+                        app:textInputLayoutFocusedRectEnabled="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -594,9 +604,9 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="00"
+                    android:imeOptions="actionDone"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:imeOptions="actionDone"
                     app:layout_constraintBottom_toBottomOf="@id/highAlarm_vi"
                     app:layout_constraintEnd_toEndOf="@+id/highAlarm_vi"
                     app:layout_constraintHorizontal_bias="0.98"

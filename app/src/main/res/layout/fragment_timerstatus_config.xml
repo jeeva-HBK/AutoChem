@@ -247,12 +247,12 @@
             android:id="@+id/timer_name_txt"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@null"
             android:cursorVisible="false"
-            android:maxLength="15"
+            android:gravity="center"
             android:imeOptions="actionDone"
             android:inputType="textPersonName"
-            android:background="@null"
-            android:gravity="center"
+            android:maxLength="15"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/view_timer_name"
             app:layout_constraintEnd_toEndOf="@id/view_timer_name"
@@ -315,11 +315,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clickable="false"
-                android:padding="10dp"
-                android:gravity="center"
                 android:editable="false"
                 android:focusable="false"
-                android:focusableInTouchMode="false">
+                android:focusableInTouchMode="false"
+                android:gravity="center"
+                android:padding="10dp">
 
             </com.google.android.material.textfield.MaterialAutoCompleteTextView>
         </com.google.android.material.textfield.TextInputLayout>
@@ -390,8 +390,8 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="10dp"
-            android:visibility="gone"
             android:background="@drawable/bg_timer_status_rectangle"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/txt_weeks"
             app:layout_constraintEnd_toEndOf="@id/guideline"
             app:layout_constraintHorizontal_bias="0.5"
@@ -447,18 +447,19 @@
             </com.google.android.material.textfield.MaterialAutoCompleteTextView>
 
         </com.google.android.material.textfield.TextInputLayout>
-       <TextView
+
+        <TextView
             android:id="@+id/txt_weeks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:text="Weeks"
             android:textColor="@color/primary"
             android:textStyle="bold"
-            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/week_checkbox_1"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/week_checkbox_1"
             app:layout_constraintTop_toBottomOf="@+id/view_flow_sensor" />
 
         <View
@@ -506,14 +507,14 @@
             android:id="@+id/txt_accesory_timmer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
             android:text="Accessory Timer"
             android:textColor="@color/primary"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/Accessory_checkbox_1"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/Accessory_checkbox_1"
             app:layout_constraintTop_toBottomOf="@+id/week_checkbox_1" />
 
         <View

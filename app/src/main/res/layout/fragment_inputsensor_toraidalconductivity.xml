@@ -58,8 +58,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/cand_seqNumber_til_isc"
                 style="@style/config_AtxTil"
-                android:enabled="false"
                 android:layout_weight="1"
+                android:enabled="false"
                 android:visibility="invisible">
 
                 <AutoCompleteTextView
@@ -94,7 +94,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="textPersonName"
                     android:maxLength="20"
-                    android:maxLines="1"/>
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -239,9 +239,9 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="@string/double_zero"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/ph_lowAlarm_til_isc"
                     app:layout_constraintEnd_toEndOf="@+id/ph_lowAlarm_til_isc"
@@ -297,9 +297,9 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="@string/double_zero"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/cand_highalarm_til_isc"
                     app:layout_constraintEnd_toEndOf="@+id/cand_highalarm_til_isc"
@@ -394,9 +394,9 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="@string/double_zero"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/cand_compFactor_til_isc"
                     app:layout_constraintEnd_toEndOf="@+id/cand_compFactor_til_isc"
@@ -463,8 +463,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/cand_temperature_edt_isc"
                         style="@style/config_Edt"
-                        android:inputType="number"
                         android:imeOptions="actionNext"
+                        android:inputType="number"
                         android:maxLength="3"
                         android:textAlignment="center"
                         app:textInputLayoutFocusedRectEnabled="true" />
@@ -502,7 +502,6 @@
                     app:layout_constraintTop_toTopOf="@+id/cand_defaultTemperatureValue_til_isc" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
         </LinearLayout>

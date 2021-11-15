@@ -16,6 +16,7 @@ import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.MainConfigurationDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
+import com.ionexchange.Database.Dao.OutputKeepAliveDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
 import com.ionexchange.Database.Dao.UserManagementDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
@@ -25,6 +26,7 @@ import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 import com.ionexchange.Database.Entity.MainConfigurationEntity;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
+import com.ionexchange.Database.Entity.OutputKeepAliveEntity;
 import com.ionexchange.Database.Entity.TimerConfigurationEntity;
 import com.ionexchange.Database.Entity.UsermanagementEntity;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
@@ -33,7 +35,7 @@ import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 @Database(entities = {InputConfigurationEntity.class, OutputConfigurationEntity.class,
         VirtualConfigurationEntity.class, TimerConfigurationEntity.class,
         DefaultLayoutConfigurationEntity.class, MainConfigurationEntity.class,
-        KeepAliveCurrentEntity.class, DiagnosticDataEntity.class, UsermanagementEntity.class},
+        KeepAliveCurrentEntity.class, DiagnosticDataEntity.class, UsermanagementEntity.class, OutputKeepAliveEntity.class},
         version = 2, exportSchema = false)
 @TypeConverters(Converters.class)
 
@@ -81,5 +83,7 @@ public abstract class WaterTreatmentDb extends RoomDatabase {
     public abstract KeepAliveCurrentValueDao keepAliveCurrentValueDao();
 
     public abstract DiagnosticDataDao diagnosticDataDao();
+
+    public abstract OutputKeepAliveDao outputKeepAliveDao();
 
 }

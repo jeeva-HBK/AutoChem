@@ -2,6 +2,7 @@
 <layout>
 
     <data>
+
         <variable
             name="title"
             type="String" />

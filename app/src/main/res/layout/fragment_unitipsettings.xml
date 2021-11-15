@@ -29,10 +29,10 @@
                 android:id="@+id/logout"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="20dp"
-                android:src="@drawable/ic_logout"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_marginRight="20dp"
+                android:src="@drawable/ic_logout" />
 
         </RelativeLayout>
 

@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/drawable/ic_baseline_access_time_filled_24.xml" value="0.18055555555555555" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/filter_screen.xml" value="0.35185185185185186" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_outputcontrol.xml" value="0.1" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/output_control_item.xml" value="0.1" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/drawable/ic_back_right.xml" value="0.20462962962962963" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/drawable/ic_save.xml" value="0.20462962962962963" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/add_input_sensor_dailog.xml" value="0.5" />

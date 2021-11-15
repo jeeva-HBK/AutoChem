@@ -24,7 +24,8 @@
 
     <!--App AutoComplete TextView-->
     <style name="appAutoTxt" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
-        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
+        </item>
         <item name="boxStrokeColor">@color/primary</item>
         <item name="endIconTint">@color/primary</item>
         <item name="android:textColorHint">@color/primary</item>
@@ -34,7 +35,8 @@
 
     <!--App EditText-->
     <style name="appEdtTxt" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
+        </item>
         <item name="boxStrokeColor">@color/primary</item>
         <item name="endIconTint">@color/primary</item>
         <item name="android:textColorHint">@color/primary</item>
@@ -63,7 +65,8 @@
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:layout_margin">3dp</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
+        </item>
         <item name="boxStrokeColor">@color/primary</item>
         <item name="endIconTint">@color/primary</item>
         <item name="android:textColorHint">@color/primary</item>
@@ -72,7 +75,8 @@
     <style name="con_Til" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
+        </item>
         <item name="boxStrokeColor">@color/primary</item>
         <item name="endIconTint">@color/primary</item>
         <item name="android:textColorHint">@color/primary</item>
@@ -89,7 +93,8 @@
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:layout_margin">3dp</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="android:theme">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
+        </item>
         <item name="boxStrokeColor">@color/primary</item>
         <item name="endIconTint">@color/primary</item>
         <item name="android:textColorHint">@color/primary</item>

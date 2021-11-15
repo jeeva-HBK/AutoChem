@@ -67,9 +67,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Server 1 Port"
-                android:maxLength="5"
                 android:imeOptions="actionNext"
                 android:inputType="number|numberDecimal"
+                android:maxLength="5"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -115,11 +115,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Tablet Port"
-                android:maxLength="5"
                 android:imeOptions="actionDone"
                 android:inputType="number|numberDecimal"
-                android:maxLines="1"
-                />
+                android:maxLength="5"
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

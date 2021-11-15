@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="android.view.View" />
+
         <variable
             name="compType"
             type="String" />
@@ -71,8 +73,8 @@
 
         <!--Row-2-->
         <LinearLayout
-            style="@style/config_rowLl"
-            android:id="@+id/con_Row2_isc">
+            android:id="@+id/con_Row2_isc"
+            style="@style/config_rowLl">
 
             <!--input label-->
             <com.google.android.material.textfield.TextInputLayout
@@ -128,8 +130,8 @@
 
         <!--Row-3-->
         <LinearLayout
-            style="@style/config_rowLl"
-            android:id="@+id/condRow3">
+            android:id="@+id/condRow3"
+            style="@style/config_rowLl">
 
             <!--smoothing factor-->
             <com.google.android.material.textfield.TextInputLayout
@@ -186,8 +188,8 @@
 
         <!--Row-4-->
         <LinearLayout
-            style="@style/config_rowLl"
-            android:id="@+id/con_Row4_isc">
+            android:id="@+id/con_Row4_isc"
+            style="@style/config_rowLl">
 
             <!--Low Alarm-->
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -201,10 +203,10 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/con_lowAlarm_til_isc"
                     style="@style/config_Til_Zero"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:hint="@string/low_alarm"
                     app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -247,7 +249,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/con_lowAlarm_til_isc"
                     app:layout_constraintHorizontal_bias="0.98"
                     app:layout_constraintStart_toStartOf="@+id/con_lowAlarm_til_isc"
-                    app:layout_constraintTop_toTopOf="@+id/con_lowAlarm_root_isc"/>
+                    app:layout_constraintTop_toTopOf="@+id/con_lowAlarm_root_isc" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -300,8 +302,8 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="@string/double_zero"
-                    android:inputType="number"
                     android:imeOptions="actionNext"
+                    android:inputType="number"
                     android:maxLength="2"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/con_highAlarm_root_isc"
@@ -362,9 +364,9 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="@string/double_zero"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/con_cellConstant_root_isc"
                     app:layout_constraintEnd_toEndOf="@+id/con_cellConstant_til_isc"
@@ -411,10 +413,10 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/con_compFactor_til_isc"
                     style="@style/config_Til_Zero"
+                    android:enabled="@{compType.equals(`0`)? true : false}"
+                    app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:expandedHintEnabled="false"
-                    android:enabled="@{compType.equals(`0`)? true : false}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -444,15 +446,15 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:enabled="@{compType.equals(`0`)? true : false}"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="2dp"
                     android:background="@null"
+                    android:enabled="@{compType.equals(`0`)? true : false}"
                     android:gravity="center"
                     android:hint="@string/double_zero"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:imeOptions="actionNext"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/con_compFactor_root_isc"
                     app:layout_constraintEnd_toEndOf="@+id/con_compFactor_til_isc"
@@ -497,10 +499,10 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/con_defaultTemperature_edt_isc"
                         style="@style/config_Edt"
+                        android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="3"
                         android:maxLines="1"
-                        android:imeOptions="actionNext"
                         android:textAlignment="center"
                         app:textInputLayoutFocusedRectEnabled="true" />
 
@@ -526,9 +528,9 @@
                     android:background="@null"
                     android:gravity="center"
                     android:hint="@string/double_zero"
+                    android:imeOptions="actionDone"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:imeOptions="actionDone"
                     android:textColorHint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/con_defaultTemperatureValue_til_isc"
                     app:layout_constraintEnd_toEndOf="@+id/con_defaultTemperatureValue_til_isc"
