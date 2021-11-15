@@ -1,9 +1,12 @@
 package com.ionexchange.Fragments;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +15,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Database.Dao.UserManagementDao;
+import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Fragments.Configuration.FragmentRoot_Config;
 import com.ionexchange.Fragments.Services.FragmentRootServices;
 import com.ionexchange.Interface.DataReceiveCallback;
@@ -37,6 +42,7 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
     BaseActivity mActivity;
     ApplicationClass mAppClass;
 
+
     private static final String TAG = "FragmentMainHost";
 
     @Nullable
@@ -55,8 +61,8 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
         mBinding.trendScreenBtn.setOnClickListener(this);
         mBinding.eventLogsScreenBtn.setOnClickListener(this);
         mBinding.configScreenBtn.setOnClickListener(this);
-        // Connect_Packet
 
+        // Connect_Packet
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                 PCK_connectPacket + SPILT_CHAR + APP_VERSION + SPILT_CHAR + CONNECT_COMMAND + SPILT_CHAR + ADMIN);
 
@@ -125,7 +131,6 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
                     break;
 
                 case R.id.config_screen_btn:
-
                     setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText, new FragmentRoot_Config(), "Configuration");
                     break;
             }
@@ -133,8 +138,6 @@ public class FragmentHostDashboard extends Fragment implements View.OnClickListe
             mAppClass.showSnackBar(getContext(), "Access Denied !");
         }
     }
-
-
 
     @Override
     public void OnDataReceive(String data) {

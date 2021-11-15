@@ -1,8 +1,12 @@
 package com.ionexchange.Activity;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
@@ -15,6 +19,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.ionexchange.Adapters.ExpandableListAdapter;
+import com.ionexchange.Database.Dao.UserManagementDao;
+import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.ActivityBaseBinding;
 
@@ -22,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.ionexchange.Others.ApplicationClass.editor;
 import static com.ionexchange.Others.ApplicationClass.preferences;
 
 ///Created By silambu
@@ -32,16 +40,18 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     AppBarConfiguration mAppBarConfiguration;
     NavController mNavController;
     NavGraph navGraph;
+    ApplicationClass mAppClass;
     private int lastPosition = -1;
     HashMap<String, List<String>> childList;
     List<String> generaList, ioList, homescreenList, headerList;
-
+    public static UserManagementDao userManagementDao;
+    public static WaterTreatmentDb DB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_base);
-
+        mAppClass = (ApplicationClass) getApplication();
         if (preferences.getBoolean("prefLoggedIn", false)) {
             setNavigation(R.navigation.navigation, R.id.Dashboard);
         } else {
@@ -178,13 +188,62 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                     break;
 
                 case R.id.config_screen_btn:
-                    setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText,
-                            navGraph, R.id.configuration, mNavController);
-                    expandedListView();
-                    mBinding.view.setVisibility(View.VISIBLE);
+                    if (preferences.getBoolean("requiredUserLogin", true)) {
+                        checkUserLogin();
+                    } else {
+                        moveToConfig();
+                    }
                     break;
+            }
+    }
 
-        }
+    private void checkUserLogin() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BaseActivity.this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_password, null);
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+
+        alertDialog.show();
+
+        EditText userName = dialogView.findViewById(R.id.dialog_usernameEdt);
+        EditText password = dialogView.findViewById(R.id.dialog_passwordEdt);
+        Button loginBtn = dialogView.findViewById(R.id.dialog_login);
+        DB = WaterTreatmentDb.getDatabase(getApplicationContext());
+        userManagementDao = DB.userManagementDao();
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (userName.getText().toString().equals("")) {
+                    mAppClass.showSnackBar(BaseActivity.this, "Username should be empty");
+                    return;
+                }
+                if (userName.getText().toString().equals("")) {
+                    mAppClass.showSnackBar(BaseActivity.this, "Password should be empty");
+                    return;
+                }
+                if (userManagementDao.getPassword(userName.getText().toString()) == null) {
+                    mAppClass.showSnackBar(BaseActivity.this, "user not found");
+                    return;
+                }
+
+                if (password.getText().toString().equals(userManagementDao.getPassword(userName.getText().toString()))) {
+                    moveToConfig();
+                    alertDialog.dismiss();
+                } else {
+                    mAppClass.showSnackBar(BaseActivity.this, "password is Incorrect");
+                }
+            }
+        });
+    }
+
+    private void moveToConfig() {
+        setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText,
+                navGraph, R.id.configuration, mNavController);
+        expandedListView();
+        mBinding.view.setVisibility(View.VISIBLE);
+        editor.putBoolean("requiredUserLogin", false).commit();
+        editor.apply();
     }
 
 

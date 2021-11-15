@@ -74,6 +74,7 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
                         editor.remove("prefLoggedIn");
                         editor.remove("prefIp");
                         editor.remove("prefPort");
+                        editor.putBoolean("requiredUserLogin", true);
                         editor.commit();
                         editor.apply();
                         PackageManager packageManager = getContext().getPackageManager();
@@ -89,7 +90,6 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
                 dialogInterface.dismiss();
             }
         }).show();
-
     }
 
     private String toString(EditText editText) {

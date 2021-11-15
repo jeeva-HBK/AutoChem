@@ -17,6 +17,7 @@ import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.MainConfigurationDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
+import com.ionexchange.Database.Dao.UserManagementDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
 import com.ionexchange.Database.Entity.DiagnosticDataEntity;
@@ -25,13 +26,14 @@ import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 import com.ionexchange.Database.Entity.MainConfigurationEntity;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
 import com.ionexchange.Database.Entity.TimerConfigurationEntity;
+import com.ionexchange.Database.Entity.UsermanagementEntity;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 
 
 @Database(entities = {InputConfigurationEntity.class, OutputConfigurationEntity.class,
         VirtualConfigurationEntity.class, TimerConfigurationEntity.class,
         DefaultLayoutConfigurationEntity.class, MainConfigurationEntity.class,
-        KeepAliveCurrentEntity.class, DiagnosticDataEntity.class},
+        KeepAliveCurrentEntity.class, DiagnosticDataEntity.class, UsermanagementEntity.class},
         version = 2, exportSchema = false)
 @TypeConverters(Converters.class)
 
@@ -69,6 +71,8 @@ public abstract class WaterTreatmentDb extends RoomDatabase {
     public abstract VirtualConfigurationDao virtualConfigurationDao();
 
     public abstract TimerConfigurationDao timerConfigurationDao();
+
+    public abstract UserManagementDao userManagementDao();
 
     public abstract DefaultLayoutConfigurationDao defaultLayoutConfigurationDao();
 

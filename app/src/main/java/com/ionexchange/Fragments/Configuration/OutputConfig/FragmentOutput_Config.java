@@ -43,8 +43,6 @@ import static com.ionexchange.Others.ApplicationClass.flowMeters;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.functionMode;
 import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
-import static com.ionexchange.Others.ApplicationClass.getStringValue;
-import static com.ionexchange.Others.ApplicationClass.inputAnalogSensors;
 import static com.ionexchange.Others.ApplicationClass.inputDAO;
 import static com.ionexchange.Others.ApplicationClass.interlockChannel;
 import static com.ionexchange.Others.ApplicationClass.modeAnalog;
@@ -461,7 +459,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                     break;
             }
         }
-
     }
 
     /*Relay_Disabled*/
@@ -472,7 +469,9 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 PCK_OUTPUT_CONFIG + SPILT_CHAR +
                 toString(2, outputSensorNo) + SPILT_CHAR +
                 "0" + SPILT_CHAR +
-                toString(mBinding.outputLabelOsEDT));
+                toString(mBinding.outputLabelOsEDT) + SPILT_CHAR +
+                (Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 34) + SPILT_CHAR +
+                formDigits(2, "" + getActiviateChannaleHardwareNumber()));
     }
 
     /*AnalogTest*/
@@ -699,7 +698,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.modeOs.setEnabled(false);
         mBinding.modeOsATXT.setText("");
         mBinding.setFunctionMode("Disabled");
-        mBinding.outputRow2.setVisibility(View.GONE);
+        // mBinding.outputRow2.setVisibility(View.GONE);
         Log.e(TAG, "enableDisabled: ");
     }
 
@@ -999,15 +998,15 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                     mBinding.pidSafetyMinvalueTBtn.setChecked((splitData[22].substring(0, 1)).equals("+"));
                                     mBinding.pidSafetyMinEdtOsc.setText(splitData[22].substring(1, sensorLength + 1));
                                     mBinding.pidSafetyMinDeciOsc.setText(splitData[22].substring(sensorLength + 2, sensorLength + 4));
-                                }else{
+                                } else {
                                     mBinding.pidSetPointEdtOsc.setText(splitData[10].substring(0, sensorLength));
-                                    mBinding.pidSetPointDeciOsc.setText(splitData[10].substring(sensorLength+1, sensorLength+3));
+                                    mBinding.pidSetPointDeciOsc.setText(splitData[10].substring(sensorLength + 1, sensorLength + 3));
 
                                     mBinding.pidInputMinEdtOsc.setText(splitData[18].substring(0, sensorLength));
-                                    mBinding.pidInputMinDeciOsc.setText(splitData[18].substring(sensorLength+1, sensorLength+3));
+                                    mBinding.pidInputMinDeciOsc.setText(splitData[18].substring(sensorLength + 1, sensorLength + 3));
 
                                     mBinding.pidInputMaxEdtOsc.setText(splitData[19].substring(0, sensorLength));
-                                    mBinding.pidInputMaxDeciOsc.setText(splitData[19].substring(sensorLength+1, sensorLength+3));
+                                    mBinding.pidInputMaxDeciOsc.setText(splitData[19].substring(sensorLength + 1, sensorLength + 3));
 
                                     mBinding.pidSafetyMaxEdtOsc.setText(splitData[21].substring(0, sensorLength));
                                     mBinding.pidSafetyMaxDeciOsc.setText(splitData[21].substring(sensorLength+1, sensorLength+3));
@@ -1015,7 +1014,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                     mBinding.pidSafetyMinEdtOsc.setText(splitData[22].substring(0, sensorLength));
                                     mBinding.pidSafetyMinDeciOsc.setText(splitData[22].substring(sensorLength+1, sensorLength+3));
                                 }
-
 
                                 mBinding.pidGainEdtOsc.setText(splitData[11].substring(0, 4));
                                 mBinding.pidGainDeciOsc.setText(splitData[11].substring(5, 8));

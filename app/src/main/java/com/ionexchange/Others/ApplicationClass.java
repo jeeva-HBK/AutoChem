@@ -32,12 +32,14 @@ import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
+import com.ionexchange.Database.Dao.UserManagementDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
 import com.ionexchange.Database.Entity.TimerConfigurationEntity;
+import com.ionexchange.Database.Entity.UsermanagementEntity;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
@@ -139,6 +141,7 @@ public class ApplicationClass extends Application {
     public static OutputConfigurationDao outputDAO;
     public static VirtualConfigurationDao virtualDAO;
     public static TimerConfigurationDao timerDAO;
+    public static UserManagementDao userManagementDao;
 
     DataReceiveCallback listener;
 
@@ -225,9 +228,10 @@ public class ApplicationClass extends Application {
     }
 
     public void unregisterReceiver() {
-        mContext.unregisterReceiver(receiver);
+        try {
+            mContext.unregisterReceiver(receiver);
+        } catch (Exception e) { e.printStackTrace(); }
     }
-
 
     public static String formDigits(int digits, String value) {
         String finalDigits = null;
@@ -516,6 +520,19 @@ public class ApplicationClass extends Application {
                 updateTimerDB(entryListUpdate);
             }
         }
+
+        /*User Management*/
+        userManagementDao = DB.userManagementDao();
+        if (userManagementDao.getUsermanagementEntity().isEmpty()) {
+
+            UsermanagementEntity adminEntityUpdate = new UsermanagementEntity(1, "admin", 3, "12345");
+            UsermanagementEntity userEntityUpdate = new UsermanagementEntity(2, "user", 1, "54321");
+
+            List<UsermanagementEntity> entryListUpdate = new ArrayList<>();
+            entryListUpdate.add(adminEntityUpdate);
+            entryListUpdate.add(userEntityUpdate);
+            updateUsermanagement(entryListUpdate);
+        }
     }
 
     private void updateTimerDB(List<TimerConfigurationEntity> entryList) {
@@ -536,6 +553,11 @@ public class ApplicationClass extends Application {
     public void updateOutPutDB(List<OutputConfigurationEntity> entryList) {
         OutputConfigurationDao dao = DB.outputConfigurationDao();
         dao.insert(entryList.toArray(new OutputConfigurationEntity[0]));
+    }
+
+    public void updateUsermanagement(List<UsermanagementEntity> entryList) {
+        UserManagementDao dao = DB.userManagementDao();
+        dao.insert(entryList.toArray(new UsermanagementEntity[0]));
     }
 
     void setDefaultDb() {

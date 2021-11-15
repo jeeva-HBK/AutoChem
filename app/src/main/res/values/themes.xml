@@ -6,14 +6,14 @@
         <item name="colorPrimaryVariant">@color/colorPrimaryVarient</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="fontFamily">@font/google_font</item>
-        <!-- Secondary brand color. -->
+        <!-- Secondary brand color -->
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorSecondaryVariant">@color/colorSecondaryVarient</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
     </style>
-    <!-- Customize your theme here. -->
+    <!-- Customize your theme here -->
 
     <!--Config_Nav_textview-->
     <style name="config_nav_textview" parent="TextAppearance.AppCompat">
