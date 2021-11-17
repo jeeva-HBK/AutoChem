@@ -11,8 +11,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 import com.ionexchange.Interface.InputRvOnClick;
-import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +24,7 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
 
     public InputRvOnClick rvOnClick;
     List<InputConfigurationEntity> inputConfigurationEntityList;
+    List<KeepAliveCurrentEntity> keepAliveCurrentEntityList;
 
 
     public InputsIndexRvAdapter(InputRvOnClick rvOnClick, List<InputConfigurationEntity> inputConfigurationEntityList) {
@@ -47,6 +48,7 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
         holder.lowAlarm.setText(inputConfigurationEntityList.get(position).subValueOne);
         holder.highAlarm.setText(inputConfigurationEntityList.get(position).subValueTwo);
 
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             holder.inputNumber.setTooltipText(inputConfigurationEntityList.get(position).hardwareNo+"");
             holder.inputType.setTooltipText(inputConfigurationEntityList.get(position).inputType);
@@ -64,7 +66,7 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout view;
-        TextView inputType, inputNumber, lowAlarm, highAlarm, label;
+        TextView inputType, inputNumber, lowAlarm, highAlarm, label, currentValue;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -74,6 +76,7 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
             inputNumber = itemView.findViewById(R.id.inputNumberRv);
             lowAlarm = itemView.findViewById(R.id.lowAlarmtvRv);
             highAlarm = itemView.findViewById(R.id.highAlarmTvRv);
+            currentValue = itemView.findViewById(R.id.textView11);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

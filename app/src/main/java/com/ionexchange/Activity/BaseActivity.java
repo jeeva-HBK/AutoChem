@@ -1,7 +1,21 @@
 package com.ionexchange.Activity;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.os.Build.VERSION.SDK_INT;
+import static com.ionexchange.Others.ApplicationClass.DB;
+import static com.ionexchange.Others.ApplicationClass.editor;
+import static com.ionexchange.Others.ApplicationClass.preferences;
+import static com.ionexchange.Others.ApplicationClass.userManagementDao;
+
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +24,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
@@ -22,8 +42,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.ionexchange.Adapters.ExpandableListAdapter;
 import com.ionexchange.Database.WaterTreatmentDb;
-import static com.ionexchange.Others.ApplicationClass.editor;
-import static com.ionexchange.Others.ApplicationClass.preferences;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.TcpServer;
 import com.ionexchange.R;
@@ -33,13 +51,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.ionexchange.Others.ApplicationClass.DB;
-import static com.ionexchange.Others.ApplicationClass.preferences;
-import static com.ionexchange.Others.ApplicationClass.userManagementDao;
-
 ///Created By silambu
 public class BaseActivity extends AppCompatActivity implements View.OnClickListener, ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupClickListener, ExpandableListView.OnChildClickListener {
     ActivityBaseBinding mBinding;
+    private static final int PERMISSION_REQUEST_CODE = 2296;
     private static final String TAG = "BaseActivity";
     boolean canGoBack;
     AppBarConfiguration mAppBarConfiguration;
@@ -51,21 +66,17 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     List<String> generaList, ioList, homescreenList, headerList;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_base);
         mAppClass = (ApplicationClass) getApplication();
-        if (preferences.getBoolean("prefLoggedIn", false)) {
-            setNavigation(R.navigation.navigation, R.id.Dashboard);
-        } else {
-            setNavigation(R.navigation.connection, R.id.fragmentConnection2);
-        }
-        Intent startServer = new Intent(this, TcpServer.class);
-        startServer.setAction(TcpServer.START_SERVER);
-        startService(startServer);
 
+        startService(new Intent(this, TcpServer.class).setAction(TcpServer.START_SERVER));
         expandedListView();
+        checkPermission();
+        requestPermission();
         mBinding.mainScreenBtn.setOnClickListener(this);
         mBinding.trendScreenBtn.setOnClickListener(this);
         mBinding.eventLogsScreenBtn.setOnClickListener(this);
@@ -73,6 +84,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.expList.setOnGroupExpandListener(this);
         mBinding.expList.setOnGroupClickListener(this);
         mBinding.expList.setOnChildClickListener(this);
+        setNavigation(R.navigation.navigation, R.id.Dashboard);
     }
 
     void expandedListView() {
@@ -290,9 +302,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         lastPosition = pos;
     }
 
-
-
-
     @Override
     public boolean onGroupClick(ExpandableListView expandableListView, View v, int groupPosition, long id) {
         expandableListView.setItemChecked(groupPosition, true);
@@ -339,5 +348,88 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        hideStatusNavigationBar();
+    }
+
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        hideStatusNavigationBar();
+    }
+
+    private boolean checkPermission() {
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            return Environment.isExternalStorageManager();
+        } else {
+            int result = ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE);
+            int result1 = ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE);
+            return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED;
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void requestPermission() {
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                intent.addCategory("android.intent.category.DEFAULT");
+                intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
+                startActivityForResult(intent, 2296);
+            } catch (Exception e) {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                startActivityForResult(intent, 2296);
+            }
+        } else {
+            //below android 11
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.MANAGE_EXTERNAL_STORAGE}, 2296);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2296) {
+            if (SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager()) {
+
+                } else {
+                    Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O_MR1)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0) {
+                } else {
+                    Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
+    public void hideStatusNavigationBar() {
+
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 }

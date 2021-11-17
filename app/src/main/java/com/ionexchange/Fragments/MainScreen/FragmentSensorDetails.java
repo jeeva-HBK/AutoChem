@@ -14,8 +14,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ionexchange.Adapters.SensorDetailsParamsRvAdapter;
+import com.ionexchange.Database.Dao.CalibrationDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
+import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
+import com.ionexchange.Database.Entity.CalibrationEntity;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
@@ -73,7 +76,6 @@ public class FragmentSensorDetails extends Fragment {
     int currentPage = 0, pageMax = 8;
     FragmentCalibration_TypeOne sensorCalibration;
 
-
     FragmentModbusCalibration modbusCalibration;
     String inputNumber, inputType, spareKey = "null";
     String inNumber = "Input Number", inpuType = "Input Type", seqNumber = "Sequence Number", sensorActivation = "Sensor Activation",
@@ -98,6 +100,7 @@ public class FragmentSensorDetails extends Fragment {
         mAppClass = (ApplicationClass) getActivity().getApplication();
         inputNumber = getArguments().getString("inputNumber");
         inputType = getArguments().getString("inpuType");
+
         mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         getTCPData(inputNumber, inputType);
         mBinding.btnTrendCalibartion.setChecked(true);

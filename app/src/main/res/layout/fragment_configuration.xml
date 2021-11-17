@@ -80,17 +80,14 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.3" />
 
-
             <ExpandableListView
                 android:id="@+id/expList"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:groupIndicator="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view5" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -4,9 +4,27 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/drawable/ic_baseline_access_time_filled_24.xml" value="0.18055555555555555" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/activity_base.xml" value="0.25" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/activity_connection.xml" value="0.2" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/dashboard_layout_four_item.xml" value="0.31851851851851853" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/dashboard_layout_one_item.xml" value="0.18" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/dashboard_layout_three_item.xml" value="0.22" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/dialog_calib_onedt.xml" value="0.18" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/dialog_calib_reading.xml" value="0.2" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/dialog_calib_result_two.xml" value="0.18333333333333332" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/dialog_calib_twoedt.xml" value="0.14" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/dialog_password.xml" value="0.16" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/filter_screen.xml" value="0.35185185185185186" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_configuration.xml" value="0.14" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_dashboard.xml" value="0.18" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_mainhost.xml" value="0.18" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_outputcontrol.xml" value="0.1" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_sensor_details.xml" value="0.2" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/input_rv_item.xml" value="0.23333333333333334" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/nav_item_child.xml" value="0.25092592592592594" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/nav_item_header.xml" value="0.18" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/output_control_item.xml" value="0.1" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/sensor_details_calibration.xml" value="0.25" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/drawable/ic_back_right.xml" value="0.20462962962962963" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/drawable/ic_save.xml" value="0.20462962962962963" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/add_input_sensor_dailog.xml" value="0.5" />

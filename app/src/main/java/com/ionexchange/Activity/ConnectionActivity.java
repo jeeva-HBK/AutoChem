@@ -1,46 +1,45 @@
-package com.ionexchange.Fragments.Configuration;
-
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-
-import com.ionexchange.Activity.BaseActivity;
-import com.ionexchange.Others.ApplicationClass;
-import com.ionexchange.R;
-import com.ionexchange.databinding.FragmentConnectionBinding;
-
-import org.jetbrains.annotations.NotNull;
+package com.ionexchange.Activity;
 
 import static com.ionexchange.Others.ApplicationClass.editor;
 import static com.ionexchange.Others.ApplicationClass.mIPAddress;
 import static com.ionexchange.Others.ApplicationClass.mPortNumber;
+import static com.ionexchange.Others.ApplicationClass.preferences;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 
-public class FragmentConnection extends Fragment {
+import android.content.Intent;
+import android.os.Bundle;
 
-    FragmentConnectionBinding mBinding;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
+import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.R;
+import com.ionexchange.databinding.ActivityConnectionBinding;
+
+public class ConnectionActivity extends AppCompatActivity {
+    ActivityConnectionBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;
 
-    @Nullable
-    @org.jetbrains.annotations.Nullable
     @Override
-    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_connection, container, false);
-        return mBinding.getRoot();
-    }
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_connection);
 
-    @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mAppClass = (ApplicationClass) getActivity().getApplication();
-        mActivity = (BaseActivity) getActivity();
+        mAppClass = (ApplicationClass) getApplication();
+
+        if (preferences.getBoolean("prefLoggedIn", false)) {
+            proceedToBaseAct();
+        }
+        try {
+            mBinding.ipAdressEdt.append(preferences.getString("prefIp", ""));
+            mBinding.portEdt.append(preferences.getString("prefPort", ""));
+        } catch (Exception e) {
+
+        }
+
+        mActivity = new BaseActivity();
         mBinding.button.setOnClickListener(View -> {
             if (validateField()) {
                 editor.putBoolean("prefLoggedIn", true);
@@ -51,9 +50,13 @@ public class FragmentConnection extends Fragment {
                 mIPAddress = mBinding.ipAdressEdt.getText().toString();
                 mPortNumber = Integer.parseInt(mBinding.portEdt.getText().toString());
                 DEVICE_PASSWORD = mBinding.passwordEdt.getText().toString();
-                mActivity.setNavigation(R.navigation.navigation, R.id.Dashboard);
+                proceedToBaseAct();
             }
         });
+    }
+
+    void proceedToBaseAct() {
+        startActivity(new Intent(ConnectionActivity.this, BaseActivity.class));
     }
 
     private boolean validateField() {
@@ -73,5 +76,4 @@ public class FragmentConnection extends Fragment {
         }*/
         return true;
     }
-
 }

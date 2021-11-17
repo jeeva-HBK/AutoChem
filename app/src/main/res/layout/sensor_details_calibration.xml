@@ -54,7 +54,7 @@
             app:layout_constraintTop_toBottomOf="@id/txt_last_calibration" />
 
         <TextView
-            android:id="@+id/txt_gain"
+            android:id="@+id/txt_green"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
@@ -66,38 +66,38 @@
             app:layout_constraintTop_toTopOf="@id/txt_calibration_value" />
 
         <TextView
-            android:id="@+id/txt_gain_value"
+            android:id="@+id/txt1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
             android:text="nill |"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/txt_gain"
-            app:layout_constraintStart_toEndOf="@id/txt_gain"
-            app:layout_constraintTop_toTopOf="@id/txt_gain" />
+            app:layout_constraintBottom_toBottomOf="@id/txt_green"
+            app:layout_constraintStart_toEndOf="@id/txt_green"
+            app:layout_constraintTop_toTopOf="@id/txt_green" />
 
         <TextView
-            android:id="@+id/txt_offset"
+            android:id="@+id/txt_red"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
-            android:text="OFFSET"
+            android:text="Calibration Value"
             android:textColor="@color/red"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/txt_gain_value"
-            app:layout_constraintStart_toEndOf="@id/txt_gain_value"
-            app:layout_constraintTop_toTopOf="@id/txt_gain_value" />
+            app:layout_constraintBottom_toBottomOf="@id/txt1"
+            app:layout_constraintStart_toEndOf="@id/txt1"
+            app:layout_constraintTop_toTopOf="@id/txt1" />
 
         <TextView
-            android:id="@+id/txt_off_set_value"
+            android:id="@+id/txt2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
             android:text="nill"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/txt_offset"
-            app:layout_constraintStart_toEndOf="@id/txt_offset"
-            app:layout_constraintTop_toTopOf="@id/txt_offset" />
+            app:layout_constraintBottom_toBottomOf="@id/txt_red"
+            app:layout_constraintStart_toEndOf="@id/txt_red"
+            app:layout_constraintTop_toTopOf="@id/txt_red" />
 
         <TextView
             android:id="@+id/txt_current_mode"
@@ -112,7 +112,7 @@
             app:layout_constraintTop_toBottomOf="@id/txt_calibration_value" />
 
         <TextView
-            android:id="@+id/calibrationTypeTxt"
+            android:id="@+id/currentModeValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
@@ -197,7 +197,7 @@
                 android:background="@drawable/bg_edt_blue">
 
                 <EditText
-                    android:id="@+id/ext_precise_value"
+                    android:id="@+id/ext_value"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="@null"

@@ -1,5 +1,17 @@
 package com.ionexchange.Fragments.MainScreen;
 
+import static com.ionexchange.Others.ApplicationClass.bufferArr;
+import static com.ionexchange.Others.ApplicationClass.getPosition;
+import static com.ionexchange.Others.ApplicationClass.getValueFromArr;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_SENSORCALIB;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -18,38 +30,29 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.appbar.MaterialToolbar;
+import com.ionexchange.Database.Dao.CalibrationDao;
+import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
+import com.ionexchange.Database.Entity.CalibrationEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.SensorDetailsCalibrationBinding;
 
-import static com.ionexchange.Others.ApplicationClass.bufferArr;
-import static com.ionexchange.Others.ApplicationClass.getPosition;
-import static com.ionexchange.Others.ApplicationClass.getValueFromArr;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.PCK_DIAGNOSTIC;
-import static com.ionexchange.Others.PacketControl.PCK_SENSORCALIB;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
-public class FragmentCalibration_TypeOne extends Fragment implements CompoundButton.OnCheckedChangeListener, DataReceiveCallback {
+public class FragmentCalibration_TypeOne extends Fragment implements CompoundButton.OnCheckedChangeListener {
     SensorDetailsCalibrationBinding mBinding;
-    AlertDialog alertReading, alertStabilization;
     ApplicationClass mAppClass;
-    int stabilizationCount = 0;
-    String lastStabValue = null, inputNumber, inputType, bufferType, tempValue;
-    CountDownTimer stabilizationTimer;
-    boolean calibCompleted = false;
-    EditText leftEdt;
-
-    EditText autoDectectedValue;
-    private static final String TAG = "FragmentSensor";
+    WaterTreatmentDb db;
+    CalibrationDao calibrationDao;
+    KeepAliveCurrentValueDao keepAliveDao;
+    String inputNumber, inputType, bufferType, tempValue;
+    private static final String TAG = "FragmentSensorCalib";
 
     public FragmentCalibration_TypeOne(String inputNumber, String inputType, String bufferType) {
         this.inputNumber = inputNumber;
@@ -61,7 +64,8 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
     }
 
     public FragmentCalibration_TypeOne(String inputNumber, String inputType) {
-        this.inputType = inputType;
+        this.inputType = getValueFromArr(inputType, inputTypeArr);
+        ;
         this.inputNumber = inputNumber;
     }
 
@@ -77,28 +81,37 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         super.onViewCreated(view, savedInstanceState);
         mBinding.precise.setOnCheckedChangeListener(this);
         mBinding.quick.setOnCheckedChangeListener(this);
+        db = WaterTreatmentDb.getDatabase(getContext());
+        keepAliveDao = db.keepAliveCurrentValueDao();
 
         mAppClass = (ApplicationClass) getActivity().getApplication();
 
+        // last Calibration value
+        db = WaterTreatmentDb.getDatabase(getContext());
+        calibrationDao = db.calibrationDao();
+
+        CalibrationEntity lastCalibrationData = calibrationDao.getLastCalibrationData(Integer.parseInt(inputNumber));
+        if (lastCalibrationData != null) {
+            mBinding.txtCalibrationDate.setText(lastCalibrationData.getDate());
+            String[] calibData = lastCalibrationData.getCalibrationValue().split("\\$");
+            mBinding.txt1.setText(calibData[1]);
+            mBinding.txt2.setText(calibData[2]);
+            mBinding.txtGreen.setText(calibData[0].equals("0") ? "Offset" : "Gain");
+        }
+
+        mBinding.calibrationSensorName.setText(inputType);
         if (!inputType.equals("null")) {
             if ("pH".equals(inputType)) {
                 if (!bufferType.equals("null")) {
                     mBinding.precise.performClick();
-                    mBinding.calibrationTypeTxt.setText(getValueFromArr(bufferType, bufferArr));
-                    mBinding.calibrationSensorName.setText(inputType);
-                    mBinding.extPreciseValue.setText(getValueFromArr(bufferType, bufferArr));
+                    mBinding.currentModeValue.setText(getValueFromArr(bufferType, bufferArr));
+                    mBinding.extValue.setText(getValueFromArr(bufferType, bufferArr));
                 }
             } else if ("ORP".equals(inputType)) {
-                mBinding.txtCalibrationValue.setVisibility(View.GONE);
-                mBinding.txtGain.setVisibility(View.GONE);
-                mBinding.txtGainValue.setVisibility(View.GONE);
-                mBinding.txtOffset.setVisibility(View.GONE);
-                mBinding.txtOffSetValue.setVisibility(View.GONE);
-                mBinding.txtCurrentMode.setVisibility(View.GONE);
-                mBinding.calibrationTypeTxt.setVisibility(View.GONE);
-                mBinding.calibrationSensorName.setText("ORP Calibration");
                 mBinding.precise.setVisibility(View.GONE);
                 mBinding.quick.performClick();
+                mBinding.currentModeValue.setVisibility(View.GONE);
+                mBinding.txtCurrentMode.setVisibility(View.GONE);
             }
         } else {
             Toast.makeText(getContext(), "Sensor Type is Null !", Toast.LENGTH_SHORT).show();
@@ -107,108 +120,84 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         mBinding.startCalibrationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ("pH".equals(inputType)) {
+                if ("pH".equals(getValueFromArr(inputType, inputTypeArr))) {
                     startPHcalibration();
-                } else if ("ORP".equals(inputType)) {
+                } else if ("ORP".equals(getValueFromArr(inputType, inputTypeArr))) {
                     startQuickCalibration();
                 }
             }
         });
     }
 
+    /* Quick Calibration */
+    private void startQuickCalibration() {
+        if (!mBinding.extValue.getText().toString().equals("")) {
+            tempValue = mBinding.extValue.getText().toString();
+            sendQuickCalibWritePacket();
+        } else {
+            mAppClass.showSnackBar(getContext(), "Calibration Value should not be empty !");
+        }
+    }
+
+    private void sendQuickCalibWritePacket() { // common for all sensor
+        mAppClass.sendPacket(new DataReceiveCallback() {
+            @Override
+            public void OnDataReceive(String data) {
+                if (isValidPck(WRITE_PACKET, data)) {
+                    checkStabilization("0");
+                }
+            }
+        }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                PCK_SENSORCALIB + SPILT_CHAR + inputNumber + SPILT_CHAR + inputType + SPILT_CHAR + "1" +
+                SPILT_CHAR + "0" + SPILT_CHAR + "0" + SPILT_CHAR + mBinding.extValue.getText().toString());
+    }
+
+
     private void startPHcalibration() {
         if (getCalibrationType().equals("0")) { // Quick
             startQuickCalibration(); // pH - Quick -> step 1
         } else { // Precise
+            startPreceiseCalibration("1");
+        }
+    }
+
+    private void startPreceiseCalibration(String firstORsecond) {
+        if (inputType.equals("pH")) {
             if (bufferType.equals("0")) { // AUTO
-                showPHAutoCalib("Rinse the sensor and insert it in 7.01 buffer solution");
-            } else {
-                showPHManualCalib("Enter First Buffer Value", "First Buffer Temperature", "First Buffer Value"); // Manual -> step 1
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_calib_reading, null);
+                dialogBuilder.setView(dialogView);
+                AlertDialog alertDialog = dialogBuilder.create();
+
+                TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
+                TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
+                Button cancel = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
+                Button confirm = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
+
+                mainText.setText(firstORsecond.equals("1") ? "\"Rinse the sensor and insert it in 7.01 buffer solution\""
+                        : "\"Rinse the sensor and insert it in 4.01 or 10.00 buffer solution\"");
+                cancel.setText("CANCEL");
+                confirm.setText("CONFIRM");
+                cancel.setOnClickListener(View -> {
+                    alertDialog.dismiss();
+                });
+                confirm.setOnClickListener(View -> {
+                    alertDialog.dismiss();
+                    sendPreceiseCalibWritePacket(firstORsecond);
+                });
+                alertDialog.show();
+            } else { // Manual
+                getPhManualValues("First");
             }
         }
     }
 
-    /* Quick Calibration */
-    private void startQuickCalibration() {
-        if (!mBinding.extPreciseValue.getText().toString().equals("")) {  // todo verify
-            tempValue = mBinding.extPreciseValue.getText().toString();
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
-                    PCK_SENSORCALIB + SPILT_CHAR + inputNumber + SPILT_CHAR + inputType + SPILT_CHAR + "1" +
-                    SPILT_CHAR + "0" + SPILT_CHAR + "0" + SPILT_CHAR + mBinding.extPreciseValue.getText().toString());
-        } else {
-            mAppClass.showSnackBar(getContext(), "Calibration Value should not be empty !");
-        }
-        // next step - write response
-    }
-
-    private void readQuickStabilization() {
+    private void getPhManualValues(String type) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_calib_twoedt, null);
-        dialogBuilder.setView(dialogView);
-        alertReading = dialogBuilder.create();
-
-        TextView leftText = dialogView.findViewById(R.id.twodt_mainTxt);
-        TextView rightText = dialogView.findViewById(R.id.twodt_mainTxt2);
-        TextView subText = dialogView.findViewById(R.id.twodt_subTxt);
-        leftEdt = dialogView.findViewById(R.id.twodt_edt);
-        EditText rightEdt = dialogView.findViewById(R.id.twodt_edt2);
-        Button leftBtn = dialogView.findViewById(R.id.twodt_leftBtn);
-        Button rightBtn = dialogView.findViewById(R.id.twodt_rightBtn);
-
-        leftText.setText("Calibration Value");
-        rightText.setText("Countdown");
-
-        if (tempValue != null && !tempValue.equals("")) {
-            leftEdt.setText(tempValue);
-        }
-
-        leftEdt.setEnabled(false);
-        subText.setText("Reading, Please Wait...");
-        leftBtn.setText("CANCEL");
-        final boolean[] canSend = {true};
-        leftBtn.setOnClickListener(View -> {
-            canSend[0] = false;
-            alertReading.dismiss();
-        });
-        rightBtn.setText("CONFIRM");
-        rightBtn.setAlpha(0.5f);
-        rightEdt.setEnabled(false);
-
-        rightBtn.setOnClickListener(View -> {
-            sendpHreadPck();
-        });
-        if (stabilizationTimer != null) {
-            stabilizationTimer.cancel();
-        }
-        stabilizationCount = 0;
-        stabilizationTimer = new CountDownTimer(30000, 1000) {
-            public void onTick(long millisUntilFinished) {
-                rightEdt.setText("" + millisUntilFinished / 1000);
-                checkStabilization(inputNumber);
-            }
-
-            public void onFinish() {
-                rightEdt.setText("00");
-                rightBtn.setEnabled(true);
-                rightBtn.setAlpha(1f);
-                alertReading.dismiss();
-            }
-        };
-        stabilizationTimer.start();
-
-        alertReading.show();
-        // next step - read response
-    }
-
-    private void showPHManualCalib(String msg, String txt1, String txt2) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_calib_twoedt, null);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_calib_twoedt, null);
         dialogBuilder.setView(dialogView);
         AlertDialog alertDialog = dialogBuilder.create();
 
-        MaterialToolbar toolbar = dialogView.findViewById(R.id.materialToolbar);
         TextView leftText = dialogView.findViewById(R.id.twodt_mainTxt);
         TextView rightText = dialogView.findViewById(R.id.twodt_mainTxt2);
         TextView subText = dialogView.findViewById(R.id.twodt_subTxt);
@@ -217,275 +206,66 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         Button leftBtn = dialogView.findViewById(R.id.twodt_leftBtn);
         Button rightBtn = dialogView.findViewById(R.id.twodt_rightBtn);
 
-        toolbar.setTitle(msg);
-        leftText.setText(txt1);
-        rightText.setText(txt2);
-        subText.setVisibility(View.GONE);
-        rightBtn.setText("CONFIRM");
+        leftText.setText(type + " Temperature Value");
+        rightText.setText(type + " Buffer Value");
         leftBtn.setText("CANCEL");
+        rightBtn.setText("CONFIRM");
 
         leftBtn.setOnClickListener(View -> {
             alertDialog.dismiss();
         });
 
         rightBtn.setOnClickListener(View -> {
-            if (leftEdt.getText().toString().equals("") || leftEdt.getText().toString() == null) {
-                mAppClass.showSnackBar(getContext(), leftText.getText().toString() + " should not be empty");
-            } else if (rightEdt.getText().toString().equals("") || rightEdt.getText().toString() == null) {
-                mAppClass.showSnackBar(getContext(), rightText.getText().toString() + " should not be empty");
+            if (leftEdt.getText().toString().equals("")) {
+                mAppClass.showSnackBar(getContext(), "Temperature Value should not be empty");
+                return;
+            } else if (rightEdt.getText().toString().equals("")) {
+                mAppClass.showSnackBar(getContext(), "Buffer Value should not be empty");
             } else {
-                alertDialog.dismiss();
-                mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
-                        PCK_SENSORCALIB + SPILT_CHAR + inputNumber + SPILT_CHAR +
-                        getPosition(2, inputType, inputTypeArr) + SPILT_CHAR + "1" + SPILT_CHAR + getCalibrationType() + SPILT_CHAR +
-                        leftEdt.getText().toString() + SPILT_CHAR + rightEdt.getText().toString());
+                sendPreceiseCalibWritePacket(type.equals("First") ?
+                        "1" + SPILT_CHAR + leftEdt.getText().toString() + SPILT_CHAR + rightEdt.getText().toString() :
+                        "2" + SPILT_CHAR + leftEdt.getText().toString() + SPILT_CHAR + rightEdt.getText().toString());
             }
+            alertDialog.dismiss();
         });
         alertDialog.show();
     }
 
-    private void showPHAutoCalib(String msg) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
-        dialogBuilder.setView(dialogView);
-        alertReading = dialogBuilder.create();
-
-        TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
-        TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
-        Button cancel = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
-        Button confirm = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
-
-        mainText.setText(msg);
-        cancel.setText("CANCEL");
-        confirm.setText("CONFIRM");
-        subText.setVisibility(View.INVISIBLE);
-
-        cancel.setOnClickListener(View -> {
-            alertReading.dismiss();
-            if (stabilizationTimer != null) {
-                stabilizationTimer.cancel();
-            }
-        });
-
-        confirm.setOnClickListener(View -> {
-            alertReading.dismiss();
-            mAppClass.sendPacket(this,
-                    DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
-                            PCK_SENSORCALIB + SPILT_CHAR + inputNumber + SPILT_CHAR +
-                            getPosition(2, inputType, inputTypeArr) + SPILT_CHAR +
-                            "1" + SPILT_CHAR + "0" + SPILT_CHAR + getCalibrationType() + SPILT_CHAR + "1");
-        });
-        alertReading.show();
-        // next step -  write response
-    }
-
-    private String getCalibrationType() {
-        if (mBinding.relativeRadioGroup.getCheckedRadioButtonId() == mBinding.quick.getId()) {
-            return "0";
-        }
-        return "1";
-    }
-
-    void startTimer(String inputNumber, String inpuType, String seqNumber) {
-        stabilizationTimer = new CountDownTimer(5000, 1000) {
+    private void sendPreceiseCalibWritePacket(String firstORsecond) {
+        mAppClass.sendPacket(new DataReceiveCallback() {
             @Override
-            public void onTick(long l) {
-            }
-
-            @Override
-            public void onFinish() {
-                sendStabilizationPacket(inputNumber, inpuType, seqNumber);
-                start();
-            }
-        }.start();
-    }
-
-    private void sendStabilizationPacket(String inputNumber, String inpuType, String seqNumber) {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR + inputNumber + SPILT_CHAR +
-                inpuType + SPILT_CHAR + seqNumber + SPILT_CHAR + "0");
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
-            case R.id.precise:
-                if (isChecked) {
-                    mBinding.txtChange.setText("CALIBRATION MODE");
-                    mBinding.extPreciseValue.setEnabled(false);
-                    mBinding.extPreciseValue.setClickable(false);
-
-                    if (inputType.equals("pH")) {
-                        mBinding.extPreciseValue.setText(getValueFromArr(bufferType, bufferArr));
+            public void OnDataReceive(String data) {
+                if (isValidPck(WRITE_PACKET, data)) {
+                    if (bufferType.equals("0")) {
+                        tempValue = firstORsecond.equals("1") ? "7.01" : "10.00";
+                    } else {
+                        tempValue = firstORsecond.split("\\$")[2];
+                    }
+                    //  data = firstORsecond.equals("1") ? "{*0$10$0$1*}" : "{*0$10$0$2*}"; // todo temp Manual Pck
+                    String[] spiltData = spiltPacket(data);
+                    if (spiltData[3].equals("1")) { // step 1
+                        checkStabilization("1");
+                    } else if (spiltData[3].equals("2")) { // step 2
+                        checkStabilization("2");
+                        // sendCalibReadPacket("2");
                     }
                 }
-                break;
-            case R.id.quick:
-                if (isChecked) {
-                    mBinding.txtChange.setText("Please Enter the Calibration Value");
-                    mBinding.extPreciseValue.setText("");
-                    mBinding.extPreciseValue.setHint("00");
-                    mBinding.extPreciseValue.setEnabled(true);
-                    mBinding.extPreciseValue.setClickable(true);
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void OnDataReceive(String data) {
-        if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        } else if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        } else if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        } else if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
-        } else if (data != null) {
-            handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
-        }
-    }
-
-    private void handleResponse(String[] splitData) {
-        if (splitData[1].equals("10")) {
-            if (splitData[0].equals(WRITE_PACKET)) {
-                if (splitData[2].equals(RES_SUCCESS)) {
-                    if ("pH".equals(inputType)) {
-                        if (getCalibrationType().equals("0")) {
-                            readQuickStabilization(); // pH - Quick - step 2
-                        } else {
-                            if (bufferType.equals("0")) { // Auto
-                                readQuickStabilization();
-                            } else {
-                                startpHManualStabilization();
-                            }
-                        }
-                    } else if ("ORP".equals(inputType)) {
-                        readQuickStabilization();
-                    }
-                } else {
-                    mAppClass.showSnackBar(getContext(), "Write Failed !");
-                }
-            } else if (splitData[0].equals(READ_PACKET)) {
-                if (splitData[2].equals(RES_SUCCESS)) {
-                    if ("pH".equals(inputType)) {
-                        if (getCalibrationType().equals("0")) {
-                            showPhResult(splitData[4], splitData[5]);
-                        } else {
-
-                        }
-                    } else if ("ORP".equals(inputType)) {
-                        showOrpResult(splitData[4], splitData[5]);
-                    }
-                } else {
-                    mAppClass.showSnackBar(getContext(), "Read Failed !");
-                }
             }
-        }
+        }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                PCK_SENSORCALIB + SPILT_CHAR + inputNumber + SPILT_CHAR +
+                getPosition(2, inputType, inputTypeArr) + SPILT_CHAR + "1" + SPILT_CHAR +
+                "0" + SPILT_CHAR + getCalibrationType() + SPILT_CHAR + firstORsecond);
     }
 
-    private void readAutoStabilization() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_calib_twoedt, null);
-        dialogBuilder.setView(dialogView);
-        alertReading = dialogBuilder.create();
-
-        TextView leftText = dialogView.findViewById(R.id.twodt_mainTxt);
-        TextView rightText = dialogView.findViewById(R.id.twodt_mainTxt2);
-        TextView subText = dialogView.findViewById(R.id.twodt_subTxt);
-        EditText leftEdt = dialogView.findViewById(R.id.twodt_edt);
-        EditText rightEdt = dialogView.findViewById(R.id.twodt_edt2);
-        Button leftBtn = dialogView.findViewById(R.id.twodt_leftBtn);
-        Button rightBtn = dialogView.findViewById(R.id.twodt_rightBtn);
-
-        leftText.setText("Auto Detected Value");
-        rightText.setText("Countdown");
-
-        if (tempValue != null && !tempValue.equals("")) {
-            leftEdt.setText(tempValue);
-        }
-
-        leftEdt.setEnabled(false);
-        subText.setText("Reading, Please Wait...");
-        leftBtn.setText("CANCEL");
-        final boolean[] canSend = {true};
-        leftBtn.setOnClickListener(View -> {
-            canSend[0] = false;
-            alertReading.dismiss();
-        });
-        rightBtn.setText("CONFIRM");
-        rightBtn.setAlpha(0.5f);
-        rightEdt.setEnabled(false);
-
-        rightBtn.setOnClickListener(View -> {
-            sendpHreadPck();
-        });
-        if (stabilizationTimer != null) {
-            stabilizationTimer.cancel();
-        }
-        stabilizationCount = 0;
-        stabilizationTimer = new CountDownTimer(30000, 1000) {
-            public void onTick(long millisUntilFinished) {
-                rightEdt.setText("" + millisUntilFinished / 1000);
-                checkStabilization(inputNumber);
-            }
-
-            public void onFinish() {
-                rightEdt.setText("00");
-                rightBtn.setEnabled(true);
-                rightBtn.setAlpha(1f);
-                alertReading.dismiss();
-            }
-        };
-        stabilizationTimer.start();
-
-        alertReading.show();
+    private String[] spiltPacket(String data) {
+        return data.split("\\*")[1].split("\\$");
     }
 
-    private void showOrpResult(String offset, String calibValue) {
+    private void checkStabilization(String type) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_calib_twoedt, null);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_calib_result_two, null);
         dialogBuilder.setView(dialogView);
-        AlertDialog alertReading = dialogBuilder.create();
-
-        ImageView iv = dialogView.findViewById(R.id.resultTwo_iv);
-        TextView gainTv = dialogView.findViewById(R.id.resulTwo_leftValue);
-        TextView offsetTv = dialogView.findViewById(R.id.resulTwo_rightValue);
-        Button leftBtn = dialogView.findViewById(R.id.resultTwo_leftBtn);
-        Button rightBtn = dialogView.findViewById(R.id.resultTwo_rightBtn);
-
-        gainTv.setText("Calibrated Value");
-        if (Double.parseDouble(offset) >= 0.5 && Double.parseDouble(offset) <= 1.5) {
-            iv.setImageResource(R.drawable.ic_success);
-            gainTv.setText(calibValue);
-            leftBtn.setVisibility(View.GONE);
-            offsetTv.setText(offset);
-        } else {
-            iv.setImageResource(R.drawable.ic_failed);
-            gainTv.setText(calibValue);
-            offsetTv.setText(offset);
-        }
-        leftBtn.setText("RETRY");
-        rightBtn.setText("CONFIRM");
-        leftBtn.setOnClickListener(View -> {
-            sendpHreadPck();
-        });
-        rightBtn.setOnClickListener(View -> {
-            alertReading.dismiss();
-        });
-
-        alertReading.show();
-    }
-
-    private void showPhResult(String value1, String value2) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_calib_result_two, null);
-        dialogBuilder.setView(dialogView);
-        AlertDialog alertReading = dialogBuilder.create();
+        AlertDialog alertDialog = dialogBuilder.create();
 
         ImageView iv = dialogView.findViewById(R.id.resultTwo_iv);
         TextView leftValue = dialogView.findViewById(R.id.resulTwo_leftValue);
@@ -495,131 +275,293 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         TextView leftHeading = dialogView.findViewById(R.id.resultTwo_leftHeading);
         TextView rightHeading = dialogView.findViewById(R.id.resultTwo_rightHeading);
 
-        leftHeading.setText("Calibration value");
-        rightHeading.setText("Offset");
+        iv.setImageResource(R.drawable.calib_flask);
+        leftHeading.setText("Detected Value");
+        rightHeading.setText("CountDown");
+        // leftValue.setText(mBinding.extValue.getText().toString());
+        leftBtn.setText("CANCEL");
+        rightBtn.setText("PROCEED");
+        rightBtn.setText("PROCEED");
 
-        if (Double.parseDouble(value1) >= -140 && Double.parseDouble(value1) <= 140) {
-            iv.setImageResource(R.drawable.ic_success);
-            leftValue.setText(value2.substring(0, 4));
-            leftBtn.setVisibility(View.GONE);
-            rightValue.setText(value1.substring(0, 4));
-        } else {
-            iv.setImageResource(R.drawable.ic_failed);
-            leftValue.setText(value2.substring(0, 4));
-            rightValue.setText(value1.substring(0, 4));
+        rightBtn.setClickable(false);
+        rightBtn.setAlpha(0.5f);
+        if (alertDialog.isShowing()) {
+            alertDialog.dismiss();
         }
-
-        leftBtn.setText("RETRY");
-        rightBtn.setText("CONFIRM");
+        alertDialog.show();
 
         leftBtn.setOnClickListener(View -> {
-            sendpHreadPck();
-            alertReading.dismiss();
+            alertDialog.dismiss();
         });
 
         rightBtn.setOnClickListener(View -> {
-            alertReading.dismiss();
+            alertDialog.dismiss();
+            if (getCalibrationType().equals("0")) {
+                sendCalibReadPacket("0");
+            } else {
+                if (inputType.equals("pH")) {
+                    if (bufferType.equals("0")) {
+                        if (type.equals("1") || type.equals("0")) {
+                            startPreceiseCalibration("2");
+                        } else if (type.equals("2")) {
+                            sendCalibReadPacket("2");
+                        }
+                    } else {
+                        if (type.equals("1") || type.equals("0")) {
+                            getPhManualValues("Second");
+                        } else if (type.equals("2")) {
+                            sendCalibReadPacket("2");
+                        }
+                    }
+                } else {
+                    // anyOtherSensor
+                }
+            }
         });
 
-        alertReading.show();
+        final int[] stabilizationCount = {0};
+        final long[] tempInt = {1};
+        CountDownTimer stabilizationTimer = new CountDownTimer(30000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                long seconds = millisUntilFinished / 1000;
+                rightValue.setText("" + seconds);
+                leftValue.setText(keepAliveDao.getCurrentValue(Integer.parseInt(inputNumber)));
+                if (tempInt[0] == 30 - seconds) {
+                    if (!keepAliveDao.getCurrentValue(Integer.parseInt(inputNumber)).equals("N/A")) {
+                        if ((int) Double.parseDouble(tempValue) == ((int) Double.parseDouble(keepAliveDao.getCurrentValue(Integer.parseInt(inputNumber))))) {
+                            stabilizationCount[0]++;
+                        }
+                        tempInt[0] = tempInt[0] + 5;
+                    }
+                }
+
+                if (stabilizationCount[0] > 3) {
+                    cancel();
+                    if (getCalibrationType().equals("0")) {
+                        sendCalibReadPacket("0");
+                    } else {
+                        if (inputType.equals("pH")) {
+                            if (bufferType.equals("0")) {
+                                if (type.equals("1")) {
+                                    startPreceiseCalibration("2");
+                                } else if (type.equals("2")) {
+                                    sendCalibReadPacket("2");
+                                }
+                            } else {
+                                if (type.equals("1")) {
+                                    getPhManualValues("Second");
+                                } else if (type.equals("2")) {
+                                    sendCalibReadPacket("2");
+                                }
+                            }
+                        } else {
+                            // anyOtherSensor
+                        }
+                    }
+                    Toast.makeText(getContext(), "Sensor Stabilized", Toast.LENGTH_SHORT).show();
+                    alertDialog.dismiss();
+                }
+            }
+
+            public void onFinish() {
+                rightBtn.setAlpha(1f);
+                rightBtn.setClickable(true);
+            }
+        };
+        stabilizationTimer.start();
     }
 
-    private void sendpHreadPck() {
-        mAppClass.sendPacket(this::OnDataReceive, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR +
-                PCK_SENSORCALIB + SPILT_CHAR + inputNumber + SPILT_CHAR + getPosition(2, inputType, inputTypeArr) + SPILT_CHAR + "1" + SPILT_CHAR + "0");
-    }
-
-    private void checkStabilization(String value) {
-        int inputNo = Integer.parseInt(value);
-        String setID = "0";
-        if (inputNo < 11) {
-            setID = "0";
-        } else if (inputNo < 21) {
-            setID = "1";
-        } else if (inputNo < 31) {
-            setID = "2";
-        } else if (inputNo < 41) {
-            setID = "3";
-        } else if (inputNo < 57) {
-            setID = "4";
-        }
+    private void sendCalibReadPacket(String firstORsecond) {
         mAppClass.sendPacket(new DataReceiveCallback() {
             @Override
             public void OnDataReceive(String data) {
-                String[] splitData = data.split("\\*")[1].split("\\$");
-                if (isValidStabilizationPck(splitData)) {
-                    if (getCalibrationType().equals("1")) {
-                        leftEdt.setText(splitData[inputNo + 3].substring(2, splitData[inputNo + 3].length()));
-                    }
-
-                    if (splitData[inputNo + 3].substring(2, splitData[inputNo + 3].length()).equals(lastStabValue)) {
-                        stabilizationCount++;
-                        if (stabilizationCount > 5) {
-                            stabilizationTimer.cancel();
-                            alertReading.dismiss();
-                            sendpHreadPck();
-                        }
-                    }
-                    lastStabValue = splitData[inputNo + 3].substring(2, splitData[inputNo + 3].length());
+                if (isValidPck(READ_PACKET, data)) {
+                    showCalibResult(spiltPacket(data));
                 }
             }
-        }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET +
-                SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + setID);
+        }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR +
+                PCK_SENSORCALIB + SPILT_CHAR + inputNumber + SPILT_CHAR +
+                inputType + SPILT_CHAR + "1" + SPILT_CHAR + "0" +
+                (firstORsecond.equals("0") ? "" : SPILT_CHAR + firstORsecond));
     }
 
-    private boolean isValidStabilizationPck(String[] splitData) {
-        if (splitData[0].equals(READ_PACKET)) {
-            if (splitData[1].equals(PCK_DIAGNOSTIC)) {
-                if (splitData[2].equals(RES_SUCCESS)) {
-                    return true;
+    private void showCalibResult(String[] splitData) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_calib_result_two, null);
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertResult = dialogBuilder.create();
+
+        ImageView iv = dialogView.findViewById(R.id.resultTwo_iv);
+        TextView leftValue = dialogView.findViewById(R.id.resulTwo_leftValue);
+        TextView rightValue = dialogView.findViewById(R.id.resulTwo_rightValue);
+        Button leftBtn = dialogView.findViewById(R.id.resultTwo_leftBtn);
+        Button rightBtn = dialogView.findViewById(R.id.resultTwo_rightBtn);
+        TextView leftHeading = dialogView.findViewById(R.id.resultTwo_leftHeading);
+        TextView rightHeading = dialogView.findViewById(R.id.resultTwo_rightHeading);
+
+        leftBtn.setText("RETRY");
+        rightBtn.setText("SAVE");
+
+        leftBtn.setOnClickListener(View -> {
+            alertResult.dismiss();
+            mBinding.startCalibrationBtn.performClick();
+        });
+
+        rightBtn.setOnClickListener(View -> {
+            alertResult.dismiss();
+            saveCalibrationValue(splitData);
+        });
+
+
+        switch (getValueFromArr(inputType, inputTypeArr)) {
+            case "pH":
+                if (getCalibrationType().equals("0")) {
+                    showQuickCalibResult(splitData, iv, leftValue, rightValue, leftHeading, rightHeading, leftBtn, rightBtn);
+                } else {
+                    showPreceiseCalibResult(splitData, iv, leftValue, rightValue, leftHeading, rightHeading, leftBtn, rightBtn);
+                }
+                break;
+
+
+            case "ORP":
+                showQuickCalibResult(splitData, iv, leftValue, rightValue, leftHeading, rightHeading, leftBtn, rightBtn);
+                break;
+        }
+        alertResult.show();
+    }
+
+
+    private void showPreceiseCalibResult(String[] splitData, ImageView iv, TextView leftValue, TextView rightValue,
+                                         TextView leftHeading, TextView rightHeading, Button leftBtn, Button rightBtn) {
+        leftHeading.setText("Calibration Value");
+        rightHeading.setText("Gain");
+        String gain = splitData[4], calibrationValue = splitData[5];
+
+        if (Double.parseDouble(gain) > 0.2 && Double.parseDouble(gain) < 1.2) { // calibrationSuccess
+            calibrationValue = splitData[5].length() > 5 ? splitData[5].substring(0, 5) : splitData[5];
+
+            gain = splitData[4].length() > 5 ? splitData[4].substring(0, 5) : splitData[4];
+            iv.setImageResource(R.drawable.ic_success);
+            leftValue.setText(calibrationValue);
+            leftBtn.setVisibility(View.GONE);
+            rightValue.setText(gain);
+        } else {
+            calibrationValue = splitData[5].length() > 5 ? splitData[5].substring(0, 5) : splitData[5];
+
+            gain = splitData[4].length() > 5 ? splitData[4].substring(0, 5) : splitData[4];
+            iv.setImageResource(R.drawable.ic_failed);
+            leftValue.setText(calibrationValue);
+            rightValue.setText(gain);
+        }
+    }
+
+    private void showQuickCalibResult(String[] splitData, ImageView iv, TextView leftValue, TextView rightValue,
+                                      TextView leftHeading, TextView rightHeading, Button leftBtn, Button rightBtn) {
+
+        String offSet = splitData[4], calibratedValue = splitData[5];
+        double minRange, maxRange;
+        switch (inputType) {
+            case "00":
+                minRange = -140;
+                maxRange = 140;
+                break;
+
+            case "01":
+                minRange = -300;
+                maxRange = 300;
+                break;
+            default:
+                minRange = 0;
+                maxRange = 0;
+                break;
+        }
+
+        leftHeading.setText("Calibration value");
+        rightHeading.setText("Offset");
+        if (Double.parseDouble(offSet) >= minRange && Double.parseDouble(offSet) <= maxRange) {
+            offSet = splitData[4].length() > 5 ? splitData[4].substring(0, 5) : splitData[4];
+            calibratedValue = splitData[5].length() > 5 ? splitData[5].substring(0, 5) : splitData[5];
+
+            iv.setImageResource(R.drawable.ic_success);
+            leftValue.setText(calibratedValue);
+            leftBtn.setVisibility(View.GONE);
+            rightValue.setText(offSet);
+        } else {
+            offSet = splitData[4].length() > 5 ? splitData[4].substring(0, 5) : splitData[4];
+            calibratedValue = splitData[5].length() > 5 ? splitData[5].substring(0, 5) : splitData[5];
+
+            iv.setImageResource(R.drawable.ic_failed);
+            leftValue.setText(calibratedValue);
+            rightValue.setText(offSet);
+        }
+    }
+
+
+    private String getCalibrationType() {
+        if (mBinding.relativeRadioGroup.getCheckedRadioButtonId() == mBinding.quick.getId()) {
+            return "0";
+        }
+        return "1";
+    }
+
+    private boolean isValidPck(String pckType, String data) {
+        try {
+            String[] splitData = data.split("\\*")[1].split("\\$");
+            if (splitData[0].equals(pckType)) {
+                if (splitData[1].equals(PCK_SENSORCALIB)) {
+                    if (splitData[2].equals(RES_SUCCESS)) {
+                        return true;
+                    }
                 }
             }
+        } catch (Exception e) {
+            return false;
         }
         return false;
     }
 
-    private void startpHManualStabilization() {
-        stabilizationCount = 0;
-        startTimer(inputNumber, inputType, "0");
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
-        dialogBuilder.setView(dialogView);
-        AlertDialog alertpHManual = dialogBuilder.create();
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.precise:
+                if (isChecked) {
+                    mBinding.txtChange.setText("CALIBRATION MODE");
+                    mBinding.extValue.setEnabled(false);
+                    mBinding.extValue.setClickable(false);
 
-        TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
-        TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
-        Button cancel = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
-        Button confirm = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
-
-        mainText.setText("Rinse the sensor and insert it in first buffer");
-        cancel.setText("CANCEL");
-        confirm.setText("CONFIRM");
-        subText.setVisibility(View.INVISIBLE);
-        confirm.setEnabled(false);
-        confirm.setAlpha(0.5f);
-
-        new CountDownTimer(30000, 1000) {
-            @Override
-            public void onTick(long l) {
-            }
-
-            @Override
-            public void onFinish() {
-                confirm.setEnabled(true);
-                confirm.setAlpha(1f);
-            }
-        };
-
-
-        cancel.setOnClickListener(View -> {
-            alertpHManual.cancel();
-        });
-
-        confirm.setOnClickListener(View -> {
-            alertpHManual.cancel();
-        });
-        alertpHManual.show();
+                    if (inputType.equals("pH")) {
+                        mBinding.extValue.setText(getValueFromArr(bufferType, bufferArr));
+                    }
+                }
+                break;
+            case R.id.quick:
+                if (isChecked) {
+                    mBinding.txtChange.setText("Please Enter the Calibration Value");
+                    mBinding.extValue.setText("");
+                    mBinding.extValue.setHint("00");
+                    mBinding.extValue.setEnabled(true);
+                    mBinding.extValue.setClickable(true);
+                }
+                break;
+        }
     }
 
+    private void saveCalibrationValue(String[] splitData) {
+        CalibrationEntity entityUpdate = new CalibrationEntity(
+                Integer.parseInt(splitData[3]), inputType,
+                new SimpleDateFormat("yyyy.MM.dd | HH.mm.ss", Locale.getDefault()).format(new Date()),
+                getCalibrationType().equals("0") ? getCalibrationType() + SPILT_CHAR + splitData[4] + SPILT_CHAR + splitData[5] :
+                        getCalibrationType() + SPILT_CHAR + splitData[4] + SPILT_CHAR + splitData[5] // todo required confirmation
+        );
+        List<CalibrationEntity> entryListUpdate = new ArrayList<>();
+        entryListUpdate.add(entityUpdate);
+        updateToDb(entryListUpdate);
+    }
+
+    public void updateToDb(List<CalibrationEntity> entryList) {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+        CalibrationDao dao = db.calibrationDao();
+        dao.insert(entryList.toArray(new CalibrationEntity[0]));
+    }
 }

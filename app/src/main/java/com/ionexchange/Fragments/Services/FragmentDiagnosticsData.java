@@ -39,7 +39,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class FragmentDiagnosticsData extends Fragment implements DataReceiveCallback {
+public class FragmentDiagnosticsData extends Fragment implements DataReceiveCallback, CompoundButton.OnCheckedChangeListener {
     FragmentDiagnosticsBinding mBinding;
     ApplicationClass mAppClass;
     private static final String TAG = "FragmentDiagnosticsData";
@@ -47,13 +47,14 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     WaterTreatmentDb dB;
     InputConfigurationDao inputDao;
     List<DiagnosticDataEntity> diagnosticDataEntityList;
-    int minSensor =0,
-            maxSensor=0,
-            minModbusSensor=0,
-            maxModbusSensor=0, minFlowSensor=0,
-            maxFlowSensor=0, minTemp, maxTemp=0,
-            minAnalog=0, maxAnalog=0, minTank=0, maxTank=0,
-            minDigital=0, maxDigital=0;
+    int minSensor = 0,
+            maxSensor = 0,
+            minModbusSensor = 0,
+            maxModbusSensor = 0, minFlowSensor = 0,
+            maxFlowSensor = 0, minTemp, maxTemp = 0,
+            minAnalog = 0, maxAnalog = 0, minTank = 0, maxTank = 0,
+            minDigital = 0, maxDigital = 0;
+    boolean sensorBool = false, modBusBool = false, flowMeterBool = false, tempBool = false, analogBool = false, tankBool = false, digitalBool = false, empty = false;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -73,7 +74,7 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
         inputDao = dB.inputConfigurationDao();
         diagnosticDataEntityList = dao.getDiagnosticDataList();
         mBinding.readNowBtn.setOnClickListener(View -> {
-            //   sendPacket("0");
+            sendPacket("0");
         });
         mBinding.readNowBtn.performClick();
         setAdapter(diagnosticDataEntityList);
@@ -136,8 +137,10 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
                     int i = 0;
+                    int j = 9;
                     String currentTime = new SimpleDateFormat("yyyy.MM.dd | HH.mm.ss", Locale.getDefault()).format(new Date());
-                    while (i < 9) {
+
+                    while (i < j) {
                         if (splitData[i + 4].length() > 2) {
                             setDiagnosticsDb(splitData[i + 4].substring(0, 2),
                                     splitData[i + 4].substring(2, splitData[i + 4].length()), currentTime);
@@ -145,7 +148,11 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
                             setDiagnosticsDb(splitData[i + 4], "No Data Received", currentTime);
                         }
                         i++;
+                        if (i == 4) {
+                            j = 7;
+                        }
                     }
+
 
                     if (splitData[3].equals("0")) {
                         sendPacket("1");
@@ -178,57 +185,62 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
         Chip temp = dialogView.findViewById(R.id.tempSensor);
         Chip analog = dialogView.findViewById(R.id.analogSensor);
         Chip tank = dialogView.findViewById(R.id.tankSensor);
+
         Chip digital = dialogView.findViewById(R.id.digitalSensor);
         ChipGroup group = dialogView.findViewById(R.id.radio_group);
         Button ok = dialogView.findViewById(R.id.ok);
+        Button cancel = dialogView.findViewById(R.id.cancel);
+
+        sensor.setOnCheckedChangeListener(this);
+        modbus.setOnCheckedChangeListener(this);
+        flowSensor.setOnCheckedChangeListener(this);
+        temp.setOnCheckedChangeListener(this);
+        analog.setOnCheckedChangeListener(this);
+        tank.setOnCheckedChangeListener(this);
+        digital.setOnCheckedChangeListener(this);
+
+        if (sensorBool) {
+            sensor.setChecked(true);
+        }
+        if (modBusBool) {
+            modbus.setChecked(true);
+        }
+        if (analogBool) {
+            analog.setChecked(true);
+        }
+        if (digitalBool) {
+            digital.setChecked(true);
+        }
+        if (flowMeterBool) {
+            flowSensor.setChecked(true);
+        }
+        if (tankBool) {
+            tank.setChecked(true);
+        }
+        if (tempBool) {
+            temp.setChecked(true);
+        }
 
 
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                group.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(ChipGroup group, int checkedId) {
-                        switch (group.getCheckedChipId()) {
-                            case R.id.Sensor:
-                                minSensor = 1;
-                                maxSensor = 4;
-                                break;
-                            case R.id.modbusSensor:
-                                minModbusSensor = 5;
-                                maxModbusSensor = 14;
-                                break;
-                            case R.id.flowSensor:
-                                minFlowSensor = 26;
-                                maxFlowSensor = 33;
-                                break;
-                            case R.id.tempSensor:
-                                minTemp = 15;
-                                maxTemp = 17;
-                                break;
-                            case R.id.analogSensor:
-                                minAnalog = 18;
-                                maxAnalog = 25;
-                                break;
-                            case R.id.tankSensor:
-                                minTank = 42;
-                                maxTank = 49;
-                                break;
-
-                            case R.id.digitalSensor:
-                                minDigital = 34;
-                                maxDigital = 41;
-                                break;
-                        }
-                        diagnosticDataEntityList = dao.getInputHardWareNoDiagnosticDataEntity(
-                                minSensor, maxSensor,minModbusSensor,maxModbusSensor,minTemp,maxTemp,
-                                minAnalog,maxAnalog,minFlowSensor,maxFlowSensor,minDigital,maxDigital,
-                                minTank,maxTank);
-                        setAdapter(diagnosticDataEntityList);
-                        alertDialog.dismiss();
-                    }
-                });
-
+                if (empty){
+                    diagnosticDataEntityList = dao.getDiagnosticDataList();
+                }else {
+                    diagnosticDataEntityList = dao.getInputHardWareNoDiagnosticDataEntity(
+                            minSensor, maxSensor, minModbusSensor, maxModbusSensor, minTemp, maxTemp,
+                            minAnalog, maxAnalog, minFlowSensor, maxFlowSensor, minDigital, maxDigital,
+                            minTank, maxTank);
+                }
+                setAdapter(diagnosticDataEntityList);
+                alertDialog.dismiss();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
             }
         });
         alertDialog.show();
@@ -236,4 +248,101 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     }
 
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+            switch (buttonView.getId()) {
+                case R.id.Sensor:
+                    if (isChecked) {
+                        minSensor = 1;
+                        maxSensor = 4;
+                        sensorBool = true;
+                    } else {
+                        minSensor = 0;
+                        maxSensor = 0;
+                        sensorBool = false;
+                    }
+                    break;
+                case R.id.modbusSensor:
+                    if (isChecked) {
+                        minModbusSensor = 5;
+                        maxModbusSensor = 14;
+                        modBusBool = true;
+                    } else {
+                        minModbusSensor = 0;
+                        maxModbusSensor = 0;
+                        modBusBool = false;
+                    }
+                    break;
+                case R.id.flowSensor:
+                    if (isChecked) {
+                        minFlowSensor = 26;
+                        maxFlowSensor = 33;
+                        flowMeterBool = true;
+                    } else {
+                        minFlowSensor = 0;
+                        maxFlowSensor = 0;
+                        flowMeterBool = false;
+                    }
+                    break;
+                case R.id.tempSensor:
+                    if (isChecked) {
+                        minTemp = 15;
+                        maxTemp = 17;
+                        tempBool = true;
+                    } else {
+                        minTemp = 0;
+                        maxTemp = 0;
+                        tempBool = false;
+                    }
+
+                    break;
+                case R.id.analogSensor:
+                    if (isChecked) {
+                        minAnalog = 18;
+                        maxAnalog = 25;
+                        analogBool = true;
+                    } else {
+                        minAnalog = 0;
+                        maxAnalog = 0;
+                        analogBool = false;
+                    }
+                    break;
+                case R.id.tankSensor:
+                    if (isChecked) {
+                        minTank = 42;
+                        maxTank = 49;
+                        tankBool = true;
+                    } else {
+                        minTank = 0;
+                        maxTank = 0;
+                        tankBool = false;
+                    }
+
+                    break;
+
+                case R.id.digitalSensor:
+                    if (isChecked) {
+                        minDigital = 34;
+                        maxDigital = 41;
+                        digitalBool = true;
+                    } else {
+                        minDigital = 0;
+                        maxDigital = 0;
+                        digitalBool = false;
+                    }
+                    break;
+            }
+        }else {
+            empty = true;
+            sensorBool = false;
+            digitalBool = false;
+            tankBool = false;
+            analogBool = false;
+            tempBool = false;
+            flowMeterBool = false;
+            modBusBool = false;
+        }
+
+    }
 }

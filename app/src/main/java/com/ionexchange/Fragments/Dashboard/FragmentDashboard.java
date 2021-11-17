@@ -1,8 +1,6 @@
 package com.ionexchange.Fragments.Dashboard;
 
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,21 +22,12 @@ import com.ionexchange.Database.Dao.MainConfigurationDao;
 import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 import com.ionexchange.Database.Entity.MainConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
-import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentDashboardBinding;
 
 import java.util.List;
-
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.PCK_DIAGNOSTIC;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 
 public class FragmentDashboard extends Fragment implements View.OnClickListener, RvOnClick {
     FragmentDashboardBinding mBinding;
@@ -81,7 +70,6 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         keepAliveCurrentValueDao.getLiveList().observe(getViewLifecycleOwner(), new Observer<List<KeepAliveCurrentEntity>>() {
             @Override
             public void onChanged(List<KeepAliveCurrentEntity> keepAliveCurrentEntities) {
-                Log.e(TAG, "onChanged: VALUE CHANGED");
                 mBinding.rvDashboard.getAdapter().notifyDataSetChanged();
             }
         });

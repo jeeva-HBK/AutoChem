@@ -9,7 +9,6 @@
         android:background="@color/pageBg"
         tools:context=".Fragments.HostFragment">
 
-
         <FrameLayout
             android:id="@+id/dashboardHost"
             android:layout_width="match_parent"

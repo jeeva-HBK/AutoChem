@@ -13,6 +13,9 @@
         android:label="@string/app_name"
         android:hardwareAccelerated="false"
         android:largeHeap="true"
+        android:clearTaskOnLaunch="true"
+        android:stateNotNeeded="true"
+        android:launchMode="singleTask"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IonExchange">
@@ -20,9 +23,17 @@
             android:windowSoftInputMode="adjustNothing"
             android:name=".Activity.BaseActivity"
             android:screenOrientation="landscape">
+        </activity>
+
+        <activity
+            android:windowSoftInputMode="adjustNothing"
+            android:name=".Activity.ConnectionActivity"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 

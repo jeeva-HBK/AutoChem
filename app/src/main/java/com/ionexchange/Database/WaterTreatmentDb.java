@@ -1,15 +1,16 @@
 package com.ionexchange.Database;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
-import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.ionexchange.Database.Dao.CalibrationDao;
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
 import com.ionexchange.Database.Dao.DiagnosticDataDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
@@ -20,6 +21,7 @@ import com.ionexchange.Database.Dao.OutputKeepAliveDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
 import com.ionexchange.Database.Dao.UserManagementDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
+import com.ionexchange.Database.Entity.CalibrationEntity;
 import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
 import com.ionexchange.Database.Entity.DiagnosticDataEntity;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
@@ -35,36 +37,41 @@ import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 @Database(entities = {InputConfigurationEntity.class, OutputConfigurationEntity.class,
         VirtualConfigurationEntity.class, TimerConfigurationEntity.class,
         DefaultLayoutConfigurationEntity.class, MainConfigurationEntity.class,
-        KeepAliveCurrentEntity.class, DiagnosticDataEntity.class, UsermanagementEntity.class, OutputKeepAliveEntity.class},
+        KeepAliveCurrentEntity.class, DiagnosticDataEntity.class, UsermanagementEntity.class,
+        OutputKeepAliveEntity.class, CalibrationEntity.class},
         version = 2, exportSchema = false)
 @TypeConverters(Converters.class)
 
 public abstract class WaterTreatmentDb extends RoomDatabase {
 
     public static volatile WaterTreatmentDb INSTANCE;
+    public static final String DB_NAME = "ion_exchange_db.db";
 
-    static Migration migration_1_2 = new Migration(1, 2) {
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("");
-        }
-    };
 
     public static WaterTreatmentDb getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (WaterTreatmentDb.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            WaterTreatmentDb.class, "WaterTreatmentDatabase")
+                            WaterTreatmentDb.class, DB_NAME)
+                            .addCallback(roomCallback)
                             .allowMainThreadQueries()
-                            .addMigrations(migration_1_2)
                             .build();
-
                 }
+
             }
         }
         return INSTANCE;
+
     }
+
+    static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            Log.e("SOF", db.getPath());
+        }
+    };
 
     public abstract InputConfigurationDao inputConfigurationDao();
 
@@ -85,5 +92,7 @@ public abstract class WaterTreatmentDb extends RoomDatabase {
     public abstract DiagnosticDataDao diagnosticDataDao();
 
     public abstract OutputKeepAliveDao outputKeepAliveDao();
+
+    public abstract CalibrationDao calibrationDao();
 
 }

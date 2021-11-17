@@ -71,9 +71,7 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        editor.remove("prefLoggedIn");
-                        editor.remove("prefIp");
-                        editor.remove("prefPort");
+                        editor.putBoolean("prefLoggedIn", false);
                         editor.putBoolean("requiredUserLogin", true);
                         editor.commit();
                         editor.apply();

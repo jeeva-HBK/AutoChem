@@ -2,14 +2,11 @@ package com.ionexchange.Others;
 
 
 import static com.ionexchange.Others.ApplicationClass.Acknowledge;
-import static com.ionexchange.Others.ApplicationClass.Packet;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
-
-import com.ionexchange.Interface.DataReceiveCallback;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -68,12 +65,12 @@ public class TcpServer extends Service {
             }
             while (!Thread.currentThread().isInterrupted()) {
                 try {
-                    socket = serverSocket.accept();
-                    socket.setReuseAddress(true);
-                    socket.setKeepAlive(true);
-                    socket.setTcpNoDelay(true);
-                    socket.setSoLinger(true, 1);
-                    clientReceivedData(socket);
+                        socket = serverSocket.accept();
+                        socket.setReuseAddress(true);
+                        socket.setKeepAlive(true);
+                        socket.setTcpNoDelay(true);
+                        socket.setSoLinger(true, 1);
+                        clientReceivedData(socket);
                 } catch (IOException e) {
                     e.printStackTrace();
                     socket = null;

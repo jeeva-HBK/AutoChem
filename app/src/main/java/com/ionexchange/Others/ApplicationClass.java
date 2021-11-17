@@ -1,8 +1,10 @@
 package com.ionexchange.Others;
 
 import static android.util.Patterns.IP_ADDRESS;
+import static com.ionexchange.Database.WaterTreatmentDb.DB_NAME;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
-import static com.ionexchange.Others.TcpServer.ACTION_MyIntent;
 
 import android.app.Activity;
 import android.app.Application;
@@ -14,12 +16,15 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -51,14 +56,13 @@ import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.R;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
-
-import static android.util.Patterns.IP_ADDRESS;
-import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
 
 /* Created by Jeeva on 13/07/2021 */
 public class ApplicationClass extends Application {
@@ -150,7 +154,7 @@ public class ApplicationClass extends Application {
     public static VirtualConfigurationDao virtualDAO;
     public static TimerConfigurationDao timerDAO;
     public static UserManagementDao userManagementDao;
-
+    Handler handler;
     DataReceiveCallback listener;
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -192,15 +196,14 @@ public class ApplicationClass extends Application {
                         mIPAddress = preferences.getString("prefIp", "");
                         mPortNumber = Integer.parseInt(preferences.getString("prefPort", ""));
                     }
-                    registerReceiver();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                registerReceiver();
             }
 
             @Override
             public void onActivityStarted(@NonNull Activity activity) {
-
             }
 
             @Override
@@ -209,17 +212,14 @@ public class ApplicationClass extends Application {
 
             @Override
             public void onActivityPaused(@NonNull Activity activity) {
-
             }
 
             @Override
             public void onActivityStopped(@NonNull Activity activity) {
-
             }
 
             @Override
             public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
-
             }
 
             @Override
@@ -654,5 +654,82 @@ public class ApplicationClass extends Application {
         WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getApplicationContext());
         OutputKeepAliveDao dao = db.outputKeepAliveDao();
         dao.insert(entryList.toArray(new OutputKeepAliveEntity[0]));
+    }
+
+    public void exportDB() {
+        try {
+            File sd = Environment.getExternalStorageDirectory().getAbsoluteFile();
+            handler = new Handler();
+            final Runnable r = new Runnable() {
+                public void run() {
+                    try {
+                        String currentDBPath = getDatabasePath(DB_NAME).getAbsolutePath();
+                        String backupDBPath = "ion_exchange_db.db";
+                        File currentDB = new File(currentDBPath);
+                        File backupDB = new File(sd, backupDBPath);
+
+                        if (currentDB.exists()) {
+                            FileChannel src = new FileInputStream(currentDB).getChannel();
+                            FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                            dst.transferFrom(src, 0, src.size());
+                            src.close();
+                            Log.e(TAG, "exportDB: " + currentDBPath);
+                            Log.e(TAG, "exportDB: " + backupDB);
+                            dst.close();
+                            Toast.makeText(getApplicationContext(), "Backup Successful!", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            handler.postDelayed(r, 3000);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "copyFile: " + e);
+        }
+    }
+
+    public void importDB() {
+        try {
+            File sd = Environment.getExternalStorageDirectory().getAbsoluteFile();
+            handler = new Handler();
+            final Runnable r = new Runnable() {
+                public void run() {
+                    try {
+                        String currentDBPath = getDatabasePath(DB_NAME).getAbsolutePath();
+                        String backupDBPath = "ion_exchange_db.db";
+                        File currentDB = new File(currentDBPath);
+                        File backupDB = new File(sd, backupDBPath);
+
+                        if (currentDB.exists()) {
+                            FileChannel src = new FileInputStream(backupDB).getChannel();
+                            FileChannel dst = new FileOutputStream(currentDB).getChannel();
+                            dst.transferFrom(src, 0, src.size());
+                            src.close();
+                            Log.e(TAG, "importDB: " + currentDBPath);
+                            Log.e(TAG, "importDB: " + backupDB);
+                            dst.close();
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            handler.postDelayed(r, 3000);
+
+            Toast.makeText(getApplicationContext(), "Import Successful!", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+
+            Toast.makeText(getApplicationContext(), "Import Failed!", Toast.LENGTH_SHORT)
+                    .show();
+
+        }
     }
 }

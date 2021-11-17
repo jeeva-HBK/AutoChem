@@ -14,6 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:title="Calibration In Progress"
         app:titleCentered="true"
+        android:visibility="gone"
         app:titleTextColor="@color/colorSecondary" />
 
 

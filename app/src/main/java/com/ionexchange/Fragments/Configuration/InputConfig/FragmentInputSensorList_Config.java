@@ -1,35 +1,5 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
-import android.app.AlertDialog;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-
-import com.ionexchange.Adapters.InputsIndexRvAdapter;
-import com.ionexchange.Database.Dao.InputConfigurationDao;
-import com.ionexchange.Database.Entity.InputConfigurationEntity;
-import com.ionexchange.Database.WaterTreatmentDb;
-import com.ionexchange.Interface.DataReceiveCallback;
-import com.ionexchange.Interface.InputRvOnClick;
-import com.ionexchange.Others.ApplicationClass;
-import com.ionexchange.R;
-import com.ionexchange.databinding.FragmentInputsettingsBinding;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-
 import static com.ionexchange.Others.ApplicationClass.analogArr;
 import static com.ionexchange.Others.ApplicationClass.digitalSensorArr;
 import static com.ionexchange.Others.ApplicationClass.flowmeterArr;
@@ -50,12 +20,47 @@ import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 
+import android.app.AlertDialog;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.GridLayoutManager;
+
+import com.ionexchange.Adapters.InputsIndexRvAdapter;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
+import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Interface.DataReceiveCallback;
+import com.ionexchange.Interface.InputRvOnClick;
+import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.R;
+import com.ionexchange.databinding.FragmentInputsettingsBinding;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
 public class FragmentInputSensorList_Config extends Fragment implements View.OnClickListener, InputRvOnClick {
     FragmentInputsettingsBinding mBinding;
     AutoCompleteTextView sensorType, inputNumber, sensorName;
     ApplicationClass mAppClass;
     WaterTreatmentDb dB;
     InputConfigurationDao dao;
+    KeepAliveCurrentValueDao keepAliveCurrentValueDao;
+    List<KeepAliveCurrentEntity>keepAliveCurrentEntityList;
     private static final String TAG = "FragmentInputSettings";
     int pageOffset = 0, currentPage = 0, sequenceNo = 0, sequenceType = 0, sequenceValueRead = 0, analogType = 0, flowmeterType = 0;
 
@@ -71,8 +76,10 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
+        dB = WaterTreatmentDb.getDatabase(getContext());
         dao = ApplicationClass.inputDAO;
-
+        keepAliveCurrentValueDao = dB.keepAliveCurrentValueDao();
+        keepAliveCurrentEntityList = keepAliveCurrentValueDao.getKeepAliveList();
         mBinding.rightArrowIsBtn.setVisibility((dao.getInputConfigurationEntityFlagKeyList(1).size() / 9) > 0 ? View.VISIBLE : View.GONE);
         mBinding.addsensorIsBtn.setOnClickListener(this);
 
@@ -96,6 +103,12 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
                 mBinding.leftArrowIsBtn.setVisibility(View.VISIBLE);
                 mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this, dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset = pageOffset + 9)));
                 mBinding.rightArrowIsBtn.setVisibility(dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset + 9).isEmpty() ? View.GONE : View.VISIBLE);
+            }
+        });
+        keepAliveCurrentValueDao.getLiveList().observe(getViewLifecycleOwner(), new Observer<List<KeepAliveCurrentEntity>>() {
+            @Override
+            public void onChanged(List<KeepAliveCurrentEntity> keepAliveCurrentEntities) {
+                mBinding.inputsRv.getAdapter().notifyDataSetChanged();
             }
         });
     }
