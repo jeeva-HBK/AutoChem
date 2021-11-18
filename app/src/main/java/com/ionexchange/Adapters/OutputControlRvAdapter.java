@@ -23,6 +23,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
+import com.ionexchange.Database.Entity.OutputKeepAliveEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.RvOutputControl;
 import com.ionexchange.R;
@@ -34,11 +35,12 @@ public class OutputControlRvAdapter extends RecyclerView.Adapter<OutputControlRv
     private Context context;
     RvOutputControl rvOutputControl;
     List<OutputConfigurationEntity> outputConfigurationEntityList;
+    List<OutputKeepAliveEntity> outputKeepAliveEntityList;
 
-    public OutputControlRvAdapter(RvOutputControl rvOutputControl,
-                                  List<OutputConfigurationEntity> outputConfigurationEntityList) {
+    public OutputControlRvAdapter(RvOutputControl rvOutputControl, List<OutputConfigurationEntity> outputConfigurationEntityList, List<OutputKeepAliveEntity> outputKeepAliveEntityList) {
         this.rvOutputControl = rvOutputControl;
         this.outputConfigurationEntityList = outputConfigurationEntityList;
+        this.outputKeepAliveEntityList = outputKeepAliveEntityList;
     }
 
     @NonNull
@@ -53,6 +55,8 @@ public class OutputControlRvAdapter extends RecyclerView.Adapter<OutputControlRv
     @Override
     public void onBindViewHolder(@NonNull itemHolder holder, int position) {
         holder.outputControl.setAdapter(getAdapter(outputControl, context));
+        holder.outputControl.setText(holder.outputControl.getAdapter().
+                getItem(Integer.parseInt(outputKeepAliveEntityList.get(position).getOutputStatus())).toString());
 
         holder.outputName.setText(outputConfigurationEntityList.get(position).getOutputType()
                 +"-"+outputConfigurationEntityList.get(position).getOutputLabel());
@@ -66,11 +70,12 @@ public class OutputControlRvAdapter extends RecyclerView.Adapter<OutputControlRv
             holder.root.setBackgroundColor(context.getResources().getColor(R.color.ash));
             holder.outputControl.setBackgroundColor(context.getResources().getColor(R.color.ash));
         }
+        holder.outputControl.setAdapter(getAdapter(outputControl, context));
     }
 
     @Override
     public int getItemCount() {
-        return 15;
+        return 14;
     }
 
     @Override

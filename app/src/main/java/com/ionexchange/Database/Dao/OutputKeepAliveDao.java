@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 
+import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 import com.ionexchange.Database.Entity.OutputKeepAliveEntity;
 
 import java.util.List;
@@ -22,4 +23,7 @@ public interface OutputKeepAliveDao {
 
     @Query("Update OutputKeepAliveEntity SET outputStatus = :cValue WHERE hardwareNo = :hardwareNo")
     void updateOutputStatus(int hardwareNo, String cValue);
+
+    @Query("select * FROM OutputKeepAliveEntity")
+    List<OutputKeepAliveEntity> getOutputList();
 }

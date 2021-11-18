@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -30,7 +31,9 @@ import com.google.android.material.timepicker.TimeFormat;
 import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Adapters.OutputControlRvAdapter;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
+import com.ionexchange.Database.Dao.OutputKeepAliveDao;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
+import com.ionexchange.Database.Entity.OutputKeepAliveEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Interface.RvOutputControl;
@@ -48,9 +51,11 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
     FragmentOutputcontrolBinding mBinding;
     OutputControlRvAdapter outputControlRvAdapter;
     OutputConfigurationDao dao;
+    OutputKeepAliveDao outputKeepAliveDao;
     WaterTreatmentDb db;
     ApplicationClass mAppClass;
     List<OutputConfigurationEntity> outputConfigurationEntityList;
+    List<OutputKeepAliveEntity> outputKeepAliveEntityList;
     String Hours;
     BaseActivity baseActivity;
 
@@ -67,14 +72,23 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
+
         baseActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.outputConfigurationDao();
+        outputKeepAliveDao = db.outputKeepAliveDao();
         outputConfigurationEntityList = new ArrayList<>();
         outputConfigurationEntityList = dao.getOutputConfigurationEntityList();
-        outputControlRvAdapter = new OutputControlRvAdapter(this, outputConfigurationEntityList);
+        outputKeepAliveEntityList = outputKeepAliveDao.getOutputList();
+        outputControlRvAdapter = new OutputControlRvAdapter(this, outputConfigurationEntityList,outputKeepAliveEntityList);
         mBinding.outputControlRv.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.outputControlRv.setAdapter(outputControlRvAdapter);
+        outputKeepAliveDao.getOutputLiveList().observe(getViewLifecycleOwner(), new Observer<List<OutputKeepAliveEntity>>() {
+            @Override
+            public void onChanged(List<OutputKeepAliveEntity> outputKeepAliveEntities) {
+                mBinding.outputControlRv.getAdapter().notifyDataSetChanged();
+            }
+        });
     }
 
 
@@ -124,6 +138,7 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
     }
 
     private void handleResponse(String[] split) {
+
     }
 
     @Override

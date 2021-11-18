@@ -38,14 +38,14 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.outputHeader.setText(outputConfigurationEntityList.get(position).outputLabel);
         holder.outputModeValue.setText(outputConfigurationEntityList.get(position).outputMode);
-        holder.outputNumber.setText(outputConfigurationEntityList.get(position).outputHardwareNo+"");
+        holder.outputNumber.setText(outputConfigurationEntityList.get(position).outputHardwareNo + "");
         holder.outputStatus.setText(outputConfigurationEntityList.get(position).outputStatus);
         holder.outputLabel.setText("");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             holder.outputHeader.setTooltipText(outputConfigurationEntityList.get(position).outputLabel);
             holder.outputModeValue.setTooltipText(outputConfigurationEntityList.get(position).outputMode);
-            holder.outputNumber.setTooltipText(outputConfigurationEntityList.get(position).outputHardwareNo+"");
+            holder.outputNumber.setTooltipText(outputConfigurationEntityList.get(position).outputHardwareNo + "");
             holder.outputStatus.setTooltipText(outputConfigurationEntityList.get(position).outputStatus);
             holder.outputLabel.setTooltipText(outputConfigurationEntityList.get(position).outputLabel);
         }
