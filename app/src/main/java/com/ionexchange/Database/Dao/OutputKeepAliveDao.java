@@ -26,4 +26,8 @@ public interface OutputKeepAliveDao {
 
     @Query("select * FROM OutputKeepAliveEntity")
     List<OutputKeepAliveEntity> getOutputList();
+
+    @Query("select outputStatus  FROM OutputKeepAliveEntity WHERE  hardwareNo = :hardwareNo ")
+    String getOutputStatus(int hardwareNo);
+
 }

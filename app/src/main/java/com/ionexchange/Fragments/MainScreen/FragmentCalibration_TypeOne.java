@@ -51,8 +51,17 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
     WaterTreatmentDb db;
     CalibrationDao calibrationDao;
     KeepAliveCurrentValueDao keepAliveDao;
-    String inputNumber, inputType, bufferType, tempValue;
+    String inputNumber, inputType, bufferType = "", tempValue;
+
     private static final String TAG = "FragmentSensorCalib";
+
+    ImageView iv;
+    TextView leftValue;
+    TextView rightValue;
+    Button leftBtn;
+    Button rightBtn;
+    TextView leftHeading;
+    TextView rightHeading;
 
     public FragmentCalibration_TypeOne(String inputNumber, String inputType, String bufferType) {
         this.inputNumber = inputNumber;
@@ -65,7 +74,6 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
 
     public FragmentCalibration_TypeOne(String inputNumber, String inputType) {
         this.inputType = getValueFromArr(inputType, inputTypeArr);
-        ;
         this.inputNumber = inputNumber;
     }
 
@@ -112,6 +120,12 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                 mBinding.quick.performClick();
                 mBinding.currentModeValue.setVisibility(View.GONE);
                 mBinding.txtCurrentMode.setVisibility(View.GONE);
+            } else if ("Contacting Conductivity".equals(inputType)) {
+                mBinding.precise.performClick();
+                mBinding.extValue.setText("");
+                mBinding.extValue.setEnabled(false);
+                mBinding.txtCurrentMode.setVisibility(View.GONE);
+                mBinding.currentModeValue.setVisibility(View.GONE);
             }
         } else {
             Toast.makeText(getContext(), "Sensor Type is Null !", Toast.LENGTH_SHORT).show();
@@ -120,13 +134,23 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         mBinding.startCalibrationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ("pH".equals(getValueFromArr(inputType, inputTypeArr))) {
+                if ("pH".equals(inputType)) {
                     startPHcalibration();
-                } else if ("ORP".equals(getValueFromArr(inputType, inputTypeArr))) {
+                } else if ("ORP".equals(inputType)) {
                     startQuickCalibration();
+                } else if ("Contacting Conductivity".equals(inputType)) {
+                    startContactingConductivity();
                 }
             }
         });
+    }
+
+    private void startContactingConductivity() {
+        if (getCalibrationType().equals("0")) {
+            startQuickCalibration();
+        } else {
+            startPreceiseCalibration("1" + SPILT_CHAR + "0");
+        }
     }
 
     /* Quick Calibration */
@@ -163,7 +187,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
 
     private void startPreceiseCalibration(String firstORsecond) {
         if (inputType.equals("pH")) {
-            if (bufferType.equals("0")) { // AUTO
+            if (bufferType.equals("0")) { // pH AUTO
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
                 View dialogView = getLayoutInflater().inflate(R.layout.dialog_calib_reading, null);
                 dialogBuilder.setView(dialogView);
@@ -186,9 +210,31 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                     sendPreceiseCalibWritePacket(firstORsecond);
                 });
                 alertDialog.show();
-            } else { // Manual
+            } else { // pH Manual
                 getPhManualValues("First");
             }
+        } else { // conductivity
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+            View dialogView = getLayoutInflater().inflate(R.layout.dialog_calib_reading, null);
+            dialogBuilder.setView(dialogView);
+            AlertDialog alertDialog = dialogBuilder.create();
+
+            TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
+            TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
+            Button cancel = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
+            Button confirm = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
+
+            mainText.setText("\"Rinse the sensor and hold it in Air\"");
+            cancel.setText("CANCEL");
+            confirm.setText("CONFIRM");
+            cancel.setOnClickListener(View -> {
+                alertDialog.dismiss();
+            });
+            confirm.setOnClickListener(View -> {
+                alertDialog.dismiss();
+                sendPreceiseCalibWritePacket(firstORsecond);
+            });
+            alertDialog.show();
         }
     }
 
@@ -236,10 +282,14 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
             @Override
             public void OnDataReceive(String data) {
                 if (isValidPck(WRITE_PACKET, data)) {
-                    if (bufferType.equals("0")) {
-                        tempValue = firstORsecond.equals("1") ? "7.01" : "10.00";
-                    } else {
-                        tempValue = firstORsecond.split("\\$")[2];
+                    if (inputType.equals("pH")) {
+                        if (bufferType.equals("0")) {
+                            tempValue = firstORsecond.equals("1") ? "7.01" : "10.00";
+                        } else {
+                            tempValue = firstORsecond.split("\\$")[2];
+                        }
+                    } else if (inputType.equals("Contacting Conductivity")) {
+                        tempValue = firstORsecond.equals("1") ? "0.00" : firstORsecond.split("\\$")[1];
                     }
                     //  data = firstORsecond.equals("1") ? "{*0$10$0$1*}" : "{*0$10$0$2*}"; // todo temp Manual Pck
                     String[] spiltData = spiltPacket(data);
@@ -247,7 +297,6 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                         checkStabilization("1");
                     } else if (spiltData[3].equals("2")) { // step 2
                         checkStabilization("2");
-                        // sendCalibReadPacket("2");
                     }
                 }
             }
@@ -313,8 +362,13 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                             sendCalibReadPacket("2");
                         }
                     }
-                } else {
-                    // anyOtherSensor
+                } else if (inputType.equals("Contacting Conductivity")) {// anyOtherSensor
+                    if (type.equals("1")){
+                        showOneEdtDialog();
+                    } else {
+                        sendCalibReadPacket("2");
+                    }
+
                 }
             }
         });
@@ -371,6 +425,60 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         stabilizationTimer.start();
     }
 
+    private void showOneEdtDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_calib_onedt, null);
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+
+        TextView title = dialogView.findViewById(R.id.onedt_mainTxt);
+        EditText edt = dialogView.findViewById(R.id.onedt_edt);
+        Button leftBtn = dialogView.findViewById(R.id.onedt_leftBtn);
+        Button rightBtn = dialogView.findViewById(R.id.onedt_rightBtn);
+
+        title.setText("\"Enter the Standard conductivity buffer value\"");
+
+        leftBtn.setOnClickListener(View -> {
+            alertDialog.dismiss();
+        });
+
+        rightBtn.setOnClickListener(View -> {
+            if (edt.getText().toString().equals("")) {
+                alertDialog.dismiss();
+                showMsgDialog(edt.getText().toString());
+            } else {
+                mAppClass.showSnackBar(getContext(), "Field should not be empty !");
+            }
+        });
+
+        alertDialog.show();
+    }
+
+    private void showMsgDialog(String text) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+
+        TextView title = dialogView.findViewById(R.id.dialogType1Calib_mainText);
+        Button leftBtn = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
+        Button rightBtn = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
+
+        title.setText("Insert the sensor in STANDARD buffer");
+        leftBtn.setOnClickListener(View -> {
+            alertDialog.dismiss();
+        });
+
+        rightBtn.setOnClickListener(View -> {
+            alertDialog.dismiss();
+            sendPreceiseCalibWritePacket("2" + SPILT_CHAR + text);
+        });
+
+        alertDialog.show();
+    }
+
     private void sendCalibReadPacket(String firstORsecond) {
         mAppClass.sendPacket(new DataReceiveCallback() {
             @Override
@@ -392,13 +500,13 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         dialogBuilder.setView(dialogView);
         AlertDialog alertResult = dialogBuilder.create();
 
-        ImageView iv = dialogView.findViewById(R.id.resultTwo_iv);
-        TextView leftValue = dialogView.findViewById(R.id.resulTwo_leftValue);
-        TextView rightValue = dialogView.findViewById(R.id.resulTwo_rightValue);
-        Button leftBtn = dialogView.findViewById(R.id.resultTwo_leftBtn);
-        Button rightBtn = dialogView.findViewById(R.id.resultTwo_rightBtn);
-        TextView leftHeading = dialogView.findViewById(R.id.resultTwo_leftHeading);
-        TextView rightHeading = dialogView.findViewById(R.id.resultTwo_rightHeading);
+        iv = dialogView.findViewById(R.id.resultTwo_iv);
+        leftValue = dialogView.findViewById(R.id.resulTwo_leftValue);
+        rightValue = dialogView.findViewById(R.id.resulTwo_rightValue);
+        leftBtn = dialogView.findViewById(R.id.resultTwo_leftBtn);
+        rightBtn = dialogView.findViewById(R.id.resultTwo_rightBtn);
+        leftHeading = dialogView.findViewById(R.id.resultTwo_leftHeading);
+        rightHeading = dialogView.findViewById(R.id.resultTwo_rightHeading);
 
         leftBtn.setText("RETRY");
         rightBtn.setText("SAVE");
@@ -414,10 +522,10 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         });
 
 
-        switch (getValueFromArr(inputType, inputTypeArr)) {
+        switch (inputType) {
             case "pH":
                 if (getCalibrationType().equals("0")) {
-                    showQuickCalibResult(splitData, iv, leftValue, rightValue, leftHeading, rightHeading, leftBtn, rightBtn);
+                    showQuickCalibResult(splitData);
                 } else {
                     showPreceiseCalibResult(splitData, iv, leftValue, rightValue, leftHeading, rightHeading, leftBtn, rightBtn);
                 }
@@ -425,7 +533,8 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
 
 
             case "ORP":
-                showQuickCalibResult(splitData, iv, leftValue, rightValue, leftHeading, rightHeading, leftBtn, rightBtn);
+            case "Contacting Conductivity":
+                showQuickCalibResult(splitData);
                 break;
         }
         alertResult.show();
@@ -456,21 +565,25 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         }
     }
 
-    private void showQuickCalibResult(String[] splitData, ImageView iv, TextView leftValue, TextView rightValue,
-                                      TextView leftHeading, TextView rightHeading, Button leftBtn, Button rightBtn) {
-
+    private void showQuickCalibResult(String[] splitData) {
         String offSet = splitData[4], calibratedValue = splitData[5];
-        double minRange, maxRange;
+        double minRange = 0, maxRange = 0;
         switch (inputType) {
-            case "00":
+            case "pH":
                 minRange = -140;
                 maxRange = 140;
                 break;
 
-            case "01":
+            case "ORP":
                 minRange = -300;
                 maxRange = 300;
                 break;
+
+            case "Contacting Conductivity":
+                minRange = 0.5;
+                maxRange = 2.0;
+                break;
+
             default:
                 minRange = 0;
                 maxRange = 0;

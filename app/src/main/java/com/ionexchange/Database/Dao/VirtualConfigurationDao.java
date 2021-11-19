@@ -23,4 +23,13 @@ public interface VirtualConfigurationDao {
 
     @Query("select inputType  FROM virtualconfigurationentity WHERE  hardwareNo = :hardwareNo ")
     String getInputType(int hardwareNo);
+
+    @Query("select inputLabel FROM virtualconfigurationentity WHERE hardwareNo = :hardwareNo ")
+    String getVirtualLabel(int hardwareNo);
+
+    @Query("select subValueOne FROM virtualconfigurationentity WHERE hardwareNo = :hardwareNo ")
+    String getVirtualLowAlarm(int hardwareNo);
+
+    @Query("select subValueTwo FROM virtualconfigurationentity WHERE hardwareNo = :hardwareNo ")
+    String getVirtualHighAlarm(int hardwareNo);
 }

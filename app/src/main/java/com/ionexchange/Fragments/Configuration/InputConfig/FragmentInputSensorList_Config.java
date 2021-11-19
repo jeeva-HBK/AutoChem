@@ -84,13 +84,14 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
         mBinding.addsensorIsBtn.setOnClickListener(this);
 
         mBinding.inputsRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(this, dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset)));
+        mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(this, dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset),keepAliveCurrentValueDao));
 
         mBinding.leftArrowIsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 currentPage--;
-                mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this, dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset = pageOffset - 9)));
+                mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this,
+                        dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset = pageOffset - 9),keepAliveCurrentValueDao));
                 mBinding.leftArrowIsBtn.setVisibility(currentPage <= 0 ? View.GONE : View.VISIBLE);
                 mBinding.rightArrowIsBtn.setVisibility(View.VISIBLE);
             }
@@ -101,8 +102,10 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
             public void onClick(View view) {
                 currentPage++;
                 mBinding.leftArrowIsBtn.setVisibility(View.VISIBLE);
-                mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this, dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset = pageOffset + 9)));
-                mBinding.rightArrowIsBtn.setVisibility(dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset + 9).isEmpty() ? View.GONE : View.VISIBLE);
+                mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this,
+                        dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset = pageOffset + 9),keepAliveCurrentValueDao));
+                mBinding.rightArrowIsBtn.setVisibility(dao.getInputConfigurationEntityFlagKeyList
+                        (1, 9, pageOffset + 9).isEmpty() ? View.GONE : View.VISIBLE);
             }
         });
         keepAliveCurrentValueDao.getLiveList().observe(getViewLifecycleOwner(), new Observer<List<KeepAliveCurrentEntity>>() {

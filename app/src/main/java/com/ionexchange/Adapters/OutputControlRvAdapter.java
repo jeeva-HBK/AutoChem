@@ -55,8 +55,12 @@ public class OutputControlRvAdapter extends RecyclerView.Adapter<OutputControlRv
     @Override
     public void onBindViewHolder(@NonNull itemHolder holder, int position) {
         holder.outputControl.setAdapter(getAdapter(outputControl, context));
-        holder.outputControl.setText(holder.outputControl.getAdapter().
-                getItem(Integer.parseInt(outputKeepAliveEntityList.get(position).getOutputStatus())).toString());
+        try {
+            holder.outputControl.setText(holder.outputControl.getAdapter().
+                    getItem(Integer.parseInt(outputKeepAliveEntityList.get(position).getOutputStatus())).toString());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
 
         holder.outputName.setText(outputConfigurationEntityList.get(position).getOutputType()
                 +"-"+outputConfigurationEntityList.get(position).getOutputLabel());

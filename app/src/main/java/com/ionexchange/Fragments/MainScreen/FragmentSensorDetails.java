@@ -131,6 +131,7 @@ public class FragmentSensorDetails extends Fragment {
                                 getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                 break;
                             case "ORP":
+                            case "Contacting Conductivity":
                                 sensorCalibration = new FragmentCalibration_TypeOne(inputNumber, inputType);
                                 getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                 break;
@@ -220,6 +221,8 @@ public class FragmentSensorDetails extends Fragment {
                                         break;
 
                                     case "Contacting Conductivity":
+                                        sensorCalibration = new FragmentCalibration_TypeOne(splitData[3], splitData[4]);
+                                        getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                         setAdapter(formContConMap(data.split("\\*")[1].split("\\$")));
                                         break;
 

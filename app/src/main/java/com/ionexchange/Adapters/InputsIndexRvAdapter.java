@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 import com.ionexchange.Interface.InputRvOnClick;
@@ -24,12 +25,16 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
 
     public InputRvOnClick rvOnClick;
     List<InputConfigurationEntity> inputConfigurationEntityList;
-    List<KeepAliveCurrentEntity> keepAliveCurrentEntityList;
+    KeepAliveCurrentValueDao keepAliveCurrentValueDao;
 
 
-    public InputsIndexRvAdapter(InputRvOnClick rvOnClick, List<InputConfigurationEntity> inputConfigurationEntityList) {
+
+    public InputsIndexRvAdapter(InputRvOnClick rvOnClick, List<InputConfigurationEntity>
+            inputConfigurationEntityList,KeepAliveCurrentValueDao keepAliveCurrentValueDao) {
         this.rvOnClick = rvOnClick;
         this.inputConfigurationEntityList = inputConfigurationEntityList;
+        this.keepAliveCurrentValueDao = keepAliveCurrentValueDao;
+
     }
 
     @NonNull
@@ -47,7 +52,7 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
         holder.label.setText(inputConfigurationEntityList.get(position).inputLabel);
         holder.lowAlarm.setText(inputConfigurationEntityList.get(position).subValueOne);
         holder.highAlarm.setText(inputConfigurationEntityList.get(position).subValueTwo);
-
+        holder.currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(inputConfigurationEntityList.get(position).hardwareNo));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             holder.inputNumber.setTooltipText(inputConfigurationEntityList.get(position).hardwareNo+"");

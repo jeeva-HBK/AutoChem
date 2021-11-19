@@ -36,6 +36,7 @@ import androidx.navigation.Navigation;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
@@ -84,7 +85,7 @@ public class ApplicationClass extends Application {
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},
-            unitArr = {"ÂµS/cm", "mS/cm", "S/cm"},
+            unitArr = {"µS/cm", "mS/cm", "S/cm"},
             resetFlowTotalArr = {"No reset", "Reset"},
             sensorSequenceNumber = {"1-Sensor", "2-Sensor", "3-Sensor", "4-Sensor", "5-Sensor", "6-Sensor"},
             levelsensorSequenceNumber = {"None", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4",
@@ -370,7 +371,7 @@ public class ApplicationClass extends Application {
     }
 
     public void showSnackBar(Context context, String message) {
-        Snackbar snackbar = Snackbar.make(((Activity) context).findViewById(R.id.cod), message, Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(((BaseActivity) context).findViewById(R.id.cod), message, Snackbar.LENGTH_SHORT);
         TextView tv = (TextView) snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
         tv.setTextColor(Color.WHITE);
         snackbar.show();

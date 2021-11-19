@@ -21,8 +21,18 @@ public interface OutputConfigurationDao {
     @Query("select * FROM outputConfigurationEntity LIMIT  :limit OFFSET :offset")
     List<OutputConfigurationEntity> getOutputConfigurationEntityList(int limit, int offset);
 
+    @Query("select  outputLabel FROM outputConfigurationEntity  WHERE outputNumber = :hardwareNo ")
+    String getOutputLabel(int hardwareNo);
+
     @Query("select * FROM outputConfigurationEntity  WHERE outputNumber BETWEEN :hardwareTo AND :hardwareNo")
     List<OutputConfigurationEntity> getOutputHardWareNoConfigurationEntityList(int hardwareTo, int hardwareNo);
+
+    @Query("select outputStatus FROM outputConfigurationEntity  WHERE outputNumber = :hardwareNo ")
+    String getOutputMode(int hardwareNo);
+
+    @Query("select outputStatus FROM outputConfigurationEntity  WHERE outputNumber = :hardwareNo ")
+    String getOutputStatus(int hardwareNo);
+
 
     @Query("select * FROM outputConfigurationEntity  WHERE outputNumber BETWEEN :fromHardwareNo AND :toHardwareNo LIMIT  :limit OFFSET :offset")
     List<OutputConfigurationEntity> getOutputHardWareNoConfigurationEntityList(int fromHardwareNo, int toHardwareNo, int limit, int offset);
