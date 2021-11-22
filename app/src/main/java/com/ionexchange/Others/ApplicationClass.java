@@ -14,11 +14,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -36,7 +39,6 @@ import androidx.navigation.Navigation;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
@@ -85,7 +87,7 @@ public class ApplicationClass extends Application {
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},
-            unitArr = {"µS/cm", "mS/cm", "S/cm"},
+            unitArr = {"ÂµS/cm", "mS/cm", "S/cm"},
             resetFlowTotalArr = {"No reset", "Reset"},
             sensorSequenceNumber = {"1-Sensor", "2-Sensor", "3-Sensor", "4-Sensor", "5-Sensor", "6-Sensor"},
             levelsensorSequenceNumber = {"None", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4",
@@ -139,12 +141,14 @@ public class ApplicationClass extends Application {
             accessoryTimerMode = {"Timer Safety", "Timer Safety Flow", "Disabled"},
             accessoryType = {" ON Before", "OFF Before", "ON After", " OFF After", " ON With", " OFF with"},
        outputStatusarr = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for","Analog Output"},
-            outputControl = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for"};
+            outputControl = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for"},
+    outputControlShortForm = {"Ⓓ", "A OFF", "A ON", "M OFF", "M ON", "F OFF", "F ON", "M ON for"};
+
     /* Static Variables */
     public static String mIPAddress = "", Packet, Acknowledge;
     public static String macAddress; // Mac address of the unit controller
     //static String mIPAddress = "192.168.2.37", Packet;
-    public static int mPortNumber = 9760;
+    public static int mPortNumber ;
     public static CountDownTimer packetTimeOut;
     Context mContext;
     public TCP tcp;
@@ -228,6 +232,14 @@ public class ApplicationClass extends Application {
                 unregisterReceiver();
             }
         });
+    }
+
+
+    public String getTabletIp(){
+        WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
+        int ip = wifiInfo.getIpAddress();
+        return Formatter.formatIpAddress(ip);
     }
 
     public void registerReceiver() {
@@ -371,7 +383,7 @@ public class ApplicationClass extends Application {
     }
 
     public void showSnackBar(Context context, String message) {
-        Snackbar snackbar = Snackbar.make(((BaseActivity) context).findViewById(R.id.cod), message, Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(((Activity) context).findViewById(R.id.cod), message, Snackbar.LENGTH_SHORT);
         TextView tv = (TextView) snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
         tv.setTextColor(Color.WHITE);
         snackbar.show();
@@ -533,11 +545,17 @@ public class ApplicationClass extends Application {
         /*User Management*/
         userManagementDao = DB.userManagementDao();
         if (userManagementDao.getUsermanagementEntity().isEmpty()) {
+            List<UsermanagementEntity> entryListUpdate = new ArrayList<>();
 
             UsermanagementEntity adminEntityUpdate = new UsermanagementEntity(1, "admin", 3, "12345");
-            UsermanagementEntity userEntityUpdate = new UsermanagementEntity(2, "user", 1, "54321");
+            UsermanagementEntity userEntityUpdate = new UsermanagementEntity(2, "user", 3, "12345");
 
-            List<UsermanagementEntity> entryListUpdate = new ArrayList<>();
+            // todo temp Users - should delete
+            UsermanagementEntity basicEntityUpdate = new UsermanagementEntity(3, "basic", 1, "12345");
+            UsermanagementEntity intermediateEntityUpdate = new UsermanagementEntity(4, "intermediate", 2, "12345");
+            entryListUpdate.add(basicEntityUpdate);
+            entryListUpdate.add(intermediateEntityUpdate);
+
             entryListUpdate.add(adminEntityUpdate);
             entryListUpdate.add(userEntityUpdate);
             updateUsermanagement(entryListUpdate);
@@ -592,8 +610,8 @@ public class ApplicationClass extends Application {
         WaterTreatmentDb dB;
         dB = WaterTreatmentDb.getDatabase(getApplicationContext());
         dao = dB.keepAliveCurrentValueDao();
-        if (dao.getKeepAliveList() != null) {
-            for (int i = 1; i < 54; i++) {
+        if (dao.getKeepAliveList().isEmpty()) {
+            for (int i = 1; i <= 57; i++) {
                 KeepAliveCurrentEntity keepAliveCurrentEntity =
                         new KeepAliveCurrentEntity(i, "N/A");
                 List<KeepAliveCurrentEntity> entryListUpdate = new ArrayList<>();
@@ -604,10 +622,10 @@ public class ApplicationClass extends Application {
 
 
         outputKeepAliveDao = dB.outputKeepAliveDao();
-        if (outputKeepAliveDao.getOutputLiveList() != null) {
-            for (int i = 1; i < 25; i++) {
+        if (outputKeepAliveDao.getOutputList().isEmpty()) {
+            for (int i = 1; i <= 22; i++) {
                 OutputKeepAliveEntity outputKeepAliveEntity =
-                        new OutputKeepAliveEntity(i, "N/A");
+                        new OutputKeepAliveEntity(i, "N/A","N/A");
                 List<OutputKeepAliveEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(outputKeepAliveEntity);
                 insertOutputKeepAliveDb(entryListUpdate);

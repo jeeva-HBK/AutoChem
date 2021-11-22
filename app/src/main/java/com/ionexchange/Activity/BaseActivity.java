@@ -247,8 +247,8 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 if (password.getText().toString().equals(userManagementDao.getPassword(userName.getText().toString()))) {
-                    moveToConfig();
                     alertDialog.dismiss();
+                    moveToConfig();
                 } else {
                     mAppClass.showSnackBar(BaseActivity.this, "password is Incorrect");
                 }

@@ -56,4 +56,7 @@ public interface InputConfigurationDao {
     @Query("select unit  FROM inputConfigurationEntity WHERE  hardwareNo = :hardwareNo ")
     String getUnit(int hardwareNo);
 
+    @Query("select inputSequenceNumber from inputconfigurationentity WHERE hardwareNo = :hardwareNo")
+    int getSeqNumber(int hardwareNo);
+
 }

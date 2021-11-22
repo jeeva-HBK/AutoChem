@@ -12,6 +12,7 @@ import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +87,13 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
         outputKeepAliveDao.getOutputLiveList().observe(getViewLifecycleOwner(), new Observer<List<OutputKeepAliveEntity>>() {
             @Override
             public void onChanged(List<OutputKeepAliveEntity> outputKeepAliveEntities) {
-                mBinding.outputControlRv.getAdapter().notifyDataSetChanged();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mBinding.outputControlRv.getAdapter().notifyDataSetChanged();
+                    }
+                },9000);
+
             }
         });
     }
@@ -107,7 +114,6 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
             @Override
             public void onClick(View v) {
                 view.setVisibility(View.VISIBLE);
-                view.setTooltipText(materialTimePicker.getHour() + "" + materialTimePicker.getMinute());
                 Hours = formDigits(2, String.valueOf(materialTimePicker.getHour())) +
                         formDigits(2, String.valueOf(materialTimePicker.getMinute())) + "00";
                 sendData(outputNumber, outputControl);

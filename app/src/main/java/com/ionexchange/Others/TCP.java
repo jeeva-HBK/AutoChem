@@ -167,7 +167,8 @@ public class TCP extends IntentService {
                 Log.d("Communication", e1.getMessage());
                 socketDevice = null;
             } catch (IOException e1) {
-                intentMessage("FailedToConnect");
+              //  intentMessage("FailedToConnect");
+                intentMessage("tempFailed");
                 Log.d("Communication", e1.getMessage());
                 socketDevice = null;
             } catch (Exception e) {

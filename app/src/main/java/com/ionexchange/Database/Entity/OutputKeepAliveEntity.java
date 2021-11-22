@@ -12,9 +12,13 @@ public class OutputKeepAliveEntity {
     @ColumnInfo(name = "outputStatus")
     public String outputStatus;
 
-    public OutputKeepAliveEntity(int hardWare, String outputStatus) {
+    @ColumnInfo(name = "outputStatusType")
+    public String outputRelayStatus;
+
+    public OutputKeepAliveEntity(int hardWare, String outputStatus, String outputRelayStatus) {
         this.hardWare = hardWare;
         this.outputStatus = outputStatus;
+        this.outputRelayStatus = outputRelayStatus;
     }
 
     public int getHardWare() {
@@ -31,5 +35,13 @@ public class OutputKeepAliveEntity {
 
     public void setOutputStatus(String outputStatus) {
         this.outputStatus = outputStatus;
+    }
+
+    public String getOutputRelayStatus() {
+        return outputRelayStatus;
+    }
+
+    public void setOutputRelayStatus(String outputRelayStatus) {
+        this.outputRelayStatus = outputRelayStatus;
     }
 }

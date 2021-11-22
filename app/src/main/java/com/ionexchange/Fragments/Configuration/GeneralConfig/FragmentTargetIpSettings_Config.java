@@ -1,5 +1,15 @@
 package com.ionexchange.Fragments.Configuration.GeneralConfig;
 
+import static com.ionexchange.Others.ApplicationClass.mPortNumber;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_target_ip;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,15 +29,6 @@ import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentTargetipsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
-
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.PCK_target_ip;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentTargetIpSettings_Config extends Fragment implements DataReceiveCallback {
     FragmentTargetipsettingsBinding mBinding;
@@ -153,5 +154,7 @@ public class FragmentTargetIpSettings_Config extends Fragment implements DataRec
         } else {
             Log.e(TAG, "handleData: Received Wrong Packet !");
         }
+        mBinding.tabipTargetipEDT.setText(mAppClass.getTabletIp() + "");
+        mBinding.tabportTargetipEDT.setText(mPortNumber + "");
     }
 }

@@ -37,6 +37,7 @@ public class KeepAlive {
     }
 
     void spiltData(String[] data) {
+
         if (data[2].equals(INPUT_VOLTAGE)) {
             Acknowledge = startPacket + SPILT_CHAR + CRC + SPILT_CHAR + "007" + SPILT_CHAR + INPUT_VOLTAGE + SPILT_CHAR + ACK + SPILT_CHAR + endPacket;
             int i = 0;
@@ -64,9 +65,21 @@ public class KeepAlive {
             }
         }
         if (data[2].equals(OUTPUT_STATUS)) {
+
             int i = 0;
-            while (i < 22) {
-                outputKeepAliveDao.updateOutputStatus(i, data[3 + i]);
+            while (i <= 21) {
+                if (data[3 + i].length() <= 1) {
+                    outputKeepAliveDao.updateOutputStatus(i+1, data[3 + i]);
+                }
+                if (data[3+i].length() > 1){
+                    if (data[3+i].substring(0,2).equals("10")){
+                        outputKeepAliveDao.updateOutputStatus(i+1, data[3 + i].substring(0,2));
+                        outputKeepAliveDao.updateOutputRelayStatus(i+1, data[3 + i].substring(2));
+                    }else {
+                        outputKeepAliveDao.updateOutputStatus(i+1, data[3 + i].substring(0,1));
+                        outputKeepAliveDao.updateOutputRelayStatus(i+1, data[3 + i].substring(1));
+                    }
+                }
                 i++;
             }
         }

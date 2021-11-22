@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.R;
@@ -19,10 +20,13 @@ import java.util.List;
 public class VirtualSensorIndexRvAdapter extends RecyclerView.Adapter<VirtualSensorIndexRvAdapter.ViewHolder> {
     RvOnClick rvOnClick;
     List<VirtualConfigurationEntity> virtualConfigurationEntityList;
+    KeepAliveCurrentValueDao keepAliveCurrentValueDao;
 
-    public VirtualSensorIndexRvAdapter(RvOnClick rvOnClick, List<VirtualConfigurationEntity> virtualConfigurationEntityList) {
+    public VirtualSensorIndexRvAdapter(RvOnClick rvOnClick, List<VirtualConfigurationEntity> virtualConfigurationEntityList,
+                                       KeepAliveCurrentValueDao keepAliveCurrentValueDao) {
         this.rvOnClick = rvOnClick;
         this.virtualConfigurationEntityList = virtualConfigurationEntityList;
+        this.keepAliveCurrentValueDao = keepAliveCurrentValueDao;
     }
 
     @NonNull
@@ -35,7 +39,7 @@ public class VirtualSensorIndexRvAdapter extends RecyclerView.Adapter<VirtualSen
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.hardwareNo.setText(virtualConfigurationEntityList.get(position).hardwareNo + "");
+        holder.hardwareNo.setText(keepAliveCurrentValueDao.getCurrentValue(virtualConfigurationEntityList.get(position).hardwareNo));
         holder.label.setText(virtualConfigurationEntityList.get(position).inputLabel);
         holder.low.setText(virtualConfigurationEntityList.get(position).subValueOne);
         holder.high.setText(virtualConfigurationEntityList.get(position).subValueTwo);

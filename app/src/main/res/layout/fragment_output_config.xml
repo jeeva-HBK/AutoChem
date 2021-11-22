@@ -453,7 +453,7 @@
                         android:hint="Target PPM"
                         android:imeOptions="actionNext"
                         android:inputType="number"
-                        android:maxLength="8"
+                        android:maxLength="7"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -2420,7 +2420,6 @@
                     android:src="@drawable/ic_round_right"
                     app:maxImageSize="50dp"
                     app:tint="@color/black" />
-
 
             </LinearLayout>
 

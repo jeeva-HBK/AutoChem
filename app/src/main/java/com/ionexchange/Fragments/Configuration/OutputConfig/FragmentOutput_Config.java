@@ -95,8 +95,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             enableInhibitorLayout();
         } else {
             mBinding.functionModeOs.setEnabled(false);
-           mBinding.outputRow2.setVisibility(View.GONE);
-           enableAnalogLayout();
+            mBinding.outputRow2.setVisibility(View.GONE);
+            enableAnalogLayout();
         }
         bleedArr = getBleedArray();
         sensorInputArr = getSensorInputArray();
@@ -674,9 +674,9 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         int activatechannelPos = Integer.parseInt(getPosition(2, toString(mBinding.activateChannelOsATXT), activateChannalsList));
         int hardwareNo;
         if(activatechannelPos < 16){
-             hardwareNo = activatechannelPos + 34;
+            hardwareNo = activatechannelPos + 34;
         }else{
-             hardwareNo = activatechannelPos - 15;
+            hardwareNo = activatechannelPos - 15;
         }
         return hardwareNo;
     }
@@ -869,17 +869,15 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                     } else {
                         mBinding.functionModeOs.setEnabled(true);
                         mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
-                        if (!splitData[4].equals("0")) {
-                            mBinding.interLockChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(Integer.parseInt(splitData[6]) - 34).toString());
-                            int activiateChannelPos = Integer.parseInt(splitData[7]);
-                            int setActiivateChannelPos = activiateChannelPos;
-                            if(activiateChannelPos >= 34){
-                                setActiivateChannelPos = activiateChannelPos - 34;
-                                mBinding.activateChannelOsATXT.setText(mBinding.activateChannelOsATXT.getAdapter().getItem(setActiivateChannelPos).toString());
-                            }else{
-                                setActiivateChannelPos = activiateChannelPos + 15;
-                                mBinding.activateChannelOsATXT.setText(mBinding.activateChannelOsATXT.getAdapter().getItem(setActiivateChannelPos).toString());
-                            }
+                        mBinding.interLockChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(Integer.parseInt(splitData[6]) - 34).toString());
+                        int activiateChannelPos = Integer.parseInt(splitData[7]);
+                        int setActiivateChannelPos = activiateChannelPos;
+                        if(activiateChannelPos >= 34){
+                            setActiivateChannelPos = activiateChannelPos - 34;
+                            mBinding.activateChannelOsATXT.setText(mBinding.activateChannelOsATXT.getAdapter().getItem(setActiivateChannelPos).toString());
+                        }else{
+                            setActiivateChannelPos = activiateChannelPos + 15;
+                            mBinding.activateChannelOsATXT.setText(mBinding.activateChannelOsATXT.getAdapter().getItem(setActiivateChannelPos).toString());
                         }
                     }
                     switch (splitData[4]) {
@@ -1114,9 +1112,9 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         String[] sensorLink = mBinding.sensorLinkInputSensorAtxtOsc.getText().toString().split("-");
         String[] inputhardwareNo = sensorLink[1].split("\\(");
         if(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s","")) < 18) {
-             inputType = inputDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
+            inputType = inputDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
         } else {
-             inputType = virtualDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
+            inputType = virtualDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
         }
         sensorLayoutVisibility(false);
         mBinding.sensorSetPointEdtOsc.setText("");
@@ -1297,12 +1295,36 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         } else if (isEmpty(mBinding.contFlowRateEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Flow Rate cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.contDoseRateEdtOsc)) {
+        }  else if (Integer.parseInt(mBinding.contFlowRateEdtOsc.getText().toString()) < 1 ||
+                Integer.parseInt(mBinding.contFlowRateEdtOsc.getText().toString()) > 100000000) {
+            mAppClass.showSnackBar(getContext(), "Flow Rate values between 1 - 100000000");
+            return false;
+        }  else if (isEmpty(mBinding.contDoseRateEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Dose Rate cannot be Empty");
+            return false;
+        } else if (Integer.parseInt(mBinding.contDoseRateEdtOsc.getText().toString()) < 1 ||
+                Integer.parseInt(mBinding.contDoseRateEdtOsc.getText().toString()) > 100000000) {
+            mAppClass.showSnackBar(getContext(), "Dose Rate values between 1 - 100000000");
             return false;
         } else if (isEmpty(mBinding.contDosePeriodEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Dose Periods cannot be Empty");
             return false;
+        } else if (Integer.parseInt(mBinding.contDosePeriodEdtOsc.getText().toString()) < 1 ||
+                Integer.parseInt(mBinding.contDosePeriodEdtOsc.getText().toString()) > 1440) {
+            mAppClass.showSnackBar(getContext(), "Dose Periods values between  1 - 1440");
+            return false;
+        }
+        if (Integer.parseInt(mBinding.contFlowRateEdtOsc.getText().toString()) == 100000000) {
+            if(!isEmpty(mBinding.contFlowRateDeciOsc) && Integer.parseInt(mBinding.contFlowRateDeciOsc.getText().toString()) > 0) {
+                mAppClass.showSnackBar(getContext(), "Flow Rate decimal values should be 0");
+                return false;
+            }
+        }
+        if (Integer.parseInt(mBinding.contDoseRateEdtOsc.getText().toString()) == 100000000) {
+            if(!isEmpty(mBinding.contDoseRateDeciOsc) && Integer.parseInt(mBinding.contDoseRateDeciOsc.getText().toString()) > 0) {
+                mAppClass.showSnackBar(getContext(), "Dose Rate decimal values should be 0");
+                return false;
+            }
         }
         return true;
     }
@@ -1315,11 +1337,20 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         } else if (isEmpty(mBinding.bleedBleedFlowRateEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Bleed Flow Rate cannot be Empty");
             return false;
+        } else if (Integer.parseInt(mBinding.bleedBleedFlowRateEdtOsc.getText().toString()) > 100000) {
+            mAppClass.showSnackBar(getContext(), "Bleed Flow Rate should be less than 100000");
+            return false;
         } else if (isEmpty(mBinding.bleedTargetPPMEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Target PPM cannot be Empty");
             return false;
+        } else if (Integer.parseInt(mBinding.bleedTargetPPMEdtOsc.getText().toString()) > 1000000) {
+            mAppClass.showSnackBar(getContext(), "Target PPM should be less than 1000000");
+            return false;
         } else if (isEmpty(mBinding.bleedConcentrationEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Concentration cannot be Empty");
+            return false;
+        } else if (Integer.parseInt(mBinding.bleedConcentrationEdtOsc.getText().toString()) > 100) {
+            mAppClass.showSnackBar(getContext(), "Concentration should be less than 100");
             return false;
         } else if (isEmpty(mBinding.bleedLinkBleedRelayAtxtOsc)) {
             mAppClass.showSnackBar(getContext(), "Choose any relay output to link");
@@ -1330,6 +1361,37 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         } else if (isEmpty(mBinding.bleedPumpFlowRateEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Pump Flow Rate cannot be Empty");
             return false;
+        } else if (Integer.parseInt(mBinding.bleedPumpFlowRateEdtOsc.getText().toString()) < 1 ||
+                Integer.parseInt(mBinding.bleedPumpFlowRateEdtOsc.getText().toString()) > 100000000) {
+            mAppClass.showSnackBar(getContext(), "Pump Flow Rate values between 1 - 100000000");
+            return false;
+        }
+        if (Integer.parseInt(mBinding.bleedBleedFlowRateEdtOsc.getText().toString()) == 0) {
+            if (isEmpty(mBinding.bleedBleedFlowrateDeciOsc)) {
+                mAppClass.showSnackBar(getContext(), "Bleed Flow Rate decimal values should be greater then 01");
+                return false;
+            } else if (Integer.parseInt(mBinding.bleedBleedFlowrateDeciOsc.getText().toString()) == 0) {
+                mAppClass.showSnackBar(getContext(), "Bleed Flow Rate decimal values should be greater then 01");
+                return false;
+            }
+        }
+        if (Integer.parseInt(mBinding.bleedBleedFlowRateEdtOsc.getText().toString()) == 100000) {
+            if(!isEmpty(mBinding.bleedBleedFlowrateDeciOsc) && Integer.parseInt(mBinding.bleedBleedFlowrateDeciOsc.getText().toString()) > 0) {
+                mAppClass.showSnackBar(getContext(), "Bleed Flow Rate decimal values should be 0");
+                return false;
+            }
+        }
+        if (Integer.parseInt(mBinding.bleedTargetPPMEdtOsc.getText().toString()) == 1000000) {
+            if(!isEmpty(mBinding.bleedTargetPPMDeciOsc) && Integer.parseInt(mBinding.bleedTargetPPMDeciOsc.getText().toString()) > 0) {
+                mAppClass.showSnackBar(getContext(), "Target PPM decimal values should be 0");
+                return false;
+            }
+        }
+        if (Integer.parseInt(mBinding.bleedPumpFlowRateEdtOsc.getText().toString()) == 100000000) {
+            if(!isEmpty(mBinding.bleedPumpFlowRateDeciOsc) && Integer.parseInt(mBinding.bleedPumpFlowRateDeciOsc.getText().toString()) > 0) {
+                mAppClass.showSnackBar(getContext(), "Pump Flow Rate decimal values should be 0");
+                return false;
+            }
         }
         return true;
     }
@@ -1341,11 +1403,24 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         } else if (isEmpty(mBinding.waterFlowMeterTypeAtxtOsc)) {
             mAppClass.showSnackBar(getContext(), "Please select Flow Meter Type");
             return false;
+        } else if (isEmpty(mBinding.waterPumpFlowRateEdtOsc)) {
+            mAppClass.showSnackBar(getContext(), "Pump Flow Rate cannot be Empty");
+            return false;
+        } else if (Integer.parseInt(mBinding.waterPumpFlowRateEdtOsc.getText().toString()) < 1 ||
+                Integer.parseInt(mBinding.waterPumpFlowRateEdtOsc.getText().toString()) > 100000000) {
+            mAppClass.showSnackBar(getContext(), "Pump Flow Rate values between 1 - 100000000");
+            return false;
         } else if (isEmpty(mBinding.waterTargetPPMEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Target PPM cannot be Empty");
             return false;
+        } else if (Integer.parseInt(mBinding.waterTargetPPMEdtOsc.getText().toString()) > 1000000) {
+            mAppClass.showSnackBar(getContext(), "Target PPM should be less than 1000000");
+            return false;
         } else if (isEmpty(mBinding.waterConcentrationEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Concentration cannot be Empty");
+            return false;
+        } else if (Integer.parseInt(mBinding.waterConcentrationEdtOsc.getText().toString()) > 100) {
+            mAppClass.showSnackBar(getContext(), "Concentration should be less than 100");
             return false;
         } else if (isEmpty(mBinding.waterBleedRelayAtxtOsc)) {
             mAppClass.showSnackBar(getContext(), "Choose any relay output to link");
@@ -1357,12 +1432,27 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             mAppClass.showSnackBar(getContext(), "Please select Flow Meter Input");
             return false;
         }
+        if (Integer.parseInt(mBinding.waterPumpFlowRateEdtOsc.getText().toString()) == 100000000) {
+            if(!isEmpty(mBinding.waterPumpFlowRateDeciOsc) && Integer.parseInt(mBinding.waterPumpFlowRateDeciOsc.getText().toString()) > 0) {
+                mAppClass.showSnackBar(getContext(), "Pump Flow Rate decimal values should be 0");
+                return false;
+            }
+        }
+        if (Integer.parseInt(mBinding.waterTargetPPMEdtOsc.getText().toString()) == 1000000) {
+            if(!isEmpty(mBinding.waterTargetPPMDeciOsc) && Integer.parseInt(mBinding.waterTargetPPMDeciOsc.getText().toString()) > 0) {
+                mAppClass.showSnackBar(getContext(), "Target PPM decimal values should be 0");
+                return false;
+            }
+        }
         return true;
     }
 
     private boolean validation3() {
         if (isEmpty(mBinding.outputLabelOsEDT)) {
             mAppClass.showSnackBar(getContext(), "Output label cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.sensorLinkInputSensorAtxtOsc)) {
+            mAppClass.showSnackBar(getContext(), "Link Input Sensor cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.sensorSetPointEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Set Point cannot be Empty");
@@ -1376,6 +1466,9 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         } else if (isEmpty(mBinding.sensorDutyCycleEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Duty Cycle cannot be Empty");
             return false;
+        } else if (Integer.parseInt(mBinding.sensorDutyCycleEdtOsc.getText().toString()) > 100) {
+            mAppClass.showSnackBar(getContext(), "Duty Cycle should be less than 100");
+            return false;
         } else if (isEmpty(mBinding.sensorSafetyMinEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Safety Min cannot be Empty");
             return false;
@@ -1385,8 +1478,9 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         } else if (isEmpty(mBinding.sensorLockoutTimeDelayEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "LockOut Time Delay cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.sensorLinkInputSensorAtxtOsc)) {
-            mAppClass.showSnackBar(getContext(), "Link Input Sensor cannot be Empty");
+        }  else if (Integer.parseInt(mBinding.sensorLockoutTimeDelayEdtOsc.getText().toString()) < 1 ||
+                Integer.parseInt(mBinding.sensorLockoutTimeDelayEdtOsc.getText().toString()) > 86400) {
+            mAppClass.showSnackBar(getContext(), "LockOut Time Delay values between 1 - 86400");
             return false;
         }
         return true;
@@ -1402,11 +1496,20 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         } else if (isEmpty(mBinding.pidGainEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Gain cannot be Empty");
             return false;
+        } else if (Integer.parseInt(mBinding.pidGainEdtOsc.getText().toString()) > 1000) {
+            mAppClass.showSnackBar(getContext(), "Gain should be less than 1000");
+            return false;
         } else if (isEmpty(mBinding.pidIntegeralTimeEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Integral Time cannot be Empty");
             return false;
+        } else if (Integer.parseInt(mBinding.pidIntegeralTimeEdtOsc.getText().toString()) > 1000) {
+            mAppClass.showSnackBar(getContext(), "Integral Time should be less than 1000");
+            return false;
         } else if (isEmpty(mBinding.pidDerivativeTimeEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Derivative Time cannot be Empty");
+            return false;
+        } else if (Integer.parseInt(mBinding.pidDerivativeTimeEdtOsc.getText().toString()) > 1000) {
+            mAppClass.showSnackBar(getContext(), "Derivative Time should be less than 1000");
             return false;
         } else if (isEmpty(mBinding.pidInputMinEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Input min  cannot be Empty");
@@ -1417,8 +1520,14 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         } else if (isEmpty(mBinding.pidMinOutputEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Output Min  cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.pidMinOutputEdtOsc)) {
+        } else if (Integer.parseInt(mBinding.pidMinOutputEdtOsc.getText().toString()) > 100) {
+            mAppClass.showSnackBar(getContext(), "Output Min should be less than 100");
+            return false;
+        } else if (isEmpty(mBinding.pidMaxOutputEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Output Max cannot be Empty");
+            return false;
+        } else if (Integer.parseInt(mBinding.pidMaxOutputEdtOsc.getText().toString()) > 100) {
+            mAppClass.showSnackBar(getContext(), "Output Max should be less than 100");
             return false;
         } else if (isEmpty(mBinding.pidSafetyMinEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Safety Min cannot be Empty");
@@ -1432,6 +1541,10 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         } else if (isEmpty(mBinding.pidLockoutDelayEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Lockout Delay  cannot be Empty");
             return false;
+        } else if (Integer.parseInt(mBinding.pidLockoutDelayEdtOsc.getText().toString()) < 1 ||
+                Integer.parseInt(mBinding.pidLockoutDelayEdtOsc.getText().toString()) > 86400) {
+            mAppClass.showSnackBar(getContext(), "LockOut Time Delay values between 1 - 86400");
+            return false;
         } else if (isEmpty(mBinding.pidDoseTypeAtxtOsc)) {
             mAppClass.showSnackBar(getContext(), "Please select Dose Type");
             return false;
@@ -1440,6 +1553,53 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             return false;
         }
 
+
+        if (Integer.parseInt(mBinding.pidGainEdtOsc.getText().toString()) == 0) {
+            if (isEmpty(mBinding.pidGainDeciOsc)) {
+                mAppClass.showSnackBar(getContext(), "Gain decimal values should be greater then 001");
+                return false;
+            } else if (Integer.parseInt(mBinding.pidGainDeciOsc.getText().toString()) == 0) {
+                mAppClass.showSnackBar(getContext(), "Gain decimal values should be greater then 001");
+                return false;
+            }
+        }
+        if (Integer.parseInt(mBinding.pidGainEdtOsc.getText().toString()) == 1000) {
+            if(!isEmpty(mBinding.pidGainDeciOsc) && Integer.parseInt(mBinding.pidGainDeciOsc.getText().toString()) > 0) {
+                mAppClass.showSnackBar(getContext(), "Gain decimal values should be 0");
+                return false;
+            }
+        }
+
+        if (Integer.parseInt(mBinding.pidIntegeralTimeEdtOsc.getText().toString()) == 0) {
+            if (isEmpty(mBinding.pidIntegeralTimeDeciOsc)) {
+                mAppClass.showSnackBar(getContext(), "Integral Time decimal values should be greater then 001");
+                return false;
+            } else if (Integer.parseInt(mBinding.pidIntegeralTimeDeciOsc.getText().toString()) == 0) {
+                mAppClass.showSnackBar(getContext(), "Integral Time decimal values should be greater then 001");
+                return false;
+            }
+        }
+        if (Integer.parseInt(mBinding.pidIntegeralTimeEdtOsc.getText().toString()) == 1000) {
+            if(!isEmpty(mBinding.pidIntegeralTimeDeciOsc) && Integer.parseInt(mBinding.pidIntegeralTimeDeciOsc.getText().toString()) > 0) {
+                mAppClass.showSnackBar(getContext(), "Integral Time decimal values should be 0");
+                return false;
+            }
+        }
+        if (Integer.parseInt(mBinding.pidDerivativeTimeEdtOsc.getText().toString()) == 0) {
+            if (isEmpty(mBinding.pidDerivativeTimeDeciOsc)) {
+                mAppClass.showSnackBar(getContext(), "Derivative Time decimal values should be greater then 001");
+                return false;
+            } else if (Integer.parseInt(mBinding.pidDerivativeTimeDeciOsc.getText().toString()) == 0) {
+                mAppClass.showSnackBar(getContext(), "Derivative Time decimal values should be greater then 001");
+                return false;
+            }
+        }
+        if (Integer.parseInt(mBinding.pidDerivativeTimeEdtOsc.getText().toString()) == 1000) {
+            if(!isEmpty(mBinding.pidDerivativeTimeDeciOsc) && Integer.parseInt(mBinding.pidDerivativeTimeDeciOsc.getText().toString()) > 0) {
+                mAppClass.showSnackBar(getContext(), "Derivative Time decimal values should be 0");
+                return false;
+            }
+        }
         return true;
     }
 
@@ -1455,10 +1615,18 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             mAppClass.showSnackBar(getContext(), "Select the Link Input Relay");
             return false;
         } else if (isEmpty(mBinding.analogMinMaEdtOsc)) {
-            mAppClass.showSnackBar(getContext(), "Min Analog cannot be Empty");
+            mAppClass.showSnackBar(getContext(), "min mA cannot be Empty");
+            return false;
+        } else if (Integer.parseInt(mBinding.analogMinMaEdtOsc.getText().toString()) < 4 ||
+                Integer.parseInt(mBinding.analogMinMaEdtOsc.getText().toString()) > 20) {
+            mAppClass.showSnackBar(getContext(), "min mA values between 4 - 20");
             return false;
         } else if (isEmpty(mBinding.analogMaxMaEdtOsc)) {
-            mAppClass.showSnackBar(getContext(), "Max Analog cannot be Empty");
+            mAppClass.showSnackBar(getContext(), "max mA cannot be Empty");
+            return false;
+        } else if (Integer.parseInt(mBinding.analogMaxMaEdtOsc.getText().toString()) < 4 ||
+                Integer.parseInt(mBinding.analogMaxMaEdtOsc.getText().toString()) > 20) {
+            mAppClass.showSnackBar(getContext(), "max mA values between 4 - 20");
             return false;
         } else if (isEmpty(mBinding.analogMinValueEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Min Value cannot be Empty");
@@ -1467,7 +1635,18 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             mAppClass.showSnackBar(getContext(), "Max Value  cannot be Empty");
             return false;
         }
-
+        if (Integer.parseInt(mBinding.analogMinMaEdtOsc.getText().toString()) == 20) {
+            if(!isEmpty(mBinding.analogMinMaDeciOsc) && Integer.parseInt(mBinding.analogMinMaDeciOsc.getText().toString()) > 0) {
+                mAppClass.showSnackBar(getContext(), "min mA decimal values should be 0");
+                return false;
+            }
+        }
+        if (Integer.parseInt(mBinding.analogMaxMaEdtOsc.getText().toString()) == 20) {
+            if(!isEmpty(mBinding.analogMaxMaDeciOsc) && Integer.parseInt(mBinding.analogMaxMaDeciOsc.getText().toString()) > 0) {
+                mAppClass.showSnackBar(getContext(), "max mA decimal values should be 0");
+                return false;
+            }
+        }
         return true;
     }
 
@@ -1491,16 +1670,18 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         if (isEmpty(mBinding.outputLabelOsEDT)) {
             mAppClass.showSnackBar(getContext(), "Output Label  cannot be Empty");
             return false;
+        } else if (isEmpty(mBinding.interLockChannelOsATXT)) {
+            mAppClass.showSnackBar(getContext(), "Please select the Interlock Channel");
+            return false;
+        } else if (isEmpty(mBinding.activateChannelOsATXT)) {
+            mAppClass.showSnackBar(getContext(), "Please select the Activate Channel");
+            return false;
+        } else if(toString(2, outputSensorNo).equalsIgnoreCase(formDigits(2,""+getActiviateChannaleHardwareNumber()))){
+            mAppClass.showSnackBar(getContext(), "Please choose different Activate With Channel output");
+            return false;
         }
-
         if (!currentFunctionMode.equals("Disabled")) {
-            if (isEmpty(mBinding.interLockChannelOsATXT)) {
-                mAppClass.showSnackBar(getContext(), "Please select the Interlock Channel");
-                return false;
-            } else if (isEmpty(mBinding.activateChannelOsATXT)) {
-                mAppClass.showSnackBar(getContext(), "Please select the Activate Channel");
-                return false;
-            } else if (isEmpty(mBinding.modeOsATXT)) {
+            if (isEmpty(mBinding.modeOsATXT)) {
                 mAppClass.showSnackBar(getContext(), "Please select the Mode");
                 return false;
             }

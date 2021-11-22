@@ -1,38 +1,5 @@
 package com.ionexchange.Fragments.MainScreen;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CompoundButton;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-
-import com.ionexchange.Adapters.SensorDetailsParamsRvAdapter;
-import com.ionexchange.Database.Dao.CalibrationDao;
-import com.ionexchange.Database.Dao.InputConfigurationDao;
-import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
-import com.ionexchange.Database.Dao.OutputConfigurationDao;
-import com.ionexchange.Database.Entity.CalibrationEntity;
-import com.ionexchange.Database.Entity.InputConfigurationEntity;
-import com.ionexchange.Database.Entity.OutputConfigurationEntity;
-import com.ionexchange.Database.WaterTreatmentDb;
-import com.ionexchange.Fragments.MainScreen.Calibration.FragmentModbusCalibration;
-import com.ionexchange.Interface.DataReceiveCallback;
-import com.ionexchange.Others.ApplicationClass;
-import com.ionexchange.R;
-import com.ionexchange.databinding.FragmentSensorDetailsBinding;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import static com.ionexchange.Others.ApplicationClass.analogInputArr;
 import static com.ionexchange.Others.ApplicationClass.bleedRelay;
 import static com.ionexchange.Others.ApplicationClass.bufferArr;
@@ -67,6 +34,36 @@ import static com.ionexchange.Others.PacketControl.RES_FAILED;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.VIRTUAL_INPUT;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CompoundButton;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+
+import com.ionexchange.Adapters.SensorDetailsParamsRvAdapter;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
+import com.ionexchange.Database.Dao.OutputConfigurationDao;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.Entity.OutputConfigurationEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Fragments.MainScreen.Calibration.FragmentModbusCalibration;
+import com.ionexchange.Interface.DataReceiveCallback;
+import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.R;
+import com.ionexchange.databinding.FragmentSensorDetailsBinding;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FragmentSensorDetails extends Fragment {
     FragmentSensorDetailsBinding mBinding;
@@ -132,6 +129,7 @@ public class FragmentSensorDetails extends Fragment {
                                 break;
                             case "ORP":
                             case "Contacting Conductivity":
+                            case "Temperature":
                                 sensorCalibration = new FragmentCalibration_TypeOne(inputNumber, inputType);
                                 getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                 break;
@@ -213,6 +211,8 @@ public class FragmentSensorDetails extends Fragment {
                                         break;
 
                                     case "Temperature":
+                                        sensorCalibration = new FragmentCalibration_TypeOne(splitData[3], splitData[4]);
+                                        getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                         setAdapter(formTempMap(data.split("\\*")[1].split("\\$")));
                                         break;
 

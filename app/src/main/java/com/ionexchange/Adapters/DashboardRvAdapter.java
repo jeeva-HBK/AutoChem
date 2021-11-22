@@ -1,5 +1,7 @@
 package com.ionexchange.Adapters;
 
+import static com.ionexchange.Others.ApplicationClass.outputControlShortForm;
+
 import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -139,8 +141,8 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
         if (mainConfigurationEntityList.get(position).inputType != null) {
             if (mainConfigurationEntityList.get(position).inputType.contains("output")) {
                 currentMode.setText("Output Status");
-                lowKey.setText("outputMode");
-                highKey.setText("subM ode");
+                lowKey.setText("output Mode");
+                highKey.setText("sub Mode");
                 unitOne.setVisibility(View.INVISIBLE);
                 typeOne.setVisibility(View.INVISIBLE);
                 seq.setText(mainConfigurationEntityList.get(position).inputType);
@@ -155,9 +157,25 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     highAlarmOne.setText(outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(position).hardware_no)));
                 }
                 if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no) != null) {
-                    currentValue.setText(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no));
+                    if (!outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("N/A")) {
+                        if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("10")) {
+                            currentValue.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
+                        } else {
+                            if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("9") ||
+                                    outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("8")){
+                                currentValue.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
+                            }else {
+                                currentValue.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no))]);
+                            }
+
+                        }
+
+                    }
+
                 }
-            }else if (mainConfigurationEntityList.get(position).inputType.contains("virtual")) {
+            }
+
+            if (mainConfigurationEntityList.get(position).inputType.contains("virtual")) {
                 currentMode.setText("Current Value");
                 lowKey.setText("Low Alarm");
                 highKey.setText("High Alarm");
@@ -210,7 +228,18 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                         typeOne.setTooltipText(inputConfigurationDao.getType((mainConfigurationEntityList.get(position).hardware_no)));
                     }*/
                 }
-            } else {
+            }
+
+            if (mainConfigurationEntityList.get(position).inputType.contains("ph")
+                    || mainConfigurationEntityList.get(position).inputType.contains("ORP")
+                    || mainConfigurationEntityList.get(position).inputType.contains("Temperature")
+                    || mainConfigurationEntityList.get(position).inputType.contains("Flow/Water Meter")
+                    || mainConfigurationEntityList.get(position).inputType.contains("Contacting Conductivity")
+                    || mainConfigurationEntityList.get(position).inputType.contains("Toroidal Conductivity")
+                    || mainConfigurationEntityList.get(position).inputType.contains("Analog Input")
+                    || mainConfigurationEntityList.get(position).inputType.contains("Tank Level")
+                    || mainConfigurationEntityList.get(position).inputType.contains("Digital Input")
+                    || mainConfigurationEntityList.get(position).inputType.contains("Modbus Sensor")) {
                 currentMode.setText("Current Value");
                 lowKey.setText("Low Alarm");
                 highKey.setText("High Alarm");
@@ -262,10 +291,11 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                         typeOne.setTooltipText(inputConfigurationDao.getType((mainConfigurationEntityList.get(position).hardware_no)));
                     }
                 }
+                if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no) != null) {
+                    currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
+                }
             }
-            if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no) != null) {
-                currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
-            }
+
         }
 
 
@@ -282,7 +312,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                        TextView currentKeyOne, TextView currentKeyTwo, TextView currentKeyThree) {
 
 
-        if (mainConfigurationEntityList.get(0).inputType.contains("output")){
+        if (mainConfigurationEntityList.get(0).inputType.contains("output")) {
             lowKeyOne.setText("Output Mode");
             highKeyOne.setText("sub Mode");
             currentKeyOne.setText("Output Status");
@@ -303,10 +333,21 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 highAlarmOne.setText(outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(0).hardware_no)));
             }
             if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no) != null) {
-                currentValueOne.setText(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no));
+                if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no).equals("10")) {
+                    currentKeyOne.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
+                } else {
+                    if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no).equals("9") ||
+                            outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no).equals("8")){
+                        currentKeyOne.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(0).hardware_no));
+                    }else {
+                        currentKeyOne.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no))]);
+                    }
+
+                }
+
             }
         }
-        if (mainConfigurationEntityList.get(1).inputType.contains("output")){
+        if (mainConfigurationEntityList.get(1).inputType.contains("output")) {
             lowKeyTwo.setText("Output Mode");
             highKeyTwo.setText("sub Mode");
             currentKeyTwo.setText("Output Status");
@@ -327,10 +368,20 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             }
 
             if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no) != null) {
-                currentValueTwo.setText(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no));
+                if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no).equals("10")) {
+                    currentKeyTwo.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
+                } else {
+                    if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no).equals("9") ||
+                            outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no).equals("8")){
+                        currentKeyTwo.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(1).hardware_no));
+                    }else {
+                        currentKeyTwo.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no))]);
+                    }
+
+                }
             }
         }
-        if (mainConfigurationEntityList.get(2).inputType.contains("output")){
+        if (mainConfigurationEntityList.get(2).inputType.contains("output")) {
             lowKeyThree.setText("output Mode");
             highKeyThree.setText("sub Mode");
             currentKeyThree.setText("Output Status");
@@ -350,12 +401,26 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 highAlarmThree.setText(outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(2).hardware_no)));
             }
             if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no) != null) {
-                currentValueThree.setText(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no));
+                if (!outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no).equals("N/A")) {
+                    if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no).equals("10")) {
+                        currentKeyThree.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
+                    } else {
+                        if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no).equals("9") ||
+                                outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no).equals("8")){
+                            currentKeyThree.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
+                        }else {
+                            currentKeyThree.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no))]);
+                        }
+
+                    }
+
+                }
+
             }
         }
 
 
-        if (mainConfigurationEntityList.get(0).inputType.contains("virtual")){
+        if (mainConfigurationEntityList.get(0).inputType.contains("virtual")) {
             lowKeyOne.setText("Low Alarm");
             highKeyOne.setText("High Alarm ");
             unitOne.setVisibility(View.VISIBLE);
@@ -379,7 +444,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 currentValueOne.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(0).hardware_no));
             }
         }
-        if (mainConfigurationEntityList.get(1).inputType.contains("virtual")){
+        if (mainConfigurationEntityList.get(1).inputType.contains("virtual")) {
             lowKeyTwo.setText("Low Alarm");
             highKeyTwo.setText("High Alarm");
             currentKeyTwo.setText("Current Value");
@@ -406,7 +471,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 currentValueTwo.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(1).hardware_no));
             }
         }
-        if (mainConfigurationEntityList.get(2).inputType.contains("virtual")){
+        if (mainConfigurationEntityList.get(2).inputType.contains("virtual")) {
             lowKeyThree.setText("Low Alarm");
             highKeyThree.setText("High Alarm");
             currentKeyThree.setText("Current Value");
@@ -441,7 +506,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 || mainConfigurationEntityList.get(0).inputType.contains("Analog Input")
                 || mainConfigurationEntityList.get(0).inputType.contains("Tank Level")
                 || mainConfigurationEntityList.get(0).inputType.contains("Digital Input")
-                || mainConfigurationEntityList.get(0).inputType.contains("Modbus Sensor")){
+                || mainConfigurationEntityList.get(0).inputType.contains("Modbus Sensor")) {
             lowKeyOne.setText("Low Alarm");
             highKeyOne.setText("High Alarm");
             currentKeyOne.setText("Current Value");
@@ -490,7 +555,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 || mainConfigurationEntityList.get(1).inputType.contains("Analog Input")
                 || mainConfigurationEntityList.get(1).inputType.contains("Tank Level")
                 || mainConfigurationEntityList.get(1).inputType.contains("Digital Input")
-                || mainConfigurationEntityList.get(1).inputType.contains("Modbus Sensor")){
+                || mainConfigurationEntityList.get(1).inputType.contains("Modbus Sensor")) {
             lowKeyTwo.setText("Low Alarm");
             highKeyTwo.setText("High Alarm");
             currentKeyTwo.setText("Current Value");
@@ -539,7 +604,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 || mainConfigurationEntityList.get(2).inputType.contains("Analog Input")
                 || mainConfigurationEntityList.get(2).inputType.contains("Tank Level")
                 || mainConfigurationEntityList.get(2).inputType.contains("Digital Input")
-                || mainConfigurationEntityList.get(2).inputType.contains("Modbus Sensor")){
+                || mainConfigurationEntityList.get(2).inputType.contains("Modbus Sensor")) {
             lowKeyThree.setText("Low Alarm");
             highKeyThree.setText("High Alarm");
             currentKeyThree.setText("Current Value");
@@ -582,10 +647,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
         }
 
 
-
-
     }
-
 
 
     @Override

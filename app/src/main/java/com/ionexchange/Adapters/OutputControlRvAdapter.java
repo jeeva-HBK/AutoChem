@@ -5,6 +5,7 @@ import static com.ionexchange.Others.ApplicationClass.outputControl;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,26 +53,36 @@ public class OutputControlRvAdapter extends RecyclerView.Adapter<OutputControlRv
         return new itemHolder(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull itemHolder holder, int position) {
         holder.outputControl.setAdapter(getAdapter(outputControl, context));
-        try {
-            holder.outputControl.setText(holder.outputControl.getAdapter().
-                    getItem(Integer.parseInt(outputKeepAliveEntityList.get(position).getOutputStatus())).toString());
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
+        if (!outputKeepAliveEntityList.get(position).getOutputStatus().equals("N/A")) {
+            if (outputKeepAliveEntityList.get(position).getOutputStatus().equals("8") ||
+                    outputKeepAliveEntityList.get(position).getOutputStatus().equals("9")) {
+                holder.outputControl.setText(outputKeepAliveEntityList.get(position).getOutputRelayStatus());
+            } else {
+                holder.outputControl.setText(holder.outputControl.getAdapter().
+                        getItem(Integer.parseInt(outputKeepAliveEntityList.get(position).getOutputStatus())).toString());
+            }
+            if (outputKeepAliveEntityList.get(position).getOutputStatus().equals("7")) {
+                holder.time.setVisibility(View.VISIBLE);
+                holder.time.setTooltipText(outputKeepAliveEntityList.get(position).getOutputRelayStatus());
+            }else {
+                holder.time.setVisibility(View.INVISIBLE);
+            }
         }
 
         holder.outputName.setText(outputConfigurationEntityList.get(position).getOutputType()
-                +"-"+outputConfigurationEntityList.get(position).getOutputLabel());
+                + "-" + outputConfigurationEntityList.get(position).getOutputLabel());
         holder.outputType.setText(outputConfigurationEntityList.get(position).getOutputMode()
-                +"-"+outputConfigurationEntityList.get(position).getOutputStatus());
-        holder.outputControl.setOnClickListener(View ->{
+                + "-" + outputConfigurationEntityList.get(position).getOutputStatus());
+        holder.outputControl.setOnClickListener(View -> {
             holder.outputControl.showDropDown();
         });
 
-        if (position%2==0){
+        if (position % 2 == 0) {
             holder.root.setBackgroundColor(context.getResources().getColor(R.color.ash));
             holder.outputControl.setBackgroundColor(context.getResources().getColor(R.color.ash));
         }
@@ -111,7 +123,7 @@ public class OutputControlRvAdapter extends RecyclerView.Adapter<OutputControlRv
             outputControl.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                    rvOutputControl.click(outputName,outputType,outputControl,time,outputConfigurationEntityList.get(getAdapterPosition()).outputHardwareNo,pos);
+                    rvOutputControl.click(outputName, outputType, outputControl, time, outputConfigurationEntityList.get(getAdapterPosition()).outputHardwareNo, pos);
                 }
             });
         }

@@ -31,6 +31,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Database.Dao.CalibrationDao;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Entity.CalibrationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
@@ -52,7 +53,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
     CalibrationDao calibrationDao;
     KeepAliveCurrentValueDao keepAliveDao;
     String inputNumber, inputType, bufferType = "", tempValue;
-
+    CountDownTimer stabilizationTimer;
     private static final String TAG = "FragmentSensorCalib";
 
     ImageView iv;
@@ -126,6 +127,11 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                 mBinding.extValue.setEnabled(false);
                 mBinding.txtCurrentMode.setVisibility(View.GONE);
                 mBinding.currentModeValue.setVisibility(View.GONE);
+            } else if ("Temperature".equals(inputType)) {
+                mBinding.precise.setVisibility(View.GONE);
+                mBinding.quick.performClick();
+                mBinding.currentModeValue.setVisibility(View.GONE);
+                mBinding.txtCurrentMode.setVisibility(View.GONE);
             }
         } else {
             Toast.makeText(getContext(), "Sensor Type is Null !", Toast.LENGTH_SHORT).show();
@@ -140,6 +146,8 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                     startQuickCalibration();
                 } else if ("Contacting Conductivity".equals(inputType)) {
                     startContactingConductivity();
+                } else if ("Temperature".equals(inputType)) {
+                    startQuickCalibration();
                 }
             }
         });
@@ -172,10 +180,18 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                 }
             }
         }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
-                PCK_SENSORCALIB + SPILT_CHAR + inputNumber + SPILT_CHAR + inputType + SPILT_CHAR + "1" +
+                PCK_SENSORCALIB + SPILT_CHAR + inputNumber + SPILT_CHAR + getPosition(2, inputType, inputTypeArr) + SPILT_CHAR + getSeqNo() +
                 SPILT_CHAR + "0" + SPILT_CHAR + "0" + SPILT_CHAR + mBinding.extValue.getText().toString());
     }
 
+    private String getSeqNo() {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+        InputConfigurationDao dao = db.inputConfigurationDao();
+        if (inputType.equals("Temperature")) {
+            return dao.getSeqNumber(Integer.parseInt(inputNumber)) + "";
+        }
+        return "1";
+    }
 
     private void startPHcalibration() {
         if (getCalibrationType().equals("0")) { // Quick
@@ -192,6 +208,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                 View dialogView = getLayoutInflater().inflate(R.layout.dialog_calib_reading, null);
                 dialogBuilder.setView(dialogView);
                 AlertDialog alertDialog = dialogBuilder.create();
+                alertDialog.setCanceledOnTouchOutside(false);
 
                 TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
                 TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
@@ -218,6 +235,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
             View dialogView = getLayoutInflater().inflate(R.layout.dialog_calib_reading, null);
             dialogBuilder.setView(dialogView);
             AlertDialog alertDialog = dialogBuilder.create();
+            alertDialog.setCanceledOnTouchOutside(false);
 
             TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
             TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
@@ -243,6 +261,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_calib_twoedt, null);
         dialogBuilder.setView(dialogView);
         AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
 
         TextView leftText = dialogView.findViewById(R.id.twodt_mainTxt);
         TextView rightText = dialogView.findViewById(R.id.twodt_mainTxt2);
@@ -315,6 +334,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_calib_result_two, null);
         dialogBuilder.setView(dialogView);
         AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
 
         ImageView iv = dialogView.findViewById(R.id.resultTwo_iv);
         TextView leftValue = dialogView.findViewById(R.id.resulTwo_leftValue);
@@ -333,6 +353,8 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         rightBtn.setText("PROCEED");
 
         rightBtn.setClickable(false);
+        rightBtn.setEnabled(false);
+
         rightBtn.setAlpha(0.5f);
         if (alertDialog.isShowing()) {
             alertDialog.dismiss();
@@ -341,41 +363,16 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
 
         leftBtn.setOnClickListener(View -> {
             alertDialog.dismiss();
+            stabilizationTimer.cancel();
         });
 
         rightBtn.setOnClickListener(View -> {
-            alertDialog.dismiss();
-            if (getCalibrationType().equals("0")) {
-                sendCalibReadPacket("0");
-            } else {
-                if (inputType.equals("pH")) {
-                    if (bufferType.equals("0")) {
-                        if (type.equals("1") || type.equals("0")) {
-                            startPreceiseCalibration("2");
-                        } else if (type.equals("2")) {
-                            sendCalibReadPacket("2");
-                        }
-                    } else {
-                        if (type.equals("1") || type.equals("0")) {
-                            getPhManualValues("Second");
-                        } else if (type.equals("2")) {
-                            sendCalibReadPacket("2");
-                        }
-                    }
-                } else if (inputType.equals("Contacting Conductivity")) {// anyOtherSensor
-                    if (type.equals("1")){
-                        showOneEdtDialog();
-                    } else {
-                        sendCalibReadPacket("2");
-                    }
-
-                }
-            }
+            proceedToNextStep(alertDialog, type);
         });
 
         final int[] stabilizationCount = {0};
         final long[] tempInt = {1};
-        CountDownTimer stabilizationTimer = new CountDownTimer(30000, 1000) {
+        stabilizationTimer = new CountDownTimer(30000, 1000) {
             public void onTick(long millisUntilFinished) {
                 long seconds = millisUntilFinished / 1000;
                 rightValue.setText("" + seconds);
@@ -391,38 +388,47 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
 
                 if (stabilizationCount[0] > 3) {
                     cancel();
-                    if (getCalibrationType().equals("0")) {
-                        sendCalibReadPacket("0");
-                    } else {
-                        if (inputType.equals("pH")) {
-                            if (bufferType.equals("0")) {
-                                if (type.equals("1")) {
-                                    startPreceiseCalibration("2");
-                                } else if (type.equals("2")) {
-                                    sendCalibReadPacket("2");
-                                }
-                            } else {
-                                if (type.equals("1")) {
-                                    getPhManualValues("Second");
-                                } else if (type.equals("2")) {
-                                    sendCalibReadPacket("2");
-                                }
-                            }
-                        } else {
-                            // anyOtherSensor
-                        }
-                    }
-                    Toast.makeText(getContext(), "Sensor Stabilized", Toast.LENGTH_SHORT).show();
-                    alertDialog.dismiss();
+                    proceedToNextStep(alertDialog, type);
                 }
             }
 
             public void onFinish() {
                 rightBtn.setAlpha(1f);
                 rightBtn.setClickable(true);
+                rightBtn.setEnabled(true);
             }
         };
         stabilizationTimer.start();
+    }
+
+    private void proceedToNextStep(AlertDialog alertDialog, String type) {
+        alertDialog.dismiss();
+        if (getCalibrationType().equals("0")) {
+            sendCalibReadPacket("0");
+        } else {
+            if (inputType.equals("pH")) {
+                if (bufferType.equals("0")) {
+                    if (type.equals("1") || type.equals("0")) {
+                        startPreceiseCalibration("2");
+                    } else if (type.equals("2")) {
+                        sendCalibReadPacket("2");
+                    }
+                } else {
+                    if (type.equals("1") || type.equals("0")) {
+                        getPhManualValues("Second");
+                    } else if (type.equals("2")) {
+                        sendCalibReadPacket("2");
+                    }
+                }
+            } else if (inputType.equals("Contacting Conductivity")) {// anyOtherSensor
+                if (type.equals("1")) {
+                    showOneEdtDialog();
+                } else {
+                    sendCalibReadPacket("2");
+                }
+
+            }
+        }
     }
 
     private void showOneEdtDialog() {
@@ -431,6 +437,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         View dialogView = inflater.inflate(R.layout.dialog_calib_onedt, null);
         dialogBuilder.setView(dialogView);
         AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
 
         TextView title = dialogView.findViewById(R.id.onedt_mainTxt);
         EditText edt = dialogView.findViewById(R.id.onedt_edt);
@@ -461,6 +468,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
         dialogBuilder.setView(dialogView);
         AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
 
         TextView title = dialogView.findViewById(R.id.dialogType1Calib_mainText);
         Button leftBtn = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
@@ -489,7 +497,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
             }
         }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR +
                 PCK_SENSORCALIB + SPILT_CHAR + inputNumber + SPILT_CHAR +
-                inputType + SPILT_CHAR + "1" + SPILT_CHAR + "0" +
+                getPosition(2, inputType, inputTypeArr) + SPILT_CHAR + getSeqNo() + SPILT_CHAR + "0" +
                 (firstORsecond.equals("0") ? "" : SPILT_CHAR + firstORsecond));
     }
 
@@ -499,6 +507,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         View dialogView = inflater.inflate(R.layout.dialog_calib_result_two, null);
         dialogBuilder.setView(dialogView);
         AlertDialog alertResult = dialogBuilder.create();
+        alertResult.setCanceledOnTouchOutside(false);
 
         iv = dialogView.findViewById(R.id.resultTwo_iv);
         leftValue = dialogView.findViewById(R.id.resulTwo_leftValue);
@@ -521,7 +530,6 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
             saveCalibrationValue(splitData);
         });
 
-
         switch (inputType) {
             case "pH":
                 if (getCalibrationType().equals("0")) {
@@ -531,15 +539,14 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                 }
                 break;
 
-
             case "ORP":
             case "Contacting Conductivity":
+            case "Temperature":
                 showQuickCalibResult(splitData);
                 break;
         }
         alertResult.show();
     }
-
 
     private void showPreceiseCalibResult(String[] splitData, ImageView iv, TextView leftValue, TextView rightValue,
                                          TextView leftHeading, TextView rightHeading, Button leftBtn, Button rightBtn) {
@@ -582,6 +589,11 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
             case "Contacting Conductivity":
                 minRange = 0.5;
                 maxRange = 2.0;
+                break;
+
+            case "Temperature":
+                minRange = -10.0;
+                maxRange = 10.0;
                 break;
 
             default:

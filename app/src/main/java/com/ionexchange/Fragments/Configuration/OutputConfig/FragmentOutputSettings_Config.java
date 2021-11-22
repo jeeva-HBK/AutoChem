@@ -11,13 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ionexchange.Adapters.OutputIndexRvAdapter;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
+import com.ionexchange.Database.Dao.OutputKeepAliveDao;
 import com.ionexchange.Database.Entity.MainConfigurationEntity;
+import com.ionexchange.Database.Entity.OutputKeepAliveEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Enum.AppEnum;
-import com.ionexchange.Fragments.FragmentHostDashboard;
 import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
@@ -25,12 +28,16 @@ import com.ionexchange.databinding.FragmentOutputsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class FragmentOutputSettings_Config extends Fragment implements RvOnClick {
 
     static FragmentOutputsettingsBinding mBinding;
     ApplicationClass mAppClass;
     OutputConfigurationDao dao;
     int pageOffset = 0, currentPage = 0;
+    WaterTreatmentDb waterTreatmentDb;
+    OutputKeepAliveDao outputKeepAliveDao;
     AppEnum outpuType = AppEnum.RELAY_OUTPUT;
 
     @Nullable
@@ -48,6 +55,8 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
         mBinding.outputRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mAppClass = (ApplicationClass) getActivity().getApplication();
         dao = ApplicationClass.outputDAO;
+        waterTreatmentDb = WaterTreatmentDb.getDatabase(getContext());
+        outputKeepAliveDao = waterTreatmentDb.outputKeepAliveDao();
         setOutputRvData(AppEnum.RELAY_OUTPUT);
 
         mBinding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -76,10 +85,17 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
                 //mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this, dao.getOutputConfigurationEntityList(9, pageOffset = pageOffset - 9)));
 
                 mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this,
-                        dao.getOutputHardWareNoConfigurationEntityList((outpuType == AppEnum.RELAY_OUTPUT ? 1 : 15), (outpuType == AppEnum.RELAY_OUTPUT ? 14 : 22), 9, pageOffset = pageOffset - 9)));
+                        dao.getOutputHardWareNoConfigurationEntityList((outpuType == AppEnum.RELAY_OUTPUT ? 1 : 15), (outpuType == AppEnum.RELAY_OUTPUT ? 14 : 22), 9, pageOffset = pageOffset - 9),outputKeepAliveDao));
 
                 mBinding.leftArrowOsBtn.setVisibility(View.GONE);
                 mBinding.rightArrowOsBtn.setVisibility(View.VISIBLE);
+            }
+        });
+
+        outputKeepAliveDao.getOutputLiveList().observe(getViewLifecycleOwner(), new Observer<List<OutputKeepAliveEntity>>() {
+            @Override
+            public void onChanged(List<OutputKeepAliveEntity> outputKeepAliveEntities) {
+                mBinding.outputRv.getAdapter().notifyDataSetChanged();
             }
         });
 
@@ -91,7 +107,7 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
                 // mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this, dao.getOutputConfigurationEntityList(9, pageOffset = pageOffset + 9)));
 
                 mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this,
-                        dao.getOutputHardWareNoConfigurationEntityList((outpuType == AppEnum.RELAY_OUTPUT ? 1 : 15), (outpuType == AppEnum.RELAY_OUTPUT ? 14 : 22), 9, pageOffset = pageOffset + 9)));
+                        dao.getOutputHardWareNoConfigurationEntityList((outpuType == AppEnum.RELAY_OUTPUT ? 1 : 15), (outpuType == AppEnum.RELAY_OUTPUT ? 14 : 22), 9, pageOffset = pageOffset + 9), outputKeepAliveDao));
 
                 mBinding.leftArrowOsBtn.setVisibility(View.VISIBLE);
                 mBinding.rightArrowOsBtn.setVisibility(View.GONE);
@@ -120,7 +136,7 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
 
     private void setOutputRvData(AppEnum outpuType) {
         mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(this,
-                dao.getOutputHardWareNoConfigurationEntityList((outpuType == AppEnum.RELAY_OUTPUT ? 1 : 15), (outpuType == AppEnum.RELAY_OUTPUT ? 14 : 22), 9, pageOffset)));
+                dao.getOutputHardWareNoConfigurationEntityList((outpuType == AppEnum.RELAY_OUTPUT ? 1 : 15), (outpuType == AppEnum.RELAY_OUTPUT ? 14 : 22), 9, pageOffset), outputKeepAliveDao));
     }
 
     public static void hideToolbar() {
