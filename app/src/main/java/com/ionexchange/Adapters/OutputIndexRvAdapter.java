@@ -94,7 +94,7 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
             viewBase.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    rvOnClick.onClick(Integer.parseInt(outputNumber.getText().toString()));
+                    rvOnClick.onClick(Integer.parseInt(outputHeader.getText().toString()));
                 }
             });
         }

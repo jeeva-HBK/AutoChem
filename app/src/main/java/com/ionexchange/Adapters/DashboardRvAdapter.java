@@ -230,7 +230,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 }
             }
 
-            if (mainConfigurationEntityList.get(position).inputType.contains("ph")
+            if (mainConfigurationEntityList.get(position).inputType.contains("pH")
                     || mainConfigurationEntityList.get(position).inputType.contains("ORP")
                     || mainConfigurationEntityList.get(position).inputType.contains("Temperature")
                     || mainConfigurationEntityList.get(position).inputType.contains("Flow/Water Meter")
@@ -497,7 +497,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
         }
 
 
-        if (mainConfigurationEntityList.get(0).inputType.contains("ph")
+        if (mainConfigurationEntityList.get(0).inputType.contains("pH")
                 || mainConfigurationEntityList.get(0).inputType.contains("ORP")
                 || mainConfigurationEntityList.get(0).inputType.contains("Temperature")
                 || mainConfigurationEntityList.get(0).inputType.contains("Flow/Water Meter")
@@ -546,7 +546,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 currentValueOne.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(0).hardware_no));
             }
         }
-        if (mainConfigurationEntityList.get(1).inputType.contains("ph")
+        if (mainConfigurationEntityList.get(1).inputType.contains("pH")
                 || mainConfigurationEntityList.get(1).inputType.contains("ORP")
                 || mainConfigurationEntityList.get(1).inputType.contains("Temperature")
                 || mainConfigurationEntityList.get(1).inputType.contains("Flow/Water Meter")
@@ -595,7 +595,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 currentValueTwo.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(1).hardware_no));
             }
         }
-        if (mainConfigurationEntityList.get(2).inputType.contains("ph")
+        if (mainConfigurationEntityList.get(2).inputType.contains("pH")
                 || mainConfigurationEntityList.get(2).inputType.contains("ORP")
                 || mainConfigurationEntityList.get(2).inputType.contains("Temperature")
                 || mainConfigurationEntityList.get(2).inputType.contains("Flow/Water Meter")

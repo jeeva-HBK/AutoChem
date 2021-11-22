@@ -50,9 +50,9 @@ public class KeepAlive {
             while (i < j) {
                 if (data[i + 4].length() > 2) {
                     if (Integer.parseInt(data[i + 4].substring(0, 2)) > 33 && Integer.parseInt(data[i + 4].substring(0, 2)) < 50) { // DIGITAL & TANK
-                        if (data[i + 4].substring(2, data[i + 4].length()).equals("0")) {
+                        if (data[i + 4].substring(2, data[i + 4].length()).equals("1")) {
                             keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 4].substring(0, 2)), "OPEN");
-                        } else {
+                        } else if (data[i + 4].substring(2, data[i + 4].length()).equals("2")){
                             keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 4].substring(0, 2)), "CLOSE");
                         }
                     } else {
