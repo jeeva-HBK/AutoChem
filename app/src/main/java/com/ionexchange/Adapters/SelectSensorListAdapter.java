@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+//created by Silambu
 public class SelectSensorListAdapter extends RecyclerView.Adapter<SelectSensorListAdapter.ViewHolder> {
 
     RvCheckedChange rvCheckedChange;

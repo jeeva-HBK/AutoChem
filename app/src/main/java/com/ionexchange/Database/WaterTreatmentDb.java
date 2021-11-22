@@ -33,7 +33,7 @@ import com.ionexchange.Database.Entity.TimerConfigurationEntity;
 import com.ionexchange.Database.Entity.UsermanagementEntity;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 
-
+//created by Silambu
 @Database(entities = {InputConfigurationEntity.class, OutputConfigurationEntity.class,
         VirtualConfigurationEntity.class, TimerConfigurationEntity.class,
         DefaultLayoutConfigurationEntity.class, MainConfigurationEntity.class,

@@ -32,6 +32,7 @@ import com.ionexchange.R;
 
 import java.util.List;
 
+//created by Silambu
 public class OutputControlRvAdapter extends RecyclerView.Adapter<OutputControlRvAdapter.itemHolder> {
 
     private Context context;

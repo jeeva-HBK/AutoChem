@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+//created by Silambu
 public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdapter.ViewHolder> {
     RvOnClick rvOnClick;
     List<OutputConfigurationEntity> outputConfigurationEntityList;
@@ -44,6 +45,9 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.outputHeader.setText(outputConfigurationEntityList.get(position).outputHardwareNo + "");
         holder.outputModeValue.setText(outputConfigurationEntityList.get(position).outputLabel);
+        if (outputKeepAliveDao.getOutputStatus(outputConfigurationEntityList.get(position).outputHardwareNo).equals("N/A")){
+            holder.outputNumber.setText("N/A");
+        }
         if (!outputKeepAliveDao.getOutputStatus(outputConfigurationEntityList.get(position).outputHardwareNo).equals("N/A")) {
             if (outputKeepAliveDao.getOutputStatus(outputConfigurationEntityList.get(position).outputHardwareNo).equals("10")) {
                 holder.outputNumber.setText(outputKeepAliveDao.getOutputRelayStatus(outputConfigurationEntityList.get(position).outputHardwareNo));

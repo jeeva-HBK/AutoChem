@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+//created by Silambu
 public class VirtualSensorIndexRvAdapter extends RecyclerView.Adapter<VirtualSensorIndexRvAdapter.ViewHolder> {
     RvOnClick rvOnClick;
     List<VirtualConfigurationEntity> virtualConfigurationEntityList;

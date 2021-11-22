@@ -140,15 +140,15 @@ public class ApplicationClass extends Application {
                     "Flow Sensor - 7", "Flow Sensor - 8"},
             accessoryTimerMode = {"Timer Safety", "Timer Safety Flow", "Disabled"},
             accessoryType = {" ON Before", "OFF Before", "ON After", " OFF After", " ON With", " OFF with"},
-       outputStatusarr = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for","Analog Output"},
+            outputStatusarr = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for", "Analog Output"},
             outputControl = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for"},
-    outputControlShortForm = {"Ⓓ", "A OFF", "A ON", "M OFF", "M ON", "F OFF", "F ON", "M ON for"};
+            outputControlShortForm = {"Ⓓ", "A OFF", "A ON", "M OFF", "M ON", "F OFF", "F ON", "M ON for"};
 
     /* Static Variables */
-    public static String mIPAddress = "", Packet, Acknowledge;
+    public static String mIPAddress = "", TabletIPAddress = "", Packet, Acknowledge;
     public static String macAddress; // Mac address of the unit controller
     //static String mIPAddress = "192.168.2.37", Packet;
-    public static int mPortNumber ;
+    public static int mPortNumber;
     public static CountDownTimer packetTimeOut;
     Context mContext;
     public TCP tcp;
@@ -189,7 +189,6 @@ public class ApplicationClass extends Application {
         initDB();
         setDefaultDb();
         setCurrentValueDb();
-
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
@@ -197,9 +196,11 @@ public class ApplicationClass extends Application {
                     mContext = activity;
                     preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     editor = preferences.edit();
+                    editor.putString("TabletIPAddress", getTabletIp());
                     if (preferences != null) {
                         mIPAddress = preferences.getString("prefIp", "");
                         mPortNumber = Integer.parseInt(preferences.getString("prefPort", ""));
+                        TabletIPAddress = preferences.getString("TabletIPAddress", "");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -213,6 +214,7 @@ public class ApplicationClass extends Application {
 
             @Override
             public void onActivityResumed(@NonNull Activity activity) {
+
             }
 
             @Override

@@ -18,6 +18,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+
+//created by Silambu
 public class TcpServer extends Service {
 
 
@@ -109,7 +111,7 @@ public class TcpServer extends Service {
                 String message = new String(buffer).substring(0, charsRead);
                 if (!message.isEmpty()) {
                     intentMessage(message);
-                    Log.e("TCP_SERVER", "Received <--  " + message);
+                   Log.e("TCP_SERVER", "Received <--  " + message);
                     new KeepAlive(message, getApplicationContext());
                     acknowledgement();
                 } else {

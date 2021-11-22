@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="155dp">
+    android:layout_height="134dp">
 
     <View
         android:id="@+id/view_base"
@@ -18,7 +18,7 @@
     <View
         android:id="@+id/view_header"
         android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_height="35dp"
         android:background="@drawable/rectangle_blue"
         app:layout_constraintBottom_toBottomOf="@id/view_base"
         app:layout_constraintEnd_toEndOf="@id/view_base"
@@ -129,7 +129,7 @@
         android:id="@+id/low_alarm_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="3dp"
         android:text="Low Alarm"
         android:textColor="@color/primary"
         android:textStyle="bold"
@@ -156,7 +156,7 @@
         android:id="@+id/high_alarm_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="3dp"
         android:text="Low Alarm"
         android:textColor="@color/primary"
         android:textStyle="bold"

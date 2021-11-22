@@ -47,6 +47,7 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
+//created by Silambu
 public class FragmentInputSensorAnalog_Config extends Fragment implements DataReceiveCallback {
 
     FragmentInputsensorAnalogBinding mBinding;

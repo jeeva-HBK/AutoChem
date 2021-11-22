@@ -4,6 +4,7 @@ import static com.ionexchange.Others.ApplicationClass.outputControlShortForm;
 
 import android.content.Context;
 import android.os.Build;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,8 @@ import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.R;
 
 import java.util.List;
+
+//created by Silambu
 
 public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.itemHolder> {
     int layout;
@@ -245,6 +248,12 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 highKey.setText("High Alarm");
                 unitOne.setVisibility(View.VISIBLE);
                 typeOne.setVisibility(View.VISIBLE);
+                if (mainConfigurationEntityList.get(position).inputType.contains("Digital Input")) {
+                    lowKey.setText("Open\nMessage");
+                    highKey.setText("Close\nMessage");
+                    lowKey.setGravity(Gravity.CENTER);
+                    highKey.setGravity(Gravity.CENTER);
+                }
                 seq.setText(mainConfigurationEntityList.get(position).inputType);
                 if (inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(position).hardware_no) != null) {
                     label.setText(inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(position).hardware_no));
@@ -513,6 +522,10 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             unitOne.setVisibility(View.VISIBLE);
             typeOne.setVisibility(View.VISIBLE);
             hardwareNoOne.setText(mainConfigurationEntityList.get(0).hardware_no + "");
+            if (mainConfigurationEntityList.get(0).inputType.contains("Digital Input")) {
+                lowKeyOne.setText("Open\nMessage");
+                highKeyOne.setText("Close\nMessage");
+            }
             if (inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(0).hardware_no) != null) {
                 sensorLabelOne.setText(inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(0).hardware_no));
             }
@@ -561,6 +574,11 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             currentKeyTwo.setText("Current Value");
             uniTwo.setVisibility(View.VISIBLE);
             typeTwo.setVisibility(View.VISIBLE);
+            hardwareNoTwo.setText(mainConfigurationEntityList.get(1).hardware_no + "");
+            if (mainConfigurationEntityList.get(1).inputType.contains("Digital Input")) {
+                lowKeyTwo.setText("Open\nMessage");
+                highKeyTwo.setText("Close\nMessage");
+            }
             if (inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(1).hardware_no) != null) {
                 sensorLabelTwo.setText(inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(1).hardware_no));
             }
@@ -582,7 +600,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             if (mainConfigurationEntityList.get(1).inputType != null) {
                 seqTwo.setText(mainConfigurationEntityList.get(1).inputType);
             }
-            hardwareNoTwo.setText(mainConfigurationEntityList.get(1).hardware_no + "");
+
 
             if (inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(1).hardware_no)) != null) {
                 lowAlarmTwo.setText(inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(1).hardware_no)));
@@ -610,6 +628,11 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             currentKeyThree.setText("Current Value");
             uniThree.setVisibility(View.VISIBLE);
             typeThree.setVisibility(View.VISIBLE);
+            hardwareNoThree.setText(mainConfigurationEntityList.get(2).hardware_no + "");
+            if (mainConfigurationEntityList.get(2).inputType.contains("Digital Input")) {
+                lowKeyThree.setText("Open\nMessage");
+                highKeyThree.setText("Close\nMessage");
+            }
             if (inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(2).hardware_no) != null) {
                 sensorLabelThree.setText(inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(2).hardware_no));
             }

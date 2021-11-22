@@ -1,6 +1,26 @@
 
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Others.ApplicationClass.digitalArr;
+import static com.ionexchange.Others.ApplicationClass.digitalsensorSequenceNumber;
+import static com.ionexchange.Others.ApplicationClass.getAdapter;
+import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
+import static com.ionexchange.Others.ApplicationClass.getStringValue;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,26 +43,6 @@ import com.ionexchange.databinding.FragmentInputsensorDigitalBinding;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.ionexchange.Others.ApplicationClass.digitalArr;
-import static com.ionexchange.Others.ApplicationClass.digitalsensorSequenceNumber;
-import static com.ionexchange.Others.ApplicationClass.getAdapter;
-import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
-import static com.ionexchange.Others.ApplicationClass.getStringValue;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.userType;
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentInputSensorDigital_config extends Fragment implements DataReceiveCallback {
 
@@ -287,11 +287,11 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.digitalInputNumberTie)),
-                                mBinding.digitalInputSensorTypeTie.getText().toString(),"DIGITAL", 1,
+                                mBinding.digitalInputSensorTypeTie.getText().toString(), "DIGITAL", 1,
                                 mBinding.digitalLevelSequenceNumberTie.getText().toString(),
                                 Integer.parseInt(sensorSequence), getStringValue(0, mBinding.digitalInputSensorLabelTie),
-                                "N/A",
-                                "N/A", "N/A","N/A", 1);
+                                mBinding.digitalInputSensorOpenMessageTie.getText().toString(),
+                                mBinding.digitalInputSensorCloseMessageTie.getText().toString(), "N/A", "N/A", 1);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);

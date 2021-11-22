@@ -53,6 +53,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+//created by Silambu
 public class FragmentInputSensorList_Config extends Fragment implements View.OnClickListener, InputRvOnClick {
     FragmentInputsettingsBinding mBinding;
     AutoCompleteTextView sensorType, inputNumber, sensorName;

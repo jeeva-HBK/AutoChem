@@ -54,6 +54,7 @@ import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
+//created by Silambu
 public class FragmentTimerStatus_Config extends Fragment implements DataReceiveCallback, View.OnClickListener {
     FragmentTimerstatusConfigBinding mBinding;
     String timerNo;

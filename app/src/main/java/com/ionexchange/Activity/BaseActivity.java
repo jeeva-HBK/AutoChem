@@ -353,14 +353,14 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        hideStatusNavigationBar();
+      // hideStatusNavigationBar();
     }
 
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        hideStatusNavigationBar();
+       // hideStatusNavigationBar();
     }
 
     private boolean checkPermission() {

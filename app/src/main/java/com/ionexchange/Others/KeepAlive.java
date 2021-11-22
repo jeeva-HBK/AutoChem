@@ -17,8 +17,8 @@ import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.OutputKeepAliveDao;
 import com.ionexchange.Database.WaterTreatmentDb;
 
+//created by Silambu
 public class KeepAlive {
-    private Context context;
     WaterTreatmentDb db = null;
     KeepAliveCurrentValueDao keepAliveCurrentValueDao = null;
     OutputKeepAliveDao outputKeepAliveDao;
@@ -65,7 +65,6 @@ public class KeepAlive {
             }
         }
         if (data[2].equals(OUTPUT_STATUS)) {
-
             int i = 0;
             while (i <= 21) {
                 if (data[3 + i].length() <= 1) {
@@ -86,3 +85,5 @@ public class KeepAlive {
     }
 }
 
+// {*1200$$01$4$410$420$430$440$450$460$470$480$490$500*}
+// {*1200$$01$0$010$020$030$04200.00$050.000000$060$070$080$090$100*}{*1200$$01$1$110$120$130$140$150.0000$160.0000$170.0000$180$195.6272$200.0000*}{*1200$$01$2$210$220$230$240$250$260.00$270$280$290$300*}{*1200$$01$3$310$320$330$341$350$360$370$380$390$400*}{*1200$$01$4$410$420$430$440$450$460$470$480$490$500*}

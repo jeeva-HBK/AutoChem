@@ -27,6 +27,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+//created by Silambu
+
 public class FragmentVirtualSensorList_Config extends Fragment implements RvOnClick {
     RvOnClick rvOnClick;
     ApplicationClass mAppClass;

@@ -14,6 +14,7 @@ import com.ionexchange.R;
 
 import java.util.List;
 
+//created by Silambu
 public class TimerIndexRvAdapter extends RecyclerView.Adapter<TimerIndexRvAdapter.itemHolder> {
     RvOnClick listener;
     List<TimerConfigurationEntity> timerConfigurationEntityList;
