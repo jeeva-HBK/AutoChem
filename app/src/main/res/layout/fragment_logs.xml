@@ -1,15 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <RadioGroup
+            android:id="@+id/service_radioGroup"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="LOGS" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/service_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_log_checked"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Alarm Log"
+                android:textColor="@color/radio_flat_text_selector" />
+
+            <RadioButton
+                android:id="@+id/service_event"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_log_checked"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Events Log"
+                android:textColor="@color/radio_flat_text_selector" />
+
+        </RadioGroup>
+
+        <FrameLayout
+            android:id="@+id/log_hostFrame"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/service_radioGroup" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

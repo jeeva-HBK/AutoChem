@@ -73,17 +73,20 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
         dao = dB.diagnosticDataDao();
         inputDao = dB.inputConfigurationDao();
         diagnosticDataEntityList = dao.getDiagnosticDataList();
-        mBinding.readNowBtn.setOnClickListener(View -> {
-            sendPacket("0");
-        });
-        mBinding.readNowBtn.performClick();
-        setAdapter(diagnosticDataEntityList);
         mBinding.readNowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendPacket("0");
                 filterDialog();
             }
         });
+        setAdapter(diagnosticDataEntityList);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sendPacket("0");
     }
 
     private void sendPacket(String setID) {

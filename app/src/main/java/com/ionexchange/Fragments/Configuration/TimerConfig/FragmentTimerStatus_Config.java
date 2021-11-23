@@ -85,6 +85,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
     EditText endSecDay;
     WaterTreatmentDb dB;
     OutputConfigurationDao dao;
+    TimerConfigurationDao timerConfigurationDao;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -107,6 +108,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         timerNo = bundle.getString("timerNo");
         dB = WaterTreatmentDb.getDatabase(getContext());
         dao = dB.outputConfigurationDao();
+        timerConfigurationDao = dB.timerConfigurationDao();
         week = "Week-1";
         initAdapter();
         enableWeek();

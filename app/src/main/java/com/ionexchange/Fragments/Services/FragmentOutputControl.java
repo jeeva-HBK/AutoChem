@@ -92,7 +92,7 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
                     public void run() {
                         mBinding.outputControlRv.getAdapter().notifyDataSetChanged();
                     }
-                },9000);
+                },3000);
 
             }
         });

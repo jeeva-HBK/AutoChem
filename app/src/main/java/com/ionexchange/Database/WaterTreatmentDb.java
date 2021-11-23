@@ -10,6 +10,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.ionexchange.Database.Dao.AlarmLogDao;
 import com.ionexchange.Database.Dao.CalibrationDao;
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
 import com.ionexchange.Database.Dao.DiagnosticDataDao;
@@ -21,6 +22,7 @@ import com.ionexchange.Database.Dao.OutputKeepAliveDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
 import com.ionexchange.Database.Dao.UserManagementDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
+import com.ionexchange.Database.Entity.AlarmLogEntity;
 import com.ionexchange.Database.Entity.CalibrationEntity;
 import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
 import com.ionexchange.Database.Entity.DiagnosticDataEntity;
@@ -38,7 +40,7 @@ import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
         VirtualConfigurationEntity.class, TimerConfigurationEntity.class,
         DefaultLayoutConfigurationEntity.class, MainConfigurationEntity.class,
         KeepAliveCurrentEntity.class, DiagnosticDataEntity.class, UsermanagementEntity.class,
-        OutputKeepAliveEntity.class, CalibrationEntity.class},
+        OutputKeepAliveEntity.class, CalibrationEntity.class, AlarmLogEntity.class},
         version = 2, exportSchema = false)
 @TypeConverters(Converters.class)
 
@@ -95,4 +97,5 @@ public abstract class WaterTreatmentDb extends RoomDatabase {
 
     public abstract CalibrationDao calibrationDao();
 
+    public abstract AlarmLogDao alarmLogDao();
 }

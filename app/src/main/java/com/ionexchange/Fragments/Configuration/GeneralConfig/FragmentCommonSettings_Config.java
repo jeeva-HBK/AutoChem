@@ -48,6 +48,7 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
     BaseActivity mActivity;
     private static final String TAG = "FragmentCommonSettings";
 
+
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
@@ -61,6 +62,7 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
         mActivity = (BaseActivity) getActivity();
+
         mBinding.saveLayoutCommonSettings.setOnClickListener(this::onCLick);
         mBinding.saveFabCommonSettings.setOnClickListener(this::onCLick);
 
@@ -83,7 +85,7 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
                     toString(2, mBinding.SS) + toString(1, mBinding.NN) +
                     toString(2, mBinding.DD) +
                     toString(2, mBinding.month) +
-                    toString(4, mBinding.YYYY));
+                    toString(2, mBinding.YYYY));
         }
     }
 
@@ -248,13 +250,13 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
                         mBinding.fahrenheit.setChecked(true);
                     }
                     // FIXME: 22-07-2021 RTC -- by silam
-                    mBinding.Hours.setText(splitData[10].substring(1, 2));
-                    mBinding.MM.setText(splitData[10].substring(3, 4));
-                    mBinding.SS.setText(splitData[10].substring(5, 6));
-                    mBinding.NN.setText(splitData[10].substring(7));
-                    mBinding.DD.setText(splitData[10].substring(8, 9));
-                    mBinding.month.setText(splitData[10].substring(10, 11));
-                    mBinding.YYYY.setText(splitData[10].substring(12, 15));
+                    mBinding.Hours.setText(splitData[10].substring(0, 2));
+                    mBinding.MM.setText(splitData[10].substring(2, 4));
+                    mBinding.SS.setText(splitData[10].substring(4, 6));
+                    mBinding.NN.setText(splitData[10].substring(6,7));
+                    mBinding.DD.setText(splitData[10].substring(7, 9));
+                    mBinding.month.setText(splitData[10].substring(9, 11));
+                    mBinding.YYYY.setText(splitData[10].substring(11, 13));
 
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), String.valueOf(R.string.readFailed));

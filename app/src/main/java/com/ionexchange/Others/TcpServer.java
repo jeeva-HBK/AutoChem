@@ -2,6 +2,7 @@ package com.ionexchange.Others;
 
 
 import static com.ionexchange.Others.ApplicationClass.Acknowledge;
+import static com.ionexchange.Others.ApplicationClass.mPortNumber;
 
 import android.app.Service;
 import android.content.Intent;
