@@ -476,6 +476,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
     /*AnalogTest*/
     private void sendAnalogTest() {
+        // removed formDigits(2,getLinkInputSensor(mBinding.testLinkInputRelayEdtOsc)) - 24/11
+
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -484,7 +486,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 analogMode + SPILT_CHAR +
                 toString(mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 getPosition(0, toString(mBinding.modeOsATXT), modeAnalog) + SPILT_CHAR +
-                formDigits(2,getLinkInputSensor(mBinding.testLinkInputRelayEdtOsc)) + SPILT_CHAR +
+                "00" + SPILT_CHAR +
                 getDecimalValue(mBinding.analogFixedValueEdtOsc, 2, mBinding.analogFixedValueDeciOsc, 2));
     }
 
@@ -1048,11 +1050,11 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                 enableAnalogDisable();
                             } else if (splitData[6].equals("2")) {
                                 enableAnalogTest();
-                                if(Integer.parseInt(splitData[7]) < 18) {
+                                /* if(Integer.parseInt(splitData[7]) < 18) {
                                     mBinding.testLinkInputRelayEdtOsc.setText(mBinding.testLinkInputRelayEdtOsc.getAdapter().getItem(Integer.parseInt(splitData[7]) - 1).toString());
                                 }else{
                                     mBinding.testLinkInputRelayEdtOsc.setText(mBinding.testLinkInputRelayEdtOsc.getAdapter().getItem(Integer.parseInt(splitData[7]) - 33).toString());
-                                }
+                                } */
                                 mBinding.analogFixedValueEdtOsc.setText(splitData[8].substring(0, 2));
                                 mBinding.analogFixedValueDeciOsc.setText(splitData[8].substring(3, 5));
                                 mBinding.testLinkInputRelayEdtOsc.setAdapter(getAdapter(sensorInputArr));
@@ -1651,13 +1653,16 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     }
 
     private boolean validation7() {
+
+        /*else if (isEmpty(mBinding.testLinkInputRelayEdtOsc)) {
+            mAppClass.showSnackBar(getContext(), "Select the Link Input Relay");
+            return false;
+        }   24/11 */
+
         if (isEmpty(mBinding.outputLabelOsEDT)) {
             mAppClass.showSnackBar(getContext(), "Output Label  cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.testLinkInputRelayEdtOsc)) {
-            mAppClass.showSnackBar(getContext(), "Select the Link Input Relay");
-            return false;
-        } else if (isEmpty(mBinding.analogFixedValueEdtOsc)) {
+        }  else if (isEmpty(mBinding.analogFixedValueEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Fixed value cannot be Empty");
             return false;
         }

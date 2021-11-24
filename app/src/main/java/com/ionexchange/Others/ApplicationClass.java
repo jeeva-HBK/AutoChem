@@ -190,10 +190,6 @@ public class ApplicationClass extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-
-
-
         initDB();
         setDefaultDb();
         setCurrentValueDb();
@@ -630,7 +626,6 @@ public class ApplicationClass extends Application {
             }
         }
 
-
         outputKeepAliveDao = dB.outputKeepAliveDao();
         if (outputKeepAliveDao.getOutputList().isEmpty()) {
             for (int i = 1; i <= 22; i++) {
@@ -641,8 +636,6 @@ public class ApplicationClass extends Application {
                 insertOutputKeepAliveDb(entryListUpdate);
             }
         }
-
-
     }
 
     public void insertToDb(List<DefaultLayoutConfigurationEntity> entryList) {

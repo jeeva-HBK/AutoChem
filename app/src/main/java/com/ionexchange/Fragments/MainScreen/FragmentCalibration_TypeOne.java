@@ -47,12 +47,14 @@ import java.util.List;
 import java.util.Locale;
 
 public class FragmentCalibration_TypeOne extends Fragment implements CompoundButton.OnCheckedChangeListener {
+    AlertDialog alertDialog;
     SensorDetailsCalibrationBinding mBinding;
     ApplicationClass mAppClass;
     WaterTreatmentDb db;
     CalibrationDao calibrationDao;
     KeepAliveCurrentValueDao keepAliveDao;
     String inputNumber, inputType, bufferType = "", tempValue;
+    boolean tempBool = false; // onDataReceive will trigger twice, use boolean this for preventing method calling twice.
     CountDownTimer stabilizationTimer;
     private static final String TAG = "FragmentSensorCalib";
 
@@ -207,7 +209,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
                 View dialogView = getLayoutInflater().inflate(R.layout.dialog_calib_reading, null);
                 dialogBuilder.setView(dialogView);
-                AlertDialog alertDialog = dialogBuilder.create();
+                alertDialog = dialogBuilder.create();
                 alertDialog.setCanceledOnTouchOutside(false);
 
                 TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
@@ -234,7 +236,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
             View dialogView = getLayoutInflater().inflate(R.layout.dialog_calib_reading, null);
             dialogBuilder.setView(dialogView);
-            AlertDialog alertDialog = dialogBuilder.create();
+            alertDialog = dialogBuilder.create();
             alertDialog.setCanceledOnTouchOutside(false);
 
             TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
@@ -260,7 +262,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_calib_twoedt, null);
         dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog = dialogBuilder.create();
         alertDialog.setCanceledOnTouchOutside(false);
 
         TextView leftText = dialogView.findViewById(R.id.twodt_mainTxt);
@@ -287,11 +289,39 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
             } else if (rightEdt.getText().toString().equals("")) {
                 mAppClass.showSnackBar(getContext(), "Buffer Value should not be empty");
             } else {
-                sendPreceiseCalibWritePacket(type.equals("First") ?
-                        "1" + SPILT_CHAR + leftEdt.getText().toString() + SPILT_CHAR + rightEdt.getText().toString() :
-                        "2" + SPILT_CHAR + leftEdt.getText().toString() + SPILT_CHAR + rightEdt.getText().toString());
+                alertDialog.dismiss();
+                showRinceDialog(type, leftEdt.getText().toString(), rightEdt.getText().toString());
             }
+
+        });
+        alertDialog.show();
+    }
+
+    private void showRinceDialog(String type, String leftEdt, String rightEdt) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
+        dialogBuilder.setView(dialogView);
+        alertDialog = dialogBuilder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+
+        TextView title = dialogView.findViewById(R.id.dialogType1Calib_mainText);
+        Button leftBtn = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
+        Button rightBtn = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
+
+        leftBtn.setText("CANCEL");
+        leftBtn.setOnClickListener(View -> {
             alertDialog.dismiss();
+        });
+
+        title.setText("\"Rinse the sensor and insert it in " + type + " buffer\"");
+
+        rightBtn.setText("CONFIRM");
+        rightBtn.setOnClickListener(View -> {
+            alertDialog.dismiss();
+            sendPreceiseCalibWritePacket(type.equals("First") ?
+                    "1" + SPILT_CHAR + leftEdt + SPILT_CHAR + rightEdt :
+                    "2" + SPILT_CHAR + leftEdt + SPILT_CHAR + rightEdt);
         });
         alertDialog.show();
     }
@@ -301,21 +331,18 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
             @Override
             public void OnDataReceive(String data) {
                 if (isValidPck(WRITE_PACKET, data)) {
-                    if (inputType.equals("pH")) {
-                        if (bufferType.equals("0")) {
-                            tempValue = firstORsecond.equals("1") ? "7.01" : "10.00";
-                        } else {
-                            tempValue = firstORsecond.split("\\$")[2];
+                    if (!tempBool) {
+                        if (inputType.equals("pH")) {
+                            if (bufferType.equals("0")) {
+                                tempValue = firstORsecond.equals("1") ? "7.01" : "10.00";
+                            } else {
+                                tempValue = firstORsecond.split("\\$")[2];
+                            }
+                        } else if (inputType.equals("Contacting Conductivity")) {
+                            tempValue = firstORsecond.equals("1") ? "0.00" : firstORsecond.split("\\$")[1];
                         }
-                    } else if (inputType.equals("Contacting Conductivity")) {
-                        tempValue = firstORsecond.equals("1") ? "0.00" : firstORsecond.split("\\$")[1];
-                    }
-                    //  data = firstORsecond.equals("1") ? "{*0$10$0$1*}" : "{*0$10$0$2*}"; // todo temp Manual Pck
-                    String[] spiltData = spiltPacket(data);
-                    if (spiltData[3].equals("1")) { // step 1
-                        checkStabilization("1");
-                    } else if (spiltData[3].equals("2")) { // step 2
-                        checkStabilization("2");
+                        checkStabilization(spiltPacket(data)[3]);
+                        tempBool = true;
                     }
                 }
             }
@@ -356,19 +383,25 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         rightBtn.setEnabled(false);
 
         rightBtn.setAlpha(0.5f);
-        if (alertDialog.isShowing()) {
-            alertDialog.dismiss();
-        }
+
+        leftBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tempBool = false;
+                alertDialog.dismiss();
+                stabilizationTimer.cancel();
+            }
+        });
+
+        rightBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+                proceedToNextStep(type);
+            }
+        });
+
         alertDialog.show();
-
-        leftBtn.setOnClickListener(View -> {
-            alertDialog.dismiss();
-            stabilizationTimer.cancel();
-        });
-
-        rightBtn.setOnClickListener(View -> {
-            proceedToNextStep(alertDialog, type);
-        });
 
         final int[] stabilizationCount = {0};
         final long[] tempInt = {1};
@@ -385,10 +418,10 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                         tempInt[0] = tempInt[0] + 5;
                     }
                 }
-
                 if (stabilizationCount[0] > 3) {
                     cancel();
-                    proceedToNextStep(alertDialog, type);
+                    alertDialog.dismiss();
+                    proceedToNextStep(type);
                 }
             }
 
@@ -401,8 +434,8 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         stabilizationTimer.start();
     }
 
-    private void proceedToNextStep(AlertDialog alertDialog, String type) {
-        alertDialog.dismiss();
+    private void proceedToNextStep(String type) {
+        tempBool = false;
         if (getCalibrationType().equals("0")) {
             sendCalibReadPacket("0");
         } else {
@@ -426,7 +459,6 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                 } else {
                     sendCalibReadPacket("2");
                 }
-
             }
         }
     }
@@ -436,7 +468,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_calib_onedt, null);
         dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog = dialogBuilder.create();
         alertDialog.setCanceledOnTouchOutside(false);
 
         TextView title = dialogView.findViewById(R.id.onedt_mainTxt);
@@ -467,7 +499,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
         dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog = dialogBuilder.create();
         alertDialog.setCanceledOnTouchOutside(false);
 
         TextView title = dialogView.findViewById(R.id.dialogType1Calib_mainText);
@@ -492,7 +524,10 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
             @Override
             public void OnDataReceive(String data) {
                 if (isValidPck(READ_PACKET, data)) {
-                    showCalibResult(spiltPacket(data));
+                    if (!tempBool) {
+                        tempBool = true;
+                        showCalibResult(spiltPacket(data));
+                    }
                 }
             }
         }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR +
@@ -521,11 +556,13 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         rightBtn.setText("SAVE");
 
         leftBtn.setOnClickListener(View -> {
+            tempBool = false;
             alertResult.dismiss();
             mBinding.startCalibrationBtn.performClick();
         });
 
         rightBtn.setOnClickListener(View -> {
+            tempBool = false;
             alertResult.dismiss();
             saveCalibrationValue(splitData);
         });

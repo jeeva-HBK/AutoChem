@@ -2289,6 +2289,7 @@
                 style="@style/appAutoTxt"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
+                android:visibility="gone"
                 android:layout_margin="3dp"
                 android:layout_weight="1">
 
