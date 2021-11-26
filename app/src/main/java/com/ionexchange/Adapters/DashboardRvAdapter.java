@@ -317,7 +317,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
 
                     if (mainConfigurationEntityList.get(position).inputType.contains("Digital Input")) {
-                        currentValue.setTextSize(18f);
+                        currentValue.setTextSize(25f);
                         currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no)
                                 .equals("OPEN") ? inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(position).hardware_no)) :
                                 inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(position).hardware_no)));

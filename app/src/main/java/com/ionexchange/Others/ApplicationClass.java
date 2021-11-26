@@ -142,8 +142,8 @@ public class ApplicationClass extends Application {
             accessoryType = {" ON Before", "OFF Before", "ON After", " OFF After", " ON With", " OFF with"},
             outputStatusarr = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for", "Analog Output"},
             outputControl = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for"},
-    // outputControlShortForm = {"Ⓓ", "A OFF", "A ON", "M OFF", "M ON", "F OFF", "F ON", "M ON for"};
-    outputControlShortForm = {"D", "Ⱥ", "A", "₥", "m", "F̶", "F", "M for"};
+    // outputControlShortForm = {"â’¹", "A OFF", "A ON", "M OFF", "M ON", "F OFF", "F ON", "M ON for"};
+    outputControlShortForm = {"D", "Èº", "A", "â‚¥", "m", "FÌ¶", "F", "M for"};
 
     /* Static Variables */
     public static String mIPAddress = "", TabletIPAddress = "", Packet, Acknowledge;
