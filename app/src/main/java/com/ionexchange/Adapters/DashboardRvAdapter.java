@@ -95,7 +95,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 holder.lowKeyOne.setTextSize(20);
                 holder.highKeyOne.setTextSize(20);
                 defaultLayout(holder.labeLOne, holder.sensorLabelOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne,
-                        holder.currentValueOne, holder.unitOne, holder.typeOne, holder.currentKeyOne, holder.lowKeyOne, holder.highKeyOne, position);
+                        holder.currentValueOne, holder.unitOne, holder.typeOne, holder.currentKeyOne, holder.lowKeyOne, holder.highKeyOne, position, 1);
                 break;
 
             case 2:
@@ -109,7 +109,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 holder.highKeyOne.setTextSize(20);
                 defaultLayout(holder.labeLOne, holder.sensorLabelOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne,
                         holder.currentValueOne, holder.unitOne, holder.typeOne, holder.currentKeyOne,
-                        holder.lowKeyOne, holder.highKeyOne, position);
+                        holder.lowKeyOne, holder.highKeyOne, position, 2);
                 break;
 
             case 3:
@@ -127,18 +127,18 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 holder.lowKeyOne.setTextSize(20);
                 holder.highKeyOne.setTextSize(20);
                 defaultLayout(holder.labeLOne, holder.sensorLabelOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne,
-                        holder.currentValueOne, holder.unitOne, holder.typeOne, holder.currentKeyOne, holder.lowKeyOne, holder.highKeyOne, position);
+                        holder.currentValueOne, holder.unitOne, holder.typeOne, holder.currentKeyOne, holder.lowKeyOne, holder.highKeyOne, position, 5);
                 break;
 
             case 6:
                 defaultLayout(holder.labeLOne, holder.sensorLabelOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne,
-                        holder.currentValueOne, holder.unitOne, holder.typeOne, holder.currentKeyOne, holder.lowKeyOne, holder.highKeyOne, position);
+                        holder.currentValueOne, holder.unitOne, holder.typeOne, holder.currentKeyOne, holder.lowKeyOne, holder.highKeyOne, position, 6);
                 break;
         }
     }
 
     void defaultLayout(TextView seq, TextView label, TextView hardwareNoOne, TextView lowAlarmOne, TextView highAlarmOne,
-                       TextView currentValue, TextView unitOne, TextView typeOne, TextView currentMode, TextView lowKey, TextView highKey, int position) {
+                       TextView currentValue, TextView unitOne, TextView typeOne, TextView currentMode, TextView lowKey, TextView highKey, int position, int layout) {
 
         if (mainConfigurationEntityList.get(position).inputType != null) {
             if (mainConfigurationEntityList.get(position).inputType.contains("Output")) {
@@ -317,7 +317,6 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
 
                     if (mainConfigurationEntityList.get(position).inputType.contains("Digital Input")) {
-                        currentValue.setTextSize(25f);
                         currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no)
                                 .equals("OPEN") ? inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(position).hardware_no)) :
                                 inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(position).hardware_no)));
@@ -338,7 +337,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                        TextView currentKeyOne, TextView currentKeyTwo, TextView currentKeyThree) {
 
 
-        if (mainConfigurationEntityList.get(0).inputType.contains("output")) {
+        if (mainConfigurationEntityList.get(0).inputType.contains("Output")) {
             lowKeyOne.setText("Output Mode");
             highKeyOne.setText("sub Mode");
             currentKeyOne.setText("Output Status");
@@ -363,9 +362,9 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     currentKeyOne.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
                 } else {
                     if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no).equals("9") ||
-                            outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no).equals("8")){
+                            outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no).equals("8")) {
                         currentKeyOne.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(0).hardware_no));
-                    }else {
+                    } else {
                         currentKeyOne.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no))]);
                     }
 
@@ -373,7 +372,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
 
             }
         }
-        if (mainConfigurationEntityList.get(1).inputType.contains("output")) {
+        if (mainConfigurationEntityList.get(1).inputType.contains("Output")) {
             lowKeyTwo.setText("Output Mode");
             highKeyTwo.setText("sub Mode");
             currentKeyTwo.setText("Output Status");
@@ -398,16 +397,16 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     currentKeyTwo.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
                 } else {
                     if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no).equals("9") ||
-                            outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no).equals("8")){
+                            outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no).equals("8")) {
                         currentKeyTwo.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(1).hardware_no));
-                    }else {
+                    } else {
                         currentKeyTwo.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no))]);
                     }
 
                 }
             }
         }
-        if (mainConfigurationEntityList.get(2).inputType.contains("output")) {
+        if (mainConfigurationEntityList.get(2).inputType.contains("Output")) {
             lowKeyThree.setText("output Mode");
             highKeyThree.setText("sub Mode");
             currentKeyThree.setText("Output Status");
@@ -540,8 +539,14 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             typeOne.setVisibility(View.VISIBLE);
             hardwareNoOne.setText(mainConfigurationEntityList.get(0).hardware_no + "");
             if (mainConfigurationEntityList.get(0).inputType.contains("Digital Input")) {
-                lowKeyOne.setText("Open\nMessage");
-                highKeyOne.setText("Close\nMessage");
+                    /*lowKey.setText("Open\nMessage");
+                    highKey.setText("Close\nMessage");
+                    lowKey.setGravity(Gravity.CENTER);
+                    highKey.setGravity(Gravity.CENTER);*/
+                lowKeyOne.setVisibility(View.INVISIBLE);
+                highKeyOne.setVisibility(View.INVISIBLE);
+                lowAlarmOne.setVisibility(View.INVISIBLE);
+                highAlarmOne.setVisibility(View.INVISIBLE);
             }
             if (inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(0).hardware_no) != null) {
                 sensorLabelOne.setText(inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(0).hardware_no));
@@ -572,9 +577,10 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 highAlarmOne.setText(inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(0).hardware_no)));
             }
 
-            if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(0).hardware_no) != null) {
+           /* if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(0).hardware_no) != null) {
                 currentValueOne.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(0).hardware_no));
-            }
+            }*/
+            setDigitalInput(currentValueOne, 0);
         }
         if (mainConfigurationEntityList.get(1).inputType.contains("pH")
                 || mainConfigurationEntityList.get(1).inputType.contains("ORP")
@@ -592,9 +598,15 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             uniTwo.setVisibility(View.VISIBLE);
             typeTwo.setVisibility(View.VISIBLE);
             hardwareNoTwo.setText(mainConfigurationEntityList.get(1).hardware_no + "");
+
             if (mainConfigurationEntityList.get(1).inputType.contains("Digital Input")) {
-                lowKeyTwo.setText("Open\nMessage");
-                highKeyTwo.setText("Close\nMessage");
+               /* lowKeyTwo.setText("Open\nMessage");
+                highKeyTwo.setText("Close\nMessage");*/
+
+                lowKeyOne.setVisibility(View.INVISIBLE);
+                highKeyOne.setVisibility(View.INVISIBLE);
+                lowAlarmOne.setVisibility(View.INVISIBLE);
+                highAlarmOne.setVisibility(View.INVISIBLE);
             }
             if (inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(1).hardware_no) != null) {
                 sensorLabelTwo.setText(inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(1).hardware_no));
@@ -626,9 +638,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             if (inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(1).hardware_no)) != null) {
                 highAlarmTwo.setText(inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(1).hardware_no)));
             }
-            if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(1).hardware_no) != null) {
-                currentValueTwo.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(1).hardware_no));
-            }
+            setDigitalInput(currentValueTwo, 1);
         }
         if (mainConfigurationEntityList.get(2).inputType.contains("pH")
                 || mainConfigurationEntityList.get(2).inputType.contains("ORP")
@@ -647,8 +657,13 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             typeThree.setVisibility(View.VISIBLE);
             hardwareNoThree.setText(mainConfigurationEntityList.get(2).hardware_no + "");
             if (mainConfigurationEntityList.get(2).inputType.contains("Digital Input")) {
-                lowKeyThree.setText("Open\nMessage");
-                highKeyThree.setText("Close\nMessage");
+               /* lowKeyThree.setText("Open\nMessage");
+                highKeyThree.setText("Close\nMessage");*/
+
+                lowKeyOne.setVisibility(View.INVISIBLE);
+                highKeyOne.setVisibility(View.INVISIBLE);
+                lowAlarmOne.setVisibility(View.INVISIBLE);
+                highAlarmOne.setVisibility(View.INVISIBLE);
             }
             if (inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(2).hardware_no) != null) {
                 sensorLabelThree.setText(inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(2).hardware_no));
@@ -681,12 +696,26 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 highAlarmThree.setText(inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(2).hardware_no)));
             }
 
-            if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(2).hardware_no) != null) {
+          /*  if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(2).hardware_no) != null) {
                 currentValueThree.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(2).hardware_no));
-            }
+            }*/
+            setDigitalInput(currentValueThree, 2);
         }
 
 
+    }
+
+
+    void setDigitalInput(TextView txtView, int pos) {
+        if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(pos).hardware_no) != null) {
+            txtView.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(pos).hardware_no));
+
+            if (mainConfigurationEntityList.get(pos).inputType.contains("Digital Input")) {
+                txtView.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(pos).hardware_no)
+                        .equals("OPEN") ? inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(pos).hardware_no)) :
+                        inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(pos).hardware_no)));
+            }
+        }
     }
 
 
