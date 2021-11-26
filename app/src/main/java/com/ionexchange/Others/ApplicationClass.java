@@ -16,7 +16,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
@@ -33,7 +32,6 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -65,7 +63,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -108,13 +105,13 @@ public class ApplicationClass extends Application {
             totalAlarmMode = {"Interlock", "Maintain"},
             flowAlarmMode = {"Disable", "Interlock", "Maintain"},
 
-            digitalArr = {"NC", "NO"},
+    digitalArr = {"NC", "NO"},
             modBusTypeArr = {"ST500", "CR300 CS", "CR-300 CU", "ST-590", "ST-588", "ST-500 RO"},
             modBusUnitArr = {"ppb", "ppm", "mpy"},
             analogTypeArr = {"(4-20mA)", "(0-10V)"},
             analogUnitArr = {"mA", "V"},
 
-            calculationArr = {"Difference", "Ratio", "Total", "% Difference"},
+    calculationArr = {"Difference", "Ratio", "Total", "% Difference"},
             sensorArr = {"1", "2", "3", "4"}, temperatureArr = {"15", "16", "17"},
             modbusArr = {"5", "6", "7", "8", "9", "10", "11", "12", "13", "14"},
             analogArr = {"18", "19", "20", "21", "22", "23", "24", "25"},
@@ -145,7 +142,8 @@ public class ApplicationClass extends Application {
             accessoryType = {" ON Before", "OFF Before", "ON After", " OFF After", " ON With", " OFF with"},
             outputStatusarr = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for", "Analog Output"},
             outputControl = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for"},
-            outputControlShortForm = {"Ⓓ", "A OFF", "A ON", "M OFF", "M ON", "F OFF", "F ON", "M ON for"};
+    // outputControlShortForm = {"Ⓓ", "A OFF", "A ON", "M OFF", "M ON", "F OFF", "F ON", "M ON for"};
+    outputControlShortForm = {"D", "Ⱥ", "A", "₥", "m", "F̶", "F", "M for"};
 
     /* Static Variables */
     public static String mIPAddress = "", TabletIPAddress = "", Packet, Acknowledge;
@@ -186,7 +184,6 @@ public class ApplicationClass extends Application {
         }
     };
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate() {
         super.onCreate();
@@ -626,6 +623,7 @@ public class ApplicationClass extends Application {
             }
         }
 
+
         outputKeepAliveDao = dB.outputKeepAliveDao();
         if (outputKeepAliveDao.getOutputList().isEmpty()) {
             for (int i = 1; i <= 22; i++) {
@@ -636,6 +634,8 @@ public class ApplicationClass extends Application {
                 insertOutputKeepAliveDb(entryListUpdate);
             }
         }
+
+
     }
 
     public void insertToDb(List<DefaultLayoutConfigurationEntity> entryList) {

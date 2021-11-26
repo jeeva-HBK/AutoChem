@@ -175,14 +175,15 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
 
     @Override
     public void onClick(MainConfigurationEntity mEntity) {
-        Log.e(TAG, "onClick: ");
-        if (mEntity.hardware_no != 0) {
-            Bundle bundle = new Bundle();
-            bundle.putString("inputNumber", String.valueOf(mEntity.hardware_no));
-            bundle.putString("inpuType", mEntity.inputType);
-            mAppClass.navigateToBundle(getActivity(), R.id.action_Dashboard_to_sensorDetails1, bundle);
-        } else {
-            mAppClass.showSnackBar(getContext(), "Sensor Not Added");
+        if (!mEntity.inputType.contains("Output") && !mEntity.inputType.contains("virtual")) {
+            if (mEntity.hardware_no != 0) {
+                Bundle bundle = new Bundle();
+                bundle.putString("inputNumber", String.valueOf(mEntity.hardware_no));
+                bundle.putString("inpuType", mEntity.inputType);
+                mAppClass.navigateToBundle(getActivity(), R.id.action_Dashboard_to_sensorDetails1, bundle);
+            } else {
+                mAppClass.showSnackBar(getContext(), "Sensor Not Added");
+            }
         }
     }
 

@@ -6,27 +6,22 @@ import static com.ionexchange.Others.ApplicationClass.outputControl;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.timepicker.MaterialTimePicker;
-import com.ionexchange.Database.Dao.OutputConfigurationDao;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
 import com.ionexchange.Database.Entity.OutputKeepAliveEntity;
-import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Fragments.Services.FragmentOutputControl;
 import com.ionexchange.Interface.RvOutputControl;
 import com.ionexchange.R;
 
@@ -80,7 +75,14 @@ public class OutputControlRvAdapter extends RecyclerView.Adapter<OutputControlRv
         holder.outputType.setText(outputConfigurationEntityList.get(position).getOutputMode()
                 + "-" + outputConfigurationEntityList.get(position).getOutputStatus());
         holder.outputControl.setOnClickListener(View -> {
+            FragmentOutputControl.canReceive = false;
             holder.outputControl.showDropDown();
+        });
+        holder.outputControl.setOnDismissListener(new AutoCompleteTextView.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                FragmentOutputControl.canReceive = true;
+            }
         });
 
         if (position % 2 == 0) {
@@ -88,6 +90,13 @@ public class OutputControlRvAdapter extends RecyclerView.Adapter<OutputControlRv
             holder.outputControl.setBackgroundColor(context.getResources().getColor(R.color.ash));
         }
         holder.outputControl.setAdapter(getAdapter(outputControl, context));
+
+    }
+
+    public void updateData(List<OutputConfigurationEntity> outputConfigurationEntityList, List<OutputKeepAliveEntity> outputList) {
+        this.outputConfigurationEntityList = outputConfigurationEntityList;
+        this.outputKeepAliveEntityList = outputList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -120,11 +129,18 @@ public class OutputControlRvAdapter extends RecyclerView.Adapter<OutputControlRv
             outputControl = itemView.findViewById(R.id.act_output_type);
             time = itemView.findViewById(R.id.time_view);
 
-
             outputControl.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+                    FragmentOutputControl.canReceive = false;
                     rvOutputControl.click(outputName, outputType, outputControl, time, outputConfigurationEntityList.get(getAdapterPosition()).outputHardwareNo, pos);
+                }
+            });
+
+            outputControl.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    Log.e("outputControlRVAda", "onFocusChange: " + b);
                 }
             });
         }

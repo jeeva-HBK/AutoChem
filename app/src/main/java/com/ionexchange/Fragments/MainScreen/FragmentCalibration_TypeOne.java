@@ -341,6 +341,12 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                         } else if (inputType.equals("Contacting Conductivity")) {
                             tempValue = firstORsecond.equals("1") ? "0.00" : firstORsecond.split("\\$")[1];
                         }
+                    /*String[] spiltData = spiltPacket(data);
+                    if (spiltData[3].equals("1")) { // step 1
+                        checkStabilization("1");
+                    } else if (spiltData[3].equals("2")) { // step 2
+                        checkStabilization("2");
+                    }*/
                         checkStabilization(spiltPacket(data)[3]);
                         tempBool = true;
                     }
@@ -435,7 +441,6 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
     }
 
     private void proceedToNextStep(String type) {
-        tempBool = false;
         if (getCalibrationType().equals("0")) {
             sendCalibReadPacket("0");
         } else {
@@ -447,6 +452,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                         sendCalibReadPacket("2");
                     }
                 } else {
+                    tempBool = false;
                     if (type.equals("1") || type.equals("0")) {
                         getPhManualValues("Second");
                     } else if (type.equals("2")) {

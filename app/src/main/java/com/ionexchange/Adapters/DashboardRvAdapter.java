@@ -4,7 +4,6 @@ import static com.ionexchange.Others.ApplicationClass.outputControlShortForm;
 
 import android.content.Context;
 import android.os.Build;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,7 +141,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                        TextView currentValue, TextView unitOne, TextView typeOne, TextView currentMode, TextView lowKey, TextView highKey, int position) {
 
         if (mainConfigurationEntityList.get(position).inputType != null) {
-            if (mainConfigurationEntityList.get(position).inputType.contains("output")) {
+            if (mainConfigurationEntityList.get(position).inputType.contains("Output")) {
                 currentMode.setText("Output Status");
                 lowKey.setText("output Mode");
                 highKey.setText("sub Mode");
@@ -224,6 +223,8 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     if (virtualConfigurationDao.getVirtualHighAlarm((mainConfigurationEntityList.get(position).hardware_no)) != null) {
                         highAlarmOne.setTooltipText(virtualConfigurationDao.getVirtualHighAlarm((mainConfigurationEntityList.get(position).hardware_no)));
                     }
+
+                    currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
                    /* if (inputConfigurationDao.getUnit((mainConfigurationEntityList.get(position).hardware_no)) != null) {
                         unitOne.setTooltipText(inputConfigurationDao.getUnit((mainConfigurationEntityList.get(position).hardware_no)));
                     }
@@ -249,10 +250,15 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 unitOne.setVisibility(View.VISIBLE);
                 typeOne.setVisibility(View.VISIBLE);
                 if (mainConfigurationEntityList.get(position).inputType.contains("Digital Input")) {
-                    lowKey.setText("Open\nMessage");
+                    /*lowKey.setText("Open\nMessage");
                     highKey.setText("Close\nMessage");
                     lowKey.setGravity(Gravity.CENTER);
-                    highKey.setGravity(Gravity.CENTER);
+                    highKey.setGravity(Gravity.CENTER);*/
+                    lowKey.setVisibility(View.INVISIBLE);
+                    highKey.setVisibility(View.INVISIBLE);
+                    lowAlarmOne.setVisibility(View.INVISIBLE);
+                    highAlarmOne.setVisibility(View.INVISIBLE);
+
                 }
                 seq.setText(mainConfigurationEntityList.get(position).inputType);
                 if (inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(position).hardware_no) != null) {
@@ -299,15 +305,26 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     if (inputConfigurationDao.getType((mainConfigurationEntityList.get(position).hardware_no)) != null) {
                         typeOne.setTooltipText(inputConfigurationDao.getType((mainConfigurationEntityList.get(position).hardware_no)));
                     }
+                    if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no) != null) {
+                        if (mainConfigurationEntityList.get(position).inputType.contains("Digital Input")) {
+                            currentValue.setTooltipText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no)
+                                    .equals("OPEN") ? inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(position).hardware_no)) :
+                                    inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(position).hardware_no)));
+                        }
+                    }
                 }
                 if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no) != null) {
                     currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
+
+                    if (mainConfigurationEntityList.get(position).inputType.contains("Digital Input")) {
+                        currentValue.setTextSize(18f);
+                        currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no)
+                                .equals("OPEN") ? inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(position).hardware_no)) :
+                                inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(position).hardware_no)));
+                    }
                 }
             }
-
         }
-
-
     }
 
     void changedLayout(TextView seqOne, TextView hardwareNoOne, TextView lowAlarmOne, TextView highAlarmOne,

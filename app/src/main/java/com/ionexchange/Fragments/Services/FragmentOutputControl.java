@@ -12,7 +12,6 @@ import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +58,7 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
     List<OutputKeepAliveEntity> outputKeepAliveEntityList;
     String Hours;
     BaseActivity baseActivity;
-
+    public static boolean canReceive = true;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -87,15 +86,18 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
         outputKeepAliveDao.getOutputLiveList().observe(getViewLifecycleOwner(), new Observer<List<OutputKeepAliveEntity>>() {
             @Override
             public void onChanged(List<OutputKeepAliveEntity> outputKeepAliveEntities) {
-                new Handler().postDelayed(new Runnable() {
+                /*new Handler().postDelayed(new Runnable() {
                     @Override
-                    public void run() {
-                        mBinding.outputControlRv.getAdapter().notifyDataSetChanged();
-                    }
-                },3000);
+                    public void run() {*/
+                if (canReceive) {
+                    outputControlRvAdapter.updateData(dao.getOutputConfigurationEntityList(), outputKeepAliveDao.getOutputList());
+                }
+                   /* }
+                },500);*/
 
             }
         });
+
     }
 
 
@@ -127,7 +129,7 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
     public void OnDataReceive(String data) {
         baseActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
+            //mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("pckError")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
@@ -143,8 +145,8 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
         }
     }
 
-    private void handleResponse(String[] split) {
-
+    private void handleResponse(String[] splitData) {
+        FragmentOutputControl.canReceive = true;
     }
 
     @Override
