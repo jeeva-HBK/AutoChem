@@ -383,7 +383,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         } else if (isFieldEmpty(mBinding.analogSmoothingFactorTie)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_validation));
             return false;
-        } else if (Integer.parseInt(getStringValue(3, mBinding.analogSmoothingFactorTie)) > 100) {
+        } else if (Integer.parseInt(getStringValue(3, mBinding.analogSmoothingFactorTie)) > 90) {
             mBinding.analogSmoothingFactorTie.setError(getString(R.string.smoothing_factor_vali));
             return false;
         } else if (isFieldEmpty(mBinding.analogResetCalibrationTie)) {

@@ -106,6 +106,7 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                 getStringValue(0, mBinding.tankLevelInputSensorOpenMessageTie) + SPILT_CHAR +
                 getStringValue(0, mBinding.tankLevelInputSensorCloseMessageTie) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.tankLevelInputSensorInnerLockAct), digitalArr) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.tankLevelInputSensorActivateAct), digitalArr) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.tankLevelInputSensorAlarmAct), digitalArr) + SPILT_CHAR +
                 getStringValue(6, mBinding.tankLevelInputSensorTotalTimeTie) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.tankLevelInputSensorResetTimeAct), resetCalibrationArr) + SPILT_CHAR +
@@ -118,6 +119,7 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
         mBinding.tankLevelInputSensorSensorActivationTie.setAdapter(getAdapter(sensorActivationArr, getContext()));
         mBinding.tankLevelInputSensorInnerLockAct.setAdapter(getAdapter(digitalArr, getContext()));
         mBinding.tankLevelInputSensorAlarmAct.setAdapter(getAdapter(digitalArr, getContext()));
+        mBinding.tankLevelInputSensorActivateAct.setAdapter(getAdapter(digitalArr, getContext()));
         mBinding.tankLevelInputSensorResetTimeAct.setAdapter(getAdapter(resetCalibrationArr, getContext()));
         mBinding.tankLevelSequenceNumberTie.setAdapter(getAdapter(levelsensorSequenceNumber, getContext()));
     }
@@ -156,9 +158,10 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                     mBinding.tankLevelInputSensorOpenMessageTie.setText(data[8]);
                     mBinding.tankLevelInputSensorCloseMessageTie.setText(data[9]);
                     mBinding.tankLevelInputSensorInnerLockAct.setText(mBinding.tankLevelInputSensorInnerLockAct.getAdapter().getItem(Integer.parseInt(data[10])).toString());
-                    mBinding.tankLevelInputSensorAlarmAct.setText(mBinding.tankLevelInputSensorAlarmAct.getAdapter().getItem(Integer.parseInt(data[11])).toString());
-                    mBinding.tankLevelInputSensorTotalTimeTie.setText(data[12]);
-                    mBinding.tankLevelInputSensorResetTimeAct.setText(mBinding.tankLevelInputSensorResetTimeAct.getAdapter().getItem(Integer.parseInt(data[13])).toString());
+                    mBinding.tankLevelInputSensorActivateAct.setText(mBinding.tankLevelInputSensorActivateAct.getAdapter().getItem(Integer.parseInt(data[11])).toString());
+                    mBinding.tankLevelInputSensorAlarmAct.setText(mBinding.tankLevelInputSensorAlarmAct.getAdapter().getItem(Integer.parseInt(data[12])).toString());
+                    mBinding.tankLevelInputSensorTotalTimeTie.setText(data[13]);
+                    mBinding.tankLevelInputSensorResetTimeAct.setText(mBinding.tankLevelInputSensorResetTimeAct.getAdapter().getItem(Integer.parseInt(data[14])).toString());
                     initAdapter();
                 } else if (data[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
@@ -216,6 +219,28 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
         } else if (isFieldEmpty(mBinding.tankLevelInputSensorInnerLockAct)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.interlock_validation));
             return false;
+        } else if (isFieldEmpty(mBinding.tankLevelInputSensorActivateAct)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.activatechannal_validation));
+            return false;
+        }  else if (mBinding.tankLevelInputSensorTotalTimeTie.getText().toString().length() != 6) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.time_validation));
+            return false;
+        } else if (mBinding.tankLevelInputSensorTotalTimeTie.getText().toString().length() == 6) {
+            String totalTime = mBinding.tankLevelInputSensorTotalTimeTie.getText().toString();
+            int hr = Integer.parseInt(totalTime.substring(0,2));
+            int mm = Integer.parseInt(totalTime.substring(2,4));
+            int ss = Integer.parseInt(totalTime.substring(4,6));
+            if(hr > 24){
+                mAppClass.showSnackBar(getContext(), getString(R.string.hh_validation));
+                return false;
+            } else if(mm > 60){
+                mAppClass.showSnackBar(getContext(), getString(R.string.minu_validation));
+                return false;
+            } else if(ss > 60){
+                mAppClass.showSnackBar(getContext(), getString(R.string.ss_validation));
+                return false;
+            }
+            return true;
         }
         return true;
     }

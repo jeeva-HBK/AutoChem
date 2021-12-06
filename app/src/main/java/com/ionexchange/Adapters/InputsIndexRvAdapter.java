@@ -52,8 +52,12 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
         holder.label.setText(inputConfigurationEntityList.get(position).inputLabel);
         holder.lowAlarm.setText(inputConfigurationEntityList.get(position).subValueOne);
         holder.highAlarm.setText(inputConfigurationEntityList.get(position).subValueTwo);
-        holder.currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(inputConfigurationEntityList.get(position).hardwareNo));
 
+        holder.currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(inputConfigurationEntityList.get(position).hardwareNo));
+        if(inputConfigurationEntityList.get(position).inputType.equalsIgnoreCase("Digital Input")){
+        holder.lowAlarmKey.setText("Open Message");
+        holder.highAlarmKey.setText("Close Message");
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             holder.inputNumber.setTooltipText(inputConfigurationEntityList.get(position).hardwareNo+"");
             holder.inputType.setTooltipText(inputConfigurationEntityList.get(position).inputType);
@@ -71,7 +75,8 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout view;
-        TextView inputType, inputNumber, lowAlarm, highAlarm, label, currentValue;
+        TextView inputType, inputNumber, lowAlarm, highAlarm, label, currentValue,
+         lowAlarmKey, highAlarmKey;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -82,6 +87,8 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
             lowAlarm = itemView.findViewById(R.id.lowAlarmtvRv);
             highAlarm = itemView.findViewById(R.id.highAlarmTvRv);
             currentValue = itemView.findViewById(R.id.textView11);
+            lowAlarmKey = itemView.findViewById(R.id.lowalarmKey);
+            highAlarmKey = itemView.findViewById(R.id.highAlarmTv);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

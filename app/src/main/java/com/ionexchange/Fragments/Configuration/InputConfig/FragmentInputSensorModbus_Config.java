@@ -377,7 +377,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
         } else if (isFieldEmpty(mBinding.modBusSmoothingFactorTie)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_validation));
             return false;
-        } else if (Integer.parseInt(getStringValue(3, mBinding.modBusSmoothingFactorTie)) > 100) {
+        } else if (Integer.parseInt(getStringValue(3, mBinding.modBusSmoothingFactorTie)) > 90) {
             mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_vali));
             return false;
         } else if (isFieldEmpty(mBinding.modBusUnitMeasurementTie)) {
@@ -386,7 +386,30 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
         } else if (isFieldEmpty(mBinding.modBusSensorActivationTie)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.sensor_activation_validation));
             return false;
+        } else if (mBinding.modBusDiagnosticSweepTie.getText().toString().equals("ENABLE") && isFieldEmpty(mBinding.modBusTimeTie)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.time_validation));
+            return false;
+        } else if (mBinding.modBusDiagnosticSweepTie.getText().toString().equals("ENABLE") && mBinding.modBusTimeTie.getText().toString().length() != 6) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.time_validation));
+            return false;
+        } else if (mBinding.modBusDiagnosticSweepTie.getText().toString().equals("ENABLE") && mBinding.modBusTimeTie.getText().toString().length() == 6) {
+            String modbusTime = mBinding.modBusTimeTie.getText().toString();
+            int hr = Integer.parseInt(modbusTime.substring(0,2));
+            int mm = Integer.parseInt(modbusTime.substring(2,4));
+            int ss = Integer.parseInt(modbusTime.substring(4,6));
+            if(hr > 24){
+                mAppClass.showSnackBar(getContext(), getString(R.string.hh_validation));
+                return false;
+            } else if(mm > 60){
+                mAppClass.showSnackBar(getContext(), getString(R.string.minu_validation));
+                return false;
+            } else if(ss > 60){
+                mAppClass.showSnackBar(getContext(), getString(R.string.ss_validation));
+                return false;
+            }
+            return true;
         }
+
         /*else if (isFieldEmpty(mBinding.modBusTimeTie) || mBinding.modBusTimeTie.getText().toString().length() > 6) {
             mAppClass.showSnackBar(getContext(), getString(R.string.time_validation));
             return false;

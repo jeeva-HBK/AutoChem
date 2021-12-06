@@ -16,4 +16,6 @@
     <color name="ash">#757575</color>
     <color name="green">#00ff00</color>
     <color name="gray50">#FAFAFA</color>
+    <color name="darkgreen">#006400</color>
+    <color name="merron">#801818</color>
 </resources>

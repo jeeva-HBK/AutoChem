@@ -107,7 +107,7 @@ public class ApplicationClass extends Application {
 
     digitalArr = {"NC", "NO"},
             modBusTypeArr = {"ST500", "CR300 CS", "CR-300 CU", "ST-590", "ST-588", "ST-500 RO"},
-            modBusUnitArr = {"ppb", "ppm", "mpy"},
+            modBusUnitArr = {"ppb", "ppm", "mpy","ntu"},
             analogTypeArr = {"(4-20mA)", "(0-10V)"},
             analogUnitArr = {"mA", "V"},
 
@@ -141,9 +141,9 @@ public class ApplicationClass extends Application {
             accessoryTimerMode = {"Timer Safety", "Timer Safety Flow", "Disabled"},
             accessoryType = {" ON Before", "OFF Before", "ON After", " OFF After", " ON With", " OFF with"},
             outputStatusarr = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for", "Analog Output"},
-            outputControl = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for"},
+            outputControl = {"Disabled", "Auto", "Force OFF", "Force ON", "Manual ON for"},
     // outputControlShortForm = {"â’¹", "A OFF", "A ON", "M OFF", "M ON", "F OFF", "F ON", "M ON for"};
-    outputControlShortForm = {"D", "Èº", "A", "â‚¥", "m", "FÌ¶", "F", "M for"};
+    outputControlShortForm = {"D", "A", "FÌ¶", "F", "M for"};
 
     /* Static Variables */
     public static String mIPAddress = "", TabletIPAddress = "", Packet, Acknowledge;
@@ -438,7 +438,9 @@ public class ApplicationClass extends Application {
     public static String getStringValue(AutoCompleteTextView editText) {
         return editText.getText().toString();
     }
-
+    public static String getStringValue(TextInputEditText editText) {
+        return editText.getText().toString();
+    }
     public static Boolean isFieldEmpty(EditText editText) {
         if (editText.getText() == null || editText.getText().toString().equals("")) {
             editText.setError("Field shouldn't empty !");

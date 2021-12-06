@@ -178,7 +178,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
         } else if (isFieldEmpty(mBinding.conSmoothingFactorEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_validation));
             return false;
-        } else if (Integer.parseInt(getStringValue(3, mBinding.conSmoothingFactorEdtIsc)) > 100) {
+        } else if (Integer.parseInt(getStringValue(3, mBinding.conSmoothingFactorEdtIsc)) > 90) {
             mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_vali));
             return false;
         } else if (isFieldEmpty(mBinding.conCalibRequiredAlarmEdtIsc)) {
@@ -199,6 +199,9 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
         } else if (isFieldEmpty(mBinding.conCellConstantEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.call_constant_validation));
             return false;
+        } else if(Integer.parseInt(mBinding.conCellConstantEdtIsc.getText().toString()) > 10){
+            mAppClass.showSnackBar(getContext(), getString(R.string.call_constant_maxvalidation));
+            return false;
         } else if (isFieldEmpty(mBinding.conCompensationAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.compensation_type_validation));
             return false;
@@ -216,12 +219,27 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_limit_validation));
             return false;
         }
-
+        if(mBinding.conDefaultTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.conDefaultTemperatureEdtIsc)) > 500) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.temp_limit_validation));
+            return false;
+        } else if(!mBinding.conDefaultTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.conDefaultTemperatureEdtIsc)) > 20) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.temp_limit_validation));
+            return false;
+        }
         if (getPositionFromAtxt(0, toStringValue(mBinding.conCompensationAtxtIsc), TemperatureCompensationType).equals("0")) {
             if (isFieldEmpty(mBinding.conCompFactorEdtIsc)) {
                 mAppClass.showSnackBar(getContext(), getString(R.string.compensation_factor_validation));
                 return false;
+            } else if(Integer.parseInt(mBinding.conCompFactorEdtIsc.getText().toString()) > 20){
+                mAppClass.showSnackBar(getContext(), getString(R.string.compensation_factor_maxvalidation));
+                return false;
             }
+            /*if (Integer.parseInt(mBinding.conCompFactorEdtIsc.getText().toString()) == 20) {
+                if(!isFieldEmpty(mBinding.conCompFactorDeciIsc) && Integer.parseInt(mBinding.conCompFactorDeciIsc.getText().toString()) > 0) {
+                    mAppClass.showSnackBar(getContext(), getString(R.string.compensation_factor_decimal_validation));
+                    return false;
+                }
+            }*/
         }
 
         return true;

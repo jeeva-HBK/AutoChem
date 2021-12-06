@@ -27,7 +27,7 @@ public interface OutputConfigurationDao {
     @Query("select * FROM outputConfigurationEntity  WHERE outputNumber BETWEEN :hardwareTo AND :hardwareNo")
     List<OutputConfigurationEntity> getOutputHardWareNoConfigurationEntityList(int hardwareTo, int hardwareNo);
 
-    @Query("select outputStatus FROM outputConfigurationEntity  WHERE outputNumber = :hardwareNo ")
+    @Query("select outputMode FROM outputConfigurationEntity  WHERE outputNumber = :hardwareNo ")
     String getOutputMode(int hardwareNo);
 
     @Query("select outputStatus FROM outputConfigurationEntity  WHERE outputNumber = :hardwareNo ")

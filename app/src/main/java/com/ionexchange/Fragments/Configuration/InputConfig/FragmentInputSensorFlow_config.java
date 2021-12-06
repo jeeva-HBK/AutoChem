@@ -28,6 +28,7 @@ import com.ionexchange.databinding.FragmentInputsensorFlowBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -296,6 +297,9 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else if (isFieldEmpty(mBinding.flowTotalizerAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.totalizer_vali));
             return false;
+        } else if (Long.valueOf(mBinding.flowTotalizerAlarmEdtIsc.getText().toString()) > 1000000) {
+            mBinding.flowTotalizerAlarmEdtIsc.setError(getString(R.string.totalizer_feedmonitor_vali));
+            return false;
         } else if (isFieldEmpty(mBinding.flowResetFlowTotalAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.reset_flowtotal_vali));
             return false;
@@ -310,6 +314,9 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
             return false;
         } else if (isFieldEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.setflowtotal_vali));
+            return false;
+        } else if (Long.valueOf(mBinding.flowSetFlowTotalEdtIsc.getText().toString()) > 1000000000) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.setflowtotalmax_vali));
             return false;
         } else if (isFieldEmpty(mBinding.flowAlarmLowEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_low_validation));
@@ -329,11 +336,35 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else if (isFieldEmpty(mBinding.flowAlarmClearEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.flowalarmclear_validation));
             return false;
-        } else if (isFieldEmpty(mBinding.flowOutputRelayEdtIsc)) {
+        } else if (Integer.parseInt(mBinding.flowAlarmClearEdtIsc.getText().toString()) < 1 ||
+                Integer.parseInt(mBinding.flowAlarmClearEdtIsc.getText().toString()) > 100000) {
+            mAppClass.showSnackBar(getContext(), "Flow Alarm Clear Values between 1 - 100000");
+            return false;
+        }else if (isFieldEmpty(mBinding.flowOutputRelayEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.output_link_validation));
             return false;
         } else if (isFieldEmpty(mBinding.flowFeedVolumeEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.volume_vali));
+            return false;
+        }else if(Integer.parseInt(mBinding.flowFeedVolumeEdtIsc.getText().toString()) == 0) {
+            if (isFieldEmpty(mBinding.flowFeedVolumeDeciIsc)) {
+                mAppClass.showSnackBar(getContext(), "Volume decimal values should be greater then 001");
+                return false;
+            } else if (Integer.parseInt(mBinding.flowFeedVolumeDeciIsc.getText().toString()) == 0) {
+                mAppClass.showSnackBar(getContext(), "Volume decimal values should be greater then 001");
+                return false;
+            }
+        }else if(Integer.parseInt(mBinding.flowFeedVolumeEdtIsc.getText().toString()) > 1000){
+            mAppClass.showSnackBar(getContext(), "Volume values should be less than 1000");
+            return false;
+        } else if (getStringValue(mBinding.flowAlarmDelayEdtIsc).length() != 4) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.flowalarmdelay_valid));
+            return false;
+        } else if (getStringValue(mBinding.flowAlarmDelayEdtIsc).length() == 4 && Integer.parseInt(getStringValue(mBinding.flowAlarmDelayEdtIsc).substring(0,2)) > 60) {
+                mAppClass.showSnackBar(getContext(), "Invalid Minutes MM:SS");
+                return false;
+        } else if (getStringValue(mBinding.flowAlarmDelayEdtIsc).length() == 4 && Integer.parseInt(getStringValue(mBinding.flowAlarmDelayEdtIsc).substring(2,4)) > 60) {
+            mAppClass.showSnackBar(getContext(), "Invalid Seconds MM:SS");
             return false;
         }
         return true;
@@ -352,6 +383,9 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else if (isFieldEmpty(mBinding.flowTotalizerAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.totalizer_validation));
             return false;
+        } else if (Long.valueOf(mBinding.flowTotalizerAlarmEdtIsc.getText().toString()) > 2000000000) {
+            mBinding.flowTotalizerAlarmEdtIsc.setError(getString(R.string.totalizer_analog_vali));
+            return false;
         } else if (isFieldEmpty(mBinding.flowResetFlowTotalAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.reset_flowtotal_vali));
             return false;
@@ -362,10 +396,18 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
             mAppClass.showSnackBar(getContext(), getString(R.string.flowunit_vali));
             return false;
         } else if (isFieldEmpty(mBinding.flowVolumeRateunitEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.rateunit_vali));
+            mAppClass.showSnackBar(getContext(), getString(R.string.volume_vali));
+            return false;
+        } else if (!getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("3") &&
+                (Long.valueOf(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) == 0 ||
+                        Long.valueOf(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) > 100000)) {
+            mBinding.flowVolumeRateunitEdtIsc.setError(getString(R.string.volume_valida));
             return false;
         } else if (isFieldEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.setflowtotal_vali));
+            return false;
+        } else if (Long.valueOf(mBinding.flowSetFlowTotalEdtIsc.getText().toString()) > 1000000000) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.setflowtotalmax_vali));
             return false;
         } else if (isFieldEmpty(mBinding.flowAlarmLowEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_low_validation));
@@ -380,9 +422,48 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else if (isFieldEmpty(mBinding.flowKFactorEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.kfactor_validation));
             return false;
+        } else if(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("3") &&
+                (Integer.parseInt(mBinding.flowKFactorEdtIsc.getText().toString()) == 0 ||
+                        Integer.parseInt(mBinding.flowKFactorEdtIsc.getText().toString()) > 1000000)){
+            mAppClass.showSnackBar(getContext(), getString(R.string.kfactor_m3_validation));
+            return false;
         }
-
-
+        if(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("2") &&
+                Integer.parseInt(mBinding.flowKFactorEdtIsc.getText().toString()) == 0) {
+            if (isFieldEmpty(mBinding.flowKFactorDeciIsc)) {
+                mAppClass.showSnackBar(getContext(), "K factor decimal values should be greater then 01");
+                return false;
+            } else if (Integer.parseInt(mBinding.flowKFactorDeciIsc.getText().toString()) == 0) {
+                mAppClass.showSnackBar(getContext(), "K factor decimal values should be greater then 01");
+                return false;
+            }
+        }
+        if(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("2") &&
+                Integer.parseInt(mBinding.flowKFactorEdtIsc.getText().toString()) > 100000) {
+                mAppClass.showSnackBar(getContext(), "K factor values should be less than 100000");
+                return false;
+          }
+        if(!(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("2") ||
+                getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("3")) &&
+                Integer.parseInt(mBinding.flowKFactorEdtIsc.getText().toString()) > 1000000)
+        {
+            mAppClass.showSnackBar(getContext(), "K Factor should be 1 to 100000");
+            return false;
+        }
+//        if(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("3") &&
+//                Integer.parseInt(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) == 0) {
+//            if (isFieldEmpty(mBinding.flowVolumeRateunitDeciIsc)) {
+//                mAppClass.showSnackBar(getContext(), "Volume decimal values should be greater then 001");
+//                return false;
+//            } else if (Integer.parseInt(mBinding.flowVolumeRateunitDeciIsc.getText().toString()) == 0) {
+//                mAppClass.showSnackBar(getContext(), "Volume decimal values should be greater then 001");
+//                return false;
+//            }
+//        }else if(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("3") &&
+//                (Integer.parseInt(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) > 1000)){
+//            mAppClass.showSnackBar(getContext(), "Volume values should be less than 1000");
+//            return false;
+//        }
         return true;
     }
 
@@ -399,8 +480,8 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else if (isFieldEmpty(mBinding.flowTotalizerAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.totalizer_vali));
             return false;
-        } else if (mBinding.flowTotalizerAlarmEdtIsc.getText().toString().length() > 10) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.totalizer_validation));
+        } else if (Long.valueOf(mBinding.flowTotalizerAlarmEdtIsc.getText().toString()) > 2000000000) {
+            mBinding.flowTotalizerAlarmEdtIsc.setError(getString(R.string.totalizer_analog_vali));
             return false;
         } else if (isFieldEmpty(mBinding.flowResetFlowTotalAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.reset_flowtotal_vali));
@@ -414,11 +495,16 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else if (isFieldEmpty(mBinding.flowVolumeRateunitEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.volume_vali));
             return false;
-        } else if (mBinding.flowVolumeRateunitEdtIsc.getText().toString().length() > 7) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.volume_validation));
+        } else if (!getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("3") &&
+                (Long.valueOf(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) == 0 ||
+                Long.valueOf(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) > 100000)) {
+            mBinding.flowVolumeRateunitEdtIsc.setError(getString(R.string.volume_valida));
             return false;
         } else if (isFieldEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.setflowtotal_vali));
+            return false;
+        } else if (Long.valueOf(mBinding.flowSetFlowTotalEdtIsc.getText().toString()) > 1000000000) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.setflowtotalmax_vali));
             return false;
         } else if (isFieldEmpty(mBinding.flowAlarmLowEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_low_validation));
@@ -429,6 +515,19 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else if (Float.parseFloat(getDecimalValue(mBinding.flowAlarmLowEdtIsc, 10, mBinding.flowAlarmLowDeciIsc, 2)) >=
                 Float.parseFloat(getDecimalValue(mBinding.flowHighAlarmEdtIsc, 10, mBinding.flowHighAlarmDeciIsc, 2))) {
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_limit_validation));
+            return false;
+        }  else if(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("3") &&
+                Integer.parseInt(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) == 0) {
+            if (isFieldEmpty(mBinding.flowVolumeRateunitDeciIsc)) {
+                mAppClass.showSnackBar(getContext(), "Volume decimal values should be greater then 001");
+                return false;
+            } else if (Integer.parseInt(mBinding.flowVolumeRateunitDeciIsc.getText().toString()) == 0) {
+                mAppClass.showSnackBar(getContext(), "Volume decimal values should be greater then 001");
+                return false;
+            }
+        }else if(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("3") &&
+                (Integer.parseInt(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) > 1000)){
+            mAppClass.showSnackBar(getContext(), "Volume values should be less than 1000");
             return false;
         }
         return true;
@@ -447,6 +546,9 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else if (isFieldEmpty(mBinding.flowTotalizerAlarmEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.totalizer_vali));
             return false;
+        } else if (Long.valueOf(mBinding.flowTotalizerAlarmEdtIsc.getText().toString()) > 2000000000) {
+            mBinding.flowTotalizerAlarmEdtIsc.setError(getString(R.string.totalizer_analog_vali));
+            return false;
         } else if (isFieldEmpty(mBinding.flowResetFlowTotalAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.reset_flowtotal_vali));
             return false;
@@ -461,6 +563,9 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
             return false;
         } else if (isFieldEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.setflowtotal_vali));
+            return false;
+        } else if (Long.valueOf(mBinding.flowSetFlowTotalEdtIsc.getText().toString()) > 1000000000) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.setflowtotalmax_vali));
             return false;
         } else if (isFieldEmpty(mBinding.flowAlarmLowEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_low_validation));
@@ -480,14 +585,20 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         } else if (isFieldEmpty(mBinding.flowSmoothingFactorEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_validation));
             return false;
-        } else if (Integer.parseInt(getStringValue(3, mBinding.flowSmoothingFactorEdtIsc)) > 100) {
+        } else if (Integer.parseInt(getStringValue(3, mBinding.flowSmoothingFactorEdtIsc)) > 90) {
             mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_vali));
             return false;
         } else if (isFieldEmpty(mBinding.flowMinEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.flowmin_vali));
             return false;
+        } else if (Integer.parseInt(mBinding.flowMinEdtIsc.getText().toString()) > 1000000) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.flowmini_vali));
+            return false;
         } else if (isFieldEmpty(mBinding.flowMaxEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.flowmax_vali));
+            return false;
+        } else if (Integer.parseInt(mBinding.flowMaxEdtIsc.getText().toString()) > 1000000) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.flowmaxi_vali));
             return false;
         }
         return true;
@@ -512,7 +623,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 getPositionFromAtxt(0, getStringValue(mBinding.flowAlarmModeAtxtIsc), flowAlarmMode) + SPILT_CHAR +
                 getStringValue(4, mBinding.flowAlarmDelayEdtIsc) + SPILT_CHAR +
                 getStringValue(6, mBinding.flowAlarmClearEdtIsc) + SPILT_CHAR +
-                formDigits(2, Integer.parseInt(getPosition(2, getStringValue(mBinding.flowOutputRelayEdtIsc), outputNames)) + "") + SPILT_CHAR +
+                formDigits(2, (Integer.parseInt(getPosition(2, getStringValue(mBinding.flowOutputRelayEdtIsc), outputNames)) + 1) + "") + SPILT_CHAR +
                 getDecimalValue(mBinding.flowTotalizerAlarmEdtIsc, 10, mBinding.flowTotalizerAlarmDeciIsc, 2) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowResetFlowTotalAtxtIsc), resetFlowTotalArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowSetFlowTotalEdtIsc, 10, mBinding.flowSetFlowTotalDeciIsc, 2) + SPILT_CHAR +
@@ -732,7 +843,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                         mBinding.flowAlarmModeAtxtIsc.setText(mBinding.flowAlarmModeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
                         mBinding.flowAlarmDelayEdtIsc.setText(splitData[14]);
                         mBinding.flowAlarmClearEdtIsc.setText(splitData[15]);
-                        mBinding.flowOutputRelayEdtIsc.setText(mBinding.flowOutputRelayEdtIsc.getAdapter().getItem(Integer.parseInt(splitData[16])).toString());
+                        mBinding.flowOutputRelayEdtIsc.setText(mBinding.flowOutputRelayEdtIsc.getAdapter().getItem(Integer.parseInt(splitData[16]) - 1).toString());
                         mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[17].substring(0, 10));
                         mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[17].substring(11, 13));
                         mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[18])).toString());

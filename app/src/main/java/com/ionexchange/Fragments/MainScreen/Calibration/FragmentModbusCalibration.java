@@ -146,6 +146,8 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         EditText editText = dialogView.findViewById(R.id.onedt_edt);
         Button confirm = dialogView.findViewById(R.id.onedt_rightBtn);
         Button cancel = dialogView.findViewById(R.id.onedt_leftBtn);
+        cancel.setText("Cancel");
+        confirm.setText("Confirm");
 
         cancel.setOnClickListener(View -> {
             mAlertDialog.dismiss();

@@ -295,7 +295,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
         } else if (isFieldEmpty(mBinding.candSmoothingFactorEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_validation));
             return false;
-        } else if (Integer.parseInt(getStringValue(3, mBinding.candSmoothingFactorEdtIsc)) > 100) {
+        } else if (Integer.parseInt(getStringValue(3, mBinding.candSmoothingFactorEdtIsc)) > 90) {
             mBinding.candSmoothingFactorEdtIsc.setError(getString(R.string.smoothing_factor_vali));
             return false;
         } else if (isFieldEmpty(mBinding.candResetCalibAtxtIsc)) {
@@ -327,12 +327,23 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
             mAppClass.showSnackBar(getContext(), "Default Temperature value Cannot be Empty");
             return false;
         }
+        if(mBinding.candTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.candTemperatureEdtIsc)) > 500) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.temp_limit_validation));
+            return false;
+        } else if(!mBinding.candTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.candTemperatureEdtIsc)) > 20) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.temp_limit_validation));
+            return false;
+        }
         if (getPositionFromAtxt(0, toStringValue(mBinding.candCompensationAtxtIsc), TemperatureCompensationType).equals("0")) {
             if (isFieldEmpty(mBinding.candCompFactorEdtIsc)) {
                 mAppClass.showSnackBar(getContext(), getString(R.string.compensation_factor_validation));
                 return false;
+            } else if(Integer.parseInt(mBinding.candCompFactorEdtIsc.getText().toString()) > 20){
+                mAppClass.showSnackBar(getContext(), getString(R.string.compensation_factor_maxvalidation));
+                return false;
             }
         }
+
         return true;
     }
 

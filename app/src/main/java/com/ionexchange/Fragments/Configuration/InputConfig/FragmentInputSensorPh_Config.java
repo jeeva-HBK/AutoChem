@@ -188,13 +188,19 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         } else if (isFieldEmpty(mBinding.phAlarmLowEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_low_validation));
             return false;
+        }  else if (Integer.parseInt(getStringValue(2, mBinding.phAlarmLowEdtIsc)) > 14) {
+            mBinding.phAlarmLowEdtIsc.setError(getString(R.string.ph_alarm_low_validation));
+            return false;
         } else if (isFieldEmpty(mBinding.phAlarmhighEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_high_validation));
+            return false;
+        }  else if (Integer.parseInt(getStringValue(2, mBinding.phAlarmhighEdtIsc)) > 14) {
+            mBinding.phAlarmhighEdtIsc.setError(getString(R.string.ph_alarm_high_validation));
             return false;
         } else if (isFieldEmpty(mBinding.phSmoothingFactorEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_validation));
             return false;
-        } else if (Integer.parseInt(getStringValue(3, mBinding.phSmoothingFactorEdtIsc)) > 100) {
+        } else if (Integer.parseInt(getStringValue(3, mBinding.phSmoothingFactorEdtIsc)) > 90) {
             mBinding.phSmoothingFactorEdtIsc.setError(getString(R.string.smoothing_factor_vali));
             return false;
         } else if (isFieldEmpty(mBinding.phCalibrationRequiredEdtIsc)) {
@@ -217,6 +223,15 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_limit_validation));
             return false;
         }
+
+            if(mBinding.phTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.phTemperatureEdtIsc)) > 500) {
+                mAppClass.showSnackBar(getContext(), getString(R.string.temp_limit_validation));
+                return false;
+            } else if(!mBinding.phTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.phTemperatureEdtIsc)) > 20) {
+                mAppClass.showSnackBar(getContext(), getString(R.string.temp_limit_validation));
+                return false;
+            }
+
         return true;
     }
 

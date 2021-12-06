@@ -161,12 +161,9 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
             case 1:
             case 2:
             case 3:
-            case 4:
-            case 5:
-            case 6:
-                sendData(outputNumber, outputControl);
+               sendData(outputNumber, outputControl);
                 break;
-            case 7:
+            case 4:
                 break;
         }
 
@@ -178,8 +175,7 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
         String outputType = getPosition(0, autoCompleteTextView.getText().toString(), outputControl);
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
                 OUTPUT_CONTROL_CONFIG + SPILT_CHAR + formDigits(2, String.valueOf(outputNumber)) + SPILT_CHAR +
-                (outputType.equals("7") ? getPosition(0, autoCompleteTextView.getText().toString(), outputControl)
-                        + Hours :
-                        getPosition(7, autoCompleteTextView.getText().toString(), outputControl)));
+                (outputType.equals("4") ? getPosition(1, autoCompleteTextView.getText().toString(), outputControl) + Hours:
+                        getPosition(0, autoCompleteTextView.getText().toString(), outputControl)));
     }
 }

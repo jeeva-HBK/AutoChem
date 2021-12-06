@@ -643,9 +643,10 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                             accessoryTimer[9] = "0";
                             mBinding.AccessoryCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_unchecked));
                         }
+                        int outputNo1 = Integer.parseInt(getPosition(2, toStringValue(outputName), outputNames)) + 1;
                         accessoryTimer[10] = getPosition(1, toStringValue(mode), accessoryTimerMode);
                         accessoryTimer[11] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
-                        accessoryTimer[12] = getPosition(2, toStringValue(outputName), outputNames);
+                        accessoryTimer[12] = formDigits(2,""+outputNo1);
                         accessoryTimer[13] = getPosition(1, toStringValue(type), accessoryType);
                         alertDialog.dismiss();
                     }
@@ -659,9 +660,10 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                             accessoryTimer[15] = "0";
                             mBinding.AccessoryCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_unchecked));
                         }
+                        int outputNo2 = Integer.parseInt(getPosition(2, toStringValue(outputName), outputNames)) + 1;
                         accessoryTimer[16] = getPosition(1, toStringValue(mode), accessoryTimerMode);
                         accessoryTimer[17] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
-                        accessoryTimer[18] = getPosition(2, toStringValue(outputName), outputNames);
+                        accessoryTimer[18] = formDigits(2,""+outputNo2);
                         accessoryTimer[19] = getPosition(1, toStringValue(type), accessoryType);
                         alertDialog.dismiss();
                     }
@@ -677,9 +679,10 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                             accessoryTimer[21] = "0";
                             mBinding.AccessoryCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_unchecked));
                         }
+                        int outputNo3 = Integer.parseInt(getPosition(2, toStringValue(outputName), outputNames)) + 1;
                         accessoryTimer[22] = getPosition(1, toStringValue(mode), accessoryTimerMode);
                         accessoryTimer[23] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
-                        accessoryTimer[24] = getPosition(2, toStringValue(outputName), outputNames);
+                        accessoryTimer[24] = formDigits(2,""+outputNo3);
                         accessoryTimer[25] = getPosition(1, toStringValue(type), accessoryType);
                         alertDialog.dismiss();
                     }
@@ -694,9 +697,10 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                             accessoryTimer[27] = "0";
                             mBinding.AccessoryCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_unchecked));
                         }
+                        int outputNo4 = Integer.parseInt(getPosition(2, toStringValue(outputName), outputNames)) + 1;
                         accessoryTimer[28] = getPosition(1, toStringValue(mode), accessoryTimerMode);
                         accessoryTimer[29] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
-                        accessoryTimer[30] = getPosition(2, toStringValue(outputName), outputNames);
+                        accessoryTimer[30] = formDigits(2,""+outputNo4);
                         accessoryTimer[31] = getPosition(1, toStringValue(type), accessoryType);
                         alertDialog.dismiss();
                     }
@@ -754,7 +758,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                 startSec.setText(accessoryTimehhmmsec.substring(4, 6));
             }
             Log.e("output",accessoryTimerOutput);
-            outputName.setText(outputName.getAdapter().getItem(Integer.parseInt(accessoryTimerOutput)).toString());
+            outputName.setText(outputName.getAdapter().getItem(Integer.parseInt(accessoryTimerOutput) - 1).toString());
             type.setText(type.getAdapter().getItem(Integer.parseInt(accessoryTimerType)).toString());
         }
     }
@@ -780,7 +784,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         if (splitData[0].equals("{*1") && splitData[1].equals("08")) {
             accessoryTimer = splitData;
             mBinding.timerNameTxt.setText(splitData[4]);
-            mBinding.txtOutputNameValueAct.setText(mBinding.txtOutputNameValueAct.getAdapter().getItem(Integer.parseInt(splitData[5])).toString());
+            mBinding.txtOutputNameValueAct.setText(mBinding.txtOutputNameValueAct.getAdapter().getItem(Integer.parseInt(splitData[5]) - 1).toString());
             flowSensorVisibility(Integer.parseInt(splitData[6]));
             mBinding.txtModeValueAct.setText(mBinding.txtModeValueAct.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
             mBinding.txtFlowSensorValueAct.setText(mBinding.txtFlowSensorValueAct.getAdapter().getItem(Integer.parseInt(splitData[7])).toString());
@@ -1052,8 +1056,8 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                     SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                     PCK_TIMER_CONFIG + SPILT_CHAR + timerNo + SPILT_CHAR + mBinding.timerNameTxt.getText().toString()
-                    + SPILT_CHAR + getPosition(2, toStringValue(mBinding.txtOutputNameValueAct), outputNames)
-                    + SPILT_CHAR + getPosition(2, toStringValue(mBinding.txtModeValueAct), timerOutputMode)
+                    + SPILT_CHAR + formDigits(2,""+(Integer.parseInt(getPosition(2, toStringValue(mBinding.txtOutputNameValueAct), outputNames)) + 1))
+                    + SPILT_CHAR + getPosition(1, toStringValue(mBinding.txtModeValueAct), timerOutputMode)
                     + SPILT_CHAR + getPosition(1, toStringValue(mBinding.txtFlowSensorValueAct), timerFlowSensor)
                     + SPILT_CHAR + "1"
                     + SPILT_CHAR + accessoryTimer[9]

@@ -224,7 +224,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         } else if (isFieldEmpty(mBinding.tempSmoothingFactorEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_validation));
             return false;
-        } else if (Integer.parseInt(getStringValue(3, mBinding.tempSmoothingFactorEdtIsc)) > 100) {
+        } else if (Integer.parseInt(getStringValue(3, mBinding.tempSmoothingFactorEdtIsc)) > 90) {
             mBinding.tempSmoothingFactorEdtIsc.setError(getString(R.string.smoothing_factor_vali));
             return false;
         } else if (isFieldEmpty(mBinding.tempCalibRequiredAlarmEdtIsc)) {
@@ -239,6 +239,14 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         } else if (Float.parseFloat(getDecimalValue(mBinding.tempLowAlarmTBtn, mBinding.tempLowAlarmEdtIsc, 3, mBinding.tempLowAlarmDeciIsc, 2)) >=
                 Float.parseFloat(getDecimalValue(mBinding.tempHighAlarmTBtn, mBinding.tempHighAlarmEdtIsc, 3, mBinding.tempHighAlarmDeciIsc, 2))) {
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_limit_validation));
+            return false;
+        }
+
+        if(mBinding.tempTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.tempTemperatureEdtIsc)) > 500) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.temp_limit_validation));
+            return false;
+        } else if(!mBinding.tempTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.tempTemperatureEdtIsc)) > 20) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.temp_limit_validation));
             return false;
         }
         return true;

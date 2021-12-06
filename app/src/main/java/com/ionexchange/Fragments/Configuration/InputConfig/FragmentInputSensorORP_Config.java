@@ -235,8 +235,14 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
         } else if (isFieldEmpty(mBinding.orpAlarmLowEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_low_validation));
             return false;
+        } else if(Integer.parseInt(getStringValue(4, mBinding.orpAlarmLowEdtIsc)) > 2000) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.orp_alarm_low_validation));
+            return false;
         } else if (isFieldEmpty(mBinding.orpAlarmHighEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_high_validation));
+            return false;
+        } else if(Integer.parseInt(getStringValue(4, mBinding.orpAlarmHighEdtIsc)) > 2000) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.orp_alarm_high_validation));
             return false;
         } else if (isFieldEmpty(mBinding.orpResetCalibrationAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.reset_calibration_validation));
@@ -250,7 +256,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
         } else if (isFieldEmpty(mBinding.orpSmoothingFactorEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.smoothing_factor_validation));
             return false;
-        } else if (Integer.parseInt(getStringValue(3, mBinding.orpSmoothingFactorEdtIsc)) > 100) {
+        } else if (Integer.parseInt(getStringValue(3, mBinding.orpSmoothingFactorEdtIsc)) > 90) {
             mBinding.orpSmoothingFactorEdtIsc.setError(getString(R.string.smoothing_factor_vali));
             return false;
         } else if (Float.parseFloat(getDecimalValue(mBinding.orpAlarmLowTBtn, mBinding.orpAlarmLowEdtIsc, 4, mBinding.orpAlarmLowDeciIsc, 2)) >=
@@ -258,6 +264,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_limit_validation));
             return false;
         }
+
         return true;
     }
 

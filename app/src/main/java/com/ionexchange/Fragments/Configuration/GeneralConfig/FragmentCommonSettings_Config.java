@@ -116,6 +116,9 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
         } else if (isEmpty(mBinding.alarmDelayCommonSettingsEDT)) {
             mAppClass.showSnackBar(getContext(), "AlarmDelay  Cannot be Empty");
             return false;
+        } else if (Integer.parseInt(mBinding.alarmDelayCommonSettingsEDT.getText().toString()) > 60) {
+            mAppClass.showSnackBar(getContext(), "AlarmDelay should be less than 60");
+            return false;
         } else if (isEmpty(mBinding.Hours)) {
             mAppClass.showSnackBar(getContext(), "Hours  Cannot be Empty");
             return false;
@@ -140,7 +143,7 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
         } else if (isEmpty(mBinding.YYYY)) {
             mAppClass.showSnackBar(getContext(), "Year  Cannot be Empty");
             return false;
-        } else if (mBinding.YYYY.getText().length() < 4) {
+        } else if (mBinding.YYYY.getText().length() < 2) {
             mAppClass.showSnackBar(getContext(), "Invalid Year");
             return false;
         }

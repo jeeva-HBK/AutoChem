@@ -143,6 +143,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
                 getStringValue(0, mBinding.digitalInputSensorOpenMessageTie) + SPILT_CHAR +
                 getStringValue(0, mBinding.digitalInputSensorCloseMessageTie) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.digitalInputSensorInnerLockAct), digitalArr) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.digitalInputSensorActivateAct), digitalArr) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.digitalInputSensorAlarmAct), digitalArr) + SPILT_CHAR +
                 getStringValue(6, mBinding.digitalInputSensorTotalTimeTie) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.digitalInputSensorResetTimeAct), resetCalibrationArr) + SPILT_CHAR +
@@ -155,6 +156,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
         mBinding.digitalInputSensorSensorActivationTie.setAdapter(getAdapter(sensorActivationArr, getContext()));
         mBinding.digitalInputSensorInnerLockAct.setAdapter(getAdapter(digitalArr, getContext()));
         mBinding.digitalInputSensorAlarmAct.setAdapter(getAdapter(digitalArr, getContext()));
+        mBinding.digitalInputSensorActivateAct.setAdapter(getAdapter(digitalArr, getContext()));
         mBinding.digitalInputSensorResetTimeAct.setAdapter(getAdapter(resetCalibrationArr, getContext()));
         mBinding.digitalLevelSequenceNumberTie.setAdapter(getAdapter(digitalsensorSequenceNumber, getContext()));
     }
@@ -195,10 +197,11 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
                     mBinding.digitalInputSensorOpenMessageTie.setText(data[8]);
                     mBinding.digitalInputSensorCloseMessageTie.setText(data[9]);
                     mBinding.digitalInputSensorInnerLockAct.setText(mBinding.digitalInputSensorInnerLockAct.getAdapter().getItem(Integer.parseInt(data[10])).toString());
-                    mBinding.digitalInputSensorAlarmAct.setText(mBinding.digitalInputSensorAlarmAct.getAdapter().getItem(Integer.parseInt(data[11])).toString());
+                    mBinding.digitalInputSensorActivateAct.setText(mBinding.digitalInputSensorActivateAct.getAdapter().getItem(Integer.parseInt(data[11])).toString());
+                    mBinding.digitalInputSensorAlarmAct.setText(mBinding.digitalInputSensorAlarmAct.getAdapter().getItem(Integer.parseInt(data[12])).toString());
 
-                    mBinding.digitalInputSensorTotalTimeTie.setText(data[12]);
-                    mBinding.digitalInputSensorResetTimeAct.setText(mBinding.digitalInputSensorResetTimeAct.getAdapter().getItem(Integer.parseInt(data[13])).toString());
+                    mBinding.digitalInputSensorTotalTimeTie.setText(data[13]);
+                    mBinding.digitalInputSensorResetTimeAct.setText(mBinding.digitalInputSensorResetTimeAct.getAdapter().getItem(Integer.parseInt(data[14])).toString());
 
                     initAdapter();
                 } else if (data[2].equals(RES_FAILED)) {
@@ -243,6 +246,28 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
         } else if (isFieldEmpty(mBinding.digitalInputSensorInnerLockAct)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.interlock_validation));
             return false;
+        }  else if (isFieldEmpty(mBinding.digitalInputSensorActivateAct)) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.activatechannal_validation));
+            return false;
+        } else if (mBinding.digitalInputSensorTotalTimeTie.getText().toString().length() != 6) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.time_validation));
+            return false;
+        } else if (mBinding.digitalInputSensorTotalTimeTie.getText().toString().length() == 6) {
+            String totalTime = mBinding.digitalInputSensorTotalTimeTie.getText().toString();
+            int hr = Integer.parseInt(totalTime.substring(0,2));
+            int mm = Integer.parseInt(totalTime.substring(2,4));
+            int ss = Integer.parseInt(totalTime.substring(4,6));
+            if(hr > 24){
+                mAppClass.showSnackBar(getContext(), getString(R.string.hh_validation));
+                return false;
+            } else if(mm > 60){
+                mAppClass.showSnackBar(getContext(), getString(R.string.minu_validation));
+                return false;
+            } else if(ss > 60){
+                mAppClass.showSnackBar(getContext(), getString(R.string.ss_validation));
+                return false;
+            }
+            return true;
         }
         return true;
     }

@@ -143,8 +143,10 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
         if (mainConfigurationEntityList.get(position).inputType != null) {
             if (mainConfigurationEntityList.get(position).inputType.contains("Output")) {
                 currentMode.setText("Output Status");
-                lowKey.setText("output Mode");
-                highKey.setText("sub Mode");
+                lowKey.setText("Mode");
+
+                highKey.setText(mainConfigurationEntityList.get(position).hardware_no > 14 ? "Linked to" : "Mode");
+
                 unitOne.setVisibility(View.INVISIBLE);
                 typeOne.setVisibility(View.INVISIBLE);
                 seq.setText(mainConfigurationEntityList.get(position).inputType);
@@ -158,13 +160,24 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 if (outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(position).hardware_no)) != null) {
                     highAlarmOne.setText(outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(position).hardware_no)));
                 }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (outputConfigurationDao.getOutputLabel(mainConfigurationEntityList.get(position).hardware_no) != null) {
+                        label.setTooltipText(outputConfigurationDao.getOutputLabel(mainConfigurationEntityList.get(position).hardware_no));
+                    }
+                    if (outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(position).hardware_no)) != null) {
+                        lowAlarmOne.setTooltipText(outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(position).hardware_no)));
+                    }
+                    if (outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(position).hardware_no)) != null) {
+                        highAlarmOne.setTooltipText(outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(position).hardware_no)));
+                    }
+                }
                 if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no) != null) {
                     if (!outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("N/A")) {
-                        if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("10")) {
+                        if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("7")) {
                             currentValue.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
                         } else {
-                            if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("9") ||
-                                    outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("8")){
+                            if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("6") ||
+                                    outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("5")){
                                 currentValue.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
                             }else {
                                 currentValue.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no))]);
@@ -174,6 +187,23 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
 
                     }
 
+                }
+                if(mainConfigurationEntityList.get(position).hardware_no < 15){
+                    switch (highAlarmOne.getText().toString()) {
+                        case "Continuous":
+                            lowKey.setText("Dose Period");
+                            break;
+                        case "Bleed/Blow Down":
+                        case "Water Meter/Biocide":
+                            lowKey.setText("Accumulated Vol");
+                            break;
+                        case "On/Off":
+                        case "PID":
+                            lowKey.setText("Set Point");
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
 
@@ -338,8 +368,8 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
 
 
         if (mainConfigurationEntityList.get(0).inputType.contains("Output")) {
-            lowKeyOne.setText("Output Mode");
-            highKeyOne.setText("sub Mode");
+            lowKeyOne.setText("Mode");
+            highKeyOne.setText(mainConfigurationEntityList.get(0).hardware_no > 14 ? "Linked to" : "Mode");
             currentKeyOne.setText("Output Status");
             unitOne.setVisibility(View.INVISIBLE);
             typeOne.setVisibility(View.INVISIBLE);
@@ -358,23 +388,40 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 highAlarmOne.setText(outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(0).hardware_no)));
             }
             if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no) != null) {
-                if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no).equals("10")) {
-                    currentKeyOne.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
+                if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no).equals("7")) {
+                    currentValueOne.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
                 } else {
-                    if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no).equals("9") ||
-                            outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no).equals("8")) {
-                        currentKeyOne.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(0).hardware_no));
+                    if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no).equals("6") ||
+                            outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no).equals("5")) {
+                        currentValueOne.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(0).hardware_no));
                     } else {
-                        currentKeyOne.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no))]);
+                        currentValueOne.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no))]);
                     }
 
                 }
 
             }
+            if(mainConfigurationEntityList.get(0).hardware_no < 15){
+                switch (highAlarmOne.getText().toString()) {
+                    case "Continuous":
+                        lowKeyOne.setText("Dose Period");
+                        break;
+                    case "Bleed/Blow Down":
+                    case "Water Meter/Biocide":
+                        lowKeyOne.setText("Accumulated Vol");
+                        break;
+                    case "On/Off":
+                    case "PID":
+                        lowKeyOne.setText("Set Point");
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
         if (mainConfigurationEntityList.get(1).inputType.contains("Output")) {
-            lowKeyTwo.setText("Output Mode");
-            highKeyTwo.setText("sub Mode");
+            lowKeyTwo.setText("Mode");
+            highKeyTwo.setText(mainConfigurationEntityList.get(1).hardware_no > 14 ? "Linked to" : "Mode");
             currentKeyTwo.setText("Output Status");
             uniTwo.setVisibility(View.INVISIBLE);
             typeTwo.setVisibility(View.INVISIBLE);
@@ -393,22 +440,39 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             }
 
             if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no) != null) {
-                if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no).equals("10")) {
-                    currentKeyTwo.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
+                if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no).equals("7")) {
+                    currentValueTwo.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(1).hardware_no));
                 } else {
-                    if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no).equals("9") ||
-                            outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no).equals("8")) {
-                        currentKeyTwo.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(1).hardware_no));
+                    if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no).equals("6") ||
+                            outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no).equals("5")) {
+                        currentValueTwo.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(1).hardware_no));
                     } else {
-                        currentKeyTwo.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no))]);
+                        currentValueTwo.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no))]);
                     }
 
                 }
             }
+            if(mainConfigurationEntityList.get(1).hardware_no < 15){
+                switch (highAlarmTwo.getText().toString()) {
+                    case "Continuous":
+                        lowKeyTwo.setText("Dose Period");
+                        break;
+                    case "Bleed/Blow Down":
+                    case "Water Meter/Biocide":
+                        lowKeyTwo.setText("Accumulated Vol");
+                        break;
+                    case "On/Off":
+                    case "PID":
+                        lowKeyTwo.setText("Set Point");
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
         if (mainConfigurationEntityList.get(2).inputType.contains("Output")) {
-            lowKeyThree.setText("output Mode");
-            highKeyThree.setText("sub Mode");
+            lowKeyThree.setText("Mode");
+            highKeyThree.setText(mainConfigurationEntityList.get(2).hardware_no > 14 ? "Linked to" : "Mode");
             currentKeyThree.setText("Output Status");
             uniThree.setVisibility(View.INVISIBLE);
             typeThree.setVisibility(View.INVISIBLE);
@@ -427,20 +491,37 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             }
             if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no) != null) {
                 if (!outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no).equals("N/A")) {
-                    if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no).equals("10")) {
-                        currentKeyThree.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
+                    if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no).equals("7")) {
+                        currentValueThree.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
                     } else {
-                        if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no).equals("9") ||
-                                outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no).equals("8")){
-                            currentKeyThree.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
+                        if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no).equals("6") ||
+                                outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no).equals("5")){
+                            currentValueThree.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
                         }else {
-                            currentKeyThree.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no))]);
+                            currentValueThree.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no))]);
                         }
 
                     }
 
                 }
 
+            }
+            if(mainConfigurationEntityList.get(2).hardware_no < 15){
+                switch (highAlarmThree.getText().toString()) {
+                    case "Continuous":
+                        lowKeyThree.setText("Dose Period");
+                        break;
+                    case "Bleed/Blow Down":
+                    case "Water Meter/Biocide":
+                        lowKeyThree.setText("Accumulated Vol");
+                        break;
+                    case "On/Off":
+                    case "PID":
+                        lowKeyThree.setText("Set Point");
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 

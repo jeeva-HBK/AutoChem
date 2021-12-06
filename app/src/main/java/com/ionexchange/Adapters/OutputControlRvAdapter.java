@@ -55,14 +55,14 @@ public class OutputControlRvAdapter extends RecyclerView.Adapter<OutputControlRv
     public void onBindViewHolder(@NonNull itemHolder holder, int position) {
         holder.outputControl.setAdapter(getAdapter(outputControl, context));
         if (!outputKeepAliveEntityList.get(position).getOutputStatus().equals("N/A")) {
-            if (outputKeepAliveEntityList.get(position).getOutputStatus().equals("8") ||
-                    outputKeepAliveEntityList.get(position).getOutputStatus().equals("9")) {
+            if (outputKeepAliveEntityList.get(position).getOutputStatus().equals("5") ||
+                    outputKeepAliveEntityList.get(position).getOutputStatus().equals("6")) {
                 holder.outputControl.setText(outputKeepAliveEntityList.get(position).getOutputRelayStatus());
             } else {
                 holder.outputControl.setText(holder.outputControl.getAdapter().
                         getItem(Integer.parseInt(outputKeepAliveEntityList.get(position).getOutputStatus())).toString());
             }
-            if (outputKeepAliveEntityList.get(position).getOutputStatus().equals("7")) {
+            if (outputKeepAliveEntityList.get(position).getOutputStatus().equals("4")) {
                 holder.time.setVisibility(View.VISIBLE);
                 holder.time.setTooltipText(outputKeepAliveEntityList.get(position).getOutputRelayStatus());
             }else {
