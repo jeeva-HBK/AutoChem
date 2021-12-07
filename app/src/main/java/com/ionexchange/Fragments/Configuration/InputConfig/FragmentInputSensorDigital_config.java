@@ -38,6 +38,7 @@ import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorDigitalBinding;
 
@@ -210,6 +211,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
             } else if (data[0].equals(WRITE_PACKET)) {
                 if (data[3].equals(RES_SUCCESS)) {
                     analogEntity(Integer.parseInt(data[2]));
+                    new EventLogDemo(inputNumber,"Digital","Input Setting Changed",getContext());
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 } else if (data[3].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));

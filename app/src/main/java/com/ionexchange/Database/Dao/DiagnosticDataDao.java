@@ -40,4 +40,7 @@ public interface DiagnosticDataDao {
             int hardwareToFive,int hardwareNoFive,
             int hardwareToSix,int hardwareNoSix,
             int hardwareToSeven,int hardwareNoSeven);
+
+    @Query("select *  FROM DiagnosticDataEntity WHERE  hardwareNo = :hardwareNo ")
+    List<DiagnosticDataEntity> getDiagnosticData(String hardwareNo);
 }

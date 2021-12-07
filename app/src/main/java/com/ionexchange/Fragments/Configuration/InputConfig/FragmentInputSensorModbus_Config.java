@@ -18,6 +18,7 @@ import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorModbusBinding;
 
@@ -281,7 +282,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                     mBinding.modBusTypeTie.setText(mBinding.modBusTypeTie.getAdapter().getItem(Integer.parseInt(data[6])).toString());
 
                     int typeOfValueRead = 0;
-                    switch (Integer.parseInt(data[5])){
+                    switch (Integer.parseInt(data[4])){
                         case 0:
                             typeOfValueArr = new String[]{"Fluorescence", "Turbidity"};
                             typeOfValueRead = Integer.parseInt(data[7]) - 1;
@@ -330,6 +331,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
             } else if (data[0].equals(WRITE_PACKET)) {
                 if (data[3].equals(RES_SUCCESS)) {
                     modBusEntity(Integer.parseInt(data[2]));
+                    new EventLogDemo(inputNumber,"ModBus","Input Setting Changed",getContext());
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 } else if (data[3].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));

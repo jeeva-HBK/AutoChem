@@ -1,5 +1,7 @@
 package com.ionexchange.Adapters;
 
+import static com.ionexchange.Others.ApplicationClass.inputDAO;
+import static com.ionexchange.Others.ApplicationClass.keepaliveDAO;
 import static com.ionexchange.Others.ApplicationClass.outputControlShortForm;
 
 import android.content.Context;
@@ -142,44 +144,58 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
 
         if (mainConfigurationEntityList.get(position).inputType != null) {
             if (mainConfigurationEntityList.get(position).inputType.contains("Output")) {
+                String outputmode = "", outputLabel="", highAlarm = "";
+
                 currentMode.setText("Output Status");
                 lowKey.setText("Mode");
-
-                highKey.setText(mainConfigurationEntityList.get(position).hardware_no > 14 ? "Linked to" : "Mode");
+                highKey.setText(mainConfigurationEntityList.get(position).hardware_no < 15 ? "Mode" : "Linked to");
 
                 unitOne.setVisibility(View.INVISIBLE);
                 typeOne.setVisibility(View.INVISIBLE);
                 seq.setText(mainConfigurationEntityList.get(position).inputType);
+                if(outputConfigurationDao.getOutputMode(mainConfigurationEntityList.get(position).hardware_no)!= null) {
+                    outputmode = outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(position).hardware_no));
+                    lowAlarmOne.setText(outputmode);
+                }
                 if (outputConfigurationDao.getOutputLabel(mainConfigurationEntityList.get(position).hardware_no) != null) {
-                    label.setText(outputConfigurationDao.getOutputLabel(mainConfigurationEntityList.get(position).hardware_no));
+                    outputLabel = outputConfigurationDao.getOutputLabel(mainConfigurationEntityList.get(position).hardware_no);
+                    label.setText(outputLabel);
                 }
                 hardwareNoOne.setText(mainConfigurationEntityList.get(position).hardware_no + "");
-                if (outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(position).hardware_no)) != null) {
-                    lowAlarmOne.setText(outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(position).hardware_no)));
-                }
+
                 if (outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(position).hardware_no)) != null) {
-                    highAlarmOne.setText(outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(position).hardware_no)));
+                    highAlarm = outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(position).hardware_no));
+                    highAlarmOne.setText(highAlarm);
                 }
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    if (outputConfigurationDao.getOutputLabel(mainConfigurationEntityList.get(position).hardware_no) != null) {
-                        label.setTooltipText(outputConfigurationDao.getOutputLabel(mainConfigurationEntityList.get(position).hardware_no));
+                    if (outputLabel != null && !outputLabel.isEmpty()) {
+                        label.setTooltipText(outputLabel);
                     }
-                    if (outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(position).hardware_no)) != null) {
-                        lowAlarmOne.setTooltipText(outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(position).hardware_no)));
+                    if (outputmode != null && !outputmode.isEmpty()) {
+                        lowAlarmOne.setTooltipText(outputmode.contains("$") ? outputmode.split("\\$")[0] : outputmode);
                     }
-                    if (outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(position).hardware_no)) != null) {
-                        highAlarmOne.setTooltipText(outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(position).hardware_no)));
+
+                    if (highAlarm != null && !highAlarm.isEmpty())  {
+                        highAlarmOne.setTooltipText(highAlarm);
                     }
                 }
                 if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no) != null) {
                     if (!outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("N/A")) {
                         if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("7")) {
+                            currentMode.setText("Current Value");
                             currentValue.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
                         } else {
                             if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("6") ||
                                     outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("5")){
+                                currentMode.setText("Status : "+outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
                                 currentValue.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
+                            }else if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("8") ||
+                                    outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("9")){
+                                currentMode.setText("Status : "+outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
+                                lowAlarmOne.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
                             }else {
+                                currentMode.setText("Status : "+ outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no))]);
                                 currentValue.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no))]);
                             }
 
@@ -189,22 +205,33 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
 
                 }
                 if(mainConfigurationEntityList.get(position).hardware_no < 15){
-                    switch (highAlarmOne.getText().toString()) {
+                    switch (highAlarm) {
                         case "Continuous":
                             lowKey.setText("Dose Period");
+                            lowAlarmOne.setText(outputmode.contains("$") ? outputmode.split("\\$")[0] : outputmode);
+                            currentValue.setText(outputmode.contains("$") ? outputmode.split("\\$")[1] : outputmode);
                             break;
                         case "Bleed/Blow Down":
                         case "Water Meter/Biocide":
                             lowKey.setText("Accumulated Vol");
+                            currentValue.setText(outputmode);
                             break;
                         case "On/Off":
                         case "PID":
                             lowKey.setText("Set Point");
+                            try {
+                                lowAlarmOne.setText(outputmode.contains("$") ? outputmode.split("\\$")[0] : outputmode);
+                                currentValue.setText(keepaliveDAO.getCurrentValue(Integer.parseInt(outputmode.split("\\$")[1])));
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                             break;
                         default:
+                            lowKey.setText("Mode");
                             break;
                     }
                 }
+
             }
 
             if (mainConfigurationEntityList.get(position).inputType.contains("virtual")) {
@@ -288,7 +315,6 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     highKey.setVisibility(View.INVISIBLE);
                     lowAlarmOne.setVisibility(View.INVISIBLE);
                     highAlarmOne.setVisibility(View.INVISIBLE);
-
                 }
                 seq.setText(mainConfigurationEntityList.get(position).inputType);
                 if (inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(position).hardware_no) != null) {
@@ -368,238 +394,36 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
 
 
         if (mainConfigurationEntityList.get(0).inputType.contains("Output")) {
-            lowKeyOne.setText("Mode");
-            highKeyOne.setText(mainConfigurationEntityList.get(0).hardware_no > 14 ? "Linked to" : "Mode");
-            currentKeyOne.setText("Output Status");
-            unitOne.setVisibility(View.INVISIBLE);
-            typeOne.setVisibility(View.INVISIBLE);
-            if (mainConfigurationEntityList.get(0).inputType != null) {
-                seqOne.setText(mainConfigurationEntityList.get(0).inputType);
-            }
-            if (outputConfigurationDao.getOutputLabel(mainConfigurationEntityList.get(0).hardware_no) != null) {
-                sensorLabelOne.setText(outputConfigurationDao.getOutputLabel(mainConfigurationEntityList.get(0).hardware_no));
-            }
-            hardwareNoOne.setText(mainConfigurationEntityList.get(0).hardware_no + "");
-
-            if (outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(0).hardware_no)) != null) {
-                lowAlarmOne.setText(outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(0).hardware_no)));
-            }
-            if (outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(0).hardware_no)) != null) {
-                highAlarmOne.setText(outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(0).hardware_no)));
-            }
-            if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no) != null) {
-                if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no).equals("7")) {
-                    currentValueOne.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
-                } else {
-                    if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no).equals("6") ||
-                            outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no).equals("5")) {
-                        currentValueOne.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(0).hardware_no));
-                    } else {
-                        currentValueOne.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(0).hardware_no))]);
-                    }
-
-                }
-
-            }
-            if(mainConfigurationEntityList.get(0).hardware_no < 15){
-                switch (highAlarmOne.getText().toString()) {
-                    case "Continuous":
-                        lowKeyOne.setText("Dose Period");
-                        break;
-                    case "Bleed/Blow Down":
-                    case "Water Meter/Biocide":
-                        lowKeyOne.setText("Accumulated Vol");
-                        break;
-                    case "On/Off":
-                    case "PID":
-                        lowKeyOne.setText("Set Point");
-                        break;
-                    default:
-                        break;
-                }
-            }
+            setthreefourthLayoutOutput(lowKeyOne,lowAlarmOne,
+                    sensorLabelOne,highAlarmOne,0,currentValueOne,seqOne,
+                    hardwareNoOne,highKeyOne,currentKeyOne,unitOne,typeOne);
         }
         if (mainConfigurationEntityList.get(1).inputType.contains("Output")) {
-            lowKeyTwo.setText("Mode");
-            highKeyTwo.setText(mainConfigurationEntityList.get(1).hardware_no > 14 ? "Linked to" : "Mode");
-            currentKeyTwo.setText("Output Status");
-            uniTwo.setVisibility(View.INVISIBLE);
-            typeTwo.setVisibility(View.INVISIBLE);
-            if (mainConfigurationEntityList.get(1).inputType != null) {
-                seqTwo.setText(mainConfigurationEntityList.get(1).inputType);
-            }
-            if (outputConfigurationDao.getOutputLabel(mainConfigurationEntityList.get(1).hardware_no) != null) {
-                sensorLabelTwo.setText(outputConfigurationDao.getOutputLabel(mainConfigurationEntityList.get(1).hardware_no));
-            }
-            hardwareNoTwo.setText(mainConfigurationEntityList.get(1).hardware_no + "");
-            if (outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(1).hardware_no)) != null) {
-                lowAlarmTwo.setText(outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(1).hardware_no)));
-            }
-            if (outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(1).hardware_no)) != null) {
-                highAlarmTwo.setText(outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(1).hardware_no)));
-            }
-
-            if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no) != null) {
-                if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no).equals("7")) {
-                    currentValueTwo.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(1).hardware_no));
-                } else {
-                    if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no).equals("6") ||
-                            outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no).equals("5")) {
-                        currentValueTwo.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(1).hardware_no));
-                    } else {
-                        currentValueTwo.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(1).hardware_no))]);
-                    }
-
-                }
-            }
-            if(mainConfigurationEntityList.get(1).hardware_no < 15){
-                switch (highAlarmTwo.getText().toString()) {
-                    case "Continuous":
-                        lowKeyTwo.setText("Dose Period");
-                        break;
-                    case "Bleed/Blow Down":
-                    case "Water Meter/Biocide":
-                        lowKeyTwo.setText("Accumulated Vol");
-                        break;
-                    case "On/Off":
-                    case "PID":
-                        lowKeyTwo.setText("Set Point");
-                        break;
-                    default:
-                        break;
-                }
-            }
+            setthreefourthLayoutOutput(lowKeyTwo,lowAlarmTwo,
+                    sensorLabelTwo,highAlarmTwo,1,currentValueTwo,seqTwo,
+                    hardwareNoTwo,highKeyTwo,currentKeyTwo,uniTwo,typeTwo);
         }
         if (mainConfigurationEntityList.get(2).inputType.contains("Output")) {
-            lowKeyThree.setText("Mode");
-            highKeyThree.setText(mainConfigurationEntityList.get(2).hardware_no > 14 ? "Linked to" : "Mode");
-            currentKeyThree.setText("Output Status");
-            uniThree.setVisibility(View.INVISIBLE);
-            typeThree.setVisibility(View.INVISIBLE);
-            if (mainConfigurationEntityList.get(2).inputType != null) {
-                seqThree.setText(mainConfigurationEntityList.get(2).inputType);
-            }
-            if (outputConfigurationDao.getOutputLabel(mainConfigurationEntityList.get(2).hardware_no) != null) {
-                sensorLabelThree.setText(outputConfigurationDao.getOutputLabel(mainConfigurationEntityList.get(2).hardware_no));
-            }
-            hardwareNoThree.setText(mainConfigurationEntityList.get(2).hardware_no + "");
-            if (outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(2).hardware_no)) != null) {
-                lowAlarmThree.setText(outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(2).hardware_no)));
-            }
-            if (outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(2).hardware_no)) != null) {
-                highAlarmThree.setText(outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(2).hardware_no)));
-            }
-            if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no) != null) {
-                if (!outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no).equals("N/A")) {
-                    if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no).equals("7")) {
-                        currentValueThree.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
-                    } else {
-                        if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no).equals("6") ||
-                                outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no).equals("5")){
-                            currentValueThree.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(2).hardware_no));
-                        }else {
-                            currentValueThree.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(2).hardware_no))]);
-                        }
-
-                    }
-
-                }
-
-            }
-            if(mainConfigurationEntityList.get(2).hardware_no < 15){
-                switch (highAlarmThree.getText().toString()) {
-                    case "Continuous":
-                        lowKeyThree.setText("Dose Period");
-                        break;
-                    case "Bleed/Blow Down":
-                    case "Water Meter/Biocide":
-                        lowKeyThree.setText("Accumulated Vol");
-                        break;
-                    case "On/Off":
-                    case "PID":
-                        lowKeyThree.setText("Set Point");
-                        break;
-                    default:
-                        break;
-                }
-            }
+            setthreefourthLayoutOutput(lowKeyThree,lowAlarmThree,
+                    sensorLabelThree,highAlarmThree,2,currentValueThree,
+                    seqThree,hardwareNoThree,highKeyThree,currentKeyThree,uniThree,typeThree);
         }
 
 
         if (mainConfigurationEntityList.get(0).inputType.contains("virtual")) {
-            lowKeyOne.setText("Low Alarm");
-            highKeyOne.setText("High Alarm ");
-            unitOne.setVisibility(View.VISIBLE);
-            typeOne.setVisibility(View.VISIBLE);
-            hardwareNoOne.setText(String.valueOf(mainConfigurationEntityList.get(0).getHardware_no()));
-            currentKeyOne.setText("Current Value");
-            if (mainConfigurationEntityList.get(0).inputType != null) {
-                seqOne.setText(mainConfigurationEntityList.get(0).inputType);
-            }
-            if (virtualConfigurationDao.getVirtualLabel(mainConfigurationEntityList.get(0).hardware_no) != null) {
-                sensorLabelOne.setText(virtualConfigurationDao.getVirtualLabel(mainConfigurationEntityList.get(0).hardware_no));
-            }
-
-            if (virtualConfigurationDao.getVirtualLowAlarm((mainConfigurationEntityList.get(0).hardware_no)) != null) {
-                lowAlarmOne.setText(virtualConfigurationDao.getVirtualLowAlarm((mainConfigurationEntityList.get(0).hardware_no)));
-            }
-            if (virtualConfigurationDao.getVirtualHighAlarm((mainConfigurationEntityList.get(0).hardware_no)) != null) {
-                highAlarmOne.setText(virtualConfigurationDao.getVirtualHighAlarm((mainConfigurationEntityList.get(0).hardware_no)));
-            }
-            if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(0).hardware_no) != null) {
-                currentValueOne.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(0).hardware_no));
-            }
+            setthreefourthLayoutVirtual(0,lowKeyOne,highKeyOne,unitOne,
+                    typeOne,hardwareNoOne,currentKeyOne,seqOne,
+                    sensorLabelOne,lowAlarmOne,highAlarmOne,currentValueOne);
         }
         if (mainConfigurationEntityList.get(1).inputType.contains("virtual")) {
-            lowKeyTwo.setText("Low Alarm");
-            highKeyTwo.setText("High Alarm");
-            currentKeyTwo.setText("Current Value");
-            uniTwo.setVisibility(View.INVISIBLE);
-            hardwareNoTwo.setText(mainConfigurationEntityList.get(1).getHardware_no() + "");
-            typeTwo.setVisibility(View.INVISIBLE);
-            if (mainConfigurationEntityList.get(1).inputType != null) {
-                seqTwo.setText(mainConfigurationEntityList.get(1).inputType);
-            }
-
-            if (virtualConfigurationDao.getVirtualLabel(mainConfigurationEntityList.get(1).hardware_no) != null) {
-                sensorLabelTwo.setText(virtualConfigurationDao.getVirtualLabel(mainConfigurationEntityList.get(1).hardware_no));
-            }
-
-            if (virtualConfigurationDao.getVirtualLowAlarm((mainConfigurationEntityList.get(1).hardware_no)) != null) {
-                lowAlarmTwo.setText(virtualConfigurationDao.getVirtualLowAlarm((mainConfigurationEntityList.get(1).hardware_no)));
-            }
-
-            if (virtualConfigurationDao.getVirtualHighAlarm((mainConfigurationEntityList.get(1).hardware_no)) != null) {
-                highAlarmTwo.setText(virtualConfigurationDao.getVirtualHighAlarm((mainConfigurationEntityList.get(1).hardware_no)));
-            }
-
-            if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(1).hardware_no) != null) {
-                currentValueTwo.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(1).hardware_no));
-            }
+            setthreefourthLayoutVirtual(1,lowKeyTwo,highKeyTwo,uniTwo,
+                    typeTwo,hardwareNoTwo,currentKeyTwo,seqTwo,
+                    sensorLabelTwo,lowAlarmTwo,highAlarmTwo,currentValueTwo);
         }
         if (mainConfigurationEntityList.get(2).inputType.contains("virtual")) {
-            lowKeyThree.setText("Low Alarm");
-            highKeyThree.setText("High Alarm");
-            currentKeyThree.setText("Current Value");
-            uniThree.setVisibility(View.INVISIBLE);
-            typeThree.setVisibility(View.INVISIBLE);
-            hardwareNoThree.setText(mainConfigurationEntityList.get(2).hardware_no + "");
-            if (mainConfigurationEntityList.get(2).inputType != null) {
-                seqThree.setText(mainConfigurationEntityList.get(2).inputType);
-            }
-            if (virtualConfigurationDao.getVirtualLabel(mainConfigurationEntityList.get(2).hardware_no) != null) {
-                sensorLabelThree.setText(virtualConfigurationDao.getVirtualLabel(mainConfigurationEntityList.get(2).hardware_no));
-            }
-            if (outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(2).hardware_no)) != null) {
-                lowAlarmThree.setText(virtualConfigurationDao.getVirtualLowAlarm((mainConfigurationEntityList.get(2).hardware_no)));
-            }
-
-            if (virtualConfigurationDao.getVirtualHighAlarm((mainConfigurationEntityList.get(2).hardware_no)) != null) {
-                highAlarmThree.setText(virtualConfigurationDao.getVirtualHighAlarm((mainConfigurationEntityList.get(2).hardware_no)));
-            }
-            if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(2).hardware_no) != null) {
-                currentValueThree.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(2).hardware_no));
-            }
+            setthreefourthLayoutVirtual(2,lowKeyThree,highKeyThree,uniThree,
+                    typeThree,hardwareNoThree,currentKeyThree,seqThree,
+                    sensorLabelThree,lowAlarmThree,highAlarmThree,currentValueThree);
         }
 
 
@@ -613,55 +437,9 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 || mainConfigurationEntityList.get(0).inputType.contains("Tank Level")
                 || mainConfigurationEntityList.get(0).inputType.contains("Digital Input")
                 || mainConfigurationEntityList.get(0).inputType.contains("Modbus Sensor")) {
-            lowKeyOne.setText("Low Alarm");
-            highKeyOne.setText("High Alarm");
-            currentKeyOne.setText("Current Value");
-            unitOne.setVisibility(View.VISIBLE);
-            typeOne.setVisibility(View.VISIBLE);
-            hardwareNoOne.setText(mainConfigurationEntityList.get(0).hardware_no + "");
-            if (mainConfigurationEntityList.get(0).inputType.contains("Digital Input")) {
-                    /*lowKey.setText("Open\nMessage");
-                    highKey.setText("Close\nMessage");
-                    lowKey.setGravity(Gravity.CENTER);
-                    highKey.setGravity(Gravity.CENTER);*/
-                lowKeyOne.setVisibility(View.INVISIBLE);
-                highKeyOne.setVisibility(View.INVISIBLE);
-                lowAlarmOne.setVisibility(View.INVISIBLE);
-                highAlarmOne.setVisibility(View.INVISIBLE);
-            }
-            if (inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(0).hardware_no) != null) {
-                sensorLabelOne.setText(inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(0).hardware_no));
-            }
-            if (mainConfigurationEntityList.get(0).inputType != null) {
-                seqOne.setText(mainConfigurationEntityList.get(0).inputType);
-            }
-            if (inputConfigurationDao.getUnit(mainConfigurationEntityList.get(0).hardware_no) != null) {
-                if (inputConfigurationDao.getUnit((mainConfigurationEntityList.get(0).hardware_no)).equals("N/A")) {
-                    unitOne.setText("");
-                } else {
-                    unitOne.setText(inputConfigurationDao.getUnit((mainConfigurationEntityList.get(0).hardware_no)));
-                }
-            }
+            setthreefourthLayoutSensor(0,lowKeyOne,highKeyOne,currentKeyOne,unitOne,typeOne,hardwareNoOne,
+                    lowAlarmOne,highAlarmOne,sensorLabelOne,seqOne,currentValueOne);
 
-            if (inputConfigurationDao.getType(mainConfigurationEntityList.get(0).hardware_no) != null) {
-                if (inputConfigurationDao.getType((mainConfigurationEntityList.get(0).hardware_no)).equals("N/A")) {
-                    typeOne.setText("");
-                } else {
-                    typeOne.setText(inputConfigurationDao.getType((mainConfigurationEntityList.get(0).hardware_no)));
-                }
-            }
-            if (inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(0).hardware_no)) != null) {
-                lowAlarmOne.setText(inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(0).hardware_no)));
-            }
-
-            if (inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(0).hardware_no)) != null) {
-                highAlarmOne.setText(inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(0).hardware_no)));
-            }
-
-           /* if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(0).hardware_no) != null) {
-                currentValueOne.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(0).hardware_no));
-            }*/
-            setDigitalInput(currentValueOne, 0);
         }
         if (mainConfigurationEntityList.get(1).inputType.contains("pH")
                 || mainConfigurationEntityList.get(1).inputType.contains("ORP")
@@ -673,53 +451,8 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 || mainConfigurationEntityList.get(1).inputType.contains("Tank Level")
                 || mainConfigurationEntityList.get(1).inputType.contains("Digital Input")
                 || mainConfigurationEntityList.get(1).inputType.contains("Modbus Sensor")) {
-            lowKeyTwo.setText("Low Alarm");
-            highKeyTwo.setText("High Alarm");
-            currentKeyTwo.setText("Current Value");
-            uniTwo.setVisibility(View.VISIBLE);
-            typeTwo.setVisibility(View.VISIBLE);
-            hardwareNoTwo.setText(mainConfigurationEntityList.get(1).hardware_no + "");
-
-            if (mainConfigurationEntityList.get(1).inputType.contains("Digital Input")) {
-               /* lowKeyTwo.setText("Open\nMessage");
-                highKeyTwo.setText("Close\nMessage");*/
-
-                lowKeyOne.setVisibility(View.INVISIBLE);
-                highKeyOne.setVisibility(View.INVISIBLE);
-                lowAlarmOne.setVisibility(View.INVISIBLE);
-                highAlarmOne.setVisibility(View.INVISIBLE);
-            }
-            if (inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(1).hardware_no) != null) {
-                sensorLabelTwo.setText(inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(1).hardware_no));
-            }
-            if (inputConfigurationDao.getUnit(mainConfigurationEntityList.get(1).hardware_no) != null) {
-                if (inputConfigurationDao.getUnit((mainConfigurationEntityList.get(1).hardware_no)).equals("N/A")) {
-                    uniTwo.setText("");
-                } else {
-                    uniTwo.setText(inputConfigurationDao.getUnit((mainConfigurationEntityList.get(1).hardware_no)));
-                }
-            }
-
-            if (inputConfigurationDao.getType((mainConfigurationEntityList.get(1).hardware_no)) != null) {
-                if (inputConfigurationDao.getType((mainConfigurationEntityList.get(1).hardware_no)).equals("N/A")) {
-                    typeTwo.setText("");
-                } else {
-                    typeTwo.setText(inputConfigurationDao.getType((mainConfigurationEntityList.get(1).hardware_no)));
-                }
-            }
-            if (mainConfigurationEntityList.get(1).inputType != null) {
-                seqTwo.setText(mainConfigurationEntityList.get(1).inputType);
-            }
-
-
-            if (inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(1).hardware_no)) != null) {
-                lowAlarmTwo.setText(inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(1).hardware_no)));
-            }
-
-            if (inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(1).hardware_no)) != null) {
-                highAlarmTwo.setText(inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(1).hardware_no)));
-            }
-            setDigitalInput(currentValueTwo, 1);
+            setthreefourthLayoutSensor(1,lowKeyTwo,highKeyTwo,currentKeyTwo,uniTwo,typeTwo,hardwareNoTwo,
+                    lowAlarmTwo,highAlarmTwo,sensorLabelTwo,seqTwo,currentValueTwo);
         }
         if (mainConfigurationEntityList.get(2).inputType.contains("pH")
                 || mainConfigurationEntityList.get(2).inputType.contains("ORP")
@@ -731,59 +464,65 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 || mainConfigurationEntityList.get(2).inputType.contains("Tank Level")
                 || mainConfigurationEntityList.get(2).inputType.contains("Digital Input")
                 || mainConfigurationEntityList.get(2).inputType.contains("Modbus Sensor")) {
-            lowKeyThree.setText("Low Alarm");
-            highKeyThree.setText("High Alarm");
-            currentKeyThree.setText("Current Value");
-            uniThree.setVisibility(View.VISIBLE);
-            typeThree.setVisibility(View.VISIBLE);
-            hardwareNoThree.setText(mainConfigurationEntityList.get(2).hardware_no + "");
-            if (mainConfigurationEntityList.get(2).inputType.contains("Digital Input")) {
-               /* lowKeyThree.setText("Open\nMessage");
-                highKeyThree.setText("Close\nMessage");*/
-
-                lowKeyOne.setVisibility(View.INVISIBLE);
-                highKeyOne.setVisibility(View.INVISIBLE);
-                lowAlarmOne.setVisibility(View.INVISIBLE);
-                highAlarmOne.setVisibility(View.INVISIBLE);
-            }
-            if (inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(2).hardware_no) != null) {
-                sensorLabelThree.setText(inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(2).hardware_no));
-            }
-
-            if (inputConfigurationDao.getUnit((mainConfigurationEntityList.get(2).hardware_no)) != null) {
-                if (inputConfigurationDao.getUnit((mainConfigurationEntityList.get(2).hardware_no)).equals("N/A")) {
-                    uniThree.setText("");
-                } else {
-                    uniThree.setText(inputConfigurationDao.getUnit((mainConfigurationEntityList.get(2).hardware_no)));
-                }
-            }
-
-            if (inputConfigurationDao.getType((mainConfigurationEntityList.get(2).hardware_no)) != null) {
-                if (inputConfigurationDao.getType((mainConfigurationEntityList.get(2).hardware_no)).equals("N/A")) {
-                    typeThree.setText("");
-                } else {
-                    typeThree.setText(inputConfigurationDao.getType((mainConfigurationEntityList.get(2).hardware_no)));
-                }
-            }
-            if (mainConfigurationEntityList.get(2).inputType != null) {
-                seqThree.setText(mainConfigurationEntityList.get(2).inputType);
-            }
-            hardwareNoThree.setText(mainConfigurationEntityList.get(2).hardware_no + "");
-            if (inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(2).hardware_no)) != null) {
-                lowAlarmThree.setText(inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(2).hardware_no)));
-            }
-
-            if (inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(2).hardware_no)) != null) {
-                highAlarmThree.setText(inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(2).hardware_no)));
-            }
-
-          /*  if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(2).hardware_no) != null) {
-                currentValueThree.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(2).hardware_no));
-            }*/
-            setDigitalInput(currentValueThree, 2);
+            setthreefourthLayoutSensor(2,lowKeyThree,highKeyThree,currentKeyThree,uniThree,typeThree,hardwareNoThree,
+                    lowAlarmThree,highAlarmThree,sensorLabelThree,seqThree,currentValueThree);
         }
 
+    }
 
+    private void setthreefourthLayoutSensor(int position, TextView lowKey, TextView highKey,
+                                            TextView currentKey, TextView unit, TextView type,
+                                            TextView hardwareNo, TextView lowAlarm, TextView highAlarm,
+                                            TextView sensorLabel, TextView seq, TextView currentValue) {
+        lowKey.setText("Low Alarm");
+        highKey.setText("High Alarm");
+        currentKey.setText("Current Value");
+        unit.setVisibility(View.VISIBLE);
+        type.setVisibility(View.VISIBLE);
+        hardwareNo.setText(mainConfigurationEntityList.get(position).hardware_no + "");
+        if (mainConfigurationEntityList.get(position).inputType.contains("Digital Input")) {
+                    /*lowKey.setText("Open\nMessage");
+                    highKey.setText("Close\nMessage");
+                    lowKey.setGravity(Gravity.CENTER);
+                    highKey.setGravity(Gravity.CENTER);*/
+            lowKey.setVisibility(View.INVISIBLE);
+            highKey.setVisibility(View.INVISIBLE);
+            lowAlarm.setVisibility(View.INVISIBLE);
+            highAlarm.setVisibility(View.INVISIBLE);
+        }
+        if (inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(position).hardware_no) != null) {
+            sensorLabel.setText(inputConfigurationDao.getInputLabel(mainConfigurationEntityList.get(position).hardware_no));
+        }
+        if (mainConfigurationEntityList.get(position).inputType != null) {
+            seq.setText(mainConfigurationEntityList.get(position).inputType);
+        }
+        if (inputConfigurationDao.getUnit(mainConfigurationEntityList.get(position).hardware_no) != null) {
+            if (inputConfigurationDao.getUnit((mainConfigurationEntityList.get(position).hardware_no)).equals("N/A")) {
+                unit.setText("");
+            } else {
+                unit.setText(inputConfigurationDao.getUnit((mainConfigurationEntityList.get(position).hardware_no)));
+            }
+        }
+
+        if (inputConfigurationDao.getType(mainConfigurationEntityList.get(position).hardware_no) != null) {
+            if (inputConfigurationDao.getType((mainConfigurationEntityList.get(position).hardware_no)).equals("N/A")) {
+                type.setText("");
+            } else {
+                type.setText(inputConfigurationDao.getType((mainConfigurationEntityList.get(position).hardware_no)));
+            }
+        }
+        if (inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(position).hardware_no)) != null) {
+            lowAlarm.setText(inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(position).hardware_no)));
+        }
+
+        if (inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(position).hardware_no)) != null) {
+            highAlarm.setText(inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(position).hardware_no)));
+        }
+
+           /* if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(0).hardware_no) != null) {
+                currentValueOne.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(0).hardware_no));
+            }*/
+        setDigitalInput(currentValue, position);
     }
 
 
@@ -896,6 +635,116 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     break;
             }
 
+        }
+    }
+
+    private void setthreefourthLayoutVirtual(int position,TextView lowKey,TextView highKey,TextView unit,
+                                             TextView type,TextView hardwareNo, TextView currentKey,TextView seq,
+                                             TextView sensorLabel,TextView lowAlarm,TextView highAlarm,TextView currentValue){
+        lowKey.setText("Low Alarm");
+        highKey.setText("High Alarm ");
+        unit.setVisibility(View.VISIBLE);
+        type.setVisibility(View.VISIBLE);
+        hardwareNo.setText(String.valueOf(mainConfigurationEntityList.get(position).getHardware_no()));
+        currentKey.setText("Current Value");
+        if (mainConfigurationEntityList.get(position).inputType != null) {
+            seq.setText(mainConfigurationEntityList.get(position).inputType);
+        }
+        if (virtualConfigurationDao.getVirtualLabel(mainConfigurationEntityList.get(position).hardware_no) != null) {
+            sensorLabel.setText(virtualConfigurationDao.getVirtualLabel(mainConfigurationEntityList.get(position).hardware_no));
+        }
+
+        if (virtualConfigurationDao.getVirtualLowAlarm((mainConfigurationEntityList.get(position).hardware_no)) != null) {
+            lowAlarm.setText(virtualConfigurationDao.getVirtualLowAlarm((mainConfigurationEntityList.get(position).hardware_no)));
+        }
+        if (virtualConfigurationDao.getVirtualHighAlarm((mainConfigurationEntityList.get(position).hardware_no)) != null) {
+            highAlarm.setText(virtualConfigurationDao.getVirtualHighAlarm((mainConfigurationEntityList.get(position).hardware_no)));
+        }
+        if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no) != null) {
+            currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
+        }
+    }
+    private void setthreefourthLayoutOutput(TextView lowKey,TextView lowAlarm,TextView sensorLabel, TextView highAlarm,
+                                            int position, TextView currentValue,TextView seqType,
+                                            TextView hardwareNo,TextView highKey,TextView currentKey,
+                                            TextView unit,TextView type){
+        String highalarmValue = "", outputLabel="", outputMode = "";
+        lowKey.setText("Mode");
+        highKey.setText(mainConfigurationEntityList.get(position).hardware_no < 15 ? "Mode" : "Linked to");
+        currentKey.setText("Output Status");
+        unit.setVisibility(View.INVISIBLE);
+        type.setVisibility(View.INVISIBLE);
+        if (mainConfigurationEntityList.get(position).inputType != null) {
+            seqType.setText(mainConfigurationEntityList.get(position).inputType);
+        }
+        if (outputConfigurationDao.getOutputLabel(mainConfigurationEntityList.get(position).hardware_no) != null) {
+            outputLabel = outputConfigurationDao.getOutputLabel(mainConfigurationEntityList.get(position).hardware_no);
+            sensorLabel.setText(outputLabel);
+        }
+        hardwareNo.setText(mainConfigurationEntityList.get(position).hardware_no + "");
+        if (outputConfigurationDao.getOutputMode((mainConfigurationEntityList.get(position).hardware_no)) != null) {
+            outputMode = outputConfigurationDao.getOutputMode(mainConfigurationEntityList.get(position).hardware_no);
+            lowAlarm.setText(outputMode);
+        }
+        if (outputConfigurationDao.getOutputStatus((mainConfigurationEntityList.get(position).hardware_no)) != null) {
+            highalarmValue = outputConfigurationDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no);
+            highAlarm.setText(highalarmValue);
+        }
+        if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no) != null) {
+            if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("7")) {
+                currentKey.setText("Current Value");
+                currentValue.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
+            } else {
+                if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("6") ||
+                        outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("5")) {
+                    currentValue.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
+                    currentKey.setText("Status : " + outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
+                } else if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("8") ||
+                        outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("9")) {
+                    currentValue.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
+                    currentKey.setText("Status : " + outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
+                } else {
+                    currentValue.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no))]);
+                    currentKey.setText("Status : " + outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no))]);
+                }
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (outputLabel != null && !outputLabel.isEmpty()) {
+                sensorLabel.setTooltipText(outputLabel);
+            }
+            if (outputMode != null && !outputMode.isEmpty()) {
+                lowAlarm.setTooltipText(outputMode.contains("$") ? outputMode.split("\\$")[0] : outputMode);
+            }
+
+            if (highalarmValue != null && !highalarmValue.isEmpty())  {
+                highAlarm.setTooltipText(highalarmValue);
+            }
+        }
+        if(mainConfigurationEntityList.get(position).hardware_no < 15){
+            switch (highalarmValue) {
+                case "Continuous":
+                    lowKey.setText("Dose Period");
+                    lowAlarm.setText(outputMode.contains("$") ? outputMode.split("\\$")[0] : outputMode);
+                    currentValue.setText(outputMode.contains("$") ? outputMode.split("\\$")[1] : outputMode);
+                    break;
+                case "Bleed/Blow Down":
+                case "Water Meter/Biocide":
+                    lowKey.setText("Accumulated Vol");
+                    currentValue.setText(outputMode);
+                    break;
+                case "On/Off":
+                case "PID":
+                    lowKey.setText("Set Point");
+                    if(outputMode.contains("$")){
+                        lowAlarm.setText(outputMode.split("\\$")[0]);
+                        currentValue.setText(keepaliveDAO.getCurrentValue(Integer.parseInt(outputMode.split("\\$")[1])));
+                    }
+                    break;
+                default:
+                    lowKey.setText("Mode");
+                    break;
+            }
         }
     }
 }

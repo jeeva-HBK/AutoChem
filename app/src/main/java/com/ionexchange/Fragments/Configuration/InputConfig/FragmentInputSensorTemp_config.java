@@ -17,6 +17,7 @@ import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorTempBinding;
 
@@ -194,6 +195,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[3].equals(RES_SUCCESS)) {
                     temperatureEntity(Integer.parseInt(splitData[2]));
+                    new EventLogDemo(inputNumber,"Temperature","Input Setting Changed",getContext());
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));

@@ -1,5 +1,7 @@
 package com.ionexchange.Adapters;
 
+import static com.ionexchange.Others.ApplicationClass.inputDAO;
+import static com.ionexchange.Others.ApplicationClass.keepaliveDAO;
 import static com.ionexchange.Others.ApplicationClass.outputControlShortForm;
 
 import android.content.res.Resources;
@@ -59,7 +61,9 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
                 holder.outputNumber.setText(outputKeepAliveDao.getOutputRelayStatus(outputConfigurationEntityList.get(position).outputHardwareNo));
             } else {
                 if (outputKeepAliveDao.getOutputStatus(outputConfigurationEntityList.get(position).outputHardwareNo).equals("5") ||
-                        outputKeepAliveDao.getOutputStatus(outputConfigurationEntityList.get(position).outputHardwareNo).equals("6")) {
+                        outputKeepAliveDao.getOutputStatus(outputConfigurationEntityList.get(position).outputHardwareNo).equals("6") ||
+                        outputKeepAliveDao.getOutputStatus(outputConfigurationEntityList.get(position).outputHardwareNo).equals("8") ||
+                        outputKeepAliveDao.getOutputStatus(outputConfigurationEntityList.get(position).outputHardwareNo).equals("9")) {
                     holder.outputNumber.setText(outputKeepAliveDao.getOutputRelayStatus(outputConfigurationEntityList.get(position).outputHardwareNo));
                 } else {
                     if (!outputKeepAliveDao.getOutputStatus(outputConfigurationEntityList.get(position).outputHardwareNo).equals("N/A")) {
@@ -75,8 +79,8 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
         holder.outputstatusHeader.setVisibility(View.VISIBLE);
         if(outputConfigurationEntityList.get(position).outputHardwareNo < 15) {
             switch (analogValue) {
-                case "A":
-                    holder.viewBase.setBackgroundResource(R.drawable.blue_box);
+                case "D":
+                    holder.viewBase.setBackgroundResource(R.drawable.ash_box);
                     break;
                 case "F":
                     holder.viewBase.setBackgroundResource(R.drawable.green_box);
@@ -88,7 +92,7 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
                     holder.viewBase.setBackgroundResource(R.drawable.merron_box);
                     break;
                 default:
-                    holder.viewBase.setBackgroundResource(R.drawable.ash_box);
+                    holder.viewBase.setBackgroundResource(R.drawable.blue_box);
                     break;
             }
 
@@ -102,6 +106,7 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
             switch (outputConfigurationEntityList.get(position).outputStatus) {
                 case "Continuous":
                     holder.outputstatusHeader.setText("Dose Period");
+                    holder.outputMode.setText("Dose Rate");
                     try {
                         String[] mode = outputConfigurationEntityList.get(position).outputMode.split("\\$");
                         holder.outputStatus.setText(mode[0]);
@@ -114,19 +119,33 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
                 case "Bleed/Blow Down":
                 case "Water Meter/Biocide":
                     holder.outputstatusHeader.setText("Accumulated Vol");
+                    holder.outputMode.setText("Target PPM");
                     holder.outputNumber.setText(outputConfigurationEntityList.get(position).outputMode);
-                    holder.outputStatus.setText("");
+                    holder.outputStatus.setText(outputKeepAliveDao.getOutputRelayStatus(outputConfigurationEntityList.get(position).outputHardwareNo));
                     holder.outputNumber.setTextSize(15f);
                     break;
                 case "On/Off":
                 case "PID":
                     holder.outputstatusHeader.setText("Set Point");
+                    holder.outputMode.setText("Value");
+                    try {
+                        String[] mode = outputConfigurationEntityList.get(position).outputMode.split("\\$");
+                        holder.outputStatus.setText(mode[0]);
+                        holder.outputMode.setText(inputDAO.getInputType(Integer.parseInt(mode[1])));
+                        holder.outputNumber.setText(keepaliveDAO.getCurrentValue(Integer.parseInt(mode[1])));
+                        holder.outputNumber.setTextSize(15f);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                     break;
                 default:
+                    holder.outputMode.setText("Value");
                     holder.outputstatusHeader.setVisibility(View.INVISIBLE);
                     holder.outputStatus.setVisibility(View.INVISIBLE);
                     break;
             }
+        }else{
+            holder.outputMode.setText("Value");
         }
 
     }

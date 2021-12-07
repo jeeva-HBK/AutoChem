@@ -40,10 +40,12 @@
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/drawable/boder_edt_bg.xml" value="0.2203125" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/drawable/ic_back_right.xml" value="0.20462962962962963" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.1" />
+        <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/drawable/ic_refresh.xml" value="0.2703125" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/drawable/ic_save.xml" value="0.20462962962962963" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/add_input_sensor_dailog.xml" value="0.5" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/alarm_log_item.xml" value="0.22" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/event_log_item.xml" value="0.20416666666666666" />
+        <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/filter_screen.xml" value="0.25025641025641027" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_alarm_log.xml" value="0.2" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_commonsettings.xml" value="0.14" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_configuration.xml" value="0.20416666666666666" />
@@ -78,7 +80,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

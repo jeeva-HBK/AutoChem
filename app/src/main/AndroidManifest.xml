@@ -41,5 +41,6 @@
 
         <service android:name=".Others.TCP" />
         <service android:name=".Others.TcpServer" />
+
     </application>
 </manifest>

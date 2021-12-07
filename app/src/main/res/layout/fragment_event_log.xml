@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -45,43 +44,71 @@
             app:layout_constraintBottom_toBottomOf="@id/to_date"
             android:text="Alerts"/>
 
-        <TextView
-            android:id="@+id/edt_form_date"
-            android:layout_width="0dp"
+        <View
+            android:id="@+id/view_1"
             android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:background="@drawable/boder_edt_bg"
             app:layout_constraintStart_toStartOf="@id/form_date"
             app:layout_constraintEnd_toEndOf="@id/form_date"
-            android:layout_marginTop="5sp"
-            android:drawableEnd="@drawable/ic_baseline_date_range_24"
-            android:padding="5sp"
-            android:gravity="center"
-            android:hint="DD-MM-YYYY"
-            android:textColor="@color/black"
-            android:background="@drawable/boder_edt_bg"
-            app:layout_constraintTop_toBottomOf="@id/form_date"/>
+            app:layout_constraintTop_toBottomOf="@id/form_date"
+            >
 
-        <TextView
-            android:id="@+id/edt_to_date"
+        </View>
+
+
+        <AutoCompleteTextView
+            android:id="@+id/edt_form_date"
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:hint="DD-MM-YYYY"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/view_1"
+            app:layout_constraintEnd_toEndOf="@id/view_1"
+            android:background="@color/white"
+            android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_24"
+            android:focusable="false"
+            android:layout_margin="3dp"
             android:gravity="center"
+            android:hint="DD-MM-YYYY"
+            android:textColorHint="@color/black"
+            app:layout_constraintTop_toTopOf="@+id/view_1"
+            app:layout_constraintBottom_toBottomOf="@id/view_1"/>
+
+
+        <View
+            android:id="@+id/view_2"
+            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:background="@drawable/boder_edt_bg"
             app:layout_constraintStart_toStartOf="@id/to_date"
             app:layout_constraintEnd_toEndOf="@id/to_date"
+            app:layout_constraintTop_toBottomOf="@id/to_date"
+            >
+
+        </View>
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/edt_to_date"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/view_2"
+            app:layout_constraintEnd_toEndOf="@id/view_2"
             android:layout_marginTop="5sp"
-            android:textColor="@color/black"
-            android:drawableEnd="@drawable/ic_baseline_date_range_24"
-            android:padding="5sp"
-            android:background="@drawable/boder_edt_bg"
-            app:layout_constraintTop_toBottomOf="@id/to_date"/>
+            android:background="@color/white"
+            android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_24"
+            android:focusable="false"
+            android:layout_margin="3dp"
+            android:gravity="center"
+            android:hint="DD-MM-YYYY"
+            android:textColorHint="@color/black"
+            app:layout_constraintTop_toTopOf="@+id/view_2"
+            app:layout_constraintBottom_toBottomOf="@id/view_2"/>
 
         <View
             android:id="@+id/view_alerts"
-            android:layout_height="0dp"
+            android:layout_height="50dp"
             android:layout_width="0dp"
             android:background="@drawable/boder_edt_bg"
             app:layout_constraintStart_toStartOf="@id/txt_alerts"
-            app:layout_constraintEnd_toEndOf="@id/txt_alerts"
+            app:layout_constraintEnd_toStartOf="@id/round_view"
             app:layout_constraintBottom_toBottomOf="@id/edt_to_date"
             app:layout_constraintTop_toTopOf="@id/edt_to_date">
 
@@ -98,11 +125,27 @@
             android:layout_margin="3dp"
             android:gravity="center"
             android:hint="Type"
+            android:textColorHint="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/view_alerts"
             app:layout_constraintEnd_toEndOf="@+id/view_alerts"
             app:layout_constraintStart_toStartOf="@+id/view_alerts"
             app:layout_constraintTop_toTopOf="@+id/view_alerts" />
 
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/round_view"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            app:tint="@android:color/black"
+            android:foregroundGravity="center"
+            app:rippleColor="@color/black"
+            android:backgroundTint="@color/colorSecondary"
+            android:src="@drawable/ic_baseline_search_24"
+            app:layout_constraintStart_toEndOf="@id/view_alerts"
+            app:layout_constraintTop_toTopOf="@id/view_alerts"
+            app:layout_constraintBottom_toBottomOf="@id/view_alerts"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <View
             android:id="@+id/root_head_view"

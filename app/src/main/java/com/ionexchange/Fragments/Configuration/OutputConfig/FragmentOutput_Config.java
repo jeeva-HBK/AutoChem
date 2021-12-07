@@ -27,6 +27,7 @@ import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentOutputConfigBinding;
 
@@ -1182,6 +1183,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
+                    new EventLogDemo(String.valueOf(outputSensorNo),"output-"+outputSensorNo,"Output Setting Changed",getContext());
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                     outputConfigurationEntity();
                 } else if (splitData[2].equals(RES_FAILED)) {
@@ -1766,7 +1768,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             } else if (isEmpty(mBinding.activateChannelOsATXT)) {
                 mAppClass.showSnackBar(getContext(), "Please select the Activate Channel");
                 return false;
-            } else if (toString(2, outputSensorNo).equalsIgnoreCase(formDigits(2, "" + getActiviateChannaleHardwareNumber()))) {
+            } else if (formDigits(2,""+getInterlockChannaleHardwareNumber()).equalsIgnoreCase(formDigits(2, "" + getActiviateChannaleHardwareNumber()))) {
                 mAppClass.showSnackBar(getContext(), "Please choose different Activate With Channel output");
                 return false;
             }
@@ -1801,13 +1803,16 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             if(mBinding.funtionModeOsATXT.getText().toString().equalsIgnoreCase("Sensor")){
                 switch (getPosition(1, toString(mBinding.modeOsATXT), modeSensor)){
                     case "0":
-
-                        subValue1 = tbtn ? ((mBinding.sensorSetpointvalueTBtn.isChecked()? "+" : "-") + toString(mBinding.sensorSetPointEdtOsc)+"."+mBinding.sensorSetPointDeciOsc.getText().toString()) :
-                                toString(mBinding.sensorSetPointEdtOsc)+"."+mBinding.sensorSetPointDeciOsc.getText().toString();
+                        String setpoint = toString(mBinding.sensorSetPointEdtOsc)+"."+mBinding.sensorSetPointDeciOsc.getText().toString() +"$"+
+                                formDigits(2,getLinkInputSensor(mBinding.sensorLinkInputSensorAtxtOsc));
+                        subValue1 = tbtn ? ((mBinding.sensorSetpointvalueTBtn.isChecked()? "+" : "-") + setpoint) :
+                                setpoint;
                         break;
                     case "1" :
-                        subValue1 = tbtn ? ((mBinding.pidSetpointvalueTBtn.isChecked() ? "+" : "-") + toString(mBinding.pidSetPointEdtOsc)+"."+mBinding.pidSetPointDeciOsc.getText().toString()):
-                                toString(mBinding.pidSetPointEdtOsc)+"."+mBinding.pidSetPointDeciOsc.getText().toString();
+                        String pidsetpoint = toString(mBinding.pidSetPointEdtOsc)+"."+mBinding.pidSetPointDeciOsc.getText().toString() +"$"+
+                                formDigits(2,getLinkInputSensor(mBinding.pidLinkInputAtxtOsc));
+                        subValue1 = tbtn ? ((mBinding.pidSetpointvalueTBtn.isChecked() ? "+" : "-") + pidsetpoint):
+                                pidsetpoint;
                         break;
                     default:
                         break;

@@ -20,8 +20,8 @@ public class PacketControl {
 
     /* Connect Packet */
     APP_VERSION = BuildConfig.VERSION_NAME, CONNECT_COMMAND = "0", DISCONNECT_COMMAND = "1",
-            ADMIN = "0", ENGINEER = "1", USER, OUTPUT_CONTROL_CONFIG = "13";
+            ADMIN = "0", ENGINEER = "1", USER, OUTPUT_CONTROL_CONFIG = "13",CHARGE_CONTROL_PACKET="15";
 
     /*ServerPacketID*/
-    public static String INPUT_VOLTAGE = "01", OUTPUT_STATUS = "02";
+    public static String INPUT_VOLTAGE = "01", OUTPUT_STATUS = "02", ALARM_STATUS = "03";
 }

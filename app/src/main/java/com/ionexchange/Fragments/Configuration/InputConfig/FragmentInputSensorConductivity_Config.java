@@ -18,6 +18,7 @@ import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorCondBinding;
 
@@ -352,6 +353,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 if (spiltData[3].equals(RES_SUCCESS)) {
                     conductivityEntity(Integer.parseInt(spiltData[2]));
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
+                    new EventLogDemo(inputNumber,"Temperature","Input Setting Changed",getContext());
                 } else if (spiltData[3].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }

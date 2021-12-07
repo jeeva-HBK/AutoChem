@@ -23,6 +23,7 @@ import com.ionexchange.Database.Entity.OutputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorFlowBinding;
 
@@ -863,6 +864,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[3].equals(RES_SUCCESS)) {
                     flowMeterEntity(Integer.parseInt(splitData[2]));
+                    new EventLogDemo(inputNumber,"FlowMeter","Input Setting Changed",getContext());
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 } else if (splitData[3].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));

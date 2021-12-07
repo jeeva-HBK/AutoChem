@@ -1,8 +1,12 @@
 package com.ionexchange.Fragments.Services;
 
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_DIAGNOSTIC;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -10,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
@@ -21,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Adapters.DiagnosticDataAdapter;
 import com.ionexchange.Database.Dao.DiagnosticDataDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
@@ -47,14 +51,7 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     WaterTreatmentDb dB;
     InputConfigurationDao inputDao;
     List<DiagnosticDataEntity> diagnosticDataEntityList;
-    int minSensor = 0,
-            maxSensor = 0,
-            minModbusSensor = 0,
-            maxModbusSensor = 0, minFlowSensor = 0,
-            maxFlowSensor = 0, minTemp, maxTemp = 0,
-            minAnalog = 0, maxAnalog = 0, minTank = 0, maxTank = 0,
-            minDigital = 0, maxDigital = 0;
-    boolean sensorBool = false, modBusBool = false, flowMeterBool = false, tempBool = false, analogBool = false, tankBool = false, digitalBool = false, empty = false;
+    BaseActivity baseActivity;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -67,6 +64,7 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        baseActivity = (BaseActivity) getActivity();
         mAppClass = (ApplicationClass) getActivity().getApplication();
         diagnosticDataEntityList = new ArrayList<>();
         dB = WaterTreatmentDb.getDatabase(getContext());
@@ -76,11 +74,16 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
         mBinding.readNowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendPacket("0");
+                diagnosticDataEntityList = dao.getDiagnosticDataList();
+                setAdapter(diagnosticDataEntityList);
                 filterDialog();
             }
         });
         setAdapter(diagnosticDataEntityList);
+        mBinding.refresh.setOnClickListener(View -> {
+            sendPacket("0");
+
+        });
     }
 
     @Override
@@ -90,8 +93,9 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     }
 
     private void sendPacket(String setID) {
-        // todo need to change
-        mAppClass.sendPacket(this, "1234$0$1$12$" + setID);
+        baseActivity.showProgress();
+        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
+                READ_PACKET + SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + setID);
     }
 
     private void setDiagnosticsDb(String hardwareNo, String diagData, String timeStamp) {
@@ -114,6 +118,7 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
 
     @Override
     public void OnDataReceive(String data) {
+        baseActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {
@@ -136,7 +141,7 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     }
 
     private void handleResponse(String[] splitData) {
-        if (splitData[1].equals("12")) {
+        if (splitData[1].equals("11")) {
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
                     int i = 0;
@@ -157,16 +162,22 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
                     }
 
 
-                    if (splitData[3].equals("0")) {
-                        sendPacket("1");
-                    } else if (splitData[3].equals("1")) {
-                        sendPacket("2");
-                    } else if (splitData[3].equals("2")) {
-                        sendPacket("3");
-                    } else if (splitData[3].equals("3")) {
-                        sendPacket("4");
-                    } else if (splitData[3].equals("4")) {
-                        sendPacket("5");
+                    switch (splitData[3]) {
+                        case "0":
+                            sendPacket("1");
+                            break;
+                        case "1":
+                            sendPacket("2");
+                            break;
+                        case "2":
+                            sendPacket("3");
+                            break;
+                        case "3":
+                            sendPacket("4");
+                            break;
+                        case "4":
+                            sendPacket("5");
+                            break;
                     }
                     setAdapter(diagnosticDataEntityList);
                 }
@@ -182,70 +193,31 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
         View dialogView = inflater.inflate(R.layout.filter_screen, null);
         dialogBuilder.setView(dialogView);
         AlertDialog alertDialog = dialogBuilder.create();
-        Chip sensor = dialogView.findViewById(R.id.Sensor);
-        Chip modbus = dialogView.findViewById(R.id.modbusSensor);
-        Chip flowSensor = dialogView.findViewById(R.id.flowSensor);
-        Chip temp = dialogView.findViewById(R.id.tempSensor);
-        Chip analog = dialogView.findViewById(R.id.analogSensor);
-        Chip tank = dialogView.findViewById(R.id.tankSensor);
+        ChipGroup group = dialogView.findViewById(R.id.chipGroup);
 
-        Chip digital = dialogView.findViewById(R.id.digitalSensor);
-        ChipGroup group = dialogView.findViewById(R.id.radio_group);
-        Button ok = dialogView.findViewById(R.id.ok);
-        Button cancel = dialogView.findViewById(R.id.cancel);
 
-        sensor.setOnCheckedChangeListener(this);
-        modbus.setOnCheckedChangeListener(this);
-        flowSensor.setOnCheckedChangeListener(this);
-        temp.setOnCheckedChangeListener(this);
-        analog.setOnCheckedChangeListener(this);
-        tank.setOnCheckedChangeListener(this);
-        digital.setOnCheckedChangeListener(this);
-
-        if (sensorBool) {
-            sensor.setChecked(true);
-        }
-        if (modBusBool) {
-            modbus.setChecked(true);
-        }
-        if (analogBool) {
-            analog.setChecked(true);
-        }
-        if (digitalBool) {
-            digital.setChecked(true);
-        }
-        if (flowMeterBool) {
-            flowSensor.setChecked(true);
-        }
-        if (tankBool) {
-            tank.setChecked(true);
-        }
-        if (tempBool) {
-            temp.setChecked(true);
+        for (int i = 1; i < 58; i++) {
+            Chip chip = new Chip(dialogView.getContext());
+            chip.setText(i + "");
+            chip.setCheckable(true);
+            chip.setId(100 + i);
+            group.addView(chip);
         }
 
 
-        ok.setOnClickListener(new View.OnClickListener() {
+        group.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                if (empty){
-                    diagnosticDataEntityList = dao.getDiagnosticDataList();
-                }else {
-                    diagnosticDataEntityList = dao.getInputHardWareNoDiagnosticDataEntity(
-                            minSensor, maxSensor, minModbusSensor, maxModbusSensor, minTemp, maxTemp,
-                            minAnalog, maxAnalog, minFlowSensor, maxFlowSensor, minDigital, maxDigital,
-                            minTank, maxTank);
-                }
+            public void onCheckedChanged(ChipGroup group, int checkedId) {
+                Chip chip = dialogView.findViewById(group.getCheckedChipId());
+                chip.setChipBackgroundColorResource(R.color.colorSecondary);
+                diagnosticDataEntityList = dao.getDiagnosticData(chip.getText().toString());
                 setAdapter(diagnosticDataEntityList);
                 alertDialog.dismiss();
             }
+
         });
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-            }
-        });
+
+
         alertDialog.show();
 
     }
@@ -253,99 +225,7 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked) {
-            switch (buttonView.getId()) {
-                case R.id.Sensor:
-                    if (isChecked) {
-                        minSensor = 1;
-                        maxSensor = 4;
-                        sensorBool = true;
-                    } else {
-                        minSensor = 0;
-                        maxSensor = 0;
-                        sensorBool = false;
-                    }
-                    break;
-                case R.id.modbusSensor:
-                    if (isChecked) {
-                        minModbusSensor = 5;
-                        maxModbusSensor = 14;
-                        modBusBool = true;
-                    } else {
-                        minModbusSensor = 0;
-                        maxModbusSensor = 0;
-                        modBusBool = false;
-                    }
-                    break;
-                case R.id.flowSensor:
-                    if (isChecked) {
-                        minFlowSensor = 26;
-                        maxFlowSensor = 33;
-                        flowMeterBool = true;
-                    } else {
-                        minFlowSensor = 0;
-                        maxFlowSensor = 0;
-                        flowMeterBool = false;
-                    }
-                    break;
-                case R.id.tempSensor:
-                    if (isChecked) {
-                        minTemp = 15;
-                        maxTemp = 17;
-                        tempBool = true;
-                    } else {
-                        minTemp = 0;
-                        maxTemp = 0;
-                        tempBool = false;
-                    }
 
-                    break;
-                case R.id.analogSensor:
-                    if (isChecked) {
-                        minAnalog = 18;
-                        maxAnalog = 25;
-                        analogBool = true;
-                    } else {
-                        minAnalog = 0;
-                        maxAnalog = 0;
-                        analogBool = false;
-                    }
-                    break;
-                case R.id.tankSensor:
-                    if (isChecked) {
-                        minTank = 42;
-                        maxTank = 49;
-                        tankBool = true;
-                    } else {
-                        minTank = 0;
-                        maxTank = 0;
-                        tankBool = false;
-                    }
-
-                    break;
-
-                case R.id.digitalSensor:
-                    if (isChecked) {
-                        minDigital = 34;
-                        maxDigital = 41;
-                        digitalBool = true;
-                    } else {
-                        minDigital = 0;
-                        maxDigital = 0;
-                        digitalBool = false;
-                    }
-                    break;
-            }
-        }else {
-            empty = true;
-            sensorBool = false;
-            digitalBool = false;
-            tankBool = false;
-            analogBool = false;
-            tempBool = false;
-            flowMeterBool = false;
-            modBusBool = false;
-        }
 
     }
 }

@@ -1,5 +1,6 @@
 package com.ionexchange.Others;
 
+import static android.content.Intent.ACTION_BATTERY_CHANGED;
 import static android.util.Patterns.IP_ADDRESS;
 import static com.ionexchange.Database.WaterTreatmentDb.DB_NAME;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
@@ -63,7 +64,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -143,7 +147,10 @@ public class ApplicationClass extends Application {
             outputStatusarr = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for", "Analog Output"},
             outputControl = {"Disabled", "Auto", "Force OFF", "Force ON", "Manual ON for"},
     // outputControlShortForm = {"â’¹", "A OFF", "A ON", "M OFF", "M ON", "F OFF", "F ON", "M ON for"};
-    outputControlShortForm = {"D", "A", "FÌ¶", "F", "M for"};
+    outputControlShortForm = {"D", "A", "FÌ¶", "F", "M for"},
+    alarmArr = {"Low Alarm" ,"High Alarm", "Safety Low Alarm" ,
+           " Safety High", "Alarm Calibration" ,"Required Alarm", "Totalizer Alarm", "DI Alarm" ,"Flow Verify Alarm", "Lockout Alarm"};
+
 
     /* Static Variables */
     public static String mIPAddress = "", TabletIPAddress = "", Packet, Acknowledge;
@@ -160,6 +167,7 @@ public class ApplicationClass extends Application {
     public static VirtualConfigurationDao virtualDAO;
     public static TimerConfigurationDao timerDAO;
     public static UserManagementDao userManagementDao;
+    public static KeepAliveCurrentValueDao keepaliveDAO;
     Handler handler;
     DataReceiveCallback listener;
 
@@ -207,6 +215,7 @@ public class ApplicationClass extends Application {
                     e.printStackTrace();
                 }
                 registerReceiver();
+                registerBatteryReceiver();
             }
 
             @Override
@@ -233,6 +242,7 @@ public class ApplicationClass extends Application {
             @Override
             public void onActivityDestroyed(@NonNull Activity activity) {
                 unregisterReceiver();
+                unregisterBatteryReceiver();
             }
         });
     }
@@ -257,6 +267,18 @@ public class ApplicationClass extends Application {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
+
+    public void registerBatteryReceiver() {
+        IntentFilter intentFilter = new IntentFilter(ACTION_BATTERY_CHANGED);
+        intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        mContext.registerReceiver(new MonitorBatteryLevel(), intentFilter);
+    }
+
+    public void unregisterBatteryReceiver() {
+        try {
+            mContext.unregisterReceiver(new MonitorBatteryLevel());
+        } catch (Exception e) { e.printStackTrace(); }
+    }
     public static String formDigits(int digits, String value) {
         String finalDigits = null;
         switch (digits) {
@@ -478,6 +500,7 @@ public class ApplicationClass extends Application {
         DB = WaterTreatmentDb.getDatabase(getApplicationContext());
         /*Input_DB*/
         inputDAO = DB.inputConfigurationDao();
+        keepaliveDAO = DB.keepAliveCurrentValueDao();
         if (inputDAO.getInputConfigurationEntityList().isEmpty()) {
             String sensorType = "SENSOR";
             for (int i = 1; i < 50; i++) {
@@ -590,6 +613,16 @@ public class ApplicationClass extends Application {
     public void updateUsermanagement(List<UsermanagementEntity> entryList) {
         UserManagementDao dao = DB.userManagementDao();
         dao.insert(entryList.toArray(new UsermanagementEntity[0]));
+    }
+
+    public static String getCurrentDate(){
+        Format f = new SimpleDateFormat("MM/dd/yy");
+        return  f.format(new Date());
+    }
+
+    public static String getCurrentTime(){
+        Format f = new SimpleDateFormat("HH.mm.ss");
+        return  f.format(new Date());
     }
 
     void setDefaultDb() {

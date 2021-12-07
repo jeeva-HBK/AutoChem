@@ -18,6 +18,7 @@ import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorToraidalconductivityBinding;
 
@@ -271,6 +272,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
             } else if (spiltData[0].equals(WRITE_PACKET)) {
                 if (spiltData[3].equals(RES_SUCCESS)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
+                    new EventLogDemo(inputNumber,"Temperature","Input Setting Changed",getContext());
                     tankLevelEntity(Integer.valueOf(spiltData[2]));
                 } else if (spiltData[3].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));

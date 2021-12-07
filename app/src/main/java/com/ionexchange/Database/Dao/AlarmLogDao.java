@@ -24,9 +24,18 @@ public interface AlarmLogDao {
     @Query("select * FROM alarmlogentity WHERE  date BETWEEN :formDate AND :toDate")
     List<AlarmLogEntity> getDateWise(String formDate, String toDate);
 
-    @Query("DELETE FROM alarmlogentity WHERE date = :Date")
-    void deleteDateWise(String Date);
 
-    @Query("select date FROM alarmlogentity WHERE date = :Date")
-    List<String> getDeleteDate(String Date);
+
+    @Query("select * FROM alarmlogentity WHERE  date BETWEEN :formDate AND :toDate in (SELECT alarmLog FROM alarmlogentity Where sensorType =:type)")
+    List<AlarmLogEntity> getDateWiseAndType(String formDate, String toDate,String type);
+
+
+
+    @Query("select date FROM alarmlogentity")
+    List<String> getDateList();
+
+
+    @Query("Delete FROM alarmlogentity WHERE sNo in (SELECT sNo FROM AlarmLogEntity limit 1)")
+    void deleteFirstRow();
+
 }

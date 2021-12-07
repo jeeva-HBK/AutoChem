@@ -15,9 +15,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -33,6 +36,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GestureDetectorCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
@@ -52,7 +56,9 @@ import java.util.HashMap;
 import java.util.List;
 
 ///Created By silambu
-public class BaseActivity extends AppCompatActivity implements View.OnClickListener, ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupClickListener, ExpandableListView.OnChildClickListener {
+public class BaseActivity extends AppCompatActivity implements View.OnClickListener,
+        ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupClickListener,
+        ExpandableListView.OnChildClickListener {
     ActivityBaseBinding mBinding;
     private static final int PERMISSION_REQUEST_CODE = 2296;
     private static final String TAG = "BaseActivity";
@@ -64,6 +70,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     private int lastPosition = -1;
     HashMap<String, List<String>> childList;
     List<String> generaList, ioList, homescreenList, headerList;
+
+    private static final String DEBUG_TAG = "Gestures";
+    GestureDetector gestureDetector;
 
 
     @RequiresApi(api = Build.VERSION_CODES.R)
@@ -363,6 +372,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
        // hideStatusNavigationBar();
     }
 
+    private void turnOnScreen() {
+
+    }
     private boolean checkPermission() {
         if (SDK_INT >= Build.VERSION_CODES.R) {
             return Environment.isExternalStorageManager();
@@ -432,4 +444,8 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
+
+
+
 }
+

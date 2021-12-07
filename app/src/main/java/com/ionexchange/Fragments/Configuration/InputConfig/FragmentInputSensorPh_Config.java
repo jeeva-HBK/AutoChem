@@ -16,6 +16,7 @@ import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentInputsensorPhBinding;
 
@@ -317,6 +318,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[3].equals(RES_SUCCESS)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
+                    new EventLogDemo(inputNumber,"Ph","Input Setting Changed",getContext());
                     pHEntity(Integer.parseInt(splitData[2]));
 
                 } else if (splitData[3].equals(RES_FAILED)) {

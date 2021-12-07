@@ -14,6 +14,7 @@ import com.ionexchange.Database.Dao.AlarmLogDao;
 import com.ionexchange.Database.Dao.CalibrationDao;
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
 import com.ionexchange.Database.Dao.DiagnosticDataDao;
+import com.ionexchange.Database.Dao.EventLogDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.MainConfigurationDao;
@@ -26,6 +27,7 @@ import com.ionexchange.Database.Entity.AlarmLogEntity;
 import com.ionexchange.Database.Entity.CalibrationEntity;
 import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
 import com.ionexchange.Database.Entity.DiagnosticDataEntity;
+import com.ionexchange.Database.Entity.EventLogEntity;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 import com.ionexchange.Database.Entity.MainConfigurationEntity;
@@ -40,7 +42,7 @@ import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
         VirtualConfigurationEntity.class, TimerConfigurationEntity.class,
         DefaultLayoutConfigurationEntity.class, MainConfigurationEntity.class,
         KeepAliveCurrentEntity.class, DiagnosticDataEntity.class, UsermanagementEntity.class,
-        OutputKeepAliveEntity.class, CalibrationEntity.class, AlarmLogEntity.class},
+        OutputKeepAliveEntity.class, CalibrationEntity.class, AlarmLogEntity.class, EventLogEntity.class},
         version = 2, exportSchema = false)
 @TypeConverters(Converters.class)
 
@@ -98,4 +100,7 @@ public abstract class WaterTreatmentDb extends RoomDatabase {
     public abstract CalibrationDao calibrationDao();
 
     public abstract AlarmLogDao alarmLogDao();
+
+    public abstract EventLogDao eventLogDao();
+
 }

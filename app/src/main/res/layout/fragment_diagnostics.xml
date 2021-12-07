@@ -53,6 +53,19 @@
 
         </LinearLayout>
 
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           android:layout_marginBottom="5sp"
+            android:backgroundTint="@color/primary"
+            android:src="@drawable/ic_refresh"
+            app:fabSize="mini"
+            android:scaleType="center"
+            app:layout_constraintBottom_toTopOf="@+id/readNowBtn"
+            app:layout_constraintEnd_toEndOf="@+id/readNowBtn"
+            app:layout_constraintStart_toStartOf="@+id/readNowBtn" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/diagnosticRv"
             android:layout_width="0dp"
