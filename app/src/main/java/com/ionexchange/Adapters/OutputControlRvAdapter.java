@@ -72,7 +72,25 @@ public class OutputControlRvAdapter extends RecyclerView.Adapter<OutputControlRv
 
         holder.outputName.setText(outputConfigurationEntityList.get(position).getOutputType()
                 + "-" + outputConfigurationEntityList.get(position).getOutputLabel());
-        holder.outputType.setText(outputConfigurationEntityList.get(position).getOutputMode()
+        String outputmode = "";
+        switch (outputConfigurationEntityList.get(position).getOutputStatus()){
+            case "Continuous":
+            case "Bleed/Blow Down":
+            case "Water Meter/Biocide":
+                outputmode = "Inhibitor";
+                break;
+            case "On/Off":
+            case "PID":
+                outputmode = "Sensor";
+                break;
+            case "Manual":
+                outputmode = "Manual";
+                break;
+            default:
+                outputmode = "Disable";
+                break;
+        }
+        holder.outputType.setText(outputmode
                 + "-" + outputConfigurationEntityList.get(position).getOutputStatus());
         holder.outputControl.setOnClickListener(View -> {
             FragmentOutputControl.canReceive = false;

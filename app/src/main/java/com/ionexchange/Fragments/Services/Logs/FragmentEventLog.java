@@ -1,6 +1,7 @@
 package com.ionexchange.Fragments.Services.Logs;
 
 import static com.ionexchange.Others.ApplicationClass.alarmArr;
+import static com.ionexchange.Others.ApplicationClass.eventLogArr;
 import static com.ionexchange.Others.ApplicationClass.getAdapter;
 import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
 import static com.ionexchange.Others.ApplicationClass.getStringValue;
@@ -99,7 +100,7 @@ public class FragmentEventLog extends Fragment {
         date.addAll(dateset);
         mBinding.edtFormDate.setAdapter(new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, date));
         mBinding.edtToDate.setAdapter(new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, date));
-        mBinding.alertsType.setAdapter(getAdapter(alarmArr,getContext()));
+        mBinding.alertsType.setAdapter(getAdapter(eventLogArr,getContext()));
     }
 
     void setAdapter(List<EventLogEntity> eventLogEntityList){

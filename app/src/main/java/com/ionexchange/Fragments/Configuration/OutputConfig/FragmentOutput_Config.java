@@ -935,7 +935,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                         //   }
                     } else {
                         mBinding.functionModeOs.setEnabled(true);
-                        mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
+                            mBinding.funtionModeOsATXT.setText(splitData[4].equalsIgnoreCase("4") ? mBinding.funtionModeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[4]) - 1).toString() :
+                                    mBinding.funtionModeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
                         //mBinding.interLockChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(Integer.parseInt(splitData[6]) - 34).toString());
                         if(!splitData[4].equals("0")) {
                             int interlockChannelPos = Integer.parseInt(splitData[6]);
@@ -1839,7 +1840,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
                 (outputSensorNo, "Output- " + outputSensorNo + "(" + toString(mBinding.outputLabelOsEDT) + ")", toString(0, mBinding.outputLabelOsEDT),
                         (mBinding.funtionModeOsATXT.getText().toString().equals("Analog") ? mBinding.modeOsATXT.getText().toString() : subValue1),
-                        (mBinding.funtionModeOsATXT.getText().toString().equals("Analog")  ? linkInputSensor : (mBinding.modeOsATXT.getText().toString().equals("") ? "Disable" : mBinding.modeOsATXT.getText().toString())));
+                        (mBinding.funtionModeOsATXT.getText().toString().equals("Analog")  ? linkInputSensor : (mBinding.modeOsATXT.getText().toString().equals("") ? mBinding.funtionModeOsATXT.getText().toString() : mBinding.modeOsATXT.getText().toString())));
         List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(entityUpdate);
         updateToDb(entryListUpdate);

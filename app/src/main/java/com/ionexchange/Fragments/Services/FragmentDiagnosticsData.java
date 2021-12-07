@@ -82,6 +82,7 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
         setAdapter(diagnosticDataEntityList);
         mBinding.refresh.setOnClickListener(View -> {
             sendPacket("0");
+            setAdapter(diagnosticDataEntityList);
 
         });
     }

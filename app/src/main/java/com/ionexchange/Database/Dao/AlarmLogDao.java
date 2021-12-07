@@ -26,7 +26,7 @@ public interface AlarmLogDao {
 
 
 
-    @Query("select * FROM alarmlogentity WHERE  date BETWEEN :formDate AND :toDate in (SELECT alarmLog FROM alarmlogentity Where sensorType =:type)")
+    @Query("select * FROM alarmlogentity WHERE  date BETWEEN :formDate AND :toDate in (SELECT alarmLog FROM alarmlogentity Where alarmLog =:type)")
     List<AlarmLogEntity> getDateWiseAndType(String formDate, String toDate,String type);
 
 

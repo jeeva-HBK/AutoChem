@@ -3,6 +3,7 @@ package com.ionexchange.Others;
 
 import static com.ionexchange.Others.ApplicationClass.Acknowledge;
 import static com.ionexchange.Others.ApplicationClass.alarmArr;
+import static com.ionexchange.Others.ApplicationClass.eventLogArr;
 import static com.ionexchange.Others.PacketControl.ACK;
 import static com.ionexchange.Others.PacketControl.ALARM_STATUS;
 import static com.ionexchange.Others.PacketControl.CRC;
@@ -128,7 +129,7 @@ public class KeepAlive {
                 }
                 EventLogEntity eventLogEntity = new EventLogEntity(eventLogDao.getLastSno() + 1,
                         data[3], sensorType,
-                        alarmArr[Integer.parseInt(data[4])],
+                        eventLogArr[Integer.parseInt(data[4])],
                         ApplicationClass.getCurrentTime(), ApplicationClass.getCurrentDate());
                 List<EventLogEntity> eventLogEntities = new ArrayList<>();
                 eventLogEntities.add(eventLogEntity);

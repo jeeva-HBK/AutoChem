@@ -148,6 +148,9 @@ public class ApplicationClass extends Application {
             outputControl = {"Disabled", "Auto", "Force OFF", "Force ON", "Manual ON for"},
     // outputControlShortForm = {"â’¹", "A OFF", "A ON", "M OFF", "M ON", "F OFF", "F ON", "M ON for"};
     outputControlShortForm = {"D", "A", "FÌ¶", "F", "M for"},
+    eventLogArr={"Unit IP setting changed",
+            "Target IP settings changed", "General settings changed", "Input Settings Changed", "Output Settings Changed", "Timer settings changed",
+            "Menu Access BY Admin", "Menu Access BY Engineer", "Menu Access BY User 1", "Menu Access BY User 2"},
     alarmArr = {"Low Alarm" ,"High Alarm", "Safety Low Alarm" ,
            " Safety High", "Alarm Calibration" ,"Required Alarm", "Totalizer Alarm", "DI Alarm" ,"Flow Verify Alarm", "Lockout Alarm"};
 
@@ -616,7 +619,7 @@ public class ApplicationClass extends Application {
     }
 
     public static String getCurrentDate(){
-        Format f = new SimpleDateFormat("MM/dd/yy");
+        Format f = new SimpleDateFormat("dd/MM/yy");
         return  f.format(new Date());
     }
 

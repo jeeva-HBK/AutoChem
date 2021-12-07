@@ -28,14 +28,13 @@ public interface EventLogDao {
 
 
 
-    @Query("select * FROM EventLogEntity WHERE  date BETWEEN :formDate AND :toDate in (SELECT alarmLog FROM alarmlogentity Where sensorType =:type)")
+    @Query("select * FROM EventLogEntity WHERE  date BETWEEN :formDate AND :toDate in (SELECT EventLog FROM EventLogEntity Where EventLog =:type)")
     List<EventLogEntity> getDateWiseAndType(String formDate, String toDate,String type);
 
 
 
     @Query("select date FROM EventLogEntity")
     List<String> getDateList();
-
 
     @Query("Delete FROM EventLogEntity WHERE sNo in (SELECT sNo FROM EventLogEntity limit 1)")
     void deleteFirstRow();
