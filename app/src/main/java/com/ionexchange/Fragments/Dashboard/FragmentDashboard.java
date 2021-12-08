@@ -1,7 +1,6 @@
 package com.ionexchange.Fragments.Dashboard;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +58,13 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         db = WaterTreatmentDb.getDatabase(getContext());
         defaultLayoutConfigurationDao = db.defaultLayoutConfigurationDao();
         mainConfigurationDao = db.mainConfigurationDao();
+        mBinding.exInDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             //   mAppClass.navigateTo(getActivity(), R.id.action_Dashboard_to_export_dbFile);
 
+            }
+        });
         setGridCount(pageNo);
         setDefaultPage();
         mBinding.rightArrowIsBtn.setOnClickListener(this);
@@ -168,10 +173,12 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onClick(int sensorInputNo) {}
+    public void onClick(int sensorInputNo) {
+    }
 
     @Override
-    public void onClick(String sensorInputNo) {}
+    public void onClick(String sensorInputNo) {
+    }
 
     @Override
     public void onClick(MainConfigurationEntity mEntity) {

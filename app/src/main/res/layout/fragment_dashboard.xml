@@ -17,6 +17,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageView
+            android:id="@+id/image"
             android:layout_width="200dp"
             android:layout_height="0dp"
             android:src="@drawable/ion_logo"
@@ -24,6 +25,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/ex_in_db"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:visibility="gone"
+            android:background="@drawable/ic_baseline_import_export_24"
+            app:layout_constraintTop_toTopOf="@id/image"
+            app:layout_constraintBottom_toBottomOf="@id/image"
+            app:layout_constraintEnd_toStartOf="@id/image"/>
 
         <TextView
             android:id="@+id/pageNo"

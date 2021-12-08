@@ -14,8 +14,19 @@
         <action
             android:id="@+id/action_Dashboard_to_sensorDetails1"
             app:destination="@id/sensorDetails" />
+        <action
+            android:id="@+id/action_Dashboard_to_export_dbFile"
+            app:destination="@id/export_dbFile" />
     </fragment>
 
+    <fragment
+        android:id="@+id/export_dbFile"
+        android:name="com.ionexchange.Fragments.SaveDb.Fragment_Import_Export_Db"
+        android:label="ExportDb"
+        tools:layout="@layout/db_export_import">
+
+
+    </fragment>
     <fragment
         android:id="@+id/sensorDetails"
         android:name="com.ionexchange.Fragments.MainScreen.FragmentSensorDetails"

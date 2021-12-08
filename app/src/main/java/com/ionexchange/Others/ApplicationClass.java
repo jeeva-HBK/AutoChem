@@ -716,7 +716,7 @@ public class ApplicationClass extends Application {
         dao.insert(entryList.toArray(new OutputKeepAliveEntity[0]));
     }
 
-    public void exportDB() {
+    public void importDB() {
         try {
             File sd = Environment.getExternalStorageDirectory().getAbsoluteFile();
             handler = new Handler();
@@ -733,8 +733,8 @@ public class ApplicationClass extends Application {
                             FileChannel dst = new FileOutputStream(backupDB).getChannel();
                             dst.transferFrom(src, 0, src.size());
                             src.close();
-                            Log.e(TAG, "exportDB: " + currentDBPath);
-                            Log.e(TAG, "exportDB: " + backupDB);
+                            Log.e(TAG, "importDB: " + currentDBPath);
+                            Log.e(TAG, "importDB: " + backupDB);
                             dst.close();
                             Toast.makeText(getApplicationContext(), "Backup Successful!", Toast.LENGTH_SHORT).show();
                         }
@@ -753,7 +753,7 @@ public class ApplicationClass extends Application {
         }
     }
 
-    public void importDB() {
+    public void exportDB() {
         try {
             File sd = Environment.getExternalStorageDirectory().getAbsoluteFile();
             handler = new Handler();
@@ -777,13 +777,14 @@ public class ApplicationClass extends Application {
 
                     } catch (Exception e) {
                         e.printStackTrace();
+                        Log.e(TAG, "run: "+e );
                     }
                 }
             };
 
             handler.postDelayed(r, 3000);
 
-            Toast.makeText(getApplicationContext(), "Import Successful!", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getApplicationContext(), "Import Successful!", Toast.LENGTH_SHORT).show();
 
         } catch (Exception e) {
 
