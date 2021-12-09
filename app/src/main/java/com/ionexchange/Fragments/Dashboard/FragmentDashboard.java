@@ -62,7 +62,6 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
             @Override
             public void onClick(View v) {
              //   mAppClass.navigateTo(getActivity(), R.id.action_Dashboard_to_export_dbFile);
-
             }
         });
         setGridCount(pageNo);
@@ -80,6 +79,7 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
             }
         });
     }
+
 
     @Override
     public void onResume() {

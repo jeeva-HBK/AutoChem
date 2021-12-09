@@ -1,5 +1,6 @@
 package com.ionexchange.Fragments.MainScreen;
 
+import static com.ionexchange.Fragments.MainScreen.FragmentSensorDetails.clickMainScreenBtn;
 import static com.ionexchange.Others.ApplicationClass.bufferArr;
 import static com.ionexchange.Others.ApplicationClass.getPosition;
 import static com.ionexchange.Others.ApplicationClass.getValueFromArr;
@@ -725,6 +726,8 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         List<CalibrationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(entityUpdate);
         updateToDb(entryListUpdate);
+        clickMainScreenBtn();
+        mAppClass.showSnackBar(getContext(), "Calibration Success");
     }
 
     public void updateToDb(List<CalibrationEntity> entryList) {

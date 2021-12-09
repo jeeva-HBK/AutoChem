@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,23 +56,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
-            android:text="-- |"
+            android:text=" -- "
             android:textSize="12dp"
             app:layout_constraintBottom_toBottomOf="@id/modbusCalib_lastCalib"
             app:layout_constraintStart_toEndOf="@id/modbusCalib_lastCalib"
-            app:layout_constraintTop_toTopOf="@id/modbusCalib_lastCalib" />
-
-        <TextView
-            android:id="@+id/modbusCalib_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:text="GAIN "
-            android:textColor="@color/green"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/modbusCalib_date"
-            app:layout_constraintStart_toEndOf="@+id/modbusCalib_date"
-            app:layout_constraintTop_toTopOf="@+id/modbusCalib_date" />
+            app:layout_constraintTop_toTopOf="@id/modbusCalib_lastCalib"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/linearLayout4"
@@ -85,7 +75,8 @@
             android:textSize="16dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-            app:layout_constraintTop_toBottomOf="@+id/modbusCalib_status" />
+            app:layout_constraintTop_toBottomOf="@+id/modbusCalib_date"
+            tools:layout_editor_absoluteX="10dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline8"

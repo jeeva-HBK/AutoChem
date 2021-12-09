@@ -193,34 +193,34 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.main_screen_btn:
-                setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle,
-                        mBinding.homeText, navGraph, R.id.Dashboard, mNavController);
-                mBinding.view.setVisibility(View.GONE);
-                break;
+            switch (v.getId()) {
+                case R.id.main_screen_btn:
+                    setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle,
+                            mBinding.homeText, navGraph, R.id.Dashboard, mNavController);
+                    mBinding.view.setVisibility(View.GONE);
+                    break;
 
-            case R.id.trend_screen_btn:
-                setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle,
-                        mBinding.statisticsText, navGraph, R.id.trend, mNavController);
-                mBinding.view.setVisibility(View.GONE);
+                case R.id.trend_screen_btn:
+                    setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle,
+                            mBinding.statisticsText, navGraph, R.id.trend, mNavController);
+                    mBinding.view.setVisibility(View.GONE);
 
-                break;
+                    break;
 
-            case R.id.event_logs_screen_btn:
-                setNewState(mBinding.supportBigCircle, mBinding.supportMain, mBinding.supportSub, mBinding.supportSmallCircle, mBinding.supportText,
-                        navGraph, R.id.event_log, mNavController);
-                mBinding.view.setVisibility(View.GONE);
-                break;
+                case R.id.event_logs_screen_btn:
+                    setNewState(mBinding.supportBigCircle, mBinding.supportMain, mBinding.supportSub, mBinding.supportSmallCircle, mBinding.supportText,
+                            navGraph, R.id.event_log, mNavController);
+                    mBinding.view.setVisibility(View.GONE);
+                    break;
 
-            case R.id.config_screen_btn:
-                if (preferences.getBoolean("requiredUserLogin", true)) {
-                    checkUserLogin();
-                } else {
-                    moveToConfig();
-                }
-                break;
-        }
+                case R.id.config_screen_btn:
+                    if (preferences.getBoolean("requiredUserLogin", true)) {
+                        checkUserLogin();
+                    } else {
+                        moveToConfig();
+                    }
+                    break;
+            }
     }
 
     private void checkUserLogin() {
@@ -299,8 +299,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onBackPressed() {
-    }
+    public void onBackPressed() { }
 
     @Override
     public void onGroupExpand(int pos) {
@@ -361,21 +360,20 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        // hideStatusNavigationBar();
+      // hideStatusNavigationBar();
     }
 
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        // hideStatusNavigationBar();
+       // hideStatusNavigationBar();
     }
 
     private void turnOnScreen() {
 
     }
-
-  /*  private boolean checkPermission() {
+    private boolean checkPermission() {
         if (SDK_INT >= Build.VERSION_CODES.R) {
             return Environment.isExternalStorageManager();
         } else {
@@ -384,7 +382,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED;
         }
     }
-*/
+
     public void checkPermission(String permission, int requestCode) {
         if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, new String[] { permission }, requestCode);
@@ -407,6 +405,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(intent, 2296);
             }
         } else {
+            //below android 11
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.MANAGE_EXTERNAL_STORAGE}, 2296);
         }
@@ -438,14 +437,11 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                     boolean WRITE_EXTERNAL_STORAGE = grantResults[1] == PackageManager.PERMISSION_GRANTED;
 
                     if (READ_EXTERNAL_STORAGE && WRITE_EXTERNAL_STORAGE) {
-                        if (SDK_INT >= Build.VERSION_CODES.R) {
-
-                        }
+                        // perform action when allow permission success
                     } else {
                         Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
                     }
                 }
-
                 break;
         }
     }
@@ -460,32 +456,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
-
-
-    public  void provider(){
-        String path = "/storage/emulated/0/ion_exchange_db.db";
-        File file = new File(path);
-        Uri uri = FileProvider.getUriForFile(getApplicationContext(), "com.ionexchange.Others.GenericFileProvider", file);
-        Intent intent = ShareCompat.IntentBuilder.from(this)
-                .setType("application/pdf")
-                .setStream(uri)
-                .setChooserTitle("Choose bar")
-                .createChooserIntent()
-                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        getApplicationContext().startActivity(intent);
-    }
-
-    public void openFolder() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        String path = "/data/user/0/com.ionexchange/databases/ion_exchange_db.db";
-        File file = new File(path);
-        Uri uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider",
-                file);
-        intent.setDataAndType(uri,"application/vnd.sqlite3");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivity(intent);
-    }
 }
+
+
 

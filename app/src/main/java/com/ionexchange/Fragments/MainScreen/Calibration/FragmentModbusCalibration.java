@@ -1,5 +1,18 @@
 package com.ionexchange.Fragments.MainScreen.Calibration;
 
+import static com.ionexchange.Fragments.MainScreen.FragmentSensorDetails.clickMainScreenBtn;
+import static com.ionexchange.Others.ApplicationClass.getPosition;
+import static com.ionexchange.Others.ApplicationClass.modBusTypeArr;
+import static com.ionexchange.Others.ApplicationClass.typeOfValueRead;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_SENSORCALIB;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +29,9 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.ionexchange.Database.Dao.CalibrationDao;
+import com.ionexchange.Database.Entity.CalibrationEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
@@ -23,24 +39,20 @@ import com.ionexchange.databinding.FragmentCalibrationModbusBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.ionexchange.Others.ApplicationClass.getPosition;
-import static com.ionexchange.Others.ApplicationClass.modBusTypeArr;
-import static com.ionexchange.Others.ApplicationClass.typeOfValueRead;
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.PCK_SENSORCALIB;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class FragmentModbusCalibration extends Fragment implements DataReceiveCallback {
     FragmentCalibrationModbusBinding mBinding;
     ApplicationClass mAppClass;
     Bundle mBundle;
     String calibMode = "0";
-    AlertDialog alertReading, alertSlopeReadingPleaseWait;
+    WaterTreatmentDb db;
+    CalibrationDao calibrationDao;
+    boolean tempBool = false;
 
     public FragmentModbusCalibration(Bundle bundle) {
         this.mBundle = bundle;
@@ -61,6 +73,14 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
 
         if (!mBundle.isEmpty()) {
             mBinding.modbusCalibType.setText(mBundle.getString("ModbusType") + " | " + mBundle.getString("TypeOfValue"));
+        }
+        // last Calibration value
+        db = WaterTreatmentDb.getDatabase(getContext());
+        calibrationDao = db.calibrationDao();
+        CalibrationEntity lastCalibrationData = calibrationDao.getLastCalibrationData(Integer.parseInt(mBundle.getString("InputNo")));
+        if (lastCalibrationData != null) {
+            mBinding.modbusCalibDate.setText(lastCalibrationData.getCalibrationValue().split("\\$")[1] + " | Date :" + lastCalibrationData.getDate());
+            mBinding.modbusCalibDate.setTextColor(lastCalibrationData.getCalibrationValue().split("\\$")[0].equals("0") ? getResources().getColor(R.color.green) : getResources().getColor(R.color.red));
         }
 
         switch (mBundle.getString("ModbusType")) {
@@ -127,6 +147,7 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
 
         confirm.setOnClickListener(View -> {
             alertDialog.dismiss();
+            tempBool = false;
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
                     WRITE_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR + mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "1" + SPILT_CHAR +
                     getPosition(0, mBundle.getString("ModbusType"), modBusTypeArr) + SPILT_CHAR +
@@ -144,8 +165,11 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         AlertDialog mAlertDialog = dialogBuilder.create();
         mAlertDialog.setCanceledOnTouchOutside(false);
         EditText editText = dialogView.findViewById(R.id.onedt_edt);
+        TextView mainTxt = dialogView.findViewById(R.id.onedt_mainTxt);
         Button confirm = dialogView.findViewById(R.id.onedt_rightBtn);
         Button cancel = dialogView.findViewById(R.id.onedt_leftBtn);
+
+        mainTxt.setText("Enter the standard solution value");
         cancel.setText("Cancel");
         confirm.setText("Confirm");
 
@@ -154,12 +178,9 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         });
 
         confirm.setOnClickListener(View -> {
+            mAlertDialog.dismiss();
             if (!editText.getText().toString().trim().equals("")) {
-                mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
-                        WRITE_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR + mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "1" + SPILT_CHAR +
-                        getPosition(0, mBundle.getString("ModbusType"), modBusTypeArr) + SPILT_CHAR +
-                        getPosition(0, mBundle.getString("TypeOfValue"), typeOfValueRead) + SPILT_CHAR + "2" + SPILT_CHAR + editText.getText().toString().trim());
-                mAlertDialog.dismiss();
+                insertStandardSolution(editText.getText().toString());
             } else {
                 mAppClass.showSnackBar(getContext(), "Field should not be empty !");
             }
@@ -173,8 +194,8 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
         dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
+        AlertDialog diagCDialog = dialogBuilder.create();
+        diagCDialog.setCanceledOnTouchOutside(false);
         TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
         TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
         Button leftBtn = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
@@ -186,11 +207,12 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         rightBtn.setText("Confirm");
 
         leftBtn.setOnClickListener(View -> {
-            alertDialog.dismiss();
+            diagCDialog.dismiss();
         });
 
         rightBtn.setOnClickListener(View -> {
-            alertDialog.dismiss();
+            diagCDialog.dismiss();
+            tempBool = false;
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
                     WRITE_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR + mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "1" + SPILT_CHAR +
                     getPosition(0, mBundle.getString("ModbusType"), modBusTypeArr) + SPILT_CHAR +
@@ -198,7 +220,7 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
             );
         });
 
-        alertDialog.show();
+        diagCDialog.show();
     }
 
     /* Reading Register Values */
@@ -207,8 +229,8 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
         dialogBuilder.setView(dialogView);
-        alertReading = dialogBuilder.create();
-        alertReading.setCanceledOnTouchOutside(false);
+        AlertDialog mAlertReading = dialogBuilder.create();
+        mAlertReading.setCanceledOnTouchOutside(false);
         TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
         TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
         Button leftBtn = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
@@ -222,14 +244,16 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         final Boolean[] canSend = {true};
         leftBtn.setOnClickListener(View -> {
             canSend[0] = false;
-            alertReading.dismiss();
+            mAlertReading.dismiss();
         });
 
-        alertReading.show();
+        mAlertReading.show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (canSend[0]) {
+                    mAlertReading.dismiss();
+                    tempBool = false;
                     mAppClass.sendPacket(FragmentModbusCalibration.this,
                             DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR +
                                     mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "1" + SPILT_CHAR +
@@ -240,13 +264,13 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         }, 5000);
     }
 
-    private void insertStandardSolution() {
+    private void insertStandardSolution(String solValue) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
         dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
+        AlertDialog solDialog = dialogBuilder.create();
+        solDialog.setCanceledOnTouchOutside(false);
         TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
         TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
         Button cancel = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
@@ -260,13 +284,17 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         final Boolean[] canSend = {true};
         cancel.setOnClickListener(View -> {
             canSend[0] = false;
-            alertDialog.dismiss();
+            solDialog.dismiss();
         });
         confirm.setOnClickListener(View -> {
-            sendSlopeCalibrationPacket();
-            alertDialog.dismiss();
+            solDialog.dismiss();
+            tempBool = false;
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
+                    WRITE_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR + mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "1" + SPILT_CHAR +
+                    getPosition(0, mBundle.getString("ModbusType"), modBusTypeArr) + SPILT_CHAR +
+                    getPosition(0, mBundle.getString("TypeOfValue"), typeOfValueRead) + SPILT_CHAR + "2" + SPILT_CHAR + solValue);
         });
-        alertDialog.show();
+        solDialog.show();
     }
 
     private void sendSlopeCalibrationPacket() {
@@ -274,8 +302,8 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
         dialogBuilder.setView(dialogView);
-        alertSlopeReadingPleaseWait = dialogBuilder.create();
-        alertSlopeReadingPleaseWait.setCanceledOnTouchOutside(false);
+        AlertDialog pleaseWaitDialog = dialogBuilder.create();
+        pleaseWaitDialog.setCanceledOnTouchOutside(false);
 
         TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
         TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
@@ -290,15 +318,16 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         final boolean[] canSend = {true};
         cancel.setOnClickListener(View -> {
             canSend[0] = false;
-            alertSlopeReadingPleaseWait.dismiss();
+            pleaseWaitDialog.dismiss();
         });
 
-        alertSlopeReadingPleaseWait.show();
-
+        pleaseWaitDialog.show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (canSend[0]) {
+                    tempBool = false;
+                    pleaseWaitDialog.dismiss();
                     mAppClass.sendPacket(FragmentModbusCalibration.this,
                             DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR +
                                     mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "1" + SPILT_CHAR + getPosition(0, mBundle.getString("ModbusType"), modBusTypeArr) + SPILT_CHAR +
@@ -314,8 +343,8 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
         dialogBuilder.setView(dialogView);
-        alertReading = dialogBuilder.create();
-        alertReading.setCanceledOnTouchOutside(false);
+        AlertDialog diagReading = dialogBuilder.create();
+        diagReading.setCanceledOnTouchOutside(false);
 
         TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
         TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
@@ -330,14 +359,16 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         final Boolean[] canSend = {true};
         rightBtn.setOnClickListener(View -> {
             canSend[0] = false;
-            alertReading.dismiss();
+            diagReading.dismiss();
         });
 
-        alertReading.show();
+        diagReading.show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (canSend[0]) {
+                    tempBool = false;
+                    diagReading.dismiss();
                     mAppClass.sendPacket(FragmentModbusCalibration.this,
                             DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_SENSORCALIB + SPILT_CHAR +
                                     mBundle.getString("InputNo") + SPILT_CHAR + "07" + SPILT_CHAR + "3" + SPILT_CHAR +
@@ -355,8 +386,8 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
         dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
+        AlertDialog resultDialog = dialogBuilder.create();
+        resultDialog.setCanceledOnTouchOutside(false);
 
         ImageView iv = dialogView.findViewById(R.id.dialogType1CalibIv);
         TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
@@ -373,7 +404,8 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                 rightBtn.setVisibility(View.GONE);
                 leftBtn.setVisibility(View.VISIBLE);
                 leftBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    saveCalibrationValue("0$status - 0");
+                    resultDialog.dismiss();
                 });
                 break;
 
@@ -387,11 +419,12 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                 leftBtn.setVisibility(View.VISIBLE);
 
                 rightBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    saveCalibrationValue("1$status - 2048");
+                    resultDialog.dismiss();
                 });
 
                 leftBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    resultDialog.dismiss();
                     readCalibPacket();
                 });
                 break;
@@ -406,16 +439,17 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                 rightBtn.setVisibility(View.VISIBLE);
 
                 rightBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    saveCalibrationValue("1$status - 2096");
+                    resultDialog.dismiss();
                 });
 
                 leftBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    resultDialog.dismiss();
                     readCalibPacket();
                 });
                 break;
         }
-        alertDialog.show();
+        resultDialog.show();
     }
 
     private void showSlopeCalibResult(String result) {
@@ -423,8 +457,8 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
         dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
+        AlertDialog resultDialog = dialogBuilder.create();
+        resultDialog.setCanceledOnTouchOutside(false);
         ImageView iv = dialogView.findViewById(R.id.dialogType1CalibIv);
         TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
         TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
@@ -440,7 +474,8 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                 leftBtn.setVisibility(View.GONE);
                 rightBtn.setVisibility(View.VISIBLE);
                 rightBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    saveCalibrationValue("0$status - 0");
+                    resultDialog.dismiss();
                 });
                 break;
 
@@ -451,10 +486,11 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                 rightBtn.setText("CONFIRM");
                 leftBtn.setText("RETRY");
                 rightBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    saveCalibrationValue("1$status - 1");
+                    resultDialog.dismiss();
                 });
                 leftBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    resultDialog.dismiss();
                     readCalibPacket();
                 });
                 break;
@@ -466,10 +502,11 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                 rightBtn.setText("CONFIRM");
                 leftBtn.setText("RETRY");
                 rightBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    saveCalibrationValue("1$status - 2");
+                    resultDialog.dismiss();
                 });
                 leftBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    resultDialog.dismiss();
                     readCalibPacket();
                 });
                 break;
@@ -481,10 +518,11 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                 rightBtn.setText("CONFIRM");
                 leftBtn.setText("RETRY");
                 rightBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    saveCalibrationValue("1$status - 3");
+                    resultDialog.dismiss();
                 });
                 leftBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    resultDialog.dismiss();
                     readCalibPacket();
                 });
                 break;
@@ -499,11 +537,12 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                 leftBtn.setVisibility(View.VISIBLE);
 
                 rightBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    saveCalibrationValue("1$status - 256");
+                    resultDialog.dismiss();
                 });
 
                 leftBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    resultDialog.dismiss();
                     readCalibPacket();
                 });
                 break;
@@ -517,11 +556,12 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                 rightBtn.setVisibility(View.VISIBLE);
 
                 rightBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    saveCalibrationValue("1$status - 1024");
+                    resultDialog.dismiss();
                 });
 
                 leftBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    resultDialog.dismiss();
                     readCalibPacket();
                 });
                 break;
@@ -534,19 +574,17 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                 rightBtn.setVisibility(View.VISIBLE);
 
                 rightBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    saveCalibrationValue("1$status - other");
+                    resultDialog.dismiss();
                 });
 
                 leftBtn.setOnClickListener(View -> {
-                    alertDialog.dismiss();
+                    resultDialog.dismiss();
                     readCalibPacket();
                 });
                 break;
         }
-        if (alertSlopeReadingPleaseWait != null) {
-            alertSlopeReadingPleaseWait.dismiss();
-        }
-        alertDialog.show();
+        resultDialog.show();
     }
 
     private void showDiagCheckResult(String spiltData) {
@@ -554,8 +592,8 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_calib_reading, null);
         dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
+        AlertDialog resultDialog = dialogBuilder.create();
+        resultDialog.setCanceledOnTouchOutside(false);
         ImageView iv = dialogView.findViewById(R.id.dialogType1CalibIv);
         TextView mainText = dialogView.findViewById(R.id.dialogType1Calib_mainText);
         TextView subText = dialogView.findViewById(R.id.dialogType1Calib_subText);
@@ -569,10 +607,10 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
             confirm.setText("Retry");
             cancel.setText("CANCEL");
             cancel.setOnClickListener(View -> {
-                alertDialog.dismiss();
+                resultDialog.dismiss();
             });
             confirm.setOnClickListener(View -> {
-                alertDialog.dismiss();
+                resultDialog.dismiss();
                 readDiagnosticCheckPacket("1024");
             });
 
@@ -584,7 +622,8 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
             confirm.setText("CONFIRM");
             cancel.setVisibility(View.GONE);
             confirm.setOnClickListener(View -> {
-                alertDialog.dismiss();
+                saveCalibrationValue("0$" + spiltData);
+                resultDialog.dismiss();
             });
 
         } else if (Integer.parseInt(spiltData) > 3000) {
@@ -594,7 +633,8 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
             confirm.setText("CONFIRM");
             cancel.setVisibility(View.GONE);
             confirm.setOnClickListener(View -> {
-                alertDialog.dismiss();
+                saveCalibrationValue("0$" + spiltData);
+                resultDialog.dismiss();
             });
 
         } else if (Integer.parseInt(spiltData) < 3000) {
@@ -604,24 +644,28 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
             confirm.setText("CONFIRM");
             cancel.setVisibility(View.GONE);
             confirm.setOnClickListener(View -> {
-                alertDialog.dismiss();
+                saveCalibrationValue("0$" + spiltData);
+                resultDialog.dismiss();
             });
         }
-        alertDialog.show();
+        resultDialog.show();
     }
 
     @Override
     public void OnDataReceive(String data) {
-        if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        } else if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        } else if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        } else if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
-        } else if (data != null) {
-            handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
+        if (!tempBool) {
+            tempBool = true;
+            if (data.equals("FailedToConnect")) {
+                mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
+            } else if (data.equals("pckError")) {
+                mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
+            } else if (data.equals("sendCatch")) {
+                mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
+            } else if (data.equals("Timeout")) {
+                mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
+            } else if (data != null) {
+                handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
+            }
         }
     }
 
@@ -635,7 +679,7 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                             break;
 
                         case "2":
-                            insertStandardSolution();
+                            sendSlopeCalibrationPacket();
                             break;
 
                         case "3":
@@ -647,9 +691,6 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
                 }
             } else if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
-                    if (alertReading != null) {
-                        alertReading.dismiss();
-                    }
                     switch (calibMode) {
                         case "1":
                             showZeroCalibResult(splitData[4]);
@@ -668,4 +709,22 @@ public class FragmentModbusCalibration extends Fragment implements DataReceiveCa
         }
     }
 
+    private void saveCalibrationValue(String calibData) {
+        CalibrationEntity entityUpdate = new CalibrationEntity(
+                Integer.parseInt(mBundle.getString("InputNo")), "07",
+                new SimpleDateFormat("yyyy.MM.dd | HH.mm.ss", Locale.getDefault()).format(new Date()),
+                calibData
+        );
+        List<CalibrationEntity> entryListUpdate = new ArrayList<>();
+        entryListUpdate.add(entityUpdate);
+        updateToDb(entryListUpdate);
+        clickMainScreenBtn();
+        mAppClass.showSnackBar(getContext(), "Calibration Success");
+    }
+
+    public void updateToDb(List<CalibrationEntity> entryList) {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+        CalibrationDao dao = db.calibrationDao();
+        dao.insert(entryList.toArray(new CalibrationEntity[0]));
+    }
 }

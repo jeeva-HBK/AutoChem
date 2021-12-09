@@ -48,6 +48,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.google.android.material.card.MaterialCardView;
 import com.ionexchange.Adapters.SensorDetailsParamsRvAdapter;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
@@ -72,7 +73,7 @@ public class FragmentSensorDetails extends Fragment {
     List<List<String[]>> finalSensorParamList;
     int currentPage = 0, pageMax = 8;
     FragmentCalibration_TypeOne sensorCalibration;
-
+    static MaterialCardView mainScreenBtn;
     FragmentModbusCalibration modbusCalibration;
     String inputNumber, inputType, spareKey = "null";
     String inNumber = "Input Number", inpuType = "Input Type", seqNumber = "Sequence Number", sensorActivation = "Sensor Activation",
@@ -97,7 +98,7 @@ public class FragmentSensorDetails extends Fragment {
         mAppClass = (ApplicationClass) getActivity().getApplication();
         inputNumber = getArguments().getString("inputNumber");
         inputType = getArguments().getString("inpuType");
-
+        mainScreenBtn = view.findViewById(mBinding.cardViewMultiMainScreen.getId());
         mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         getTCPData(inputNumber, inputType);
         mBinding.btnTrendCalibartion.setChecked(true);
@@ -173,6 +174,10 @@ public class FragmentSensorDetails extends Fragment {
                 }
             }
         });
+    }
+
+    public static void clickMainScreenBtn(){
+        mainScreenBtn.performClick();
     }
 
     private void getTCPData(String inputNumber, String inpuType) {
