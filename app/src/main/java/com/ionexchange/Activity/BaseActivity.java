@@ -9,6 +9,10 @@ import static com.ionexchange.Others.ApplicationClass.preferences;
 import static com.ionexchange.Others.ApplicationClass.userManagementDao;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.KeyguardManager;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,7 +20,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.PowerManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +51,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.ionexchange.Adapters.ExpandableListAdapter;
 import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Others.AdminReceiver;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.TcpServer;
 import com.ionexchange.R;
@@ -72,6 +80,8 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     boolean permission = false;
     private static final String DEBUG_TAG = "Gestures";
     GestureDetector gestureDetector;
+    Runnable userInactive;
+    Handler handler;
 
 
     @RequiresApi(api = Build.VERSION_CODES.R)
@@ -92,8 +102,59 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.expList.setOnGroupClickListener(this);
         mBinding.expList.setOnChildClickListener(this);
         setNavigation(R.navigation.navigation, R.id.Dashboard);
+
+        inactiveHandler();
+
+
     }
 
+    void  inactiveHandler(){
+        handler = new Handler();
+        userInactive = new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.O_MR1)
+            @Override
+            public void run() {
+                lock();
+
+            }
+        };
+        startHandler();
+    }
+
+    private void lock() {
+      mBinding.mainScreenBtn.performClick();
+        PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
+        if (pm.isScreenOn()) {
+            DevicePolicyManager policy = (DevicePolicyManager)
+                    getSystemService(Context.DEVICE_POLICY_SERVICE);
+            try {
+                policy.lockNow();
+            } catch (SecurityException ex) {
+                Toast.makeText(this,
+                        "must enable device administrator",
+                        Toast.LENGTH_LONG).show();
+                ComponentName admin = new ComponentName(this, AdminReceiver.class);
+                Intent intent = new Intent(
+                        DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).putExtra(
+                        DevicePolicyManager.EXTRA_DEVICE_ADMIN, admin);
+                this.startActivity(intent);
+            }
+        }
+    }
+    @Override
+    public void onUserInteraction() {
+
+        super.onUserInteraction();
+        stopHandler();//stop first and then start
+        startHandler();
+    }
+
+    public void stopHandler() {
+        handler.removeCallbacks(userInactive);
+    }
+    public void startHandler() {
+        handler.postDelayed(userInactive, 10*60 * 1000); //for 5 minutes
+    }
     void expandedListView() {
         childList = new HashMap<>();
 
@@ -190,6 +251,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         NavGraph.setStartDestination(fragment);
         navController.setGraph(navGraph);
     }
+
+
+
 
     @Override
     public void onClick(View v) {
@@ -360,28 +424,28 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-      // hideStatusNavigationBar();
+        startHandler();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startHandler();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        startHandler();
+    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-       // hideStatusNavigationBar();
-    }
-
-    private void turnOnScreen() {
 
     }
-    private boolean checkPermission() {
-        if (SDK_INT >= Build.VERSION_CODES.R) {
-            return Environment.isExternalStorageManager();
-        } else {
-            int result = ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE);
-            int result1 = ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE);
-            return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED;
-        }
-    }
+
+
 
     public void checkPermission(String permission, int requestCode) {
         if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
