@@ -28,8 +28,9 @@ public interface EventLogDao {
 
 
 
-    @Query("select * FROM EventLogEntity WHERE  date BETWEEN :formDate AND :toDate in (SELECT EventLog FROM EventLogEntity Where EventLog =:type)")
+    @Query("select * FROM EventLogEntity WHERE  EventLog =:type AND date BETWEEN :formDate AND :toDate ")
     List<EventLogEntity> getDateWiseAndType(String formDate, String toDate,String type);
+
 
 
 

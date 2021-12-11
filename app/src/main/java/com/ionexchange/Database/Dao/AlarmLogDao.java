@@ -15,6 +15,7 @@ public interface AlarmLogDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(AlarmLogEntity... alarmLogEntities);
 
+
     @Query("select * FROM AlarmLogEntity")
     List<AlarmLogEntity> getAlarmLogList();
 
@@ -26,7 +27,7 @@ public interface AlarmLogDao {
 
 
 
-    @Query("select * FROM alarmlogentity WHERE  date BETWEEN :formDate AND :toDate in (SELECT alarmLog FROM alarmlogentity Where alarmLog =:type)")
+    @Query("select * FROM alarmlogentity WHERE  alarmLog =:type AND date BETWEEN :formDate AND :toDate")
     List<AlarmLogEntity> getDateWiseAndType(String formDate, String toDate,String type);
 
 
