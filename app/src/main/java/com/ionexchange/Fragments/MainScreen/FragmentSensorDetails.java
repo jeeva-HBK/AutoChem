@@ -232,10 +232,14 @@ public class FragmentSensorDetails extends Fragment {
                                         break;
 
                                     case "Toroidal Conductivity":
+                                        sensorCalibration = new FragmentCalibration_TypeOne(splitData[3], splitData[4]);
+                                        getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                         setAdapter(formTorConMap(data.split("\\*")[1].split("\\$")));
                                         break;
 
                                     case "Analog Input":
+                                        sensorCalibration = new FragmentCalibration_TypeOne(splitData[3], splitData[4]);
+                                        getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                         setAdapter(formAnalogMap(data.split("\\*")[1].split("\\$")));
                                         break;
 

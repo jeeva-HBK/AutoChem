@@ -48,7 +48,10 @@
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/alarm_log_item.xml" value="0.22" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/db_export_import.xml" value="0.176" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/dialog_calib_onedt.xml" value="0.1" />
+        <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/dialog_calib_result_two.xml" value="0.1" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/dialog_calib_twoedt.xml" value="0.1" />
+        <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/dialog_password.xml" value="0.25416666666666665" />
+        <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/dialog_time_out.xml" value="0.25416666666666665" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/event_log_item.xml" value="0.20416666666666666" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/filter_screen.xml" value="0.25025641025641027" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/fragment_alarm_log.xml" value="0.2" />

@@ -511,7 +511,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void hideStatusNavigationBar() {
-
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION

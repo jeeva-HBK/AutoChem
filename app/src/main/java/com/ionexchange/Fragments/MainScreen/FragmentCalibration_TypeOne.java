@@ -14,6 +14,7 @@ import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 import android.app.AlertDialog;
+import android.app.WallpaperManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -124,7 +125,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                 mBinding.quick.performClick();
                 mBinding.currentModeValue.setVisibility(View.GONE);
                 mBinding.txtCurrentMode.setVisibility(View.GONE);
-            } else if ("Contacting Conductivity".equals(inputType)) {
+            } else if ("Contacting Conductivity".equals(inputType) || "Toroidal Conductivity".equals(inputType)) {
                 mBinding.precise.performClick();
                 mBinding.extValue.setText("");
                 mBinding.extValue.setEnabled(false);
@@ -135,6 +136,12 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                 mBinding.quick.performClick();
                 mBinding.currentModeValue.setVisibility(View.GONE);
                 mBinding.txtCurrentMode.setVisibility(View.GONE);
+            } else if ("Analog Input".equals(inputType)) {
+                mBinding.precise.performClick();
+                mBinding.extValue.setText("");
+                mBinding.extValue.setEnabled(false);
+                mBinding.txtCurrentMode.setVisibility(View.GONE);
+                mBinding.currentModeValue.setVisibility(View.GONE);
             }
         } else {
             Toast.makeText(getContext(), "Sensor Type is Null !", Toast.LENGTH_SHORT).show();
@@ -147,16 +154,26 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                     startPHcalibration();
                 } else if ("ORP".equals(inputType)) {
                     startQuickCalibration();
-                } else if ("Contacting Conductivity".equals(inputType)) {
-                    startContactingConductivity();
+                } else if ("Contacting Conductivity".equals(inputType) || "Toroidal Conductivity".equals(inputType)) {
+                    startConductivityCalibration();
                 } else if ("Temperature".equals(inputType)) {
                     startQuickCalibration();
+                } else if ("Analog Input".equals(inputType)) {
+                    startAnalogCalibration();
                 }
             }
         });
     }
 
-    private void startContactingConductivity() {
+    private void startAnalogCalibration() {
+        if (getCalibrationType().equals("0")) {
+            startQuickCalibration();
+        } else {
+            startPreceiseCalibration("1" + SPILT_CHAR + "0");
+        }
+    }
+
+    private void startConductivityCalibration() {
         if (getCalibrationType().equals("0")) {
             startQuickCalibration();
         } else {
@@ -233,7 +250,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
             } else { // pH Manual
                 getPhManualValues("First");
             }
-        } else { // conductivity
+        } else if (inputType.contains("Conductivity")) { // Conductivity
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
             View dialogView = getLayoutInflater().inflate(R.layout.dialog_calib_reading, null);
             dialogBuilder.setView(dialogView);
@@ -256,7 +273,44 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                 sendPreceiseCalibWritePacket(firstORsecond);
             });
             alertDialog.show();
+        } else if (inputType.equals("Analog Input")) {
+            showAnalogCalib(1);
         }
+    }
+
+    private void showAnalogCalib(int type) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_calib_onedt, null);
+        dialogBuilder.setView(dialogView);
+        alertDialog = dialogBuilder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+
+        TextView title = dialogView.findViewById(R.id.onedt_mainTxt);
+        EditText edt = dialogView.findViewById(R.id.onedt_edt);
+        Button leftBtn = dialogView.findViewById(R.id.onedt_leftBtn);
+        Button rightBtn = dialogView.findViewById(R.id.onedt_rightBtn);
+
+        if (type == 1) {
+            title.setText("\"Enter the value transmitter/sensor will be sending\"");
+        } else if (type == 2) {
+            title.setText("\"Enter second value the transmitter/sensor will be sending\"");
+        }
+
+        leftBtn.setOnClickListener(View -> {
+            alertDialog.dismiss();
+        });
+
+        rightBtn.setOnClickListener(View -> {
+            if (edt.getText().toString().equals("")) {
+                alertDialog.dismiss();
+                sendPreceiseCalibWritePacket(edt.getText().toString());
+            } else {
+                mAppClass.showSnackBar(getContext(), "Field should not be empty !");
+            }
+        });
+
+        alertDialog.show();
     }
 
     private void getPhManualValues(String type) {
@@ -341,8 +395,10 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                             }
                         } else if (inputType.equals("Contacting Conductivity")) {
                             tempValue = firstORsecond.equals("1") ? "0.00" : firstORsecond.split("\\$")[1];
+                        } else if (inputType.equals("Analog Input")) {
+                            tempValue = firstORsecond;
                         }
-                    /*String[] spiltData = spiltPacket(data);
+                        /*String[] spiltData = spiltPacket(data);
                     if (spiltData[3].equals("1")) { // step 1
                         checkStabilization("1");
                     } else if (spiltData[3].equals("2")) { // step 2
@@ -442,7 +498,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
     }
 
     private void proceedToNextStep(String type) {
-        if (getCalibrationType().equals("0")) {
+        if (getCalibrationType().equals("0")) { // Quick Calibration procedure
             sendCalibReadPacket("0");
         } else {
             if (inputType.equals("pH")) {
@@ -460,9 +516,15 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                         sendCalibReadPacket("2");
                     }
                 }
-            } else if (inputType.equals("Contacting Conductivity")) {// anyOtherSensor
+            } else if (inputType.equals("Contacting Conductivity") || inputType.equals("Toroidal Conductivity")) { // anyOtherSensor
                 if (type.equals("1")) {
                     showOneEdtDialog();
+                } else {
+                    sendCalibReadPacket("2");
+                }
+            } else if (inputType.equals("Analog Input")) {
+                if (type.equals("1")) {
+                    showAnalogCalib(2);
                 } else {
                     sendCalibReadPacket("2");
                 }
@@ -585,7 +647,9 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
 
             case "ORP":
             case "Contacting Conductivity":
+            case "Toroidal Conductivity":
             case "Temperature":
+            case "Analog Input":
                 showQuickCalibResult(splitData);
                 break;
         }
@@ -631,13 +695,20 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                 break;
 
             case "Contacting Conductivity":
-                minRange = 0.5;
-                maxRange = 2.0;
+
+            case "Toroidal Conductivity":
+                minRange = 0.5; // -100  toroidal = -10,000
+                maxRange = 2.0; // 100   toroidal =  10,000
                 break;
 
             case "Temperature":
-                minRange = -10.0;
-                maxRange = 10.0;
+                minRange = -10.0; // -2
+                maxRange = 10.0; // 2
+                break;
+
+            case "Analog Input":
+                minRange = -2;
+                maxRange = 2;
                 break;
 
             default:
@@ -645,7 +716,6 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                 maxRange = 0;
                 break;
         }
-
         leftHeading.setText("Calibration value");
         rightHeading.setText("Offset");
         if (Double.parseDouble(offSet) >= minRange && Double.parseDouble(offSet) <= maxRange) {
