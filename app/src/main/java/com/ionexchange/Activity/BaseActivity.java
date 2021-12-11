@@ -1,7 +1,5 @@
 package com.ionexchange.Activity;
 
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION.SDK_INT;
 import static com.ionexchange.Others.ApplicationClass.DB;
 import static com.ionexchange.Others.ApplicationClass.editor;
@@ -9,8 +7,6 @@ import static com.ionexchange.Others.ApplicationClass.preferences;
 import static com.ionexchange.Others.ApplicationClass.userManagementDao;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.KeyguardManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -19,11 +15,11 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,9 +35,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.ShareCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
@@ -57,7 +51,6 @@ import com.ionexchange.Others.TcpServer;
 import com.ionexchange.R;
 import com.ionexchange.databinding.ActivityBaseBinding;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,6 +77,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     Handler handler;
 
 
+
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +87,12 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
         startService(new Intent(this, TcpServer.class).setAction(TcpServer.START_SERVER));
         expandedListView();
-        checkPermission( Manifest.permission.WRITE_EXTERNAL_STORAGE,101);
+        checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 101);
+        ComponentName admin = new ComponentName(this, AdminReceiver.class);
+        Intent intent = new Intent(
+                DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).putExtra(
+                DevicePolicyManager.EXTRA_DEVICE_ADMIN, admin);
+        this.startActivity(intent);
         mBinding.mainScreenBtn.setOnClickListener(this);
         mBinding.trendScreenBtn.setOnClickListener(this);
         mBinding.eventLogsScreenBtn.setOnClickListener(this);
@@ -108,13 +107,13 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    void  inactiveHandler(){
+    void inactiveHandler() {
         handler = new Handler();
         userInactive = new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.O_MR1)
             @Override
             public void run() {
-                lock();
+                screenTimeout();
 
             }
         };
@@ -122,8 +121,10 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void lock() {
-      mBinding.mainScreenBtn.performClick();
-        PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
+        editor.putBoolean("requiredUserLogin", true).commit();
+        editor.apply();
+        mBinding.mainScreenBtn.performClick();
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         if (pm.isScreenOn()) {
             DevicePolicyManager policy = (DevicePolicyManager)
                     getSystemService(Context.DEVICE_POLICY_SERVICE);
@@ -141,6 +142,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+
     @Override
     public void onUserInteraction() {
 
@@ -152,9 +154,11 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     public void stopHandler() {
         handler.removeCallbacks(userInactive);
     }
+
     public void startHandler() {
-        handler.postDelayed(userInactive, 10*60 * 1000); //for 5 minutes
+        handler.postDelayed(userInactive, 5 * 60 * 1000); //for 5 minutes
     }
+
     void expandedListView() {
         childList = new HashMap<>();
 
@@ -253,38 +257,67 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-
     @Override
     public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.main_screen_btn:
-                    setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle,
-                            mBinding.homeText, navGraph, R.id.Dashboard, mNavController);
-                    mBinding.view.setVisibility(View.GONE);
-                    break;
+        switch (v.getId()) {
+            case R.id.main_screen_btn:
+                setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle,
+                        mBinding.homeText, navGraph, R.id.Dashboard, mNavController);
+                mBinding.view.setVisibility(View.GONE);
+                break;
 
-                case R.id.trend_screen_btn:
-                    setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle,
-                            mBinding.statisticsText, navGraph, R.id.trend, mNavController);
-                    mBinding.view.setVisibility(View.GONE);
+            case R.id.trend_screen_btn:
+                setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle,
+                        mBinding.statisticsText, navGraph, R.id.trend, mNavController);
+                mBinding.view.setVisibility(View.GONE);
 
-                    break;
+                break;
 
-                case R.id.event_logs_screen_btn:
-                    setNewState(mBinding.supportBigCircle, mBinding.supportMain, mBinding.supportSub, mBinding.supportSmallCircle, mBinding.supportText,
-                            navGraph, R.id.event_log, mNavController);
-                    mBinding.view.setVisibility(View.GONE);
-                    break;
+            case R.id.event_logs_screen_btn:
+                setNewState(mBinding.supportBigCircle, mBinding.supportMain, mBinding.supportSub, mBinding.supportSmallCircle, mBinding.supportText,
+                        navGraph, R.id.event_log, mNavController);
+                mBinding.view.setVisibility(View.GONE);
+                break;
 
-                case R.id.config_screen_btn:
-                    if (preferences.getBoolean("requiredUserLogin", true)) {
-                        checkUserLogin();
-                    } else {
-                        moveToConfig();
-                    }
-                    break;
+            case R.id.config_screen_btn:
+                if (preferences.getBoolean("requiredUserLogin", true)) {
+                    checkUserLogin();
+                } else {
+                    moveToConfig();
+                }
+                break;
+        }
+    }
+
+
+    private void screenTimeout() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BaseActivity.this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_time_out, null);
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.show();
+
+        Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
+        TextView dialog_timeout_txt = dialogView.findViewById(R.id.dialog_timeout_txt);
+        CountDownTimer CountDownTimer=  new CountDownTimer(5000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                dialog_timeout_txt.setText(millisUntilFinished / 1000+"");
             }
+
+            public void onFinish() {
+                alertDialog.dismiss();
+                lock();
+
+            }
+
+        }.start();
+        btnCancel.setOnClickListener(V -> {
+            alertDialog.dismiss();
+            CountDownTimer.cancel();
+        });
     }
 
     private void checkUserLogin() {
@@ -363,7 +396,8 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onBackPressed() { }
+    public void onBackPressed() {
+    }
 
     @Override
     public void onGroupExpand(int pos) {
@@ -446,10 +480,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     public void checkPermission(String permission, int requestCode) {
         if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(this, new String[] { permission }, requestCode);
+            ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
             requestPermission();
         } else {
             Toast.makeText(this, "Permission already granted", Toast.LENGTH_SHORT).show();
@@ -461,7 +494,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
                 intent.addCategory("android.intent.category.DEFAULT");
-                intent.setData(Uri.parse(String.format("package:%s",getApplicationContext().getPackageName())));
+                intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
                 startActivityForResult(intent, 2296);
             } catch (Exception e) {
                 Intent intent = new Intent();
