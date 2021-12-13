@@ -137,7 +137,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView2">
 
                 <RadioButton
-                    android:id="@+id/enableCommonSettings"
+                    android:id="@+id/enableSite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -146,11 +146,11 @@
                     android:text=" Enable" />
 
                 <RadioButton
-                    android:id="@+id/disableCommonSettings"
+                    android:id="@+id/disableSite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:checked="true"
+                    android:checked="false"
                     android:clickable="false"
                     android:enabled="false"
                     android:text=" Disable" />
@@ -319,7 +319,7 @@
                         android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:hint="Day"
+                        android:hint="N"
                         android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="2"

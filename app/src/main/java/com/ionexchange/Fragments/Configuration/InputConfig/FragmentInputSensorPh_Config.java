@@ -173,7 +173,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                 getPositionFromAtxt(1, getStringValue(mBinding.phResetCalibrationAtxtIsc), resetCalibrationArr) + SPILT_CHAR +
                 sensorStatus
         );
-    }
+    } // {*1234$0$0$06$01$1$O
 
     boolean validField() {
 
@@ -240,19 +240,15 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     public void OnDataReceive(String data) {
         mActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        }
-        if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        }
-        if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        }
-        if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
-        }
-        if (data != null) {
-            handleResponce(data.split("\\*")[1].split(RES_SPILT_CHAR));
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        } else if (data.equals("pckError")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        } else if (data.equals("sendCatch")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        } else if (data.equals("Timeout")) {
+            mAppClass.showSnackBar(getContext(), "TimeOut");
+        } else if (data != null) {
+            handleResponce(data.split("\\*")[1].split("\\$"));
         }
     }
 

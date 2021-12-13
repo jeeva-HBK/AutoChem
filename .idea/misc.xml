@@ -85,7 +85,10 @@
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/layout/vi_rv_item.xml" value="0.2" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/xml/device_admin_sample.xml" value="0.25416666666666665" />
         <entry key="..\:/Silambu(android)/Auto_Chem_ION/app/src/main/res/xml/filepaths.xml" value="0.1" />
+        <entry key="..\:/Users/jeeva/Desktop/Auto_Chem_ION/app/src/main/res/layout/activity_connection.xml" value="0.1" />
         <entry key="..\:/Users/jeeva/Desktop/Auto_Chem_ION/app/src/main/res/layout/dashboard_layout_one_item.xml" value="0.1" />
+        <entry key="..\:/Users/jeeva/Desktop/Auto_Chem_ION/app/src/main/res/layout/fragment_commonsettings.xml" value="0.1" />
+        <entry key="..\:/Users/jeeva/Desktop/Auto_Chem_ION/app/src/main/res/layout/item_buletooth.xml" value="0.1" />
         <entry key="..\:/Users/jeeva/Desktop/Auto_Chem_ION/app/src/main/res/layout/output_rv_item.xml" value="0.1" />
         <entry key="..\:/Users/jeeva/Desktop/Auto_Chem_ION/app/src/main/res/layout/sensor_details_calibration.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_output_config.xml" value="0.12454710144927536" />
@@ -93,7 +96,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

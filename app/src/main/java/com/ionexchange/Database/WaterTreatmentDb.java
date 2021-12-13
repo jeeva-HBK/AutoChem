@@ -37,7 +37,7 @@ import com.ionexchange.Database.Entity.TimerConfigurationEntity;
 import com.ionexchange.Database.Entity.UsermanagementEntity;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 
-//created by Silambu
+// created by Silambu
 @Database(entities = {InputConfigurationEntity.class, OutputConfigurationEntity.class,
         VirtualConfigurationEntity.class, TimerConfigurationEntity.class,
         DefaultLayoutConfigurationEntity.class, MainConfigurationEntity.class,
@@ -51,7 +51,6 @@ public abstract class WaterTreatmentDb extends RoomDatabase {
     public static volatile WaterTreatmentDb INSTANCE;
     public static final String DB_NAME = "ion_exchange_db.db";
 
-
     public static WaterTreatmentDb getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (WaterTreatmentDb.class) {
@@ -62,11 +61,9 @@ public abstract class WaterTreatmentDb extends RoomDatabase {
                             .allowMainThreadQueries()
                             .build();
                 }
-
             }
         }
         return INSTANCE;
-
     }
 
     static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {

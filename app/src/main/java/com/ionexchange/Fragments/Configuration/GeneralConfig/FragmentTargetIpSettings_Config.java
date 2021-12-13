@@ -116,17 +116,13 @@ public class FragmentTargetIpSettings_Config extends Fragment implements DataRec
         mActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(), "Failed to connect");
-        }
-        if (data.equals("pckError")) {
+        } else if (data.equals("pckError")) {
             mAppClass.showSnackBar(getContext(), "Failed to connect");
-        }
-        if (data.equals("sendCatch")) {
+        } else if (data.equals("sendCatch")) {
             mAppClass.showSnackBar(getContext(), "Failed to connect");
-        }
-        if (data.equals("Timeout")) {
+        } else if (data.equals("Timeout")) {
             mAppClass.showSnackBar(getContext(), "TimeOut");
-        }
-        if (data != null) {
+        } else if (data != null) {
             handleData(data.split("\\*")[1].split("\\$"));
         }
     }

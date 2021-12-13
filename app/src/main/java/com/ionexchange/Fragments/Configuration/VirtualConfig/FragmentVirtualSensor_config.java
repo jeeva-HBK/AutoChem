@@ -1,5 +1,21 @@
 package com.ionexchange.Fragments.Configuration.VirtualConfig;
 
+import static com.ionexchange.Others.ApplicationClass.calculationArr;
+import static com.ionexchange.Others.ApplicationClass.formDigits;
+import static com.ionexchange.Others.ApplicationClass.getStringValue;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.VIRTUAL_INPUT;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
@@ -10,7 +26,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -34,24 +49,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.ionexchange.Others.ApplicationClass.calculationArr;
-import static com.ionexchange.Others.ApplicationClass.formDigits;
-import static com.ionexchange.Others.ApplicationClass.getStringValue;
-import static com.ionexchange.Others.ApplicationClass.inputSensors;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorTypeArr;
-import static com.ionexchange.Others.ApplicationClass.userType;
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.VIRTUAL_INPUT;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 //created by Silambu
 
@@ -538,7 +535,15 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
 
     @Override
     public void OnDataReceive(String data) {
-        if (data != null) {
+        if (data.equals("FailedToConnect")) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
+        } else if (data.equals("pckError")) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
+        } else if (data.equals("sendCatch")) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
+        } else if (data.equals("Timeout")) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
+        } else if (data != null) {
             handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
         }
     }

@@ -5,7 +5,6 @@ import static android.util.Patterns.IP_ADDRESS;
 import static com.ionexchange.Database.WaterTreatmentDb.DB_NAME;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.TCP.ACTION_MyIntentService;
 
 import android.app.Activity;
 import android.app.Application;
@@ -13,33 +12,40 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.content.pm.PackageManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.Observable;
+import androidx.databinding.ObservableBoolean;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.Navigation;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
+import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.BLE.BluetoothHelper;
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
@@ -58,7 +64,13 @@ import com.ionexchange.Database.Entity.UsermanagementEntity;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
+import com.ionexchange.Interface.VolleyCallback;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.ApiService;
+import com.ionexchange.Singleton.KeepAlive;
+import com.ionexchange.Singleton.SharedPref;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -74,10 +86,10 @@ import java.util.regex.Matcher;
 /* Created by Jeeva on 13/07/2021 */
 public class ApplicationClass extends Application {
     private static final String TAG = "ApplicationClass";
-
-    public static SharedPreferences preferences;
-    public static SharedPreferences.Editor editor;
-
+    public static final String LOG_DIVIDER = " <----------------------------------------------------------------------------------------------------------------------------> ";
+    private static final String API = "API";
+    private static final String FISHEYE = "FishEye";
+    private static final String EAGLE_EYE = "EagleEye";
     public static int userType = 3; // 0 - None | 1 - Basic | 2 - intermediate | 3 - Advanced
 
     public static String[] sensorActivationArr = {"ENABLE", "DISABLE"},
@@ -161,9 +173,9 @@ public class ApplicationClass extends Application {
     //static String mIPAddress = "192.168.2.37", Packet;
     public static int mPortNumber;
     public static CountDownTimer packetTimeOut;
-    Context mContext;
-    public TCP tcp;
+    public static Context mContext;
 
+    //  public TCP tcp;
     public static WaterTreatmentDb DB;
     public static InputConfigurationDao inputDAO;
     public static OutputConfigurationDao outputDAO;
@@ -171,8 +183,18 @@ public class ApplicationClass extends Application {
     public static TimerConfigurationDao timerDAO;
     public static UserManagementDao userManagementDao;
     public static KeepAliveCurrentValueDao keepaliveDAO;
+    // WebService
+    private static final int httpRequestTimeout = 3000;
+    public static RequestQueue requestQueue;
+    public final static String baseURL = "http://192.168.1.82/WaterIOT.API/api/";
+    //public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
+
+    public static ObservableBoolean triggerWebService = new ObservableBoolean(false);
+
     Handler handler;
     DataReceiveCallback listener;
+    public static String lastKeepAliveData = "";
+    static ApplicationClass mAppclass;
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -195,16 +217,31 @@ public class ApplicationClass extends Application {
         }
     };
 
+    public static ApplicationClass getInstance() {
+        if (mAppclass == null) {
+            return mAppclass = new ApplicationClass();
+        }
+        return mAppclass;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
-        initDB();
-        setDefaultDb();
-        setCurrentValueDb();
+
+        init();
+        triggerWebService.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                if (triggerWebService.get()) {
+                    ApiService.getInstance(getApplicationContext()).startApiService();
+                }
+            }
+        });
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-                try {
+                requestQueue = Volley.newRequestQueue(getApplicationContext());
+                /*  try {
                     mContext = activity;
                     preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     editor = preferences.edit();
@@ -217,8 +254,7 @@ public class ApplicationClass extends Application {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                registerReceiver();
-                registerBatteryReceiver();
+                registerReceiver();*/
             }
 
             @Override
@@ -227,7 +263,9 @@ public class ApplicationClass extends Application {
 
             @Override
             public void onActivityResumed(@NonNull Activity activity) {
-
+                SharedPref.init(getApplicationContext());
+                ApiService.getInstance(getApplicationContext());
+                KeepAlive.getInstance();
             }
 
             @Override
@@ -244,21 +282,46 @@ public class ApplicationClass extends Application {
 
             @Override
             public void onActivityDestroyed(@NonNull Activity activity) {
-                unregisterReceiver();
-                unregisterBatteryReceiver();
+                // unregisterReceiver();
+                // todo BLE
+                disconnectBle();
             }
         });
     }
 
+    private void disconnectBle() {
+        BluetoothHelper helper = BluetoothHelper.getInstance();
+        if (helper != null) {
+            if (helper.isConnected()) {
+                helper.disConnect();
+            }
+        }
+    }
 
-    public String getTabletIp(){
+    public boolean havePermission(Activity activity, String permission) {
+        if (ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        return false;
+    }
+
+    public void sendPacket(DataReceiveCallback callback, String packetToSend) {
+        try {
+            BluetoothHelper helper = BluetoothHelper.getInstance();
+            helper.sendDataBLE(callback, packetToSend);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getTabletIp() {
         WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
         int ip = wifiInfo.getIpAddress();
         return Formatter.formatIpAddress(ip);
     }
 
-    public void registerReceiver() {
+    /*public void registerReceiver() {
         IntentFilter intentFilter = new IntentFilter(ACTION_MyIntentService);
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
         mContext.registerReceiver(receiver, intentFilter);
@@ -268,8 +331,49 @@ public class ApplicationClass extends Application {
         try {
             mContext.unregisterReceiver(receiver);
         } catch (Exception e) { e.printStackTrace(); }
-    }
+    }*/
 
+    public static void httpRequest(Context mContext, String apiType, @Nullable JSONObject object, final int method, final VolleyCallback callBack) throws Exception {
+        if (mContext == null) {
+            throw new Exception("Context is null");
+        }
+        if (apiType == null) {
+            throw new Exception("URL is null");
+        }
+        if (apiType.equals("")) {
+            throw new Exception("URL is invalid");
+        }
+        if (callBack == null) {
+            throw new Exception("Callback is null");
+        }
+        String URL = baseURL + apiType;
+
+        Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callBack.OnSuccess(response);
+                Log.e(FISHEYE, API + " <-- " + response);
+                Log.e(EAGLE_EYE, API + " <-- recevied success");
+            }
+        };
+
+        Response.ErrorListener volleyErrorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callBack.OnFailure(error);
+                Log.e(EAGLE_EYE, API + " <-- recevied error");
+            }
+        };
+
+        JsonObjectRequest request = new JsonObjectRequest(method, URL, object, responseListener, volleyErrorListener);
+
+        request.setRetryPolicy(new DefaultRetryPolicy(httpRequestTimeout, 0, 1.0f));
+        Log.e(FISHEYE, API + " --> " + new String(request.getBody()));
+        Log.e(EAGLE_EYE, API + " --> sent");
+
+        requestQueue.add(request);
+
+    }
 
     public void registerBatteryReceiver() {
         IntentFilter intentFilter = new IntentFilter(ACTION_BATTERY_CHANGED);
@@ -377,7 +481,7 @@ public class ApplicationClass extends Application {
         Navigation.findNavController((Activity) activity, R.id.nav_host_frag).popBackStack();
     }
 
-    public void sendPacket(final DataReceiveCallback listener, String packet) {
+    /* public void sendPacket(final DataReceiveCallback listener, String packet) {
         tcp = new TCP();
         this.listener = listener;
         if (packetTimeOut != null) {
@@ -404,18 +508,16 @@ public class ApplicationClass extends Application {
                 TCP.class);
         mServiceIntent.putExtra("dataPacket", packet);
         mContext.startService(mServiceIntent);
-    }
+    } */
 
     public void castFrag(FragmentManager parentFragmentManager, int host, Fragment fragment) {
         parentFragmentManager.beginTransaction().replace(host, fragment).commit();
     }
 
     public void showSnackBar(Context context, String message) {
-        Snackbar snackbar = Snackbar.make(((Activity) context).findViewById(R.id.cod), message, Snackbar.LENGTH_SHORT);
-        TextView tv = (TextView) snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
-        tv.setTextColor(Color.WHITE);
-        snackbar.show();
+        BaseActivity.showSnack(message);
     }
+
     public static Boolean isValidIp(String ip) {
         Matcher matcher = IP_ADDRESS.matcher(ip);
         return matcher.matches();
@@ -499,27 +601,29 @@ public class ApplicationClass extends Application {
         return new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, strArr);
     }
 
-    private void initDB() {
+    private void init() {
+        mContext = getApplicationContext();
         DB = WaterTreatmentDb.getDatabase(getApplicationContext());
+
+        keepaliveDAO = DB.keepAliveCurrentValueDao();
         /*Input_DB*/
         inputDAO = DB.inputConfigurationDao();
-        keepaliveDAO = DB.keepAliveCurrentValueDao();
         if (inputDAO.getInputConfigurationEntityList().isEmpty()) {
             String sensorType = "SENSOR";
             for (int i = 1; i < 50; i++) {
-                if(i < 5){
+                if (i < 5) {
                     sensorType = "SENSOR";
-                }else if(i > 4 && i < 15){
+                } else if (i > 4 && i < 15) {
                     sensorType = "MODBUS";
-                }else if(i > 14 && i < 18){
+                } else if (i > 14 && i < 18) {
                     sensorType = "SENSOR";
-                }else if(i > 17 && i < 26){
+                } else if (i > 17 && i < 26) {
                     sensorType = "Analog";
-                }else if(i > 25 && i < 34){
+                } else if (i > 25 && i < 34) {
                     sensorType = "FLOWMETER";
-                }else if(i > 33 && i < 42){
+                } else if (i > 33 && i < 42) {
                     sensorType = "DIGITAL";
-                }else if(i > 41 && i < 50){
+                } else if (i > 41 && i < 50) {
                     sensorType = "TANK";
                 }
 
@@ -578,19 +682,64 @@ public class ApplicationClass extends Application {
         if (userManagementDao.getUsermanagementEntity().isEmpty()) {
             List<UsermanagementEntity> entryListUpdate = new ArrayList<>();
 
-            UsermanagementEntity adminEntityUpdate = new UsermanagementEntity(1, "admin", 3, "12345");
-            UsermanagementEntity userEntityUpdate = new UsermanagementEntity(2, "user", 3, "12345");
-
-            // todo temp Users - should delete
-            UsermanagementEntity basicEntityUpdate = new UsermanagementEntity(3, "basic", 1, "12345");
-            UsermanagementEntity intermediateEntityUpdate = new UsermanagementEntity(4, "intermediate", 2, "12345");
-            entryListUpdate.add(basicEntityUpdate);
-            entryListUpdate.add(intermediateEntityUpdate);
+            UsermanagementEntity adminEntityUpdate = new UsermanagementEntity("TU0001", "admin", "admin", "12345", "0000000000", "0");
+            UsermanagementEntity userEntityUpdate = new UsermanagementEntity("TU0002", "user", "user", "12345", "0000000000", "0");
 
             entryListUpdate.add(adminEntityUpdate);
             entryListUpdate.add(userEntityUpdate);
             updateUsermanagement(entryListUpdate);
         }
+
+        /*DefaultLayout Configuration*/
+        DefaultLayoutConfigurationDao defaultLayoutConfigurationDao;
+        DB = WaterTreatmentDb.getDatabase(getApplicationContext());
+        defaultLayoutConfigurationDao = DB.defaultLayoutConfigurationDao();
+        if (defaultLayoutConfigurationDao.getDefaultLayoutConfigurationEntityList().isEmpty()) {
+            for (int i = 1; i < 6; i++) {
+                DefaultLayoutConfigurationEntity entityUpdate = new DefaultLayoutConfigurationEntity
+                        (i, i, 0, macAddress, 1);
+                List<DefaultLayoutConfigurationEntity> entryListUpdate = new ArrayList<>();
+                entryListUpdate.add(entityUpdate);
+                insertToDb(entryListUpdate);
+            }
+            defaultLayoutConfigurationDao.update(1, 1);
+        }
+        /* Input KeepAlive*/
+        KeepAliveCurrentValueDao dao;
+        OutputKeepAliveDao outputKeepAliveDao;
+        DB = WaterTreatmentDb.getDatabase(getApplicationContext());
+        dao = DB.keepAliveCurrentValueDao();
+        if (dao.getKeepAliveList().isEmpty()) {
+            for (int i = 1; i <= 57; i++) {
+                KeepAliveCurrentEntity keepAliveCurrentEntity =
+                        new KeepAliveCurrentEntity(i, "N/A");
+                List<KeepAliveCurrentEntity> entryListUpdate = new ArrayList<>();
+                entryListUpdate.add(keepAliveCurrentEntity);
+                insertKeepAliveDb(entryListUpdate);
+            }
+        }
+        /* Output KeepAlive*/
+        outputKeepAliveDao = DB.outputKeepAliveDao();
+        if (outputKeepAliveDao.getOutputList().isEmpty()) {
+            for (int i = 1; i <= 22; i++) {
+                OutputKeepAliveEntity outputKeepAliveEntity =
+                        new OutputKeepAliveEntity(i, "N/A", "N/A");
+                List<OutputKeepAliveEntity> entryListUpdate = new ArrayList<>();
+                entryListUpdate.add(outputKeepAliveEntity);
+                insertOutputKeepAliveDb(entryListUpdate);
+            }
+        }
+    }
+
+
+    public static String getCurrentDate() {
+        Format f = new SimpleDateFormat("dd/MM/yy");
+        return f.format(new Date());
+    }
+
+    public static String getCurrentTime() {
+        Format f = new SimpleDateFormat("HH.mm.ss");
+        return f.format(new Date());
     }
 
     private void updateTimerDB(List<TimerConfigurationEntity> entryList) {
@@ -618,64 +767,6 @@ public class ApplicationClass extends Application {
         dao.insert(entryList.toArray(new UsermanagementEntity[0]));
     }
 
-    public static String getCurrentDate(){
-        Format f = new SimpleDateFormat("dd/MM/yy");
-        return  f.format(new Date());
-    }
-
-    public static String getCurrentTime(){
-        Format f = new SimpleDateFormat("HH.mm.ss");
-        return  f.format(new Date());
-    }
-
-    void setDefaultDb() {
-        DefaultLayoutConfigurationDao dao;
-        WaterTreatmentDb dB;
-        dB = WaterTreatmentDb.getDatabase(getApplicationContext());
-        dao = dB.defaultLayoutConfigurationDao();
-        if (dao.getDefaultLayoutConfigurationEntityList().isEmpty()) {
-            for (int i = 1; i < 6; i++) {
-                DefaultLayoutConfigurationEntity entityUpdate = new DefaultLayoutConfigurationEntity
-                        (i, i, 0, macAddress, 1);
-                List<DefaultLayoutConfigurationEntity> entryListUpdate = new ArrayList<>();
-                entryListUpdate.add(entityUpdate);
-                insertToDb(entryListUpdate);
-            }
-            dao.update(1, 1);
-        }
-    }
-
-    void setCurrentValueDb() {
-        KeepAliveCurrentValueDao dao;
-        OutputKeepAliveDao outputKeepAliveDao;
-        WaterTreatmentDb dB;
-        dB = WaterTreatmentDb.getDatabase(getApplicationContext());
-        dao = dB.keepAliveCurrentValueDao();
-        if (dao.getKeepAliveList().isEmpty()) {
-            for (int i = 1; i <= 57; i++) {
-                KeepAliveCurrentEntity keepAliveCurrentEntity =
-                        new KeepAliveCurrentEntity(i, "N/A");
-                List<KeepAliveCurrentEntity> entryListUpdate = new ArrayList<>();
-                entryListUpdate.add(keepAliveCurrentEntity);
-                insertKeepAliveDb(entryListUpdate);
-            }
-        }
-
-
-        outputKeepAliveDao = dB.outputKeepAliveDao();
-        if (outputKeepAliveDao.getOutputList().isEmpty()) {
-            for (int i = 1; i <= 22; i++) {
-                OutputKeepAliveEntity outputKeepAliveEntity =
-                        new OutputKeepAliveEntity(i, "N/A","N/A");
-                List<OutputKeepAliveEntity> entryListUpdate = new ArrayList<>();
-                entryListUpdate.add(outputKeepAliveEntity);
-                insertOutputKeepAliveDb(entryListUpdate);
-            }
-        }
-
-
-    }
-
     public void insertToDb(List<DefaultLayoutConfigurationEntity> entryList) {
         WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getApplicationContext());
         DefaultLayoutConfigurationDao dao = db.defaultLayoutConfigurationDao();
@@ -688,7 +779,7 @@ public class ApplicationClass extends Application {
         dao.insert(entryList.toArray(new KeepAliveCurrentEntity[0]));
     }
 
-    private boolean isValidPck(String pckType, String data, Context context) {
+    public boolean isValidPck(String pckType, String data, Context context) {
         if (data.equals("FailedToConnect")) {
             showSnackBar(context, getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {
@@ -777,14 +868,13 @@ public class ApplicationClass extends Application {
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Log.e(TAG, "run: "+e );
                     }
                 }
             };
 
             handler.postDelayed(r, 3000);
 
-           // Toast.makeText(getApplicationContext(), "Import Successful!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Import Successful!", Toast.LENGTH_SHORT).show();
 
         } catch (Exception e) {
 
@@ -793,4 +883,5 @@ public class ApplicationClass extends Application {
 
         }
     }
+
 }

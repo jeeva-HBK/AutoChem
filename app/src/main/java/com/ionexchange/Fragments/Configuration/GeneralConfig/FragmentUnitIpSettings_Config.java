@@ -1,5 +1,14 @@
 package com.ionexchange.Fragments.Configuration.GeneralConfig;
 
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_panelIpConfig;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,19 +31,10 @@ import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentUnitipsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
-
-import static com.ionexchange.Others.ApplicationClass.editor;
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.PCK_panelIpConfig;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentUnitIpSettings_Config extends Fragment implements DataReceiveCallback {
     FragmentUnitipsettingsBinding mBinding;
@@ -60,34 +60,8 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
         mBinding.saveLayoutUnitIp.setOnClickListener(this::writeData);
 
         mBinding.logout.setOnClickListener(View -> {
-            logOut();
+            BaseActivity.logOut();
         });
-    }
-
-    private void logOut() {
-        new MaterialAlertDialogBuilder(getContext())
-                .setTitle("LOGOUT")
-                .setMessage("Are you sure, you want to Logout ?")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        editor.putBoolean("prefLoggedIn", false);
-                        editor.putBoolean("requiredUserLogin", true);
-                        editor.commit();
-                        editor.apply();
-                        PackageManager packageManager = getContext().getPackageManager();
-                        Intent intent = packageManager.getLaunchIntentForPackage(getContext().getPackageName());
-                        ComponentName componentName = intent.getComponent();
-                        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
-                        getContext().startActivity(mainIntent);
-                        Runtime.getRuntime().exit(0);
-                    }
-                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        }).show();
     }
 
     private String toString(EditText editText) {
@@ -104,7 +78,6 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
         mActivity.showProgress();
         mAppclass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_panelIpConfig);
     }
-
 
     private boolean validateFields() {
         if (isEmpty(mBinding.ipUnitipEDT)) {
@@ -168,20 +141,15 @@ public class FragmentUnitIpSettings_Config extends Fragment implements DataRecei
         mActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppclass.showSnackBar(getContext(), "Failed to connect");
-        }
-        if (data.equals("pckError")) {
+        } else if (data.equals("pckError")) {
             mAppclass.showSnackBar(getContext(), "Failed to connect");
-        }
-        if (data.equals("sendCatch")) {
+        } else if (data.equals("sendCatch")) {
             mAppclass.showSnackBar(getContext(), "Failed to connect");
-        }
-        if (data.equals("Timeout")) {
+        } else if (data.equals("Timeout")) {
             mAppclass.showSnackBar(getContext(), "TimeOut");
+        } else if (data != null) {
+           // handleData(data.split("\\*")[1].split("\\$"));
         }
-        if (data != null) {
-            handleData(data.split("\\*")[1].split("\\$"));
-        }
-
     }
 
     private void handleData(String[] splitData) {

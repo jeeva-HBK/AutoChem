@@ -423,8 +423,8 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_calib_result_two, null);
         dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
+        AlertDialog stabDialog = dialogBuilder.create();
+        stabDialog.setCanceledOnTouchOutside(false);
 
         ImageView iv = dialogView.findViewById(R.id.resultTwo_iv);
         TextView leftValue = dialogView.findViewById(R.id.resulTwo_leftValue);
@@ -451,7 +451,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
             @Override
             public void onClick(View view) {
                 tempBool = false;
-                alertDialog.dismiss();
+                stabDialog.dismiss();
                 stabilizationTimer.cancel();
             }
         });
@@ -459,12 +459,12 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         rightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alertDialog.dismiss();
+                stabDialog.dismiss();
                 proceedToNextStep(type);
             }
         });
 
-        alertDialog.show();
+        stabDialog.show();
 
         final int[] stabilizationCount = {0};
         final long[] tempInt = {1};
@@ -483,7 +483,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                 }
                 if (stabilizationCount[0] > 3) {
                     cancel();
-                    alertDialog.dismiss();
+                    stabDialog.dismiss();
                     proceedToNextStep(type);
                 }
             }
@@ -517,6 +517,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                     }
                 }
             } else if (inputType.equals("Contacting Conductivity") || inputType.equals("Toroidal Conductivity")) { // anyOtherSensor
+                tempBool = false;
                 if (type.equals("1")) {
                     showOneEdtDialog();
                 } else {
@@ -546,13 +547,15 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         Button rightBtn = dialogView.findViewById(R.id.onedt_rightBtn);
 
         title.setText("\"Enter the Standard conductivity buffer value\"");
+        leftBtn.setText("CANCEL");
+        rightBtn.setText("PROCEED");
 
         leftBtn.setOnClickListener(View -> {
             alertDialog.dismiss();
         });
 
         rightBtn.setOnClickListener(View -> {
-            if (edt.getText().toString().equals("")) {
+            if (!edt.getText().toString().equals("")) {
                 alertDialog.dismiss();
                 showMsgDialog(edt.getText().toString());
             } else {
@@ -574,6 +577,9 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         TextView title = dialogView.findViewById(R.id.dialogType1Calib_mainText);
         Button leftBtn = dialogView.findViewById(R.id.dialogType1Calib_leftBtn);
         Button rightBtn = dialogView.findViewById(R.id.dialogType1Calib_rightBtn);
+
+        leftBtn.setText("CANCEL");
+        rightBtn.setText("PROCEED");
 
         title.setText("Insert the sensor in STANDARD buffer");
         leftBtn.setOnClickListener(View -> {
@@ -695,10 +701,13 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                 break;
 
             case "Contacting Conductivity":
+                minRange = 0.5; // -100  toroidal = -10,000
+                maxRange = 2.0; // 100   toroidal =  10,000
+                break;
 
             case "Toroidal Conductivity":
                 minRange = 0.5; // -100  toroidal = -10,000
-                maxRange = 2.0; // 100   toroidal =  10,000
+                maxRange = 10; // 100   toroidal =  10,000
                 break;
 
             case "Temperature":
@@ -797,7 +806,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         entryListUpdate.add(entityUpdate);
         updateToDb(entryListUpdate);
         clickMainScreenBtn();
-        mAppClass.showSnackBar(getContext(), "Calibration Success");
+        mAppClass.showSnackBar(getContext(), "Calibration Completed");
     }
 
     public void updateToDb(List<CalibrationEntity> entryList) {

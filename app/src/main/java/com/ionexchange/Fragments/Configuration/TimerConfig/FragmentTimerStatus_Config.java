@@ -769,11 +769,9 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         mActivity.dismissProgress();
         if (data.equals("FailedToConnect") || data.equals("pckError") || data.equals("sendCatch")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        }
-        if (data.equals("Timeout")) {
+        } else if (data.equals("Timeout")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
-        }
-        if (data != null) {
+        } else if (data != null) {
             handleResponse(data.split(RES_SPILT_CHAR), 0);
         }
     }

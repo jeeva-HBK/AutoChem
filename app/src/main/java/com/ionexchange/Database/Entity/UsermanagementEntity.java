@@ -1,37 +1,46 @@
 package com.ionexchange.Database.Entity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 
 @Entity(primaryKeys = {"user_id"})
 public class UsermanagementEntity {
-
+    @NonNull
     @ColumnInfo(name = "user_id")
-    public int userId;
+    public String userId;
 
     @ColumnInfo(name = "user_name")
     public String userName;
 
     @ColumnInfo(name = "user_role")
-    public int userRole;
+    public String userRole;
 
     @ColumnInfo(name = "user_password")
     public String userPassword;
 
+    @ColumnInfo(name = "contact")
+    public String contact;
 
-    public UsermanagementEntity(int userId, String userName, int userRole, String userPassword) {
+    @ColumnInfo(name = "lOGINSTATUS")
+    public String loginStatus;
+
+
+    public UsermanagementEntity(String userId, String userName, String userRole, String userPassword, String contact, String loginStatus) {
         this.userId = userId;
         this.userName = userName;
         this.userRole = userRole;
         this.userPassword = userPassword;
+        this.contact = contact;
+        this.loginStatus = loginStatus;
     }
 
-
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -43,11 +52,11 @@ public class UsermanagementEntity {
         this.userName = userName;
     }
 
-    public int getUserRole() {
+    public String getUserRole() {
         return userRole;
     }
 
-    public void setUserRole(int userRole) {
+    public void setUserRole(String userRole) {
         this.userRole = userRole;
     }
 
@@ -57,5 +66,21 @@ public class UsermanagementEntity {
 
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String getLoginStatus() {
+        return loginStatus;
+    }
+
+    public void setLoginStatus(String loginStatus) {
+        this.loginStatus = loginStatus;
     }
 }

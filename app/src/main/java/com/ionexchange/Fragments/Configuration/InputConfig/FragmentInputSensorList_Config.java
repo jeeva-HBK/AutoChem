@@ -209,32 +209,42 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
         mAppClass.sendPacket(new DataReceiveCallback() {
             @Override
             public void OnDataReceive(String data) {
-                if (sensorNum <= 17) {
-                    String[] tempRes = data.split("\\*")[1].split(RES_SPILT_CHAR);
-                    if (tempRes[0].equals(READ_PACKET)) {
-                        if (tempRes[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
-                            if (tempRes[2].equals(RES_SUCCESS)) {
-                                sensorName.setText(inputTypeArr[Integer.parseInt(tempRes[4])]);
-                                sequenceNo = Integer.parseInt(tempRes[5]);
-                                if(sensorNum >= 5 && sensorNum <= 14){
-                                    sequenceType = Integer.parseInt(tempRes[6]);
-                                    sequenceValueRead = Integer.parseInt(tempRes[7]);
+                if (data.equals("FailedToConnect")) {
+                    mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
+                } else if (data.equals("pckError")) {
+                    mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
+                } else if (data.equals("sendCatch")) {
+                    mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
+                } else if (data.equals("Timeout")) {
+                    mAppClass.showSnackBar(getContext(), "TimeOut");
+                } else if (data != null) {
+                    if (sensorNum <= 17) {
+                        String[] tempRes = data.split("\\*")[1].split(RES_SPILT_CHAR);
+                        if (tempRes[0].equals(READ_PACKET)) {
+                            if (tempRes[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
+                                if (tempRes[2].equals(RES_SUCCESS)) {
+                                    sensorName.setText(inputTypeArr[Integer.parseInt(tempRes[4])]);
+                                    sequenceNo = Integer.parseInt(tempRes[5]);
+                                    if (sensorNum >= 5 && sensorNum <= 14) {
+                                        sequenceType = Integer.parseInt(tempRes[6]);
+                                        sequenceValueRead = Integer.parseInt(tempRes[7]);
+                                    }
                                 }
                             }
                         }
-                    }
-                } else if (sensorNum >= 18 && sensorNum <= 49) {
-                    String[] tempRes = data.split("\\*")[1].split(RES_SPILT_CHAR);
-                    if (tempRes[0].equals(READ_PACKET)) {
-                        if (tempRes[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
-                            if (tempRes[2].equals(RES_SUCCESS)) {
-                                sensorName.setText(inputTypeArr[Integer.parseInt(tempRes[4])]);
-                                sequenceNo = Integer.parseInt(tempRes[5]);
-                                if(sensorNum <= 33){
-                                    sequenceNo = Integer.parseInt(tempRes[6]);
-                                    sequenceType = Integer.parseInt(tempRes[5]);
-                                    if (sensorNum <= 25) {
-                                        analogType = Integer.parseInt(tempRes[7]);
+                    } else if (sensorNum >= 18 && sensorNum <= 49) {
+                        String[] tempRes = data.split("\\*")[1].split(RES_SPILT_CHAR);
+                        if (tempRes[0].equals(READ_PACKET)) {
+                            if (tempRes[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
+                                if (tempRes[2].equals(RES_SUCCESS)) {
+                                    sensorName.setText(inputTypeArr[Integer.parseInt(tempRes[4])]);
+                                    sequenceNo = Integer.parseInt(tempRes[5]);
+                                    if (sensorNum <= 33) {
+                                        sequenceNo = Integer.parseInt(tempRes[6]);
+                                        sequenceType = Integer.parseInt(tempRes[5]);
+                                        if (sensorNum <= 25) {
+                                            analogType = Integer.parseInt(tempRes[7]);
+                                        }
                                     }
                                 }
                             }
@@ -244,6 +254,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
             }
         }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + formDigits(2, String.valueOf(sensorNum)));
+
     }
 
     public ArrayAdapter<String> getAdapter(String[] strArr) {

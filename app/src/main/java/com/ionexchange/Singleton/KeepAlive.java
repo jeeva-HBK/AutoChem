@@ -1,4 +1,4 @@
-package com.ionexchange.Others;
+package com.ionexchange.Singleton;
 
 
 import static com.ionexchange.Others.ApplicationClass.Acknowledge;
@@ -7,12 +7,12 @@ import static com.ionexchange.Others.ApplicationClass.eventLogArr;
 import static com.ionexchange.Others.PacketControl.ACK;
 import static com.ionexchange.Others.PacketControl.ALARM_STATUS;
 import static com.ionexchange.Others.PacketControl.CRC;
+import static com.ionexchange.Others.PacketControl.ENDPACKET;
 import static com.ionexchange.Others.PacketControl.INPUT_VOLTAGE;
 import static com.ionexchange.Others.PacketControl.OUTPUT_STATUS;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.TCP.endPacket;
-import static com.ionexchange.Others.TCP.startPacket;
+import static com.ionexchange.Others.PacketControl.STARTPACKET;
 
 import android.content.Context;
 
@@ -24,12 +24,14 @@ import com.ionexchange.Database.Dao.OutputKeepAliveDao;
 import com.ionexchange.Database.Entity.AlarmLogEntity;
 import com.ionexchange.Database.Entity.EventLogEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Others.ApplicationClass;
 
 import java.util.ArrayList;
 import java.util.List;
 
 //created by Silambu
 public class KeepAlive {
+    static KeepAlive keepAlive;
     WaterTreatmentDb db = null;
     KeepAliveCurrentValueDao keepAliveCurrentValueDao = null;
     OutputKeepAliveDao outputKeepAliveDao;
@@ -38,11 +40,17 @@ public class KeepAlive {
     InputConfigurationDao inputConfigurationDao;
     String sensorType;
 
+    public KeepAlive() {
+    }
 
+    public static KeepAlive getInstance() {
+        if (keepAlive == null) {
+            keepAlive = new KeepAlive();
+        }
+        return keepAlive;
+    }
 
-    public KeepAlive(String data, Context applicationContext) {
-
-
+    public void processKeepAlive(String data, Context applicationContext) {
         if (db == null) {
             db = WaterTreatmentDb.getDatabase(applicationContext);
         }
@@ -60,9 +68,8 @@ public class KeepAlive {
     }
 
     void spiltData(String[] data) {
-
         if (data[2].equals(INPUT_VOLTAGE)) {
-            Acknowledge = startPacket + SPILT_CHAR + CRC + SPILT_CHAR + "007" + SPILT_CHAR + INPUT_VOLTAGE + SPILT_CHAR + ACK + SPILT_CHAR + endPacket;
+            Acknowledge = STARTPACKET + SPILT_CHAR + CRC + SPILT_CHAR + "007" + SPILT_CHAR + INPUT_VOLTAGE + SPILT_CHAR + ACK + SPILT_CHAR + ENDPACKET;
             int i = 0;
             int j;
             if (data[3].equals("5")) {
@@ -147,6 +154,3 @@ public class KeepAlive {
         eventLogDao.insert(entryList.toArray(new EventLogEntity[0]));
     }
 }
-
-// {*1200$$01$4$410$420$430$440$450$460$470$480$490$500*}
-// {*1200$$01$0$010$020$030$04200.00$050.000000$060$070$080$090$100*}{*1200$$01$1$110$120$130$140$150.0000$160.0000$170.0000$180$195.6272$200.0000*}{*1200$$01$2$210$220$230$240$250$260.00$270$280$290$300*}{*1200$$01$3$310$320$330$341$350$360$370$380$390$400*}{*1200$$01$4$410$420$430$440$450$460$470$480$490$500*}

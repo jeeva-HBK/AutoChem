@@ -2,16 +2,18 @@ package com.ionexchange.Activity;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static com.ionexchange.Others.ApplicationClass.DB;
-import static com.ionexchange.Others.ApplicationClass.editor;
-import static com.ionexchange.Others.ApplicationClass.preferences;
 import static com.ionexchange.Others.ApplicationClass.userManagementDao;
+import static com.ionexchange.Singleton.SharedPref.pref_LOGGEDIN;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINREQUIRED;
 
 import android.Manifest;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -43,12 +46,14 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.ionexchange.Adapters.ExpandableListAdapter;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Others.AdminReceiver;
 import com.ionexchange.Others.ApplicationClass;
-import com.ionexchange.Others.TcpServer;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.ActivityBaseBinding;
 
 import java.util.ArrayList;
@@ -66,7 +71,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     AppBarConfiguration mAppBarConfiguration;
     NavController mNavController;
     NavGraph navGraph;
+    static CoordinatorLayout coordinatorLayout;
     ApplicationClass mAppClass;
+    static Context context;
     private int lastPosition = -1;
     HashMap<String, List<String>> childList;
     List<String> generaList, ioList, homescreenList, headerList;
@@ -77,15 +84,14 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     Handler handler;
 
 
-
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_base);
         mAppClass = (ApplicationClass) getApplication();
-
-        startService(new Intent(this, TcpServer.class).setAction(TcpServer.START_SERVER));
+        context = getApplicationContext();
+        //startService(new Intent(this, TcpServer.class).setAction(TcpServer.START_SERVER));
         expandedListView();
         checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 101);
         ComponentName admin = new ComponentName(this, AdminReceiver.class);
@@ -93,6 +99,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).putExtra(
                 DevicePolicyManager.EXTRA_DEVICE_ADMIN, admin);
         this.startActivity(intent);
+        coordinatorLayout = findViewById(R.id.cod);
         mBinding.mainScreenBtn.setOnClickListener(this);
         mBinding.trendScreenBtn.setOnClickListener(this);
         mBinding.eventLogsScreenBtn.setOnClickListener(this);
@@ -121,8 +128,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void lock() {
-        editor.putBoolean("requiredUserLogin", true).commit();
-        editor.apply();
+        SharedPref.write(pref_USERLOGINREQUIRED, true);
         mBinding.mainScreenBtn.performClick();
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         if (pm.isScreenOn()) {
@@ -196,6 +202,13 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    public static void showSnack(String message) {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT);
+        TextView tv = (TextView) snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
+        tv.setTextColor(Color.WHITE);
+        snackbar.show();
+    }
+
     public void setNavigation(int navigation, int des) {
         mNavController = Navigation.findNavController(this, R.id.nav_host_frag);
         navGraph = mNavController.getNavInflater().inflate(navigation);
@@ -256,7 +269,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         navController.setGraph(navGraph);
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -280,7 +292,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.config_screen_btn:
-                if (preferences.getBoolean("requiredUserLogin", true)) {
+                if (SharedPref.read(pref_USERLOGINREQUIRED, false)) {
                     checkUserLogin();
                 } else {
                     moveToConfig();
@@ -301,10 +313,10 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
         TextView dialog_timeout_txt = dialogView.findViewById(R.id.dialog_timeout_txt);
-        CountDownTimer CountDownTimer=  new CountDownTimer(5000, 1000) {
+        CountDownTimer CountDownTimer = new CountDownTimer(5000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                dialog_timeout_txt.setText(millisUntilFinished / 1000+"");
+                dialog_timeout_txt.setText(millisUntilFinished / 1000 + "");
             }
 
             public void onFinish() {
@@ -365,8 +377,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 navGraph, R.id.configuration, mNavController);
         expandedListView();
         mBinding.view.setVisibility(View.VISIBLE);
-        editor.putBoolean("requiredUserLogin", false).commit();
-        editor.apply();
+        SharedPref.write(pref_USERLOGINREQUIRED, false);
     }
 
 
@@ -552,7 +563,28 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
+
+    public static void logOut() {
+        new MaterialAlertDialogBuilder(context, R.style.Theme_IonExchange)
+                .setTitle("LOGOUT")
+                .setMessage("Are you sure, you want to Logout ?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        SharedPref.write(pref_LOGGEDIN, false);
+                        SharedPref.write(pref_USERLOGINREQUIRED, true);
+                        PackageManager packageManager = context.getPackageManager();
+                        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+                        ComponentName componentName = intent.getComponent();
+                        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+                        context.startActivity(mainIntent);
+                        Runtime.getRuntime().exit(0);
+                    }
+                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        }).show();
+    }
 }
-
-
-

@@ -42,6 +42,11 @@
         <item name="android:textColorHint">@color/primary</item>
     </style>
 
+    <style name="textAppearence" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="colorPrimaryDark">@color/primary</item>
         <item name="colorAccent">@color/colorSecondary</item>

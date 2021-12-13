@@ -28,6 +28,7 @@ import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentCommonsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +41,11 @@ import static com.ionexchange.Others.PacketControl.RES_FAILED;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import static com.ionexchange.Singleton.SharedPref.pref_CONTROLLERISACTIVE;
+import static com.ionexchange.Singleton.SharedPref.pref_CONTROLLERPASSWORD;
+import static com.ionexchange.Singleton.SharedPref.pref_SITEID;
+import static com.ionexchange.Singleton.SharedPref.pref_SITELOCATION;
+import static com.ionexchange.Singleton.SharedPref.pref_SITENAME;
 
 //created by Silambu
 public class FragmentCommonSettings_Config extends Fragment implements DataReceiveCallback {
@@ -65,7 +71,6 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
 
         mBinding.saveLayoutCommonSettings.setOnClickListener(this::onCLick);
         mBinding.saveFabCommonSettings.setOnClickListener(this::onCLick);
-
     }
 
     private void onCLick(View view) {
@@ -77,7 +82,7 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
                     toString(0, mBinding.siteIdCommonSettingsEDT) + SPILT_CHAR +
                     toString(0, mBinding.siteNameCommonSettingsEDT) + SPILT_CHAR +
                     toString(0, mBinding.sitePasswordCommonSettingsEDT) + SPILT_CHAR +
-                    getRadio(mBinding.radioGroup, mBinding.enableCommonSettings) + SPILT_CHAR +
+                    getRadio(mBinding.radioGroup, mBinding.enableSite) + SPILT_CHAR +
                     toString(0, mBinding.siteLocationCommonSettingsEDT) + SPILT_CHAR +
                     toString(2, mBinding.alarmDelayCommonSettingsEDT) + SPILT_CHAR +
                     getRadio(mBinding.radioGroup2, mBinding.fahrenheit) + SPILT_CHAR +
@@ -162,7 +167,20 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
     public void onResume() {
         super.onResume();
         readData();
+        setSiteDetailsFromPref();
+    }
 
+    private void setSiteDetailsFromPref() {
+        mBinding.siteIdCommonSettingsEDT.setText(SharedPref.read(pref_SITEID, ""));
+        mBinding.siteNameCommonSettingsEDT.setText(SharedPref.read(pref_SITENAME, ""));
+        mBinding.siteLocationCommonSettingsEDT.setText(SharedPref.read(pref_SITELOCATION, ""));
+        mBinding.sitePasswordCommonSettingsEDT.setText(SharedPref.read(pref_CONTROLLERPASSWORD, ""));
+
+        if (SharedPref.read(pref_CONTROLLERISACTIVE, false)) {
+            mBinding.enableSite.setChecked(true);
+        } else {
+            mBinding.disableSite.setChecked(true);
+        }
     }
 
     private void loca() {
@@ -210,17 +228,13 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
         mActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(), "Failed to connect");
-        }
-        if (data.equals("pckError")) {
+        } else if (data.equals("pckError")) {
             mAppClass.showSnackBar(getContext(), "Failed to connect");
-        }
-        if (data.equals("sendCatch")) {
+        } else if (data.equals("sendCatch")) {
             mAppClass.showSnackBar(getContext(), "Failed to connect");
-        }
-        if (data.equals("Timeout")) {
+        } else if (data.equals("Timeout")) {
             mAppClass.showSnackBar(getContext(), "TimeOut");
-        }
-        if (data != null) {
+        } else if (data != null) {
             handleResponce(data.split("\\*")[1].split("\\$"));
         }
     }
@@ -239,9 +253,9 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
                     mBinding.sitePasswordCommonSettingsEDT.setText(splitData[5]);
 
                     if (splitData[6].equals("0")) {
-                        mBinding.disableCommonSettings.setChecked(true);
+                        mBinding.disableSite.setChecked(true);
                     } else if (splitData[6].equals("1")) {
-                        mBinding.enableCommonSettings.setChecked(true);
+                        mBinding.enableSite.setChecked(true);
                     }
 
                     mBinding.siteLocationCommonSettingsEDT.setText(splitData[7]);

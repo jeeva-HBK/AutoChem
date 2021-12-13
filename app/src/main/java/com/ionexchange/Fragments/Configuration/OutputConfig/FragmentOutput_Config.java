@@ -916,8 +916,16 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
     @Override
     public void OnDataReceive(String data) {
-        if (data != null) {
-            handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
+        if (data.equals("FailedToConnect")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        } else if (data.equals("pckError")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        } else if (data.equals("sendCatch")) {
+            mAppClass.showSnackBar(getContext(), "Failed to connect");
+        } else if (data.equals("Timeout")) {
+            mAppClass.showSnackBar(getContext(), "TimeOut");
+        } else if (data != null) {
+            handleResponse(data.split("\\*")[1].split("\\$"));
         }
     }
 

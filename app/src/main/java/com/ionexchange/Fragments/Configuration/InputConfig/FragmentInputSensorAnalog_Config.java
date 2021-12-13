@@ -274,17 +274,13 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         mActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        }
-        if (data.equals("pckError")) {
+        } else if (data.equals("pckError")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        }
-        if (data.equals("sendCatch")) {
+        } else if (data.equals("sendCatch")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        }
-        if (data.equals("Timeout")) {
+        } else if (data.equals("Timeout")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
-        }
-        if (data != null) {
+        } else if (data != null) {
             handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
         }
     }
