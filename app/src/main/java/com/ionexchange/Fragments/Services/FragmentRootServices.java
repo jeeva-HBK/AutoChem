@@ -34,7 +34,7 @@ public class FragmentRootServices extends Fragment implements RadioGroup.OnCheck
 
         mBinding.serviceRadioGroup.setOnCheckedChangeListener(this);
 
-        mBinding.serviceDiagnosticsRb.performClick();
+        mBinding.serviceLogsRb.performClick();
     }
 
     @Override

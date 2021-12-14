@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <import type="android.view.View" />
-
         <variable
             name="modbusType"
             type="String" />
@@ -185,16 +183,17 @@
             <!--Total Time-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tank_totalTime"
-                style="@style/config_Til">
+                style="@style/config_AtxTil">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <AutoCompleteTextView
                     android:id="@+id/tank_level_input_sensor_total_time_tie"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/total_time"
-                    android:imeOptions="actionDone"
-                    android:inputType="number"
-                    android:maxLength="6" />
+                    android:clickable="false"
+                    android:editable="false"
+                    android:focusable="false" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--Alarm-->

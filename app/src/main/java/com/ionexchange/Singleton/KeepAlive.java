@@ -108,35 +108,38 @@ public class KeepAlive {
             }
         }
         if (data[2].equals(ALARM_STATUS)) {
-
-
-            if (data[3].substring(0, 2).equals("IN")) {
-              sensorType =  inputConfigurationDao.getSensorType(Integer.parseInt(data[3].substring(2, 4)));
-            } else {
-              sensorType =   outputKeepAliveDao.getOutputStatus(Integer.parseInt(data[3].substring(2, 4)));
+            if (alarmLogDao.getAlarmLogList().size() >= 1000) {
+                alarmLogDao.deleteFirstRow();
             }
-            if (data[4].equals("00") || data[4].equals("01")
-                    || data[4].equals("02") || data[4].equals("03") || data[4].equals("04")
-                    || data[4].equals("05") || data[4].equals("06") || data[4].equals("07")
-                    || data[4].equals("08")) {
-                if (alarmLogDao.getAlarmLogList().size() >= 1000) {
-                    alarmLogDao.deleteFirstRow();
-                }
+            if (eventLogDao.getEventLogList().size() >= 1000) {
+                eventLogDao.deleteFirstRow();
+            }
+
+            switch (data[3].substring(0, 2)) {
+                case "IN":
+                    sensorType = inputConfigurationDao.getSensorType(Integer.parseInt(data[3].substring(2, 4)));
+                    break;
+                case "OP":
+                    sensorType = outputKeepAliveDao.getOutputStatus(Integer.parseInt(data[3].substring(2, 4)));
+                    break;
+                case "TI":
+                    sensorType = "TIMER" + data[3].substring(2, 4);
+                    break;
+            }
+            if (data[4].equals("0")) {
                 AlarmLogEntity alarmLogEntity = new AlarmLogEntity(alarmLogDao.getLastSno() + 1,
                         data[3], sensorType,
-                        alarmArr[Integer.parseInt(data[4])],
+                        alarmArr[Integer.parseInt(data[5])],
                         ApplicationClass.getCurrentTime(),
                         ApplicationClass.getCurrentDate());
                 List<AlarmLogEntity> outputEntryList = new ArrayList<>();
                 outputEntryList.add(alarmLogEntity);
                 updateToAlarmDb(outputEntryList);
-            } else {
-                if (eventLogDao.getEventLogList().size() >= 1000) {
-                    eventLogDao.deleteFirstRow();
-                }
+
+            } else if (data[4].equals("1")) {
                 EventLogEntity eventLogEntity = new EventLogEntity(eventLogDao.getLastSno() + 1,
                         data[3], sensorType,
-                        eventLogArr[Integer.parseInt(data[4])],
+                        eventLogArr[Integer.parseInt(data[5])],
                         ApplicationClass.getCurrentTime(), ApplicationClass.getCurrentDate());
                 List<EventLogEntity> eventLogEntities = new ArrayList<>();
                 eventLogEntities.add(eventLogEntity);

@@ -18,14 +18,15 @@ import android.util.Log;
 
 import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Interface.DataReceiveCallback;
+import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Singleton.KeepAlive;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BluetoothHelper implements SerialListener {
     private static final String TAG = "BLE";
-    private static final String FISH_EYE = "FishEye";
-    private static final String EAGLE_EYE = "EagleEye";
+    private static final String TAG1 = "Bluetooth";
     private static BluetoothHelper helper;
     private static String END_CHAR = "}";
     BluetoothConnectCallback connectCallback;
@@ -295,8 +296,8 @@ public class BluetoothHelper implements SerialListener {
         dataReceived = false;
         socket.write(this, data.getBytes());
 
-        Log.e(FISH_EYE, TAG + " --> " + data);
-        Log.e(EAGLE_EYE, TAG + " --> sent" );
+        Log.e(TAG1, " --> " + data);
+        Log.e(TAG, " --> sent");
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -368,9 +369,7 @@ public class BluetoothHelper implements SerialListener {
             public void run() {
                 dataBuilder.append(data);
 
-                Log.e(FISH_EYE, TAG + " <-- " + data);
-                Log.e(EAGLE_EYE, TAG + " <-- received");
-
+                Log.e(TAG, " <-- received");
                 if (dataBuilder.toString().contains(STARTPACKET) && dataBuilder.toString().contains(ENDPACKET)) {
                     /*indexOfSplit = dataBuilder.indexOf(END_CHAR);
                     String framedData = dataBuilder.toString().substring(0, indexOfSplit + (END_CHAR.length()));
@@ -402,17 +401,16 @@ public class BluetoothHelper implements SerialListener {
                         String[] splitData = mData.split("\\*")[1].split("\\$");
                         if (splitData[0].equals("0")) { // ConfigurationPackets
                             String configPacket = "{*" + mData.substring(4);
+                            Log.e(TAG1 + "| config <-", configPacket);
                             if (dataCallback != null) {
                                 dataCallback.OnDataReceive(configPacket);
                             }
-                            Log.e(TAG, "finalBleData | config " + configPacket);
                         } else if (splitData[0].equals("1")) { // KeepAlivePackets
                             lastKeepAliveData = "{*" + mData.substring(4);
-                            Log.e(TAG, "finalBleData | keepAlive" + lastKeepAliveData);
+                            Log.e(TAG1 + "| keepAlive <-", lastKeepAliveData);
+                            KeepAlive.getInstance().processKeepAlive(lastKeepAliveData, ApplicationClass.mContext);
                         }
-                    // dataCallback.OnDataReceive(data);
                     }
-                    //  lastKeepAliveData = data; // todo put only keepAliveData
             }
         });
     }
@@ -433,6 +431,5 @@ public class BluetoothHelper implements SerialListener {
         ByName,
         ByMAC
     }
-
 
 }

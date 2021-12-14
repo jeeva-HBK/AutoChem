@@ -33,6 +33,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ionexchange.Others.ApplicationClass.analogOutput;
 import static com.ionexchange.Others.ApplicationClass.bleedRelay;
 import static com.ionexchange.Others.ApplicationClass.flowAlarmMode;
 import static com.ionexchange.Others.ApplicationClass.flowMeterTypeArr;
@@ -691,6 +692,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 getPositionFromAtxt(2, getStringValue(mBinding.flowSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr) + SPILT_CHAR +
                 sequenceNumber + SPILT_CHAR +
+                getPositionFromAtxt(0, getStringValue(mBinding.flowAnalogSeqEdtIsc), analogOutput) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
                 getStringValue(0, mBinding.flowInputLabelEdtIsc) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr) + SPILT_CHAR +
@@ -720,6 +722,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         mBinding.flowSeqNumberAtxtIsc.setAdapter(getAdapter(flowmeterSequenceNumber, getContext()));
         mBinding.flowTotalAlarmModeAtxtIsc.setAdapter(getAdapter(totalAlarmMode, getContext()));
         mBinding.flowAlarmModeAtxtIsc.setAdapter(getAdapter(flowAlarmMode, getContext()));
+        mBinding.flowAnalogSeqEdtIsc.setAdapter(getAdapter(analogOutput, getContext()));
         List<OutputConfigurationEntity> outputNameList = output_dao.getOutputHardWareNoConfigurationEntityList(1, 14);
         outputNames = new String[14];
         if (!outputNameList.isEmpty()) {
@@ -768,118 +771,122 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     }
 
     private void handleResponse(String[] splitData) {
-        // {*1$ 04$ 0$ 07$ 06$ 0$ 0$ 0$ analog$ 0$ 10.00$ 11.00$ 120$ 12.00$ 13.00$ 100$ 0$ 0*}
-        if (splitData[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
-            if (splitData[0].equals(READ_PACKET)) {
-                if (splitData[2].equals(RES_SUCCESS)) {
-                    mBinding.setFlowMeterType(splitData[5]);
-                    // Alarm Low/Alarm High
-                    mBinding.flowInputNumberEdtIsc.setText(splitData[3]);
-                    mBinding.flowSensorTypeAtxtIsc.setText(mBinding.flowSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
-                    mBinding.flowFlowMeterTypeAtxtIsc.setText(mBinding.flowFlowMeterTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[5])).toString());
-                    sequenceNumber = splitData[6];
-                    mBinding.flowSeqNumberAtxtIsc.setText(mBinding.flowSeqNumberAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
-                    mBinding.flowSensorActivationAtxtIsc.setText(mBinding.flowSensorActivationAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[7])).toString());
-                    mBinding.flowInputLabelEdtIsc.setText(splitData[8]);
-                    mBinding.flowFlowUnitAtxtIsc.setText(mBinding.flowFlowUnitAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[9])).toString());
+        try {
+            if (splitData[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
+                if (splitData[0].equals(READ_PACKET)) {
+                    if (splitData[2].equals(RES_SUCCESS)) {
+                        mBinding.setFlowMeterType(splitData[5]);
+                        // Alarm Low/Alarm High
+                        mBinding.flowInputNumberEdtIsc.setText(splitData[3]);
+                        mBinding.flowSensorTypeAtxtIsc.setText(mBinding.flowSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
+                        mBinding.flowFlowMeterTypeAtxtIsc.setText(mBinding.flowFlowMeterTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[5])).toString());
+                        sequenceNumber = splitData[6];
+                        mBinding.flowSeqNumberAtxtIsc.setText(mBinding.flowSeqNumberAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
+                        mBinding.flowSensorActivationAtxtIsc.setText(mBinding.flowSensorActivationAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[7])).toString());
+                        mBinding.flowInputLabelEdtIsc.setText(splitData[8]);
+                        mBinding.flowFlowUnitAtxtIsc.setText(mBinding.flowFlowUnitAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[9])).toString());
 
-                    mBinding.flowFlowMeterTypeAtxtIsc.setAdapter(getAdapter(flowMeterTypeArr, getContext()));
-                    mBinding.flowVolumeRateunitEdtIsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
-                    mBinding.flowVolumeRateunitDeciIsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(2)});
-                    // Analog Flow Meter
-                    if (splitData[5].equals("0")) {
-                        mBinding.flowVolumeRateunitEdtIsc.setText(splitData[10].substring(0, 4));
-                        mBinding.flowVolumeRateunitDeciIsc.setText(splitData[10].substring(5, 7));
-                        mBinding.flowMaxEdtIsc.setText(splitData[11].substring(0, 7));
-                        mBinding.flowMaxDeciIsc.setText(splitData[11].substring(8, 10));
-                        mBinding.flowMinEdtIsc.setText(splitData[12].substring(0, 7));
-                        mBinding.flowMinDeciIsc.setText(splitData[12].substring(8, 10));
-                        mBinding.flowSmoothingFactorEdtIsc.setText(splitData[13]);
-                        mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[14].substring(0, 10));
-                        mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[14].substring(11, 13));
-                        mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[15])).toString());
-                        mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[16])).toString());
-                        mBinding.flowSetFlowTotalEdtIsc.setText(splitData[17].substring(0, 10));
-                        mBinding.flowSetFlowTotalDeciIsc.setText(splitData[17].substring(11, 13));
-                        mBinding.flowAlarmLowEdtIsc.setText(splitData[18].substring(0, 10));
-                        mBinding.flowAlarmLowDeciIsc.setText(splitData[18].substring(11, 13));
-                        mBinding.flowHighAlarmEdtIsc.setText(splitData[19].substring(0, 10));
-                        mBinding.flowHighAlarmDeciIsc.setText(splitData[19].substring(11, 13));
-                        mBinding.flowCalibrationRequiredEdtIsc.setText(splitData[20]);
-                        mBinding.flowResetCalibrationEdtIsc.setText(mBinding.flowResetCalibrationEdtIsc.getAdapter().getItem(Integer.parseInt(splitData[21])).toString());
+                        mBinding.flowFlowMeterTypeAtxtIsc.setAdapter(getAdapter(flowMeterTypeArr, getContext()));
+                        mBinding.flowVolumeRateunitEdtIsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+                        mBinding.flowVolumeRateunitDeciIsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(2)});
+                        // Analog Flow Meter
+                        if (splitData[5].equals("0")) {
+                            mBinding.flowAnalogSeqEdtIsc.setText(mBinding.flowAnalogSeqEdtIsc.getAdapter().getItem(Integer.parseInt(splitData[7])).toString());
+                            mBinding.flowVolumeRateunitEdtIsc.setText(splitData[11].substring(0, 4));
+                            mBinding.flowVolumeRateunitDeciIsc.setText(splitData[11].substring(5, 7));
+                            mBinding.flowMaxEdtIsc.setText(splitData[12].substring(0, 7));
+                            mBinding.flowMaxDeciIsc.setText(splitData[12].substring(8, 10));
+                            mBinding.flowMinEdtIsc.setText(splitData[13].substring(0, 7));
+                            mBinding.flowMinDeciIsc.setText(splitData[13].substring(8, 10));
+                            mBinding.flowSmoothingFactorEdtIsc.setText(splitData[14]);
+                            mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[15].substring(0, 10));
+                            mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[15].substring(11, 13));
+                            mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[16])).toString());
+                            mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[17])).toString());
+                            mBinding.flowSetFlowTotalEdtIsc.setText(splitData[18].substring(0, 10));
+                            mBinding.flowSetFlowTotalDeciIsc.setText(splitData[18].substring(11, 13));
+                            mBinding.flowAlarmLowEdtIsc.setText(splitData[19].substring(0, 10));
+                            mBinding.flowAlarmLowDeciIsc.setText(splitData[19].substring(11, 13));
+                            mBinding.flowHighAlarmEdtIsc.setText(splitData[20].substring(0, 10));
+                            mBinding.flowHighAlarmDeciIsc.setText(splitData[20].substring(11, 13));
+                            mBinding.flowCalibrationRequiredEdtIsc.setText(splitData[21]);
+                            mBinding.flowResetCalibrationEdtIsc.setText(mBinding.flowResetCalibrationEdtIsc.getAdapter().getItem(Integer.parseInt(splitData[22])).toString());
 
-                        // Contactor
-                    } else if (splitData[5].equals("1")) {
-                        mBinding.flowVolumeRateunitEdtIsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7)});
-                        mBinding.flowVolumeRateunitDeciIsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
-                        mBinding.flowVolumeRateunitEdtIsc.setText(splitData[10].substring(0, 7));
-                        mBinding.flowVolumeRateunitDeciIsc.setText(splitData[10].substring(8, 11));
-                        mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[11].substring(0, 10));
-                        mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[11].substring(11, 13));
-                        mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[12])).toString());
-                        mBinding.flowSetFlowTotalEdtIsc.setText(splitData[13].substring(0, 9));
-                        mBinding.flowSetFlowTotalDeciIsc.setText(splitData[13].substring(11, 13));
-                        mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[14])).toString());
-                        mBinding.flowAlarmLowEdtIsc.setText(splitData[15].substring(0, 9));
-                        mBinding.flowAlarmLowDeciIsc.setText(splitData[15].substring(11, 13));
-                        mBinding.flowHighAlarmEdtIsc.setText(splitData[16].substring(0, 9));
-                        mBinding.flowHighAlarmDeciIsc.setText(splitData[16].substring(11, 13));
+                            // Contactor
+                        } else if (splitData[5].equals("1")) {
+                            mBinding.flowVolumeRateunitEdtIsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7)});
+                            mBinding.flowVolumeRateunitDeciIsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
+                            mBinding.flowVolumeRateunitEdtIsc.setText(splitData[10].substring(0, 7));
+                            mBinding.flowVolumeRateunitDeciIsc.setText(splitData[10].substring(8, 11));
+                            mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[11].substring(0, 10));
+                            mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[11].substring(11, 13));
+                            mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[12])).toString());
+                            mBinding.flowSetFlowTotalEdtIsc.setText(splitData[13].substring(0, 9));
+                            mBinding.flowSetFlowTotalDeciIsc.setText(splitData[13].substring(11, 13));
+                            mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[14])).toString());
+                            mBinding.flowAlarmLowEdtIsc.setText(splitData[15].substring(0, 9));
+                            mBinding.flowAlarmLowDeciIsc.setText(splitData[15].substring(11, 13));
+                            mBinding.flowHighAlarmEdtIsc.setText(splitData[16].substring(0, 9));
+                            mBinding.flowHighAlarmDeciIsc.setText(splitData[16].substring(11, 13));
 
-                        // Paddle wheel flow meter type
-                    } else if (splitData[5].equals("2")) {
-                        mBinding.flowVolumeRateunitEdtIsc.setText(splitData[10].substring(0, 4));
-                        mBinding.flowVolumeRateunitDeciIsc.setText(splitData[10].substring(5, 7));
-                        mBinding.flowKFactorEdtIsc.setText(splitData[11].substring(0, 7));
-                        mBinding.flowKFactorDeciIsc.setText(splitData[11].substring(8, 10));
-                        mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[12].substring(0, 10));
-                        mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[12].substring(11, 13));
-                        mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
-                        mBinding.flowSetFlowTotalEdtIsc.setText(splitData[14].substring(0, 9));
-                        mBinding.flowSetFlowTotalDeciIsc.setText(splitData[14].substring(11, 13));
-                        mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[15])).toString());
-                        mBinding.flowAlarmLowEdtIsc.setText(splitData[16].substring(0, 9));
-                        mBinding.flowAlarmLowDeciIsc.setText(splitData[16].substring(11, 13));
-                        mBinding.flowHighAlarmEdtIsc.setText(splitData[17].substring(0, 9));
-                        mBinding.flowHighAlarmDeciIsc.setText(splitData[17].substring(11, 13));
+                            // Paddle wheel flow meter type
+                        } else if (splitData[5].equals("2")) {
+                            mBinding.flowVolumeRateunitEdtIsc.setText(splitData[10].substring(0, 4));
+                            mBinding.flowVolumeRateunitDeciIsc.setText(splitData[10].substring(5, 7));
+                            mBinding.flowKFactorEdtIsc.setText(splitData[11].substring(0, 7));
+                            mBinding.flowKFactorDeciIsc.setText(splitData[11].substring(8, 10));
+                            mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[12].substring(0, 10));
+                            mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[12].substring(11, 13));
+                            mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
+                            mBinding.flowSetFlowTotalEdtIsc.setText(splitData[14].substring(0, 9));
+                            mBinding.flowSetFlowTotalDeciIsc.setText(splitData[14].substring(11, 13));
+                            mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[15])).toString());
+                            mBinding.flowAlarmLowEdtIsc.setText(splitData[16].substring(0, 9));
+                            mBinding.flowAlarmLowDeciIsc.setText(splitData[16].substring(11, 13));
+                            mBinding.flowHighAlarmEdtIsc.setText(splitData[17].substring(0, 9));
+                            mBinding.flowHighAlarmDeciIsc.setText(splitData[17].substring(11, 13));
 
-                        // Feed Monitor type
-                    } else if (splitData[5].equals("3")) {
-                        mBinding.flowFeedVolumeEdtIsc.setText(splitData[10].substring(0, 7));
-                        mBinding.flowFeedVolumeDeciIsc.setText(splitData[10].substring(8, 11));
-                        mBinding.flowVolumeRateunitEdtIsc.setText(splitData[11].substring(0, 4));
-                        mBinding.flowVolumeRateunitDeciIsc.setText(splitData[11].substring(5, 7));
-                        mBinding.flowTotalAlarmModeAtxtIsc.setText(mBinding.flowTotalAlarmModeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[12])).toString());
-                        mBinding.flowAlarmModeAtxtIsc.setText(mBinding.flowAlarmModeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
-                        mBinding.flowAlarmDelayEdtIsc.setText(splitData[14]);
-                        mBinding.flowAlarmClearEdtIsc.setText(splitData[15]);
-                        mBinding.flowOutputRelayEdtIsc.setText(mBinding.flowOutputRelayEdtIsc.getAdapter().getItem(Integer.parseInt(splitData[16]) - 1).toString());
-                        mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[17].substring(0, 10));
-                        mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[17].substring(11, 13));
-                        mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[18])).toString());
-                        mBinding.flowSetFlowTotalEdtIsc.setText(splitData[19].substring(0, 9));
-                        mBinding.flowSetFlowTotalDeciIsc.setText(splitData[19].substring(11, 13));
-                        mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[20])).toString());
-                        mBinding.flowAlarmLowEdtIsc.setText(splitData[21].substring(0, 9));
-                        mBinding.flowAlarmLowDeciIsc.setText(splitData[21].substring(11, 13));
-                        mBinding.flowHighAlarmEdtIsc.setText(splitData[22].substring(0, 9));
-                        mBinding.flowHighAlarmDeciIsc.setText(splitData[22].substring(11, 13));
+                            // Feed Monitor type
+                        } else if (splitData[5].equals("3")) {
+                            mBinding.flowFeedVolumeEdtIsc.setText(splitData[10].substring(0, 7));
+                            mBinding.flowFeedVolumeDeciIsc.setText(splitData[10].substring(8, 11));
+                            mBinding.flowVolumeRateunitEdtIsc.setText(splitData[11].substring(0, 4));
+                            mBinding.flowVolumeRateunitDeciIsc.setText(splitData[11].substring(5, 7));
+                            mBinding.flowTotalAlarmModeAtxtIsc.setText(mBinding.flowTotalAlarmModeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[12])).toString());
+                            mBinding.flowAlarmModeAtxtIsc.setText(mBinding.flowAlarmModeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
+                            mBinding.flowAlarmDelayEdtIsc.setText(splitData[14]);
+                            mBinding.flowAlarmClearEdtIsc.setText(splitData[15]);
+                            mBinding.flowOutputRelayEdtIsc.setText(mBinding.flowOutputRelayEdtIsc.getAdapter().getItem(Integer.parseInt(splitData[16]) - 1).toString());
+                            mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[17].substring(0, 10));
+                            mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[17].substring(11, 13));
+                            mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[18])).toString());
+                            mBinding.flowSetFlowTotalEdtIsc.setText(splitData[19].substring(0, 9));
+                            mBinding.flowSetFlowTotalDeciIsc.setText(splitData[19].substring(11, 13));
+                            mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[20])).toString());
+                            mBinding.flowAlarmLowEdtIsc.setText(splitData[21].substring(0, 9));
+                            mBinding.flowAlarmLowDeciIsc.setText(splitData[21].substring(11, 13));
+                            mBinding.flowHighAlarmEdtIsc.setText(splitData[22].substring(0, 9));
+                            mBinding.flowHighAlarmDeciIsc.setText(splitData[22].substring(11, 13));
+                        }
+                        initAdapter();
+                    } else if (splitData[2].equals(RES_FAILED)) {
+                        mAppClass.showSnackBar(getContext(), getString(R.string.readFailed));
                     }
-                    initAdapter();
-                } else if (splitData[2].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), getString(R.string.readFailed));
+                    // {*0$ 04$ 1$ 0*}
+                } else if (splitData[0].equals(WRITE_PACKET)) {
+                    if (splitData[3].equals(RES_SUCCESS)) {
+                        flowMeterEntity(Integer.parseInt(splitData[2]));
+                        new EventLogDemo(inputNumber,"FlowMeter","Input Setting Changed",getContext());
+                        mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
+                    } else if (splitData[3].equals(RES_FAILED)) {
+                        mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
+                    }
                 }
-                // {*0$ 04$ 1$ 0*}
-            } else if (splitData[0].equals(WRITE_PACKET)) {
-                if (splitData[3].equals(RES_SUCCESS)) {
-                    flowMeterEntity(Integer.parseInt(splitData[2]));
-                    new EventLogDemo(inputNumber,"FlowMeter","Input Setting Changed",getContext());
-                    mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
-                } else if (splitData[3].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
-                }
+            } else {
+                Log.e(TAG, getString(R.string.wrongPack));
             }
-        } else {
-            Log.e(TAG, getString(R.string.wrongPack));
+        }catch (Exception e){
+
         }
     }
 

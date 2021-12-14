@@ -103,9 +103,9 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
 
     private void delete(View view) {
         if (getPositionFromAtxt(1, getStringValue(mBinding.candCompensationAtxtIsc), TemperatureCompensationType).equals("0")) {
-            sendDataLinearTemperature(sensorStatus);
+            sendDataLinearTemperature(2);
         } else {
-            sendStandardNaClTemperature(sensorStatus);
+            sendStandardNaClTemperature(2);
         }
     }
 

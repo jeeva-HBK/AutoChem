@@ -10,13 +10,13 @@ import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.totalTimeArr;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
@@ -146,9 +146,9 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
                 getPositionFromAtxt(1, getStringValue(mBinding.digitalInputSensorInnerLockAct), digitalArr) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.digitalInputSensorActivateAct), digitalArr) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.digitalInputSensorAlarmAct), digitalArr) + SPILT_CHAR +
-                getStringValue(6, mBinding.digitalInputSensorTotalTimeTie) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.digitalInputSensorTotalTimeTie), totalTimeArr) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.digitalInputSensorResetTimeAct), resetCalibrationArr) + SPILT_CHAR +
-                sensorStatus);
+                sensorStatus + "$00");
     }
 
 
@@ -160,6 +160,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
         mBinding.digitalInputSensorActivateAct.setAdapter(getAdapter(digitalArr, getContext()));
         mBinding.digitalInputSensorResetTimeAct.setAdapter(getAdapter(resetCalibrationArr, getContext()));
         mBinding.digitalLevelSequenceNumberTie.setAdapter(getAdapter(digitalsensorSequenceNumber, getContext()));
+        mBinding.digitalInputSensorTotalTimeTie.setAdapter(getAdapter(totalTimeArr, getContext()));
     }
 
     @Override
@@ -184,7 +185,6 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
         if (data[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
             if (data[0].equals(READ_PACKET)) {
                 if (data[2].equals(RES_SUCCESS)) {
-
                     mBinding.digitalInputNumberTie.setText(data[3]);
                     mBinding.digitalInputSensorTypeTie.setText(mBinding.digitalInputSensorTypeTie.getAdapter().getItem(Integer.parseInt(data[4])).toString());
                     mBinding.digitalLevelSequenceNumberTie.setText(mBinding.digitalLevelSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[5])).toString());
@@ -197,7 +197,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
                     mBinding.digitalInputSensorActivateAct.setText(mBinding.digitalInputSensorActivateAct.getAdapter().getItem(Integer.parseInt(data[11])).toString());
                     mBinding.digitalInputSensorAlarmAct.setText(mBinding.digitalInputSensorAlarmAct.getAdapter().getItem(Integer.parseInt(data[12])).toString());
 
-                    mBinding.digitalInputSensorTotalTimeTie.setText(data[13]);
+                    mBinding.digitalInputSensorTotalTimeTie.setText(mBinding.digitalInputSensorTotalTimeTie.getAdapter().getItem(Integer.parseInt(data[13])).toString());
                     mBinding.digitalInputSensorResetTimeAct.setText(mBinding.digitalInputSensorResetTimeAct.getAdapter().getItem(Integer.parseInt(data[14])).toString());
 
                     initAdapter();
@@ -247,25 +247,6 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
         }  else if (isFieldEmpty(mBinding.digitalInputSensorActivateAct)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.activatechannal_validation));
             return false;
-        } else if (mBinding.digitalInputSensorTotalTimeTie.getText().toString().length() != 6) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.time_validation));
-            return false;
-        } else if (mBinding.digitalInputSensorTotalTimeTie.getText().toString().length() == 6) {
-            String totalTime = mBinding.digitalInputSensorTotalTimeTie.getText().toString();
-            int hr = Integer.parseInt(totalTime.substring(0,2));
-            int mm = Integer.parseInt(totalTime.substring(2,4));
-            int ss = Integer.parseInt(totalTime.substring(4,6));
-            if(hr > 24){
-                mAppClass.showSnackBar(getContext(), getString(R.string.hh_validation));
-                return false;
-            } else if(mm > 60){
-                mAppClass.showSnackBar(getContext(), getString(R.string.minu_validation));
-                return false;
-            } else if(ss > 60){
-                mAppClass.showSnackBar(getContext(), getString(R.string.ss_validation));
-                return false;
-            }
-            return true;
         }
         return true;
     }
@@ -285,7 +266,6 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
             mBinding.digitalLevelSaveTxtIsc.setText("ADD");
         }
     }
-
 
     public void updateToDb(List<InputConfigurationEntity> entryList) {
         WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());

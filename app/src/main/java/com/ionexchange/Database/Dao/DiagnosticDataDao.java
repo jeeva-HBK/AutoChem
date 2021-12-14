@@ -5,8 +5,9 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.ionexchange.Database.Entity.AlarmLogEntity;
 import com.ionexchange.Database.Entity.DiagnosticDataEntity;
-import com.ionexchange.Database.Entity.InputConfigurationEntity;
+
 
 import java.util.List;
 
@@ -21,6 +22,12 @@ public interface DiagnosticDataDao {
 
     @Query("select * FROM DiagnosticDataEntity order by sNo desc")
     List<DiagnosticDataEntity> getDiagnosticDataList();
+
+    @Query("select * FROM DiagnosticDataEntity")
+    List<AlarmLogEntity> getDiagnosticData();
+
+    @Query("Delete FROM DiagnosticDataEntity WHERE sNo in (SELECT sNo FROM DiagnosticDataEntity limit 1)")
+    void deleteFirstRow();
 
     @Query("select * FROM DiagnosticDataEntity WHERE " +
             " hardwareNo BETWEEN :hardwareTo AND :hardwareNo" +

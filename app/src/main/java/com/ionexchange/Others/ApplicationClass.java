@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
+import android.telephony.TelephonyManager;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -88,10 +89,10 @@ public class ApplicationClass extends Application {
     private static final String TAG = "ApplicationClass";
     public static final String LOG_DIVIDER = " <----------------------------------------------------------------------------------------------------------------------------> ";
     private static final String API = "API";
-    private static final String FISHEYE = "FishEye";
-    private static final String EAGLE_EYE = "EagleEye";
-    public static int userType = 3; // 0 - None | 1 - Basic | 2 - intermediate | 3 - Advanced
+    private static final String API1 = "SERVER";
 
+    public static int userType = 3; // 0 - None | 1 - Basic | 2 - intermediate | 3 - Advanced
+   public static String defaultPassword = "12345";
     public static String[] sensorActivationArr = {"ENABLE", "DISABLE"},
             roleType = {"None", "Basic", "Intermediate", "Advanced"},
             sensorTypeArr = {"Sensor", "Temperature", "Modbus", "Analog Input", "Flow/Water Meter",
@@ -110,6 +111,7 @@ public class ApplicationClass extends Application {
                     "Tank Level - 5", "Tank Level - 6","Tank Level - 7","Tank Level - 8"},
             digitalsensorSequenceNumber = {"None", "Digital Sensor - 1", "Digital Sensor - 2", "Digital Sensor - 3", "Digital Sensor - 4",
                     "Digital Sensor - 5", "Digital Sensor - 6","Digital Sensor - 7","Digital Sensor - 8"},
+            totalTimeArr = {"NC", "NO"},
             flowmeterSequenceNumber = {"None", "Flow Meter - 1", "Flow Meter - 2", "Flow Meter - 3", "Flow Meter - 4",
                     "Flow Meter - 5", "Flow Meter - 6","Flow Meter - 7","Flow Meter - 8"},
             analogSequenceNumber = {"None", "Analog - 1", "Analog - 2", "Analog - 3", "Analog - 4",
@@ -161,10 +163,14 @@ public class ApplicationClass extends Application {
     // outputControlShortForm = {"â’¹", "A OFF", "A ON", "M OFF", "M ON", "F OFF", "F ON", "M ON for"};
     outputControlShortForm = {"D", "A", "FÌ¶", "F", "M for"},
     eventLogArr={"Unit IP setting changed",
-            "Target IP settings changed", "General settings changed", "Input Setting Changed", "Output Settings Changed", "Timer settings changed",
+            "Target IP settings changed", "General settings changed", "Input Setting Changed",
+            "Output Settings Changed", "Timer settings changed",
             "Menu Access BY Admin", "Menu Access BY Engineer", "Menu Access BY User 1", "Menu Access BY User 2"},
     alarmArr = {"Low Alarm" ,"High Alarm", "Safety Low Alarm" ,
-           " Safety High", "Alarm Calibration" ,"Required Alarm", "Totalizer Alarm", "DI Alarm" ,"Flow Verify Alarm", "Lockout Alarm"};
+           "Safety High Alarm", "Calibration Required Alarm" ,"Totalizer Alarm",
+            "DI Alarm" ,"Flow Verify Alarm", "Lockout Alarm"},
+    analogOutput = {"Analog-1","Analog-2","Analog-3","Analog-4","Analog-5","Analog-6","Analog-7", "Analog-8"};
+
 
 
     /* Static Variables */
@@ -255,6 +261,8 @@ public class ApplicationClass extends Application {
                     e.printStackTrace();
                 }
                 registerReceiver();*/
+
+                registerBatteryReceiver();
             }
 
             @Override
@@ -285,6 +293,7 @@ public class ApplicationClass extends Application {
                 // unregisterReceiver();
                 // todo BLE
                 disconnectBle();
+                unregisterBatteryReceiver();
             }
         });
     }
@@ -352,8 +361,8 @@ public class ApplicationClass extends Application {
             @Override
             public void onResponse(JSONObject response) {
                 callBack.OnSuccess(response);
-                Log.e(FISHEYE, API + " <-- " + response);
-                Log.e(EAGLE_EYE, API + " <-- recevied success");
+                Log.e(API1, " <-- " + response);
+                Log.e(API, " <-- recevied success");
             }
         };
 
@@ -361,15 +370,16 @@ public class ApplicationClass extends Application {
             @Override
             public void onErrorResponse(VolleyError error) {
                 callBack.OnFailure(error);
-                Log.e(EAGLE_EYE, API + " <-- recevied error");
+                Log.e(API, " <-- recevied error");
+                Log.e(API1, " <-- recevied error");
             }
         };
 
         JsonObjectRequest request = new JsonObjectRequest(method, URL, object, responseListener, volleyErrorListener);
 
         request.setRetryPolicy(new DefaultRetryPolicy(httpRequestTimeout, 0, 1.0f));
-        Log.e(FISHEYE, API + " --> " + new String(request.getBody()));
-        Log.e(EAGLE_EYE, API + " --> sent");
+        Log.e(API1, " --> " + new String(request.getBody()));
+        Log.e(API, " --> sent");
 
         requestQueue.add(request);
 

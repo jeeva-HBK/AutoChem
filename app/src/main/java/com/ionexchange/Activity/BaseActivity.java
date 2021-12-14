@@ -2,8 +2,10 @@ package com.ionexchange.Activity;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static com.ionexchange.Others.ApplicationClass.DB;
+import static com.ionexchange.Others.ApplicationClass.defaultPassword;
 import static com.ionexchange.Others.ApplicationClass.userManagementDao;
 import static com.ionexchange.Singleton.SharedPref.pref_LOGGEDIN;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINNAME;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINREQUIRED;
 
 import android.Manifest;
@@ -49,6 +51,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.ionexchange.Adapters.ExpandableListAdapter;
+import com.ionexchange.Database.Dao.UserManagementDao;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Others.AdminReceiver;
 import com.ionexchange.Others.ApplicationClass;
@@ -82,6 +85,8 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     GestureDetector gestureDetector;
     Runnable userInactive;
     Handler handler;
+    WaterTreatmentDb db;
+    UserManagementDao userManagementDao;
 
 
     @RequiresApi(api = Build.VERSION_CODES.R)
@@ -91,6 +96,8 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_base);
         mAppClass = (ApplicationClass) getApplication();
         context = getApplicationContext();
+        db = WaterTreatmentDb.getDatabase(getApplicationContext());
+        userManagementDao = db.userManagementDao();
         //startService(new Intent(this, TcpServer.class).setAction(TcpServer.START_SERVER));
         expandedListView();
         checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 101);
@@ -173,7 +180,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         homescreenList = new ArrayList<>();
         headerList = new ArrayList<>();
 
-        generaList.add("- Unit Settings");
+        generaList.add("- Password Settings");
         generaList.add("- Target IP Settings");
         generaList.add("- Site Settings");
 
@@ -344,6 +351,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         EditText userName = dialogView.findViewById(R.id.dialog_usernameEdt);
         EditText password = dialogView.findViewById(R.id.dialog_passwordEdt);
         Button loginBtn = dialogView.findViewById(R.id.dialog_login);
+        TextView forgotPassword = dialogView.findViewById(R.id.forgot_password);
         DB = WaterTreatmentDb.getDatabase(getApplicationContext());
         userManagementDao = DB.userManagementDao();
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -364,12 +372,52 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (password.getText().toString().equals(userManagementDao.getPassword(userName.getText().toString()))) {
                     alertDialog.dismiss();
+                    SharedPref.write(pref_USERLOGINNAME, userName.getText().toString());
                     moveToConfig();
                 } else {
                     mAppClass.showSnackBar(BaseActivity.this, "password is Incorrect");
                 }
             }
         });
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                forgotPassword();
+            }
+        });
+    }
+
+    void forgotPassword() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BaseActivity.this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_forgot_password, null);
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+        EditText defPassword = dialogView.findViewById(R.id.dialog_default_pass_Edt);
+        EditText password = dialogView.findViewById(R.id.dialog_current_pass_Edt);
+        Button confirmBtn = dialogView.findViewById(R.id.cnf_btn);
+        confirmBtn.setOnClickListener(v -> {
+            if (defPassword.getText().toString().equals("")) {
+                mAppClass.showSnackBar(BaseActivity.this, "Default Password should be empty");
+                return;
+            }
+            if (password.getText().toString().equals("")) {
+                mAppClass.showSnackBar(BaseActivity.this, "New Password should be empty");
+                return;
+            }
+            if (!defPassword.getText().toString().equals(defaultPassword)) {
+                mAppClass.showSnackBar(BaseActivity.this, "Default Password not Matched");
+                return;
+            }else {
+                userManagementDao.updatePassword(password.getText().toString(),SharedPref.read(pref_USERLOGINNAME,""));
+                mAppClass.showSnackBar(getApplicationContext(),"Password changed");
+                alertDialog.dismiss();
+            }
+        });
+
     }
 
     private void moveToConfig() {
@@ -378,6 +426,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         expandedListView();
         mBinding.view.setVisibility(View.VISIBLE);
         SharedPref.write(pref_USERLOGINREQUIRED, false);
+
     }
 
 

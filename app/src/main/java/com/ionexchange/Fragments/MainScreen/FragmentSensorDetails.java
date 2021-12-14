@@ -131,7 +131,7 @@ public class FragmentSensorDetails extends Fragment {
                             case "ORP":
                             case "Contacting Conductivity":
                             case "Temperature":
-                                sensorCalibration = new FragmentCalibration_TypeOne(inputNumber, inputType);
+                                sensorCalibration = new FragmentCalibration_TypeOne(inputNumber, getPosition(2, inputType, inputTypeArr));
                                 getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                 break;
                             case "Analog":
@@ -688,8 +688,9 @@ public class FragmentSensorDetails extends Fragment {
         tempMap.put(closeMsg, splitData[9]);
         tempMap.put(interLock, (splitData[10].equals("0") ? "NC" : "NO"));
         tempMap.put(alarm, (splitData[11].equals("0") ? "NC" : "NO"));
-        tempMap.put(totalTime, splitData[12]);
+        tempMap.put(totalTime, (splitData[12].equals("0") ? "NC" : "NO"));
         tempMap.put(resetTotalTime, splitData[13].equals("0") ? "No Time" : "Reset Time");
+        tempMap.put("Total Time Amount", splitData[16]);
 
         switch (userType) {
             case 1:
@@ -713,8 +714,9 @@ public class FragmentSensorDetails extends Fragment {
         tempMap.put(closeMsg, splitData[9]);
         tempMap.put(interLock, (splitData[10].equals("0") ? "NC" : "NO"));
         tempMap.put(alarm, (splitData[11].equals("0") ? "NC" : "NO"));
-        tempMap.put(totalTime, splitData[12]);
+        tempMap.put(totalTime, (splitData[12].equals("0") ? "NC" : "NO"));
         tempMap.put(resetTotalTime, splitData[13].equals("0") ? "No Time" : "Reset Time");
+        tempMap.put("Total Time Amount", splitData[16]);
 
         switch (userType) {
             case 1:

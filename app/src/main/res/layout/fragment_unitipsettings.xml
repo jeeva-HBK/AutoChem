@@ -21,7 +21,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="0dp"
-                android:text="Unit Ip Settings"
+                android:text="Password Settings"
                 android:textColor="@color/white" />
 
 
@@ -39,166 +39,92 @@
 
         <!--Ip Address-->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ip_unitip"
+            android:id="@+id/current_password"
             style="@style/appEdtTxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
+            android:layout_marginStart="20sp"
+            android:layout_marginTop="20sp"
             android:layout_marginEnd="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/gateway_unitip"
-            app:layout_constraintEnd_toStartOf="@+id/subNet_unitip"
+            app:layout_constraintBottom_toTopOf="@id/change_password"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
+            app:layout_constraintVertical_chainStyle="packed">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ip_unitipEDT"
+                android:id="@+id/current_password_edt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Current Password"
+                android:imeOptions="actionNext"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/change_password"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            app:layout_constraintBottom_toTopOf="@id/confirm_change_password"
+            app:layout_constraintEnd_toEndOf="@id/current_password"
+            app:layout_constraintStart_toStartOf="@id/current_password"
+            app:layout_constraintTop_toBottomOf="@id/current_password"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/change_password_edt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:digits="1234567890"
-                android:hint="IP Address"
+                android:hint="New Password"
                 android:imeOptions="actionNext"
-                android:inputType="number|numberDecimal"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--SubNet Address-->
+
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/subNet_unitip"
+            android:id="@+id/confirm_change_password"
             style="@style/appEdtTxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:inputType="number"
-            app:layout_constraintBottom_toBottomOf="@+id/ip_unitip"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/ip_unitip"
-            app:layout_constraintTop_toTopOf="@+id/ip_unitip">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/subNet_unitipEDT"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:digits="1234567890."
-                android:hint="Subnet Ip"
-                android:imeOptions="actionNext"
-                android:inputType="number|numberDecimal"
-                android:maxLines="1" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--GateWay Address-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/gateway_unitip"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/DNS1_unitip"
-            app:layout_constraintEnd_toEndOf="@+id/ip_unitip"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/ip_unitip"
-            app:layout_constraintTop_toBottomOf="@+id/ip_unitip">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/gateway_unitipEDT"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:digits="1234567890."
-                android:hint="Gateway Ip"
-                android:imeOptions="actionNext"
-                android:inputType="number|numberDecimal"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--PORT-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/port_unitip"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            app:layout_constraintBottom_toBottomOf="@+id/gateway_unitip"
-            app:layout_constraintEnd_toEndOf="@+id/subNet_unitip"
-            app:layout_constraintStart_toStartOf="@+id/subNet_unitip"
-            app:layout_constraintTop_toTopOf="@+id/gateway_unitip"
-            app:layout_constraintVertical_bias="0.3">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/port_unitipEDT"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:digits="1234567890."
-                android:hint="Port"
-                android:imeOptions="actionNext"
-                android:inputType="number|numberDecimal"
-                android:maxLength="5"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--DNS 1-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/DNS1_unitip"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
             app:layout_constraintBottom_toTopOf="@+id/saveLayout_unitIp"
-            app:layout_constraintEnd_toEndOf="@+id/gateway_unitip"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/gateway_unitip"
-            app:layout_constraintTop_toBottomOf="@+id/gateway_unitip">
+            app:layout_constraintEnd_toEndOf="@id/change_password"
+            app:layout_constraintStart_toStartOf="@id/change_password"
+            app:layout_constraintTop_toBottomOf="@id/change_password"
+            app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/DNS1_unitipEDT"
+                android:id="@+id/confirm_change_password_edt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:digits="1234567890."
-                android:hint="DNS 1 Ip"
-                android:imeOptions="actionNext"
-                android:inputType="number|numberDecimal"
-                android:maxLength="8"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--DNS 2-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/DNS2_unitip"
-            style="@style/appEdtTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            app:layout_constraintBottom_toBottomOf="@+id/DNS1_unitip"
-            app:layout_constraintEnd_toEndOf="@+id/port_unitip"
-            app:layout_constraintStart_toStartOf="@+id/port_unitip"
-            app:layout_constraintTop_toTopOf="@+id/DNS1_unitip">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/DNS2_unitipEDT"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:digits="1234567890."
-                android:hint="DNS 2 Ip"
+                android:digits="1234567890"
+                android:hint="Confirm New Password"
                 android:imeOptions="actionDone"
-                android:inputType="number|numberDecimal"
-                android:maxLength="8"
+
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
 
         <!--saveLayout-->
         <LinearLayout
             android:id="@+id/saveLayout_unitIp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/DNS1_unitip">
+            app:layout_constraintTop_toBottomOf="@id/confirm_change_password">
 
             <TextView
                 android:layout_width="match_parent"

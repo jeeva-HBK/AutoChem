@@ -59,6 +59,7 @@ public abstract class WaterTreatmentDb extends RoomDatabase {
                             WaterTreatmentDb.class, DB_NAME)
                             .addCallback(roomCallback)
                             .allowMainThreadQueries()
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }

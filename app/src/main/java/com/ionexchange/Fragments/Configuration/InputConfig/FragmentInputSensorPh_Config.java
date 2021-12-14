@@ -173,10 +173,9 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                 getPositionFromAtxt(1, getStringValue(mBinding.phResetCalibrationAtxtIsc), resetCalibrationArr) + SPILT_CHAR +
                 sensorStatus
         );
-    } // {*1234$0$0$06$01$1$O
+    }
 
     boolean validField() {
-
         if (isFieldEmpty(mBinding.phInputLabelEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.input_name_validation));
             return false;

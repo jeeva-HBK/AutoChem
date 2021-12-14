@@ -185,6 +185,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
     private void startQuickCalibration() {
         if (!mBinding.extValue.getText().toString().equals("")) {
             tempValue = mBinding.extValue.getText().toString();
+            tempBool = false;
             sendQuickCalibWritePacket();
         } else {
             mAppClass.showSnackBar(getContext(), "Calibration Value should not be empty !");
@@ -195,8 +196,11 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         mAppClass.sendPacket(new DataReceiveCallback() {
             @Override
             public void OnDataReceive(String data) {
-                if (isValidPck(WRITE_PACKET, data)) {
-                    checkStabilization("0");
+                if (!tempBool) {
+                    tempBool = true;
+                    if (isValidPck(WRITE_PACKET, data)) {
+                        checkStabilization("0");
+                    }
                 }
             }
         }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
@@ -240,6 +244,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                 cancel.setText("CANCEL");
                 confirm.setText("CONFIRM");
                 cancel.setOnClickListener(View -> {
+                    tempBool = false;
                     alertDialog.dismiss();
                 });
                 confirm.setOnClickListener(View -> {
@@ -266,6 +271,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
             cancel.setText("CANCEL");
             confirm.setText("CONFIRM");
             cancel.setOnClickListener(View -> {
+                tempBool = false;
                 alertDialog.dismiss();
             });
             confirm.setOnClickListener(View -> {
@@ -291,6 +297,9 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         Button leftBtn = dialogView.findViewById(R.id.onedt_leftBtn);
         Button rightBtn = dialogView.findViewById(R.id.onedt_rightBtn);
 
+        leftBtn.setText("CANCEL");
+        rightBtn.setText("PROCEED");
+
         if (type == 1) {
             title.setText("\"Enter the value transmitter/sensor will be sending\"");
         } else if (type == 2) {
@@ -298,13 +307,14 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         }
 
         leftBtn.setOnClickListener(View -> {
+            tempBool = false;
             alertDialog.dismiss();
         });
 
         rightBtn.setOnClickListener(View -> {
-            if (edt.getText().toString().equals("")) {
+            if (!edt.getText().toString().equals("")) {
                 alertDialog.dismiss();
-                sendPreceiseCalibWritePacket(edt.getText().toString());
+                sendPreceiseCalibWritePacket(type + SPILT_CHAR + edt.getText().toString());
             } else {
                 mAppClass.showSnackBar(getContext(), "Field should not be empty !");
             }
@@ -334,6 +344,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         rightBtn.setText("CONFIRM");
 
         leftBtn.setOnClickListener(View -> {
+            tempBool = false;
             alertDialog.dismiss();
         });
 
@@ -366,6 +377,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
 
         leftBtn.setText("CANCEL");
         leftBtn.setOnClickListener(View -> {
+            tempBool = false;
             alertDialog.dismiss();
         });
 
@@ -382,6 +394,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
     }
 
     private void sendPreceiseCalibWritePacket(String firstORsecond) {
+        tempBool = false;
         mAppClass.sendPacket(new DataReceiveCallback() {
             @Override
             public void OnDataReceive(String data) {
@@ -396,7 +409,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
                         } else if (inputType.equals("Contacting Conductivity")) {
                             tempValue = firstORsecond.equals("1") ? "0.00" : firstORsecond.split("\\$")[1];
                         } else if (inputType.equals("Analog Input")) {
-                            tempValue = firstORsecond;
+                            tempValue = firstORsecond.split(SPILT_CHAR)[0];
                         }
                         /*String[] spiltData = spiltPacket(data);
                     if (spiltData[3].equals("1")) { // step 1
@@ -551,6 +564,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
         rightBtn.setText("PROCEED");
 
         leftBtn.setOnClickListener(View -> {
+            tempBool = false;
             alertDialog.dismiss();
         });
 
@@ -583,6 +597,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
 
         title.setText("Insert the sensor in STANDARD buffer");
         leftBtn.setOnClickListener(View -> {
+            tempBool = false;
             alertDialog.dismiss();
         });
 
@@ -595,6 +610,7 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
     }
 
     private void sendCalibReadPacket(String firstORsecond) {
+        tempBool = false;
         mAppClass.sendPacket(new DataReceiveCallback() {
             @Override
             public void OnDataReceive(String data) {

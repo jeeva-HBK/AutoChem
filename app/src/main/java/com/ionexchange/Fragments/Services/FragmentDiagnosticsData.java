@@ -81,8 +81,9 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
         });
         setAdapter(diagnosticDataEntityList);
         mBinding.refresh.setOnClickListener(View -> {
+            baseActivity.showProgress();
             sendPacket("0");
-            setAdapter(diagnosticDataEntityList);
+            //setAdapter(diagnosticDataEntityList);
 
         });
     }
@@ -90,11 +91,11 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     @Override
     public void onResume() {
         super.onResume();
+        baseActivity.showProgress();
         sendPacket("0");
     }
 
     private void sendPacket(String setID) {
-        baseActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
                 READ_PACKET + SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + setID);
     }
@@ -119,14 +120,13 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
 
     @Override
     public void OnDataReceive(String data) {
-        baseActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
+            baseActivity.dismissProgress();
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        } else if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
-        } else if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
+        } else if (data.equals("pckError") || data.equals("sendCatch")) {
+        //     baseActivity.dismissProgress();
         } else if (data.equals("Timeout")) {
+            baseActivity.dismissProgress();
             mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
         } else if (data != null) {
             handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
@@ -142,14 +142,18 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     }
 
     private void handleResponse(String[] splitData) {
+
         if (splitData[1].equals("11")) {
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
                     int i = 0;
-                    int j = 9;
+                    int j = 10;
                     String currentTime = new SimpleDateFormat("yyyy.MM.dd | HH.mm.ss", Locale.getDefault()).format(new Date());
 
                     while (i < j) {
+                        if(dao.getDiagnosticData().size() > 855){
+                            dao.deleteFirstRow();
+                        }
                         if (splitData[i + 4].length() > 2) {
                             setDiagnosticsDb(splitData[i + 4].substring(0, 2),
                                     splitData[i + 4].substring(2, splitData[i + 4].length()), currentTime);
@@ -157,10 +161,12 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
                             setDiagnosticsDb(splitData[i + 4], "No Data Received", currentTime);
                         }
                         i++;
-                        if (i == 4) {
+                        if(splitData[3].equalsIgnoreCase("5")) {
                             j = 7;
                         }
+
                     }
+
 
 
                     switch (splitData[3]) {
@@ -179,11 +185,15 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
                         case "4":
                             sendPacket("5");
                             break;
+                        case "5":
+                            baseActivity.dismissProgress();
+                            break;
                     }
                     setAdapter(diagnosticDataEntityList);
                 }
             }
         } else {
+            baseActivity.dismissProgress();
             Log.e(TAG, "handleResponse: Received Wrong Pck");
         }
     }

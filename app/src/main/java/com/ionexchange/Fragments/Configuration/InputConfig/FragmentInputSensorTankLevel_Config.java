@@ -1,5 +1,25 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Others.ApplicationClass.digitalArr;
+import static com.ionexchange.Others.ApplicationClass.getAdapter;
+import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
+import static com.ionexchange.Others.ApplicationClass.getStringValue;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
+import static com.ionexchange.Others.ApplicationClass.levelsensorSequenceNumber;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.totalTimeArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,26 +43,6 @@ import com.ionexchange.databinding.FragmentInputSensorTankLevelBinding;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.ionexchange.Others.ApplicationClass.digitalArr;
-import static com.ionexchange.Others.ApplicationClass.getAdapter;
-import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
-import static com.ionexchange.Others.ApplicationClass.getStringValue;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
-import static com.ionexchange.Others.ApplicationClass.levelsensorSequenceNumber;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.userType;
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 //created by Silambu
 public class FragmentInputSensorTankLevel_Config extends Fragment implements DataReceiveCallback {
@@ -109,11 +109,10 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                 getPositionFromAtxt(1, getStringValue(mBinding.tankLevelInputSensorInnerLockAct), digitalArr) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.tankLevelInputSensorActivateAct), digitalArr) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.tankLevelInputSensorAlarmAct), digitalArr) + SPILT_CHAR +
-                getStringValue(6, mBinding.tankLevelInputSensorTotalTimeTie) + SPILT_CHAR +
+                getPositionFromAtxt(1, getStringValue(mBinding.tankLevelInputSensorTotalTimeTie), totalTimeArr) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.tankLevelInputSensorResetTimeAct), resetCalibrationArr) + SPILT_CHAR +
-                sensorStatus);
+                sensorStatus + "$00");
     }
-
 
     private void initAdapter() {
         mBinding.tankLevelInputSensorTypeTie.setAdapter(getAdapter(inputTypeArr, getContext()));
@@ -123,6 +122,7 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
         mBinding.tankLevelInputSensorActivateAct.setAdapter(getAdapter(digitalArr, getContext()));
         mBinding.tankLevelInputSensorResetTimeAct.setAdapter(getAdapter(resetCalibrationArr, getContext()));
         mBinding.tankLevelSequenceNumberTie.setAdapter(getAdapter(levelsensorSequenceNumber, getContext()));
+        mBinding.tankLevelInputSensorTotalTimeTie.setAdapter(getAdapter(totalTimeArr, getContext()));
     }
 
     @Override
@@ -157,7 +157,7 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                     mBinding.tankLevelInputSensorInnerLockAct.setText(mBinding.tankLevelInputSensorInnerLockAct.getAdapter().getItem(Integer.parseInt(data[10])).toString());
                     mBinding.tankLevelInputSensorActivateAct.setText(mBinding.tankLevelInputSensorActivateAct.getAdapter().getItem(Integer.parseInt(data[11])).toString());
                     mBinding.tankLevelInputSensorAlarmAct.setText(mBinding.tankLevelInputSensorAlarmAct.getAdapter().getItem(Integer.parseInt(data[12])).toString());
-                    mBinding.tankLevelInputSensorTotalTimeTie.setText(data[13]);
+                    mBinding.tankLevelInputSensorTotalTimeTie.setText(mBinding.tankLevelInputSensorTotalTimeTie.getAdapter().getItem(Integer.parseInt(data[13])).toString());
                     mBinding.tankLevelInputSensorResetTimeAct.setText(mBinding.tankLevelInputSensorResetTimeAct.getAdapter().getItem(Integer.parseInt(data[14])).toString());
                     initAdapter();
                 } else if (data[2].equals(RES_FAILED)) {
@@ -220,25 +220,6 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
         } else if (isFieldEmpty(mBinding.tankLevelInputSensorActivateAct)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.activatechannal_validation));
             return false;
-        }  else if (mBinding.tankLevelInputSensorTotalTimeTie.getText().toString().length() != 6) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.time_validation));
-            return false;
-        } else if (mBinding.tankLevelInputSensorTotalTimeTie.getText().toString().length() == 6) {
-            String totalTime = mBinding.tankLevelInputSensorTotalTimeTie.getText().toString();
-            int hr = Integer.parseInt(totalTime.substring(0,2));
-            int mm = Integer.parseInt(totalTime.substring(2,4));
-            int ss = Integer.parseInt(totalTime.substring(4,6));
-            if(hr > 24){
-                mAppClass.showSnackBar(getContext(), getString(R.string.hh_validation));
-                return false;
-            } else if(mm > 60){
-                mAppClass.showSnackBar(getContext(), getString(R.string.minu_validation));
-                return false;
-            } else if(ss > 60){
-                mAppClass.showSnackBar(getContext(), getString(R.string.ss_validation));
-                return false;
-            }
-            return true;
         }
         return true;
     }
@@ -276,7 +257,6 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                 updateToDb(entryListUpdate);
                 break;
         }
-
     }
     void changeUi(){
         switch (userType) {

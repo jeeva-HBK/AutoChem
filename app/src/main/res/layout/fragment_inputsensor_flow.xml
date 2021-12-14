@@ -872,6 +872,42 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+            <!--Analog typ-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/flow_analog_seq_root_isc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/flow_analog_seq_til_isc"
+                    style="@style/config_AtxTil_zero"
+                    android:layout_weight="1.5"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/flow_analog_seq_edt_isc"
+                        style="@style/config_Edt"
+                        android:hint="Analog Type"
+                        android:imeOptions="actionNext"
+                        android:enabled="false"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:inputType="number"
+                        android:maxLength="7" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         </LinearLayout>
 
         <!--Row 8 (Save and Delete)-->

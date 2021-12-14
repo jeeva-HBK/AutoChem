@@ -9,6 +9,7 @@ import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.BatteryManager;
 import android.widget.Toast;
 
 import com.ionexchange.Interface.DataReceiveCallback;
@@ -24,19 +25,24 @@ public class MonitorBatteryLevel extends BroadcastReceiver implements DataReceiv
         int level = intent.getIntExtra("level", 0);
         mAppClass = (ApplicationClass) context.getApplicationContext();
         mContext = context;
-        if (level < 60) {
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
-                    WRITE_PACKET + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + CHARGE_CONTROL_PACKET + SPILT_CHAR +
-                    "1" + SPILT_CHAR
-            );
-        } else if (level > 98) {
+        int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status ==
+                BatteryManager.BATTERY_STATUS_FULL;
 
-            mAppClass.sendPacket(this, "");
-            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
-                    WRITE_PACKET + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + CHARGE_CONTROL_PACKET + SPILT_CHAR +
-                    "0" + SPILT_CHAR
-            );
+        if (!isCharging){
+            if (level < 60) {
+                mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+                        WRITE_PACKET + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + CHARGE_CONTROL_PACKET + SPILT_CHAR +
+                        "1"
+                );
+            } else if (level > 98) {
+                mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+                        WRITE_PACKET + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + CHARGE_CONTROL_PACKET + SPILT_CHAR +
+                        "0"
+                );
+            }
         }
+
     }
 
     @Override
