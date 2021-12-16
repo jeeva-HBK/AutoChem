@@ -68,7 +68,6 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
                 } else {
                     if (!outputKeepAliveDao.getOutputStatus(outputConfigurationEntityList.get(position).outputHardwareNo).equals("N/A")) {
                         holder.outputNumber.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(outputConfigurationEntityList.get(position).outputHardwareNo))]);
-
                     }
                 }
             }
@@ -85,7 +84,7 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
                 case "F":
                     holder.viewBase.setBackgroundResource(R.drawable.green_box);
                     break;
-                case "FÌ¶":
+                case "F̶":
                     holder.viewBase.setBackgroundResource(R.drawable.red_box);
                     break;
                 case "M for":
@@ -139,9 +138,9 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
                     }
                     break;
                 default:
-                    holder.outputMode.setText("Value");
+                   /* holder.outputMode.setText("Value");
                     holder.outputstatusHeader.setVisibility(View.INVISIBLE);
-                    holder.outputStatus.setVisibility(View.INVISIBLE);
+                    holder.outputStatus.setVisibility(View.INVISIBLE);*/
                     break;
             }
         }else{

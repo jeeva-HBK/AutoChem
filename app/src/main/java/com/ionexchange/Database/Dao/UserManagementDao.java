@@ -21,6 +21,10 @@ public interface UserManagementDao {
     @Query("select user_password FROM usermanagemententity where user_name == :userName")
     String getPassword(String userName);
 
+
+    @Query("select user_role FROM usermanagemententity where user_name == :userName")
+    int getRole(String userName);
+
     @Query("UPDATE usermanagemententity SET user_password = :userPassword WHERE user_role = :userName")
     void updatePassword(String userPassword,String userName);
 }

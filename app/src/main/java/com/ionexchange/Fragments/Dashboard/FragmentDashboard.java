@@ -182,15 +182,19 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
 
     @Override
     public void onClick(MainConfigurationEntity mEntity) {
-        if (!mEntity.inputType.contains("Output") && !mEntity.inputType.contains("virtual")) {
-            if (mEntity.hardware_no != 0) {
-                Bundle bundle = new Bundle();
-                bundle.putString("inputNumber", String.valueOf(mEntity.hardware_no));
-                bundle.putString("inpuType", mEntity.inputType);
-                mAppClass.navigateToBundle(getActivity(), R.id.action_Dashboard_to_sensorDetails1, bundle);
-            } else {
-                mAppClass.showSnackBar(getContext(), "Sensor Not Added");
+        if (ApplicationClass.userType == 3) {
+            if (!mEntity.inputType.contains("Output") && !mEntity.inputType.contains("virtual")) {
+                if (mEntity.hardware_no != 0) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("inputNumber", String.valueOf(mEntity.hardware_no));
+                    bundle.putString("inpuType", mEntity.inputType);
+                    mAppClass.navigateToBundle(getActivity(), R.id.action_Dashboard_to_sensorDetails1, bundle);
+                } else {
+                    mAppClass.showSnackBar(getContext(), "Sensor Not Added");
+                }
             }
+        } else {
+            mAppClass.showSnackBar(getContext(), "Access Denied");
         }
     }
 

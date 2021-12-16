@@ -195,11 +195,11 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     public void OnDataReceive(String data) {
         mActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
         } else if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
         } else if (data.equals("Timeout")) {
             mAppClass.showSnackBar(getContext(), "TimeOut");
         } else if (data != null) {
@@ -268,7 +268,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
             } else if (spiltData[0].equals(WRITE_PACKET)) {
                 if (spiltData[3].equals(RES_SUCCESS)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
-                    new EventLogDemo(inputNumber,"Temperature","Input Setting Changed",getContext());
+                    new EventLogDemo(inputNumber,"Toroidal Conductivity","Input Setting Changed",getContext());
                     tankLevelEntity(Integer.valueOf(spiltData[2]));
                 } else if (spiltData[3].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));

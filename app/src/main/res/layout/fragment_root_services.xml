@@ -22,7 +22,7 @@
                 android:background="@drawable/bg_radio_empty"
                 android:button="@null"
                 android:gravity="center"
-                android:text="Alrams &amp; Events"
+                android:text="Alarms &amp; Events"
                 android:textColor="@color/radio_flat_text_selector" />
 
             <RadioButton

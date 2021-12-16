@@ -48,10 +48,10 @@
 
 
     <fragment
-        android:id="@+id/configuration"
+        android:id="@+id/passwordSettings"
         android:name="com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentPasswordSetting_Config"
         android:label="unitIp"
-        tools:layout="@layout/fragment_unitipsettings" />
+        tools:layout="@layout/fragment_passwordsettings" />
 
 
     <fragment

@@ -1,5 +1,19 @@
 package com.ionexchange.Fragments.Configuration.GeneralConfig;
 
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_GENERAL;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import static com.ionexchange.Singleton.SharedPref.pref_CONTROLLERISACTIVE;
+import static com.ionexchange.Singleton.SharedPref.pref_CONTROLLERPASSWORD;
+import static com.ionexchange.Singleton.SharedPref.pref_SITEID;
+import static com.ionexchange.Singleton.SharedPref.pref_SITELOCATION;
+import static com.ionexchange.Singleton.SharedPref.pref_SITENAME;
+
 import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,25 +41,12 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentCommonsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
-
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.PCK_GENERAL;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-import static com.ionexchange.Singleton.SharedPref.pref_CONTROLLERISACTIVE;
-import static com.ionexchange.Singleton.SharedPref.pref_CONTROLLERPASSWORD;
-import static com.ionexchange.Singleton.SharedPref.pref_SITEID;
-import static com.ionexchange.Singleton.SharedPref.pref_SITELOCATION;
-import static com.ionexchange.Singleton.SharedPref.pref_SITENAME;
 
 //created by Silambu
 public class FragmentCommonSettings_Config extends Fragment implements DataReceiveCallback {
@@ -235,58 +236,62 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
         } else if (data.equals("Timeout")) {
             mAppClass.showSnackBar(getContext(), "TimeOut");
         } else if (data != null) {
-          //  handleResponce(data.split("\\*")[1].split("\\$")); todo -> SHOULD UNCOMMENT
+            handleResponce(data.split("\\*")[1].split("\\$"));
         }
     }
 
     private void handleResponce(String[] splitData) {
         // Read - Res - {*1# 03# 0# 007# Russia# 12341# 1# chennai# 30# 0# 120435022072020*}
         // Write - Res - {*0#03#0*}
+        try {
+            if (splitData[1].equals(PCK_GENERAL)) {
+                // READ_Response
+                if (splitData[0].equals(READ_PACKET)) {
+                    if (splitData[2].equals(RES_SUCCESS)) {
+                        mBinding.siteIdCommonSettingsEDT.setText(splitData[3]);
+                        mBinding.siteNameCommonSettingsEDT.setText(splitData[4]);
+                        mBinding.sitePasswordCommonSettingsEDT.setText(splitData[5]);
 
-        if (splitData[1].equals(PCK_GENERAL)) {
-            // READ_Response
-            if (splitData[0].equals(READ_PACKET)) {
-                if (splitData[2].equals(RES_SUCCESS)) {
+                        if (splitData[6].equals("0")) {
+                            mBinding.disableSite.setChecked(true);
+                        } else if (splitData[6].equals("1")) {
+                            mBinding.enableSite.setChecked(true);
+                        }
 
-                    mBinding.siteIdCommonSettingsEDT.setText(splitData[3]);
-                    mBinding.siteNameCommonSettingsEDT.setText(splitData[4]);
-                    mBinding.sitePasswordCommonSettingsEDT.setText(splitData[5]);
+                        mBinding.siteLocationCommonSettingsEDT.setText(splitData[7]);
+                        mBinding.alarmDelayCommonSettingsEDT.setText(splitData[8]);
 
-                    if (splitData[6].equals("0")) {
-                        mBinding.disableSite.setChecked(true);
-                    } else if (splitData[6].equals("1")) {
-                        mBinding.enableSite.setChecked(true);
+                        if (splitData[9].equals("0")) {
+                            mBinding.celsius.setChecked(true);
+                        } else if (splitData[9].equals("1")) {
+                            mBinding.fahrenheit.setChecked(true);
+                        }
+                        // FIXME: 22-07-2021 RTC -- by silam
+                        mBinding.Hours.setText(splitData[10].substring(0, 2));
+                        mBinding.MM.setText(splitData[10].substring(2, 4));
+                        mBinding.SS.setText(splitData[10].substring(4, 6));
+                        mBinding.NN.setText(splitData[10].substring(6, 7));
+                        mBinding.DD.setText(splitData[10].substring(7, 9));
+                        mBinding.month.setText(splitData[10].substring(9, 11));
+                        mBinding.YYYY.setText(splitData[10].substring(11, 13));
+
+                    } else if (splitData[2].equals(RES_FAILED)) {
+                        mAppClass.showSnackBar(getContext(), String.valueOf(R.string.readFailed));
                     }
-
-                    mBinding.siteLocationCommonSettingsEDT.setText(splitData[7]);
-                    mBinding.alarmDelayCommonSettingsEDT.setText(splitData[8]);
-
-                    if (splitData[9].equals("0")) {
-                        mBinding.celsius.setChecked(true);
-                    } else if (splitData[9].equals("1")) {
-                        mBinding.fahrenheit.setChecked(true);
+                } else if (splitData[0].equals(WRITE_PACKET)) {
+                    if (splitData[2].equals(RES_SUCCESS)) {
+                        mAppClass.showSnackBar(getContext(), "Write Success");
+                        new EventLogDemo("0", "Site", "General settings changed", getContext());
+                    } else if (splitData[2].equals(RES_FAILED)) {
+                        mAppClass.showSnackBar(getContext(), "Write Failed");
                     }
-                    // FIXME: 22-07-2021 RTC -- by silam
-                    mBinding.Hours.setText(splitData[10].substring(0, 2));
-                    mBinding.MM.setText(splitData[10].substring(2, 4));
-                    mBinding.SS.setText(splitData[10].substring(4, 6));
-                    mBinding.NN.setText(splitData[10].substring(6,7));
-                    mBinding.DD.setText(splitData[10].substring(7, 9));
-                    mBinding.month.setText(splitData[10].substring(9, 11));
-                    mBinding.YYYY.setText(splitData[10].substring(11, 13));
-
-                } else if (splitData[2].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), String.valueOf(R.string.readFailed));
                 }
-            } else if (splitData[0].equals(WRITE_PACKET)) {
-                if (splitData[2].equals(RES_SUCCESS)) {
-                    mAppClass.showSnackBar(getContext(), "Write Success");
-                } else if (splitData[2].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), "Write Failed");
-                }
+            } else {
+                mAppClass.showSnackBar(getContext(), String.valueOf(R.string.wrongPack));
             }
-        } else {
-            mAppClass.showSnackBar(getContext(), String.valueOf(R.string.wrongPack));
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

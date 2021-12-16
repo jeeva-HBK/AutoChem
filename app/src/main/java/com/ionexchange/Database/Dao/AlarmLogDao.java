@@ -25,12 +25,14 @@ public interface AlarmLogDao {
     @Query("select * FROM alarmlogentity WHERE  date BETWEEN :formDate AND :toDate")
     List<AlarmLogEntity> getDateWise(String formDate, String toDate);
 
-
+    @Query("Update alarmlogentity SET lockOutAlarm = :cValue WHERE sNo = :sNo")
+    void updateLockAlarm(int sNo, String cValue);
 
     @Query("select * FROM alarmlogentity WHERE  alarmLog =:type AND date BETWEEN :formDate AND :toDate")
     List<AlarmLogEntity> getDateWiseAndType(String formDate, String toDate,String type);
 
-
+    @Query("select * FROM alarmlogentity WHERE  alarmLog =:alarmLog AND  lockOutAlarm =:lockOutAlarm")
+    List<AlarmLogEntity> getLockAlarmSize(String alarmLog, String lockOutAlarm);
 
     @Query("select date FROM alarmlogentity")
     List<String> getDateList();

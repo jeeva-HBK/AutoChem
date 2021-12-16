@@ -702,14 +702,14 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("6") ||
                         outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("5")) {
                     currentValue.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
-                    currentKey.setText("Status : " + outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
+                    currentKey.setText("Output Status : " + outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
                 } else if (outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("8") ||
                         outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no).equals("9")) {
                     currentValue.setText(outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
-                    currentKey.setText("Status : " + outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
+                    currentKey.setText("Output Status : " + outputKeepAliveDao.getOutputRelayStatus(mainConfigurationEntityList.get(position).hardware_no));
                 } else {
                     currentValue.setText(outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no))]);
-                    currentKey.setText("Status : " + outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no))]);
+                    currentKey.setText("Output Status : " + outputControlShortForm[Integer.parseInt(outputKeepAliveDao.getOutputStatus(mainConfigurationEntityList.get(position).hardware_no))]);
                 }
             }
         }

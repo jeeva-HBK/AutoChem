@@ -34,6 +34,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.ionexchange.BLE.BluetoothDataCallback;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
@@ -42,6 +43,7 @@ import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentVirtualsensorConfigBinding;
 
@@ -552,106 +554,111 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
         if (spiltData[1].equals(VIRTUAL_INPUT)) {
             if (spiltData[0].equals(READ_PACKET)) {
                 if (spiltData[2].equals(RES_SUCCESS)) {
-                    mBinding.sensorActivationViEDT.setText(mBinding.sensorActivationViEDT.getAdapter().getItem(Integer.parseInt(spiltData[4])).toString());
-                    mBinding.labelViEDT.setText(spiltData[5]);
-                    mBinding.sensor1TypeATXT.setText(mBinding.sensor1TypeATXT.getAdapter().getItem(Integer.parseInt(spiltData[8])).toString());
-                    //mBinding.sensor1TypeATXT.setText("Contacting Conductivity");
-                   // mBinding.sensor2TypeATXT.setText("Contacting Conductivity");
-                    if(spiltData[6].equalsIgnoreCase("1")){
-                        mBinding.sensor1ViATXT.setText(mBinding.sensor1ViATXT.getAdapter().getItem(0).toString());
-                        setMaxLength(mBinding.sensor1TypeATXT.getText().toString(),mBinding.sensor1ConstantViEDT,0);
-                        TBtnVisiblity(spiltData[7],mBinding.pidConstant1valueTBtn,mBinding.sensor1ConstantViEDT,mBinding.sensor1ConstantDec);
-                        mBinding.sensor1TypeVi.setEnabled(true);
-                        mBinding.sensor1ConstantViEDT.setEnabled(true);
-                        mBinding.sensor1ConstantDec.setEnabled(true);
-                        mBinding.pidConstant1valueTBtn.setEnabled(true);
-                    } else {
-                        mBinding.sensor1ViATXT.setText(mBinding.sensor1ViATXT.getAdapter().getItem(Integer.parseInt(spiltData[7])).toString());
-                        String sensorValue = sensorvalueDao.getCurrentValue(Integer.parseInt(spiltData[7]));
-                        if(sensorValue.equalsIgnoreCase("N/A"))
-                            sensorValue = "0";
-                        if(sensorValue.contains("-")){
-                            mBinding.pidConstant1valueTBtn.setChecked(false);
+                    try {
+                        mBinding.sensorActivationViEDT.setText(mBinding.sensorActivationViEDT.getAdapter().getItem(Integer.parseInt(spiltData[4])).toString());
+                        mBinding.labelViEDT.setText(spiltData[5]);
+                        mBinding.sensor1TypeATXT.setText(mBinding.sensor1TypeATXT.getAdapter().getItem(Integer.parseInt(spiltData[8])).toString());
+                        //mBinding.sensor1TypeATXT.setText("Contacting Conductivity");
+                        // mBinding.sensor2TypeATXT.setText("Contacting Conductivity");
+                        if(spiltData[6].equalsIgnoreCase("1")){
+                            mBinding.sensor1ViATXT.setText(mBinding.sensor1ViATXT.getAdapter().getItem(0).toString());
+                            setMaxLength(mBinding.sensor1TypeATXT.getText().toString(),mBinding.sensor1ConstantViEDT,0);
+                            TBtnVisiblity(spiltData[7],mBinding.pidConstant1valueTBtn,mBinding.sensor1ConstantViEDT,mBinding.sensor1ConstantDec);
+                            mBinding.sensor1TypeVi.setEnabled(true);
+                            mBinding.sensor1ConstantViEDT.setEnabled(true);
+                            mBinding.sensor1ConstantDec.setEnabled(true);
+                            mBinding.pidConstant1valueTBtn.setEnabled(true);
                         } else {
-                            mBinding.pidConstant1valueTBtn.setChecked(true);
+                            mBinding.sensor1ViATXT.setText(mBinding.sensor1ViATXT.getAdapter().getItem(Integer.parseInt(spiltData[7])).toString());
+                            String sensorValue = sensorvalueDao.getCurrentValue(Integer.parseInt(spiltData[7]));
+                            if(sensorValue.equalsIgnoreCase("N/A"))
+                                sensorValue = "0";
+                            if(sensorValue.contains("-")){
+                                mBinding.pidConstant1valueTBtn.setChecked(false);
+                            } else {
+                                mBinding.pidConstant1valueTBtn.setChecked(true);
+                            }
+                            if(sensorValue.contains("-") || sensorValue.contains("+")){
+                                mBinding.sensor1ConstantViEDT.setText(sensorValue.substring(1));
+                                splitDecimal(sensorValue.substring(1),mBinding.sensor1ConstantViEDT,mBinding.sensor1ConstantDec);
+                            }else{
+                                mBinding.sensor1ConstantViEDT.setText(sensorValue);
+                                splitDecimal(sensorValue,mBinding.sensor1ConstantViEDT,mBinding.sensor1ConstantDec);
+                            }
+                            mBinding.sensor1ConstantViEDT.setEnabled(false);
+                            mBinding.sensor1ConstantDec.setEnabled(false);
+                            mBinding.pidConstant1valueTBtn.setEnabled(false);
+                            mBinding.sensor1TypeVi.setEnabled(false);
+                            setMaxLength(mBinding.sensor1TypeATXT.getText().toString(),mBinding.sensor1ConstantViEDT,1);
                         }
-                        if(sensorValue.contains("-") || sensorValue.contains("+")){
-                            mBinding.sensor1ConstantViEDT.setText(sensorValue.substring(1));
-                            splitDecimal(sensorValue.substring(1),mBinding.sensor1ConstantViEDT,mBinding.sensor1ConstantDec);
+                        // mBinding.sensor1ConstantViEDT.setText(spiltData[7].substring(0, 6));
+                        //mBinding.sensor1ConstantDec.setText(spiltData[7].substring(7, 9));
+                        mBinding.sensor2TypeATXT.setText(mBinding.sensor2TypeATXT.getAdapter().getItem(Integer.parseInt(spiltData[11])).toString());
+                        if(spiltData[9].equalsIgnoreCase("1")){
+                            mBinding.sensor2ViATXT.setText(mBinding.sensor2ViATXT.getAdapter().getItem(0).toString());
+                            setMaxLength(mBinding.sensor2TypeATXT.getText().toString(),mBinding.sensor2ConstantViEDT,0);
+                            TBtnVisiblity(spiltData[10],mBinding.pidConstant2valueTBtn,mBinding.sensor2ConstantViEDT,mBinding.sensor2ConstantDec);
+                            mBinding.sensor2TypeVi.setEnabled(true);
+                            mBinding.sensor2ConstantViEDT.setEnabled(true);
+                            mBinding.sensor2ConstantDec.setEnabled(true);
+                            mBinding.pidConstant2valueTBtn.setEnabled(true);
                         }else{
-                            mBinding.sensor1ConstantViEDT.setText(sensorValue);
-                            splitDecimal(sensorValue,mBinding.sensor1ConstantViEDT,mBinding.sensor1ConstantDec);
+                            mBinding.sensor2ViATXT.setText(mBinding.sensor2ViATXT.getAdapter().getItem(Integer.parseInt(spiltData[10])).toString());
+                            String sensorValue = sensorvalueDao.getCurrentValue(Integer.parseInt(spiltData[10]));
+                            if(sensorValue.equalsIgnoreCase("N/A"))
+                                sensorValue = "0";
+                            if(sensorValue.contains("-")){
+                                mBinding.pidConstant2valueTBtn.setChecked(false);
+                            } else {
+                                mBinding.pidConstant2valueTBtn.setChecked(true);
+                            }
+                            if(sensorValue.contains("-") || sensorValue.contains("+")){
+                                mBinding.sensor2ConstantViEDT.setText(sensorValue.substring(1));
+                                splitDecimal(sensorValue.substring(1),mBinding.sensor2ConstantViEDT,mBinding.sensor2ConstantDec);
+                            }else{
+                                mBinding.sensor2ConstantViEDT.setText(sensorValue);
+                                splitDecimal(sensorValue,mBinding.sensor2ConstantViEDT,mBinding.sensor2ConstantDec);
+                            }
+                            mBinding.sensor2ConstantViEDT.setEnabled(false);
+                            mBinding.sensor2ConstantDec.setEnabled(false);
+                            mBinding.pidConstant2valueTBtn.setEnabled(false);
+                            mBinding.sensor2TypeVi.setEnabled(false);
+                            setMaxLength(mBinding.sensor2TypeATXT.getText().toString(),mBinding.sensor2ConstantViEDT,1);
                         }
-                        mBinding.sensor1ConstantViEDT.setEnabled(false);
-                        mBinding.sensor1ConstantDec.setEnabled(false);
-                        mBinding.pidConstant1valueTBtn.setEnabled(false);
-                        mBinding.sensor1TypeVi.setEnabled(false);
-                        setMaxLength(mBinding.sensor1TypeATXT.getText().toString(),mBinding.sensor1ConstantViEDT,1);
+                        //mBinding.sensor2ConstantViEDT.setText(spiltData[9].substring(0, 6));
+                        //mBinding.sensor2ConstantDec.setText(spiltData[9].substring(7, 9));
+                        //mBinding.lowRangeViEDT.setText(spiltData[10]);
+                        //mBinding.highRangeViEDT.setText(spiltData[11]);
+                        mBinding.lowRangeViEDT.setText(spiltData[12].substring(0, sensorLength));
+                        mBinding.lowRangeViDec.setText(spiltData[12].substring(sensorLength+1, sensorLength+3));
+                        TBtnVisiblity(spiltData[12],mBinding.lowRangeTBtn,mBinding.lowRangeViEDT,mBinding.lowRangeViDec);
+
+                        mBinding.highRangeViEDT.setText(spiltData[13].substring(0, sensorLength));
+                        mBinding.highRangeViDec.setText(spiltData[13].substring(sensorLength+1, sensorLength+3));
+                        TBtnVisiblity(spiltData[13],mBinding.highRangeTBtn,mBinding.highRangeViEDT,mBinding.highRangeViDec);
+
+                        mBinding.smoothingFactorViEDT.setText(spiltData[14]);
+
+                        mBinding.lowAlarmViEDT.setText(spiltData[15].substring(0, sensorLength));
+                        mBinding.lowAlarmViDec.setText(spiltData[15].substring(sensorLength+1, sensorLength+3));
+                        TBtnVisiblity(spiltData[15],mBinding.lowAlarmTBtn,mBinding.lowAlarmViEDT,mBinding.lowAlarmViDec);
+
+                        mBinding.highAlarmViEDT.setText(spiltData[16].substring(0, sensorLength));
+                        mBinding.highAlarmDec.setText(spiltData[16].substring(sensorLength+1, sensorLength+3));
+                        TBtnVisiblity(spiltData[16],mBinding.highAlarmTBtn,mBinding.highAlarmViEDT,mBinding.highAlarmDec);
+
+                        mBinding.calculationViEDT.setText(mBinding.calculationViEDT.getAdapter().getItem(Integer.parseInt(spiltData[17])).toString());
+                        initAdapters();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                   // mBinding.sensor1ConstantViEDT.setText(spiltData[7].substring(0, 6));
-                    //mBinding.sensor1ConstantDec.setText(spiltData[7].substring(7, 9));
-                    mBinding.sensor2TypeATXT.setText(mBinding.sensor2TypeATXT.getAdapter().getItem(Integer.parseInt(spiltData[11])).toString());
-                    if(spiltData[9].equalsIgnoreCase("1")){
-                        mBinding.sensor2ViATXT.setText(mBinding.sensor2ViATXT.getAdapter().getItem(0).toString());
-                        setMaxLength(mBinding.sensor2TypeATXT.getText().toString(),mBinding.sensor2ConstantViEDT,0);
-                        TBtnVisiblity(spiltData[10],mBinding.pidConstant2valueTBtn,mBinding.sensor2ConstantViEDT,mBinding.sensor2ConstantDec);
-                        mBinding.sensor2TypeVi.setEnabled(true);
-                        mBinding.sensor2ConstantViEDT.setEnabled(true);
-                        mBinding.sensor2ConstantDec.setEnabled(true);
-                        mBinding.pidConstant2valueTBtn.setEnabled(true);
-                    }else{
-                        mBinding.sensor2ViATXT.setText(mBinding.sensor2ViATXT.getAdapter().getItem(Integer.parseInt(spiltData[10])).toString());
-                        String sensorValue = sensorvalueDao.getCurrentValue(Integer.parseInt(spiltData[10]));
-                        if(sensorValue.equalsIgnoreCase("N/A"))
-                            sensorValue = "0";
-                        if(sensorValue.contains("-")){
-                            mBinding.pidConstant2valueTBtn.setChecked(false);
-                        } else {
-                            mBinding.pidConstant2valueTBtn.setChecked(true);
-                        }
-                        if(sensorValue.contains("-") || sensorValue.contains("+")){
-                            mBinding.sensor2ConstantViEDT.setText(sensorValue.substring(1));
-                            splitDecimal(sensorValue.substring(1),mBinding.sensor2ConstantViEDT,mBinding.sensor2ConstantDec);
-                        }else{
-                            mBinding.sensor2ConstantViEDT.setText(sensorValue);
-                            splitDecimal(sensorValue,mBinding.sensor2ConstantViEDT,mBinding.sensor2ConstantDec);
-                        }
-                        mBinding.sensor2ConstantViEDT.setEnabled(false);
-                        mBinding.sensor2ConstantDec.setEnabled(false);
-                        mBinding.pidConstant2valueTBtn.setEnabled(false);
-                        mBinding.sensor2TypeVi.setEnabled(false);
-                        setMaxLength(mBinding.sensor2TypeATXT.getText().toString(),mBinding.sensor2ConstantViEDT,1);
-                    }
-                    //mBinding.sensor2ConstantViEDT.setText(spiltData[9].substring(0, 6));
-                    //mBinding.sensor2ConstantDec.setText(spiltData[9].substring(7, 9));
-                    //mBinding.lowRangeViEDT.setText(spiltData[10]);
-                    //mBinding.highRangeViEDT.setText(spiltData[11]);
-                    mBinding.lowRangeViEDT.setText(spiltData[12].substring(0, sensorLength));
-                    mBinding.lowRangeViDec.setText(spiltData[12].substring(sensorLength+1, sensorLength+3));
-                    TBtnVisiblity(spiltData[12],mBinding.lowRangeTBtn,mBinding.lowRangeViEDT,mBinding.lowRangeViDec);
-
-                    mBinding.highRangeViEDT.setText(spiltData[13].substring(0, sensorLength));
-                    mBinding.highRangeViDec.setText(spiltData[13].substring(sensorLength+1, sensorLength+3));
-                    TBtnVisiblity(spiltData[13],mBinding.highRangeTBtn,mBinding.highRangeViEDT,mBinding.highRangeViDec);
-
-                    mBinding.smoothingFactorViEDT.setText(spiltData[14]);
-
-                    mBinding.lowAlarmViEDT.setText(spiltData[15].substring(0, sensorLength));
-                    mBinding.lowAlarmViDec.setText(spiltData[15].substring(sensorLength+1, sensorLength+3));
-                    TBtnVisiblity(spiltData[15],mBinding.lowAlarmTBtn,mBinding.lowAlarmViEDT,mBinding.lowAlarmViDec);
-
-                    mBinding.highAlarmViEDT.setText(spiltData[16].substring(0, sensorLength));
-                    mBinding.highAlarmDec.setText(spiltData[16].substring(sensorLength+1, sensorLength+3));
-                    TBtnVisiblity(spiltData[16],mBinding.highAlarmTBtn,mBinding.highAlarmViEDT,mBinding.highAlarmDec);
-
-                    mBinding.calculationViEDT.setText(mBinding.calculationViEDT.getAdapter().getItem(Integer.parseInt(spiltData[17])).toString());
-                    initAdapters();
                 } else if (spiltData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.readFailed));
                 }
             } else if (spiltData[0].equals(WRITE_PACKET)) {
                 if (spiltData[2].equals(RES_SUCCESS)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
+                    new EventLogDemo(String.valueOf(sensorInputNo), "Virtual", "Input Setting Changed", getContext());
                     virtualEntity();
                 } else if (spiltData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
@@ -677,4 +684,5 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
         VirtualConfigurationDao dao = db.virtualConfigurationDao();
         dao.insert(entryList.toArray(new VirtualConfigurationEntity[0]));
     }
+
 }

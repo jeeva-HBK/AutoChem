@@ -98,6 +98,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
             <fragment
                 android:id="@+id/nav_host_frag"
                 android:name="androidx.navigation.fragment.NavHostFragment"
@@ -105,10 +106,11 @@
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@id/view2"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@id/view"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
                 app:navGraph="@navigation/navigation" />
-
 
             <View
                 android:id="@+id/view2"
@@ -254,6 +256,34 @@
                 app:layout_constraintStart_toEndOf="@+id/statisticsMain"
                 app:layout_constraintTop_toTopOf="@+id/view2" />
 
+            <View
+                android:id="@+id/notfication_view"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="33dp"
+                android:layout_marginTop="3sp"
+                android:background="@drawable/circle_bg"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@id/supportMain"
+                app:layout_constraintStart_toStartOf="@+id/supportMain"
+                app:layout_constraintTop_toTopOf="@id/view2" />
+
+
+            <TextView
+                android:id="@+id/notfication_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="10dp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/notfication_view"
+                app:layout_constraintEnd_toEndOf="@+id/notfication_view"
+                app:layout_constraintStart_toStartOf="@+id/notfication_view"
+                app:layout_constraintTop_toTopOf="@id/notfication_view" />
+
             <TextView
                 android:id="@+id/supportText"
                 android:layout_width="wrap_content"
@@ -294,8 +324,10 @@
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/supportText"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/supportText"
-                app:layout_constraintTop_toTopOf="@+id/guideline3" />
+                app:layout_constraintTop_toTopOf="@+id/guideline3"
+                app:layout_constraintVertical_bias="0.0" />
 
             <View
                 android:id="@+id/supportSub"

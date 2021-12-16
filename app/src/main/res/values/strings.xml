@@ -9,7 +9,7 @@
 
     <string name="update_failed">Update Failed</string>
 
-    <string name="connection_failed">Failed to connect</string>
+    <string name="connection_failed">Bluetooth Disconnected</string>
 
     <string name="timeout">Timeout</string>
 

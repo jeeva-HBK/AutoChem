@@ -24,24 +24,31 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ionexchange.Activity.BaseActivity;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
+import com.ionexchange.Database.Entity.TimerConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentTimerstatusConfigBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.ionexchange.Others.ApplicationClass.accessoryTimerMode;
 import static com.ionexchange.Others.ApplicationClass.accessoryType;
 import static com.ionexchange.Others.ApplicationClass.bleedRelay;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
+import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
 import static com.ionexchange.Others.ApplicationClass.getPosition;
+import static com.ionexchange.Others.ApplicationClass.getStringValue;
 import static com.ionexchange.Others.ApplicationClass.timerFlowSensor;
 import static com.ionexchange.Others.ApplicationClass.timerOutputMode;
 import static com.ionexchange.Others.ApplicationClass.toStringValue;
@@ -60,6 +67,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
     String timerNo;
     BaseActivity mActivity;
     ApplicationClass mAppClass;
+
 
     String week1, week2, week3, week4;
 
@@ -779,123 +787,130 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
     @SuppressLint("UseCompatLoadingForDrawables")
     private void handleResponse(String[] splitData, int mode) {
         //Timer
-        if (splitData[0].equals("{*1") && splitData[1].equals("08")) {
-            accessoryTimer = splitData;
-            mBinding.timerNameTxt.setText(splitData[4]);
-            mBinding.txtOutputNameValueAct.setText(mBinding.txtOutputNameValueAct.getAdapter().getItem(Integer.parseInt(splitData[5]) - 1).toString());
-            flowSensorVisibility(Integer.parseInt(splitData[6]));
-            mBinding.txtModeValueAct.setText(mBinding.txtModeValueAct.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
-            mBinding.txtFlowSensorValueAct.setText(mBinding.txtFlowSensorValueAct.getAdapter().getItem(Integer.parseInt(splitData[7])).toString());
+        try {
 
-            //accessoryTimer- set background
-            setAccessoryTimerBackground(splitData[9], mBinding.AccessoryCheckbox1, 1);
-            setAccessoryTimerBackground(splitData[15], mBinding.AccessoryCheckbox2, 2);
-            setAccessoryTimerBackground(splitData[21], mBinding.AccessoryCheckbox3, 3);
-            setAccessoryTimerBackground(splitData[27], mBinding.AccessoryCheckbox4, 4);
+            if (splitData[0].equals("{*1") && splitData[1].equals("08")) {
+                accessoryTimer = splitData;
+                mBinding.timerNameTxt.setText(splitData[4]);
+                mBinding.txtOutputNameValueAct.setText(mBinding.txtOutputNameValueAct.getAdapter().getItem(Integer.parseInt(splitData[5]) - 1).toString());
+                flowSensorVisibility(Integer.parseInt(splitData[6]));
+                mBinding.txtModeValueAct.setText(mBinding.txtModeValueAct.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
+                mBinding.txtFlowSensorValueAct.setText(mBinding.txtFlowSensorValueAct.getAdapter().getItem(Integer.parseInt(splitData[7])).toString());
 
-            weeklyScheduleReadPacket(week1);
-        }
+                //accessoryTimer- set background
+                setAccessoryTimerBackground(splitData[9], mBinding.AccessoryCheckbox1, 1);
+                setAccessoryTimerBackground(splitData[15], mBinding.AccessoryCheckbox2, 2);
+                setAccessoryTimerBackground(splitData[21], mBinding.AccessoryCheckbox3, 3);
+                setAccessoryTimerBackground(splitData[27], mBinding.AccessoryCheckbox4, 4);
 
-        if (splitData[0].equals("{*0") && splitData[1].equals("08")) {
-            if (splitData[2].equals("0*}")) {
-                WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
-                TimerConfigurationDao dao = db.timerConfigurationDao();
-                int timerNum = Integer.parseInt(timerNo) + 1;
-                dao.updateTimer(mBinding.timerNameTxt.getText().toString(),
-                        mBinding.txtOutputNameValueAct.getText().toString(), mBinding.txtModeValueAct.getText().toString(), timerNum);
-                writeWeeklySchedule(week1, timerOne, 1);
+                weeklyScheduleReadPacket(week1);
             }
-            if (splitData[2].equals("1*}")) {
-                mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
+
+            if (splitData[0].equals("{*0") && splitData[1].equals("08")) {
+                if (splitData[2].equals("0*}")) {
+                    WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+                    TimerConfigurationDao dao = db.timerConfigurationDao();
+                    int timerNum = Integer.parseInt(timerNo) + 1;
+                    dao.updateTimer(mBinding.timerNameTxt.getText().toString(),
+                            mBinding.txtOutputNameValueAct.getText().toString(), mBinding.txtModeValueAct.getText().toString(), timerNum);
+                    writeWeeklySchedule(week1, timerOne, 1);
+                }
+                if (splitData[2].equals("1*}")) {
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
+                }
             }
-        }
-        //Weekly
-        if (mode == 0) {
-            if (splitData[0].equals("{*1") && splitData[1].equals("09")) {
-                if (splitData[4].equals(week1)) {
-                    timerOne = splitData;
-                    if (splitData[5].equals("0")) {
-                        mBinding.weekCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_unchecked));
-                        mBinding.switchBtnWeek.setChecked(false);
-                    } else if (splitData[5].equals("1")) {
-                        mBinding.weekCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_checked));
-                        mBinding.switchBtnWeek.setChecked(true);
+            //Weekly
+            if (mode == 0) {
+                if (splitData[0].equals("{*1") && splitData[1].equals("09")) {
+                    if (splitData[4].equals(week1)) {
+                        timerOne = splitData;
+                        if (splitData[5].equals("0")) {
+                            mBinding.weekCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_unchecked));
+                            mBinding.switchBtnWeek.setChecked(false);
+                        } else if (splitData[5].equals("1")) {
+                            mBinding.weekCheckbox1.setBackground(getResources().getDrawable(R.drawable.one_checked));
+                            mBinding.switchBtnWeek.setChecked(true);
+                        }
+                        setWeekBackground(splitData);
+                        weeklyScheduleReadPacket(week2);
+                    }
+                    if (splitData[4].equals(week2)) {
+                        timerTwo = splitData;
+                        if (splitData[5].equals("0")) {
+                            mBinding.weekCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_unchecked));
+                        } else if (splitData[5].equals("1")) {
+                            mBinding.weekCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_checked));
+                        }
+                        setWeekBackground(splitData);
+                        weeklyScheduleReadPacket(week3);
+                    }
+                    if (splitData[4].equals(week3)) {
+                        timerThree = splitData;
+                        if (splitData[5].equals("0")) {
+                            mBinding.weekCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_unchecked));
+                        } else if (splitData[5].equals("1")) {
+                            mBinding.weekCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_checked));
+                        }
+                        setWeekBackground(splitData);
+                        weeklyScheduleReadPacket(week4);
+                    }
+                    if (splitData[4].equals(week4)) {
+                        timerFour = splitData;
+                        if (splitData[5].equals("0")) {
+                            mBinding.weekCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_unchecked));
+                        } else if (splitData[5].equals("1")) {
+                            mBinding.weekCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_cheched));
+                        }
+                        setWeekBackground(splitData);
+                        handleResponse(timerOne, 1);
+                    }
+                }
+            }
+
+            if (mode == 1) {
+                if (splitData[0].equals("{*1") && splitData[1].equals("09")) {
+                    if (splitData[4].equals(week1)) {
+                        timerOne = splitData;
+                    }
+                    if (splitData[4].equals(week2)) {
+                        timerTwo = splitData;
+                    }
+                    if (splitData[4].equals(week3)) {
+                        timerThree = splitData;
+                    }
+                    if (splitData[4].equals(week4)) {
+                        timerFour = splitData;
                     }
                     setWeekBackground(splitData);
-                    weeklyScheduleReadPacket(week2);
-                }
-                if (splitData[4].equals(week2)) {
-                    timerTwo = splitData;
-                    if (splitData[5].equals("0")) {
-                        mBinding.weekCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_unchecked));
-                    } else if (splitData[5].equals("1")) {
-                        mBinding.weekCheckbox2.setBackground(getResources().getDrawable(R.drawable.two_checked));
-                    }
-                    setWeekBackground(splitData);
-                    weeklyScheduleReadPacket(week3);
-                }
-                if (splitData[4].equals(week3)) {
-                    timerThree = splitData;
-                    if (splitData[5].equals("0")) {
-                        mBinding.weekCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_unchecked));
-                    } else if (splitData[5].equals("1")) {
-                        mBinding.weekCheckbox3.setBackground(getResources().getDrawable(R.drawable.three_checked));
-                    }
-                    setWeekBackground(splitData);
-                    weeklyScheduleReadPacket(week4);
-                }
-                if (splitData[4].equals(week4)) {
-                    timerFour = splitData;
-                    if (splitData[5].equals("0")) {
-                        mBinding.weekCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_unchecked));
-                    } else if (splitData[5].equals("1")) {
-                        mBinding.weekCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_cheched));
-                    }
-                    setWeekBackground(splitData);
-                    handleResponse(timerOne, 1);
                 }
             }
-        }
 
-        if (mode == 1) {
-            if (splitData[0].equals("{*1") && splitData[1].equals("09")) {
-                if (splitData[4].equals(week1)) {
-                    timerOne = splitData;
+            if (splitData[0].equals("{*0") && splitData[1].equals("09")) {
+                if (splitData[2].equals("0*}")) {
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
+                    switch (loopWeeklyPacket){
+                        case 1:
+                            writeWeeklySchedule(week2, timerTwo,2);
+                            break;
+                        case 2:
+                            writeWeeklySchedule(week3, timerThree,3);
+                            break;
+                        case 3:
+                            writeWeeklySchedule(week4, timerFour, 0);
+                            break;
+                    }
                 }
-                if (splitData[4].equals(week2)) {
-                    timerTwo = splitData;
+                if (splitData[2].equals("1*}")) {
+                    mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }
-                if (splitData[4].equals(week3)) {
-                    timerThree = splitData;
-                }
-                if (splitData[4].equals(week4)) {
-                    timerFour = splitData;
-                }
-                setWeekBackground(splitData);
             }
-        }
+            initAdapter();
+            new EventLogDemo(timerNo,"TIMER"+timerNo,"Timer settings changed",getContext());
+            timerEntity();
 
-        if (splitData[0].equals("{*0") && splitData[1].equals("09")) {
-            if (splitData[2].equals("0*}")) {
-                mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
-                switch (loopWeeklyPacket){
-                    case 1:
-                        writeWeeklySchedule(week2, timerTwo,2);
-                        break;
-                    case 2:
-                        writeWeeklySchedule(week3, timerThree,3);
-                        break;
-                    case 3:
-                        writeWeeklySchedule(week4, timerFour, 0);
-                        break;
-                }
-            }
-            if (splitData[2].equals("1*}")) {
-                mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
-            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        initAdapter();
-
     }
 
     private void setWeekBackground(String[] splitData) {
@@ -1285,5 +1300,20 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         stringArr[24] = applyStringArr[enable];
         stringArr[25] = applyStringArr[startTime];
         stringArr[26] = applyStringArr[durationTime];
+    }
+
+    public void timerEntity() {
+                TimerConfigurationEntity entity = new TimerConfigurationEntity(Integer.parseInt(timerNo),mBinding.timerNameTxt.getText().toString(),
+                        mBinding.txtOutputNameValueAct.getText().toString(),mBinding.txtModeValueAct.getText().toString(),0,0,"");
+                List<TimerConfigurationEntity> entryListDelete = new ArrayList<>();
+                entryListDelete.add(entity);
+                updateToDb(entryListDelete);
+
+    }
+
+    public void updateToDb(List<TimerConfigurationEntity> entryList) {
+        WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
+        TimerConfigurationDao dao = db.timerConfigurationDao();
+        dao.insert(entryList.toArray(new TimerConfigurationEntity[0]));
     }
 }

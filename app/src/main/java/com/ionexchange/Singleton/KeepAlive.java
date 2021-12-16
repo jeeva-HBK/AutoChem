@@ -21,23 +21,28 @@ import com.ionexchange.Database.Dao.EventLogDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.OutputKeepAliveDao;
+import com.ionexchange.Database.Dao.ServicesNotificationDao;
 import com.ionexchange.Database.Entity.AlarmLogEntity;
 import com.ionexchange.Database.Entity.EventLogEntity;
+import com.ionexchange.Database.Entity.ServicesNotificationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 
 import java.util.ArrayList;
 import java.util.List;
 
 //created by Silambu
-public class KeepAlive {
+public class KeepAlive implements DataReceiveCallback {
     static KeepAlive keepAlive;
+    ApplicationClass mAppClass;
     WaterTreatmentDb db = null;
     KeepAliveCurrentValueDao keepAliveCurrentValueDao = null;
     OutputKeepAliveDao outputKeepAliveDao;
     AlarmLogDao alarmLogDao;
     EventLogDao eventLogDao;
     InputConfigurationDao inputConfigurationDao;
+    ServicesNotificationDao servicesNotificationDao;
     String sensorType;
 
     public KeepAlive() {
@@ -60,8 +65,9 @@ public class KeepAlive {
             inputConfigurationDao = db.inputConfigurationDao();
             alarmLogDao = db.alarmLogDao();
             eventLogDao = db.eventLogDao();
+            servicesNotificationDao = db.servicesNotificationDao();
         }
-
+        mAppClass = ApplicationClass.getInstance();
         if (data != null) {
             spiltData(data.split("\\*")[1].split(RES_SPILT_CHAR));
         }
@@ -71,12 +77,6 @@ public class KeepAlive {
         if (data[2].equals(INPUT_VOLTAGE)) {
             Acknowledge = STARTPACKET + SPILT_CHAR + CRC + SPILT_CHAR + "007" + SPILT_CHAR + INPUT_VOLTAGE + SPILT_CHAR + ACK + SPILT_CHAR + ENDPACKET;
             int i = 0;
-            int j;
-           /* if (data[3].equals("5")) {
-                j = 7;
-            } else {
-                j = 10;
-            }*/
             while (i < 57) {
                 if (data[i + 3].length() > 2) {
                     if (Integer.parseInt(data[i + 3].substring(0, 2)) > 33 && Integer.parseInt(data[i + 3].substring(0, 2)) < 50) { // DIGITAL & TANK
@@ -110,6 +110,22 @@ public class KeepAlive {
             }
         }
         if (data[2].equals(ALARM_STATUS)) {
+            if (data[4].equals("0")) {
+                if (data[5].equals("08")) {
+                    AlarmLogEntity alarmLogEntity = new AlarmLogEntity(alarmLogDao.getLastSno() + 1,
+                            data[3].substring(2,4), sensorType,
+                            alarmArr[Integer.parseInt(data[5])],
+                            ApplicationClass.getCurrentTime(),
+                            ApplicationClass.getCurrentDate(), "1");
+                    List<AlarmLogEntity> outputEntryList = new ArrayList<>();
+                    outputEntryList.add(alarmLogEntity);
+                    updateToAlarmDb(outputEntryList);
+                }else {
+                    sendPacket("CRC"+SPILT_CHAR+"01"+SPILT_CHAR+"03"+SPILT_CHAR+"1"+SPILT_CHAR);
+                }
+            } else {
+                sendPacket("CRC"+SPILT_CHAR+"01"+SPILT_CHAR+"03"+SPILT_CHAR+"1"+SPILT_CHAR);
+            }
             if (alarmLogDao.getAlarmLogList().size() >= 1000) {
                 alarmLogDao.deleteFirstRow();
             }
@@ -119,7 +135,7 @@ public class KeepAlive {
 
             switch (data[3].substring(0, 2)) {
                 case "IN":
-                    sensorType = inputConfigurationDao.getSensorType(Integer.parseInt(data[3].substring(2, 4)));
+                    sensorType = inputConfigurationDao.getInputType(Integer.parseInt(data[3].substring(2, 4)));
                     break;
                 case "OP":
                     sensorType = outputKeepAliveDao.getOutputStatus(Integer.parseInt(data[3].substring(2, 4)));
@@ -129,18 +145,21 @@ public class KeepAlive {
                     break;
             }
             if (data[4].equals("0")) {
-                AlarmLogEntity alarmLogEntity = new AlarmLogEntity(alarmLogDao.getLastSno() + 1,
-                        data[3], sensorType,
-                        alarmArr[Integer.parseInt(data[5])],
-                        ApplicationClass.getCurrentTime(),
-                        ApplicationClass.getCurrentDate());
-                List<AlarmLogEntity> outputEntryList = new ArrayList<>();
-                outputEntryList.add(alarmLogEntity);
-                updateToAlarmDb(outputEntryList);
+                if (!data[5].equals("08")){
+                    AlarmLogEntity alarmLogEntity = new AlarmLogEntity(alarmLogDao.getLastSno() + 1,
+                            data[3].substring(2,4), sensorType,
+                            alarmArr[Integer.parseInt(data[5])],
+                            ApplicationClass.getCurrentTime(),
+                            ApplicationClass.getCurrentDate(),"0");
+                    List<AlarmLogEntity> outputEntryList = new ArrayList<>();
+                    outputEntryList.add(alarmLogEntity);
+                    updateToAlarmDb(outputEntryList);
+                }
+
 
             } else if (data[4].equals("1")) {
                 EventLogEntity eventLogEntity = new EventLogEntity(eventLogDao.getLastSno() + 1,
-                        data[3], sensorType,
+                        data[3].substring(2,4), sensorType,
                         eventLogArr[Integer.parseInt(data[5])],
                         ApplicationClass.getCurrentTime(), ApplicationClass.getCurrentDate());
                 List<EventLogEntity> eventLogEntities = new ArrayList<>();
@@ -157,5 +176,18 @@ public class KeepAlive {
 
     public void updateToEventDb(List<EventLogEntity> entryList) {
         eventLogDao.insert(entryList.toArray(new EventLogEntity[0]));
+    }
+
+    public void updateToNotificationDb(List<ServicesNotificationEntity> entryList) {
+        servicesNotificationDao.insert(entryList.toArray(new ServicesNotificationEntity[0]));
+    }
+
+    public void sendPacket(String packet) {
+        mAppClass.sendPacket( this, packet);
+    }
+
+    @Override
+    public void OnDataReceive(String data) {
+
     }
 }

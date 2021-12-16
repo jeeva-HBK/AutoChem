@@ -4,9 +4,11 @@ import static android.os.Build.VERSION.SDK_INT;
 import static com.ionexchange.Others.ApplicationClass.DB;
 import static com.ionexchange.Others.ApplicationClass.defaultPassword;
 import static com.ionexchange.Others.ApplicationClass.userManagementDao;
+import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Singleton.SharedPref.pref_LOGGEDIN;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINNAME;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINREQUIRED;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINROLE;
 
 import android.Manifest;
 import android.app.admin.DevicePolicyManager;
@@ -52,10 +54,13 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.ionexchange.Adapters.ExpandableListAdapter;
+import com.ionexchange.Database.Dao.AlarmLogDao;
+import com.ionexchange.Database.Dao.ServicesNotificationDao;
 import com.ionexchange.Database.Dao.UserManagementDao;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Others.AdminReceiver;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.ActivityBaseBinding;
@@ -88,11 +93,13 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     Handler handler;
     WaterTreatmentDb db;
     UserManagementDao userManagementDao;
-
+    ServicesNotificationDao servicesNotificationDao;
     static ActivityBaseBinding msBinding;
     static Context msContext;
     static BaseActivity baseActivity;
     static ApplicationClass msAppClass;
+
+    AlarmLogDao alarmLogDao;
 
 
     @RequiresApi(api = Build.VERSION_CODES.R)
@@ -104,13 +111,15 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         msAppClass = (ApplicationClass) getApplication();
         msContext = getApplicationContext();
         msContext = getApplicationContext();
-        context = getApplicationContext();
+        context = BaseActivity.this;
         db = WaterTreatmentDb.getDatabase(getApplicationContext());
         userManagementDao = db.userManagementDao();
+        alarmLogDao = db.alarmLogDao();
         //startService(new Intent(this, TcpServer.class).setAction(TcpServer.START_SERVER));
         expandedListView();
         baseActivity = this;
         msBinding = mBinding;
+        SharedPref.write(pref_USERLOGINREQUIRED, true);
         checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 101);
         ComponentName admin = new ComponentName(this, AdminReceiver.class);
         Intent intent = new Intent(
@@ -129,7 +138,16 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
         inactiveHandler();
 
+        if (alarmLogDao.getLockAlarmSize("Lockout Alarm", "1").size() == 0){
+            mBinding.notficationTxt.setVisibility(View.INVISIBLE);
+            mBinding.notficationView.setVisibility(View.INVISIBLE);
+        } else {
+            mBinding.notficationTxt.setVisibility(View.VISIBLE);
+            mBinding.notficationView.setVisibility(View.VISIBLE);
+            mBinding.notficationTxt.setText(alarmLogDao.getLockAlarmSize("Lockout Alarm", "1").size() + "");
+        }
 
+       // mBinding.notficationTxt.setText();
     }
 
     void inactiveHandler() {
@@ -261,7 +279,8 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.supportSmallCircle.setVisibility(View.INVISIBLE);
         mBinding.supportSub.setVisibility(View.INVISIBLE);
         mBinding.supportText.setVisibility(View.INVISIBLE);
-
+        mBinding.notficationView.setVisibility(View.INVISIBLE);
+        mBinding.notficationTxt.setVisibility(View.INVISIBLE);
         mBinding.configBigCircle.setVisibility(View.INVISIBLE);
         mBinding.configSmallCircle.setVisibility(View.INVISIBLE);
         mBinding.configSub.setVisibility(View.INVISIBLE);
@@ -276,7 +295,8 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         sub.setVisibility(View.VISIBLE);
         txtView.setVisibility(View.VISIBLE);
         main.setVisibility(View.INVISIBLE);
-
+        mBinding.notficationView.setVisibility(View.VISIBLE);
+        mBinding.notficationTxt.setVisibility(View.VISIBLE);
         NavGraph.setStartDestination(fragment);
         navController.setGraph(navGraph);
 
@@ -297,10 +317,10 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.trend_screen_btn:
-                setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle,
+                /*setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle,
                         mBinding.statisticsText, navGraph, R.id.trend, mNavController);
-                mBinding.view.setVisibility(View.GONE);
-
+                mBinding.view.setVisibility(View.GONE);*/
+                mAppClass.showSnackBar(getApplicationContext(), "UNDER DEVELOPMENT !");
                 break;
 
             case R.id.event_logs_screen_btn:
@@ -310,7 +330,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.config_screen_btn:
-                if (SharedPref.read(pref_USERLOGINREQUIRED, false)) {
+                if (SharedPref.read(pref_USERLOGINREQUIRED, true)) {
                     checkUserLogin();
                 } else {
                     moveToConfig();
@@ -369,24 +389,30 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 if (userName.getText().toString().equals("")) {
-                    mAppClass.showSnackBar(BaseActivity.this, "Username should be empty");
+                   // mAppClass.showSnackBar(BaseActivity.this, "Username should be empty");
+                    Snackbar.make(dialogView, "Username should not be empty", Snackbar.LENGTH_LONG).show();
                     return;
                 }
-                if (userName.getText().toString().equals("")) {
-                    mAppClass.showSnackBar(BaseActivity.this, "Password should be empty");
+                if (password.getText().toString().equals("")) {
+                    //mAppClass.showSnackBar(BaseActivity.this, "Password should be empty");
+                    Snackbar.make(dialogView, "Password should not be empty", Snackbar.LENGTH_LONG).show();
                     return;
                 }
                 if (userManagementDao.getPassword(userName.getText().toString()) == null) {
-                    mAppClass.showSnackBar(BaseActivity.this, "user not found");
+                    // mAppClass.showSnackBar(BaseActivity.this, "user not found");
+                    Snackbar.make(dialogView, "User not found", Snackbar.LENGTH_LONG).show();
                     return;
                 }
 
                 if (password.getText().toString().equals(userManagementDao.getPassword(userName.getText().toString()))) {
                     alertDialog.dismiss();
                     SharedPref.write(pref_USERLOGINNAME, userName.getText().toString());
+                    SharedPref.write(pref_USERLOGINROLE, userManagementDao.getRole(userName.getText().toString()));
+                    userType = SharedPref.read(pref_USERLOGINROLE, 0);
                     moveToConfig();
                 } else {
-                    mAppClass.showSnackBar(BaseActivity.this, "password is Incorrect");
+                    // mAppClass.showSnackBar(BaseActivity.this, "password is Incorrect");
+                    Snackbar.make(dialogView, "Password is Incorrect", Snackbar.LENGTH_LONG).show();
                 }
             }
         });
@@ -432,6 +458,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void moveToConfig() {
+        new EventLogDemo("0","-", "Menu accessed by " + SharedPref.read(pref_USERLOGINNAME,""),getApplicationContext());
         setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText,
                 navGraph, R.id.siteSetting, mNavController);
         expandedListView();
@@ -468,8 +495,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     public static void msDismissProgress() {
         msBinding.progressCircular.setVisibility(View.GONE);
-        msAppClass.showSnackBar(baseActivity, "Timed out try again !");
-        Log.e("TAG", "msDismissProgress: " );
+       // msAppClass.showSnackBar(baseActivity, "Timed out try again !");
         baseActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         canGoBack = true;
     }
@@ -489,7 +515,11 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onGroupClick(ExpandableListView expandableListView, View v, int groupPosition, long id) {
         expandableListView.setItemChecked(groupPosition, true);
         if (groupPosition == 2) {
-            setNavGraph(navGraph, R.id.homeScreen, mNavController);
+            if (userType == 3) {
+                setNavGraph(navGraph, R.id.homeScreen, mNavController);
+            } else {
+                mAppClass.showSnackBar(getApplicationContext(), "Access Denied");
+            }
         }
         return false;
     }
@@ -502,11 +532,15 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             case 0:
                 switch (pos1) {
                     case 0:
-                        setNavGraph(navGraph, R.id.siteSetting, mNavController);
+                        if (userType == 3) {
+                            setNavGraph(navGraph, R.id.siteSetting, mNavController);
+                        } else {
+                            showSnack("Access Denied");
+                        }
                         break;
 
                     case 1:
-                        setNavGraph(navGraph, R.id.configuration, mNavController);
+                        setNavGraph(navGraph, R.id.passwordSettings, mNavController);
                         //setNavGraph(navGraph, R.id.targetIpSetting, mNavController);
                         break;
                 }
@@ -631,7 +665,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public static void logOut() {
-        new MaterialAlertDialogBuilder(context, R.style.Theme_IonExchange)
+        new MaterialAlertDialogBuilder(context)
                 .setTitle("LOGOUT")
                 .setMessage("Are you sure, you want to Logout ?")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {

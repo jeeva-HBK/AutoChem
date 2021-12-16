@@ -20,12 +20,12 @@ import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.SharedPref;
-import com.ionexchange.databinding.FragmentUnitipsettingsBinding;
+import com.ionexchange.databinding.FragmentPasswordsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
 
 public class FragmentPasswordSetting_Config extends Fragment implements View.OnClickListener {
-    FragmentUnitipsettingsBinding mBinding;
+    FragmentPasswordsettingsBinding mBinding;
     ApplicationClass mAppclass;
     BaseActivity mActivity;
     WaterTreatmentDb db;
@@ -36,7 +36,7 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_unitipsettings, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_passwordsettings, container, false);
         return mBinding.getRoot();
     }
 

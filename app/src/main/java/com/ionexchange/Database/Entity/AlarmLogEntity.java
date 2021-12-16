@@ -24,13 +24,17 @@ public class AlarmLogEntity {
     @ColumnInfo(name = "date")
     public String date;
 
-    public AlarmLogEntity(int sNo, String hardwareNo, String sensorType, String alarmLog, String time, String date) {
+    @ColumnInfo(name = "lockOutAlarm")
+    public String lockOutAlarm;
+
+    public AlarmLogEntity(int sNo, String hardwareNo, String sensorType, String alarmLog, String time, String date, String lockOutAlarm) {
         this.sNo = sNo;
         this.hardwareNo = hardwareNo;
         this.sensorType = sensorType;
         this.alarmLog = alarmLog;
         this.time = time;
         this.date = date;
+        this.lockOutAlarm = lockOutAlarm;
     }
 
     public int getsNo() {
@@ -79,5 +83,13 @@ public class AlarmLogEntity {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getLockOutAlarm() {
+        return lockOutAlarm;
+    }
+
+    public void setLockOutAlarm(String lockOutAlarm) {
+        this.lockOutAlarm = lockOutAlarm;
     }
 }

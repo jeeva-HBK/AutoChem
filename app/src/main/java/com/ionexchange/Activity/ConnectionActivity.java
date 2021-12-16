@@ -1,6 +1,5 @@
 package com.ionexchange.Activity;
 
-import static com.ionexchange.Others.ApplicationClass.lastKeepAliveData;
 import static com.ionexchange.Others.ApplicationClass.triggerWebService;
 import static com.ionexchange.Singleton.SharedPref.pref_MACADDRESS;
 
@@ -13,8 +12,8 @@ import android.content.pm.PackageManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,15 +28,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.android.volley.Request;
-import com.android.volley.VolleyError;
 import com.ionexchange.Adapters.BluetoothListAdapter;
 import com.ionexchange.BLE.BluetoothConnectCallback;
 import com.ionexchange.BLE.BluetoothDataCallback;
 import com.ionexchange.BLE.BluetoothHelper;
 import com.ionexchange.BLE.BluetoothScannerCallback;
 import com.ionexchange.Interface.ItemClickListener;
-import com.ionexchange.Interface.VolleyCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.SharedPref;
@@ -164,7 +160,7 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
     }
 
     void init() {
-        mBinding.deviceMacAddress.setText(getBluetoothMacAddress());
+        mBinding.deviceMacAddress.setText(Settings.System.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID));
         preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         mBinding.btnScan.setAlpha(.5f);
         mBinding.btnScan.setEnabled(false);

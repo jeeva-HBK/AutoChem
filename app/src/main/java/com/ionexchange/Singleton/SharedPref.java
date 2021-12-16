@@ -13,6 +13,7 @@ public class SharedPref {
     public static final String pref_LOGGEDIN ="LOGGED_IN";
     public static final String pref_USERLOGINREQUIRED = "USER_LOGIN_REQUIRED";
     public static final String pref_USERLOGINNAME = "USER_LOGIN_NAME";
+    public static final String pref_USERLOGINROLE = "USER_LOGIN_ROLE";
 
     // Site Info
     public static final String pref_SITEID = "SITE_ID";

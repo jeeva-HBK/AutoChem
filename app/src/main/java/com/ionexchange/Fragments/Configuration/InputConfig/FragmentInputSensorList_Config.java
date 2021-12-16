@@ -207,7 +207,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
                     alertDialog.getWindow().setLayout(width, height);
 
                 } else {
-                    mAppClass.showSnackBar(getContext(), "Access Denied !");
+                    mAppClass.showSnackBar(getContext(), "Access Denied");
                 }
 
                 break;

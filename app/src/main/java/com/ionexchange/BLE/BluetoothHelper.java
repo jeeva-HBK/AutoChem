@@ -418,6 +418,7 @@ public class BluetoothHelper implements SerialListener {
     public void onSerialIoError(Exception e) {
         // reconnect();
         e.printStackTrace();
+        dataCallback.OnDataReceive("FailedToConnect");
     }
 
     @Override

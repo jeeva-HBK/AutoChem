@@ -19,7 +19,6 @@ public class MonitorBatteryLevel extends BroadcastReceiver implements DataReceiv
     ApplicationClass mAppClass;
     Context mContext;
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
         int level = intent.getIntExtra("level", 0);
@@ -35,12 +34,14 @@ public class MonitorBatteryLevel extends BroadcastReceiver implements DataReceiv
                         WRITE_PACKET + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + CHARGE_CONTROL_PACKET + SPILT_CHAR +
                         "1"
                 );
-            } else if (level > 98) {
-                mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
-                        WRITE_PACKET + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + CHARGE_CONTROL_PACKET + SPILT_CHAR +
-                        "0"
-                );
             }
+        }
+
+        if (level == 95 || level == 96) {
+            mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+                    WRITE_PACKET + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + CHARGE_CONTROL_PACKET + SPILT_CHAR +
+                    "0"
+            );
         }
 
     }

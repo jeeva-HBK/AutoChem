@@ -254,11 +254,11 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
     public void OnDataReceive(String data) {
         mActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
         } else if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
         } else if (data.equals("Timeout")) {
             mAppClass.showSnackBar(getContext(), "TimeOut");
         } else if (data != null) {

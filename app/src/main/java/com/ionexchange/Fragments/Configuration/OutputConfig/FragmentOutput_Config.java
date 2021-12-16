@@ -1,5 +1,29 @@
 package com.ionexchange.Fragments.Configuration.OutputConfig;
 
+import static com.ionexchange.Others.ApplicationClass.bleedRelay;
+import static com.ionexchange.Others.ApplicationClass.doseTypeArr;
+import static com.ionexchange.Others.ApplicationClass.flowMeterTypeArr;
+import static com.ionexchange.Others.ApplicationClass.flowMeters;
+import static com.ionexchange.Others.ApplicationClass.formDigits;
+import static com.ionexchange.Others.ApplicationClass.functionMode;
+import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
+import static com.ionexchange.Others.ApplicationClass.inputDAO;
+import static com.ionexchange.Others.ApplicationClass.interlockChannel;
+import static com.ionexchange.Others.ApplicationClass.modeAnalog;
+import static com.ionexchange.Others.ApplicationClass.modeInhibitor;
+import static com.ionexchange.Others.ApplicationClass.modeSensor;
+import static com.ionexchange.Others.ApplicationClass.resetFlowTotalArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.ApplicationClass.virtualDAO;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_OUTPUT_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
@@ -36,31 +60,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.ionexchange.Others.ApplicationClass.bleedRelay;
-import static com.ionexchange.Others.ApplicationClass.doseTypeArr;
-import static com.ionexchange.Others.ApplicationClass.flowMeterTypeArr;
-import static com.ionexchange.Others.ApplicationClass.flowMeters;
-import static com.ionexchange.Others.ApplicationClass.formDigits;
-import static com.ionexchange.Others.ApplicationClass.functionMode;
-import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
-import static com.ionexchange.Others.ApplicationClass.inputDAO;
-import static com.ionexchange.Others.ApplicationClass.interlockChannel;
-import static com.ionexchange.Others.ApplicationClass.modeAnalog;
-import static com.ionexchange.Others.ApplicationClass.modeInhibitor;
-import static com.ionexchange.Others.ApplicationClass.modeSensor;
-import static com.ionexchange.Others.ApplicationClass.resetFlowTotalArr;
-import static com.ionexchange.Others.ApplicationClass.userType;
-import static com.ionexchange.Others.ApplicationClass.virtualDAO;
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.PCK_OUTPUT_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentOutput_Config extends Fragment implements DataReceiveCallback {
     FragmentOutputConfigBinding mBinding;
@@ -882,7 +881,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     }
 
     private void initAdapter() {
-
         List<OutputConfigurationEntity> outputNameList = dao.getOutputHardWareNoConfigurationEntityList(1, 14);
         String[] outputNames = new String[14];
         if (!outputNameList.isEmpty()) {
@@ -917,11 +915,11 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     @Override
     public void OnDataReceive(String data) {
         if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
         } else if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(), "Failed to connect");
+            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
         } else if (data.equals("Timeout")) {
             mAppClass.showSnackBar(getContext(), "TimeOut");
         } else if (data != null) {
@@ -933,259 +931,263 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         if (splitData[1].equals(PCK_OUTPUT_CONFIG)) {
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
-                    mBinding.outputLabelOsEDT.setText(splitData[5]);
-                    if (outputSensorNo > 14) {
-                        mBinding.functionModeOs.setEnabled(false);
-                        //  if (splitData[4].equalsIgnoreCase("3")) {
-                        mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(1).toString());
-                        //   } else {
-                        //        mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
-                        //   }
-                    } else {
-                        mBinding.functionModeOs.setEnabled(true);
+                    try {
+
+                        mBinding.outputLabelOsEDT.setText(splitData[5]);
+                        if (outputSensorNo > 14) {
+                            mBinding.functionModeOs.setEnabled(false);
+                            //  if (splitData[4].equalsIgnoreCase("3")) {
+                            mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(1).toString());
+                            //   } else {
+                            //        mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
+                            //   }
+                        } else {
+                            mBinding.functionModeOs.setEnabled(true);
                             mBinding.funtionModeOsATXT.setText(splitData[4].equalsIgnoreCase("4") ? mBinding.funtionModeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[4]) - 1).toString() :
                                     mBinding.funtionModeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
-                        //mBinding.interLockChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(Integer.parseInt(splitData[6]) - 34).toString());
-                        if(!splitData[4].equals("0")) {
-                            int interlockChannelPos = Integer.parseInt(splitData[6]);
-                            int setInterlockChannelPos = interlockChannelPos;
-                            if (interlockChannelPos >= 34) {
-                                setInterlockChannelPos = interlockChannelPos - 34;
-                                mBinding.interLockChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(setInterlockChannelPos).toString());
-                            } else {
-                                setInterlockChannelPos = interlockChannelPos + 15;
-                                mBinding.interLockChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(setInterlockChannelPos).toString());
-                            }
-                            int activiateChannelPos = Integer.parseInt(splitData[7]);
-                            int setActiivateChannelPos = activiateChannelPos;
-                            if (activiateChannelPos >= 34) {
-                                setActiivateChannelPos = activiateChannelPos - 34;
-                                mBinding.activateChannelOsATXT.setText(mBinding.activateChannelOsATXT.getAdapter().getItem(setActiivateChannelPos).toString());
-                            } else {
-                                setActiivateChannelPos = activiateChannelPos + 15;
-                                mBinding.activateChannelOsATXT.setText(mBinding.activateChannelOsATXT.getAdapter().getItem(setActiivateChannelPos).toString());
+                            //mBinding.interLockChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(Integer.parseInt(splitData[6]) - 34).toString());
+                            if(!splitData[4].equals("0")) {
+                                int interlockChannelPos = Integer.parseInt(splitData[6]);
+                                int setInterlockChannelPos = interlockChannelPos;
+                                if (interlockChannelPos >= 34) {
+                                    setInterlockChannelPos = interlockChannelPos - 34;
+                                    mBinding.interLockChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(setInterlockChannelPos).toString());
+                                } else {
+                                    setInterlockChannelPos = interlockChannelPos + 15;
+                                    mBinding.interLockChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(setInterlockChannelPos).toString());
+                                }
+                                int activiateChannelPos = Integer.parseInt(splitData[7]);
+                                int setActiivateChannelPos = activiateChannelPos;
+                                if (activiateChannelPos >= 34) {
+                                    setActiivateChannelPos = activiateChannelPos - 34;
+                                    mBinding.activateChannelOsATXT.setText(mBinding.activateChannelOsATXT.getAdapter().getItem(setActiivateChannelPos).toString());
+                                } else {
+                                    setActiivateChannelPos = activiateChannelPos + 15;
+                                    mBinding.activateChannelOsATXT.setText(mBinding.activateChannelOsATXT.getAdapter().getItem(setActiivateChannelPos).toString());
+                                }
                             }
                         }
-                    }
-                    switch (splitData[4]) {
-                        case "0": // Disable
-                            enableDisabled();
-                            break;
-                        case "1": // Inhibitor
-                            enableInhibitorLayout();
-                            if (splitData[8].equals("0")) { // Continuious
-                                enableContinuous();
-                                mBinding.contFlowRateEdtOsc.setText(splitData[9].substring(0, 9));
-                                mBinding.contFlowRateDeciOsc.setText(splitData[9].substring(10, 12));
+                        switch (splitData[4]) {
+                            case "0": // Disable
+                                enableDisabled();
+                                break;
+                            case "1": // Inhibitor
+                                enableInhibitorLayout();
+                                if (splitData[8].equals("0")) { // Continuious
+                                    enableContinuous();
+                                    mBinding.contFlowRateEdtOsc.setText(splitData[9].substring(0, 9));
+                                    mBinding.contFlowRateDeciOsc.setText(splitData[9].substring(10, 12));
 
-                                mBinding.contDoseRateEdtOsc.setText(splitData[10].substring(0, 9));
-                                mBinding.contDoseRateDeciOsc.setText(splitData[10].substring(10, 12));
+                                    mBinding.contDoseRateEdtOsc.setText(splitData[10].substring(0, 9));
+                                    mBinding.contDoseRateDeciOsc.setText(splitData[10].substring(10, 12));
 
-                                mBinding.contDosePeriodEdtOsc.setText(splitData[11]);
+                                    mBinding.contDosePeriodEdtOsc.setText(splitData[11]);
 
-                            } else if (splitData[8].equals("1")) { // Bleed/Blow
-                                enableBleed();
-                                mBinding.bleedLinkBleedRelayAtxtOsc.setText(mBinding.bleedLinkBleedRelayAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[9]) - 1).toString());
+                                } else if (splitData[8].equals("1")) { // Bleed/Blow
+                                    enableBleed();
+                                    mBinding.bleedLinkBleedRelayAtxtOsc.setText(mBinding.bleedLinkBleedRelayAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[9]) - 1).toString());
 
-                                mBinding.bleedBleedFlowRateEdtOsc.setText(splitData[10].substring(0, 6));
-                                mBinding.bleedBleedFlowrateDeciOsc.setText(splitData[10].substring(7, 9));
+                                    mBinding.bleedBleedFlowRateEdtOsc.setText(splitData[10].substring(0, 6));
+                                    mBinding.bleedBleedFlowrateDeciOsc.setText(splitData[10].substring(7, 9));
 
-                                mBinding.bleedPumpFlowRateEdtOsc.setText(splitData[11].substring(0, 9));
-                                mBinding.bleedPumpFlowRateDeciOsc.setText(splitData[11].substring(10, 12));
+                                    mBinding.bleedPumpFlowRateEdtOsc.setText(splitData[11].substring(0, 9));
+                                    mBinding.bleedPumpFlowRateDeciOsc.setText(splitData[11].substring(10, 12));
 
-                                mBinding.bleedTargetPPMEdtOsc.setText(splitData[12].substring(0, 7));
-                                mBinding.bleedTargetPPMDeciOsc.setText(splitData[12].substring(8, 10));
+                                    mBinding.bleedTargetPPMEdtOsc.setText(splitData[12].substring(0, 7));
+                                    mBinding.bleedTargetPPMDeciOsc.setText(splitData[12].substring(8, 10));
 
-                                mBinding.bleedConcentrationEdtOsc.setText(splitData[13]);
+                                    mBinding.bleedConcentrationEdtOsc.setText(splitData[13]);
 
-                                mBinding.bleedSpecificGravityEdtOsc.setText(splitData[14].substring(0, 1));
-                                mBinding.bleedSpecificGravityDeciOsc.setText(splitData[14].substring(2, 5));
+                                    mBinding.bleedSpecificGravityEdtOsc.setText(splitData[14].substring(0, 1));
+                                    mBinding.bleedSpecificGravityDeciOsc.setText(splitData[14].substring(2, 5));
 
-                                mBinding.bleedLinkBleedRelayAtxtOsc.setAdapter(getAdapter(bleedArr));
+                                    mBinding.bleedLinkBleedRelayAtxtOsc.setAdapter(getAdapter(bleedArr));
 
-                            } else if (splitData[8].equals("2")) { // Water/Meter
-                                enableWater();
-                                mBinding.waterFlowMeterTypeAtxtOsc.setText(mBinding.waterFlowMeterTypeAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[9])).toString());
-                                mBinding.waterFlowMeterInputAtxtOsc.setText(mBinding.waterFlowMeterInputAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[10]) - 1).toString());
-                                mBinding.waterBleedRelayAtxtOsc.setText(mBinding.waterBleedRelayAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[11]) - 1).toString());
+                                } else if (splitData[8].equals("2")) { // Water/Meter
+                                    enableWater();
+                                    mBinding.waterFlowMeterTypeAtxtOsc.setText(mBinding.waterFlowMeterTypeAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[9])).toString());
+                                    mBinding.waterFlowMeterInputAtxtOsc.setText(mBinding.waterFlowMeterInputAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[10]) - 1).toString());
+                                    mBinding.waterBleedRelayAtxtOsc.setText(mBinding.waterBleedRelayAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[11]) - 1).toString());
 
-                                mBinding.waterPumpFlowRateEdtOsc.setText(splitData[12].substring(0, 9));
-                                mBinding.waterPumpFlowRateDeciOsc.setText(splitData[12].substring(10, 12));
+                                    mBinding.waterPumpFlowRateEdtOsc.setText(splitData[12].substring(0, 9));
+                                    mBinding.waterPumpFlowRateDeciOsc.setText(splitData[12].substring(10, 12));
 
-                                mBinding.waterTargetPPMEdtOsc.setText(splitData[13].substring(0, 7));
-                                mBinding.waterTargetPPMDeciOsc.setText(splitData[13].substring(8, 10));
+                                    mBinding.waterTargetPPMEdtOsc.setText(splitData[13].substring(0, 7));
+                                    mBinding.waterTargetPPMDeciOsc.setText(splitData[13].substring(8, 10));
 
-                                mBinding.waterConcentrationEdtOsc.setText(splitData[14]);
+                                    mBinding.waterConcentrationEdtOsc.setText(splitData[14]);
 
-                                mBinding.waterSpecificGravityEdtOsc.setText(splitData[15].substring(0, 1));
-                                mBinding.waterSpecificGravityDeciOsc.setText(splitData[15].substring(2, 5));
+                                    mBinding.waterSpecificGravityEdtOsc.setText(splitData[15].substring(0, 1));
+                                    mBinding.waterSpecificGravityDeciOsc.setText(splitData[15].substring(2, 5));
 
-                                mBinding.waterFlowMeterInputAtxtOsc.setAdapter(getAdapter(flowMeters));
-                                mBinding.waterBleedRelayAtxtOsc.setAdapter(getAdapter(bleedArr));
-                                mBinding.waterFlowMeterTypeAtxtOsc.setAdapter(getAdapter(flowMeterTypeArr));
-                            }
-                            break;
-                        case "2": // Sensor
-                            enableSensorLayout();
-                            if (splitData[9].equals("0")) { // On/Off
-                                enableOnOff();
-                                if(Integer.parseInt(splitData[8]) < 18){
-                                    mBinding.sensorLinkInputSensorAtxtOsc.setText(mBinding.sensorLinkInputSensorAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) - 1).toString());
-                                }else {
-                                    mBinding.sensorLinkInputSensorAtxtOsc.setText(mBinding.sensorLinkInputSensorAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) - 33).toString());
+                                    mBinding.waterFlowMeterInputAtxtOsc.setAdapter(getAdapter(flowMeters));
+                                    mBinding.waterBleedRelayAtxtOsc.setAdapter(getAdapter(bleedArr));
+                                    mBinding.waterFlowMeterTypeAtxtOsc.setAdapter(getAdapter(flowMeterTypeArr));
                                 }
-                                setMaxLength();
-                                if(inputType.equalsIgnoreCase("ORP") ||inputType.equalsIgnoreCase("Temperature")) {
-                                    mBinding.sensorSetpointvalueTBtn.setChecked((splitData[10].substring(0, 1)).equals("+"));
-                                    mBinding.sensorSetPointEdtOsc.setText(splitData[10].substring(1, sensorLength + 1));
-                                    mBinding.sensorSetPointDeciOsc.setText(splitData[10].substring(sensorLength + 2, sensorLength + 4));
-                                    mBinding.sensorSafetyMinTBtn.setChecked((splitData[16].substring(0, 1)).equals("+"));
-                                    mBinding.sensorSafetyMinEdtOsc.setText(splitData[16].substring(1, sensorLength + 1));
-                                    mBinding.sensorSafetyMinDeciOsc.setText(splitData[16].substring(sensorLength + 2, sensorLength + 4));
-                                    mBinding.sensorSafetyMaxTBtn.setChecked((splitData[15].substring(0, 1)).equals("+"));
-                                    mBinding.sensorSafetyMaxEdtOsc.setText(splitData[15].substring(1, sensorLength + 1));
-                                    mBinding.sensorSafetyMaxDeciOsc.setText(splitData[15].substring(sensorLength + 2, sensorLength + 4));
-                                }else{
-                                    mBinding.sensorSetPointEdtOsc.setText(splitData[10].substring(0, sensorLength));
-                                    mBinding.sensorSetPointDeciOsc.setText(splitData[10].substring(sensorLength+1, sensorLength+3));
-                                    mBinding.sensorSafetyMinEdtOsc.setText(splitData[16].substring(0, sensorLength));
-                                    mBinding.sensorSafetyMinDeciOsc.setText(splitData[16].substring(sensorLength+1, sensorLength+3));
-                                    mBinding.sensorSafetyMaxEdtOsc.setText(splitData[15].substring(0, sensorLength));
-                                    mBinding.sensorSafetyMaxDeciOsc.setText(splitData[15].substring(sensorLength+1, sensorLength+3));
+                                break;
+                            case "2": // Sensor
+                                enableSensorLayout();
+                                if (splitData[9].equals("0")) { // On/Off
+                                    enableOnOff();
+                                    if(Integer.parseInt(splitData[8]) < 18){
+                                        mBinding.sensorLinkInputSensorAtxtOsc.setText(mBinding.sensorLinkInputSensorAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) - 1).toString());
+                                    }else {
+                                        mBinding.sensorLinkInputSensorAtxtOsc.setText(mBinding.sensorLinkInputSensorAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) - 33).toString());
+                                    }
+                                    setMaxLength();
+                                    if(inputType.equalsIgnoreCase("ORP") ||inputType.equalsIgnoreCase("Temperature")) {
+                                        mBinding.sensorSetpointvalueTBtn.setChecked((splitData[10].substring(0, 1)).equals("+"));
+                                        mBinding.sensorSetPointEdtOsc.setText(splitData[10].substring(1, sensorLength + 1));
+                                        mBinding.sensorSetPointDeciOsc.setText(splitData[10].substring(sensorLength + 2, sensorLength + 4));
+                                        mBinding.sensorSafetyMinTBtn.setChecked((splitData[16].substring(0, 1)).equals("+"));
+                                        mBinding.sensorSafetyMinEdtOsc.setText(splitData[16].substring(1, sensorLength + 1));
+                                        mBinding.sensorSafetyMinDeciOsc.setText(splitData[16].substring(sensorLength + 2, sensorLength + 4));
+                                        mBinding.sensorSafetyMaxTBtn.setChecked((splitData[15].substring(0, 1)).equals("+"));
+                                        mBinding.sensorSafetyMaxEdtOsc.setText(splitData[15].substring(1, sensorLength + 1));
+                                        mBinding.sensorSafetyMaxDeciOsc.setText(splitData[15].substring(sensorLength + 2, sensorLength + 4));
+                                    }else{
+                                        mBinding.sensorSetPointEdtOsc.setText(splitData[10].substring(0, sensorLength));
+                                        mBinding.sensorSetPointDeciOsc.setText(splitData[10].substring(sensorLength+1, sensorLength+3));
+                                        mBinding.sensorSafetyMinEdtOsc.setText(splitData[16].substring(0, sensorLength));
+                                        mBinding.sensorSafetyMinDeciOsc.setText(splitData[16].substring(sensorLength+1, sensorLength+3));
+                                        mBinding.sensorSafetyMaxEdtOsc.setText(splitData[15].substring(0, sensorLength));
+                                        mBinding.sensorSafetyMaxDeciOsc.setText(splitData[15].substring(sensorLength+1, sensorLength+3));
+                                    }
+                                    mBinding.sensorDoseTypeAtxtOsc.setText(mBinding.sensorDoseTypeAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[11])).toString());
+                                    mBinding.sensorHysteresisEdtOsc.setText(splitData[12]);
+                                    mBinding.sensorDutyCycleEdtOsc.setText(splitData[13]);
+                                    mBinding.sensorLockoutTimeDelayEdtOsc.setText(splitData[14]);
+                                    mBinding.sensorDoseTypeAtxtOsc.setAdapter(getAdapter(doseTypeArr));
+                                    mBinding.sensorLinkInputSensorAtxtOsc.setAdapter(getAdapter(sensorInputArr));
+                                } else if (splitData[9].equals("1")) { // PID
+                                    enablePID();
+                                    mBinding.pidLinkInputAtxtOsc.setText(mBinding.pidLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) -1).toString());
+                                    setMaxLengthPID();
+                                    if(inputType.equalsIgnoreCase("ORP") ||inputType.equalsIgnoreCase("Temperature")) {
+                                        mBinding.pidSetpointvalueTBtn.setChecked((splitData[10].substring(0, 1)).equals("+"));
+                                        mBinding.pidSetPointEdtOsc.setText(splitData[10].substring(1, sensorLength + 1));
+                                        mBinding.pidSetPointDeciOsc.setText(splitData[10].substring(sensorLength + 2, sensorLength + 4));
+
+                                        mBinding.pidInputMinvalueTBtn.setChecked((splitData[18].substring(0, 1)).equals("+"));
+                                        mBinding.pidInputMinEdtOsc.setText(splitData[18].substring(1, sensorLength + 1));
+                                        mBinding.pidInputMinDeciOsc.setText(splitData[18].substring(sensorLength + 2, sensorLength + 4));
+
+                                        mBinding.pidInputMaxvalueTBtn.setChecked((splitData[19].substring(0, 1)).equals("+"));
+                                        mBinding.pidInputMaxEdtOsc.setText(splitData[19].substring(1, sensorLength + 1));
+                                        mBinding.pidInputMaxDeciOsc.setText(splitData[19].substring(sensorLength + 2, sensorLength + 4));
+
+                                        mBinding.pidSafetyMaxvalueTBtn.setChecked((splitData[21].substring(0, 1)).equals("+"));
+                                        mBinding.pidSafetyMaxEdtOsc.setText(splitData[21].substring(1, sensorLength + 1));
+                                        mBinding.pidSafetyMaxDeciOsc.setText(splitData[21].substring(sensorLength + 2, sensorLength + 4));
+
+                                        mBinding.pidSafetyMinvalueTBtn.setChecked((splitData[22].substring(0, 1)).equals("+"));
+                                        mBinding.pidSafetyMinEdtOsc.setText(splitData[22].substring(1, sensorLength + 1));
+                                        mBinding.pidSafetyMinDeciOsc.setText(splitData[22].substring(sensorLength + 2, sensorLength + 4));
+                                    } else {
+                                        mBinding.pidSetPointEdtOsc.setText(splitData[10].substring(0, sensorLength));
+                                        mBinding.pidSetPointDeciOsc.setText(splitData[10].substring(sensorLength + 1, sensorLength + 3));
+
+                                        mBinding.pidInputMinEdtOsc.setText(splitData[18].substring(0, sensorLength));
+                                        mBinding.pidInputMinDeciOsc.setText(splitData[18].substring(sensorLength + 1, sensorLength + 3));
+
+                                        mBinding.pidInputMaxEdtOsc.setText(splitData[19].substring(0, sensorLength));
+                                        mBinding.pidInputMaxDeciOsc.setText(splitData[19].substring(sensorLength + 1, sensorLength + 3));
+
+                                        mBinding.pidSafetyMaxEdtOsc.setText(splitData[21].substring(0, sensorLength));
+                                        mBinding.pidSafetyMaxDeciOsc.setText(splitData[21].substring(sensorLength+1, sensorLength+3));
+
+                                        mBinding.pidSafetyMinEdtOsc.setText(splitData[22].substring(0, sensorLength));
+                                        mBinding.pidSafetyMinDeciOsc.setText(splitData[22].substring(sensorLength+1, sensorLength+3));
+                                    }
+
+                                    mBinding.pidGainEdtOsc.setText(splitData[11].substring(0, 4));
+                                    mBinding.pidGainDeciOsc.setText(splitData[11].substring(5, 8));
+
+                                    mBinding.pidIntegeralTimeEdtOsc.setText(splitData[12].substring(0, 4));
+                                    mBinding.pidIntegeralTimeDeciOsc.setText(splitData[12].substring(5, 8));
+
+                                    mBinding.pidDerivativeTimeEdtOsc.setText(splitData[13].substring(0, 4));
+                                    mBinding.pidDerivativeTimeDeciOsc.setText(splitData[13].substring(5, 8));
+
+                                    mBinding.pidResetPidAtxtOsc.setText(mBinding.pidResetPidAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[14])).toString());
+                                    mBinding.pidMinOutputEdtOsc.setText(splitData[15]);
+                                    mBinding.pidMaxOutputEdtOsc.setText(splitData[16]);
+                                    mBinding.pidDoseTypeAtxtOsc.setText(mBinding.pidDoseTypeAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[17])).toString());
+                                    //mBinding.pidInputMinEdtOsc.setText(splitData[18]);
+                                    //mBinding.pidInputMaxEdtOsc.setText(splitData[19]);
+                                    mBinding.pidLockoutDelayEdtOsc.setText(splitData[20]);
+                                    //mBinding.pidSafetyMaxEdtOsc.setText(splitData[21]);
+                                    //mBinding.pidSafetyMinEdtOsc.setText(splitData[22]);
+
+                                    mBinding.pidDoseTypeAtxtOsc.setAdapter(getAdapter(doseTypeArr));
+                                    mBinding.pidLinkInputAtxtOsc.setAdapter(getAdapter(sensorInputArr));
+
+                                    mBinding.pidResetPidAtxtOsc.setAdapter(getAdapter(resetFlowTotalArr));
+                                } else if (splitData[9].equals("2")) {
+                                    enableFuzzy();
+                                    // FIXME: 05-08-2021 Still Development
                                 }
-                                mBinding.sensorDoseTypeAtxtOsc.setText(mBinding.sensorDoseTypeAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[11])).toString());
-                                mBinding.sensorHysteresisEdtOsc.setText(splitData[12]);
-                                mBinding.sensorDutyCycleEdtOsc.setText(splitData[13]);
-                                mBinding.sensorLockoutTimeDelayEdtOsc.setText(splitData[14]);
-                                mBinding.sensorDoseTypeAtxtOsc.setAdapter(getAdapter(doseTypeArr));
-                                mBinding.sensorLinkInputSensorAtxtOsc.setAdapter(getAdapter(sensorInputArr));
-                            } else if (splitData[9].equals("1")) { // PID
-                                enablePID();
-                                mBinding.pidLinkInputAtxtOsc.setText(mBinding.pidLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) -1).toString());
-                                setMaxLengthPID();
-                                if(inputType.equalsIgnoreCase("ORP") ||inputType.equalsIgnoreCase("Temperature")) {
-                                    mBinding.pidSetpointvalueTBtn.setChecked((splitData[10].substring(0, 1)).equals("+"));
-                                    mBinding.pidSetPointEdtOsc.setText(splitData[10].substring(1, sensorLength + 1));
-                                    mBinding.pidSetPointDeciOsc.setText(splitData[10].substring(sensorLength + 2, sensorLength + 4));
+                                break;
 
-                                    mBinding.pidInputMinvalueTBtn.setChecked((splitData[18].substring(0, 1)).equals("+"));
-                                    mBinding.pidInputMinEdtOsc.setText(splitData[18].substring(1, sensorLength + 1));
-                                    mBinding.pidInputMinDeciOsc.setText(splitData[18].substring(sensorLength + 2, sensorLength + 4));
-
-                                    mBinding.pidInputMaxvalueTBtn.setChecked((splitData[19].substring(0, 1)).equals("+"));
-                                    mBinding.pidInputMaxEdtOsc.setText(splitData[19].substring(1, sensorLength + 1));
-                                    mBinding.pidInputMaxDeciOsc.setText(splitData[19].substring(sensorLength + 2, sensorLength + 4));
-
-                                    mBinding.pidSafetyMaxvalueTBtn.setChecked((splitData[21].substring(0, 1)).equals("+"));
-                                    mBinding.pidSafetyMaxEdtOsc.setText(splitData[21].substring(1, sensorLength + 1));
-                                    mBinding.pidSafetyMaxDeciOsc.setText(splitData[21].substring(sensorLength + 2, sensorLength + 4));
-
-                                    mBinding.pidSafetyMinvalueTBtn.setChecked((splitData[22].substring(0, 1)).equals("+"));
-                                    mBinding.pidSafetyMinEdtOsc.setText(splitData[22].substring(1, sensorLength + 1));
-                                    mBinding.pidSafetyMinDeciOsc.setText(splitData[22].substring(sensorLength + 2, sensorLength + 4));
-                                } else {
-                                    mBinding.pidSetPointEdtOsc.setText(splitData[10].substring(0, sensorLength));
-                                    mBinding.pidSetPointDeciOsc.setText(splitData[10].substring(sensorLength + 1, sensorLength + 3));
-
-                                    mBinding.pidInputMinEdtOsc.setText(splitData[18].substring(0, sensorLength));
-                                    mBinding.pidInputMinDeciOsc.setText(splitData[18].substring(sensorLength + 1, sensorLength + 3));
-
-                                    mBinding.pidInputMaxEdtOsc.setText(splitData[19].substring(0, sensorLength));
-                                    mBinding.pidInputMaxDeciOsc.setText(splitData[19].substring(sensorLength + 1, sensorLength + 3));
-
-                                    mBinding.pidSafetyMaxEdtOsc.setText(splitData[21].substring(0, sensorLength));
-                                    mBinding.pidSafetyMaxDeciOsc.setText(splitData[21].substring(sensorLength+1, sensorLength+3));
-
-                                    mBinding.pidSafetyMinEdtOsc.setText(splitData[22].substring(0, sensorLength));
-                                    mBinding.pidSafetyMinDeciOsc.setText(splitData[22].substring(sensorLength+1, sensorLength+3));
-                                }
-
-                                mBinding.pidGainEdtOsc.setText(splitData[11].substring(0, 4));
-                                mBinding.pidGainDeciOsc.setText(splitData[11].substring(5, 8));
-
-                                mBinding.pidIntegeralTimeEdtOsc.setText(splitData[12].substring(0, 4));
-                                mBinding.pidIntegeralTimeDeciOsc.setText(splitData[12].substring(5, 8));
-
-                                mBinding.pidDerivativeTimeEdtOsc.setText(splitData[13].substring(0, 4));
-                                mBinding.pidDerivativeTimeDeciOsc.setText(splitData[13].substring(5, 8));
-
-                                mBinding.pidResetPidAtxtOsc.setText(mBinding.pidResetPidAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[14])).toString());
-                                mBinding.pidMinOutputEdtOsc.setText(splitData[15]);
-                                mBinding.pidMaxOutputEdtOsc.setText(splitData[16]);
-                                mBinding.pidDoseTypeAtxtOsc.setText(mBinding.pidDoseTypeAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[17])).toString());
-                                //mBinding.pidInputMinEdtOsc.setText(splitData[18]);
-                                //mBinding.pidInputMaxEdtOsc.setText(splitData[19]);
-                                mBinding.pidLockoutDelayEdtOsc.setText(splitData[20]);
-                                //mBinding.pidSafetyMaxEdtOsc.setText(splitData[21]);
-                                //mBinding.pidSafetyMinEdtOsc.setText(splitData[22]);
-
-                                mBinding.pidDoseTypeAtxtOsc.setAdapter(getAdapter(doseTypeArr));
-                                mBinding.pidLinkInputAtxtOsc.setAdapter(getAdapter(sensorInputArr));
-
-                                mBinding.pidResetPidAtxtOsc.setAdapter(getAdapter(resetFlowTotalArr));
-                            } else if (splitData[9].equals("2")) {
-                                enableFuzzy();
-                                // FIXME: 05-08-2021 Still Development
-                            }
-                            break;
-
-                        case "3": // Analog
-                            enableAnalogLayout();
-                            if (splitData[6].equals("0")) {
-                                enableAnalogDisable();
-                            } else if (splitData[6].equals("2")) {
-                                enableAnalogTest();
+                            case "3": // Analog
+                                enableAnalogLayout();
+                                if (splitData[6].equals("0")) {
+                                    enableAnalogDisable();
+                                } else if (splitData[6].equals("2")) {
+                                    enableAnalogTest();
                                 /* if(Integer.parseInt(splitData[7]) < 18) {
                                     mBinding.testLinkInputRelayEdtOsc.setText(mBinding.testLinkInputRelayEdtOsc.getAdapter().getItem(Integer.parseInt(splitData[7]) - 1).toString());
                                 }else{
                                     mBinding.testLinkInputRelayEdtOsc.setText(mBinding.testLinkInputRelayEdtOsc.getAdapter().getItem(Integer.parseInt(splitData[7]) - 33).toString());
                                 } */
-                                mBinding.analogFixedValueEdtOsc.setText(splitData[7].substring(0, 2));
-                                mBinding.analogFixedValueDeciOsc.setText(splitData[7].substring(3, 5));
-                               // mBinding.testLinkInputRelayEdtOsc.setAdapter(getAdapter(sensorInputArr));
-                            } else {
-                                enableAnalogMain();
-                                mBinding.modeOsATXT.setText(mBinding.modeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
-                                String gethardwareNo = splitData[7].substring(1,3);
-                                if(splitData[7].startsWith("I")) {
-                                    if (Integer.parseInt(gethardwareNo) < 18) {
-                                        mBinding.analogLinkInputAtxtOsc.setText(mBinding.analogLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(gethardwareNo) - 1).toString());
-                                    } else {
-                                        mBinding.analogLinkInputAtxtOsc.setText(mBinding.analogLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(gethardwareNo) - 33).toString());
-                                    }
-                                }else{
-                                    mBinding.analogLinkInputAtxtOsc.setText(mBinding.analogLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(gethardwareNo) + 24).toString());
-                                }
-                                mBinding.analogMinMaEdtOsc.setText(splitData[8].substring(0, 2));
-                                mBinding.analogMinMaDeciOsc.setText(splitData[8].substring(3, 5));
-
-                                mBinding.analogMaxMaEdtOsc.setText(splitData[9].substring(0, 2));
-                                mBinding.analogMaxMaDeciOsc.setText(splitData[9].substring(3, 5));
-                                setMaxLengthAnalog();
-                                if(inputType.equalsIgnoreCase("ORP") ||inputType.equalsIgnoreCase("Temperature")) {
-                                    mBinding.analogMinValueTBtn.setChecked((splitData[10].substring(0, 1)).equals("+"));
-                                    mBinding.analogMinValueEdtOsc.setText(splitData[10].substring(1, sensorLength + 1));
-                                    mBinding.analogMinValueDeciOsc.setText(splitData[10].substring(sensorLength + 2, sensorLength + 4));
-
-                                    mBinding.analogMaxValueTBtn.setChecked((splitData[11].substring(0, 1)).equals("+"));
-                                    mBinding.analogMaxValueEdtOsc.setText(splitData[11].substring(1, sensorLength + 1));
-                                    mBinding.analogMaxValueDeciOsc.setText(splitData[11].substring(sensorLength + 2, sensorLength + 4));
+                                    mBinding.analogFixedValueEdtOsc.setText(splitData[7].substring(0, 2));
+                                    mBinding.analogFixedValueDeciOsc.setText(splitData[7].substring(3, 5));
+                                    // mBinding.testLinkInputRelayEdtOsc.setAdapter(getAdapter(sensorInputArr));
                                 } else {
-                                    mBinding.analogMinValueEdtOsc.setText(splitData[10].substring(0, sensorLength));
-                                    mBinding.analogMinValueDeciOsc.setText(splitData[10].substring(sensorLength + 1, sensorLength + 3));
+                                    enableAnalogMain();
+                                    mBinding.modeOsATXT.setText(mBinding.modeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
+                                    String gethardwareNo = splitData[7].substring(1,3);
+                                    if(splitData[7].startsWith("I")) {
+                                        if (Integer.parseInt(gethardwareNo) < 18) {
+                                            mBinding.analogLinkInputAtxtOsc.setText(mBinding.analogLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(gethardwareNo) - 1).toString());
+                                        } else {
+                                            mBinding.analogLinkInputAtxtOsc.setText(mBinding.analogLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(gethardwareNo) - 33).toString());
+                                        }
+                                    }else{
+                                        mBinding.analogLinkInputAtxtOsc.setText(mBinding.analogLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(gethardwareNo) + 24).toString());
+                                    }
+                                    mBinding.analogMinMaEdtOsc.setText(splitData[8].substring(0, 2));
+                                    mBinding.analogMinMaDeciOsc.setText(splitData[8].substring(3, 5));
 
-                                    mBinding.analogMaxValueEdtOsc.setText(splitData[11].substring(0, sensorLength));
-                                    mBinding.analogMaxValueDeciOsc.setText(splitData[11].substring(sensorLength + 1, sensorLength + 3));
+                                    mBinding.analogMaxMaEdtOsc.setText(splitData[9].substring(0, 2));
+                                    mBinding.analogMaxMaDeciOsc.setText(splitData[9].substring(3, 5));
+                                    setMaxLengthAnalog();
+                                    if(inputType.equalsIgnoreCase("ORP") ||inputType.equalsIgnoreCase("Temperature")) {
+                                        mBinding.analogMinValueTBtn.setChecked((splitData[10].substring(0, 1)).equals("+"));
+                                        mBinding.analogMinValueEdtOsc.setText(splitData[10].substring(1, sensorLength + 1));
+                                        mBinding.analogMinValueDeciOsc.setText(splitData[10].substring(sensorLength + 2, sensorLength + 4));
+
+                                        mBinding.analogMaxValueTBtn.setChecked((splitData[11].substring(0, 1)).equals("+"));
+                                        mBinding.analogMaxValueEdtOsc.setText(splitData[11].substring(1, sensorLength + 1));
+                                        mBinding.analogMaxValueDeciOsc.setText(splitData[11].substring(sensorLength + 2, sensorLength + 4));
+                                    } else {
+                                        mBinding.analogMinValueEdtOsc.setText(splitData[10].substring(0, sensorLength));
+                                        mBinding.analogMinValueDeciOsc.setText(splitData[10].substring(sensorLength + 1, sensorLength + 3));
+
+                                        mBinding.analogMaxValueEdtOsc.setText(splitData[11].substring(0, sensorLength));
+                                        mBinding.analogMaxValueDeciOsc.setText(splitData[11].substring(sensorLength + 1, sensorLength + 3));
+                                    }
+                                    mBinding.analogLinkInputAtxtOsc.setAdapter(getAdapter(sensorInputArr));
                                 }
-                                mBinding.analogLinkInputAtxtOsc.setAdapter(getAdapter(sensorInputArr));
-                            }
-                            mBinding.modeOsATXT.setAdapter(getAdapter(modeAnalog));
-                            break;
-                        case "4"://Manual
-                            enableManual();
-                            break;
-                    }
-                    initAdapter();
+                                mBinding.modeOsATXT.setAdapter(getAdapter(modeAnalog));
+                                break;
+                            case "4"://Manual
+                                enableManual();
+                                break;
+                        }
+                        initAdapter();
+
+                    }catch (Exception e){ e.printStackTrace(); }
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.readFailed));
                 }

@@ -8,13 +8,17 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
@@ -76,6 +80,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -91,8 +96,7 @@ public class ApplicationClass extends Application {
     private static final String API = "API";
     private static final String API1 = "SERVER";
 
-    public static int userType = 3; // 0 - None | 1 - Basic | 2 - intermediate | 3 - Advanced
-   public static String defaultPassword = "12345";
+    public static String defaultPassword = "12345";
     public static String[] sensorActivationArr = {"ENABLE", "DISABLE"},
             roleType = {"None", "Basic", "Intermediate", "Advanced"},
             sensorTypeArr = {"Sensor", "Temperature", "Modbus", "Analog Input", "Flow/Water Meter",
@@ -161,11 +165,11 @@ public class ApplicationClass extends Application {
             outputStatusarr = {"Disabled", "Auto OFF", "Auto ON", "Manual OFF", "Manual ON", "Force OFF", "Force ON", "Manual ON for", "Analog Output"},
             outputControl = {"Disabled", "Auto", "Force OFF", "Force ON", "Manual ON for"},
     // outputControlShortForm = {"â’¹", "A OFF", "A ON", "M OFF", "M ON", "F OFF", "F ON", "M ON for"};
-    outputControlShortForm = {"D", "A", "FÌ¶", "F", "M for"},
-    eventLogArr={"Unit IP setting changed",
-            "Target IP settings changed", "General settings changed", "Input Setting Changed",
-            "Output Settings Changed", "Timer settings changed",
-            "Menu Access BY Admin", "Menu Access BY Engineer", "Menu Access BY User 1", "Menu Access BY User 2"},
+    outputControlShortForm = {"D", "A", "F̶", "F", "M for"},
+
+    eventLogArr={"General settings changed", "Input Setting Changed",
+            "Output Setting Changed", "Timer setting changed"},
+
     alarmArr = {"Low Alarm" ,"High Alarm", "Safety Low Alarm" ,
            "Safety High Alarm", "Calibration Required Alarm" ,"Totalizer Alarm",
             "DI Alarm" ,"Flow Verify Alarm", "Lockout Alarm"},
@@ -191,6 +195,7 @@ public class ApplicationClass extends Application {
     public static KeepAliveCurrentValueDao keepaliveDAO;
     // WebService
     private static final int httpRequestTimeout = 3000;
+    public static int userType = 0;
     public static RequestQueue requestQueue;
     public final static String baseURL = "http://192.168.1.82/WaterIOT.API/api/";
     //public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
@@ -233,7 +238,6 @@ public class ApplicationClass extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         init();
         triggerWebService.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
@@ -261,7 +265,6 @@ public class ApplicationClass extends Application {
                     e.printStackTrace();
                 }
                 registerReceiver();*/
-
                 registerBatteryReceiver();
             }
 
@@ -523,6 +526,7 @@ public class ApplicationClass extends Application {
         BaseActivity.showSnack(message);
     }
 
+
     public static Boolean isValidIp(String ip) {
         Matcher matcher = IP_ADDRESS.matcher(ip);
         return matcher.matches();
@@ -686,9 +690,9 @@ public class ApplicationClass extends Application {
         userManagementDao = DB.userManagementDao();
         if (userManagementDao.getUsermanagementEntity().isEmpty()) {
             List<UsermanagementEntity> entryListUpdate = new ArrayList<>();
-
-            UsermanagementEntity adminEntityUpdate = new UsermanagementEntity("TU0001", "admin", "admin", "12345", "0000000000", "0");
-            UsermanagementEntity userEntityUpdate = new UsermanagementEntity("TU0002", "user", "user", "12345", "0000000000", "0");
+            /* 0 - NONE | 1 - BASIC | 2 - INTERMEDIATE | 3 -ADVANCED   */
+            UsermanagementEntity adminEntityUpdate = new UsermanagementEntity("TU0001", "admin", 3, "12345", "0000000000", "0");
+            UsermanagementEntity userEntityUpdate = new UsermanagementEntity("TU0002", "user", 2, "12345", "0000000000", "0");
 
             entryListUpdate.add(adminEntityUpdate);
             entryListUpdate.add(userEntityUpdate);
@@ -888,5 +892,8 @@ public class ApplicationClass extends Application {
 
         }
     }
+
+
+
 
 }

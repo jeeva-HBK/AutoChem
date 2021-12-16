@@ -262,8 +262,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
             if(analogType == 1){
                 analog_type = "(0 - 10V)";
             }
-            mBinding.analogSequenceNumberTie.setText(mBinding.analogSequenceNumberTie.getAdapter().
-                    getItem(Integer.parseInt(sequenceNo)).toString() + " "+analog_type);
+            mBinding.analogSequenceNumberTie.setText(mBinding.analogSequenceNumberTie.getAdapter().getItem(Integer.parseInt(sequenceNo)).toString() + " "+analog_type);
             mBinding.analogDeleteLayoutIsc.setVisibility(View.GONE);
             mBinding.analogSaveTxtIsc.setText("ADD");
         }

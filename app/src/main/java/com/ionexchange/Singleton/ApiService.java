@@ -107,7 +107,7 @@ public class ApiService {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
     }
 
@@ -141,7 +141,7 @@ public class ApiService {
             for (int i = 0; i < userArr.length(); i++) {
                 JSONObject tempUser = userArr.getJSONObject(i);
                 userList.add(new UsermanagementEntity(tempUser.getString("USERID"), tempUser.getString("USERNAME"),
-                        tempUser.getString("ROLE"), tempUser.getString("PASSWORD"), tempUser.getString("CONTACT"), tempUser.getString("LOGINSTATUS")));
+                        tempUser.getInt("ROLE"), tempUser.getString("PASSWORD"), tempUser.getString("CONTACT"), tempUser.getString("LOGINSTATUS")));
             }
             UserManagementDao dao = DB.userManagementDao();
             dao.insert(userList.toArray(new UsermanagementEntity[0]));

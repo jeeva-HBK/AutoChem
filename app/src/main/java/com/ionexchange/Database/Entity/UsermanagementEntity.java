@@ -15,7 +15,7 @@ public class UsermanagementEntity {
     public String userName;
 
     @ColumnInfo(name = "user_role")
-    public String userRole;
+    public int userRole;
 
     @ColumnInfo(name = "user_password")
     public String userPassword;
@@ -27,7 +27,7 @@ public class UsermanagementEntity {
     public String loginStatus;
 
 
-    public UsermanagementEntity(String userId, String userName, String userRole, String userPassword, String contact, String loginStatus) {
+    public UsermanagementEntity(@NonNull String userId, String userName, int userRole, String userPassword, String contact, String loginStatus) {
         this.userId = userId;
         this.userName = userName;
         this.userRole = userRole;
@@ -36,11 +36,13 @@ public class UsermanagementEntity {
         this.loginStatus = loginStatus;
     }
 
+
+    @NonNull
     public String getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(@NonNull String userId) {
         this.userId = userId;
     }
 
@@ -52,11 +54,11 @@ public class UsermanagementEntity {
         this.userName = userName;
     }
 
-    public String getUserRole() {
+    public int getUserRole() {
         return userRole;
     }
 
-    public void setUserRole(String userRole) {
+    public void setUserRole(int userRole) {
         this.userRole = userRole;
     }
 
