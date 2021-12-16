@@ -1,5 +1,6 @@
 package com.ionexchange.BLE;
 
+import static com.ionexchange.Activity.BaseActivity.msDismissProgress;
 import static com.ionexchange.Others.ApplicationClass.lastKeepAliveData;
 import static com.ionexchange.Others.PacketControl.ENDPACKET;
 import static com.ionexchange.Others.PacketControl.STARTPACKET;
@@ -16,7 +17,6 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 
-import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Singleton.KeepAlive;
@@ -289,24 +289,24 @@ public class BluetoothHelper implements SerialListener {
         socket.connect(context, this, device);
     }
 
+
     public void sendDataBLE(DataReceiveCallback callback, String data) throws Exception {
+
         data = STARTPACKET + data + ENDPACKET;
         this.dataCallback = callback;
         SerialSocket socket = SerialSocket.getInstance();
         dataReceived = false;
         socket.write(this, data.getBytes());
 
-        Log.e(TAG1, " --> " + data);
-        Log.e(TAG, " --> sent");
-
+        Log.e("Config --> ", data);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (!dataReceived) {
-                    callback.OnDataReceive("Timeout");
+                    msDismissProgress();
                 }
             }
-        }, 10000);
+        }, 7000);
     }
 
     public DataReceiveCallback getDataCallback() {
@@ -368,8 +368,6 @@ public class BluetoothHelper implements SerialListener {
             @Override
             public void run() {
                 dataBuilder.append(data);
-
-                Log.e(TAG, " <-- received");
                 if (dataBuilder.toString().contains(STARTPACKET) && dataBuilder.toString().contains(ENDPACKET)) {
                     /*indexOfSplit = dataBuilder.indexOf(END_CHAR);
                     String framedData = dataBuilder.toString().substring(0, indexOfSplit + (END_CHAR.length()));
@@ -396,18 +394,19 @@ public class BluetoothHelper implements SerialListener {
                     String excessData = dataBuilder.toString().substring(indexOfSplit + (END_CHAR.length()));
                     dataBuilder.setLength(0);
                     dataBuilder.append(excessData);*/
-                    dataReceived = true;
+
                     String mData = data;
                         String[] splitData = mData.split("\\*")[1].split("\\$");
                         if (splitData[0].equals("0")) { // ConfigurationPackets
                             String configPacket = "{*" + mData.substring(4);
-                            Log.e(TAG1 + "| config <-", configPacket);
+                            dataReceived = true;
+                            Log.e("Config <-", configPacket);
                             if (dataCallback != null) {
                                 dataCallback.OnDataReceive(configPacket);
                             }
                         } else if (splitData[0].equals("1")) { // KeepAlivePackets
                             lastKeepAliveData = "{*" + mData.substring(4);
-                            Log.e(TAG1 + "| keepAlive <-", lastKeepAliveData);
+                            Log.e("keepAlive <-", lastKeepAliveData);
                             KeepAlive.getInstance().processKeepAlive(lastKeepAliveData, ApplicationClass.mContext);
                         }
                     }
@@ -417,13 +416,14 @@ public class BluetoothHelper implements SerialListener {
 
     @Override
     public void onSerialIoError(Exception e) {
+        // reconnect();
         e.printStackTrace();
     }
 
     @Override
     public void onDisconnected() {
         isConnected = false;
-        BaseActivity.logOut();
+        //  BaseActivity.logOut();
         Log.e(TAG, "onDisconnected: ");
     }
 

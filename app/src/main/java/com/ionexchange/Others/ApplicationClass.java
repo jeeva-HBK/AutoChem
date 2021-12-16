@@ -169,7 +169,7 @@ public class ApplicationClass extends Application {
     alarmArr = {"Low Alarm" ,"High Alarm", "Safety Low Alarm" ,
            "Safety High Alarm", "Calibration Required Alarm" ,"Totalizer Alarm",
             "DI Alarm" ,"Flow Verify Alarm", "Lockout Alarm"},
-    analogOutput = {"Analog-1","Analog-2","Analog-3","Analog-4","Analog-5","Analog-6","Analog-7", "Analog-8"};
+    FlowanalogType = {"Analog - 1","Analog - 2","Analog - 3","Analog - 4","Analog - 5","Analog - 6","Analog - 7", "Analog - 8"};
 
 
 
@@ -361,8 +361,7 @@ public class ApplicationClass extends Application {
             @Override
             public void onResponse(JSONObject response) {
                 callBack.OnSuccess(response);
-                Log.e(API1, " <-- " + response);
-                Log.e(API, " <-- recevied success");
+                //Log.e(API1, " <-- " + response);
             }
         };
 
@@ -370,17 +369,13 @@ public class ApplicationClass extends Application {
             @Override
             public void onErrorResponse(VolleyError error) {
                 callBack.OnFailure(error);
-                Log.e(API, " <-- recevied error");
-                Log.e(API1, " <-- recevied error");
             }
         };
 
         JsonObjectRequest request = new JsonObjectRequest(method, URL, object, responseListener, volleyErrorListener);
 
         request.setRetryPolicy(new DefaultRetryPolicy(httpRequestTimeout, 0, 1.0f));
-        Log.e(API1, " --> " + new String(request.getBody()));
-        Log.e(API, " --> sent");
-
+        // Log.e(API1, " --> " + new String(request.getBody()));
         requestQueue.add(request);
 
     }

@@ -72,37 +72,39 @@ public class KeepAlive {
             Acknowledge = STARTPACKET + SPILT_CHAR + CRC + SPILT_CHAR + "007" + SPILT_CHAR + INPUT_VOLTAGE + SPILT_CHAR + ACK + SPILT_CHAR + ENDPACKET;
             int i = 0;
             int j;
-            if (data[3].equals("5")) {
+           /* if (data[3].equals("5")) {
                 j = 7;
             } else {
                 j = 10;
-            }
-            while (i < j) {
-                if (data[i + 4].length() > 2) {
-                    if (Integer.parseInt(data[i + 4].substring(0, 2)) > 33 && Integer.parseInt(data[i + 4].substring(0, 2)) < 50) { // DIGITAL & TANK
-                        if (data[i + 4].substring(2, data[i + 4].length()).equals("1")) {
-                            keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 4].substring(0, 2)), "OPEN");
-                        } else if (data[i + 4].substring(2, data[i + 4].length()).equals("2")) {
-                            keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 4].substring(0, 2)), "CLOSE");
+            }*/
+            while (i < 57) {
+                if (data[i + 3].length() > 2) {
+                    if (Integer.parseInt(data[i + 3].substring(0, 2)) > 33 && Integer.parseInt(data[i + 3].substring(0, 2)) < 50) { // DIGITAL & TANK
+                        if (data[i + 3].substring(2, data[i + 3].length()).equals("1")) {
+                            keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), "OPEN");
+                        } else if (data[i + 3].substring(2, data[i + 3].length()).equals("2")) {
+                            keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), "CLOSE");
                         }
                     } else {
-                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 4].substring(0, 2)), data[i + 4].substring(2, data[i + 4].length()));
+                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), data[i + 3].substring(2, data[i + 3].length()));
                     }
                 } else {
-                    keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 4].substring(0, 2)), "N/A");
+                    keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), "N/A");
                 }
                 i++;
             }
         }
         if (data[2].equals(OUTPUT_STATUS)) {
             int i = 0;
-            while (i <= 21) {
-                if (data[3 + i].length() <= 1) {
-                    outputKeepAliveDao.updateOutputStatus(i + 1, data[3 + i]);
+            while (i < 25) {
+                if(i < 3){
+
                 }
-                if (data[3 + i].length() > 1) {
-                    outputKeepAliveDao.updateOutputStatus(i + 1, data[3 + i].substring(0, 1));
-                    outputKeepAliveDao.updateOutputRelayStatus(i + 1, data[3 + i].substring(1));
+                else if (i < 17) {
+                    outputKeepAliveDao.updateOutputStatus(i - 2, data[i]);
+                } else  {
+                    outputKeepAliveDao.updateOutputStatus(i - 2 , data[i].substring(0, 1));
+                    outputKeepAliveDao.updateOutputRelayStatus(i - 2 , data[i].substring(1));
                 }
                 i++;
             }

@@ -14,8 +14,8 @@ import androidx.fragment.app.Fragment;
 import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Adapters.ExpandableListAdapter;
 import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentCommonSettings_Config;
+import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentPasswordSetting_Config;
 import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentTargetIpSettings_Config;
-import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentUnitIpSettings_Config;
 import com.ionexchange.Fragments.Configuration.HomeScreen.FragmentHomeScreen_Config;
 import com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorList_Config;
 import com.ionexchange.Fragments.Configuration.OutputConfig.FragmentOutputSettings_Config;
@@ -62,7 +62,7 @@ public class FragmentRoot_Config extends Fragment implements ExpandableListView.
         headerList = new ArrayList<>();
 
         generaList.add("- Unit Settings");
-        generaList.add("- Target IP Settings");
+        // generaList.add("- Target IP Settings");
         generaList.add("- Site Settings");
 
         ioList.add("- Input Settings");
@@ -90,7 +90,8 @@ public class FragmentRoot_Config extends Fragment implements ExpandableListView.
         mBinding.expList.expandGroup(0);
         onGroupClick(mBinding.expList, null, 0, 0);
 
-        mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentUnitIpSettings_Config());
+        //  mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentUnitIpSettings_Config());
+        //  mAppClass.castFrag(getParentFragmentManager(), R.id.configRootHost, new FragmentCommonSettings_Config());
     }
 
     void cast(Fragment fragment) {
@@ -123,7 +124,7 @@ public class FragmentRoot_Config extends Fragment implements ExpandableListView.
             case 0:
                 switch (pos1) {
                     case 0:
-                        cast(new FragmentUnitIpSettings_Config());
+                        cast(new FragmentPasswordSetting_Config());
                         break;
                     case 1:
                         cast(new FragmentTargetIpSettings_Config());

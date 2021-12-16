@@ -1,10 +1,10 @@
 package com.ionexchange.Adapters;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,7 +45,16 @@ public class VirtualSensorIndexRvAdapter extends RecyclerView.Adapter<VirtualSen
         holder.label.setText(virtualConfigurationEntityList.get(position).inputLabel);
         holder.low.setText(virtualConfigurationEntityList.get(position).subValueOne);
         holder.high.setText(virtualConfigurationEntityList.get(position).subValueTwo);
-        holder.tv.setText(holder.tv.getText() + " " + (position + 1));
+        holder.tv.setText("Virtual Sensor "+(position + 1));
+        holder.currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(virtualConfigurationEntityList.get(position).hardwareNo));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            holder.hardwareNo.setTooltipText(virtualConfigurationEntityList.get(position).hardwareNo+"");
+            holder.currentValue.setTooltipText(keepAliveCurrentValueDao.getCurrentValue(virtualConfigurationEntityList.get(position).hardwareNo));
+            holder.label.setTooltipText(virtualConfigurationEntityList.get(position).inputLabel);
+            holder.low.setTooltipText(virtualConfigurationEntityList.get(position).subValueOne);
+            holder.high.setTooltipText(virtualConfigurationEntityList.get(position).subValueTwo);
+        }
     }
 
     @Override
@@ -54,7 +63,7 @@ public class VirtualSensorIndexRvAdapter extends RecyclerView.Adapter<VirtualSen
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv, label, low, high, hardwareNo;
+        TextView tv, label, low, high, hardwareNo,currentValue;
         View view;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
@@ -65,11 +74,12 @@ public class VirtualSensorIndexRvAdapter extends RecyclerView.Adapter<VirtualSen
             low = itemView.findViewById(R.id.low_alarm_value);
             high = itemView.findViewById(R.id.high_alarm_value);
             hardwareNo = itemView.findViewById(R.id.input_hardware_no);
+            currentValue = itemView.findViewById(R.id.current_value);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    rvOnClick.onClick(Integer.parseInt(hardwareNo.getText().toString()));
+                    rvOnClick.onClick(getAdapterPosition() + 50);
                 }
             });
         }

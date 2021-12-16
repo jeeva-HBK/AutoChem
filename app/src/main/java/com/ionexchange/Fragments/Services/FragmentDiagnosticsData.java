@@ -101,8 +101,6 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     }
 
     private void setDiagnosticsDb(String hardwareNo, String diagData, String timeStamp) {
-
-
         if (dao.getDiagnosticDataList() != null) {
             DiagnosticDataEntity diagnosticDataEntity =
                     new DiagnosticDataEntity(dao.getLastSno() + 1, Integer.parseInt(hardwareNo), diagData, timeStamp);
@@ -189,7 +187,7 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
                             baseActivity.dismissProgress();
                             break;
                     }
-                    setAdapter(diagnosticDataEntityList);
+                    setAdapter(dao.getDiagnosticDataList());
                 }
             }
         } else {

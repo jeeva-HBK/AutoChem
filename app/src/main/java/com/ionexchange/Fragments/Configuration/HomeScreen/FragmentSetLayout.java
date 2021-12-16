@@ -312,7 +312,6 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
 
                 fragment.show(getChildFragmentManager(), null);
                 break;
-
         }
 
 

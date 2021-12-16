@@ -235,7 +235,7 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
         } else if (data.equals("Timeout")) {
             mAppClass.showSnackBar(getContext(), "TimeOut");
         } else if (data != null) {
-            handleResponce(data.split("\\*")[1].split("\\$"));
+          //  handleResponce(data.split("\\*")[1].split("\\$")); todo -> SHOULD UNCOMMENT
         }
     }
 

@@ -99,7 +99,7 @@ public class OutputControlRvAdapter extends RecyclerView.Adapter<OutputControlRv
         holder.outputControl.setOnDismissListener(new AutoCompleteTextView.OnDismissListener() {
             @Override
             public void onDismiss() {
-                FragmentOutputControl.canReceive = true;
+                FragmentOutputControl.canReceive = (!holder.outputControl.getText().toString().equals("Manual ON for"));
             }
         });
 

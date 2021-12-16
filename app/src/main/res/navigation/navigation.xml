@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/configuration"
-        android:name="com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentUnitIpSettings_Config"
+        android:name="com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentPasswordSetting_Config"
         android:label="unitIp"
         tools:layout="@layout/fragment_unitipsettings" />
 

@@ -24,6 +24,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,7 +71,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     ActivityBaseBinding mBinding;
     private static final int PERMISSION_REQUEST_CODE = 2296;
     private static final String TAG = "BaseActivity";
-    boolean canGoBack;
+    public static boolean canGoBack;
     AppBarConfiguration mAppBarConfiguration;
     NavController mNavController;
     NavGraph navGraph;
@@ -88,6 +89,11 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     WaterTreatmentDb db;
     UserManagementDao userManagementDao;
 
+    static ActivityBaseBinding msBinding;
+    static Context msContext;
+    static BaseActivity baseActivity;
+    static ApplicationClass msAppClass;
+
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -95,11 +101,16 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_base);
         mAppClass = (ApplicationClass) getApplication();
+        msAppClass = (ApplicationClass) getApplication();
+        msContext = getApplicationContext();
+        msContext = getApplicationContext();
         context = getApplicationContext();
         db = WaterTreatmentDb.getDatabase(getApplicationContext());
         userManagementDao = db.userManagementDao();
         //startService(new Intent(this, TcpServer.class).setAction(TcpServer.START_SERVER));
         expandedListView();
+        baseActivity = this;
+        msBinding = mBinding;
         checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 101);
         ComponentName admin = new ComponentName(this, AdminReceiver.class);
         Intent intent = new Intent(
@@ -180,9 +191,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         homescreenList = new ArrayList<>();
         headerList = new ArrayList<>();
 
-        generaList.add("- Password Settings");
-        generaList.add("- Target IP Settings");
         generaList.add("- Site Settings");
+        generaList.add("- Password Settings");
+       // generaList.add("- Target IP Settings");
 
         ioList.add("- Input Settings");
         ioList.add("- Output Settings");
@@ -422,7 +433,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     private void moveToConfig() {
         setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText,
-                navGraph, R.id.configuration, mNavController);
+                navGraph, R.id.siteSetting, mNavController);
         expandedListView();
         mBinding.view.setVisibility(View.VISIBLE);
         SharedPref.write(pref_USERLOGINREQUIRED, false);
@@ -455,6 +466,13 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         canGoBack = true;
     }
 
+    public static void msDismissProgress() {
+        msBinding.progressCircular.setVisibility(View.GONE);
+        msAppClass.showSnackBar(baseActivity, "Timed out try again !");
+        Log.e("TAG", "msDismissProgress: " );
+        baseActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        canGoBack = true;
+    }
     @Override
     public void onBackPressed() {
     }
@@ -484,13 +502,12 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             case 0:
                 switch (pos1) {
                     case 0:
-                        setNavGraph(navGraph, R.id.configuration, mNavController);
-                        break;
-                    case 1:
-                        setNavGraph(navGraph, R.id.targetIpSetting, mNavController);
-                        break;
-                    case 2:
                         setNavGraph(navGraph, R.id.siteSetting, mNavController);
+                        break;
+
+                    case 1:
+                        setNavGraph(navGraph, R.id.configuration, mNavController);
+                        //setNavGraph(navGraph, R.id.targetIpSetting, mNavController);
                         break;
                 }
                 break;

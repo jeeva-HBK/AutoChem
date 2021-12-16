@@ -24,7 +24,7 @@ import com.ionexchange.databinding.FragmentUnitipsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FragmentUnitIpSettings_Config extends Fragment implements View.OnClickListener {
+public class FragmentPasswordSetting_Config extends Fragment implements View.OnClickListener {
     FragmentUnitipsettingsBinding mBinding;
     ApplicationClass mAppclass;
     BaseActivity mActivity;

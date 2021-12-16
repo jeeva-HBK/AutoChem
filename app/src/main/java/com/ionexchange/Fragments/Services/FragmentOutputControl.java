@@ -119,7 +119,14 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
                 Hours = formDigits(2, String.valueOf(materialTimePicker.getHour())) +
                         formDigits(2, String.valueOf(materialTimePicker.getMinute())) + "00";
                 sendData(outputNumber, outputControl);
-
+                canReceive = true;
+            }
+        });
+        materialTimePicker.addOnNegativeButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                materialTimePicker.dismiss();
+                canReceive = true;
             }
         });
         materialTimePicker.show(getParentFragmentManager(), "fragment_tag");

@@ -9,11 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.ionexchange.Adapters.VirtualSensorIndexRvAdapter;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
+import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 import com.ionexchange.Database.Entity.MainConfigurationEntity;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
@@ -57,6 +59,12 @@ public class FragmentVirtualSensorList_Config extends Fragment implements RvOnCl
 
         mBinding.viRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mBinding.viRv.setAdapter(new VirtualSensorIndexRvAdapter(this, virtualConfigurationEntityList,keepAliveCurrentValueDao));
+        keepAliveCurrentValueDao.getLiveList().observe(getViewLifecycleOwner(), new Observer<List<KeepAliveCurrentEntity>>() {
+            @Override
+            public void onChanged(List<KeepAliveCurrentEntity> keepAliveCurrentEntities) {
+                mBinding.viRv.getAdapter().notifyDataSetChanged();
+            }
+        });
     }
 
     @Override

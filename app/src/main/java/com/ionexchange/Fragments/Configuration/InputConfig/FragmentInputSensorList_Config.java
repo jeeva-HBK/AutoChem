@@ -124,6 +124,15 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        mBinding.leftArrowIsBtn.setVisibility(currentPage <= 0 ? View.GONE : View.VISIBLE);
+        mBinding.rightArrowIsBtn.setVisibility(dao.getInputConfigurationEntityFlagKeyList
+                (1, 9, pageOffset + 9).isEmpty() ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addsensor_is_btn:

@@ -34,7 +34,6 @@ public class FragmentSetHomeScreen extends Fragment implements RadioGroup.OnChec
     DefaultLayoutConfigurationDao dao;
     int enableScreenNo = 0, screenNo = 0;
 
-
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override

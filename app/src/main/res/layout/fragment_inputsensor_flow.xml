@@ -872,8 +872,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-            <!--Analog typ-->
+            <!--Analog_type-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/flow_analog_seq_root_isc"
                 android:layout_width="0dp"
@@ -883,7 +882,7 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/flow_analog_seq_til_isc"
+                    android:id="@+id/flow_analog_type_isc"
                     style="@style/config_AtxTil_zero"
                     android:layout_weight="1.5"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -892,21 +891,14 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <AutoCompleteTextView
-                        android:id="@+id/flow_analog_seq_edt_isc"
-                        style="@style/config_Edt"
-                        android:hint="Analog Type"
-                        android:imeOptions="actionNext"
-                        android:enabled="false"
-                        android:clickable="false"
-                        android:focusable="false"
-                        android:inputType="number"
-                        android:maxLength="7" />
+                        android:id="@+id/flow_analog_type_atxt"
+                        style="@style/config_Atxt"
+                        android:hint="Analog Type" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         </LinearLayout>
 

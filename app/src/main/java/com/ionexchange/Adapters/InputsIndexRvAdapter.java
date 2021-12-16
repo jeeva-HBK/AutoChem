@@ -34,7 +34,6 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
         this.rvOnClick = rvOnClick;
         this.inputConfigurationEntityList = inputConfigurationEntityList;
         this.keepAliveCurrentValueDao = keepAliveCurrentValueDao;
-
     }
 
     @NonNull
@@ -54,7 +53,9 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
         holder.highAlarm.setText(inputConfigurationEntityList.get(position).subValueTwo);
 
         holder.currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(inputConfigurationEntityList.get(position).hardwareNo));
-        if(inputConfigurationEntityList.get(position).inputType.equalsIgnoreCase("Digital Input")){
+        holder.lowAlarmKey.setText("Low Alarm");
+        holder.highAlarmKey.setText("High Alarm");
+        if(inputConfigurationEntityList.get(position).inputType.equalsIgnoreCase("Digital Input")) {
         holder.lowAlarmKey.setText("Open Message");
         holder.highAlarmKey.setText("Close Message");
         }

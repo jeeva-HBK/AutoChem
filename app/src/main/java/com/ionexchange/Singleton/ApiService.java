@@ -81,7 +81,7 @@ public class ApiService {
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
         }
         responseTabId = 0;
         responseTabData = "";
@@ -118,7 +118,7 @@ public class ApiService {
         try {
             responseTabData = getInputSensorConfig(dataObj.getString("INPUT_NO"));
         } catch (JSONException e) {
-            e.printStackTrace();
+        //    e.printStackTrace();
         }
     }
 
@@ -148,7 +148,7 @@ public class ApiService {
             responseTabId = 02;
             responseTabData = "{*1200$007$01$01PH$02ORP$03Contacting conductivity$04Toroidal conductivity$05ST500(Fluorescence)$06ST500(Turbidity)$07CR-300 CS(Corrosion)$08CR-300 CS(Pitting)$09CR-300 CU(Corrosion)$10CR-300 CU(Pitting)$11ST-590$12ST-588(Fluorescence)$13ST-588(Tagged Polymer)$14ST-500 RO$15Temperature$16Temperature$17Temperature$18Analog4-20mA1$19Analog4-20mA2$20Analog4-20mA3$21Analog4-20mA4$22Analog4-20mA5$23Analog4-20mA6$24Analog0-10V1$25Analog0-10V2$26AnalogFlow Meters2$27AnalogFlow Meters3$28AnalogFlow Meters4$29AnalogFlow Meters5$30DigitalFlow Meters1$31DigitalFlow Meters2$32DigitalFlow Meters3$33DigitalFlow Meters4$34DigitalSensor1$35DigitalSensor2$36DigitalSensor3$37DigitalSensor4$38DigitalSensor5$39DigitalSensor6$40DigitalSensor7$41DigitalSensor8$42TankSensor1$43TankSensor2$44TankSensor3$45TankSensor4$46TankSensor5$47TankSensor6$48TankSensor7$49TankSensor8$50VirtualSensors1$51VirtualSensors2$52VirtualSensors3$53VirtualSensors4$54VirtualSensors5$55VirtualSensors6$56VirtualSensors7$57VirtualSensors8*}";
         } catch (JSONException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
     }
 
@@ -162,7 +162,7 @@ public class ApiService {
             responseTabId = 03;
             responseTabData = "ACK";
         } catch (JSONException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
             responseTabData = "NACK";
         }
     }
@@ -188,7 +188,7 @@ public class ApiService {
 
             finalObject.put("DATAS", dataObject);
         } catch (JSONException e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
         }
         return finalObject;
     }
@@ -208,7 +208,7 @@ public class ApiService {
 
             return responseObj;
         } catch (JSONException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
         return null;
     }

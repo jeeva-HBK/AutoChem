@@ -143,7 +143,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                        TextView currentValue, TextView unitOne, TextView typeOne, TextView currentMode, TextView lowKey, TextView highKey, int position, int layout) {
 
         if (mainConfigurationEntityList.get(position).inputType != null) {
-            if (mainConfigurationEntityList.get(position).inputType.contains("Output")) {
+            if (mainConfigurationEntityList.get(position).inputType.toUpperCase().contains("OUTPUT")) {
                 String outputmode = "", outputLabel="", highAlarm = "";
 
                 currentMode.setText("Output Status");
@@ -306,6 +306,10 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 highKey.setText("High Alarm");
                 unitOne.setVisibility(View.VISIBLE);
                 typeOne.setVisibility(View.VISIBLE);
+                lowKey.setVisibility(View.VISIBLE);
+                highKey.setVisibility(View.VISIBLE);
+                lowAlarmOne.setVisibility(View.VISIBLE);
+                highAlarmOne.setVisibility(View.VISIBLE);
                 if (mainConfigurationEntityList.get(position).inputType.contains("Digital Input")) {
                     /*lowKey.setText("Open\nMessage");
                     highKey.setText("Close\nMessage");
@@ -393,17 +397,17 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                        TextView currentKeyOne, TextView currentKeyTwo, TextView currentKeyThree) {
 
 
-        if (mainConfigurationEntityList.get(0).inputType.contains("Output")) {
+        if (mainConfigurationEntityList.get(0).inputType.toUpperCase().contains("OUTPUT")) {
             setthreefourthLayoutOutput(lowKeyOne,lowAlarmOne,
                     sensorLabelOne,highAlarmOne,0,currentValueOne,seqOne,
                     hardwareNoOne,highKeyOne,currentKeyOne,unitOne,typeOne);
         }
-        if (mainConfigurationEntityList.get(1).inputType.contains("Output")) {
+        if (mainConfigurationEntityList.get(1).inputType.toUpperCase().contains("OUTPUT")) {
             setthreefourthLayoutOutput(lowKeyTwo,lowAlarmTwo,
                     sensorLabelTwo,highAlarmTwo,1,currentValueTwo,seqTwo,
                     hardwareNoTwo,highKeyTwo,currentKeyTwo,uniTwo,typeTwo);
         }
-        if (mainConfigurationEntityList.get(2).inputType.contains("Output")) {
+        if (mainConfigurationEntityList.get(2).inputType.toUpperCase().contains("OUTPUT")) {
             setthreefourthLayoutOutput(lowKeyThree,lowAlarmThree,
                     sensorLabelThree,highAlarmThree,2,currentValueThree,
                     seqThree,hardwareNoThree,highKeyThree,currentKeyThree,uniThree,typeThree);
