@@ -17,6 +17,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 
+import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Singleton.KeepAlive;
@@ -183,6 +184,7 @@ public class BluetoothHelper implements SerialListener {
                                     mConnectStatus = ConnectStatus.NOTCONNECTED;
                                     mConnectionListener.start();
                                 }
+
                             }
                         }, mConnectPacket);
 
@@ -423,8 +425,9 @@ public class BluetoothHelper implements SerialListener {
 
     @Override
     public void onDisconnected() {
+        if(isConnected)
+            BaseActivity.kickOut();
         isConnected = false;
-        //  BaseActivity.logOut();
         Log.e(TAG, "onDisconnected: ");
     }
 

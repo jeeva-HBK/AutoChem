@@ -212,6 +212,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
         if (spiltData[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
             if (spiltData[0].equals(READ_PACKET)) {
                 if (spiltData[2].equals(RES_SUCCESS)) {
+                    try {
                     mBinding.candInputNumberEdtIsc.setText(spiltData[3]);
                     mBinding.candSensorTypeAtxtIsc.setText(mBinding.candSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[4])).toString());
                     mBinding.candSeqNumberAtxtIsc.setText(mBinding.candSeqNumberAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[5])).toString());
@@ -261,6 +262,9 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                         mBinding.candResetCalibAtxtIsc.setText(mBinding.candResetCalibAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[16])).toString());
                     }
                     initAdapters();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                 } else if (spiltData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }

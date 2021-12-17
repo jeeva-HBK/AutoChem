@@ -3,7 +3,6 @@ package com.ionexchange.Activity;
 import static android.os.Build.VERSION.SDK_INT;
 import static com.ionexchange.Others.ApplicationClass.DB;
 import static com.ionexchange.Others.ApplicationClass.defaultPassword;
-import static com.ionexchange.Others.ApplicationClass.userManagementDao;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Singleton.SharedPref.pref_LOGGEDIN;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINNAME;
@@ -26,7 +25,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +43,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.Observable;
+import androidx.databinding.ObservableBoolean;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
@@ -102,6 +102,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     AlarmLogDao alarmLogDao;
 
 
+
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +148,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             mBinding.notficationTxt.setText(alarmLogDao.getLockAlarmSize("Lockout Alarm", "1").size() + "");
         }
 
-       // mBinding.notficationTxt.setText();
+        // mBinding.notficationTxt.setText();
     }
 
     void inactiveHandler() {
@@ -211,7 +212,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
         generaList.add("- Site Settings");
         generaList.add("- Password Settings");
-       // generaList.add("- Target IP Settings");
+        // generaList.add("- Target IP Settings");
 
         ioList.add("- Input Settings");
         ioList.add("- Output Settings");
@@ -351,7 +352,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
         TextView dialog_timeout_txt = dialogView.findViewById(R.id.dialog_timeout_txt);
-        CountDownTimer CountDownTimer = new CountDownTimer(5000, 1000) {
+        CountDownTimer CountDownTimer = new CountDownTimer(30000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 dialog_timeout_txt.setText(millisUntilFinished / 1000 + "");
@@ -389,7 +390,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 if (userName.getText().toString().equals("")) {
-                   // mAppClass.showSnackBar(BaseActivity.this, "Username should be empty");
+                    // mAppClass.showSnackBar(BaseActivity.this, "Username should be empty");
                     Snackbar.make(dialogView, "Username should not be empty", Snackbar.LENGTH_LONG).show();
                     return;
                 }
@@ -495,10 +496,11 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     public static void msDismissProgress() {
         msBinding.progressCircular.setVisibility(View.GONE);
-       // msAppClass.showSnackBar(baseActivity, "Timed out try again !");
+        // msAppClass.showSnackBar(baseActivity, "Timed out try again !");
         baseActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         canGoBack = true;
     }
+
     @Override
     public void onBackPressed() {
     }
@@ -687,4 +689,30 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             }
         }).show();
     }
+
+    public static void kickOut() {
+        baseActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new MaterialAlertDialogBuilder(context)
+                        .setTitle("Bluetooth Disconnected")
+                        .setMessage("Please try to reconnect the bluetooth")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                SharedPref.write(pref_LOGGEDIN, false);
+                                SharedPref.write(pref_USERLOGINREQUIRED, true);
+                                PackageManager packageManager = context.getPackageManager();
+                                Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+                                ComponentName componentName = intent.getComponent();
+                                Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+                                context.startActivity(mainIntent);
+                                Runtime.getRuntime().exit(0);
+                            }
+                        }).show();
+            }
+        });
+
+    }
 }
+

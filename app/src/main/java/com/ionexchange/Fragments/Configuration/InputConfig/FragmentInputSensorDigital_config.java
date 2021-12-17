@@ -185,22 +185,26 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
         if (data[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
             if (data[0].equals(READ_PACKET)) {
                 if (data[2].equals(RES_SUCCESS)) {
-                    mBinding.digitalInputNumberTie.setText(data[3]);
-                    mBinding.digitalInputSensorTypeTie.setText(mBinding.digitalInputSensorTypeTie.getAdapter().getItem(Integer.parseInt(data[4])).toString());
-                    mBinding.digitalLevelSequenceNumberTie.setText(mBinding.digitalLevelSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[5])).toString());
-                    mBinding.digitalInputSensorSensorActivationTie.setText(mBinding.digitalInputSensorSensorActivationTie.getAdapter().getItem(Integer.parseInt(data[6])).toString());
-                    sensorSequence = data[5];
-                    mBinding.digitalInputSensorLabelTie.setText(data[7]);
-                    mBinding.digitalInputSensorOpenMessageTie.setText(data[8]);
-                    mBinding.digitalInputSensorCloseMessageTie.setText(data[9]);
-                    mBinding.digitalInputSensorInnerLockAct.setText(mBinding.digitalInputSensorInnerLockAct.getAdapter().getItem(Integer.parseInt(data[10])).toString());
-                    mBinding.digitalInputSensorActivateAct.setText(mBinding.digitalInputSensorActivateAct.getAdapter().getItem(Integer.parseInt(data[11])).toString());
-                    mBinding.digitalInputSensorAlarmAct.setText(mBinding.digitalInputSensorAlarmAct.getAdapter().getItem(Integer.parseInt(data[12])).toString());
+                    try {
+                        mBinding.digitalInputNumberTie.setText(data[3]);
+                        mBinding.digitalInputSensorTypeTie.setText(mBinding.digitalInputSensorTypeTie.getAdapter().getItem(Integer.parseInt(data[4])).toString());
+                        mBinding.digitalLevelSequenceNumberTie.setText(mBinding.digitalLevelSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[5])).toString());
+                        mBinding.digitalInputSensorSensorActivationTie.setText(mBinding.digitalInputSensorSensorActivationTie.getAdapter().getItem(Integer.parseInt(data[6])).toString());
+                        sensorSequence = data[5];
+                        mBinding.digitalInputSensorLabelTie.setText(data[7]);
+                        mBinding.digitalInputSensorOpenMessageTie.setText(data[8]);
+                        mBinding.digitalInputSensorCloseMessageTie.setText(data[9]);
+                        mBinding.digitalInputSensorInnerLockAct.setText(mBinding.digitalInputSensorInnerLockAct.getAdapter().getItem(Integer.parseInt(data[10])).toString());
+                        mBinding.digitalInputSensorActivateAct.setText(mBinding.digitalInputSensorActivateAct.getAdapter().getItem(Integer.parseInt(data[11])).toString());
+                        mBinding.digitalInputSensorAlarmAct.setText(mBinding.digitalInputSensorAlarmAct.getAdapter().getItem(Integer.parseInt(data[12])).toString());
 
-                    mBinding.digitalInputSensorTotalTimeTie.setText(mBinding.digitalInputSensorTotalTimeTie.getAdapter().getItem(Integer.parseInt(data[13])).toString());
-                    mBinding.digitalInputSensorResetTimeAct.setText(mBinding.digitalInputSensorResetTimeAct.getAdapter().getItem(Integer.parseInt(data[14])).toString());
+                        mBinding.digitalInputSensorTotalTimeTie.setText(mBinding.digitalInputSensorTotalTimeTie.getAdapter().getItem(Integer.parseInt(data[13])).toString());
+                        mBinding.digitalInputSensorResetTimeAct.setText(mBinding.digitalInputSensorResetTimeAct.getAdapter().getItem(Integer.parseInt(data[14])).toString());
 
-                    initAdapter();
+                        initAdapter();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                 } else if (data[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }

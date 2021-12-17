@@ -73,12 +73,48 @@ public class FragmentEventLog extends Fragment {
 
             }
         });
+        mBinding.edtFormDate.setOnClickListener(View -> {
+            MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.datePicker();
+            materialDateBuilder.setTitleText("SELECT A DATE");
+            final MaterialDatePicker materialDatePicker = materialDateBuilder.build();
+            materialDatePicker.show(getChildFragmentManager(), "MATERIAL_DATE_PICKER");
+            materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+                @Override
+                public void onPositiveButtonClick(Object selection) {
+                    String startDate = DateFormat.format("dd/MM/yyyy", new Date(materialDatePicker.getHeaderText())).toString();
+                    mBinding.edtFormDate.setText(startDate);
+                }
+            });
+        });
+        mBinding.alertsType.setAdapter(getAdapter(eventLogArr, getContext()));
+        mBinding.alertsType.setOnClickListener(v -> {
+            mBinding.alertsType.showDropDown();
+        });
+
         mBinding.edtToDate.setOnClickListener(View -> {
-            mBinding.edtToDate.showDropDown();
+            MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.datePicker();
+            materialDateBuilder.setTitleText("SELECT A DATE");
+            final MaterialDatePicker materialDatePicker = materialDateBuilder.build();
+            materialDatePicker.show(getChildFragmentManager(), "MATERIAL_DATE_PICKER");
+            materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+                @Override
+                public void onPositiveButtonClick(Object selection) {
+                    String endDate = DateFormat.format("dd/MM/yyyy", new Date(materialDatePicker.getHeaderText())).toString();
+                    mBinding.edtToDate.setText(endDate);
+                    if (!mBinding.edtFormDate.getText().toString().isEmpty()) {
+                        String[] splitStartDate = mBinding.edtFormDate.getText().toString().split("/");
+                        String[] splitEndDate = mBinding.edtToDate.getText().toString().split("/");
+                        String startDate = splitStartDate[0] + splitEndDate[1] + splitStartDate[2];
+                        String FinalDate = splitEndDate[0] + splitEndDate[1] + splitEndDate[2];
+                        if (Integer.parseInt(FinalDate) < Integer.parseInt(startDate)) {
+                            Toast.makeText(getContext(), "Invalid Date", Toast.LENGTH_SHORT).show();
+                            mBinding.edtToDate.setText("");
+                        }
+                    }
+                }
+            });
         });
-        mBinding.edtFormDate.setOnClickListener(View ->{
-            mBinding.edtFormDate.showDropDown();
-        });
+
         mBinding.alertsType.setOnClickListener(View ->{
             mBinding.alertsType.showDropDown();
         });
@@ -98,12 +134,17 @@ public class FragmentEventLog extends Fragment {
         LinkedHashSet<String> dateset = new LinkedHashSet<>(date);
         date.clear();
         date.addAll(dateset);
-        mBinding.edtFormDate.setAdapter(new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, date));
-        mBinding.edtToDate.setAdapter(new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, date));
+//        mBinding.edtFormDate.setAdapter(new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, date));
+//        mBinding.edtToDate.setAdapter(new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, date));
         mBinding.alertsType.setAdapter(getAdapter(eventLogArr,getContext()));
     }
 
     void setAdapter(List<EventLogEntity> eventLogEntityList){
+        if (eventLogEntityList.size()==0){
+            mBinding.txt.setVisibility(View.VISIBLE);
+        }else {
+            mBinding.txt.setVisibility(View.GONE);
+        }
         eventLogRvAdapter = new EventLogRvAdapter(eventLogEntityList);
         mBinding.rvAlarmLog.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.rvAlarmLog.setAdapter(eventLogRvAdapter);

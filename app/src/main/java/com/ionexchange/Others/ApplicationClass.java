@@ -54,6 +54,7 @@ import com.ionexchange.BLE.BluetoothHelper;
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
+import com.ionexchange.Database.Dao.MainConfigurationDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
 import com.ionexchange.Database.Dao.OutputKeepAliveDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
@@ -62,6 +63,7 @@ import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
+import com.ionexchange.Database.Entity.MainConfigurationEntity;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
 import com.ionexchange.Database.Entity.OutputKeepAliveEntity;
 import com.ionexchange.Database.Entity.TimerConfigurationEntity;
@@ -193,6 +195,8 @@ public class ApplicationClass extends Application {
     public static TimerConfigurationDao timerDAO;
     public static UserManagementDao userManagementDao;
     public static KeepAliveCurrentValueDao keepaliveDAO;
+    public static MainConfigurationDao mainConfigurationDao;
+
     // WebService
     private static final int httpRequestTimeout = 3000;
     public static int userType = 0;
@@ -615,6 +619,7 @@ public class ApplicationClass extends Application {
         DB = WaterTreatmentDb.getDatabase(getApplicationContext());
 
         keepaliveDAO = DB.keepAliveCurrentValueDao();
+
         /*Input_DB*/
         inputDAO = DB.inputConfigurationDao();
         if (inputDAO.getInputConfigurationEntityList().isEmpty()) {
@@ -675,7 +680,7 @@ public class ApplicationClass extends Application {
         /*Timer_DB*/
         timerDAO = DB.timerConfigurationDao();
         if (timerDAO.geTimerConfigurationEntityList().isEmpty()) {
-            for (int i = 1; i < 7; i++) {
+            for (int i = 0; i < 6; i++) {
                 TimerConfigurationEntity entityUpdate = new TimerConfigurationEntity
                         (i, "N/A",
                                 "N/A",
@@ -713,6 +718,18 @@ public class ApplicationClass extends Application {
             }
             defaultLayoutConfigurationDao.update(1, 1);
         }
+
+        /*Set Default Layout_DB*/
+        mainConfigurationDao = DB.mainConfigurationDao();
+        if (mainConfigurationDao.getMainConfigurationEntityList().isEmpty()){
+            MainConfigurationEntity entityUpdate = new MainConfigurationEntity(
+                                       1,1,1,1,1,1,
+                    "N/A",0,"N/A",0);
+            List<MainConfigurationEntity> mainEntryList = new ArrayList<>();
+            mainEntryList.add(entityUpdate);
+            updateMainDB(mainEntryList);
+        }
+
         /* Input KeepAlive*/
         KeepAliveCurrentValueDao dao;
         OutputKeepAliveDao outputKeepAliveDao;
@@ -742,7 +759,7 @@ public class ApplicationClass extends Application {
 
 
     public static String getCurrentDate() {
-        Format f = new SimpleDateFormat("dd/MM/yy");
+        Format f = new SimpleDateFormat("dd/MM/yyyy");
         return f.format(new Date());
     }
 
@@ -780,6 +797,11 @@ public class ApplicationClass extends Application {
         WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getApplicationContext());
         DefaultLayoutConfigurationDao dao = db.defaultLayoutConfigurationDao();
         dao.insert(entryList.toArray(new DefaultLayoutConfigurationEntity[0]));
+    }
+
+    private void updateMainDB(List<MainConfigurationEntity> entryList) {
+        MainConfigurationDao dao = DB.mainConfigurationDao();
+        dao.insert(entryList.toArray(new MainConfigurationEntity[0]));
     }
 
     public void insertKeepAliveDb(List<KeepAliveCurrentEntity> entryList) {

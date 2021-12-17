@@ -52,7 +52,6 @@ public class FragmentTimer_Config extends Fragment implements RvOnClick {
         mAdapter = new TimerIndexRvAdapter(this, timerConfigurationEntityList);
         mBinding.timerRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mBinding.timerRv.setAdapter(mAdapter);
-
     }
 
     @Override
@@ -61,27 +60,26 @@ public class FragmentTimer_Config extends Fragment implements RvOnClick {
     @Override
     public void onClick(String sensorInputNo) {
         switch (sensorInputNo) {
-            case "1":
+            case "0":
                 mAppClass.navigateToBundle(getActivity(), R.id.action_TimerSetting_to_Timer, putBundle("00", "01", "02", "03", "0"));
                 break;
-            case "2":
+            case "1":
                 mAppClass.navigateToBundle(getActivity(), R.id.action_TimerSetting_to_Timer, putBundle("04", "05", "06", "07", "1"));
                 break;
-            case "3":
+            case "2":
                 mAppClass.navigateToBundle(getActivity(), R.id.action_TimerSetting_to_Timer, putBundle("08", "09", "10", "11", "2"));
                 break;
-            case "4":
+            case "3":
                 mAppClass.navigateToBundle(getActivity(), R.id.action_TimerSetting_to_Timer, putBundle("12", "13", "14", "15", "3"));
                 break;
-            case "5":
+            case "4":
                 mAppClass.navigateToBundle(getActivity(), R.id.action_TimerSetting_to_Timer, putBundle("16", "17", "18", "19", "4"));
                 break;
-            case "6":
+            case "5":
                 mAppClass.navigateToBundle(getActivity(), R.id.action_TimerSetting_to_Timer, putBundle("20", "21", "22", "23", "5"));
                 break;
         }
     }
-
 
     Bundle putBundle(String week1, String week2, String week3, String week4, String timerNo) {
         Bundle bundle = new Bundle();
@@ -90,12 +88,9 @@ public class FragmentTimer_Config extends Fragment implements RvOnClick {
         bundle.putString("week3", week3);
         bundle.putString("week4", week4);
         bundle.putString("timerNo", timerNo);
-
-
         return bundle;
     }
 
     @Override
-    public void onClick(MainConfigurationEntity mEntity) {
-    }
+    public void onClick(MainConfigurationEntity mEntity) { }
 }

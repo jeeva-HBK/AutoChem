@@ -10,7 +10,7 @@
             android:id="@+id/form_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Form"
+            android:text="From"
             android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,67 +44,52 @@
             app:layout_constraintBottom_toBottomOf="@id/to_date"
             android:text="Alerts"/>
 
-        <View
-            android:id="@+id/view_1"
-            android:layout_height="50dp"
-            android:layout_width="0dp"
-            android:background="@drawable/boder_edt_bg"
-            app:layout_constraintStart_toStartOf="@id/form_date"
-            app:layout_constraintEnd_toEndOf="@id/form_date"
-            app:layout_constraintTop_toBottomOf="@id/form_date"
-            >
+        <TextView
+            android:id="@+id/txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="No Data Found"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-        </View>
-
-
-        <AutoCompleteTextView
+        <TextView
             android:id="@+id/edt_form_date"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="@id/view_1"
-            app:layout_constraintEnd_toEndOf="@id/view_1"
-            android:background="@color/white"
-            android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_24"
-            android:focusable="false"
-            android:layout_margin="3dp"
-            android:gravity="center"
-            android:hint="DD-MM-YYYY"
-            android:textColorHint="@color/black"
-            app:layout_constraintTop_toTopOf="@+id/view_1"
-            app:layout_constraintBottom_toBottomOf="@id/view_1"/>
-
-
-        <View
-            android:id="@+id/view_2"
             android:layout_height="50dp"
-            android:layout_width="0dp"
+            app:layout_constraintStart_toStartOf="@id/form_date"
+            app:layout_constraintEnd_toEndOf="@id/form_date"
+            android:layout_marginTop="5sp"
+            android:gravity="center"
+            android:textColorHint="@color/black"
+            android:drawableEnd="@drawable/ic_baseline_date_range_24"
+            android:padding="5sp"
+            android:hint="DD-MM-YYYY"
+            android:textColor="@color/black"
             android:background="@drawable/boder_edt_bg"
-            app:layout_constraintStart_toStartOf="@id/to_date"
-            app:layout_constraintEnd_toEndOf="@id/to_date"
-            app:layout_constraintTop_toBottomOf="@id/to_date"
-            >
+            app:layout_constraintTop_toBottomOf="@id/form_date"/>
 
-        </View>
-        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+        <TextView
             android:id="@+id/edt_to_date"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="@id/view_2"
-            app:layout_constraintEnd_toEndOf="@id/view_2"
-            android:layout_marginTop="5sp"
-            android:background="@color/white"
-            android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_24"
-            android:focusable="false"
-            android:layout_margin="3dp"
-            android:gravity="center"
+            android:layout_height="50dp"
             android:hint="DD-MM-YYYY"
+            app:layout_constraintStart_toStartOf="@id/to_date"
+            app:layout_constraintEnd_toEndOf="@id/to_date"
+            android:layout_marginTop="5sp"
+            android:gravity="center"
             android:textColorHint="@color/black"
-            app:layout_constraintTop_toTopOf="@+id/view_2"
-            app:layout_constraintBottom_toBottomOf="@id/view_2"/>
+            android:textColor="@color/black"
+            android:drawableEnd="@drawable/ic_baseline_date_range_24"
+            android:padding="5sp"
+            android:background="@drawable/boder_edt_bg"
+            app:layout_constraintTop_toBottomOf="@id/to_date"/>
 
         <View
             android:id="@+id/view_alerts"
-            android:layout_height="50dp"
+            android:layout_height="0dp"
             android:layout_width="0dp"
             android:background="@drawable/boder_edt_bg"
             app:layout_constraintStart_toStartOf="@id/txt_alerts"

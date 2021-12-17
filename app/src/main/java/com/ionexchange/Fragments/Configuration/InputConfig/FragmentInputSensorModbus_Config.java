@@ -271,7 +271,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
         if (data[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
             if (data[0].equals(READ_PACKET)) {
                 if (data[2].equals(RES_SUCCESS)) {
-
+                    try {
                     mBinding.modBusInputNumberTie.setText(data[3]);
                     mBinding.modBusSensorTypeTie.setText(mBinding.modBusSensorTypeTie.getAdapter().getItem(Integer.parseInt(data[4])).toString());
                     mBinding.modbusSequenceNumberTie.setText(mBinding.modbusSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[5])).toString());
@@ -321,6 +321,10 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                     mBinding.modBusCalibrationRequiredAlarmTie.setText(data[17]);
                     mBinding.modBusResetCalibrationTie.setText(mBinding.modBusResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[18])).toString());
                     initAdapter();
+
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                 } else if (data[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }

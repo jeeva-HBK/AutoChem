@@ -75,7 +75,7 @@ public class KeepAlive implements DataReceiveCallback {
 
     void spiltData(String[] data) {
         if (data[2].equals(INPUT_VOLTAGE)) {
-            Acknowledge = STARTPACKET + SPILT_CHAR + CRC + SPILT_CHAR + "007" + SPILT_CHAR + INPUT_VOLTAGE + SPILT_CHAR + ACK + SPILT_CHAR + ENDPACKET;
+            // Acknowledge = STARTPACKET + SPILT_CHAR + CRC + SPILT_CHAR + "007" + SPILT_CHAR + INPUT_VOLTAGE + SPILT_CHAR + ACK + SPILT_CHAR + ENDPACKET;
             int i = 0;
             while (i < 57) {
                 if (data[i + 3].length() > 2) {
@@ -121,10 +121,10 @@ public class KeepAlive implements DataReceiveCallback {
                     outputEntryList.add(alarmLogEntity);
                     updateToAlarmDb(outputEntryList);
                 }else {
-                    sendPacket("CRC"+SPILT_CHAR+"01"+SPILT_CHAR+"03"+SPILT_CHAR+"1"+SPILT_CHAR);
+                   // sendPacket("CRC"+SPILT_CHAR+"01"+SPILT_CHAR+"03"+SPILT_CHAR+"1"+SPILT_CHAR);
                 }
             } else {
-                sendPacket("CRC"+SPILT_CHAR+"01"+SPILT_CHAR+"03"+SPILT_CHAR+"1"+SPILT_CHAR);
+                // sendPacket("CRC"+SPILT_CHAR+"01"+SPILT_CHAR+"03"+SPILT_CHAR+"1"+SPILT_CHAR);
             }
             if (alarmLogDao.getAlarmLogList().size() >= 1000) {
                 alarmLogDao.deleteFirstRow();
@@ -155,7 +155,6 @@ public class KeepAlive implements DataReceiveCallback {
                     outputEntryList.add(alarmLogEntity);
                     updateToAlarmDb(outputEntryList);
                 }
-
 
             } else if (data[4].equals("1")) {
                 EventLogEntity eventLogEntity = new EventLogEntity(eventLogDao.getLastSno() + 1,

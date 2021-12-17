@@ -288,49 +288,53 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
         if (data[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
             if (data[0].equals(READ_PACKET)) {
                 if (data[2].equals(RES_SUCCESS)) {
-                    mBinding.analogInputNumberTie.setText(data[3]);
-                    mBinding.analogSensorTypeTie.setText(mBinding.analogSensorTypeTie.getAdapter().getItem(Integer.parseInt(data[4])).toString());
-                    if(data[7].equals("1")){
-                        analog_type = "(0 - 10V)";
-                    }else {
-                        analog_type = "(4 - 20mA)";
-                    }
-                    sequenceNo = data[6];
-                    mBinding.analogSequenceNumberTie.setText(mBinding.analogSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[6])).toString()+ " "+analog_type);
-                    mBinding.analogTypeTie.setText(mBinding.analogTypeTie.getAdapter().getItem(Integer.parseInt(data[5])).toString());
-                    mBinding.analogSensorActivationTie.setText(mBinding.analogSensorActivationTie.getAdapter().getItem(Integer.parseInt(data[8])).toString());
-                    mBinding.analogInputLabelTie.setText(data[9]);
-                    mBinding.analogUnitMeasurementTie.setText(mBinding.analogUnitMeasurementTie.getAdapter().getItem(Integer.parseInt(data[10])).toString());
-                    setMaxLength();
-                    if(data[5].equals("2") || data[5].equals("3")){
-                        mBinding.analogminvalueTBtn.setChecked((data[11].substring(0, 1)).equals("+"));
-                        mBinding.analogMinValueTie.setText(data[11].substring(1, sensorLength+1));
-                        mBinding.analogMinValueIsc.setText(data[11].substring(sensorLength+2, sensorLength+4));
-                        mBinding.analogmaxvalueTBtn.setChecked((data[12].substring(0, 1)).equals("+"));
-                        mBinding.analogMaxValueTie.setText(data[12].substring(1, sensorLength+1));
-                        mBinding.analogMaxValueIsc.setText(data[12].substring(sensorLength+2, sensorLength+4));
-                        mBinding.analogLowAlarmTBtn.setChecked((data[14].substring(0, 1)).equals("+"));
-                        mBinding.analogAlarmLowTie.setText(data[14].substring(1, sensorLength+1));
-                        mBinding.lowAlarmMinValueIsc.setText(data[14].substring(sensorLength+2, sensorLength+4));
-                        mBinding.analogHighAlarmTBtn.setChecked((data[15].substring(0, 1)).equals("+"));
-                        mBinding.analogHighLowTie.setText(data[15].substring(1, sensorLength+1));
-                        mBinding.highAlarmMinValueIsc.setText(data[15].substring(sensorLength+2, sensorLength+4));
-                    }else{
-                        mBinding.analogMinValueTie.setText(data[11].substring(0, sensorLength));
-                        mBinding.analogMinValueIsc.setText(data[11].substring(sensorLength+1, sensorLength+3));
-                        mBinding.analogMaxValueTie.setText(data[12].substring(0, sensorLength));
-                        mBinding.analogMaxValueIsc.setText(data[12].substring(sensorLength+1, sensorLength+3));
-                        mBinding.analogAlarmLowTie.setText(data[14].substring(0, sensorLength));
-                        mBinding.lowAlarmMinValueIsc.setText(data[14].substring(sensorLength+1, sensorLength+3));
-                        mBinding.analogHighLowTie.setText(data[15].substring(0, sensorLength));
-                        mBinding.highAlarmMinValueIsc.setText(data[15].substring(sensorLength+1,sensorLength+3));
-                    }
+                    try {
+                        mBinding.analogInputNumberTie.setText(data[3]);
+                        mBinding.analogSensorTypeTie.setText(mBinding.analogSensorTypeTie.getAdapter().getItem(Integer.parseInt(data[4])).toString());
+                        if(data[7].equals("1")){
+                            analog_type = "(0 - 10V)";
+                        }else {
+                            analog_type = "(4 - 20mA)";
+                        }
+                        sequenceNo = data[6];
+                        mBinding.analogSequenceNumberTie.setText(mBinding.analogSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[6])).toString()+ " "+analog_type);
+                        mBinding.analogTypeTie.setText(mBinding.analogTypeTie.getAdapter().getItem(Integer.parseInt(data[5])).toString());
+                        mBinding.analogSensorActivationTie.setText(mBinding.analogSensorActivationTie.getAdapter().getItem(Integer.parseInt(data[8])).toString());
+                        mBinding.analogInputLabelTie.setText(data[9]);
+                        mBinding.analogUnitMeasurementTie.setText(mBinding.analogUnitMeasurementTie.getAdapter().getItem(Integer.parseInt(data[10])).toString());
+                        setMaxLength();
+                        if(data[5].equals("2") || data[5].equals("3")){
+                            mBinding.analogminvalueTBtn.setChecked((data[11].substring(0, 1)).equals("+"));
+                            mBinding.analogMinValueTie.setText(data[11].substring(1, sensorLength+1));
+                            mBinding.analogMinValueIsc.setText(data[11].substring(sensorLength+2, sensorLength+4));
+                            mBinding.analogmaxvalueTBtn.setChecked((data[12].substring(0, 1)).equals("+"));
+                            mBinding.analogMaxValueTie.setText(data[12].substring(1, sensorLength+1));
+                            mBinding.analogMaxValueIsc.setText(data[12].substring(sensorLength+2, sensorLength+4));
+                            mBinding.analogLowAlarmTBtn.setChecked((data[14].substring(0, 1)).equals("+"));
+                            mBinding.analogAlarmLowTie.setText(data[14].substring(1, sensorLength+1));
+                            mBinding.lowAlarmMinValueIsc.setText(data[14].substring(sensorLength+2, sensorLength+4));
+                            mBinding.analogHighAlarmTBtn.setChecked((data[15].substring(0, 1)).equals("+"));
+                            mBinding.analogHighLowTie.setText(data[15].substring(1, sensorLength+1));
+                            mBinding.highAlarmMinValueIsc.setText(data[15].substring(sensorLength+2, sensorLength+4));
+                        }else{
+                            mBinding.analogMinValueTie.setText(data[11].substring(0, sensorLength));
+                            mBinding.analogMinValueIsc.setText(data[11].substring(sensorLength+1, sensorLength+3));
+                            mBinding.analogMaxValueTie.setText(data[12].substring(0, sensorLength));
+                            mBinding.analogMaxValueIsc.setText(data[12].substring(sensorLength+1, sensorLength+3));
+                            mBinding.analogAlarmLowTie.setText(data[14].substring(0, sensorLength));
+                            mBinding.lowAlarmMinValueIsc.setText(data[14].substring(sensorLength+1, sensorLength+3));
+                            mBinding.analogHighLowTie.setText(data[15].substring(0, sensorLength));
+                            mBinding.highAlarmMinValueIsc.setText(data[15].substring(sensorLength+1,sensorLength+3));
+                        }
 
-                    mBinding.analogSmoothingFactorTie.setText(data[13]);
+                        mBinding.analogSmoothingFactorTie.setText(data[13]);
 
-                    mBinding.analogCalibrationRequiredAlarmTie.setText(data[16]);
-                    mBinding.analogResetCalibrationTie.setText(mBinding.analogResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[17])).toString());
-                    initAdapter();
+                        mBinding.analogCalibrationRequiredAlarmTie.setText(data[16]);
+                        mBinding.analogResetCalibrationTie.setText(mBinding.analogResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[17])).toString());
+                        initAdapter();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                 } else if (data[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.readFailed));
                 }

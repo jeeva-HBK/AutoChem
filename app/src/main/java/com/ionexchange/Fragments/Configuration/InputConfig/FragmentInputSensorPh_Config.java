@@ -270,6 +270,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         if (splitData[1].equals("04")) {
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
+                    try {
                     mBinding.phInputNumberEdtIsc.setText(splitData[3]);
 
                     mBinding.phSensorTypeAtxtIsc.setText(mBinding.phSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
@@ -305,7 +306,9 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
 
                     mBinding.phResetCalibrationAtxtIsc.setText(mBinding.phResetCalibrationAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[15])).toString());
                     mBinding.phResetCalibrationAtxtIsc.setAdapter(getAdapter(resetCalibrationArr, getContext()));
-
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.readFailed));
                 }

@@ -777,6 +777,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
             if (splitData[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
                 if (splitData[0].equals(READ_PACKET)) {
                     if (splitData[2].equals(RES_SUCCESS)) {
+                        try {
                         mBinding.setFlowMeterType(splitData[5]);
                         // Alarm Low/Alarm High
                         mBinding.flowInputNumberEdtIsc.setText(splitData[3]);
@@ -880,6 +881,10 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                             mBinding.flowHighAlarmDeciIsc.setText(splitData[22].substring(11, 13));
                         }
                         initAdapter();
+
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
                     } else if (splitData[2].equals(RES_FAILED)) {
                         mAppClass.showSnackBar(getContext(), getString(R.string.readFailed));
                     }

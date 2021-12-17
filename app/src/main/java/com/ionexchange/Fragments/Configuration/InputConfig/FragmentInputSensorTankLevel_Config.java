@@ -145,6 +145,7 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
         if (data[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
             if (data[0].equals(READ_PACKET)) {
                 if (data[2].equals(RES_SUCCESS)) {
+                    try {
                     mBinding.tankLevelInputNumberTie.setText(data[3]);
 
                     mBinding.tankLevelInputSensorTypeTie.setText(mBinding.tankLevelInputSensorTypeTie.getAdapter().getItem(Integer.parseInt(data[4])).toString());
@@ -160,6 +161,9 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                     mBinding.tankLevelInputSensorTotalTimeTie.setText(mBinding.tankLevelInputSensorTotalTimeTie.getAdapter().getItem(Integer.parseInt(data[13])).toString());
                     mBinding.tankLevelInputSensorResetTimeAct.setText(mBinding.tankLevelInputSensorResetTimeAct.getAdapter().getItem(Integer.parseInt(data[14])).toString());
                     initAdapter();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                 } else if (data[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }

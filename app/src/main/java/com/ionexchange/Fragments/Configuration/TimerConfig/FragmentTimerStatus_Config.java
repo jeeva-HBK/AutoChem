@@ -810,9 +810,11 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                 if (splitData[2].equals("0*}")) {
                     WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getContext());
                     TimerConfigurationDao dao = db.timerConfigurationDao();
-                    int timerNum = Integer.parseInt(timerNo) + 1;
+                    int timerNum = Integer.parseInt(timerNo);
                     dao.updateTimer(mBinding.timerNameTxt.getText().toString(),
                             mBinding.txtOutputNameValueAct.getText().toString(), mBinding.txtModeValueAct.getText().toString(), timerNum);
+                    new EventLogDemo(timerNo,"TIMER"+timerNo,"Timer setting changed",getContext());
+                    timerEntity();
                     writeWeeklySchedule(week1, timerOne, 1);
                 }
                 if (splitData[2].equals("1*}")) {
@@ -905,8 +907,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                 }
             }
             initAdapter();
-            new EventLogDemo(timerNo,"TIMER"+timerNo,"Timer settings changed",getContext());
-            timerEntity();
+
 
         }catch (Exception e){
             e.printStackTrace();

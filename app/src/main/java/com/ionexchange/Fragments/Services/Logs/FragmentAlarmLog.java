@@ -2,18 +2,22 @@ package com.ionexchange.Fragments.Services.Logs;
 
 import static com.ionexchange.Others.ApplicationClass.alarmArr;
 import static com.ionexchange.Others.ApplicationClass.getAdapter;
+import static com.ionexchange.Others.PacketControl.ACK;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_LOCKOUT;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +26,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.ionexchange.Adapters.AlarmLogRvAdapter;
 import com.ionexchange.Database.Dao.AlarmLogDao;
 import com.ionexchange.Database.Dao.ServicesNotificationDao;
@@ -34,6 +40,7 @@ import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentAlarmLogBinding;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -79,14 +86,45 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
 
             }
         });
-        mBinding.edtToDate.setOnClickListener(View -> {
-            mBinding.edtToDate.showDropDown();
+        mBinding.alertsType.setAdapter(getAdapter(alarmArr, getContext()));
+        mBinding.alertsType.setOnClickListener(v -> {
+            mBinding.alertsType.showDropDown();
         });
         mBinding.edtFormDate.setOnClickListener(View -> {
-            mBinding.edtFormDate.showDropDown();
+            MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.datePicker();
+            materialDateBuilder.setTitleText("SELECT A DATE");
+            final MaterialDatePicker materialDatePicker = materialDateBuilder.build();
+            materialDatePicker.show(getChildFragmentManager(), "MATERIAL_DATE_PICKER");
+            materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+                @Override
+                public void onPositiveButtonClick(Object selection) {
+                    String startDate = DateFormat.format("dd/MM/yyyy", new Date(materialDatePicker.getHeaderText())).toString();
+                    mBinding.edtFormDate.setText(startDate);
+                }
+            });
         });
-        mBinding.alertsType.setOnClickListener(View -> {
-            mBinding.alertsType.showDropDown();
+        mBinding.edtToDate.setOnClickListener(View -> {
+            MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.datePicker();
+            materialDateBuilder.setTitleText("SELECT A DATE");
+            final MaterialDatePicker materialDatePicker = materialDateBuilder.build();
+            materialDatePicker.show(getChildFragmentManager(), "MATERIAL_DATE_PICKER");
+            materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+                @Override
+                public void onPositiveButtonClick(Object selection) {
+                    String endDate = DateFormat.format("dd/MM/yyyy", new Date(materialDatePicker.getHeaderText())).toString();
+                    mBinding.edtToDate.setText(endDate);
+                    if (!mBinding.edtFormDate.getText().toString().isEmpty()) {
+                        String[] splitStartDate = mBinding.edtFormDate.getText().toString().split("/");
+                        String[] splitEndDate = mBinding.edtToDate.getText().toString().split("/");
+                        String startDate = splitStartDate[0] + splitEndDate[1] + splitStartDate[2];
+                        String FinalDate = splitEndDate[0] + splitEndDate[1] + splitEndDate[2];
+                        if (Integer.parseInt(FinalDate) < Integer.parseInt(startDate)) {
+                            Toast.makeText(getContext(), "Invalid Date", Toast.LENGTH_SHORT).show();
+                            mBinding.edtToDate.setText("");
+                        }
+                    }
+                }
+            });
         });
 
      /*   LocalDate currentDate = LocalDate.now();
@@ -106,9 +144,9 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
         LinkedHashSet<String> dateset = new LinkedHashSet<>(date);
         date.clear();
         date.addAll(dateset);
-        mBinding.edtFormDate.setAdapter(new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, date));
-        mBinding.edtToDate.setAdapter(new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, date));
-        mBinding.alertsType.setAdapter(getAdapter(alarmArr, getContext()));
+//        mBinding.edtFormDate.setAdapter(new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, date));
+//        mBinding.edtToDate.setAdapter(new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, date));
+
     }
 
 
@@ -117,6 +155,11 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
     }
 
     void setAdapter(List<AlarmLogEntity> alarmLogEntityList) {
+        if (alarmLogEntityList.size()==0){
+            mBinding.txt.setVisibility(View.VISIBLE);
+        }else {
+            mBinding.txt.setVisibility(View.GONE);
+        }
         alarmLogRvAdapter = new AlarmLogRvAdapter(alarmLogEntityList, this);
         mBinding.rvAlarmLog.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.rvAlarmLog.setAdapter(alarmLogRvAdapter);
@@ -129,9 +172,11 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
     }
 
     @Override
-    public void OnItemClick(int pos, Button button, String lockOutAlarm) {
+    public void OnItemClick(int hardwareNo, Button button, String lockOutAlarm) {
+       /* mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
+                WRITE_PACKET + SPILT_CHAR + "1" + SPILT_CHAR + "1" + SPILT_CHAR);*/
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
-                WRITE_PACKET + SPILT_CHAR + "1" + SPILT_CHAR + "1" + SPILT_CHAR);
+                WRITE_PACKET + SPILT_CHAR + PCK_LOCKOUT + SPILT_CHAR + hardwareNo + SPILT_CHAR + ACK);
         alarmLogDao.updateLockAlarm(Integer.parseInt(lockOutAlarm), "0");
         button.setVisibility(View.INVISIBLE);
     }

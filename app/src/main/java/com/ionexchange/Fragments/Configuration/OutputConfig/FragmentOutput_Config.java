@@ -346,7 +346,9 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                     mBinding.sensorSafetyMaxTilOsc.setEnabled(false);
                     mBinding.sensorSafetyMaxDeciOsc.setEnabled(false);
                     mBinding.sensorLockoutTimeDelayTilOsc.setEnabled(false);
-                    mBinding.sensorHysteresisRootOsc.setEnabled(false);
+                    mBinding.pidHysteresisTilOsc.setEnabled(false);
+                    mBinding.pidHysteresisDeciOsc.setEnabled(false);
+                    mBinding.pidHysteresisTBtn.setEnabled(false);
                     mBinding.pidSetpointvalueTBtn.setEnabled(false);
                     mBinding.pidSetPointTilOsc.setEnabled(false);
                     mBinding.pidSetPointDeciOsc.setEnabled(false);
@@ -604,15 +606,17 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
     /*OnOff*/
     private void sendOnOFf() {
-        String u_setPoint, u_safetyMin, u_safetyMax;
+        String u_setPoint, u_safetyMin, u_safetyMax, hystersis;
         if(inputType.equalsIgnoreCase("ORP") || inputType.equals("Temperature")){
             u_setPoint = getDecimalValue(mBinding.sensorSetpointvalueTBtn, mBinding.sensorSetPointEdtOsc,sensorLength, mBinding.sensorSetPointDeciOsc,2);
             u_safetyMin = getDecimalValue(mBinding.sensorSafetyMinTBtn, mBinding.sensorSafetyMinEdtOsc,sensorLength, mBinding.sensorSafetyMinDeciOsc,2);
             u_safetyMax = getDecimalValue(mBinding.sensorSafetyMaxTBtn, mBinding.sensorSafetyMaxEdtOsc,sensorLength, mBinding.sensorSafetyMaxDeciOsc,2);
+            hystersis = getDecimalValue(mBinding.pidHysteresisTBtn, mBinding.pidHysteresisEdtOsc,sensorLength, mBinding.pidHysteresisDeciOsc,2);
         }else{
             u_setPoint = getDecimalValue(mBinding.sensorSetPointEdtOsc,sensorLength, mBinding.sensorSetPointDeciOsc,2);
             u_safetyMin = getDecimalValue(mBinding.sensorSafetyMinEdtOsc,sensorLength, mBinding.sensorSafetyMinDeciOsc,2);
             u_safetyMax = getDecimalValue(mBinding.sensorSafetyMaxEdtOsc,sensorLength, mBinding.sensorSafetyMaxDeciOsc,2);
+            hystersis = getDecimalValue(mBinding.pidHysteresisEdtOsc,sensorLength, mBinding.pidHysteresisDeciOsc,2);
         }
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
@@ -628,7 +632,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 getPosition(0, toString(mBinding.modeOsATXT), modeSensor) + SPILT_CHAR +
                 u_setPoint + SPILT_CHAR +
                 getPosition(0, toString(mBinding.sensorDoseTypeAtxtOsc), doseTypeArr) + SPILT_CHAR +
-                toString(5, mBinding.sensorHysteresisEdtOsc) + SPILT_CHAR +
+                hystersis + SPILT_CHAR +
                 toString(3, mBinding.sensorDutyCycleEdtOsc) + SPILT_CHAR +
                 toString(5, mBinding.sensorLockoutTimeDelayEdtOsc) + SPILT_CHAR +
                 u_safetyMax + SPILT_CHAR +
@@ -1045,6 +1049,10 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                         mBinding.sensorSafetyMaxTBtn.setChecked((splitData[15].substring(0, 1)).equals("+"));
                                         mBinding.sensorSafetyMaxEdtOsc.setText(splitData[15].substring(1, sensorLength + 1));
                                         mBinding.sensorSafetyMaxDeciOsc.setText(splitData[15].substring(sensorLength + 2, sensorLength + 4));
+
+                                        mBinding.pidHysteresisTBtn.setChecked((splitData[12].substring(0, 1)).equals("+"));
+                                        mBinding.pidHysteresisEdtOsc.setText(splitData[12].substring(1, sensorLength + 1));
+                                        mBinding.pidHysteresisDeciOsc.setText(splitData[12].substring(sensorLength + 2, sensorLength + 4));
                                     }else{
                                         mBinding.sensorSetPointEdtOsc.setText(splitData[10].substring(0, sensorLength));
                                         mBinding.sensorSetPointDeciOsc.setText(splitData[10].substring(sensorLength+1, sensorLength+3));
@@ -1052,9 +1060,11 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                         mBinding.sensorSafetyMinDeciOsc.setText(splitData[16].substring(sensorLength+1, sensorLength+3));
                                         mBinding.sensorSafetyMaxEdtOsc.setText(splitData[15].substring(0, sensorLength));
                                         mBinding.sensorSafetyMaxDeciOsc.setText(splitData[15].substring(sensorLength+1, sensorLength+3));
+                                        mBinding.pidHysteresisEdtOsc.setText(splitData[12].substring(0, sensorLength));
+                                        mBinding.pidHysteresisDeciOsc.setText(splitData[12].substring(sensorLength+1, sensorLength+3));
                                     }
                                     mBinding.sensorDoseTypeAtxtOsc.setText(mBinding.sensorDoseTypeAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[11])).toString());
-                                    mBinding.sensorHysteresisEdtOsc.setText(splitData[12]);
+
                                     mBinding.sensorDutyCycleEdtOsc.setText(splitData[13]);
                                     mBinding.sensorLockoutTimeDelayEdtOsc.setText(splitData[14]);
                                     mBinding.sensorDoseTypeAtxtOsc.setAdapter(getAdapter(doseTypeArr));
@@ -1558,7 +1568,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         } else if (isEmpty(mBinding.sensorDoseTypeAtxtOsc)) {
             mAppClass.showSnackBar(getContext(), "Dose Type cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.sensorHysteresisEdtOsc)) {
+        } else if (isEmpty(mBinding.pidHysteresisEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Hysteresis cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.sensorDutyCycleEdtOsc)) {

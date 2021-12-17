@@ -1,7 +1,14 @@
 package com.ionexchange.Fragments.Configuration.GeneralConfig;
 
+import static com.ionexchange.Others.PacketControl.ACK;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_FACTORYRESET;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINNAME;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +20,12 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Database.Dao.UserManagementDao;
 import com.ionexchange.Database.WaterTreatmentDb;
+import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.SharedPref;
@@ -52,6 +61,54 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
         mBinding.logout.setOnClickListener(View -> {
             BaseActivity.logOut();
         });
+
+        mBinding.reset.setOnClickListener(View -> {
+            factoryResetConfirmation();
+        });
+    }
+
+    private void factoryResetConfirmation() {
+        new MaterialAlertDialogBuilder(getContext()).setTitle("Confirmation")
+                .setMessage("Are you sure, you want to reset the unit ?")
+                .setPositiveButton("CONFIRM", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        sendResetPck(dialogInterface);
+                    }
+                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        }).show();
+
+    }
+
+    public static boolean isOdd(int num) {
+        return num % 2 == 0;
+    }
+
+
+    private void sendResetPck(DialogInterface dialog) {
+        mAppclass.sendPacket(new DataReceiveCallback() { // {*0$0$17$0*}
+            @Override
+            public void OnDataReceive(String data) {
+                if (mAppclass.isValidPck(WRITE_PACKET, data, getContext())) {
+                    if (data.split("\\*")[1].split("\\$")[2].equals("0")) {
+                        dialog.dismiss();
+                        mAppclass.showSnackBar(getContext(), "Factory Reset Success");
+
+                    } else {
+                        dialog.dismiss();
+                        mAppclass.showSnackBar(getContext(), "Factory Reset Failed");
+                    }
+                } else {
+                    dialog.dismiss();
+                    mAppclass.showSnackBar(getContext(), "Factory Reset Failed");
+
+                }
+            }
+        }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_FACTORYRESET + SPILT_CHAR + ACK);
     }
 
     private String toString(EditText editText) {

@@ -137,6 +137,12 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
                         e.printStackTrace();
                     }
                     break;
+                case "Manual":
+                case "Disable":
+                    holder.outputstatusHeader.setText("");
+                    holder.outputMode.setText("Output Status");
+                    holder.outputNumber.setTextSize(25f);
+                    break;
                 default:
                    /* holder.outputMode.setText("Value");
                     holder.outputstatusHeader.setVisibility(View.INVISIBLE);

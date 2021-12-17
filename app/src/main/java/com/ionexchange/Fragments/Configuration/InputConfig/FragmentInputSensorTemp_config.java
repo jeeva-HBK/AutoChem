@@ -161,6 +161,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         if (splitData[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
+                    try {
                     mBinding.tempInputNumberEdtIsc.setText(splitData[3]);
                     mBinding.temSensorTypeAtxtIsc.setText(mBinding.temSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
                     mBinding.temSeqNumberAtxtIsc.setText(mBinding.temSeqNumberAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[5])).toString());
@@ -185,6 +186,9 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
                     mBinding.tempResetCalibAtxtIsc.setText(mBinding.tempResetCalibAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
 
                     initAdapter();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }

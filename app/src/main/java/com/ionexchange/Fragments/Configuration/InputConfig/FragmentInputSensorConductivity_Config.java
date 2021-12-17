@@ -290,57 +290,61 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
         if (spiltData[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
             if (spiltData[0].equals(READ_PACKET)) {
                 if (spiltData[2].equals(RES_SUCCESS)) {
-                    mBinding.conInputNumberEdtIsc.setText(spiltData[3]);
-                    mBinding.conSensorTypeAtxtIsc.setText(mBinding.conSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[4])).toString());
-                    mBinding.conSeqNumberAtxtIsc.setText(mBinding.conSeqNumberAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[5])).toString());
-                    mBinding.conSensorActivationAtxtIsc.setText(mBinding.conSensorActivationAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[6])).toString());
-                    mBinding.conInputLabelEdtIsc.setText(spiltData[7]);
-                    mBinding.conTempLinkedAtxtIsc.setText(mBinding.conTempLinkedAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[8])).toString());
+                    try {
+                        mBinding.conInputNumberEdtIsc.setText(spiltData[3]);
+                        mBinding.conSensorTypeAtxtIsc.setText(mBinding.conSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[4])).toString());
+                        mBinding.conSeqNumberAtxtIsc.setText(mBinding.conSeqNumberAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[5])).toString());
+                        mBinding.conSensorActivationAtxtIsc.setText(mBinding.conSensorActivationAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[6])).toString());
+                        mBinding.conInputLabelEdtIsc.setText(spiltData[7]);
+                        mBinding.conTempLinkedAtxtIsc.setText(mBinding.conTempLinkedAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[8])).toString());
 
-                    mBinding.conDefaultTempValueTBtn.setChecked((spiltData[9].substring(0, 1).equals("+")));
-                    mBinding.conDefaultTemperatureEdtIsc.setText(spiltData[9].substring(1, 4));
-                    mBinding.conDefaultTempDeciIsc.setText(spiltData[9].substring(5, 7));
+                        mBinding.conDefaultTempValueTBtn.setChecked((spiltData[9].substring(0, 1).equals("+")));
+                        mBinding.conDefaultTemperatureEdtIsc.setText(spiltData[9].substring(1, 4));
+                        mBinding.conDefaultTempDeciIsc.setText(spiltData[9].substring(5, 7));
 
-                    mBinding.conUnitOfMeasureAxtIsc.setText(mBinding.conUnitOfMeasureAxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[10])).toString());
-                    mBinding.conCellConstantEdtIsc.setText(spiltData[11].substring(0, 2));
-                    mBinding.conCellConstantDeciIsc.setText(spiltData[11].substring(3, 5));
-                    mBinding.conCompensationAtxtIsc.setText(mBinding.conCompensationAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[12])).toString());
-                    mBinding.conCompFactorEdtIsc.setEnabled(spiltData[12].equals("0"));
-                    mBinding.conCompFactorDeciIsc.setEnabled(spiltData[12].equals("0"));
-                    switch (userType) {
-                        case 1:
-                        case 2:
-                            mBinding.conCompFactorEdtIsc.setEnabled(false);
-                            mBinding.conCompFactorDeciIsc.setEnabled(false);
-                            break;
+                        mBinding.conUnitOfMeasureAxtIsc.setText(mBinding.conUnitOfMeasureAxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[10])).toString());
+                        mBinding.conCellConstantEdtIsc.setText(spiltData[11].substring(0, 2));
+                        mBinding.conCellConstantDeciIsc.setText(spiltData[11].substring(3, 5));
+                        mBinding.conCompensationAtxtIsc.setText(mBinding.conCompensationAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[12])).toString());
+                        mBinding.conCompFactorEdtIsc.setEnabled(spiltData[12].equals("0"));
+                        mBinding.conCompFactorDeciIsc.setEnabled(spiltData[12].equals("0"));
+                        switch (userType) {
+                            case 1:
+                            case 2:
+                                mBinding.conCompFactorEdtIsc.setEnabled(false);
+                                mBinding.conCompFactorDeciIsc.setEnabled(false);
+                                break;
+                        }
+                        if (spiltData[12].equals("0")) {
+                            mBinding.conCompFactorEdtIsc.setText(spiltData[13].substring(0, 2));
+                            mBinding.conCompFactorDeciIsc.setText(spiltData[13].substring(3, 5));
+                            mBinding.conSmoothingFactorEdtIsc.setText(spiltData[14]);
+
+                            mBinding.conAlarmLowEdtIsc.setText(spiltData[15].substring(0, 6));
+                            mBinding.conAlarmLowDeciIsc.setText(spiltData[15].substring(7, 9));
+
+                            mBinding.conAlarmhighEdtIsc.setText(spiltData[16].subSequence(0, 6));
+                            mBinding.conHighAlarmDeciIsc.setText(spiltData[16].subSequence(7, 9));
+
+                            mBinding.conCalibRequiredAlarmEdtIsc.setText(spiltData[17]);
+                            mBinding.conResetCalibAtxtIsc.setText(mBinding.conResetCalibAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[18])).toString());
+                        } else {
+                            mBinding.conSmoothingFactorEdtIsc.setText(spiltData[13]);
+
+                            mBinding.conAlarmLowEdtIsc.setText(spiltData[14].substring(0, 6));
+                            mBinding.conAlarmLowDeciIsc.setText(spiltData[14].substring(7, 9));
+
+                            mBinding.conAlarmhighEdtIsc.setText(spiltData[15].subSequence(0, 6));
+                            mBinding.conHighAlarmDeciIsc.setText(spiltData[15].subSequence(7, 9));
+
+                            mBinding.conCalibRequiredAlarmEdtIsc.setText(spiltData[16]);
+                            mBinding.conResetCalibAtxtIsc.setText(mBinding.conResetCalibAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[17])).toString());
+                        }
+
+                        initAdapters();
+                    } catch (Exception e){
+                        e.printStackTrace();
                     }
-                    if (spiltData[12].equals("0")) {
-                        mBinding.conCompFactorEdtIsc.setText(spiltData[13].substring(0, 2));
-                        mBinding.conCompFactorDeciIsc.setText(spiltData[13].substring(3, 5));
-                        mBinding.conSmoothingFactorEdtIsc.setText(spiltData[14]);
-
-                        mBinding.conAlarmLowEdtIsc.setText(spiltData[15].substring(0, 6));
-                        mBinding.conAlarmLowDeciIsc.setText(spiltData[15].substring(7, 9));
-
-                        mBinding.conAlarmhighEdtIsc.setText(spiltData[16].subSequence(0, 6));
-                        mBinding.conHighAlarmDeciIsc.setText(spiltData[16].subSequence(7, 9));
-
-                        mBinding.conCalibRequiredAlarmEdtIsc.setText(spiltData[17]);
-                        mBinding.conResetCalibAtxtIsc.setText(mBinding.conResetCalibAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[18])).toString());
-                    } else {
-                        mBinding.conSmoothingFactorEdtIsc.setText(spiltData[13]);
-
-                        mBinding.conAlarmLowEdtIsc.setText(spiltData[14].substring(0, 6));
-                        mBinding.conAlarmLowDeciIsc.setText(spiltData[14].substring(7, 9));
-
-                        mBinding.conAlarmhighEdtIsc.setText(spiltData[15].subSequence(0, 6));
-                        mBinding.conHighAlarmDeciIsc.setText(spiltData[15].subSequence(7, 9));
-
-                        mBinding.conCalibRequiredAlarmEdtIsc.setText(spiltData[16]);
-                        mBinding.conResetCalibAtxtIsc.setText(mBinding.conResetCalibAtxtIsc.getAdapter().getItem(Integer.parseInt(spiltData[17])).toString());
-                    }
-
-                    initAdapters();
                 } else if (spiltData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }

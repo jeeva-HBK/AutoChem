@@ -53,7 +53,7 @@ public class AlarmLogRvAdapter extends RecyclerView.Adapter<AlarmLogRvAdapter.it
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnOnClick.OnItemClick(position,holder.button,alarmLogEntityList.get(position).lockOutAlarm);
+                btnOnClick.OnItemClick(Integer.parseInt(alarmLogEntityList.get(position).hardwareNo), holder.button, alarmLogEntityList.get(position).lockOutAlarm);
             }
         });
     }

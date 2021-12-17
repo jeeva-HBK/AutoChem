@@ -1,6 +1,12 @@
 package com.ionexchange.Activity;
 
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.triggerWebService;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEFAULT_CONFIG;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Singleton.SharedPref.pref_MACADDRESS;
 
 import android.Manifest;
@@ -33,6 +39,9 @@ import com.ionexchange.BLE.BluetoothConnectCallback;
 import com.ionexchange.BLE.BluetoothDataCallback;
 import com.ionexchange.BLE.BluetoothHelper;
 import com.ionexchange.BLE.BluetoothScannerCallback;
+import com.ionexchange.Database.Dao.InputConfigurationDao;
+import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.ItemClickListener;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
@@ -64,6 +73,8 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
     AlertDialog dispenseAlert, panAlert;
     ImageView iv;
     TextView tv;
+    WaterTreatmentDb waterTreatmentDb;
+    InputConfigurationDao inputConfigurationDao;
 
     private ActivityResultContracts.RequestMultiplePermissions requestMultiplePermissionsContract;
     private ActivityResultLauncher<String[]> multiplePermissionActivityResultLauncher;
@@ -86,6 +97,8 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(ConnectionActivity.this, R.layout.activity_connection);
         mAppClass = (ApplicationClass) getApplication();
+        waterTreatmentDb = WaterTreatmentDb.getDatabase(getApplicationContext());
+        inputConfigurationDao = waterTreatmentDb.inputConfigurationDao();
         /* mBinding = DataBindingUtil.setContentView(this, R.layout.activity_connection);
 
         mAppClass = (ApplicationClass) getApplication();
@@ -259,6 +272,55 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
     @Override
     public void OnDataReceived(String data) {
         Log.e(TAG, "OnDataReceived: " + data);
+        /*if (data.equals("FailedToConnect")) {
+            mAppClass.showSnackBar(getApplicationContext(), getString(R.string.connection_failed));
+        } else if (data.equals("pckError")) {
+            mAppClass.showSnackBar(getApplicationContext(), getString(R.string.connection_failed));
+        } else if (data.equals("sendCatch")) {
+            mAppClass.showSnackBar(getApplicationContext(), getString(R.string.connection_failed));
+        } else if (data.equals("Timeout")) {
+            mAppClass.showSnackBar(getApplicationContext(), getString(R.string.timeout));
+        } else if (data != null) {
+            handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
+        }*/
+    }
+
+    private void updateInputDB(List<InputConfigurationEntity> entryList) {
+        InputConfigurationDao dao = waterTreatmentDb.inputConfigurationDao();
+        dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
+    }
+
+    private void handleResponse(String[] splitData) {
+        if (splitData[1].equals("0")){
+            int i=1;
+            String sensorType = "SENSOR";
+            while (i<=50){
+                if (i < 5) {
+                    sensorType = "SENSOR";
+                } else if (i < 15) {
+                    sensorType = "MODBUS";
+                } else if (i < 18) {
+                    sensorType = "SENSOR";
+                } else if (i < 26) {
+                    sensorType = "Analog";
+                } else if (i < 34) {
+                    sensorType = "FLOWMETER";
+                } else if (i < 42) {
+                    sensorType = "DIGITAL";
+                } else if (i < 50) {
+                    sensorType = "TANK";
+                }
+                InputConfigurationEntity entityUpdate = new InputConfigurationEntity
+                        (Integer.parseInt(splitData[3+i].substring(0,2)), inputTypeArr[Integer.parseInt(splitData[3+i].substring(2,4))],
+                                sensorType, 0,"N/A",
+                                Integer.parseInt(splitData[3+i].substring(4,5)), "N/A",
+                                "N/A", "N/A", "N/A", "N/A",0);
+                List<InputConfigurationEntity> inputentryList = new ArrayList<>();
+                inputentryList.add(entityUpdate);
+                updateInputDB(inputentryList);
+                i++;
+            }
+        }
     }
 
     @Override
@@ -316,6 +378,11 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
                                 });
                                 e.printStackTrace();
                             }*/
+                            if(inputConfigurationDao.getInputConfigurationEntityList().isEmpty()){
+                                sendPacket(DEVICE_PASSWORD+SPILT_CHAR+CONN_TYPE+SPILT_CHAR+READ_PACKET+SPILT_CHAR+DEFAULT_CONFIG+SPILT_CHAR+"0"+SPILT_CHAR);
+                            }
+
+
                         }
 
                         @Override

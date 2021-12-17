@@ -87,6 +87,9 @@ public class SerialSocket extends BluetoothGattCallback {
         }
     }
 
+    String getName() {
+        return device.getName() != null ? device.getName() : device.getAddress();
+    }
 
     public void disconnect() {
         Log.e(TAG, "disconnect");
