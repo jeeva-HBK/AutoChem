@@ -112,7 +112,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
         keepAliveCurrentValueDao.getLiveList().observe(getViewLifecycleOwner(), new Observer<List<KeepAliveCurrentEntity>>() {
             @Override
             public void onChanged(List<KeepAliveCurrentEntity> keepAliveCurrentEntities) {
-                mBinding.inputsRv.getAdapter().notifyDataSetChanged();
+                mBinding.inputsRv.getAdapter().notifyDataSetChanged(); // connect ble
             }
         });
     }

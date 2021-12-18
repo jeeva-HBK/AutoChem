@@ -622,7 +622,7 @@ public class ApplicationClass extends Application {
 
         /*Input_DB*/
         inputDAO = DB.inputConfigurationDao();
-        if (inputDAO.getInputConfigurationEntityList().isEmpty()) {
+        /*if (inputDAO.getInputConfigurationEntityList().isEmpty()) {
             String sensorType = "SENSOR";
             for (int i = 1; i < 50; i++) {
                 if (i < 5) {
@@ -648,7 +648,7 @@ public class ApplicationClass extends Application {
                 inputentryList.add(entityUpdate);
                 updateInputDB(inputentryList);
             }
-        }
+        }*/
 
         /*Output_DB*/
         outputDAO = DB.outputConfigurationDao();

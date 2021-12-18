@@ -1,6 +1,7 @@
 package com.ionexchange.Fragments.Services.Logs;
 
 import static com.ionexchange.Others.ApplicationClass.alarmArr;
+import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.getAdapter;
 import static com.ionexchange.Others.PacketControl.ACK;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
@@ -15,7 +16,6 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -167,17 +167,32 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
 
 
     @Override
-    public void OnDataReceive(String data) {
-
-    }
+    public void OnDataReceive(String data) { }
 
     @Override
-    public void OnItemClick(int hardwareNo, Button button, String lockOutAlarm) {
+    public void OnItemClick(int sNo,int hardwareNo, Button button, String lockOutAlarm) {
        /* mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR + "1" + SPILT_CHAR + "1" + SPILT_CHAR);*/
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
-                WRITE_PACKET + SPILT_CHAR + PCK_LOCKOUT + SPILT_CHAR + hardwareNo + SPILT_CHAR + ACK);
-        alarmLogDao.updateLockAlarm(Integer.parseInt(lockOutAlarm), "0");
-        button.setVisibility(View.INVISIBLE);
+        mAppClass.sendPacket(new DataReceiveCallback() {
+            @Override
+            public void OnDataReceive(String data) {
+                String[] splitData = data.split("\\*")[1].split("\\$");
+                if (splitData[0].equals(WRITE_PACKET)) {
+                    if (splitData[1].equals(PCK_LOCKOUT)) {
+                        if (splitData[2].equals("1")) {
+                            alarmLogDao.updateLockAlarm(sNo, "0");
+                            button.setVisibility(View.INVISIBLE);
+                        } else {
+                            mAppClass.showSnackBar(getContext(), "Acknowledgement Failed");
+                        }
+                    } else {
+                        mAppClass.showSnackBar(getContext(), "Acknowledgement Failed");
+                    }
+                } else {
+                    mAppClass.showSnackBar(getContext(), "Acknowledgement Failed");
+                }
+            }
+        }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
+                WRITE_PACKET + SPILT_CHAR + PCK_LOCKOUT + SPILT_CHAR + formDigits(2, String.valueOf(hardwareNo)) + SPILT_CHAR + ACK);
     }
 }

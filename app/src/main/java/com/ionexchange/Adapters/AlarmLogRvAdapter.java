@@ -42,18 +42,18 @@ public class AlarmLogRvAdapter extends RecyclerView.Adapter<AlarmLogRvAdapter.it
             holder.button.setBackgroundColor(context.getResources().getColor(R.color.ash));
 
         }
-        holder.sensorType.setText(alarmLogEntityList.get(position).sensorType);
+        holder.sensorType.setText(alarmLogEntityList.get(position).hardwareNo);
         holder.AlertName.setText(alarmLogEntityList.get(position).alarmLog);
         if (alarmLogEntityList.get(position).lockOutAlarm.equals("1")){
             holder.button.setVisibility(View.VISIBLE);
         }else {
             holder.button.setVisibility(View.INVISIBLE);
         }
-        holder.Date.setText(alarmLogEntityList.get(position).date+"|"+alarmLogEntityList.get(position).time);
+        holder.Date.setText(alarmLogEntityList.get(position).date + " | " + alarmLogEntityList.get(position).time);
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnOnClick.OnItemClick(Integer.parseInt(alarmLogEntityList.get(position).hardwareNo), holder.button, alarmLogEntityList.get(position).lockOutAlarm);
+                btnOnClick.OnItemClick(alarmLogEntityList.get(position).sNo, Integer.parseInt(alarmLogEntityList.get(position).hardwareNo), holder.button, alarmLogEntityList.get(position).lockOutAlarm);
             }
         });
     }

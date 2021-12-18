@@ -113,7 +113,7 @@ public class KeepAlive implements DataReceiveCallback {
             if (data[4].equals("0")) {
                 if (data[5].equals("08")) {
                     AlarmLogEntity alarmLogEntity = new AlarmLogEntity(alarmLogDao.getLastSno() + 1,
-                            data[3].substring(2,4), sensorType,
+                            data[3].substring(2,4),  data[3].substring(0, 2),
                             alarmArr[Integer.parseInt(data[5])],
                             ApplicationClass.getCurrentTime(),
                             ApplicationClass.getCurrentDate(), "1");
@@ -147,7 +147,7 @@ public class KeepAlive implements DataReceiveCallback {
             if (data[4].equals("0")) {
                 if (!data[5].equals("08")){
                     AlarmLogEntity alarmLogEntity = new AlarmLogEntity(alarmLogDao.getLastSno() + 1,
-                            data[3].substring(2,4), sensorType,
+                            data[3].substring(2,4), data[3].substring(0, 2),
                             alarmArr[Integer.parseInt(data[5])],
                             ApplicationClass.getCurrentTime(),
                             ApplicationClass.getCurrentDate(),"0");

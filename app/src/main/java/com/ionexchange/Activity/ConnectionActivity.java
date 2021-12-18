@@ -6,6 +6,7 @@ import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEFAULT_CONFIG;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Singleton.SharedPref.pref_MACADDRESS;
 
@@ -271,8 +272,15 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
 
     @Override
     public void OnDataReceived(String data) {
+
+        data =  "{*1$0$14$01000$02010$03040$04050$05090$06091$07092$08093$09094$10095" +
+                "$11096$12097$13098$14099$15021$16022$17023$18061$19062$20063$21064" +
+                "$22065$23066$24067$25068$26031$27032$28033$29034$30035$31036$32037" +
+                "$33038$34081$35082$36083$37084$38085$39086$40087$41088$42071$43072" +
+                "$44073$45074$46075$47076$48077$49078*}";
+
         Log.e(TAG, "OnDataReceived: " + data);
-        /*if (data.equals("FailedToConnect")) {
+        if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getApplicationContext(), getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {
             mAppClass.showSnackBar(getApplicationContext(), getString(R.string.connection_failed));
@@ -282,7 +290,7 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
             mAppClass.showSnackBar(getApplicationContext(), getString(R.string.timeout));
         } else if (data != null) {
             handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
-        }*/
+        }
     }
 
     private void updateInputDB(List<InputConfigurationEntity> entryList) {
@@ -292,22 +300,22 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
 
     private void handleResponse(String[] splitData) {
         if (splitData[1].equals("0")){
-            int i=1;
+            int i=0;
             String sensorType = "SENSOR";
-            while (i<=50){
-                if (i < 5) {
+            while (i<49){
+                if (i < 4) {
                     sensorType = "SENSOR";
-                } else if (i < 15) {
+                } else if (i < 14) {
                     sensorType = "MODBUS";
-                } else if (i < 18) {
+                } else if (i < 17) {
                     sensorType = "SENSOR";
-                } else if (i < 26) {
+                } else if (i < 25) {
                     sensorType = "Analog";
-                } else if (i < 34) {
+                } else if (i < 33) {
                     sensorType = "FLOWMETER";
-                } else if (i < 42) {
+                } else if (i < 41) {
                     sensorType = "DIGITAL";
-                } else if (i < 50) {
+                } else {
                     sensorType = "TANK";
                 }
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
@@ -381,8 +389,6 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
                             if(inputConfigurationDao.getInputConfigurationEntityList().isEmpty()){
                                 sendPacket(DEVICE_PASSWORD+SPILT_CHAR+CONN_TYPE+SPILT_CHAR+READ_PACKET+SPILT_CHAR+DEFAULT_CONFIG+SPILT_CHAR+"0"+SPILT_CHAR);
                             }
-
-
                         }
 
                         @Override
