@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Dashboard;
 
+import static com.ionexchange.Others.ApplicationClass.bleConnected;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.Observable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -58,10 +61,33 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         db = WaterTreatmentDb.getDatabase(getContext());
         defaultLayoutConfigurationDao = db.defaultLayoutConfigurationDao();
         mainConfigurationDao = db.mainConfigurationDao();
+        if (bleConnected.get()) {
+            mBinding.connectStatus.setImageResource(R.drawable.green_circle);
+            mBinding.connectTxt.setText("CONNECTED");
+        }
+
+        bleConnected.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                baseActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (bleConnected.get()) {
+                            mBinding.connectStatus.setImageResource(R.drawable.green_circle);
+                            mBinding.connectTxt.setText("CONNECTED");
+                        } else {
+                            mBinding.connectStatus.setImageResource(R.drawable.circle_bg);
+                            mBinding.connectTxt.setText("NOT CONNECTED");
+                        }
+                    }
+                });
+            }
+        });
+
         mBinding.exInDb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             //   mAppClass.navigateTo(getActivity(), R.id.action_Dashboard_to_export_dbFile);
+                //   mAppClass.navigateTo(getActivity(), R.id.action_Dashboard_to_export_dbFile);
             }
         });
         setGridCount(pageNo);

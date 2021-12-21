@@ -16,6 +16,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
+
+        <ImageView
+            android:id="@+id/connectStatus"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@drawable/bg_circle"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintEnd_toStartOf="@+id/image"
+            app:layout_constraintHorizontal_bias="0.05"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/connectTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="10dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/connectStatus"
+            app:layout_constraintStart_toEndOf="@+id/connectStatus"
+            app:layout_constraintTop_toTopOf="@+id/connectStatus" />
+
         <ImageView
             android:id="@+id/image"
             android:layout_width="200dp"

@@ -1,6 +1,7 @@
 package com.ionexchange.BLE;
 
 import static com.ionexchange.Activity.BaseActivity.msDismissProgress;
+import static com.ionexchange.Others.ApplicationClass.bleConnected;
 import static com.ionexchange.Others.ApplicationClass.lastKeepAliveData;
 import static com.ionexchange.Others.PacketControl.ENDPACKET;
 import static com.ionexchange.Others.PacketControl.STARTPACKET;
@@ -177,10 +178,12 @@ public class BluetoothHelper implements SerialListener {
                                 mConnectionListener.start();
                                 if (data.contains(mExpectedResponse)) {
                                     isConnected = true;
+                                    bleConnected.set(true);
                                     mConnectStatus = ConnectStatus.CONNECTED;
                                     packetTimeout.cancel();
                                 } else {
                                     isConnected = false;
+                                    bleConnected.set(false);
                                     mConnectStatus = ConnectStatus.NOTCONNECTED;
                                     mConnectionListener.start();
                                 }
@@ -230,9 +233,11 @@ public class BluetoothHelper implements SerialListener {
     public void setConnected(boolean connectStatus) {
         if (connectStatus) {
             isConnected = true;
+            bleConnected.set(true);
             mConnectStatus = ConnectStatus.CONNECTED;
         } else {
             isConnected = false;
+            bleConnected.set(false);
             mConnectStatus = ConnectStatus.NOTCONNECTED;
         }
 
@@ -342,6 +347,7 @@ public class BluetoothHelper implements SerialListener {
 
     @Override
     public void onSerialConnect() {
+        bleConnected.set(true);
         connectCallback.OnConnectSuccess();
     }
 
@@ -425,10 +431,13 @@ public class BluetoothHelper implements SerialListener {
 
     @Override
     public void onDisconnected() {
-        if(isConnected)
+        if(isConnected) {
             BaseActivity.kickOut();
+        }
         isConnected = false;
+        bleConnected.set(false);
         Log.e(TAG, "onDisconnected: ");
+
     }
 
     public enum SearchType {

@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -56,8 +57,14 @@ public class FragmentEventLog extends Fragment {
         db =  WaterTreatmentDb.getDatabase(getContext());
         eventLogDao = db.eventLogDao();
         eventLogEntityList = eventLogDao.getEventLogList();
-        setAdapter(eventLogEntityList);
-        getDateFormDb();
+
+        eventLogDao.getEventLiveList().observe(getViewLifecycleOwner(), new Observer<List<EventLogEntity>>() {
+            @Override
+            public void onChanged(List<EventLogEntity> eventLogEntities) {
+                setAdapter(eventLogEntities);
+            }
+        });
+
         mBinding.roundView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,9 +77,9 @@ public class FragmentEventLog extends Fragment {
                     }
                     setAdapter(eventLogEntityList);
                 }
-
             }
         });
+
         mBinding.edtFormDate.setOnClickListener(View -> {
             MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.datePicker();
             materialDateBuilder.setTitleText("SELECT A DATE");
@@ -86,6 +93,7 @@ public class FragmentEventLog extends Fragment {
                 }
             });
         });
+
         mBinding.alertsType.setAdapter(getAdapter(eventLogArr, getContext()));
         mBinding.alertsType.setOnClickListener(v -> {
             mBinding.alertsType.showDropDown();
@@ -118,8 +126,6 @@ public class FragmentEventLog extends Fragment {
         mBinding.alertsType.setOnClickListener(View ->{
             mBinding.alertsType.showDropDown();
         });
-
-
     }
 
     public void deleteTopRow() {

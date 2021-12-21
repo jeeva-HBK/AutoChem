@@ -177,8 +177,6 @@ public class ApplicationClass extends Application {
             "DI Alarm" ,"Flow Verify Alarm", "Lockout Alarm"},
     FlowanalogType = {"Analog - 1","Analog - 2","Analog - 3","Analog - 4","Analog - 5","Analog - 6","Analog - 7", "Analog - 8"};
 
-
-
     /* Static Variables */
     public static String mIPAddress = "", TabletIPAddress = "", Packet, Acknowledge;
     public static String macAddress; // Mac address of the unit controller
@@ -202,9 +200,10 @@ public class ApplicationClass extends Application {
     public static int userType = 0;
     public static RequestQueue requestQueue;
     public final static String baseURL = "http://192.168.1.82/WaterIOT.API/api/";
-    //public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
+    // public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
 
     public static ObservableBoolean triggerWebService = new ObservableBoolean(false);
+    public static ObservableBoolean bleConnected = new ObservableBoolean(true);
 
     Handler handler;
     DataReceiveCallback listener;

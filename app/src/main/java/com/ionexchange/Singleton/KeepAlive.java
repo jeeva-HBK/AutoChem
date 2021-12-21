@@ -45,8 +45,7 @@ public class KeepAlive implements DataReceiveCallback {
     ServicesNotificationDao servicesNotificationDao;
     String sensorType;
 
-    public KeepAlive() {
-    }
+    public KeepAlive() { }
 
     public static KeepAlive getInstance() {
         if (keepAlive == null) {
@@ -186,7 +185,5 @@ public class KeepAlive implements DataReceiveCallback {
     }
 
     @Override
-    public void OnDataReceive(String data) {
-
-    }
+    public void OnDataReceive(String data) { }
 }

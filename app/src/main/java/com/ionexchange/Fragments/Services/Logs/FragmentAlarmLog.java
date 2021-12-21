@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -70,8 +71,20 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
         servicesNotificationDao = waterTreatmentDb.servicesNotificationDao();
         alarmLogDao = waterTreatmentDb.alarmLogDao();
         alarmLogEntityList = alarmLogDao.getAlarmLogList();
-        setAdapter(alarmLogEntityList);
-        getDateFormDb();
+
+        /*LiveData*/
+        alarmLogDao.getAlarmLiveList().observe(getViewLifecycleOwner(), new Observer<List<AlarmLogEntity>>() {
+            @Override
+            public void onChanged(List<AlarmLogEntity> alarmLogEntities) {
+                setAdapter(alarmLogEntities);
+            }
+        });
+
+        mBinding.alertsType.setAdapter(getAdapter(alarmArr, getContext()));
+        mBinding.alertsType.setOnClickListener(v -> {
+            mBinding.alertsType.showDropDown();
+        });
+
         mBinding.roundView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,10 +99,7 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
 
             }
         });
-        mBinding.alertsType.setAdapter(getAdapter(alarmArr, getContext()));
-        mBinding.alertsType.setOnClickListener(v -> {
-            mBinding.alertsType.showDropDown();
-        });
+
         mBinding.edtFormDate.setOnClickListener(View -> {
             MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.datePicker();
             materialDateBuilder.setTitleText("SELECT A DATE");
@@ -126,29 +136,7 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
                 }
             });
         });
-
-     /*   LocalDate currentDate = LocalDate.now();
-        LocalDate currentDateMinus6Months = currentDate.minusMonths(3);
-        String dt = currentDateMinus6Months.toString();
-        String[] split = dt.split("-");
-        String ad = split[2]+"/"+split[1]+"/"+split[0];
-
-            if (alarmLogDao.getDeleteDate(ad).contains(ad)) {
-                alarmLogDao.deleteDateWise(ad);
-            }*/
     }
-
-    void getDateFormDb() {
-        List<String> date = new ArrayList<>();
-        date = alarmLogDao.getDateList();
-        LinkedHashSet<String> dateset = new LinkedHashSet<>(date);
-        date.clear();
-        date.addAll(dateset);
-//        mBinding.edtFormDate.setAdapter(new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, date));
-//        mBinding.edtToDate.setAdapter(new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, date));
-
-    }
-
 
     public void updateToDb(List<AlarmLogEntity> entryList) {
         alarmLogDao.insert(entryList.toArray(new AlarmLogEntity[0]));
@@ -171,8 +159,6 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
 
     @Override
     public void OnItemClick(int sNo,int hardwareNo, Button button, String lockOutAlarm) {
-       /* mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
-                WRITE_PACKET + SPILT_CHAR + "1" + SPILT_CHAR + "1" + SPILT_CHAR);*/
         mAppClass.sendPacket(new DataReceiveCallback() {
             @Override
             public void OnDataReceive(String data) {

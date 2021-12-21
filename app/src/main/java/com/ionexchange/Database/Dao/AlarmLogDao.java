@@ -1,11 +1,13 @@
 package com.ionexchange.Database.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.ionexchange.Database.Entity.AlarmLogEntity;
+import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 
 import java.util.List;
 
@@ -14,7 +16,6 @@ public interface AlarmLogDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(AlarmLogEntity... alarmLogEntities);
-
 
     @Query("select * FROM AlarmLogEntity")
     List<AlarmLogEntity> getAlarmLogList();
@@ -37,8 +38,10 @@ public interface AlarmLogDao {
     @Query("select date FROM alarmlogentity")
     List<String> getDateList();
 
-
     @Query("Delete FROM alarmlogentity WHERE sNo in (SELECT sNo FROM AlarmLogEntity limit 1)")
     void deleteFirstRow();
+
+    @Query("select * FROM AlarmLogEntity")
+    LiveData<List<AlarmLogEntity>> getAlarmLiveList();
 
 }
