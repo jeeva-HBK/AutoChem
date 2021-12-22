@@ -26,6 +26,7 @@
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_alarm_log.xml" value="0.36666666666666664" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_configuration.xml" value="0.14" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_dashboard.xml" value="0.2" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_diagnostics.xml" value="0.2722222222222222" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_event_log.xml" value="0.23425925925925925" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_input_sensor_tank_level.xml" value="0.22" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_inputsensor_digital.xml" value="0.2" />
@@ -39,6 +40,7 @@
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_passwordsettings.xml" value="0.2" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_root_services.xml" value="0.33" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_sensor_details.xml" value="0.2" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_sensor_statistics.xml" value="0.25" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_targetipsettings.xml" value="0.2" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_unitipsettings.xml" value="0.1" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/ic_baseline_notifications_24.xml" value="0.1" />

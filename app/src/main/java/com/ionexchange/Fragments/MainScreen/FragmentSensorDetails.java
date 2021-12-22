@@ -44,6 +44,8 @@ import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -61,6 +63,8 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentSensorDetailsBinding;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -72,7 +76,7 @@ public class FragmentSensorDetails extends Fragment {
     ApplicationClass mAppClass;
     List<List<String[]>> finalSensorParamList;
     int currentPage = 0, pageMax = 8;
-    FragmentCalibration_TypeOne sensorCalibration;
+    FragmentSensorCalibration sensorCalibration;
     static MaterialCardView mainScreenBtn;
     FragmentModbusCalibration modbusCalibration;
     String inputNumber, inputType, spareKey = "null";
@@ -99,9 +103,23 @@ public class FragmentSensorDetails extends Fragment {
         inputNumber = getArguments().getString("inputNumber");
         inputType = getArguments().getString("inpuType");
         mainScreenBtn = view.findViewById(mBinding.cardViewMultiMainScreen.getId());
-        mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         getTCPData(inputNumber, inputType);
         mBinding.btnTrendCalibartion.setChecked(true);
+
+        if (inputType.contains("Digital Input") || inputType.contains("Tank")) {
+            mBinding.detailFrame.setVisibility(View.GONE);
+            mBinding.btnNext.setVisibility(View.GONE);
+            mBinding.btnPerv.setVisibility(View.GONE);
+            mBinding.cardViewMultiSelection.setVisibility(View.GONE);
+            mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 6)); // should change
+            ConstraintLayout constraintLayout = view.findViewById(R.id.detailRootLayout);
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone(constraintLayout);
+            constraintSet.connect(R.id.recyclerView, ConstraintSet.LEFT, R.id.cardView_multi_mainScreen, ConstraintSet.RIGHT, 0);
+            constraintSet.applyTo(constraintLayout);
+        }
+
+        mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
         mBinding.viewTrendMainScreen.setOnClickListener(View -> {
             mAppClass.popStackBack(getActivity());
@@ -125,13 +143,13 @@ public class FragmentSensorDetails extends Fragment {
                     } else {
                         switch (inputType) {
                             case "pH":
-                                sensorCalibration = new FragmentCalibration_TypeOne(inputNumber, getPosition(2, inputType, inputTypeArr), spareKey);
+                                sensorCalibration = new FragmentSensorCalibration(inputNumber, getPosition(2, inputType, inputTypeArr), spareKey);
                                 getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                 break;
                             case "ORP":
                             case "Contacting Conductivity":
                             case "Temperature":
-                                sensorCalibration = new FragmentCalibration_TypeOne(inputNumber, getPosition(2, inputType, inputTypeArr));
+                                sensorCalibration = new FragmentSensorCalibration(inputNumber, getPosition(2, inputType, inputTypeArr));
                                 getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                 break;
                             case "Analog":
@@ -141,7 +159,7 @@ public class FragmentSensorDetails extends Fragment {
                 } else {
                     mBinding.txtTrendCalibration.setText("CALIBRATION");
                     mBinding.viewTrendCalibration.setBackground(getContext().getDrawable(R.drawable.calib_flask));
-                    getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), new FragmentSensorStatistics()).commit();
+                    getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), new FragmentSensorStatistics(inputNumber, inputType)).commit();
                 }
             }
         });
@@ -204,19 +222,19 @@ public class FragmentSensorDetails extends Fragment {
                                         mBundle.putString("bufferType", splitData[8]);
                                         mBundle.putString("inputNumber", splitData[3]);
                                         spareKey = splitData[8];
-                                        sensorCalibration = new FragmentCalibration_TypeOne(splitData[3], splitData[4], splitData[8]);
+                                        sensorCalibration = new FragmentSensorCalibration(splitData[3], splitData[4], splitData[8]);
                                         getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                         setAdapter(formpHMap(data.split("\\*")[1].split("\\$")));
                                         break;
 
                                     case "ORP":
-                                        sensorCalibration = new FragmentCalibration_TypeOne(splitData[3], splitData[4]);
+                                        sensorCalibration = new FragmentSensorCalibration(splitData[3], splitData[4]);
                                         getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                         setAdapter(formORPMap(data.split("\\*")[1].split("\\$")));
                                         break;
 
                                     case "Temperature":
-                                        sensorCalibration = new FragmentCalibration_TypeOne(splitData[3], splitData[4]);
+                                        sensorCalibration = new FragmentSensorCalibration(splitData[3], splitData[4]);
                                         getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                         setAdapter(formTempMap(data.split("\\*")[1].split("\\$")));
                                         break;
@@ -226,19 +244,19 @@ public class FragmentSensorDetails extends Fragment {
                                         break;
 
                                     case "Contacting Conductivity":
-                                        sensorCalibration = new FragmentCalibration_TypeOne(splitData[3], splitData[4]);
+                                        sensorCalibration = new FragmentSensorCalibration(splitData[3], splitData[4]);
                                         getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                         setAdapter(formContConMap(data.split("\\*")[1].split("\\$")));
                                         break;
 
                                     case "Toroidal Conductivity":
-                                        sensorCalibration = new FragmentCalibration_TypeOne(splitData[3], splitData[4]);
+                                        sensorCalibration = new FragmentSensorCalibration(splitData[3], splitData[4]);
                                         getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                         setAdapter(formTorConMap(data.split("\\*")[1].split("\\$")));
                                         break;
 
                                     case "Analog Input":
-                                        sensorCalibration = new FragmentCalibration_TypeOne(splitData[3], splitData[4]);
+                                        sensorCalibration = new FragmentSensorCalibration(splitData[3], splitData[4]);
                                         getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
                                         setAdapter(formAnalogMap(data.split("\\*")[1].split("\\$")));
                                         break;

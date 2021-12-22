@@ -101,8 +101,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     AlarmLogDao alarmLogDao;
 
-
-
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(Bundle savedInstanceState) {

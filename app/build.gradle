@@ -43,7 +43,7 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.7.2'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
 
-    //Database
+    // database
     def room_version = "2.2.5"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
@@ -51,11 +51,14 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version"
 
-    //Network library
+    // network library
     implementation 'com.android.volley:volley:1.2.1'
 
-    //WorkManager
+    // workManager
     def work_version = "2.3.1"
     implementation "androidx.work:work-runtime:$work_version"
     implementation "androidx.work:work-runtime-ktx:$work_version"
+
+    // mpChart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

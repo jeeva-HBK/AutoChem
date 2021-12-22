@@ -8,22 +8,17 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 
 import android.app.Activity;
 import android.app.Application;
-import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
-import android.telephony.TelephonyManager;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -82,7 +77,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -207,7 +201,7 @@ public class ApplicationClass extends Application {
 
     Handler handler;
     DataReceiveCallback listener;
-    public static String lastKeepAliveData = "";
+    public static String lastKeepAliveData = "", trendDataCollector = "";
     static ApplicationClass mAppclass;
 
     BroadcastReceiver receiver = new BroadcastReceiver() {

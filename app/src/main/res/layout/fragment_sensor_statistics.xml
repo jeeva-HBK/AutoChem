@@ -1,9 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/sensorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Sensor Statistics"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Filter"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/sensorName"
+            app:layout_constraintTop_toBottomOf="@+id/sensorName" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            app:checkedChip="@+id/lessThanWeek"
+            app:layout_constraintStart_toStartOf="@+id/filter"
+            app:layout_constraintTop_toBottomOf="@+id/filter">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/lessThanWeek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:checkable="true"
+                app:chipBackgroundColor="@color/bg_chip_state_list"
+                app:checkedIconEnabled="false"
+                android:text="Less than a week" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/lessThanTwoWeek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Less than two weeks"
+                app:checkedIconEnabled="false"
+                app:chipBackgroundColor="@color/bg_chip_state_list"
+                android:checkable="true"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/greaterThanTwoWeek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Greater than two week"
+                app:checkedIconEnabled="false"
+                app:chipBackgroundColor="@color/bg_chip_state_list"
+                android:checkable="true"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="3dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

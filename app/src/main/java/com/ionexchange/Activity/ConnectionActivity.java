@@ -46,6 +46,7 @@ import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.ItemClickListener;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.KeepAlive;
 import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.ActivityConnectionBinding;
 
@@ -418,6 +419,13 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
     private void startApp(String macAddress) {
         SharedPref.write(pref_MACADDRESS, macAddress);
         startActivity(new Intent(this, BaseActivity.class));
+        triggerWebService.set(true);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                KeepAlive.getInstance().collectTrendData();
+            }
+        });
         triggerWebService.set(true);
     }
 

@@ -48,7 +48,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class FragmentCalibration_TypeOne extends Fragment implements CompoundButton.OnCheckedChangeListener {
+public class FragmentSensorCalibration extends Fragment implements CompoundButton.OnCheckedChangeListener {
     AlertDialog alertDialog;
     SensorDetailsCalibrationBinding mBinding;
     ApplicationClass mAppClass;
@@ -68,16 +68,15 @@ public class FragmentCalibration_TypeOne extends Fragment implements CompoundBut
     TextView leftHeading;
     TextView rightHeading;
 
-    public FragmentCalibration_TypeOne(String inputNumber, String inputType, String bufferType) {
+    public FragmentSensorCalibration(String inputNumber, String inputType, String bufferType) {
         this.inputNumber = inputNumber;
         this.inputType = getValueFromArr(inputType, inputTypeArr);
         this.bufferType = bufferType;
     }
 
-    public FragmentCalibration_TypeOne() {
-    }
+    public FragmentSensorCalibration() { }
 
-    public FragmentCalibration_TypeOne(String inputNumber, String inputType) {
+    public FragmentSensorCalibration(String inputNumber, String inputType) {
         this.inputType = getValueFromArr(inputType, inputTypeArr);
         this.inputNumber = inputNumber;
     }

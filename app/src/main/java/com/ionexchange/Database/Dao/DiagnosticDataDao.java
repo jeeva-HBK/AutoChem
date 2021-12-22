@@ -24,7 +24,7 @@ public interface DiagnosticDataDao {
     List<DiagnosticDataEntity> getDiagnosticDataList();
 
     @Query("select * FROM DiagnosticDataEntity")
-    List<AlarmLogEntity> getDiagnosticData();
+    List<DiagnosticDataEntity> getDiagnosticData();
 
     @Query("Delete FROM DiagnosticDataEntity WHERE sNo in (SELECT sNo FROM DiagnosticDataEntity limit 1)")
     void deleteFirstRow();
