@@ -1,19 +1,16 @@
 package com.ionexchange.Singleton;
 
 
-import static com.ionexchange.Others.ApplicationClass.Acknowledge;
 import static com.ionexchange.Others.ApplicationClass.alarmArr;
+import static com.ionexchange.Others.ApplicationClass.alertKeepAliveData;
 import static com.ionexchange.Others.ApplicationClass.eventLogArr;
+import static com.ionexchange.Others.ApplicationClass.inputKeepAliveData;
+import static com.ionexchange.Others.ApplicationClass.outputKeepAliveData;
 import static com.ionexchange.Others.ApplicationClass.trendDataCollector;
-import static com.ionexchange.Others.PacketControl.ACK;
 import static com.ionexchange.Others.PacketControl.ALARM_STATUS;
-import static com.ionexchange.Others.PacketControl.CRC;
-import static com.ionexchange.Others.PacketControl.ENDPACKET;
 import static com.ionexchange.Others.PacketControl.INPUT_VOLTAGE;
 import static com.ionexchange.Others.PacketControl.OUTPUT_STATUS;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.STARTPACKET;
 
 import android.content.Context;
 import android.os.CountDownTimer;
@@ -51,7 +48,8 @@ public class KeepAlive implements DataReceiveCallback {
     TrendDao trendDao;
     String sensorType;
 
-    public KeepAlive() { }
+    public KeepAlive() {
+    }
 
     public static KeepAlive getInstance() {
         if (keepAlive == null) {
@@ -79,6 +77,11 @@ public class KeepAlive implements DataReceiveCallback {
             String [] splitInput = data.split("\\*")[1].split(RES_SPILT_CHAR);
             if (splitInput[2].equals(INPUT_VOLTAGE)){
                 trendDataCollector = data;
+                inputKeepAliveData = data;
+            } else if (splitInput[2].equals(OUTPUT_STATUS)) {
+                outputKeepAliveData = data;
+            } else if (splitInput[2].equals(ALARM_STATUS)) {
+                alertKeepAliveData = data;
             }
         }
     }
@@ -191,8 +194,8 @@ public class KeepAlive implements DataReceiveCallback {
         trendDao.insert(entryList.toArray(new TrendEntity[0]));
     }
 
-    public void trendEntity(int sNo, String hardwareNo, String keepValue, String date, String time) {
-        TrendEntity trendEntity = new TrendEntity(sNo, hardwareNo, keepValue, date, time);
+    public void trendEntity(int sNo, int hardwareNo, String keepValue, String date, String time, int row) {
+        TrendEntity trendEntity = new TrendEntity(sNo, hardwareNo, keepValue, date, time, row);
         List<TrendEntity> trendEntities = new ArrayList<>();
         trendEntities.add(trendEntity);
         updateToTrend(trendEntities);
@@ -212,7 +215,7 @@ public class KeepAlive implements DataReceiveCallback {
 
     public void collectTrendData() {
         Log.e("TAG", "collectTrendData: ");
-
+        trendDao = ApplicationClass.DB.trendDao();
         new CountDownTimer(60 * 1000, 100) {
             @Override
             public void onTick(long millisUntilFinished) { }
@@ -220,25 +223,46 @@ public class KeepAlive implements DataReceiveCallback {
             @Override
             public void onFinish() {
                 try {
-                    String[] data = trendDataCollector.split("\\*")[1].split("\\$");
-                    if (data[2].equals(INPUT_VOLTAGE)) {
+                    int maxRow = trendDao.lastRowNumber() == null ? 1 : trendDao.lastRowNumber() + 1;
+                    if (trendDataCollector.equals("NoDataReceived")){
                         int i = 0;
                         while (i < 57) {
-                            if (data[i + 3].length() > 2) {
-                                if (Integer.parseInt(data[i + 3].substring(0, 2)) < 33) {
-                                    trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
-                                            data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentDate(),
-                                            ApplicationClass.getCurrentTime());
+                                if (i < 33) {
+                                    trendEntity(trendDao.getLastSno() + 1, i + 1 ,
+                                            "00", ApplicationClass.getCurrentDate(),
+                                            ApplicationClass.getCurrentTime(), maxRow);
+                                } else if (i > 49) {
+                                    trendEntity(trendDao.getLastSno() + 1, i+1,
+                                            "00", ApplicationClass.getCurrentDate(),
+                                            ApplicationClass.getCurrentTime(), maxRow);
                                 }
-                            }
                             i++;
                         }
+                    } else {
+                        String[] data = trendDataCollector.split("\\*")[1].split("\\$");
+                        if (data[2].equals(INPUT_VOLTAGE)) {
+                            int i = 0;
+                            while (i < 57) {
+                                if (data[i + 3].length() > 2) {
+                                    if (Integer.parseInt(data[i + 3].substring(0, 2)) < 33) {
+                                        trendEntity(trendDao.getLastSno() + 1, Integer.parseInt(data[i + 3].substring(0, 2)),
+                                                data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentDate(),
+                                                ApplicationClass.getCurrentTime(), maxRow);
+                                    } else if (Integer.parseInt(data[i + 3].substring(0, 2)) > 49) {
+                                        trendEntity(trendDao.getLastSno() + 1, Integer.parseInt(data[i + 3].substring(0, 2)),
+                                                data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentDate(),
+                                                ApplicationClass.getCurrentTime(), maxRow);
+                                    }
+                                }
+                                i++;
+                            }
+                        }
                     }
-                    trendDataCollector = "00";
+                    trendDataCollector = "NoDataReceived";
                     start();
 
 
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

@@ -201,7 +201,8 @@ public class ApplicationClass extends Application {
 
     Handler handler;
     DataReceiveCallback listener;
-    public static String lastKeepAliveData = "", trendDataCollector = "";
+    public static String lastKeepAliveData = "", trendDataCollector = "NoDataReceived",
+            inputKeepAliveData = "", outputKeepAliveData = "", alertKeepAliveData = "";
     static ApplicationClass mAppclass;
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -361,7 +362,7 @@ public class ApplicationClass extends Application {
             @Override
             public void onResponse(JSONObject response) {
                 callBack.OnSuccess(response);
-                //Log.e(API1, " <-- " + response);
+                Log.e(API1, " <-- " + response);
             }
         };
 
@@ -375,7 +376,7 @@ public class ApplicationClass extends Application {
         JsonObjectRequest request = new JsonObjectRequest(method, URL, object, responseListener, volleyErrorListener);
 
         request.setRetryPolicy(new DefaultRetryPolicy(httpRequestTimeout, 0, 1.0f));
-        // Log.e(API1, " --> " + new String(request.getBody()));
+         Log.e(API1, " --> " + new String(request.getBody()));
         requestQueue.add(request);
 
     }
@@ -755,6 +756,12 @@ public class ApplicationClass extends Application {
         Format f = new SimpleDateFormat("dd/MM/yyyy");
         return f.format(new Date());
     }
+
+    public static String formatDate(Date date) {
+        Format f = new SimpleDateFormat("dd/MM/yyyy");
+        return f.format(date);
+    }
+
 
     public static String getCurrentTime() {
         Format f = new SimpleDateFormat("HH.mm.ss");

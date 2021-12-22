@@ -1,8 +1,10 @@
 package com.ionexchange.Singleton;
 
 import static com.ionexchange.Others.ApplicationClass.DB;
+import static com.ionexchange.Others.ApplicationClass.alertKeepAliveData;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
-import static com.ionexchange.Others.ApplicationClass.lastKeepAliveData;
+import static com.ionexchange.Others.ApplicationClass.inputKeepAliveData;
+import static com.ionexchange.Others.ApplicationClass.outputKeepAliveData;
 import static com.ionexchange.Others.ApplicationClass.triggerWebService;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
@@ -42,7 +44,7 @@ public class ApiService {
     private static ApiService apiService;
     static Context mContext;
     private static final String TAG = "API";
-    int responseTabId = 0;
+    String responseTabId = "00";
     String responseTabData = "";
 
     private ApiService() {
@@ -69,21 +71,22 @@ public class ApiService {
 
     private void postData() {
         try {
-            ApplicationClass.httpRequest(mContext, "Mobile/MobileData?Data=", getKeepAliveObject(), Request.Method.POST, new VolleyCallback() {
-                @Override
-                public void OnSuccess(JSONObject object) {
-                    processApiData(object);
-                }
+            ApplicationClass.httpRequest(mContext, "Mobile/MobileData?Data=", getKeepAliveObject(),
+                    Request.Method.POST, new VolleyCallback() {
+                        @Override
+                        public void OnSuccess(JSONObject object) {
+                            processApiData(object);
+                        }
 
-                @Override
-                public void OnFailure(VolleyError error) {
+                        @Override
+                        public void OnFailure(VolleyError error) {
 
-                }
-            });
+                        }
+                    });
         } catch (Exception e) {
           //  e.printStackTrace();
         }
-        responseTabId = 0;
+        responseTabId = "00";
         responseTabData = "";
         startApiService();
     }
@@ -104,21 +107,38 @@ public class ApiService {
                     case "10":
                         processInputConfiguration(responseObject.getJSONArray("DATA").getJSONObject(0));
                         break;
+
+                    case "12":
+                        processDefaultConfiguration(responseObject.getJSONArray("DATA").getJSONObject(0));
+                        break;
                 }
             }
         } catch (Exception e) {
-         //   e.printStackTrace();
+            //   e.printStackTrace();
+        }
+    }
+
+    private void processDefaultConfiguration(JSONObject data) {
+        responseTabId = "12";
+        try {
+            responseTabData = "{*1$0$14$01000$02010$03040$04050$05090$06091$07092$08093$09094$10095" +
+                    "$11096$12097$13098$14099$15021$16022$17023$18061$19062$20063$21064" +
+                    "$22065$23066$24067$25068$26031$27032$28033$29034$30035$31036$32037" +
+                    "$33038$34081$35082$36083$37084$38085$39086$40087$41088$42071$43072" +
+                    "$44073$45074$46075$47076$48077$49078*}";
+        } catch (Exception e) {
+            //    e.printStackTrace();
         }
     }
 
     private void processInputConfiguration(JSONObject dataObj) {
         // INPUT_NO
-        responseTabId = 10;
+        responseTabId = "10";
         // responseTabData = "{*1$04$0$01$00$1$0$PHSensor$0$1$33$10$400$1300$10$0$1*}";
         try {
             responseTabData = getInputSensorConfig(dataObj.getString("INPUT_NO"));
         } catch (JSONException e) {
-        //    e.printStackTrace();
+            //    e.printStackTrace();
         }
     }
 
@@ -140,13 +160,21 @@ public class ApiService {
         try {
             for (int i = 0; i < userArr.length(); i++) {
                 JSONObject tempUser = userArr.getJSONObject(i);
-                userList.add(new UsermanagementEntity(tempUser.getString("USERID"), tempUser.getString("USERNAME"),
-                        tempUser.getInt("ROLE"), tempUser.getString("PASSWORD"), tempUser.getString("CONTACT"), tempUser.getString("LOGINSTATUS")));
+                userList.add(new UsermanagementEntity(tempUser.getString("USERID"),
+                        tempUser.getString("USERNAME"),
+                        tempUser.getInt("ROLE"),
+                        tempUser.getString("PASSWORD"),
+                        tempUser.getString("CONTACT"),
+                        tempUser.getString("LOGINSTATUS")));
             }
             UserManagementDao dao = DB.userManagementDao();
             dao.insert(userList.toArray(new UsermanagementEntity[0]));
-            responseTabId = 02;
-            responseTabData = "{*1200$007$01$01PH$02ORP$03Contacting conductivity$04Toroidal conductivity$05ST500(Fluorescence)$06ST500(Turbidity)$07CR-300 CS(Corrosion)$08CR-300 CS(Pitting)$09CR-300 CU(Corrosion)$10CR-300 CU(Pitting)$11ST-590$12ST-588(Fluorescence)$13ST-588(Tagged Polymer)$14ST-500 RO$15Temperature$16Temperature$17Temperature$18Analog4-20mA1$19Analog4-20mA2$20Analog4-20mA3$21Analog4-20mA4$22Analog4-20mA5$23Analog4-20mA6$24Analog0-10V1$25Analog0-10V2$26AnalogFlow Meters2$27AnalogFlow Meters3$28AnalogFlow Meters4$29AnalogFlow Meters5$30DigitalFlow Meters1$31DigitalFlow Meters2$32DigitalFlow Meters3$33DigitalFlow Meters4$34DigitalSensor1$35DigitalSensor2$36DigitalSensor3$37DigitalSensor4$38DigitalSensor5$39DigitalSensor6$40DigitalSensor7$41DigitalSensor8$42TankSensor1$43TankSensor2$44TankSensor3$45TankSensor4$46TankSensor5$47TankSensor6$48TankSensor7$49TankSensor8$50VirtualSensors1$51VirtualSensors2$52VirtualSensors3$53VirtualSensors4$54VirtualSensors5$55VirtualSensors6$56VirtualSensors7$57VirtualSensors8*}";
+            responseTabId = "12";
+            responseTabData = "{*1$0$14$01000$02010$03040$04050$05090$06091$07092$08093$09094$10095" +
+                    "$11096$12097$13098$14099$15021$16022$17023$18061$19062$20063$21064" +
+                    "$22065$23066$24067$25068$26031$27032$28033$29034$30035$31036$32037" +
+                    "$33038$34081$35082$36083$37084$38085$39086$40087$41088$42071$43072" +
+                    "$44073$45074$46075$47076$48077$49078*}";
         } catch (JSONException e) {
          //   e.printStackTrace();
         }
@@ -159,7 +187,7 @@ public class ApiService {
             SharedPref.write(pref_SITELOCATION, siteDetailsObject.getString("SITE_LOCATION"));
             SharedPref.write(pref_CONTROLLERPASSWORD, siteDetailsObject.getString("CONTROLLER_PASSWORD"));
             SharedPref.write(pref_CONTROLLERISACTIVE, (siteDetailsObject.getString("ISACTIVE").equals("1")));
-            responseTabId = 03;
+            responseTabId = "03";
             responseTabData = "ACK";
         } catch (JSONException e) {
            // e.printStackTrace();
@@ -177,9 +205,9 @@ public class ApiService {
             finalObject.put("DEVICE_MAC", SharedPref.read(pref_MACADDRESS, "N/A"));
             finalObject.put("TIMESTAMP", System.currentTimeMillis());
 
-            dataObject.put("MSG_ID", "001");
-            dataObject.put("MSG_SUBID", "02");
-            dataObject.put("MSG_FIELD", lastKeepAliveData);
+            dataObject.put("ALERT_RESPONSE", alertKeepAliveData);
+            dataObject.put("OUTPUT_RESPONSE", outputKeepAliveData);
+            dataObject.put("MSG_FIELD", inputKeepAliveData);
             dataObject.put("LABLE", "");
             dataObject.put("RESPONSE_WEB", "");
             dataObject.put("RESPONSE_TAB", getResponceTab() == null ? "NACK" : getResponceTab());

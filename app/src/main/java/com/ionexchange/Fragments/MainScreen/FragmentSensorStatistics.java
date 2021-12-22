@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +36,9 @@ import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentSensorStatisticsBinding;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class FragmentSensorStatistics extends Fragment implements OnChartValueSelectedListener {
@@ -44,7 +48,7 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
     String inputNumber, inputType;
     TrendDao trendDao;
     InputConfigurationDao inputDao;
-
+    ArrayList<Entry> values;
     public FragmentSensorStatistics(String inputNumber, String inputType) {
         this.inputNumber = ApplicationClass.formDigits(2, inputNumber);
         this.inputType = inputType;
@@ -61,43 +65,62 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mBinding.sensorName.setText(inputType + " Sensor Statistics");
+        mBinding.sensorName.setText(inputType + " Sensor");
         trendDao = ApplicationClass.DB.trendDao();
         inputDao = ApplicationClass.DB.inputConfigurationDao();
+        chart = mBinding.lineChart;
 
+        initChart(trendDao.getLessThenOneWeek(lessThanAWeek(),
+                ApplicationClass.getCurrentDate(), inputNumber));
 
         mBinding.chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.lessThanWeek:
-                        initChart(trendDao.getTrendList(inputNumber));
+                        initChart(trendDao.getLessThenOneWeek(lessThanAWeek(),
+                                ApplicationClass.getCurrentDate(), inputNumber));
                         break;
 
                     case R.id.lessThanTwoWeek:
-                        initChart(trendDao.getTrendList(inputNumber));
+                        initChart(trendDao.getLessThenTwoWeek(lessThanTwoWeek(),
+                                ApplicationClass.getCurrentDate(), inputNumber));
                         break;
 
                     case R.id.greaterThanTwoWeek:
-                        initChart(trendDao.getTrendList(inputNumber));
+                        initChart(trendDao.getMoreThanTwoWeek(inputNumber));
                         break;
                 }
             }
         });
 
-        trendDao.getTrendLiveList().observe(getViewLifecycleOwner(), new Observer<List<TrendEntity>>() {
+        trendDao.getTrendLiveList(inputNumber).observe(getViewLifecycleOwner(), new Observer<List<TrendEntity>>() {
             @Override
-            public void onChanged(List<TrendEntity> trendEntities) {
-                setData(trendEntities);
-                mBinding.lineChart.notifyDataSetChanged();
-                mBinding.lineChart.invalidate();
+            public void onChanged(List<TrendEntity> list) {
+                if (mBinding.lessThanWeek.isChecked()){
+                    setData(list);
+                    mBinding.lineChart.notifyDataSetChanged();
+                    mBinding.lineChart.invalidate();
+                }
             }
         });
     }
 
-    private void initChart(List<TrendEntity> dataSet) {
+    String lessThanAWeek() {
+        Calendar cal = new GregorianCalendar();
+        cal.add(Calendar.DAY_OF_MONTH, -7);
+        Date sevenDaysAgo = cal.getTime();
+        return ApplicationClass.formatDate(sevenDaysAgo);
+    }
 
-        chart = mBinding.lineChart;
+    String lessThanTwoWeek() {
+        Calendar cal = new GregorianCalendar();
+        cal.add(Calendar.DAY_OF_MONTH, -14);
+        Date sevenDaysAgo = cal.getTime();
+        return ApplicationClass.formatDate(sevenDaysAgo);
+    }
+
+    private void initChart(List<TrendEntity> dataSet) {
         chart.getAxisLeft().setDrawGridLines(false);
         chart.getXAxis().setDrawGridLines(false);
         chart.setBackgroundColor(Color.WHITE);
@@ -143,7 +166,7 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
     }
 
     private void setData(List<TrendEntity> list) {
-        ArrayList<Entry> values = new ArrayList<>();
+        values = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
             float val = Float.parseFloat(list.get(i).keepValue);

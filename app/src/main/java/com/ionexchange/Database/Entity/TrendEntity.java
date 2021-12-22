@@ -10,7 +10,7 @@ public class TrendEntity {
     public int sNo;
 
     @ColumnInfo(name = "hardwareNo")
-    public String hardwareNo;
+    public int hardwareNo;
 
     @ColumnInfo(name = "keepValue")
     public String keepValue;
@@ -21,13 +21,19 @@ public class TrendEntity {
     @ColumnInfo(name = "time")
     public String time;
 
-    public TrendEntity(int sNo, String hardwareNo, String keepValue, String date, String time) {
+    @ColumnInfo(name = "rowNumber")
+    public int rowNumber;
+
+
+    public TrendEntity(int sNo, int hardwareNo, String keepValue, String date, String time, int rowNumber) {
         this.sNo = sNo;
         this.hardwareNo = hardwareNo;
         this.keepValue = keepValue;
         this.date = date;
         this.time = time;
+        this.rowNumber = rowNumber;
     }
+
 
     public int getsNo() {
         return sNo;
@@ -37,11 +43,11 @@ public class TrendEntity {
         this.sNo = sNo;
     }
 
-    public String getHardwareNo() {
+    public int getHardwareNo() {
         return hardwareNo;
     }
 
-    public void setHardwareNo(String hardwareNo) {
+    public void setHardwareNo(int hardwareNo) {
         this.hardwareNo = hardwareNo;
     }
 
@@ -67,5 +73,13 @@ public class TrendEntity {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public int getRowNumber() {
+        return rowNumber;
+    }
+
+    public void setRowNumber(int rowNumber) {
+        this.rowNumber = rowNumber;
     }
 }

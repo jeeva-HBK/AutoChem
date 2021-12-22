@@ -219,9 +219,9 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
 
     @Override
     public void onClick(MainConfigurationEntity mEntity) {
-       // if (ApplicationClass.userType == 3) {
+        // if (ApplicationClass.userType == 3) {
             if (!mEntity.inputType.contains("Output") && !mEntity.inputType.contains("virtual")) {
-                if (mEntity.hardware_no != 0) {
+                if (mEntity.flag_Value != 0) {
                     Bundle bundle = new Bundle();
                     bundle.putString("inputNumber", String.valueOf(mEntity.hardware_no));
                     bundle.putString("inpuType", mEntity.inputType);
