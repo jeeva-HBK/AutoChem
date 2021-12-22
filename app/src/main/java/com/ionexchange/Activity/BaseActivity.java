@@ -316,10 +316,10 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.trend_screen_btn:
-                /*setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle,
+                setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle,
                         mBinding.statisticsText, navGraph, R.id.trend, mNavController);
-                mBinding.view.setVisibility(View.GONE);*/
-                mAppClass.showSnackBar(getApplicationContext(), "UNDER DEVELOPMENT !");
+                mBinding.view.setVisibility(View.GONE);
+                //mAppClass.showSnackBar(getApplicationContext(), "UNDER DEVELOPMENT !");
                 break;
 
             case R.id.event_logs_screen_btn:

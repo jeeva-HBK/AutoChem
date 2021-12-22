@@ -3,6 +3,7 @@ package com.ionexchange.Fragments.MainScreen;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
@@ -22,24 +24,32 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IFillFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.android.material.chip.ChipGroup;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.TrendDao;
 import com.ionexchange.Database.Entity.TrendEntity;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.AxisValueFormatter;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentSensorStatisticsBinding;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 public class FragmentSensorStatistics extends Fragment implements OnChartValueSelectedListener {
 
@@ -49,6 +59,7 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
     TrendDao trendDao;
     InputConfigurationDao inputDao;
     ArrayList<Entry> values;
+
     public FragmentSensorStatistics(String inputNumber, String inputType) {
         this.inputNumber = ApplicationClass.formDigits(2, inputNumber);
         this.inputType = inputType;
@@ -144,12 +155,12 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
         chart.getXAxis().setDrawGridLines(true);
         chart.getXAxis().setGridLineWidth(0.5f);
 
-        LimitLine ll1 = new LimitLine(Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(inputNumber))), "Upper Limit");
+        LimitLine ll1 = new LimitLine(Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(inputNumber))), "Low Alarm");
         ll1.setLineWidth(2f);
         ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
         ll1.setTextSize(10f);
 
-        LimitLine ll2 = new LimitLine(Float.parseFloat(inputDao.getLowAlarm(Integer.parseInt(inputNumber))), "Lower Limit");
+        LimitLine ll2 = new LimitLine(Float.parseFloat(inputDao.getLowAlarm(Integer.parseInt(inputNumber))), "High Alarm");
         ll2.setLineWidth(2f);
         ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
         ll2.setTextSize(10f);
@@ -215,4 +226,7 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
     @Override
     public void onNothingSelected() { }
 }
+
+
+
 
