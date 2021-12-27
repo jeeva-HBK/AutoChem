@@ -36,4 +36,5 @@ public interface OutputKeepAliveDao {
     @Query("select outputStatusType  FROM OutputKeepAliveEntity WHERE  hardwareNo = :hardwareNo ")
     String getOutputRelayStatus(int hardwareNo);
 
+
 }

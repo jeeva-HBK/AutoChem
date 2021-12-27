@@ -36,7 +36,7 @@
 
     <fragment
         android:id="@+id/trend"
-        android:name="com.ionexchange.Fragments.FragmentRoot_Trend"
+        android:name="com.ionexchange.Fragments.Trend.FragmentRoot_Trend"
         android:label="Trend"
         tools:layout="@layout/fragment_trend" />
 

@@ -36,6 +36,8 @@ public interface OutputConfigurationDao {
     @Query("select outputType FROM outputConfigurationEntity  WHERE outputNumber = :hardwareNo ")
     String getOutputName(int hardwareNo);
 
+    @Query("select writePacket from outputConfigurationEntity WHERE outputNumber = :hardwareNo ")
+    String getWritePacket(int hardwareNo);
 
     @Query("select * FROM outputConfigurationEntity  WHERE outputNumber BETWEEN :fromHardwareNo AND :toHardwareNo LIMIT  :limit OFFSET :offset")
     List<OutputConfigurationEntity> getOutputHardWareNoConfigurationEntityList(int fromHardwareNo, int toHardwareNo, int limit, int offset);

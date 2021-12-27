@@ -42,10 +42,12 @@ public class InputConfigurationEntity {
     @ColumnInfo(name = "flagKey")
     public int flagKey;
 
-    public InputConfigurationEntity(int hardwareNo, String inputType, String sensorType, int signalType,
-                                    String inputsequenceName, int inputSequenceNumber, String inputLabel,
-                                    String subValueOne, String subValueTwo,
-                                    String unit, String type,int flagKey) {
+    @ColumnInfo(name = "writePacket")
+    public String writePacket;
+
+
+    public InputConfigurationEntity(int hardwareNo, String inputType, String sensorType, int signalType, String inputsequenceName, int inputSequenceNumber, String inputLabel,
+                                    String subValueOne, String subValueTwo, String unit, String type, int flagKey, String writePacket) {
         this.hardwareNo = hardwareNo;
         this.inputType = inputType;
         this.sensorType = sensorType;
@@ -58,6 +60,7 @@ public class InputConfigurationEntity {
         this.unit = unit;
         this.type = type;
         this.flagKey = flagKey;
+        this.writePacket = writePacket;
     }
 
     public int getHardwareNo() {
@@ -154,5 +157,13 @@ public class InputConfigurationEntity {
 
     public void setFlagKey(int flagKey) {
         this.flagKey = flagKey;
+    }
+
+    public String getWritePacket() {
+        return writePacket;
+    }
+
+    public void setWritePacket(String writePacket) {
+        this.writePacket = writePacket;
     }
 }

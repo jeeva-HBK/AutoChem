@@ -1,5 +1,29 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Others.ApplicationClass.bufferArr;
+import static com.ionexchange.Others.ApplicationClass.formDigits;
+import static com.ionexchange.Others.ApplicationClass.getAdapter;
+import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
+import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
+import static com.ionexchange.Others.ApplicationClass.getStringValue;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
+import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.ENDPACKET;
+import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.STARTPACKET;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,35 +49,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ionexchange.Others.ApplicationClass.bufferArr;
-import static com.ionexchange.Others.ApplicationClass.formDigits;
-import static com.ionexchange.Others.ApplicationClass.getAdapter;
-import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
-import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
-import static com.ionexchange.Others.ApplicationClass.getStringValue;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
-import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
-import static com.ionexchange.Others.ApplicationClass.userType;
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-
 public class FragmentInputSensorPh_Config extends Fragment implements DataReceiveCallback {
     FragmentInputsensorPhBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;
     WaterTreatmentDb db;
     InputConfigurationDao dao;
+    String writePacket;
 
     private static final String TAG = "FragmentInputSensor";
 
@@ -153,8 +155,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
 
     void sendData(int sensorStatus) {
         mActivity.showProgress();
-        // Write -> {* 1234$ 0$ 0$ 04$ 01$ 00$ 1$ 0$ pHSensor$ 0$ 1$ +220.00$ 090$ 07.25$ 12.50$ 300$ 1$ 1 *}
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+        writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
@@ -171,8 +172,9 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                 getDecimalValue(mBinding.phAlarmhighEdtIsc, 2, mBinding.phHighAlarmDeciIsc, 2) + SPILT_CHAR +
                 getStringValue(3, mBinding.phCalibrationRequiredEdtIsc) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.phResetCalibrationAtxtIsc), resetCalibrationArr) + SPILT_CHAR +
-                sensorStatus
-        );
+                sensorStatus;
+
+        mAppClass.sendPacket(this, writePacket);
     }
 
     boolean validField() {
@@ -188,13 +190,13 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
         } else if (isFieldEmpty(mBinding.phAlarmLowEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_low_validation));
             return false;
-        }  else if (Integer.parseInt(getStringValue(2, mBinding.phAlarmLowEdtIsc)) > 14) {
+        } else if (Integer.parseInt(getStringValue(2, mBinding.phAlarmLowEdtIsc)) > 14) {
             mBinding.phAlarmLowEdtIsc.setError(getString(R.string.ph_alarm_low_validation));
             return false;
         } else if (isFieldEmpty(mBinding.phAlarmhighEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.alarm_high_validation));
             return false;
-        }  else if (Integer.parseInt(getStringValue(2, mBinding.phAlarmhighEdtIsc)) > 14) {
+        } else if (Integer.parseInt(getStringValue(2, mBinding.phAlarmhighEdtIsc)) > 14) {
             mBinding.phAlarmhighEdtIsc.setError(getString(R.string.ph_alarm_high_validation));
             return false;
         } else if (isFieldEmpty(mBinding.phSmoothingFactorEdtIsc)) {
@@ -224,13 +226,13 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             return false;
         }
 
-            if(mBinding.phTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.phTemperatureEdtIsc)) > 500) {
-                mAppClass.showSnackBar(getContext(), getString(R.string.temp_limit_validation));
-                return false;
-            } else if(!mBinding.phTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.phTemperatureEdtIsc)) > 20) {
-                mAppClass.showSnackBar(getContext(), getString(R.string.temp_limit_validation));
-                return false;
-            }
+        if (mBinding.phTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.phTemperatureEdtIsc)) > 500) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.temp_limit_validation));
+            return false;
+        } else if (!mBinding.phTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.phTemperatureEdtIsc)) > 20) {
+            mAppClass.showSnackBar(getContext(), getString(R.string.temp_limit_validation));
+            return false;
+        }
 
         return true;
     }
@@ -239,11 +241,11 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     public void OnDataReceive(String data) {
         mActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("Timeout")) {
             mAppClass.showSnackBar(getContext(), "TimeOut");
         } else if (data != null) {
@@ -271,42 +273,42 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
                     try {
-                    mBinding.phInputNumberEdtIsc.setText(splitData[3]);
+                        mBinding.phInputNumberEdtIsc.setText(splitData[3]);
 
-                    mBinding.phSensorTypeAtxtIsc.setText(mBinding.phSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
-                    mBinding.phSensorTypeAtxtIsc.setAdapter(getAdapter(inputTypeArr, getContext()));
+                        mBinding.phSensorTypeAtxtIsc.setText(mBinding.phSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
+                        mBinding.phSensorTypeAtxtIsc.setAdapter(getAdapter(inputTypeArr, getContext()));
 
-                    // splitData[5] - sequenceNumber
+                        // splitData[5] - sequenceNumber
 
-                    mBinding.phSensorActivationAtxtIsc.setText(mBinding.phSensorActivationAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
-                    mBinding.phSensorActivationAtxtIsc.setAdapter(getAdapter(sensorActivationArr, getContext()));
+                        mBinding.phSensorActivationAtxtIsc.setText(mBinding.phSensorActivationAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
+                        mBinding.phSensorActivationAtxtIsc.setAdapter(getAdapter(sensorActivationArr, getContext()));
 
-                    mBinding.phInputLabelEdtIsc.setText(splitData[7]);
+                        mBinding.phInputLabelEdtIsc.setText(splitData[7]);
 
-                    mBinding.phBufferTypeAtxtIsc.setText(mBinding.phBufferTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[8])).toString());
-                    mBinding.phBufferTypeAtxtIsc.setAdapter(getAdapter(bufferArr, getContext()));
+                        mBinding.phBufferTypeAtxtIsc.setText(mBinding.phBufferTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[8])).toString());
+                        mBinding.phBufferTypeAtxtIsc.setAdapter(getAdapter(bufferArr, getContext()));
 
-                    mBinding.phTempLinkedAtxtIsc.setText(mBinding.phTempLinkedAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[9])).toString());
-                    mBinding.phTempLinkedAtxtIsc.setAdapter(getAdapter(tempLinkedArr, getContext()));
+                        mBinding.phTempLinkedAtxtIsc.setText(mBinding.phTempLinkedAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[9])).toString());
+                        mBinding.phTempLinkedAtxtIsc.setAdapter(getAdapter(tempLinkedArr, getContext()));
 
-                    mBinding.phTempValueTBtn.setChecked((splitData[10].substring(0, 1)).equals("+"));
+                        mBinding.phTempValueTBtn.setChecked((splitData[10].substring(0, 1)).equals("+"));
 
-                    mBinding.phTemperatureEdtIsc.setText(splitData[10].substring(1, 4));
-                    mBinding.phTempDeciIsc.setText(splitData[10].substring(5, 7));
+                        mBinding.phTemperatureEdtIsc.setText(splitData[10].substring(1, 4));
+                        mBinding.phTempDeciIsc.setText(splitData[10].substring(5, 7));
 
-                    mBinding.phSmoothingFactorEdtIsc.setText(splitData[11]);
+                        mBinding.phSmoothingFactorEdtIsc.setText(splitData[11]);
 
-                    mBinding.phAlarmLowEdtIsc.setText(splitData[12].substring(0, 2));
-                    mBinding.phAlarmLowDeciIsc.setText(splitData[12].substring(3, 5));
+                        mBinding.phAlarmLowEdtIsc.setText(splitData[12].substring(0, 2));
+                        mBinding.phAlarmLowDeciIsc.setText(splitData[12].substring(3, 5));
 
-                    mBinding.phAlarmhighEdtIsc.setText(splitData[13].substring(0, 2));
-                    mBinding.phHighAlarmDeciIsc.setText(splitData[13].substring(3, 5));
+                        mBinding.phAlarmhighEdtIsc.setText(splitData[13].substring(0, 2));
+                        mBinding.phHighAlarmDeciIsc.setText(splitData[13].substring(3, 5));
 
-                    mBinding.phCalibrationRequiredEdtIsc.setText(splitData[14]);
+                        mBinding.phCalibrationRequiredEdtIsc.setText(splitData[14]);
 
-                    mBinding.phResetCalibrationAtxtIsc.setText(mBinding.phResetCalibrationAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[15])).toString());
-                    mBinding.phResetCalibrationAtxtIsc.setAdapter(getAdapter(resetCalibrationArr, getContext()));
-                    } catch (Exception e){
+                        mBinding.phResetCalibrationAtxtIsc.setText(mBinding.phResetCalibrationAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[15])).toString());
+                        mBinding.phResetCalibrationAtxtIsc.setAdapter(getAdapter(resetCalibrationArr, getContext()));
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else if (splitData[2].equals(RES_FAILED)) {
@@ -316,7 +318,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[3].equals(RES_SUCCESS)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
-                    new EventLogDemo(inputNumber,"Ph","Input Setting Changed",getContext());
+                    new EventLogDemo(inputNumber, "Ph", "Input Setting Changed", getContext());
                     pHEntity(Integer.parseInt(splitData[2]));
 
                 } else if (splitData[3].equals(RES_FAILED)) {
@@ -339,8 +341,8 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.phInputNumberEdtIsc)),
-                                "N/A","SENSOR" , 0,"N/A",
-                                1, "N/A", "N/A", "N/A", "N/A","N/A",0);
+                                "N/A", "SENSOR", 0, "N/A",
+                                1, "N/A", "N/A", "N/A", "N/A", "N/A", 0, "N/A");
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
@@ -350,10 +352,11 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.phInputNumberEdtIsc)),
-                                mBinding.phSensorTypeAtxtIsc.getText().toString(),"SENSOR",0,mBinding.phSensorTypeAtxtIsc.getText().toString(),
+                                mBinding.phSensorTypeAtxtIsc.getText().toString(), "SENSOR", 0, mBinding.phSensorTypeAtxtIsc.getText().toString(),
                                 1, getStringValue(0, mBinding.phInputLabelEdtIsc),
                                 getStringValue(2, mBinding.phAlarmLowEdtIsc) + "." + getStringValue(2, mBinding.phAlarmLowDeciIsc),
-                                getStringValue(2, mBinding.phAlarmhighEdtIsc) + "." + getStringValue(2, mBinding.phHighAlarmDeciIsc), "N/A","N/A", 1);
+                                getStringValue(2, mBinding.phAlarmhighEdtIsc) + "." + getStringValue(2, mBinding.phHighAlarmDeciIsc), "N/A", "N/A", 1,
+                                STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);

@@ -15,7 +15,7 @@ import com.ionexchange.Adapters.TimerIndexRvAdapter;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
 import com.ionexchange.Database.Entity.MainConfigurationEntity;
 import com.ionexchange.Database.Entity.TimerConfigurationEntity;
-import com.ionexchange.Fragments.FragmentHostDashboard;
+
 import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;

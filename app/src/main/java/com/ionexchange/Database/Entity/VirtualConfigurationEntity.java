@@ -26,10 +26,12 @@ public class VirtualConfigurationEntity {
     @ColumnInfo(name = "subValueTwo")
     public String subValueTwo;
 
+    @ColumnInfo(name = "writePacket")
+    public String writePacket;
 
-    public VirtualConfigurationEntity(int hardwareNo, String virtualType,
-                                      int inputSequenceNumber, String inputLabel, String inputType,
-                                      String subValueOne, String subValueTwo) {
+
+    public VirtualConfigurationEntity(int hardwareNo, String virtualType, int inputSequenceNumber,
+                                      String inputLabel, String inputType, String subValueOne, String subValueTwo, String writePacket) {
         this.hardwareNo = hardwareNo;
         this.virtualType = virtualType;
         this.inputSequenceNumber = inputSequenceNumber;
@@ -37,8 +39,8 @@ public class VirtualConfigurationEntity {
         this.inputType = inputType;
         this.subValueOne = subValueOne;
         this.subValueTwo = subValueTwo;
+        this.writePacket = writePacket;
     }
-
 
     public int getHardwareNo() {
         return hardwareNo;
@@ -94,6 +96,14 @@ public class VirtualConfigurationEntity {
 
     public void setSubValueTwo(String subValueTwo) {
         this.subValueTwo = subValueTwo;
+    }
+
+    public String getWritePacket() {
+        return writePacket;
+    }
+
+    public void setWritePacket(String writePacket) {
+        this.writePacket = writePacket;
     }
 }
 

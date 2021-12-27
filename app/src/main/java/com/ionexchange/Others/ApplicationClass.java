@@ -194,6 +194,7 @@ public class ApplicationClass extends Application {
     public static int userType = 0;
     public static RequestQueue requestQueue;
     public final static String baseURL = "http://192.168.1.82/WaterIOT.API/api/";
+
     // public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
 
     public static ObservableBoolean triggerWebService = new ObservableBoolean(false);
@@ -201,7 +202,8 @@ public class ApplicationClass extends Application {
 
     Handler handler;
     DataReceiveCallback listener;
-    public static String lastKeepAliveData = "", trendDataCollector = "";
+    public static String lastKeepAliveData = "", trendDataCollector = "NoDataReceived",
+            inputKeepAliveData = "", outputKeepAliveData = "", alertKeepAliveData = "";
     static ApplicationClass mAppclass;
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -361,7 +363,7 @@ public class ApplicationClass extends Application {
             @Override
             public void onResponse(JSONObject response) {
                 callBack.OnSuccess(response);
-                //Log.e(API1, " <-- " + response);
+                Log.e(API1, " <-- " + response);
             }
         };
 
@@ -375,7 +377,7 @@ public class ApplicationClass extends Application {
         JsonObjectRequest request = new JsonObjectRequest(method, URL, object, responseListener, volleyErrorListener);
 
         request.setRetryPolicy(new DefaultRetryPolicy(httpRequestTimeout, 0, 1.0f));
-        // Log.e(API1, " --> " + new String(request.getBody()));
+         Log.e(API1, " --> " + new String(request.getBody()));
         requestQueue.add(request);
 
     }
@@ -646,11 +648,21 @@ public class ApplicationClass extends Application {
         /*Output_DB*/
         outputDAO = DB.outputConfigurationDao();
         if (outputDAO.getOutputConfigurationEntityList().isEmpty()) {
+            String defaultwritePacket = "", outputMode = "", outputStatus = "";
             for (int i = 1; i < 23; i++) {
+                if(i < 16){
+                    defaultwritePacket = "{*1234$0$0$06$"+formDigits(2,Integer.toString(i))+"$1$Output"+i+"$34$35$0$000000001.00$000000001.00$0001*}";
+                    outputStatus ="Continuous";
+                    outputMode = "0001$000000001.00";
+                } else {
+                    defaultwritePacket = "{*1234$0$0$06$"+formDigits(2,Integer.toString(i))+"$1$Output"+i+"$1$I01$04.00$20.00$00.00$14.00*}";
+                    outputStatus ="Input- 1 (N/A)";
+                    outputMode = "Probe";
+                }
                 OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
-                        (i, "output-" + i, "N/A",
-                                "N/A",
-                                "N/A");
+                        (i, "Output-" + i+"(Output"+i+")", "Output"+i,
+                                outputMode,
+                                outputStatus,defaultwritePacket);
                 List<OutputConfigurationEntity> outputEntryList = new ArrayList<>();
                 outputEntryList.add(entityUpdate);
                 updateOutPutDB(outputEntryList);
@@ -661,9 +673,11 @@ public class ApplicationClass extends Application {
         virtualDAO = DB.virtualConfigurationDao();
         if (virtualDAO.getVirtualConfigurationEntityList().isEmpty()) {
             for (int i = 50; i <= 57; i++) {
+                String defaultwritePacket = "{*1234$0$0$05$"+i+"$0$VirtualInput"+
+                        (i - 49)+"$0$01$00$0$01$00$00.00$14.00$000$00.00$14.00$0$0*}";
                 VirtualConfigurationEntity entityUpdate = new VirtualConfigurationEntity
-                        (i, "virtual-" + (i - 49), 0, "N/A",
-                                "N/A", "N/A","N/A");
+                        (i, "Virtual", 0, "VirtualInput"+(i - 49),
+                                "pH", "00.00","14.00",defaultwritePacket);
                 List<VirtualConfigurationEntity> virtualEntryList = new ArrayList<>();
                 virtualEntryList.add(entityUpdate);
                 updateVirtualDB(virtualEntryList);
@@ -673,11 +687,24 @@ public class ApplicationClass extends Application {
         /*Timer_DB*/
         timerDAO = DB.timerConfigurationDao();
         if (timerDAO.geTimerConfigurationEntityList().isEmpty()) {
+            int j = 0;
             for (int i = 0; i < 6; i++) {
+                String mainTimerPacket = "{*1234$0$0$08$"+i+"$Timer"+(i + 1)+
+                        "$01$0$1$1$0$0$000000$01$0$2$0$0$000000$01$0$3$0$0$000000$01$0$4$0$0$000000$01$0$11203041*}";
+                String weekOnePacket = "{*1234$0$0$09$" + i + "$"+formDigits(2,Integer.toString(j))+
+                        "$0$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000*}";
+                String weekTwoPacket = "{*1234$0$0$09$" + i + "$"+formDigits(2,Integer.toString(j + 1))+
+                        "$0$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000*}";
+                String weekThreePacket = "{*1234$0$0$09$" + i + "$"+formDigits(2,Integer.toString(j + 2))+
+                        "$0$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000*}";
+                String weekFourPacket = "{*1234$0$0$09$" + i + "$"+formDigits(2,Integer.toString(j + 3))+
+                        "$0$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000*}";
+                j = j+4;
                 TimerConfigurationEntity entityUpdate = new TimerConfigurationEntity
-                        (i, "N/A",
-                                "N/A",
-                                "N/A", 0, 0, "N/A");
+                        (i, "Timer"+(i + 1),
+                                "Output- 1 (Output1)",
+                                "Timer", mainTimerPacket, weekOnePacket,
+                                weekTwoPacket, weekThreePacket, weekFourPacket);
                 List<TimerConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateTimerDB(entryListUpdate);
@@ -755,6 +782,12 @@ public class ApplicationClass extends Application {
         Format f = new SimpleDateFormat("dd/MM/yyyy");
         return f.format(new Date());
     }
+
+    public static String formatDate(Date date) {
+        Format f = new SimpleDateFormat("dd/MM/yyyy");
+        return f.format(date);
+    }
+
 
     public static String getCurrentTime() {
         Format f = new SimpleDateFormat("HH.mm.ss");

@@ -43,8 +43,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.databinding.Observable;
-import androidx.databinding.ObservableBoolean;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
@@ -114,6 +112,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         db = WaterTreatmentDb.getDatabase(getApplicationContext());
         userManagementDao = db.userManagementDao();
         alarmLogDao = db.alarmLogDao();
+
         //startService(new Intent(this, TcpServer.class).setAction(TcpServer.START_SERVER));
         expandedListView();
         baseActivity = this;
@@ -316,10 +315,10 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.trend_screen_btn:
-                /*setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle,
+                setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle,
                         mBinding.statisticsText, navGraph, R.id.trend, mNavController);
-                mBinding.view.setVisibility(View.GONE);*/
-                mAppClass.showSnackBar(getApplicationContext(), "UNDER DEVELOPMENT !");
+                mBinding.view.setVisibility(View.GONE);
+                //mAppClass.showSnackBar(getApplicationContext(), "UNDER DEVELOPMENT !");
                 break;
 
             case R.id.event_logs_screen_btn:

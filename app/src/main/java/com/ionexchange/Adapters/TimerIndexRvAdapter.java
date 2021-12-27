@@ -37,9 +37,7 @@ public class TimerIndexRvAdapter extends RecyclerView.Adapter<TimerIndexRvAdapte
         holder.timerName.setText(timerConfigurationEntityList.get(position).timerName);
         holder.outputName.setText(timerConfigurationEntityList.get(position).outputLinked);
         holder.mode.setText(timerConfigurationEntityList.get(position).mode);
-        holder.startTime.setText( timerConfigurationEntityList.get(position).startTime+"");
-        holder.endTime.setText( timerConfigurationEntityList.get(position).duration+"");
-        holder.status.setText(timerConfigurationEntityList.get(position).status);
+
     }
 
     @Override

@@ -18,24 +18,33 @@ public class TimerConfigurationEntity {
     @ColumnInfo(name = "mode")
     public String mode;
 
-    @ColumnInfo(name = "startTime")
-    public long startTime;
+    @ColumnInfo(name = "mainTimerPacket")
+    public String mainTimerPacket;
 
-    @ColumnInfo(name = "duration")
-    public long duration;
+    @ColumnInfo(name = "weekOnePacket")
+    public String weekOnePacket;
 
-    @ColumnInfo(name = "status")
-    public String status;
+    @ColumnInfo(name = "weekTwoPacket")
+    public String weekTwoPacket;
+
+    @ColumnInfo(name = "weekThreePacket")
+    public String weekThreePacket;
+
+    @ColumnInfo(name = "weekFourPacket")
+    public String weekFourPacket;
 
     public TimerConfigurationEntity(int timerNo, String timerName, String outputLinked,
-                                    String mode, long startTime, long duration, String status) {
+                                    String mode, String mainTimerPacket, String weekOnePacket,
+                                    String weekTwoPacket,String weekThreePacket,String weekFourPacket) {
         this.timerNo = timerNo;
         this.timerName = timerName;
         this.outputLinked = outputLinked;
         this.mode = mode;
-        this.startTime = startTime;
-        this.duration = duration;
-        this.status = status;
+        this.mainTimerPacket = mainTimerPacket;
+        this.weekOnePacket = weekOnePacket;
+        this.weekTwoPacket = weekTwoPacket;
+        this.weekThreePacket = weekThreePacket;
+        this.weekFourPacket = weekFourPacket;
     }
 
     public int getTimerNo() {
@@ -70,27 +79,43 @@ public class TimerConfigurationEntity {
         this.mode = mode;
     }
 
-    public long getStartTime() {
-        return startTime;
+    public String getMainTimerPacket() {
+        return mainTimerPacket;
     }
 
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
+    public void setMainTimerPacket(String mainTimerPacket) {
+        this.mainTimerPacket = mainTimerPacket;
     }
 
-    public long getDuration() {
-        return duration;
+    public String getWeekOnePacket() {
+        return weekOnePacket;
     }
 
-    public void setDuration(long duration) {
-        this.duration = duration;
+    public void setWeekOnePacket(String weekOnePacket) {
+        this.weekOnePacket = weekOnePacket;
     }
 
-    public String getStatus() {
-        return status;
+    public String getWeekTwoPacket() {
+        return weekTwoPacket;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setWeekTwoPacket(String weekTwoPacket) {
+        this.weekTwoPacket = weekTwoPacket;
+    }
+
+    public String getWeekThreePacket() {
+        return weekThreePacket;
+    }
+
+    public void setWeekThreePacket(String weekThreePacket) {
+        this.weekThreePacket = weekThreePacket;
+    }
+
+    public String getWeekFourPacket() {
+        return weekFourPacket;
+    }
+
+    public void setWeekFourPacket(String weekFourPacket) {
+        this.weekFourPacket = weekFourPacket;
     }
 }

@@ -62,4 +62,14 @@ public interface InputConfigurationDao {
     @Query("select inputSequenceNumber from inputconfigurationentity WHERE hardwareNo = :hardwareNo")
     int getSeqNumber(int hardwareNo);
 
+    @Query("select writePacket from inputconfigurationentity WHERE hardwareNo = :hardwareNo AND flagKey = 1")
+    String getWritePacket(int hardwareNo);
+
+    @Query("select * from inputconfigurationentity WHERE flagKey = 1")
+    List<InputConfigurationEntity> getConfigSensor();
+
+    @Query("select hardwareNo || ' - ' || inputType  FROM inputConfigurationEntity WHERE flagKey = 0 LIMIT  33")
+    String[] getEnabledSensor();
+
+
 }

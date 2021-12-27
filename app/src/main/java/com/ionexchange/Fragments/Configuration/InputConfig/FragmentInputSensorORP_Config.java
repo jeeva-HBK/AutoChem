@@ -39,12 +39,14 @@ import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.ENDPACKET;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_FAILED;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.STARTPACKET;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentInputSensorORP_Config extends Fragment implements DataReceiveCallback {
@@ -56,6 +58,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
     int sensorStatus;
     WaterTreatmentDb db;
     InputConfigurationDao dao;
+    String writePacket;
 
 
     @Nullable
@@ -126,7 +129,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
 
     void sendData(int sensorStatus) {
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+        writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
@@ -140,7 +143,8 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
                 getDecimalValue(mBinding.orpAlarmHighTBtn, mBinding.orpAlarmHighEdtIsc, 4, mBinding.orpAlarmHighDeciIsc, 2) + SPILT_CHAR +
                 getStringValue(3, mBinding.orpCalibrationAlarmRequiredEdtIsc) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.orpResetCalibrationAtxtIsc), resetCalibrationArr) + SPILT_CHAR +
-                sensorStatus);
+                sensorStatus;
+        mAppClass.sendPacket(this, writePacket);
     }
 
     private void initAdapter() {
@@ -282,7 +286,8 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.orpInputNumberEdtIsc)), "N/A",
                                 "SENSOR", 0, "N/A",
-                                1, "N/A", "N/A", "N/A", "N/A","N/A", 0);
+                                1, "N/A", "N/A", "N/A", "N/A","N/A",
+                                0,"N/A");
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
@@ -297,7 +302,8 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
                                 "SENSOR", 0, mBinding.orpSensorTypeAtxtIsc.getText().toString(),
                                 1, getStringValue(0, mBinding.orpInputLabelEdtIsc),
                                 getDecimalValue(mBinding.orpAlarmLowTBtn, mBinding.orpAlarmLowEdtIsc, 4, mBinding.orpAlarmLowDeciIsc, 2),
-                                getDecimalValue(mBinding.orpAlarmHighTBtn, mBinding.orpAlarmHighEdtIsc, 4, mBinding.orpAlarmHighDeciIsc, 2), "mV","N/A", 1);
+                                getDecimalValue(mBinding.orpAlarmHighTBtn, mBinding.orpAlarmHighEdtIsc, 4, mBinding.orpAlarmHighDeciIsc, 2), "mV","N/A", 1,
+                                STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);

@@ -43,12 +43,14 @@ import static com.ionexchange.Others.ApplicationClass.unitArr;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.ENDPACKET;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_FAILED;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.STARTPACKET;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 public class FragmentInputSensorToroidalConductivity_config extends Fragment implements DataReceiveCallback {
@@ -61,6 +63,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     String sensorName;
     WaterTreatmentDb db;
     InputConfigurationDao dao;
+    String writePacket;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -121,7 +124,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
 
     void sendDataLinearTemperature(int sensorStatus) {
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+        writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
@@ -140,12 +143,13 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                 getDecimalValue(mBinding.candHighAlarmEdtIsc, 7, mBinding.candHighAlarmDeciIsc, 2) + SPILT_CHAR +
                 getStringValue(3, mBinding.candCalibRequiredAlarmEdtIsc) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.candResetCalibAtxtIsc), resetCalibrationArr) + SPILT_CHAR +
-                sensorStatus);
+                sensorStatus;
+        mAppClass.sendPacket(this, writePacket);
     }
 
     void sendStandardNaClTemperature(int sensorStatus) {
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+        writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
@@ -163,8 +167,8 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                 getDecimalValue(mBinding.candHighAlarmEdtIsc, 7, mBinding.candHighAlarmDeciIsc, 2) + SPILT_CHAR +
                 getStringValue(3, mBinding.candCalibRequiredAlarmEdtIsc) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.candResetCalibAtxtIsc), resetCalibrationArr) + SPILT_CHAR +
-                sensorStatus
-        );
+                sensorStatus;
+        mAppClass.sendPacket(this, writePacket);
     }
 
     private void initAdapters() {
@@ -361,7 +365,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.candInputNumberEdtIsc)),
                                 "N/A", "SENSOR", 0, "N/A",
-                                1, "N/A", "N/A", "N/A", "N/A", "N/A", 0);
+                                1, "N/A", "N/A", "N/A", "N/A", "N/A", 0,"N/A");
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
@@ -376,7 +380,8 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                                 mBinding.candSensorTypeAtxtIsc.getText().toString(),
                                 1, getStringValue(0, mBinding.candInputLabelEdtIsc),
                                 getDecimalValue(mBinding.candLowAlarmEdtIsc, 7, mBinding.candAlarmlowDeciIsc, 2),
-                                getDecimalValue(mBinding.candHighAlarmEdtIsc, 7, mBinding.candHighAlarmDeciIsc, 2), getStringValue(mBinding.candUnitOfMeasureAtxtIsc), "N/A", 1);
+                                getDecimalValue(mBinding.candHighAlarmEdtIsc, 7, mBinding.candHighAlarmDeciIsc, 2), getStringValue(mBinding.candUnitOfMeasureAtxtIsc), "N/A", 1,
+                                STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);

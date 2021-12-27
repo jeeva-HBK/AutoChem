@@ -64,14 +64,16 @@ import java.util.List;
 public class FragmentOutput_Config extends Fragment implements DataReceiveCallback {
     FragmentOutputConfigBinding mBinding;
     ApplicationClass mAppClass;
-    int outputSensorNo,sensorLength=2;
-    String[] bleedArr, sensorInputArr,activateChannalsList;
+    int outputSensorNo, sensorLength = 2;
+    String[] bleedArr, sensorInputArr, activateChannalsList;
     String lInhibitorContinuous = "layoutInhibitorContinuous", lInhibitorBleed = "layoutInhibitorBleedDown", lInhibitorWaterFlow = "layoutInhibitorWaterFlow",
             lSensorOnOFF = "layoutSensorOnOff", lSensorPid = "layoutSensorPID", lAnalogMain = "layoutAnalogMain", lAnalogTest = "layoutAnalogTest", lAnalogDisable = "layoutAnalogDisable",
             currentFunctionMode = "", analogMode = "3", inputType = "pH";
     private static final String TAG = "FragmentOutput_Config";
     OutputConfigurationDao dao;
     WaterTreatmentDb dB;
+    String writePacket;
+
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
@@ -459,7 +461,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 case "0":
                     if (isEmpty(mBinding.outputLabelOsEDT)) {
                         mAppClass.showSnackBar(getContext(), "Output Label  cannot be Empty");
-                    }else {
+                    } else {
                         sendAnalogDisable();
                     }
                     break;
@@ -480,33 +482,35 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
     /*Relay_Disabled*/
     private void sendRelayDisable(String mode) {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+        writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_OUTPUT_CONFIG + SPILT_CHAR +
                 toString(2, outputSensorNo) + SPILT_CHAR +
                 mode + SPILT_CHAR +
-                toString(mBinding.outputLabelOsEDT));
+                toString(mBinding.outputLabelOsEDT);
+        mAppClass.sendPacket(this, writePacket);
     }
 
     /*Relay Manual*/
     private void sendRelayManual(String mode) {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+        writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_OUTPUT_CONFIG + SPILT_CHAR +
                 toString(2, outputSensorNo) + SPILT_CHAR +
                 mode + SPILT_CHAR +
                 toString(mBinding.outputLabelOsEDT) + SPILT_CHAR +
-                formDigits(2,""+getInterlockChannaleHardwareNumber()) + SPILT_CHAR +
+                formDigits(2, "" + getInterlockChannaleHardwareNumber()) + SPILT_CHAR +
                 //(Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 34) + SPILT_CHAR +
-                formDigits(2, "" + getActiviateChannaleHardwareNumber()));
+                formDigits(2, "" + getActiviateChannaleHardwareNumber());
+        mAppClass.sendPacket(this,writePacket );
     }
+
     /*AnalogTest*/
     private void sendAnalogTest() {
         // removed formDigits(2,getLinkInputSensor(mBinding.testLinkInputRelayEdtOsc)) - 24/11
-
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+        writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_OUTPUT_CONFIG + SPILT_CHAR +
@@ -515,33 +519,35 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 toString(mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 getPosition(0, toString(mBinding.modeOsATXT), modeAnalog) + SPILT_CHAR +
                 //"00" + SPILT_CHAR +
-                getDecimalValue(mBinding.analogFixedValueEdtOsc, 2, mBinding.analogFixedValueDeciOsc, 2));
+                getDecimalValue(mBinding.analogFixedValueEdtOsc, 2, mBinding.analogFixedValueDeciOsc, 2);
+        mAppClass.sendPacket(this, writePacket);
     }
 
     /*AnalogDisable*/
     private void sendAnalogDisable() {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+        writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_OUTPUT_CONFIG + SPILT_CHAR +
                 toString(2, outputSensorNo) + SPILT_CHAR +
                 analogMode + SPILT_CHAR +
                 toString(mBinding.outputLabelOsEDT) + SPILT_CHAR +
-                getPosition(0, toString(mBinding.modeOsATXT), modeAnalog));
+                getPosition(0, toString(mBinding.modeOsATXT), modeAnalog);
+        mAppClass.sendPacket(this, writePacket);
     }
 
     /*analogValue*/
     private void sendAnalogValue() {
-        String u_minvalue, u_maxvalue,analog_mode="I";
-        if(inputType.equalsIgnoreCase("ORP") || inputType.equals("Temperature")){
-            u_minvalue = getDecimalValue(mBinding.analogMinValueTBtn, mBinding.analogMinValueEdtOsc,sensorLength, mBinding.analogMinValueDeciOsc,2);
-            u_maxvalue = getDecimalValue(mBinding.analogMaxValueTBtn, mBinding.analogMaxValueEdtOsc,sensorLength, mBinding.analogMaxValueDeciOsc,2);
-        }else{
-            u_minvalue = getDecimalValue(mBinding.analogMinValueEdtOsc,sensorLength, mBinding.analogMinValueDeciOsc,2);
-            u_maxvalue = getDecimalValue(mBinding.analogMaxValueEdtOsc,sensorLength, mBinding.analogMaxValueDeciOsc,2);
+        String u_minvalue, u_maxvalue, analog_mode = "I";
+        if (inputType.equalsIgnoreCase("ORP") || inputType.equals("Temperature")) {
+            u_minvalue = getDecimalValue(mBinding.analogMinValueTBtn, mBinding.analogMinValueEdtOsc, sensorLength, mBinding.analogMinValueDeciOsc, 2);
+            u_maxvalue = getDecimalValue(mBinding.analogMaxValueTBtn, mBinding.analogMaxValueEdtOsc, sensorLength, mBinding.analogMaxValueDeciOsc, 2);
+        } else {
+            u_minvalue = getDecimalValue(mBinding.analogMinValueEdtOsc, sensorLength, mBinding.analogMinValueDeciOsc, 2);
+            u_maxvalue = getDecimalValue(mBinding.analogMaxValueEdtOsc, sensorLength, mBinding.analogMaxValueDeciOsc, 2);
         }
         analog_mode = toString(mBinding.analogLinkInputAtxtOsc).startsWith("Input") ? "I" : "O";
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+        writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_OUTPUT_CONFIG + SPILT_CHAR +
@@ -549,11 +555,12 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 analogMode + SPILT_CHAR +
                 toString(mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.modeOsATXT), modeAnalog) + SPILT_CHAR +
-                analog_mode + formDigits(2,getAnalogLinkInputSensor(mBinding.analogLinkInputAtxtOsc)) + SPILT_CHAR +
+                analog_mode + formDigits(2, getAnalogLinkInputSensor(mBinding.analogLinkInputAtxtOsc)) + SPILT_CHAR +
                 getDecimalValue(mBinding.analogMinMaEdtOsc, 2, mBinding.analogMinMaDeciOsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.analogMaxMaEdtOsc, 2, mBinding.analogMaxMaDeciOsc, 2) + SPILT_CHAR +
                 u_minvalue + SPILT_CHAR +
-                u_maxvalue);
+                u_maxvalue;
+        mAppClass.sendPacket(this, writePacket);
     }
 
     /*fuzzy*/
@@ -564,20 +571,20 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     /*PID*/
     private void sendPID() {
         String u_setPoint, u_safetyMin, u_safetyMax, u_inputMin, u_inputMax;
-        if(inputType.equalsIgnoreCase("ORP") || inputType.equals("Temperature")){
-            u_setPoint = getDecimalValue(mBinding.pidSetpointvalueTBtn, mBinding.pidSetPointEdtOsc,sensorLength, mBinding.pidSetPointDeciOsc,2);
-            u_safetyMin = getDecimalValue(mBinding.pidSafetyMinvalueTBtn, mBinding.pidSafetyMinEdtOsc,sensorLength, mBinding.pidSafetyMinDeciOsc,2);
-            u_safetyMax = getDecimalValue(mBinding.pidSafetyMaxvalueTBtn, mBinding.pidSafetyMaxEdtOsc,sensorLength, mBinding.pidSafetyMaxDeciOsc,2);
-            u_inputMin = getDecimalValue(mBinding.pidInputMinvalueTBtn, mBinding.pidInputMinEdtOsc,sensorLength, mBinding.pidInputMinDeciOsc,2);
-            u_inputMax = getDecimalValue(mBinding.pidInputMaxvalueTBtn, mBinding.pidInputMaxEdtOsc,sensorLength, mBinding.pidInputMaxDeciOsc,2);
-        }else{
-            u_setPoint = getDecimalValue(mBinding.pidSetPointEdtOsc,sensorLength, mBinding.pidSetPointDeciOsc,2);
-            u_safetyMin = getDecimalValue(mBinding.pidSafetyMinEdtOsc,sensorLength, mBinding.pidSafetyMinDeciOsc,2);
-            u_safetyMax = getDecimalValue(mBinding.pidSafetyMaxEdtOsc,sensorLength, mBinding.pidSafetyMaxDeciOsc,2);
-            u_inputMin = getDecimalValue(mBinding.pidInputMinEdtOsc,sensorLength, mBinding.pidInputMinDeciOsc,2);
-            u_inputMax = getDecimalValue(mBinding.pidInputMaxEdtOsc,sensorLength, mBinding.pidInputMaxDeciOsc,2);
+        if (inputType.equalsIgnoreCase("ORP") || inputType.equals("Temperature")) {
+            u_setPoint = getDecimalValue(mBinding.pidSetpointvalueTBtn, mBinding.pidSetPointEdtOsc, sensorLength, mBinding.pidSetPointDeciOsc, 2);
+            u_safetyMin = getDecimalValue(mBinding.pidSafetyMinvalueTBtn, mBinding.pidSafetyMinEdtOsc, sensorLength, mBinding.pidSafetyMinDeciOsc, 2);
+            u_safetyMax = getDecimalValue(mBinding.pidSafetyMaxvalueTBtn, mBinding.pidSafetyMaxEdtOsc, sensorLength, mBinding.pidSafetyMaxDeciOsc, 2);
+            u_inputMin = getDecimalValue(mBinding.pidInputMinvalueTBtn, mBinding.pidInputMinEdtOsc, sensorLength, mBinding.pidInputMinDeciOsc, 2);
+            u_inputMax = getDecimalValue(mBinding.pidInputMaxvalueTBtn, mBinding.pidInputMaxEdtOsc, sensorLength, mBinding.pidInputMaxDeciOsc, 2);
+        } else {
+            u_setPoint = getDecimalValue(mBinding.pidSetPointEdtOsc, sensorLength, mBinding.pidSetPointDeciOsc, 2);
+            u_safetyMin = getDecimalValue(mBinding.pidSafetyMinEdtOsc, sensorLength, mBinding.pidSafetyMinDeciOsc, 2);
+            u_safetyMax = getDecimalValue(mBinding.pidSafetyMaxEdtOsc, sensorLength, mBinding.pidSafetyMaxDeciOsc, 2);
+            u_inputMin = getDecimalValue(mBinding.pidInputMinEdtOsc, sensorLength, mBinding.pidInputMinDeciOsc, 2);
+            u_inputMax = getDecimalValue(mBinding.pidInputMaxEdtOsc, sensorLength, mBinding.pidInputMaxDeciOsc, 2);
         }
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+        writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_OUTPUT_CONFIG + SPILT_CHAR +
@@ -585,9 +592,9 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 getPosition(0, toString(mBinding.funtionModeOsATXT), functionMode) + SPILT_CHAR +
                 toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 //(Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 34) + SPILT_CHAR +
-                formDigits(2,""+getInterlockChannaleHardwareNumber()) + SPILT_CHAR +
-                formDigits(2,""+getActiviateChannaleHardwareNumber()) + SPILT_CHAR +
-                formDigits(2,getLinkInputSensor(mBinding.pidLinkInputAtxtOsc)) + SPILT_CHAR +
+                formDigits(2, "" + getInterlockChannaleHardwareNumber()) + SPILT_CHAR +
+                formDigits(2, "" + getActiviateChannaleHardwareNumber()) + SPILT_CHAR +
+                formDigits(2, getLinkInputSensor(mBinding.pidLinkInputAtxtOsc)) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.modeOsATXT), modeSensor) + SPILT_CHAR +
                 u_setPoint + SPILT_CHAR +
                 getDecimalValue(mBinding.pidGainEdtOsc, 4, mBinding.pidGainDeciOsc, 3) + SPILT_CHAR +
@@ -601,24 +608,25 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 u_inputMax + SPILT_CHAR +
                 toString(5, mBinding.pidLockoutDelayEdtOsc) + SPILT_CHAR +
                 u_safetyMax + SPILT_CHAR +
-                u_safetyMin);
+                u_safetyMin;
+        mAppClass.sendPacket(this, writePacket);
     }
 
     /*OnOff*/
     private void sendOnOFf() {
         String u_setPoint, u_safetyMin, u_safetyMax, hystersis;
-        if(inputType.equalsIgnoreCase("ORP") || inputType.equals("Temperature")){
-            u_setPoint = getDecimalValue(mBinding.sensorSetpointvalueTBtn, mBinding.sensorSetPointEdtOsc,sensorLength, mBinding.sensorSetPointDeciOsc,2);
-            u_safetyMin = getDecimalValue(mBinding.sensorSafetyMinTBtn, mBinding.sensorSafetyMinEdtOsc,sensorLength, mBinding.sensorSafetyMinDeciOsc,2);
-            u_safetyMax = getDecimalValue(mBinding.sensorSafetyMaxTBtn, mBinding.sensorSafetyMaxEdtOsc,sensorLength, mBinding.sensorSafetyMaxDeciOsc,2);
-            hystersis = getDecimalValue(mBinding.pidHysteresisTBtn, mBinding.pidHysteresisEdtOsc,sensorLength, mBinding.pidHysteresisDeciOsc,2);
-        }else{
-            u_setPoint = getDecimalValue(mBinding.sensorSetPointEdtOsc,sensorLength, mBinding.sensorSetPointDeciOsc,2);
-            u_safetyMin = getDecimalValue(mBinding.sensorSafetyMinEdtOsc,sensorLength, mBinding.sensorSafetyMinDeciOsc,2);
-            u_safetyMax = getDecimalValue(mBinding.sensorSafetyMaxEdtOsc,sensorLength, mBinding.sensorSafetyMaxDeciOsc,2);
-            hystersis = getDecimalValue(mBinding.pidHysteresisEdtOsc,sensorLength, mBinding.pidHysteresisDeciOsc,2);
+        if (inputType.equalsIgnoreCase("ORP") || inputType.equals("Temperature")) {
+            u_setPoint = getDecimalValue(mBinding.sensorSetpointvalueTBtn, mBinding.sensorSetPointEdtOsc, sensorLength, mBinding.sensorSetPointDeciOsc, 2);
+            u_safetyMin = getDecimalValue(mBinding.sensorSafetyMinTBtn, mBinding.sensorSafetyMinEdtOsc, sensorLength, mBinding.sensorSafetyMinDeciOsc, 2);
+            u_safetyMax = getDecimalValue(mBinding.sensorSafetyMaxTBtn, mBinding.sensorSafetyMaxEdtOsc, sensorLength, mBinding.sensorSafetyMaxDeciOsc, 2);
+            hystersis = getDecimalValue(mBinding.pidHysteresisTBtn, mBinding.pidHysteresisEdtOsc, sensorLength, mBinding.pidHysteresisDeciOsc, 2);
+        } else {
+            u_setPoint = getDecimalValue(mBinding.sensorSetPointEdtOsc, sensorLength, mBinding.sensorSetPointDeciOsc, 2);
+            u_safetyMin = getDecimalValue(mBinding.sensorSafetyMinEdtOsc, sensorLength, mBinding.sensorSafetyMinDeciOsc, 2);
+            u_safetyMax = getDecimalValue(mBinding.sensorSafetyMaxEdtOsc, sensorLength, mBinding.sensorSafetyMaxDeciOsc, 2);
+            hystersis = getDecimalValue(mBinding.pidHysteresisEdtOsc, sensorLength, mBinding.pidHysteresisDeciOsc, 2);
         }
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+        writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_OUTPUT_CONFIG + SPILT_CHAR +
@@ -626,9 +634,9 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 getPosition(0, toString(mBinding.funtionModeOsATXT), functionMode) + SPILT_CHAR +
                 toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 //(Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 34) + SPILT_CHAR +
-                formDigits(2,""+getInterlockChannaleHardwareNumber()) + SPILT_CHAR +
-                formDigits(2,""+getActiviateChannaleHardwareNumber()) + SPILT_CHAR +
-                formDigits(2,getLinkInputSensor(mBinding.sensorLinkInputSensorAtxtOsc)) + SPILT_CHAR +
+                formDigits(2, "" + getInterlockChannaleHardwareNumber()) + SPILT_CHAR +
+                formDigits(2, "" + getActiviateChannaleHardwareNumber()) + SPILT_CHAR +
+                formDigits(2, getLinkInputSensor(mBinding.sensorLinkInputSensorAtxtOsc)) + SPILT_CHAR +
                 getPosition(0, toString(mBinding.modeOsATXT), modeSensor) + SPILT_CHAR +
                 u_setPoint + SPILT_CHAR +
                 getPosition(0, toString(mBinding.sensorDoseTypeAtxtOsc), doseTypeArr) + SPILT_CHAR +
@@ -636,12 +644,13 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 toString(3, mBinding.sensorDutyCycleEdtOsc) + SPILT_CHAR +
                 toString(5, mBinding.sensorLockoutTimeDelayEdtOsc) + SPILT_CHAR +
                 u_safetyMax + SPILT_CHAR +
-                u_safetyMin);
+                u_safetyMin;
+        mAppClass.sendPacket(this, writePacket);
     }
 
     /* WaterMeter */
     private void sendWaterMeter() {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+        writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_OUTPUT_CONFIG + SPILT_CHAR +
@@ -649,8 +658,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 getPosition(1, toString(mBinding.funtionModeOsATXT), functionMode) + SPILT_CHAR +
                 toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 //(Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 34) + SPILT_CHAR +
-                formDigits(2,""+getInterlockChannaleHardwareNumber()) + SPILT_CHAR +
-                formDigits(2,""+getActiviateChannaleHardwareNumber()) + SPILT_CHAR +
+                formDigits(2, "" + getInterlockChannaleHardwareNumber()) + SPILT_CHAR +
+                formDigits(2, "" + getActiviateChannaleHardwareNumber()) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.modeOsATXT), modeInhibitor) + SPILT_CHAR +
                 getPosition(2, toString(mBinding.waterFlowMeterTypeAtxtOsc), flowMeterTypeArr) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(1, toString(mBinding.waterFlowMeterInputAtxtOsc), flowMeters)) + 1) + SPILT_CHAR +
@@ -658,12 +667,13 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 getDecimalValue(mBinding.waterPumpFlowRateEdtOsc, 9, mBinding.waterPumpFlowRateDeciOsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.waterTargetPPMEdtOsc, 7, mBinding.waterTargetPPMDeciOsc, 2) + SPILT_CHAR +
                 toString(3, mBinding.waterConcentrationEdtOsc) + SPILT_CHAR +
-                getDecimalValue(mBinding.waterSpecificGravityEdtOsc, 1, mBinding.waterSpecificGravityDeciOsc, 3));
+                getDecimalValue(mBinding.waterSpecificGravityEdtOsc, 1, mBinding.waterSpecificGravityDeciOsc, 3);
+        mAppClass.sendPacket(this, writePacket);
     }
 
     /* Bleed Blow */
     private void sendBleedBlow() {
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+        writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_OUTPUT_CONFIG + SPILT_CHAR +
@@ -671,71 +681,75 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 getPosition(0, toString(mBinding.funtionModeOsATXT), functionMode) + SPILT_CHAR +
                 toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
                 //(Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 34) + SPILT_CHAR +
-                formDigits(2,""+getInterlockChannaleHardwareNumber()) + SPILT_CHAR +
-                formDigits(2,""+getActiviateChannaleHardwareNumber()) + SPILT_CHAR +
+                formDigits(2, "" + getInterlockChannaleHardwareNumber()) + SPILT_CHAR +
+                formDigits(2, "" + getActiviateChannaleHardwareNumber()) + SPILT_CHAR +
                 getPosition(0, toString(mBinding.modeOsATXT), modeInhibitor) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(2, toString(mBinding.bleedLinkBleedRelayAtxtOsc), bleedArr)) + 1) + SPILT_CHAR +
                 getDecimalValue(mBinding.bleedBleedFlowRateEdtOsc, 6, mBinding.bleedBleedFlowrateDeciOsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.bleedPumpFlowRateEdtOsc, 9, mBinding.bleedPumpFlowRateDeciOsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.bleedTargetPPMEdtOsc, 7, mBinding.bleedTargetPPMDeciOsc, 2) + SPILT_CHAR +
                 toString(3, mBinding.bleedConcentrationEdtOsc) + SPILT_CHAR +
-                getDecimalValue(mBinding.bleedSpecificGravityEdtOsc, 1, mBinding.bleedSpecificGravityDeciOsc, 3));
+                getDecimalValue(mBinding.bleedSpecificGravityEdtOsc, 1, mBinding.bleedSpecificGravityDeciOsc, 3);
+        mAppClass.sendPacket(this, writePacket);
     }
 
     /* Continuous */
     private void sendContinuous() {
-        mAppClass.sendPacket(this,
-                DEVICE_PASSWORD + SPILT_CHAR +
-                        CONN_TYPE + SPILT_CHAR +
-                        WRITE_PACKET + SPILT_CHAR +
-                        PCK_OUTPUT_CONFIG + SPILT_CHAR +
-                        toString(2, outputSensorNo) + SPILT_CHAR +
-                        getPosition(0, toString(mBinding.funtionModeOsATXT), functionMode) + SPILT_CHAR +
-                        toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
-                        //(Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 34) + SPILT_CHAR +
-                        formDigits(2,""+getInterlockChannaleHardwareNumber()) + SPILT_CHAR +
-                        formDigits(2,""+getActiviateChannaleHardwareNumber()) + SPILT_CHAR +
-                        getPosition(0, toString(mBinding.modeOsATXT), modeInhibitor) + SPILT_CHAR +
-                        getDecimalValue(mBinding.contFlowRateEdtOsc, 9, mBinding.contFlowRateDeciOsc, 2) + SPILT_CHAR +
-                        getDecimalValue(mBinding.contDoseRateEdtOsc, 9, mBinding.contDoseRateDeciOsc, 2) + SPILT_CHAR +
-                        toString(4, mBinding.contDosePeriodEdtOsc));
+        writePacket = DEVICE_PASSWORD + SPILT_CHAR +
+                CONN_TYPE + SPILT_CHAR +
+                WRITE_PACKET + SPILT_CHAR +
+                PCK_OUTPUT_CONFIG + SPILT_CHAR +
+                toString(2, outputSensorNo) + SPILT_CHAR +
+                getPosition(0, toString(mBinding.funtionModeOsATXT), functionMode) + SPILT_CHAR +
+                toString(0, mBinding.outputLabelOsEDT) + SPILT_CHAR +
+                //(Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), interlockChannel)) + 34) + SPILT_CHAR +
+                formDigits(2, "" + getInterlockChannaleHardwareNumber()) + SPILT_CHAR +
+                formDigits(2, "" + getActiviateChannaleHardwareNumber()) + SPILT_CHAR +
+                getPosition(0, toString(mBinding.modeOsATXT), modeInhibitor) + SPILT_CHAR +
+                getDecimalValue(mBinding.contFlowRateEdtOsc, 9, mBinding.contFlowRateDeciOsc, 2) + SPILT_CHAR +
+                getDecimalValue(mBinding.contDoseRateEdtOsc, 9, mBinding.contDoseRateDeciOsc, 2) + SPILT_CHAR +
+                toString(4, mBinding.contDosePeriodEdtOsc);
+        mAppClass.sendPacket(this, writePacket);
     }
 
-    private String getLinkInputSensor(AutoCompleteTextView sensorLinkInputSensorAtxtOsc){
+    private String getLinkInputSensor(AutoCompleteTextView sensorLinkInputSensorAtxtOsc) {
         int analoginputHardwareno = Integer.parseInt(getPosition(2, toString(sensorLinkInputSensorAtxtOsc), sensorInputArr)) + 1;
-        if(analoginputHardwareno >= 18){
+        if (analoginputHardwareno >= 18) {
             analoginputHardwareno = Integer.parseInt(getPosition(2, toString(sensorLinkInputSensorAtxtOsc), sensorInputArr)) + 33;
         }
-        return ""+analoginputHardwareno;
+        return "" + analoginputHardwareno;
     }
-    private String getAnalogLinkInputSensor(AutoCompleteTextView sensorLinkInputSensorAtxtOsc){
+
+    private String getAnalogLinkInputSensor(AutoCompleteTextView sensorLinkInputSensorAtxtOsc) {
         int analoginputHardwareno = 0;
-        if(toString(sensorLinkInputSensorAtxtOsc).startsWith("Input")) {
-             analoginputHardwareno = Integer.parseInt(getPosition(2, toString(sensorLinkInputSensorAtxtOsc), sensorInputArr)) + 1;
+        if (toString(sensorLinkInputSensorAtxtOsc).startsWith("Input")) {
+            analoginputHardwareno = Integer.parseInt(getPosition(2, toString(sensorLinkInputSensorAtxtOsc), sensorInputArr)) + 1;
             if (analoginputHardwareno >= 18) {
                 analoginputHardwareno = Integer.parseInt(getPosition(2, toString(sensorLinkInputSensorAtxtOsc), sensorInputArr)) + 33;
             }
-        }else{
+        } else {
             analoginputHardwareno = Integer.parseInt(getPosition(2, toString(sensorLinkInputSensorAtxtOsc), sensorInputArr)) - 24;
         }
-        return ""+analoginputHardwareno;
+        return "" + analoginputHardwareno;
     }
+
     private int getInterlockChannaleHardwareNumber() {
         int interlockchannelPos = Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), activateChannalsList));
         int hardwareNo;
-        if(interlockchannelPos < 16){
+        if (interlockchannelPos < 16) {
             hardwareNo = interlockchannelPos + 34;
-        }else{
+        } else {
             hardwareNo = interlockchannelPos - 15;
         }
         return hardwareNo;
     }
+
     private int getActiviateChannaleHardwareNumber() {
         int activatechannelPos = Integer.parseInt(getPosition(2, toString(mBinding.activateChannelOsATXT), activateChannalsList));
         int hardwareNo;
-        if(activatechannelPos < 16){
+        if (activatechannelPos < 16) {
             hardwareNo = activatechannelPos + 34;
-        } else{
+        } else {
             hardwareNo = activatechannelPos - 15;
         }
         return hardwareNo;
@@ -761,6 +775,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.outputRow2.setVisibility(View.GONE);
         Log.e(TAG, "enableDisabled: ");
     }
+
     void enableManual() {
         currentFunctionMode = "Manual";
         mBinding.modeOs.setEnabled(false);
@@ -769,6 +784,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.outputRow2.setVisibility(View.VISIBLE);
         Log.e(TAG, "enableManual: ");
     }
+
     private void enablePID() {
         mBinding.modeOs.setEnabled(true);
         mBinding.setFunctionMode(lSensorPid);
@@ -898,7 +914,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.activateChannelOsATXT.setAdapter(getAdapter(activateChannalsList));
         mBinding.interLockChannelOsATXT.setAdapter(getAdapter(activateChannalsList));
         if (outputSensorNo < 15) {
-            functionMode = new String[]{"Disable", "Inhibitor", "Sensor","Manual"};
+            functionMode = new String[]{"Disable", "Inhibitor", "Sensor", "Manual"};
             mBinding.funtionModeOsATXT.setAdapter(getAdapter(functionMode));
         } else {
             functionMode = new String[]{"Disable", "Analog"};
@@ -919,11 +935,11 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     @Override
     public void OnDataReceive(String data) {
         if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("Timeout")) {
             mAppClass.showSnackBar(getContext(), "TimeOut");
         } else if (data != null) {
@@ -950,7 +966,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                             mBinding.funtionModeOsATXT.setText(splitData[4].equalsIgnoreCase("4") ? mBinding.funtionModeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[4]) - 1).toString() :
                                     mBinding.funtionModeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
                             //mBinding.interLockChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(Integer.parseInt(splitData[6]) - 34).toString());
-                            if(!splitData[4].equals("0")) {
+                            if (!splitData[4].equals("0")) {
                                 int interlockChannelPos = Integer.parseInt(splitData[6]);
                                 int setInterlockChannelPos = interlockChannelPos;
                                 if (interlockChannelPos >= 34) {
@@ -1033,13 +1049,13 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                 enableSensorLayout();
                                 if (splitData[9].equals("0")) { // On/Off
                                     enableOnOff();
-                                    if(Integer.parseInt(splitData[8]) < 18){
+                                    if (Integer.parseInt(splitData[8]) < 18) {
                                         mBinding.sensorLinkInputSensorAtxtOsc.setText(mBinding.sensorLinkInputSensorAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) - 1).toString());
-                                    }else {
+                                    } else {
                                         mBinding.sensorLinkInputSensorAtxtOsc.setText(mBinding.sensorLinkInputSensorAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) - 33).toString());
                                     }
                                     setMaxLength();
-                                    if(inputType.equalsIgnoreCase("ORP") ||inputType.equalsIgnoreCase("Temperature")) {
+                                    if (inputType.equalsIgnoreCase("ORP") || inputType.equalsIgnoreCase("Temperature")) {
                                         mBinding.sensorSetpointvalueTBtn.setChecked((splitData[10].substring(0, 1)).equals("+"));
                                         mBinding.sensorSetPointEdtOsc.setText(splitData[10].substring(1, sensorLength + 1));
                                         mBinding.sensorSetPointDeciOsc.setText(splitData[10].substring(sensorLength + 2, sensorLength + 4));
@@ -1053,15 +1069,15 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                         mBinding.pidHysteresisTBtn.setChecked((splitData[12].substring(0, 1)).equals("+"));
                                         mBinding.pidHysteresisEdtOsc.setText(splitData[12].substring(1, sensorLength + 1));
                                         mBinding.pidHysteresisDeciOsc.setText(splitData[12].substring(sensorLength + 2, sensorLength + 4));
-                                    }else{
+                                    } else {
                                         mBinding.sensorSetPointEdtOsc.setText(splitData[10].substring(0, sensorLength));
-                                        mBinding.sensorSetPointDeciOsc.setText(splitData[10].substring(sensorLength+1, sensorLength+3));
+                                        mBinding.sensorSetPointDeciOsc.setText(splitData[10].substring(sensorLength + 1, sensorLength + 3));
                                         mBinding.sensorSafetyMinEdtOsc.setText(splitData[16].substring(0, sensorLength));
-                                        mBinding.sensorSafetyMinDeciOsc.setText(splitData[16].substring(sensorLength+1, sensorLength+3));
+                                        mBinding.sensorSafetyMinDeciOsc.setText(splitData[16].substring(sensorLength + 1, sensorLength + 3));
                                         mBinding.sensorSafetyMaxEdtOsc.setText(splitData[15].substring(0, sensorLength));
-                                        mBinding.sensorSafetyMaxDeciOsc.setText(splitData[15].substring(sensorLength+1, sensorLength+3));
+                                        mBinding.sensorSafetyMaxDeciOsc.setText(splitData[15].substring(sensorLength + 1, sensorLength + 3));
                                         mBinding.pidHysteresisEdtOsc.setText(splitData[12].substring(0, sensorLength));
-                                        mBinding.pidHysteresisDeciOsc.setText(splitData[12].substring(sensorLength+1, sensorLength+3));
+                                        mBinding.pidHysteresisDeciOsc.setText(splitData[12].substring(sensorLength + 1, sensorLength + 3));
                                     }
                                     mBinding.sensorDoseTypeAtxtOsc.setText(mBinding.sensorDoseTypeAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[11])).toString());
 
@@ -1071,9 +1087,9 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                     mBinding.sensorLinkInputSensorAtxtOsc.setAdapter(getAdapter(sensorInputArr));
                                 } else if (splitData[9].equals("1")) { // PID
                                     enablePID();
-                                    mBinding.pidLinkInputAtxtOsc.setText(mBinding.pidLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) -1).toString());
+                                    mBinding.pidLinkInputAtxtOsc.setText(mBinding.pidLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) - 1).toString());
                                     setMaxLengthPID();
-                                    if(inputType.equalsIgnoreCase("ORP") ||inputType.equalsIgnoreCase("Temperature")) {
+                                    if (inputType.equalsIgnoreCase("ORP") || inputType.equalsIgnoreCase("Temperature")) {
                                         mBinding.pidSetpointvalueTBtn.setChecked((splitData[10].substring(0, 1)).equals("+"));
                                         mBinding.pidSetPointEdtOsc.setText(splitData[10].substring(1, sensorLength + 1));
                                         mBinding.pidSetPointDeciOsc.setText(splitData[10].substring(sensorLength + 2, sensorLength + 4));
@@ -1104,10 +1120,10 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                         mBinding.pidInputMaxDeciOsc.setText(splitData[19].substring(sensorLength + 1, sensorLength + 3));
 
                                         mBinding.pidSafetyMaxEdtOsc.setText(splitData[21].substring(0, sensorLength));
-                                        mBinding.pidSafetyMaxDeciOsc.setText(splitData[21].substring(sensorLength+1, sensorLength+3));
+                                        mBinding.pidSafetyMaxDeciOsc.setText(splitData[21].substring(sensorLength + 1, sensorLength + 3));
 
                                         mBinding.pidSafetyMinEdtOsc.setText(splitData[22].substring(0, sensorLength));
-                                        mBinding.pidSafetyMinDeciOsc.setText(splitData[22].substring(sensorLength+1, sensorLength+3));
+                                        mBinding.pidSafetyMinDeciOsc.setText(splitData[22].substring(sensorLength + 1, sensorLength + 3));
                                     }
 
                                     mBinding.pidGainEdtOsc.setText(splitData[11].substring(0, 4));
@@ -1156,14 +1172,14 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                 } else {
                                     enableAnalogMain();
                                     mBinding.modeOsATXT.setText(mBinding.modeOsATXT.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
-                                    String gethardwareNo = splitData[7].substring(1,3);
-                                    if(splitData[7].startsWith("I")) {
+                                    String gethardwareNo = splitData[7].substring(1, 3);
+                                    if (splitData[7].startsWith("I")) {
                                         if (Integer.parseInt(gethardwareNo) < 18) {
                                             mBinding.analogLinkInputAtxtOsc.setText(mBinding.analogLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(gethardwareNo) - 1).toString());
                                         } else {
                                             mBinding.analogLinkInputAtxtOsc.setText(mBinding.analogLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(gethardwareNo) - 33).toString());
                                         }
-                                    }else{
+                                    } else {
                                         mBinding.analogLinkInputAtxtOsc.setText(mBinding.analogLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(gethardwareNo) + 24).toString());
                                     }
                                     mBinding.analogMinMaEdtOsc.setText(splitData[8].substring(0, 2));
@@ -1172,7 +1188,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                     mBinding.analogMaxMaEdtOsc.setText(splitData[9].substring(0, 2));
                                     mBinding.analogMaxMaDeciOsc.setText(splitData[9].substring(3, 5));
                                     setMaxLengthAnalog();
-                                    if(inputType.equalsIgnoreCase("ORP") ||inputType.equalsIgnoreCase("Temperature")) {
+                                    if (inputType.equalsIgnoreCase("ORP") || inputType.equalsIgnoreCase("Temperature")) {
                                         mBinding.analogMinValueTBtn.setChecked((splitData[10].substring(0, 1)).equals("+"));
                                         mBinding.analogMinValueEdtOsc.setText(splitData[10].substring(1, sensorLength + 1));
                                         mBinding.analogMinValueDeciOsc.setText(splitData[10].substring(sensorLength + 2, sensorLength + 4));
@@ -1197,14 +1213,16 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                         }
                         initAdapter();
 
-                    }catch (Exception e){ e.printStackTrace(); }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.readFailed));
                 }
 
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
-                    new EventLogDemo(String.valueOf(outputSensorNo),"output-"+outputSensorNo,"Output Setting Changed",getContext());
+                    new EventLogDemo(String.valueOf(outputSensorNo), "output-" + outputSensorNo, "Output Setting Changed", getContext());
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                     outputConfigurationEntity();
                 } else if (splitData[2].equals(RES_FAILED)) {
@@ -1216,10 +1234,11 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         }
         checkUser();
     }
-    void setMaxLength(){
+
+    void setMaxLength() {
         String[] sensorLink = mBinding.sensorLinkInputSensorAtxtOsc.getText().toString().split("-");
         String[] inputhardwareNo = sensorLink[1].split("\\(");
-        if(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s","")) < 18) {
+        if (Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")) < 18) {
             inputType = inputDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
         } else {
             inputType = virtualDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
@@ -1231,7 +1250,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.sensorSetpointvalueTBtn.setChecked(true);
         mBinding.sensorSafetyMinTBtn.setChecked(true);
         mBinding.sensorSafetyMaxTBtn.setChecked(true);
-        switch (inputType){
+        switch (inputType) {
             case "ORP":
                 sensorLength = 4;
                 sensorLayoutVisibility(true);
@@ -1255,14 +1274,15 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 sensorLength = 2;
                 break;
         }
-        mBinding.sensorSetPointEdtOsc.setFilters(new InputFilter[] { new InputFilter.LengthFilter(sensorLength) });
-        mBinding.sensorSafetyMinEdtOsc.setFilters(new InputFilter[] { new InputFilter.LengthFilter(sensorLength) });
-        mBinding.sensorSafetyMaxEdtOsc.setFilters(new InputFilter[] { new InputFilter.LengthFilter(sensorLength) });
+        mBinding.sensorSetPointEdtOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(sensorLength)});
+        mBinding.sensorSafetyMinEdtOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(sensorLength)});
+        mBinding.sensorSafetyMaxEdtOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(sensorLength)});
     }
-    void setMaxLengthPID(){
+
+    void setMaxLengthPID() {
         String[] sensorLink = mBinding.pidLinkInputAtxtOsc.getText().toString().split("-");
         String[] inputhardwareNo = sensorLink[1].split("\\(");
-        if(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s","")) < 18) {
+        if (Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")) < 18) {
             inputType = inputDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
         } else {
             inputType = virtualDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
@@ -1278,7 +1298,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.pidInputMinvalueTBtn.setChecked(true);
         mBinding.pidSafetyMinvalueTBtn.setChecked(true);
         mBinding.pidSafetyMaxvalueTBtn.setChecked(true);
-        switch (inputType){
+        switch (inputType) {
             case "ORP":
                 sensorLength = 4;
                 sensorPidLayoutVisibility(true);
@@ -1302,16 +1322,17 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 sensorLength = 2;
                 break;
         }
-        mBinding.pidSetPointEdtOsc.setFilters(new InputFilter[] { new InputFilter.LengthFilter(sensorLength) });
-        mBinding.pidInputMinEdtOsc.setFilters(new InputFilter[] { new InputFilter.LengthFilter(sensorLength) });
-        mBinding.pidInputMaxEdtOsc.setFilters(new InputFilter[] { new InputFilter.LengthFilter(sensorLength) });
-        mBinding.pidSafetyMinEdtOsc.setFilters(new InputFilter[] { new InputFilter.LengthFilter(sensorLength) });
-        mBinding.pidSafetyMaxEdtOsc.setFilters(new InputFilter[] { new InputFilter.LengthFilter(sensorLength) });
+        mBinding.pidSetPointEdtOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(sensorLength)});
+        mBinding.pidInputMinEdtOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(sensorLength)});
+        mBinding.pidInputMaxEdtOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(sensorLength)});
+        mBinding.pidSafetyMinEdtOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(sensorLength)});
+        mBinding.pidSafetyMaxEdtOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(sensorLength)});
     }
-    void setMaxLengthAnalog(){
+
+    void setMaxLengthAnalog() {
         String[] sensorLink = mBinding.analogLinkInputAtxtOsc.getText().toString().split("-");
         String[] inputhardwareNo = sensorLink[1].split("\\(");
-        if(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s","")) < 18) {
+        if (Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")) < 18) {
             inputType = inputDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
         } else {
             inputType = virtualDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
@@ -1323,7 +1344,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.analogMaxValueDeciOsc.setText("");
         mBinding.analogMinValueTBtn.setChecked(true);
         mBinding.analogMaxValueTBtn.setChecked(true);
-        switch (inputType){
+        switch (inputType) {
             case "ORP":
                 sensorLength = 4;
                 sensorAnalogLayoutVisibility(true);
@@ -1347,19 +1368,20 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 sensorLength = 2;
                 break;
         }
-        mBinding.analogMinValueEdtOsc.setFilters(new InputFilter[] { new InputFilter.LengthFilter(sensorLength) });
-        mBinding.analogMaxValueEdtOsc.setFilters(new InputFilter[] { new InputFilter.LengthFilter(sensorLength) });
-        mBinding.analogMinValueDeciOsc.setFilters(new InputFilter[] { new InputFilter.LengthFilter(2) });
-        mBinding.analogMaxValueDeciOsc.setFilters(new InputFilter[] { new InputFilter.LengthFilter(2) });
+        mBinding.analogMinValueEdtOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(sensorLength)});
+        mBinding.analogMaxValueEdtOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(sensorLength)});
+        mBinding.analogMinValueDeciOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(2)});
+        mBinding.analogMaxValueDeciOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(2)});
     }
-    void sensorPidLayoutVisibility(boolean visibility){
-        if(visibility){
+
+    void sensorPidLayoutVisibility(boolean visibility) {
+        if (visibility) {
             mBinding.pidSetpointvalueTBtn.setVisibility(View.VISIBLE);
             mBinding.pidInputMinvalueTBtn.setVisibility(View.VISIBLE);
             mBinding.pidInputMaxvalueTBtn.setVisibility(View.VISIBLE);
             mBinding.pidSafetyMinvalueTBtn.setVisibility(View.VISIBLE);
             mBinding.pidSafetyMaxvalueTBtn.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mBinding.pidSetpointvalueTBtn.setVisibility(View.GONE);
             mBinding.pidInputMinvalueTBtn.setVisibility(View.GONE);
             mBinding.pidInputMaxvalueTBtn.setVisibility(View.GONE);
@@ -1367,26 +1389,29 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             mBinding.pidSafetyMaxvalueTBtn.setVisibility(View.GONE);
         }
     }
-    void sensorAnalogLayoutVisibility(boolean visibility){
-        if(visibility){
+
+    void sensorAnalogLayoutVisibility(boolean visibility) {
+        if (visibility) {
             mBinding.analogMinValueTBtn.setVisibility(View.VISIBLE);
             mBinding.analogMaxValueTBtn.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mBinding.analogMinValueTBtn.setVisibility(View.GONE);
             mBinding.analogMaxValueTBtn.setVisibility(View.GONE);
         }
     }
-    void sensorLayoutVisibility(boolean visibility){
-        if(visibility){
+
+    void sensorLayoutVisibility(boolean visibility) {
+        if (visibility) {
             mBinding.sensorSetpointvalueTBtn.setVisibility(View.VISIBLE);
             mBinding.sensorSafetyMinTBtn.setVisibility(View.VISIBLE);
             mBinding.sensorSafetyMaxTBtn.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mBinding.sensorSetpointvalueTBtn.setVisibility(View.GONE);
             mBinding.sensorSafetyMinTBtn.setVisibility(View.GONE);
             mBinding.sensorSafetyMaxTBtn.setVisibility(View.GONE);
         }
     }
+
     private Boolean isEmpty(EditText editText) {
         if (editText.getText() == null || editText.getText().toString().equals("")) {
             editText.setError("Field shouldn't empty !");
@@ -1403,11 +1428,11 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         } else if (isEmpty(mBinding.contFlowRateEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Flow Rate cannot be Empty");
             return false;
-        }  else if (Integer.parseInt(mBinding.contFlowRateEdtOsc.getText().toString()) < 1 ||
+        } else if (Integer.parseInt(mBinding.contFlowRateEdtOsc.getText().toString()) < 1 ||
                 Integer.parseInt(mBinding.contFlowRateEdtOsc.getText().toString()) > 100000000) {
             mAppClass.showSnackBar(getContext(), "Flow Rate values between 1 - 100000000");
             return false;
-        }  else if (isEmpty(mBinding.contDoseRateEdtOsc)) {
+        } else if (isEmpty(mBinding.contDoseRateEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Dose Rate cannot be Empty");
             return false;
         } else if (Integer.parseInt(mBinding.contDoseRateEdtOsc.getText().toString()) < 1 ||
@@ -1423,13 +1448,13 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             return false;
         }
         if (Integer.parseInt(mBinding.contFlowRateEdtOsc.getText().toString()) == 100000000) {
-            if(!isEmpty(mBinding.contFlowRateDeciOsc) && Integer.parseInt(mBinding.contFlowRateDeciOsc.getText().toString()) > 0) {
+            if (!isEmpty(mBinding.contFlowRateDeciOsc) && Integer.parseInt(mBinding.contFlowRateDeciOsc.getText().toString()) > 0) {
                 mAppClass.showSnackBar(getContext(), "Flow Rate decimal values should be 0");
                 return false;
             }
         }
         if (Integer.parseInt(mBinding.contDoseRateEdtOsc.getText().toString()) == 100000000) {
-            if(!isEmpty(mBinding.contDoseRateDeciOsc) && Integer.parseInt(mBinding.contDoseRateDeciOsc.getText().toString()) > 0) {
+            if (!isEmpty(mBinding.contDoseRateDeciOsc) && Integer.parseInt(mBinding.contDoseRateDeciOsc.getText().toString()) > 0) {
                 mAppClass.showSnackBar(getContext(), "Dose Rate decimal values should be 0");
                 return false;
             }
@@ -1484,19 +1509,19 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             }
         }
         if (Integer.parseInt(mBinding.bleedBleedFlowRateEdtOsc.getText().toString()) == 100000) {
-            if(!isEmpty(mBinding.bleedBleedFlowrateDeciOsc) && Integer.parseInt(mBinding.bleedBleedFlowrateDeciOsc.getText().toString()) > 0) {
+            if (!isEmpty(mBinding.bleedBleedFlowrateDeciOsc) && Integer.parseInt(mBinding.bleedBleedFlowrateDeciOsc.getText().toString()) > 0) {
                 mAppClass.showSnackBar(getContext(), "Bleed Flow Rate decimal values should be 0");
                 return false;
             }
         }
         if (Integer.parseInt(mBinding.bleedTargetPPMEdtOsc.getText().toString()) == 1000000) {
-            if(!isEmpty(mBinding.bleedTargetPPMDeciOsc) && Integer.parseInt(mBinding.bleedTargetPPMDeciOsc.getText().toString()) > 0) {
+            if (!isEmpty(mBinding.bleedTargetPPMDeciOsc) && Integer.parseInt(mBinding.bleedTargetPPMDeciOsc.getText().toString()) > 0) {
                 mAppClass.showSnackBar(getContext(), "Target PPM decimal values should be 0");
                 return false;
             }
         }
         if (Integer.parseInt(mBinding.bleedPumpFlowRateEdtOsc.getText().toString()) == 100000000) {
-            if(!isEmpty(mBinding.bleedPumpFlowRateDeciOsc) && Integer.parseInt(mBinding.bleedPumpFlowRateDeciOsc.getText().toString()) > 0) {
+            if (!isEmpty(mBinding.bleedPumpFlowRateDeciOsc) && Integer.parseInt(mBinding.bleedPumpFlowRateDeciOsc.getText().toString()) > 0) {
                 mAppClass.showSnackBar(getContext(), "Pump Flow Rate decimal values should be 0");
                 return false;
             }
@@ -1541,13 +1566,13 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             return false;
         }
         if (Integer.parseInt(mBinding.waterPumpFlowRateEdtOsc.getText().toString()) == 100000000) {
-            if(!isEmpty(mBinding.waterPumpFlowRateDeciOsc) && Integer.parseInt(mBinding.waterPumpFlowRateDeciOsc.getText().toString()) > 0) {
+            if (!isEmpty(mBinding.waterPumpFlowRateDeciOsc) && Integer.parseInt(mBinding.waterPumpFlowRateDeciOsc.getText().toString()) > 0) {
                 mAppClass.showSnackBar(getContext(), "Pump Flow Rate decimal values should be 0");
                 return false;
             }
         }
         if (Integer.parseInt(mBinding.waterTargetPPMEdtOsc.getText().toString()) == 1000000) {
-            if(!isEmpty(mBinding.waterTargetPPMDeciOsc) && Integer.parseInt(mBinding.waterTargetPPMDeciOsc.getText().toString()) > 0) {
+            if (!isEmpty(mBinding.waterTargetPPMDeciOsc) && Integer.parseInt(mBinding.waterTargetPPMDeciOsc.getText().toString()) > 0) {
                 mAppClass.showSnackBar(getContext(), "Target PPM decimal values should be 0");
                 return false;
             }
@@ -1586,7 +1611,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         } else if (isEmpty(mBinding.sensorLockoutTimeDelayEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "LockOut Time Delay cannot be Empty");
             return false;
-        }  else if (Integer.parseInt(mBinding.sensorLockoutTimeDelayEdtOsc.getText().toString()) < 1 ||
+        } else if (Integer.parseInt(mBinding.sensorLockoutTimeDelayEdtOsc.getText().toString()) < 1 ||
                 Integer.parseInt(mBinding.sensorLockoutTimeDelayEdtOsc.getText().toString()) > 86400) {
             mAppClass.showSnackBar(getContext(), "LockOut Time Delay values between 1 - 86400");
             return false;
@@ -1672,7 +1697,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             }
         }
         if (Integer.parseInt(mBinding.pidGainEdtOsc.getText().toString()) == 1000) {
-            if(!isEmpty(mBinding.pidGainDeciOsc) && Integer.parseInt(mBinding.pidGainDeciOsc.getText().toString()) > 0) {
+            if (!isEmpty(mBinding.pidGainDeciOsc) && Integer.parseInt(mBinding.pidGainDeciOsc.getText().toString()) > 0) {
                 mAppClass.showSnackBar(getContext(), "Gain decimal values should be 0");
                 return false;
             }
@@ -1688,7 +1713,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             }
         }
         if (Integer.parseInt(mBinding.pidIntegeralTimeEdtOsc.getText().toString()) == 1000) {
-            if(!isEmpty(mBinding.pidIntegeralTimeDeciOsc) && Integer.parseInt(mBinding.pidIntegeralTimeDeciOsc.getText().toString()) > 0) {
+            if (!isEmpty(mBinding.pidIntegeralTimeDeciOsc) && Integer.parseInt(mBinding.pidIntegeralTimeDeciOsc.getText().toString()) > 0) {
                 mAppClass.showSnackBar(getContext(), "Integral Time decimal values should be 0");
                 return false;
             }
@@ -1703,7 +1728,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             }
         }
         if (Integer.parseInt(mBinding.pidDerivativeTimeEdtOsc.getText().toString()) == 1000) {
-            if(!isEmpty(mBinding.pidDerivativeTimeDeciOsc) && Integer.parseInt(mBinding.pidDerivativeTimeDeciOsc.getText().toString()) > 0) {
+            if (!isEmpty(mBinding.pidDerivativeTimeDeciOsc) && Integer.parseInt(mBinding.pidDerivativeTimeDeciOsc.getText().toString()) > 0) {
                 mAppClass.showSnackBar(getContext(), "Derivative Time decimal values should be 0");
                 return false;
             }
@@ -1744,13 +1769,13 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             return false;
         }
         if (Integer.parseInt(mBinding.analogMinMaEdtOsc.getText().toString()) == 20) {
-            if(!isEmpty(mBinding.analogMinMaDeciOsc) && Integer.parseInt(mBinding.analogMinMaDeciOsc.getText().toString()) > 0) {
+            if (!isEmpty(mBinding.analogMinMaDeciOsc) && Integer.parseInt(mBinding.analogMinMaDeciOsc.getText().toString()) > 0) {
                 mAppClass.showSnackBar(getContext(), "min mA decimal values should be 0");
                 return false;
             }
         }
         if (Integer.parseInt(mBinding.analogMaxMaEdtOsc.getText().toString()) == 20) {
-            if(!isEmpty(mBinding.analogMaxMaDeciOsc) && Integer.parseInt(mBinding.analogMaxMaDeciOsc.getText().toString()) > 0) {
+            if (!isEmpty(mBinding.analogMaxMaDeciOsc) && Integer.parseInt(mBinding.analogMaxMaDeciOsc.getText().toString()) > 0) {
                 mAppClass.showSnackBar(getContext(), "max mA decimal values should be 0");
                 return false;
             }
@@ -1768,7 +1793,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         if (isEmpty(mBinding.outputLabelOsEDT)) {
             mAppClass.showSnackBar(getContext(), "Output Label  cannot be Empty");
             return false;
-        }  else if (isEmpty(mBinding.analogFixedValueEdtOsc)) {
+        } else if (isEmpty(mBinding.analogFixedValueEdtOsc)) {
             mAppClass.showSnackBar(getContext(), "Fixed value cannot be Empty");
             return false;
         }
@@ -1782,14 +1807,14 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             mAppClass.showSnackBar(getContext(), "Output Label  cannot be Empty");
             return false;
         }
-        if(!(currentFunctionMode.equals("Disabled"))) {
+        if (!(currentFunctionMode.equals("Disabled"))) {
             if (isEmpty(mBinding.interLockChannelOsATXT)) {
                 mAppClass.showSnackBar(getContext(), "Please select the Interlock Channel");
                 return false;
             } else if (isEmpty(mBinding.activateChannelOsATXT)) {
                 mAppClass.showSnackBar(getContext(), "Please select the Activate Channel");
                 return false;
-            } else if (formDigits(2,""+getInterlockChannaleHardwareNumber()).equalsIgnoreCase(formDigits(2, "" + getActiviateChannaleHardwareNumber()))) {
+            } else if (formDigits(2, "" + getInterlockChannaleHardwareNumber()).equalsIgnoreCase(formDigits(2, "" + getActiviateChannaleHardwareNumber()))) {
                 mAppClass.showSnackBar(getContext(), "Please choose different Activate With Channel output");
                 return false;
             }
@@ -1810,57 +1835,58 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     }
 
     public void outputConfigurationEntity() {
-        String linkInputSensor = "",subValue1="";
+        String linkInputSensor = "", subValue1 = "";
         boolean tbtn = false;
         try {
-            if(!(mBinding.funtionModeOsATXT.getText().toString().equals("Analog") &&
+            if (!(mBinding.funtionModeOsATXT.getText().toString().equals("Analog") &&
                     (mBinding.modeOsATXT.getText().toString().equalsIgnoreCase("Disable") ||
                             mBinding.modeOsATXT.getText().toString().equalsIgnoreCase("Test")))) {
                 linkInputSensor = toString(mBinding.analogLinkInputAtxtOsc);
             }
-            if(inputType.equalsIgnoreCase("ORP") || inputType.equalsIgnoreCase("Temperature")){
+            if (inputType.equalsIgnoreCase("ORP") || inputType.equalsIgnoreCase("Temperature")) {
                 tbtn = true;
             }
-            if(mBinding.funtionModeOsATXT.getText().toString().equalsIgnoreCase("Sensor")){
-                switch (getPosition(1, toString(mBinding.modeOsATXT), modeSensor)){
+            if (mBinding.funtionModeOsATXT.getText().toString().equalsIgnoreCase("Sensor")) {
+                switch (getPosition(1, toString(mBinding.modeOsATXT), modeSensor)) {
                     case "0":
-                        String setpoint = toString(mBinding.sensorSetPointEdtOsc)+"."+mBinding.sensorSetPointDeciOsc.getText().toString() +"$"+
-                                formDigits(2,getLinkInputSensor(mBinding.sensorLinkInputSensorAtxtOsc));
-                        subValue1 = tbtn ? ((mBinding.sensorSetpointvalueTBtn.isChecked()? "+" : "-") + setpoint) :
+                        String setpoint = toString(mBinding.sensorSetPointEdtOsc) + "." + mBinding.sensorSetPointDeciOsc.getText().toString() + "$" +
+                                formDigits(2, getLinkInputSensor(mBinding.sensorLinkInputSensorAtxtOsc));
+                        subValue1 = tbtn ? ((mBinding.sensorSetpointvalueTBtn.isChecked() ? "+" : "-") + setpoint) :
                                 setpoint;
                         break;
-                    case "1" :
-                        String pidsetpoint = toString(mBinding.pidSetPointEdtOsc)+"."+mBinding.pidSetPointDeciOsc.getText().toString() +"$"+
-                                formDigits(2,getLinkInputSensor(mBinding.pidLinkInputAtxtOsc));
-                        subValue1 = tbtn ? ((mBinding.pidSetpointvalueTBtn.isChecked() ? "+" : "-") + pidsetpoint):
+                    case "1":
+                        String pidsetpoint = toString(mBinding.pidSetPointEdtOsc) + "." + mBinding.pidSetPointDeciOsc.getText().toString() + "$" +
+                                formDigits(2, getLinkInputSensor(mBinding.pidLinkInputAtxtOsc));
+                        subValue1 = tbtn ? ((mBinding.pidSetpointvalueTBtn.isChecked() ? "+" : "-") + pidsetpoint) :
                                 pidsetpoint;
                         break;
                     default:
                         break;
                 }
-            } else if(mBinding.funtionModeOsATXT.getText().toString().equalsIgnoreCase("Inhibitor")){
-                switch (getPosition(1, toString(mBinding.modeOsATXT), modeInhibitor)){
+            } else if (mBinding.funtionModeOsATXT.getText().toString().equalsIgnoreCase("Inhibitor")) {
+                switch (getPosition(1, toString(mBinding.modeOsATXT), modeInhibitor)) {
                     case "0":
-                        subValue1 = toString(mBinding.contDosePeriodEdtOsc)+ "$"+
-                                toString(mBinding.contDoseRateEdtOsc)+"."+mBinding.contDoseRateDeciOsc.getText().toString();
+                        subValue1 = toString(mBinding.contDosePeriodEdtOsc) + "$" +
+                                toString(mBinding.contDoseRateEdtOsc) + "." + mBinding.contDoseRateDeciOsc.getText().toString();
                         break;
                     case "1":
-                        subValue1 = toString(mBinding.bleedTargetPPMEdtOsc)+"."+mBinding.bleedTargetPPMDeciOsc.getText().toString();
+                        subValue1 = toString(mBinding.bleedTargetPPMEdtOsc) + "." + mBinding.bleedTargetPPMDeciOsc.getText().toString();
                         break;
                     case "2":
-                        subValue1 = toString(mBinding.waterTargetPPMEdtOsc)+"."+mBinding.waterTargetPPMDeciOsc.getText().toString();
+                        subValue1 = toString(mBinding.waterTargetPPMEdtOsc) + "." + mBinding.waterTargetPPMDeciOsc.getText().toString();
                         break;
                     default:
                         break;
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
                 (outputSensorNo, "Output- " + outputSensorNo + "(" + toString(mBinding.outputLabelOsEDT) + ")", toString(0, mBinding.outputLabelOsEDT),
                         (mBinding.funtionModeOsATXT.getText().toString().equals("Analog") ? mBinding.modeOsATXT.getText().toString() : subValue1),
-                        (mBinding.funtionModeOsATXT.getText().toString().equals("Analog")  ? linkInputSensor : (mBinding.modeOsATXT.getText().toString().equals("") ? mBinding.funtionModeOsATXT.getText().toString() : mBinding.modeOsATXT.getText().toString())));
+                        (mBinding.funtionModeOsATXT.getText().toString().equals("Analog") ? linkInputSensor : (mBinding.modeOsATXT.getText().toString().equals("")
+                                ? mBinding.funtionModeOsATXT.getText().toString() : mBinding.modeOsATXT.getText().toString())),writePacket);
         List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(entityUpdate);
         updateToDb(entryListUpdate);

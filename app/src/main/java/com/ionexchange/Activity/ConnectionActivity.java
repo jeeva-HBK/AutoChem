@@ -46,6 +46,7 @@ import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.ItemClickListener;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.ApiService;
 import com.ionexchange.Singleton.KeepAlive;
 import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.ActivityConnectionBinding;
@@ -101,6 +102,7 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
         mAppClass = (ApplicationClass) getApplication();
         waterTreatmentDb = WaterTreatmentDb.getDatabase(getApplicationContext());
         inputConfigurationDao = waterTreatmentDb.inputConfigurationDao();
+
         /* mBinding = DataBindingUtil.setContentView(this, R.layout.activity_connection);
 
         mAppClass = (ApplicationClass) getApplication();
@@ -323,7 +325,7 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
                         (Integer.parseInt(splitData[3+i].substring(0,2)), inputTypeArr[Integer.parseInt(splitData[3+i].substring(2,4))],
                                 sensorType, 0,"N/A",
                                 Integer.parseInt(splitData[3+i].substring(4,5)), "N/A",
-                                "N/A", "N/A", "N/A", "N/A",0);
+                                "N/A", "N/A", "N/A", "N/A",0,"N/A");
                 List<InputConfigurationEntity> inputentryList = new ArrayList<>();
                 inputentryList.add(entityUpdate);
                 updateInputDB(inputentryList);

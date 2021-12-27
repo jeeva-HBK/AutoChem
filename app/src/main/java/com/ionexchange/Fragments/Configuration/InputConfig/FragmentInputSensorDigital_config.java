@@ -14,11 +14,13 @@ import static com.ionexchange.Others.ApplicationClass.totalTimeArr;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.ENDPACKET;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_FAILED;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.STARTPACKET;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 import android.os.Bundle;
@@ -56,6 +58,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
     WaterTreatmentDb db;
     InputConfigurationDao dao;
     String sensorSequence = "1";
+    String  writePacket;
 
     @Nullable
     @Override
@@ -132,7 +135,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
 
     void sendData(int sensorStatus) {
         mActivity.showProgress();
-        mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+        writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
@@ -148,7 +151,8 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
                 getPositionFromAtxt(1, getStringValue(mBinding.digitalInputSensorAlarmAct), digitalArr) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.digitalInputSensorTotalTimeTie), totalTimeArr) + SPILT_CHAR +
                 getPositionFromAtxt(1, getStringValue(mBinding.digitalInputSensorResetTimeAct), resetCalibrationArr) + SPILT_CHAR +
-                sensorStatus + "$00");
+                sensorStatus + "$00";
+        mAppClass.sendPacket(this, writePacket);
     }
 
 
@@ -283,7 +287,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.digitalInputNumberTie)),
                                 "N/A", "DIGITAL", 1, "N/A",1,
-                                "N/A", "N/A", "N/A", "N/A","N/A", 0);
+                                "N/A", "N/A", "N/A", "N/A","N/A", 0,"N/A");
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
@@ -298,7 +302,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
                                 mBinding.digitalLevelSequenceNumberTie.getText().toString(),
                                 Integer.parseInt(sensorSequence), getStringValue(0, mBinding.digitalInputSensorLabelTie),
                                 mBinding.digitalInputSensorOpenMessageTie.getText().toString(),
-                                mBinding.digitalInputSensorCloseMessageTie.getText().toString(), "N/A", "N/A", 1);
+                                mBinding.digitalInputSensorCloseMessageTie.getText().toString(), "N/A", "N/A", 1,STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);

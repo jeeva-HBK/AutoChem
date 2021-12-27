@@ -22,13 +22,18 @@ public class OutputConfigurationEntity {
     @ColumnInfo(name = "outputStatus")
     public String outputStatus;
 
+    @ColumnInfo(name = "writePacket")
+    public String writePacket;
 
-    public OutputConfigurationEntity(int outputHardwareNo, String outputType, String outputLabel, String outputMode, String outputStatus) {
+
+    public OutputConfigurationEntity(int outputHardwareNo,
+                                     String outputType, String outputLabel, String outputMode, String outputStatus, String writePacket) {
         this.outputHardwareNo = outputHardwareNo;
         this.outputType = outputType;
         this.outputLabel = outputLabel;
         this.outputMode = outputMode;
         this.outputStatus = outputStatus;
+        this.writePacket = writePacket;
     }
 
     public int getOutputHardwareNo() {
@@ -69,6 +74,14 @@ public class OutputConfigurationEntity {
 
     public void setOutputStatus(String outputStatus) {
         this.outputStatus = outputStatus;
+    }
+
+    public String getWritePacket() {
+        return writePacket;
+    }
+
+    public void setWritePacket(String writePacket) {
+        this.writePacket = writePacket;
     }
 }
 
