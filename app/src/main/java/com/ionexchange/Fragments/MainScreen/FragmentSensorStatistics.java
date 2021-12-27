@@ -38,7 +38,7 @@ import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.TrendDao;
 import com.ionexchange.Database.Entity.TrendEntity;
 import com.ionexchange.Others.ApplicationClass;
-import com.ionexchange.Others.AxisValueFormatter;
+
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentSensorStatisticsBinding;
 
@@ -155,6 +155,8 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
 
         chart.getXAxis().setDrawGridLines(true);
         chart.getXAxis().setGridLineWidth(0.5f);
+
+
 
         LimitLine ll1 = new LimitLine(Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(inputNumber))), "Low Alarm");
         ll1.setLineWidth(2f);

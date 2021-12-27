@@ -3,6 +3,7 @@ package com.ionexchange.Adapters;
 import static com.ionexchange.Others.ApplicationClass.inputDAO;
 import static com.ionexchange.Others.ApplicationClass.keepaliveDAO;
 import static com.ionexchange.Others.ApplicationClass.outputControlShortForm;
+import static com.ionexchange.Others.ApplicationClass.virtualDAO;
 
 import android.content.res.Resources;
 import android.os.Build;
@@ -130,13 +131,15 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
                     try {
                         String[] mode = outputConfigurationEntityList.get(position).outputMode.split("\\$");
                         holder.outputStatus.setText(mode[0]);
-                        holder.outputMode.setText(inputDAO.getInputType(Integer.parseInt(mode[1])));
-                        holder.outputNumber.setText(keepaliveDAO.getCurrentValue(Integer.parseInt(mode[1])));
+                        int inputType = Integer.parseInt(mode[1]);
+                        holder.outputMode.setText((inputType <= 49) ? inputDAO.getInputType(inputType) : virtualDAO.getInputType(inputType));
+                        holder.outputNumber.setText(keepaliveDAO.getCurrentValue(inputType));
                         holder.outputNumber.setTextSize(15f);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
                     break;
+
                 case "Manual":
                 case "Disable":
                     holder.outputstatusHeader.setText("");
