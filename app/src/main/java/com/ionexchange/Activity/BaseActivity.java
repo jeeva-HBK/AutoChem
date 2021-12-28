@@ -60,6 +60,7 @@ import com.ionexchange.Others.AdminReceiver;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.ApiService;
 import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.ActivityBaseBinding;
 

@@ -68,7 +68,7 @@ public interface InputConfigurationDao {
     @Query("select * from inputconfigurationentity WHERE flagKey = 1")
     List<InputConfigurationEntity> getConfigSensor();
 
-    @Query("select hardwareNo || ' - ' || inputType  FROM inputConfigurationEntity WHERE flagKey = 0 LIMIT  33")
+    @Query("select hardwareNo || ' - ' || inputType  FROM inputConfigurationEntity WHERE flagKey = 1 LIMIT  33")
     String[] getEnabledSensor();
 
 

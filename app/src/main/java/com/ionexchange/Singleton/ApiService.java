@@ -10,6 +10,7 @@ import static com.ionexchange.Others.ApplicationClass.outputKeepAliveData;
 import static com.ionexchange.Others.ApplicationClass.triggerWebService;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.PCK_DIAGNOSTIC;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
@@ -27,14 +28,19 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
+import com.ionexchange.Database.Dao.TimerConfigurationDao;
 import com.ionexchange.Database.Dao.UserManagementDao;
+import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.Entity.TimerConfigurationEntity;
 import com.ionexchange.Database.Entity.UsermanagementEntity;
+import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Interface.VolleyCallback;
 import com.ionexchange.Others.ApplicationClass;
@@ -46,13 +52,19 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApiService {
+public class ApiService implements DataReceiveCallback {
     private static ApiService apiService;
     static Context mContext;
     private static final String TAG = "API";
     String responseTabId = "00";
     String responseTabData = "";
     String packetType;
+    String diagnosticsDataOne = "";
+    String diagnosticsDataTwo = "";
+    String diagnosticsDataThree = "";
+    String diagnosticsDataFour = "";
+    String diagnosticsDataFive = "";
+    String diagnosticsDataSix = "";
 
     JSONObject dataObj;
     JSONArray finalArr;
@@ -97,9 +109,10 @@ public class ApiService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        startApiService();
         responseTabId = "00";
         responseTabData = "";
-        startApiService();
     }
 
     private void processApiData(JSONObject object) {
@@ -111,6 +124,18 @@ public class ApiService {
                 packetType = responseObject.getString("PACKET_TYPE");
                 if (responseObject.getString("PACKET_TYPE").equals(WRITE_PACKET)) {
                     switch (responseObject.getString("JSON_SUB_ID")) {
+                        case "00":
+                            dataObj = new JSONObject();
+                            dataObj.put("INPUTNO", "");
+                            dataObj.put("REQ", "");
+                            dataObj.put("NAME_LABEL", "");
+                            dataObj.put("LEFT_LABEL", "");
+                            dataObj.put("RIGHT_LABEL", "");
+                            dataObj.put("SEQUENCE_NO", "");
+                            dataObj.put("UNIT", "");
+                            dataObj.put("TYPE", "");
+                            finalArr.put(dataObj);
+                            break;
                         case "02":
                             processUserList(responseObject.getJSONArray("DATA").
                                     getJSONObject(0).getJSONArray("REQ"));
@@ -120,43 +145,87 @@ public class ApiService {
                                     getJSONObject(0).getJSONArray("REQ"));
                             break;
                         case "04":
-                            writeInputConfiguration(responseObject.getJSONArray("DATA").
-                                    getJSONObject(0).getJSONArray("REQ"));
+                           /* writeInputConfiguration(responseObject.getJSONArray("DATA").
+                                    getJSONObject(0).getJSONArray("REQ"));*/
                             break;
 
                         case "05":
                             writeOutputConfiguration(responseObject.getJSONArray("DATA").
                                     getJSONObject(0).getJSONArray("REQ"));
                             break;
+                        case "06":
+                            writTimerConfiguration(responseObject.getJSONArray("DATA").
+                                    getJSONObject(0).getJSONArray("REQ"));
+                            break;
+                        case "07":
+                            writeVirtualConfiguration(responseObject.getJSONArray("DATA").
+                                    getJSONObject(0).getJSONArray("REQ"));
+                            break;
 
                     }
                 } else if (responseObject.getString("PACKET_TYPE").equals(READ_PACKET)) {
                     switch (responseObject.getString("JSON_SUB_ID")) {
+                        case "00":
+                            dataObj = new JSONObject();
+                            dataObj.put("INPUTNO", "");
+                            dataObj.put("REQ", "");
+                            dataObj.put("NAME_LABEL", "");
+                            dataObj.put("LEFT_LABEL", "");
+                            dataObj.put("RIGHT_LABEL", "");
+                            dataObj.put("SEQUENCE_NO", "");
+                            dataObj.put("UNIT", "");
+                            dataObj.put("TYPE", "");
+                            finalArr.put(dataObj);
+                            break;
                         case "02":
                             processUserList(responseObject.getJSONArray("DATA").
                                     getJSONObject(0).getJSONArray("REQ"));
+
                             break;
                         case "03":
                             processSiteDetails(responseObject.getJSONArray("DATA").
                                     getJSONObject(0).getJSONArray("REQ"));
+
                             break;
                         case "04":
                             readInputConfiguration();
+                            readDiagnostics();
                             break;
                         case "05":
-                            readOutputConfiguration(responseObject.getJSONArray("DATA").
-                                    getJSONObject(0).getJSONArray("REQ"));
+                            readOutputConfiguration();
                             break;
-                        case "10":
-
+                        case "06":
+                            timerConfiguration();
+                            break;
+                        case "07":
+                            readVirtualConfiguration();
+                            break;
+                        case "08":
+                            readDiagnostics();
                             break;
                     }
-                }
 
+
+                }
+                String subID = responseObject.getString("JSON_SUB_ID");
+                Log.e(TAG, "processApiData: " + subID);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+
+    public void readDiagnostics() {
+
+        frameDiagnosticsPacket("0");
+    }
+
+
+    public void frameDiagnosticsPacket(String setId) {
+        ApplicationClass.getInstance().sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
+                READ_PACKET + SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + setId);
     }
 
 
@@ -184,6 +253,7 @@ public class ApiService {
         }
     }
 
+    //inputConfiguration
     public void readInputConfiguration() {
 
         responseTabId = "04";
@@ -201,6 +271,20 @@ public class ApiService {
                 dataObj.put("TYPE", "");
             } catch (JSONException e) {
                 e.printStackTrace();
+                try {
+                    dataObj.put("INPUTNO", "");
+                    dataObj.put("REQ", "NACK");
+                    dataObj.put("NAME_LABEL", "");
+                    dataObj.put("LEFT_LABEL", "");
+                    dataObj.put("RIGHT_LABEL", "");
+                    dataObj.put("SEQUENCE_NO", "");
+                    dataObj.put("UNIT", "");
+                    dataObj.put("TYPE", "");
+                } catch (JSONException jsonException) {
+                    jsonException.printStackTrace();
+                }
+
+
             }
             finalArr.put(dataObj);
         }
@@ -213,7 +297,6 @@ public class ApiService {
                 @Override
                 public void OnDataReceive(String data) {
                     responseTabId = "04";
-                    responseTabData = "ACK";
                     try {
                         String[] splitData = jsonArray.getJSONObject(0).getString("REQ").
                                 split("\\*")[1].split(RES_SPILT_CHAR);
@@ -264,42 +347,77 @@ public class ApiService {
                         List<InputConfigurationEntity> inputentryList = new ArrayList<>();
                         inputentryList.add(entityUpdate);
                         updateInputDB(inputentryList);
-
+                        dataObj.put("INPUTNO", String.valueOf(hardWareNo));
+                        dataObj.put("REQ", "ACK");
+                        dataObj.put("NAME_LABEL", "");
+                        dataObj.put("LEFT_LABEL", "");
+                        dataObj.put("RIGHT_LABEL", "");
+                        dataObj.put("SEQUENCE_NO", "");
+                        dataObj.put("UNIT", "");
+                        dataObj.put("TYPE", "");
+                        finalArr.put(dataObj);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                 }
             }, jsonArray.getJSONObject(0).getString("REQ"));
+
         } catch (Exception e) {
             e.printStackTrace();
+            try {
+                dataObj.put("INPUTNO", "");
+                dataObj.put("REQ", "NACK");
+                dataObj.put("NAME_LABEL", "");
+                dataObj.put("LEFT_LABEL", "");
+                dataObj.put("RIGHT_LABEL", "");
+                dataObj.put("SEQUENCE_NO", "");
+                dataObj.put("UNIT", "");
+                dataObj.put("TYPE", "");
+                finalArr.put(dataObj);
+            } catch (JSONException jsonException) {
+                jsonException.printStackTrace();
+            }
         }
-
+        finalArr.put(dataObj);
     }
 
-    private void updateInputDB(List<InputConfigurationEntity> entryList) {
-        InputConfigurationDao dao = DB.inputConfigurationDao();
-        dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
-    }
 
-    public void readOutputConfiguration(JSONArray jsonArray) {
+    //outputConfiguration
+    public void readOutputConfiguration() {
         responseTabId = "05";
         OutputConfigurationDao outputDao = DB.outputConfigurationDao();
         try {
-            String hardWareNo = jsonArray.getJSONObject(0).getString("INPUTNO");
-            dataObj = new JSONObject();
-            dataObj.put("INPUTNO", hardWareNo);
-            dataObj.put("REQ", outputDao.getWritePacket(Integer.parseInt(hardWareNo)));
-            dataObj.put("NAME_LABEL", "");
-            dataObj.put("LEFT_LABEL", "");
-            dataObj.put("RIGHT_LABEL", "");
-            dataObj.put("SEQUENCE_NO", "");
-            dataObj.put("UNIT", "");
-            dataObj.put("TYPE", "");
-            finalArr.put(dataObj);
+            for (int i = 0; i < outputDao.getOutputConfigurationEntityList().size(); i++) {
+                dataObj = new JSONObject();
+                dataObj.put("INPUTNO", outputDao.getOutputConfigurationEntityList().get(i).outputHardwareNo);
+                dataObj.put("REQ", outputDao.getOutputConfigurationEntityList().get(i).writePacket);
+                dataObj.put("NAME_LABEL", "");
+                dataObj.put("LEFT_LABEL", "");
+                dataObj.put("RIGHT_LABEL", "");
+                dataObj.put("SEQUENCE_NO", "");
+                dataObj.put("UNIT", "");
+                dataObj.put("TYPE", "");
+                finalArr.put(dataObj);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
+            try {
+                dataObj.put("INPUTNO", "");
+                dataObj.put("REQ", "NACK");
+                dataObj.put("NAME_LABEL", "");
+                dataObj.put("LEFT_LABEL", "");
+                dataObj.put("RIGHT_LABEL", "");
+                dataObj.put("SEQUENCE_NO", "");
+                dataObj.put("UNIT", "");
+                dataObj.put("TYPE", "");
+                finalArr.put(dataObj);
+            } catch (JSONException jsonException) {
+                jsonException.printStackTrace();
+            }
         }
+
     }
 
     private void writeOutputConfiguration(JSONArray jsonArray) {
@@ -308,14 +426,335 @@ public class ApiService {
                 @Override
                 public void OnDataReceive(String data) {
                     responseTabId = "05";
-                    responseTabData = "ACK";
+                    try {
+                        dataObj.put("INPUTNO", "");
+                        dataObj.put("REQ", "ACK");
+                        dataObj.put("NAME_LABEL", "");
+                        dataObj.put("LEFT_LABEL", "");
+                        dataObj.put("RIGHT_LABEL", "");
+                        dataObj.put("SEQUENCE_NO", "");
+                        dataObj.put("UNIT", "");
+                        dataObj.put("TYPE", "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }, jsonArray.getJSONObject(0).getString("REQ"));
         } catch (JSONException e) {
             e.printStackTrace();
+            try {
+                dataObj.put("INPUTNO", "");
+                dataObj.put("REQ", "NACK");
+                dataObj.put("NAME_LABEL", "");
+                dataObj.put("LEFT_LABEL", "");
+                dataObj.put("RIGHT_LABEL", "");
+                dataObj.put("SEQUENCE_NO", "");
+                dataObj.put("UNIT", "");
+                dataObj.put("TYPE", "");
+            } catch (JSONException jsonException) {
+                jsonException.printStackTrace();
+            }
         }
     }
 
+
+    //virtualConfiguration
+    private void readVirtualConfiguration() {
+        responseTabId = "07";
+        VirtualConfigurationDao virtualConfigurationDao = DB.virtualConfigurationDao();
+        for (int i = 0; i < virtualConfigurationDao.getVirtualConfigurationEntityList().size(); i++) {
+            dataObj = new JSONObject();
+            try {
+                dataObj.put("INPUTNO", virtualConfigurationDao.getVirtualConfigurationEntityList().get(i).hardwareNo);
+                dataObj.put("REQ", virtualConfigurationDao.getVirtualConfigurationEntityList().get(i).writePacket);
+                dataObj.put("NAME_LABEL", "");
+                dataObj.put("LEFT_LABEL", "");
+                dataObj.put("RIGHT_LABEL", "");
+                dataObj.put("SEQUENCE_NO", "");
+                dataObj.put("UNIT", "");
+                dataObj.put("TYPE", "");
+            } catch (JSONException e) {
+                e.printStackTrace();
+                try {
+                    dataObj.put("INPUTNO", "");
+                    dataObj.put("REQ", "NACK");
+                    dataObj.put("NAME_LABEL", "");
+                    dataObj.put("LEFT_LABEL", "");
+                    dataObj.put("RIGHT_LABEL", "");
+                    dataObj.put("SEQUENCE_NO", "");
+                    dataObj.put("UNIT", "");
+                    dataObj.put("TYPE", "");
+                } catch (JSONException jsonException) {
+                    jsonException.printStackTrace();
+                }
+            }
+            finalArr.put(dataObj);
+        }
+    }
+
+    private void writeVirtualConfiguration(JSONArray jsonArray) {
+        try {
+            ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
+                @Override
+                public void OnDataReceive(String data) {
+                    responseTabId = "07";
+                    try {
+                        int hardWareNo = Integer.parseInt(jsonArray.getJSONObject(0).getString("INPUTNO"));
+                        String virtualLabel = jsonArray.getJSONObject(0).getString("NAME_LABEL");
+                        String lowAlarm = jsonArray.getJSONObject(0).getString("LEFT_LABEL");
+                        String highAlarm = jsonArray.getJSONObject(0).getString("RIGHT_LABEL");
+                        int seqNo = Integer.parseInt(jsonArray.getJSONObject(0).getString("SEQUENCE_NO"));
+                        String type = jsonArray.getJSONObject(0).getString("type");
+
+                        VirtualConfigurationEntity entityUpdate = new VirtualConfigurationEntity
+                                (hardWareNo, "Virtual", seqNo, virtualLabel,
+                                        type, lowAlarm, highAlarm, jsonArray.getJSONObject(0).getString("REQ"));
+                        List<VirtualConfigurationEntity> virtualEntryList = new ArrayList<>();
+                        virtualEntryList.add(entityUpdate);
+                        updateVirtualDB(virtualEntryList);
+                        dataObj.put("INPUTNO", String.valueOf(hardWareNo));
+                        dataObj.put("REQ", "ACK");
+                        dataObj.put("NAME_LABEL", "");
+                        dataObj.put("LEFT_LABEL", "");
+                        dataObj.put("RIGHT_LABEL", "");
+                        dataObj.put("SEQUENCE_NO", "");
+                        dataObj.put("UNIT", "");
+                        dataObj.put("TYPE", "");
+                        finalArr.put(dataObj);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, jsonArray.getJSONObject(0).getString("REQ"));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            try {
+                dataObj.put("INPUTNO", "");
+                dataObj.put("REQ", "NACK");
+                dataObj.put("NAME_LABEL", "");
+                dataObj.put("LEFT_LABEL", "");
+                dataObj.put("RIGHT_LABEL", "");
+                dataObj.put("SEQUENCE_NO", "");
+                dataObj.put("UNIT", "");
+                dataObj.put("TYPE", "");
+            } catch (JSONException jsonException) {
+                jsonException.printStackTrace();
+            }
+        }
+    }
+
+
+    //timerConfiguration
+    private void timerConfiguration() {
+        responseTabId = "06";
+        TimerConfigurationDao timerConfigurationDao = DB.timerConfigurationDao();
+        for (int i = 0; i < timerConfigurationDao.geTimerConfigurationEntityList().size(); i++) {
+            dataObj = new JSONObject();
+            try {
+                dataObj.put("INPUTNO", timerConfigurationDao.geTimerConfigurationEntityList().get(i).timerNo);
+                dataObj.put("REQ", timerConfigurationDao.geTimerConfigurationEntityList().get(i).getMainTimerPacket() + "#" +
+                        timerConfigurationDao.geTimerConfigurationEntityList().get(i).getWeekOnePacket() + "#" +
+                        timerConfigurationDao.geTimerConfigurationEntityList().get(i).getWeekTwoPacket() + "#" +
+                        timerConfigurationDao.geTimerConfigurationEntityList().get(i).getWeekThreePacket() + "#" +
+                        timerConfigurationDao.geTimerConfigurationEntityList().get(i).getWeekFourPacket());
+                dataObj.put("NAME_LABEL", "");
+                dataObj.put("LEFT_LABEL", "");
+                dataObj.put("RIGHT_LABEL", "");
+                dataObj.put("SEQUENCE_NO", "");
+                dataObj.put("UNIT", "");
+                dataObj.put("TYPE", "");
+                finalArr.put(dataObj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                try {
+                    dataObj.put("INPUTNO", "");
+                    dataObj.put("REQ", "NACK");
+                    dataObj.put("NAME_LABEL", "");
+                    dataObj.put("LEFT_LABEL", "");
+                    dataObj.put("RIGHT_LABEL", "");
+                    dataObj.put("SEQUENCE_NO", "");
+                    dataObj.put("UNIT", "");
+                    dataObj.put("TYPE", "");
+                    finalArr.put(dataObj);
+                } catch (JSONException jsonException) {
+                    jsonException.printStackTrace();
+                }
+            }
+
+        }
+
+    }
+
+    private void writTimerConfiguration(JSONArray jsonArray) {
+        try {
+            String[] splitTimer = jsonArray.getJSONObject(0).getString("REQ").split("#");
+            ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
+                @Override
+                public void OnDataReceive(String data) {
+                    String[] split = data.split("\\*")[1].split(RES_SPILT_CHAR);
+                    try {
+                        if (split[1].equals("08") && split[2].equals("0")) {
+                            ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
+                                @Override
+                                public void OnDataReceive(String data) {
+                                    if (split[0].equals("0") && split[2].equals("0")) {
+                                        ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
+                                            @Override
+                                            public void OnDataReceive(String data) {
+                                                if (split[0].equals("1") && split[2].equals("0")) {
+                                                    ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
+                                                        @Override
+                                                        public void OnDataReceive(String data) {
+                                                            if (split[0].equals("2") && split[2].equals("0")) {
+                                                                ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
+                                                                    @Override
+                                                                    public void OnDataReceive(String data) {
+                                                                        try {
+                                                                            responseTabId = "06";
+                                                                            int timerNo = Integer.parseInt(jsonArray.getJSONObject(0).getString("INPUTNO"));
+                                                                            String timerName = jsonArray.getJSONObject(0).getString("NAME_LABEL");
+                                                                            String lowAlarm = jsonArray.getJSONObject(0).getString("LEFT_LABEL");
+                                                                            String highAlarm = jsonArray.getJSONObject(0).getString("RIGHT_LABEL");
+                                                                            String[] splitTimer = jsonArray.getJSONObject(0).getString("REQ").split("#");
+                                                                            TimerConfigurationEntity timerConfigurationEntity = new TimerConfigurationEntity
+                                                                                    (timerNo, timerName, lowAlarm, highAlarm, splitTimer[0], splitTimer[1], splitTimer[2], splitTimer[3], splitTimer[4]);
+                                                                            List<TimerConfigurationEntity> entryListUpdate = new ArrayList<>();
+                                                                            entryListUpdate.add(timerConfigurationEntity);
+                                                                            updateTimerDB(entryListUpdate);
+                                                                            dataObj.put("INPUTNO", String.valueOf(timerNo));
+                                                                            dataObj.put("REQ", "ACK");
+                                                                            dataObj.put("NAME_LABEL", "");
+                                                                            dataObj.put("LEFT_LABEL", "");
+                                                                            dataObj.put("RIGHT_LABEL", "");
+                                                                            dataObj.put("SEQUENCE_NO", "");
+                                                                            dataObj.put("UNIT", "");
+                                                                            dataObj.put("TYPE", "");
+                                                                        } catch (Exception e) {
+                                                                            e.printStackTrace();
+                                                                            try {
+                                                                                dataObj.put("INPUTNO", "");
+                                                                                dataObj.put("REQ", "NACK");
+                                                                                dataObj.put("NAME_LABEL", "");
+                                                                                dataObj.put("LEFT_LABEL", "");
+                                                                                dataObj.put("RIGHT_LABEL", "");
+                                                                                dataObj.put("SEQUENCE_NO", "");
+                                                                                dataObj.put("UNIT", "");
+                                                                                dataObj.put("TYPE", "");
+                                                                            } catch (JSONException jsonException) {
+                                                                                jsonException.printStackTrace();
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }, splitTimer[4]);
+                                                            }
+                                                        }
+                                                    }, splitTimer[3]);
+                                                }
+                                            }
+                                        }, splitTimer[2]);
+                                    }
+                                }
+                            }, splitTimer[1]);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        try {
+                            dataObj.put("INPUTNO", "");
+                            dataObj.put("REQ", "NACK");
+                            dataObj.put("NAME_LABEL", "");
+                            dataObj.put("LEFT_LABEL", "");
+                            dataObj.put("RIGHT_LABEL", "");
+                            dataObj.put("SEQUENCE_NO", "");
+                            dataObj.put("UNIT", "");
+                            dataObj.put("TYPE", "");
+                        } catch (JSONException jsonException) {
+                            jsonException.printStackTrace();
+                        }
+                    }
+                }
+            }, splitTimer[0]);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            try {
+                dataObj.put("INPUTNO", "");
+                dataObj.put("REQ", "NACK");
+                dataObj.put("NAME_LABEL", "");
+                dataObj.put("LEFT_LABEL", "");
+                dataObj.put("RIGHT_LABEL", "");
+                dataObj.put("SEQUENCE_NO", "");
+                dataObj.put("UNIT", "");
+                dataObj.put("TYPE", "");
+            } catch (JSONException jsonException) {
+                jsonException.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void OnDataReceive(String data) {
+        handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR), data);
+    }
+
+    public void handleResponse(String[] splitData, String data) {
+
+        if (splitData[1].equals("08")) {
+            if (splitData[2].equals("0")){
+
+            }
+        }
+        //diagnosticsData
+        if (splitData[1].equals("11")) {
+            switch (splitData[3]) {
+                case "0":
+                    diagnosticsDataOne = data;
+                    Log.e(TAG, "handleResponse: " + data);
+                    frameDiagnosticsPacket("1");
+                    break;
+                case "1":
+                    diagnosticsDataTwo = data;
+                    Log.e(TAG, "handleResponse: " + data);
+                    frameDiagnosticsPacket("2");
+                    break;
+                case "2":
+                    diagnosticsDataThree = data;
+                    Log.e(TAG, "handleResponse: " + data);
+                    frameDiagnosticsPacket("3");
+                    break;
+                case "3":
+                    diagnosticsDataFour = data;
+                    Log.e(TAG, "handleResponse: " + data);
+                    frameDiagnosticsPacket("4");
+                    break;
+                case "4":
+                    diagnosticsDataFive = data;
+                    Log.e(TAG, "handleResponse: " + data);
+                    frameDiagnosticsPacket("5");
+                    break;
+                case "5":
+                    diagnosticsDataSix = data;
+                    responseTabId = "08";
+                    responseTabData = diagnosticsDataOne + "#" + diagnosticsDataTwo + "#" + diagnosticsDataThree + "#" + diagnosticsDataFour + "#" + diagnosticsDataFive + "#" + diagnosticsDataSix;
+                    dataObj = new JSONObject();
+                    try {
+                        dataObj.put("INPUTNO", "");
+                        dataObj.put("REQ", responseTabData);
+                        dataObj.put("NAME_LABEL", "");
+                        dataObj.put("LEFT_LABEL", "");
+                        dataObj.put("RIGHT_LABEL", "");
+                        dataObj.put("SEQUENCE_NO", "");
+                        dataObj.put("UNIT", "");
+                        dataObj.put("TYPE", "");
+                        finalArr.put(dataObj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.e(TAG, "handleResponse: " + responseTabData);
+                    break;
+            }
+        }
+    }
 
     private String getInputSensorConfig(String inputNo) {
         final String[] mData = {"NACK"};
@@ -388,6 +827,7 @@ public class ApiService {
         } catch (JSONException e) {
             e.printStackTrace();
             responseTabData = "NACK";
+
         }
     }
 
@@ -451,5 +891,21 @@ public class ApiService {
         }
         return false;
     }
+
+    private void updateInputDB(List<InputConfigurationEntity> entryList) {
+        InputConfigurationDao dao = DB.inputConfigurationDao();
+        dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
+    }
+
+    private void updateVirtualDB(List<VirtualConfigurationEntity> entryList) {
+        VirtualConfigurationDao dao = DB.virtualConfigurationDao();
+        dao.insert(entryList.toArray(new VirtualConfigurationEntity[0]));
+    }
+
+    private void updateTimerDB(List<TimerConfigurationEntity> entryList) {
+        TimerConfigurationDao dao = DB.timerConfigurationDao();
+        dao.insert(entryList.toArray(new TimerConfigurationEntity[0]));
+    }
+
 
 }

@@ -110,6 +110,7 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
                 .setTimeFormat(clockFormat)
                 .setHour(hour)
                 .setMinute(minute)
+                .setTitleText("HH:MM")
                 .build();
         materialTimePicker.addOnPositiveButtonClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)

@@ -17,7 +17,7 @@ public interface TrendDao {
     void insert(TrendEntity... trendEntities);
 
     @Query("select * FROM TrendEntity where hardwareNo = :hNo")
-  List<TrendEntity> getTrendList(String hNo);
+    List<TrendEntity> getTrendList(String hNo);
 
     @Query("select * FROM TrendEntity where hardwareNo = :hNo")
     LiveData<List<TrendEntity>> getTrendLiveList(String hNo);

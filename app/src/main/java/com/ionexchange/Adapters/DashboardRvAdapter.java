@@ -234,7 +234,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
 
             }
 
-            if (mainConfigurationEntityList.get(position).inputType.contains("virtual")) {
+            if (mainConfigurationEntityList.get(position).inputType.contains("Virtual")) {
                 currentMode.setText("Current Value");
                 lowKey.setText("Low Alarm");
                 highKey.setText("High Alarm");
@@ -414,17 +414,17 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
         }
 
 
-        if (mainConfigurationEntityList.get(0).inputType.contains("virtual")) {
+        if (mainConfigurationEntityList.get(0).inputType.contains("Virtual")) {
             setthreefourthLayoutVirtual(0,lowKeyOne,highKeyOne,unitOne,
                     typeOne,hardwareNoOne,currentKeyOne,seqOne,
                     sensorLabelOne,lowAlarmOne,highAlarmOne,currentValueOne);
         }
-        if (mainConfigurationEntityList.get(1).inputType.contains("virtual")) {
+        if (mainConfigurationEntityList.get(1).inputType.contains("Virtual")) {
             setthreefourthLayoutVirtual(1,lowKeyTwo,highKeyTwo,uniTwo,
                     typeTwo,hardwareNoTwo,currentKeyTwo,seqTwo,
                     sensorLabelTwo,lowAlarmTwo,highAlarmTwo,currentValueTwo);
         }
-        if (mainConfigurationEntityList.get(2).inputType.contains("virtual")) {
+        if (mainConfigurationEntityList.get(2).inputType.contains("Virtual")) {
             setthreefourthLayoutVirtual(2,lowKeyThree,highKeyThree,uniThree,
                     typeThree,hardwareNoThree,currentKeyThree,seqThree,
                     sensorLabelThree,lowAlarmThree,highAlarmThree,currentValueThree);

@@ -40,6 +40,7 @@ import androidx.navigation.Navigation;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -81,7 +82,9 @@ import java.nio.channels.FileChannel;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -190,7 +193,7 @@ public class ApplicationClass extends Application {
     public static MainConfigurationDao mainConfigurationDao;
 
     // WebService
-    private static final int httpRequestTimeout = 3000;
+    private static final int httpRequestTimeout = 10000;
     public static int userType = 0;
     public static RequestQueue requestQueue;
     public final static String baseURL = "http://192.168.1.82/WaterIOT.API/api/";
@@ -250,20 +253,6 @@ public class ApplicationClass extends Application {
             @Override
             public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
                 requestQueue = Volley.newRequestQueue(getApplicationContext());
-                /*  try {
-                    mContext = activity;
-                    preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    editor = preferences.edit();
-                    editor.putString("TabletIPAddress", getTabletIp());
-                    if (preferences != null) {
-                        mIPAddress = preferences.getString("prefIp", "");
-                        mPortNumber = Integer.parseInt(preferences.getString("prefPort", ""));
-                        TabletIPAddress = preferences.getString("TabletIPAddress", "");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                registerReceiver();*/
                 registerBatteryReceiver();
             }
 
@@ -292,8 +281,6 @@ public class ApplicationClass extends Application {
 
             @Override
             public void onActivityDestroyed(@NonNull Activity activity) {
-                // unregisterReceiver();
-                // todo BLE
                 disconnectBle();
                 unregisterBatteryReceiver();
             }
@@ -374,9 +361,12 @@ public class ApplicationClass extends Application {
             }
         };
 
-        JsonObjectRequest request = new JsonObjectRequest(method, URL, object, responseListener, volleyErrorListener);
 
-        request.setRetryPolicy(new DefaultRetryPolicy(httpRequestTimeout, 0, 1.0f));
+        JsonObjectRequest request = new JsonObjectRequest(method, URL, object, responseListener, volleyErrorListener);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                httpRequestTimeout,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
          Log.e(API1, " --> " + new String(request.getBody()));
         requestQueue.add(request);
 
@@ -744,7 +734,7 @@ public class ApplicationClass extends Application {
         if (mainConfigurationDao.getMainConfigurationEntityList().isEmpty()){
             MainConfigurationEntity entityUpdate = new MainConfigurationEntity(
                                        1,1,1,1,1,1,
-                    "N/A",0,"N/A",0);
+                    "Sensor not Added",0,"N/A",0);
             List<MainConfigurationEntity> mainEntryList = new ArrayList<>();
             mainEntryList.add(entityUpdate);
             updateMainDB(mainEntryList);
@@ -862,6 +852,13 @@ public class ApplicationClass extends Application {
         WaterTreatmentDb db = WaterTreatmentDb.getDatabase(getApplicationContext());
         OutputKeepAliveDao dao = db.outputKeepAliveDao();
         dao.insert(entryList.toArray(new OutputKeepAliveEntity[0]));
+    }
+
+    public static String lessThanAWeek() {
+        Calendar cal = new GregorianCalendar();
+        cal.add(Calendar.DAY_OF_MONTH, -7);
+        Date sevenDaysAgo = cal.getTime();
+        return ApplicationClass.formatDate(sevenDaysAgo);
     }
 
     public void importDB() {

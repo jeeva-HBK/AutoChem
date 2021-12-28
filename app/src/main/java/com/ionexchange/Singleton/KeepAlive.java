@@ -230,7 +230,7 @@ public class KeepAlive implements DataReceiveCallback {
                         int maxRow = trendDao.lastRowNumber() == null ? 1 : trendDao.lastRowNumber() + 1;
                         while (i < 57) {
                             if (data[i + 3].length() > 2) {
-                                if (Integer.parseInt(data[i + 3].substring(0, 2)) < 33) {
+                                if (Integer.parseInt(data[i + 3].substring(0, 2)) <= 33) {
                                     trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
                                             data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentDate(),
                                             ApplicationClass.getCurrentTime(), maxRow);

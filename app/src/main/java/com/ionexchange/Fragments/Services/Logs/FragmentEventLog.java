@@ -112,7 +112,7 @@ public class FragmentEventLog extends Fragment {
                     if (!mBinding.edtFormDate.getText().toString().isEmpty()) {
                         String[] splitStartDate = mBinding.edtFormDate.getText().toString().split("/");
                         String[] splitEndDate = mBinding.edtToDate.getText().toString().split("/");
-                        String startDate = splitStartDate[0] + splitEndDate[1] + splitStartDate[2];
+                        String startDate = splitStartDate[0] + splitStartDate[1] + splitStartDate[2];
                         String FinalDate = splitEndDate[0] + splitEndDate[1] + splitEndDate[2];
                         if (Integer.parseInt(FinalDate) < Integer.parseInt(startDate)) {
                             Toast.makeText(getContext(), "Invalid Date", Toast.LENGTH_SHORT).show();
