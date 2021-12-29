@@ -103,6 +103,7 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
         waterTreatmentDb = WaterTreatmentDb.getDatabase(getApplicationContext());
         inputConfigurationDao = waterTreatmentDb.inputConfigurationDao();
 
+
         /* mBinding = DataBindingUtil.setContentView(this, R.layout.activity_connection);
 
         mAppClass = (ApplicationClass) getApplication();

@@ -20,6 +20,7 @@ import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.ApiService;
 import com.ionexchange.databinding.FragmentInputsensorToraidalconductivityBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -387,6 +388,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                 updateToDb(entryListUpdate);
                 break;
         }
+        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04");
     }
 
     void userManagement() {

@@ -20,6 +20,7 @@ import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.ApiService;
 import com.ionexchange.databinding.FragmentInputsensorCondBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -401,6 +402,8 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 updateToDb(entryListUpdate);
                 break;
         }
+        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04");
+
     }
 
     void userManagement() {

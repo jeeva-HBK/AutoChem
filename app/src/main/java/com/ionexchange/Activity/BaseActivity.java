@@ -114,7 +114,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         userManagementDao = db.userManagementDao();
         alarmLogDao = db.alarmLogDao();
 
-        //startService(new Intent(this, TcpServer.class).setAction(TcpServer.START_SERVER));
         expandedListView();
         baseActivity = this;
         msBinding = mBinding;
@@ -137,7 +136,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
         inactiveHandler();
 
-        if (alarmLogDao.getLockAlarmSize("Lockout Alarm", "1").size() == 0){
+        if (alarmLogDao.getLockAlarmSize("Lockout Alarm", "1").size() == 0) {
             mBinding.notficationTxt.setVisibility(View.INVISIBLE);
             mBinding.notficationView.setVisibility(View.INVISIBLE);
         } else {
@@ -447,9 +446,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             if (!defPassword.getText().toString().equals(defaultPassword)) {
                 mAppClass.showSnackBar(BaseActivity.this, "Default Password not Matched");
                 return;
-            }else {
-                userManagementDao.updatePassword(password.getText().toString(),SharedPref.read(pref_USERLOGINNAME,""));
-                mAppClass.showSnackBar(getApplicationContext(),"Password changed");
+            } else {
+                userManagementDao.updatePassword(password.getText().toString(), SharedPref.read(pref_USERLOGINNAME, ""));
+                mAppClass.showSnackBar(getApplicationContext(), "Password changed");
                 alertDialog.dismiss();
             }
         });
@@ -457,7 +456,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void moveToConfig() {
-        new EventLogDemo("0","-", "Menu accessed by " + SharedPref.read(pref_USERLOGINNAME,""),getApplicationContext());
+        new EventLogDemo("0", "-", "Menu accessed by " + SharedPref.read(pref_USERLOGINNAME, ""), getApplicationContext());
         setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText,
                 navGraph, R.id.siteSetting, mNavController);
         expandedListView();

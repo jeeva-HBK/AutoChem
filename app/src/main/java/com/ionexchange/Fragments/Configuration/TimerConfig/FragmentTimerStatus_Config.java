@@ -50,6 +50,7 @@ import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.ApiService;
 import com.ionexchange.databinding.FragmentTimerstatusConfigBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -1310,6 +1311,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         List<TimerConfigurationEntity> entryListDelete = new ArrayList<>();
         entryListDelete.add(entity);
         updateToDb(entryListDelete);
+        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "06");
 
     }
 

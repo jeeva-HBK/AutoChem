@@ -8,10 +8,12 @@ import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.modBusTypeArr;
 import static com.ionexchange.Others.ApplicationClass.outputKeepAliveData;
 import static com.ionexchange.Others.ApplicationClass.triggerWebService;
+import static com.ionexchange.Others.ApplicationClass.typeArr;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_DIAGNOSTIC;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.PCK_OUTPUT_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
@@ -38,6 +40,7 @@ import com.ionexchange.Database.Dao.TimerConfigurationDao;
 import com.ionexchange.Database.Dao.UserManagementDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.Entity.OutputConfigurationEntity;
 import com.ionexchange.Database.Entity.TimerConfigurationEntity;
 import com.ionexchange.Database.Entity.UsermanagementEntity;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
@@ -65,7 +68,7 @@ public class ApiService implements DataReceiveCallback {
     String diagnosticsDataFour = "";
     String diagnosticsDataFive = "";
     String diagnosticsDataSix = "";
-
+    JSONObject responseObject;
     JSONObject dataObj;
     JSONArray finalArr;
 
@@ -98,7 +101,19 @@ public class ApiService implements DataReceiveCallback {
                     Request.Method.POST, new VolleyCallback() {
                         @Override
                         public void OnSuccess(JSONObject object) {
-                            processApiData(object);
+                            try {
+                                if (!object.getString("Response").equals("null")) {
+                                    responseObject = object.getJSONObject("Response")
+                                            .getJSONObject("DATAS").getJSONObject("RESPONSE_WEB");
+                                    packetType = responseObject.getString("PACKET_TYPE");
+                                    String jsonSubID = responseObject.getString("JSON_SUB_ID");
+                                    processApiData(packetType, jsonSubID);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
                         }
 
                         @Override
@@ -115,106 +130,102 @@ public class ApiService implements DataReceiveCallback {
         responseTabData = "";
     }
 
-    private void processApiData(JSONObject object) {
+    public void processApiData(String packetType, String jsonSubID) {
         finalArr = new JSONArray();
         try {
-            if (!object.getString("Response").equals("null")) {
-                JSONObject responseObject = object.getJSONObject("Response")
-                        .getJSONObject("DATAS").getJSONObject("RESPONSE_WEB");
-                packetType = responseObject.getString("PACKET_TYPE");
-                if (responseObject.getString("PACKET_TYPE").equals(WRITE_PACKET)) {
-                    switch (responseObject.getString("JSON_SUB_ID")) {
-                        case "00":
-                            dataObj = new JSONObject();
-                            dataObj.put("INPUTNO", "");
-                            dataObj.put("REQ", "");
-                            dataObj.put("NAME_LABEL", "");
-                            dataObj.put("LEFT_LABEL", "");
-                            dataObj.put("RIGHT_LABEL", "");
-                            dataObj.put("SEQUENCE_NO", "");
-                            dataObj.put("UNIT", "");
-                            dataObj.put("TYPE", "");
-                            finalArr.put(dataObj);
-                            break;
-                        case "02":
-                            processUserList(responseObject.getJSONArray("DATA").
-                                    getJSONObject(0).getJSONArray("REQ"));
-                            break;
-                        case "03":
-                            processSiteDetails(responseObject.getJSONArray("DATA").
-                                    getJSONObject(0).getJSONArray("REQ"));
-                            break;
-                        case "04":
+            if (packetType.equals(WRITE_PACKET)) {
+                switch (jsonSubID) {
+                    case "00":
+                        dataObj = new JSONObject();
+                        dataObj.put("INPUTNO", "");
+                        dataObj.put("REQ", "");
+                        dataObj.put("NAME_LABEL", "");
+                        dataObj.put("LEFT_LABEL", "");
+                        dataObj.put("RIGHT_LABEL", "");
+                        dataObj.put("SEQUENCE_NO", "");
+                        dataObj.put("UNIT", "");
+                        dataObj.put("TYPE", "");
+                        finalArr.put(dataObj);
+
+                        break;
+                    case "02":
+                        processUserList(responseObject.getJSONArray("DATA").
+                                getJSONObject(0).getJSONArray("REQ"));
+
+                        break;
+                    case "03":
+                        processSiteDetails(responseObject.getJSONArray("DATA").
+                                getJSONObject(0).getJSONArray("REQ"));
+                        break;
+                    case "04":
                            /* writeInputConfiguration(responseObject.getJSONArray("DATA").
                                     getJSONObject(0).getJSONArray("REQ"));*/
-                            break;
+                        break;
 
-                        case "05":
-                            writeOutputConfiguration(responseObject.getJSONArray("DATA").
-                                    getJSONObject(0).getJSONArray("REQ"));
-                            break;
-                        case "06":
-                            writTimerConfiguration(responseObject.getJSONArray("DATA").
-                                    getJSONObject(0).getJSONArray("REQ"));
-                            break;
-                        case "07":
-                            writeVirtualConfiguration(responseObject.getJSONArray("DATA").
-                                    getJSONObject(0).getJSONArray("REQ"));
-                            break;
-
-                    }
-                } else if (responseObject.getString("PACKET_TYPE").equals(READ_PACKET)) {
-                    switch (responseObject.getString("JSON_SUB_ID")) {
-                        case "00":
-                            dataObj = new JSONObject();
-                            dataObj.put("INPUTNO", "");
-                            dataObj.put("REQ", "");
-                            dataObj.put("NAME_LABEL", "");
-                            dataObj.put("LEFT_LABEL", "");
-                            dataObj.put("RIGHT_LABEL", "");
-                            dataObj.put("SEQUENCE_NO", "");
-                            dataObj.put("UNIT", "");
-                            dataObj.put("TYPE", "");
-                            finalArr.put(dataObj);
-                            break;
-                        case "02":
-                            processUserList(responseObject.getJSONArray("DATA").
-                                    getJSONObject(0).getJSONArray("REQ"));
-
-                            break;
-                        case "03":
-                            processSiteDetails(responseObject.getJSONArray("DATA").
-                                    getJSONObject(0).getJSONArray("REQ"));
-
-                            break;
-                        case "04":
-                            readInputConfiguration();
-                            readDiagnostics();
-                            break;
-                        case "05":
-                            readOutputConfiguration();
-                            break;
-                        case "06":
-                            timerConfiguration();
-                            break;
-                        case "07":
-                            readVirtualConfiguration();
-                            break;
-                        case "08":
-                            readDiagnostics();
-                            break;
-                    }
-
+                    case "05":
+                        writeOutputConfiguration(responseObject.getJSONArray("DATA").
+                                getJSONObject(0).getJSONArray("REQ"));
+                        break;
+                    case "06":
+                        writTimerConfiguration(responseObject.getJSONArray("DATA").
+                                getJSONObject(0).getJSONArray("REQ"));
+                        break;
+                    case "07":
+                        writeVirtualConfiguration(responseObject.getJSONArray("DATA").
+                                getJSONObject(0).getJSONArray("REQ"));
+                        break;
 
                 }
-                String subID = responseObject.getString("JSON_SUB_ID");
-                Log.e(TAG, "processApiData: " + subID);
+            } else if (responseObject.getString("PACKET_TYPE").equals(READ_PACKET)) {
+                switch (responseObject.getString("JSON_SUB_ID")) {
+                    case "00":
+                        dataObj = new JSONObject();
+                        dataObj.put("INPUTNO", "");
+                        dataObj.put("REQ", "");
+                        dataObj.put("NAME_LABEL", "");
+                        dataObj.put("LEFT_LABEL", "");
+                        dataObj.put("RIGHT_LABEL", "");
+                        dataObj.put("SEQUENCE_NO", "");
+                        dataObj.put("UNIT", "");
+                        dataObj.put("TYPE", "");
+                        finalArr.put(dataObj);
+                        break;
+                    case "02":
+                        processUserList(responseObject.getJSONArray("DATA").
+                                getJSONObject(0).getJSONArray("REQ"));
+
+                        break;
+                    case "03":
+                        processSiteDetails(responseObject.getJSONArray("DATA").
+                                getJSONObject(0).getJSONArray("REQ"));
+
+                        break;
+                    case "04":
+                        readInputConfiguration();
+                        readDiagnostics();
+                        break;
+                    case "05":
+                        readOutputConfiguration();
+                        break;
+                    case "06":
+                        readTimerConfiguration();
+                        break;
+                    case "07":
+                        readVirtualConfiguration();
+                        break;
+                    case "08":
+                        readDiagnostics();
+                        break;
+                }
+
+
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            String subID = responseObject.getString("JSON_SUB_ID");
+            Log.e(TAG, "processApiData: " + subID);
+        } catch (JSONException jsonException) {
+            jsonException.printStackTrace();
         }
     }
-
 
 
     public void readDiagnostics() {
@@ -287,6 +298,7 @@ public class ApiService implements DataReceiveCallback {
 
             }
             finalArr.put(dataObj);
+
         }
 
     }
@@ -300,68 +312,89 @@ public class ApiService implements DataReceiveCallback {
                     try {
                         String[] splitData = jsonArray.getJSONObject(0).getString("REQ").
                                 split("\\*")[1].split(RES_SPILT_CHAR);
-                        int hardWareNo = Integer.parseInt(jsonArray.getJSONObject(0).getString("INPUTNO"));
-                        String inputLabel = jsonArray.getJSONObject(0).getString("NAME_LABEL");
-                        String lowAlarm = jsonArray.getJSONObject(0).getString("LEFT_LABEL");
-                        String highAlarm = jsonArray.getJSONObject(0).getString("RIGHT_LABEL");
-                        int seqNo = Integer.parseInt(jsonArray.getJSONObject(0).getString("SEQUENCE_NO"));
-                        String unit = jsonArray.getJSONObject(0).getString("UNIT");
-                        int type = Integer.parseInt(jsonArray.getJSONObject(0).getString("TYPE"));
+                        if (splitData[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
+                            int hardWareNo = Integer.parseInt(jsonArray.getJSONObject(0).getString("INPUTNO"));
+                            String inputLabel = jsonArray.getJSONObject(0).getString("NAME_LABEL");
+                            String lowAlarm = jsonArray.getJSONObject(0).getString("LEFT_LABEL");
+                            String highAlarm = jsonArray.getJSONObject(0).getString("RIGHT_LABEL");
+                            int seqNo = Integer.parseInt(jsonArray.getJSONObject(0).getString("SEQUENCE_NO"));
+                            String unit = jsonArray.getJSONObject(0).getString("UNIT");
+                            int type = Integer.parseInt(jsonArray.getJSONObject(0).getString("TYPE"));
 
-                        String[] typeArr = {"0-None", "1-Fluorescence", "2-Turbidity Value", "3-Corrosion rate", "4-Pitting rate"
-                                , "5-Fluorescence value(ST588)", "6-Tagged Polymer value"};
+                            String sensorType = "SENSOR";
+                            String sequenceName = "";
+                            int flagValue = 0;
+                            int signalType = 0;
+                            if (hardWareNo == 1) {
+                                sensorType = "SENSOR";
+                                sequenceName = "pH";
+                                flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                            } else if (hardWareNo == 2) {
+                                sensorType = "SENSOR";
+                                sequenceName = "ORP";
+                                flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                            } else if (hardWareNo == 3) {
+                                sensorType = "SENSOR";
+                                sequenceName = "Contacting Conductivity";
+                                flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                            } else if (hardWareNo == 4) {
+                                sensorType = "SENSOR";
+                                sequenceName = "Toroidal Conductivity";
+                                flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                            } else if (hardWareNo < 14) {
+                                sensorType = "MODBUS";
+                                sequenceName = modBusTypeArr[seqNo] + typeArr[type];
+                                flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                            } else if (hardWareNo < 17) {
+                                sensorType = "SENSOR";
+                                sequenceName = "Temperature -" + seqNo;
+                                flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                            } else if (hardWareNo < 25) {
+                                sensorType = "Analog";
+                                sequenceName = seqNo < 6 ? sensorType + " - " + seqNo + "(4-20mA)" : sensorType + " - " + seqNo + "(0-10mA)";
+                                flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                            } else if (hardWareNo < 33) {
+                                sensorType = "FLOWMETER";
+                                sequenceName = "Flow Meter - " + seqNo;
+                                flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                            } else if (hardWareNo < 41) {
+                                sensorType = "DIGITAL";
+                                signalType = 1;
+                                sequenceName = "Digital Sensor -" + seqNo;
+                                flagValue = Integer.parseInt(splitData[splitData.length - 2]);
+                            } else {
+                                sensorType = "TANK";
+                                signalType = 1;
+                                sequenceName = "Tank Level -" + seqNo;
+                                flagValue = Integer.parseInt(splitData[splitData.length - 2]);
+                            }
 
-                        String sensorType = "SENSOR";
-                        String sequenceName = "";
-                        int signalType = 0;
-                        if (hardWareNo < 4) {
-                            sensorType = "SENSOR";
-                            sequenceName = "SENSOR";
-                        } else if (hardWareNo < 14) {
-                            sensorType = "MODBUS";
-                            sequenceName = modBusTypeArr[seqNo] + typeArr[type];
-                        } else if (hardWareNo < 17) {
-                            sensorType = "SENSOR";
-                            sequenceName = "Temperature" + seqNo;
-                        } else if (hardWareNo < 25) {
-                            sensorType = "Analog";
-                            sequenceName = seqNo < 6 ? "4-20mA" : "0-10mA";
-                        } else if (hardWareNo < 33) {
-                            sensorType = "FLOWMETER";
-                            sequenceName = "FLOWMETER" + seqNo;
-                        } else if (hardWareNo < 41) {
-                            sensorType = "DIGITAL";
-                            signalType = 1;
-                            sequenceName = "DIGITAL" + seqNo;
-                        } else {
-                            sensorType = "TANK";
-                            signalType = 1;
-                            sequenceName = "TANK" + seqNo;
+                            InputConfigurationEntity entityUpdate = new InputConfigurationEntity
+                                    (hardWareNo, inputTypeArr[Integer.parseInt(splitData[5])],
+                                            sensorType, signalType, sequenceName, seqNo, inputLabel,
+                                            lowAlarm, highAlarm, unit, typeArr[type], flagValue,
+                                            jsonArray.getJSONObject(0).getString("REQ"));
+                            List<InputConfigurationEntity> inputentryList = new ArrayList<>();
+                            inputentryList.add(entityUpdate);
+                            updateInputDB(inputentryList);
+                            dataObj.put("INPUTNO", String.valueOf(hardWareNo));
+                            dataObj.put("REQ", "ACK");
+                            dataObj.put("NAME_LABEL", "");
+                            dataObj.put("LEFT_LABEL", "");
+                            dataObj.put("RIGHT_LABEL", "");
+                            dataObj.put("SEQUENCE_NO", "");
+                            dataObj.put("UNIT", "");
+                            dataObj.put("TYPE", "");
+                            finalArr.put(dataObj);
                         }
 
-                        InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                                (hardWareNo, inputTypeArr[Integer.parseInt(splitData[5])],
-                                        sensorType, signalType, sequenceName, seqNo, inputLabel,
-                                        lowAlarm, highAlarm, unit, typeArr[type], 1,
-                                        jsonArray.getJSONObject(0).getString("REQ"));
-                        List<InputConfigurationEntity> inputentryList = new ArrayList<>();
-                        inputentryList.add(entityUpdate);
-                        updateInputDB(inputentryList);
-                        dataObj.put("INPUTNO", String.valueOf(hardWareNo));
-                        dataObj.put("REQ", "ACK");
-                        dataObj.put("NAME_LABEL", "");
-                        dataObj.put("LEFT_LABEL", "");
-                        dataObj.put("RIGHT_LABEL", "");
-                        dataObj.put("SEQUENCE_NO", "");
-                        dataObj.put("UNIT", "");
-                        dataObj.put("TYPE", "");
-                        finalArr.put(dataObj);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                 }
-            }, jsonArray.getJSONObject(0).getString("REQ"));
+
+            }, jsonArray.getJSONObject(2).getString("REQ").substring(1, jsonArray.getJSONObject(0).getString("REQ").length() - 2));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -427,19 +460,32 @@ public class ApiService implements DataReceiveCallback {
                 public void OnDataReceive(String data) {
                     responseTabId = "05";
                     try {
-                        dataObj.put("INPUTNO", "");
-                        dataObj.put("REQ", "ACK");
-                        dataObj.put("NAME_LABEL", "");
-                        dataObj.put("LEFT_LABEL", "");
-                        dataObj.put("RIGHT_LABEL", "");
-                        dataObj.put("SEQUENCE_NO", "");
-                        dataObj.put("UNIT", "");
-                        dataObj.put("TYPE", "");
+                        String[] splitData = jsonArray.getJSONObject(0).getString("REQ").
+                                split("\\*")[1].split(RES_SPILT_CHAR);
+
+                        if (splitData[1].equals(PCK_OUTPUT_CONFIG)) {
+                            int hardWareNo = Integer.parseInt(jsonArray.getJSONObject(0).getString("INPUTNO"));
+                            String inputLabel = jsonArray.getJSONObject(0).getString("NAME_LABEL");
+                            String lowAlarm = jsonArray.getJSONObject(0).getString("LEFT_LABEL");
+                            String highAlarm = jsonArray.getJSONObject(0).getString("RIGHT_LABEL");
+                            int seqNo = Integer.parseInt(jsonArray.getJSONObject(0).getString("SEQUENCE_NO"));
+                            String unit = jsonArray.getJSONObject(0).getString("UNIT");
+                            int type = Integer.parseInt(jsonArray.getJSONObject(0).getString("TYPE"));
+                            dataObj.put("INPUTNO", "");
+                            dataObj.put("REQ", "ACK");
+                            dataObj.put("NAME_LABEL", "");
+                            dataObj.put("LEFT_LABEL", "");
+                            dataObj.put("RIGHT_LABEL", "");
+                            dataObj.put("SEQUENCE_NO", "");
+                            dataObj.put("UNIT", "");
+                            dataObj.put("TYPE", "");
+                        }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-            }, jsonArray.getJSONObject(0).getString("REQ"));
+            }, jsonArray.getJSONObject(2).getString("REQ").substring(1, jsonArray.getJSONObject(0).getString("REQ").length() - 2));
         } catch (JSONException e) {
             e.printStackTrace();
             try {
@@ -525,7 +571,7 @@ public class ApiService implements DataReceiveCallback {
                         e.printStackTrace();
                     }
                 }
-            }, jsonArray.getJSONObject(0).getString("REQ"));
+            }, jsonArray.getJSONObject(2).getString("REQ").substring(1, jsonArray.getJSONObject(0).getString("REQ").length() - 2));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -546,7 +592,7 @@ public class ApiService implements DataReceiveCallback {
 
 
     //timerConfiguration
-    private void timerConfiguration() {
+    private void readTimerConfiguration() {
         responseTabId = "06";
         TimerConfigurationDao timerConfigurationDao = DB.timerConfigurationDao();
         for (int i = 0; i < timerConfigurationDao.geTimerConfigurationEntityList().size(); i++) {
@@ -586,6 +632,10 @@ public class ApiService implements DataReceiveCallback {
 
     }
 
+    public void timerFramePacket(String packet) {
+        ApplicationClass.getInstance().sendPacket(this, packet);
+    }
+
     private void writTimerConfiguration(JSONArray jsonArray) {
         try {
             String[] splitTimer = jsonArray.getJSONObject(0).getString("REQ").split("#");
@@ -595,67 +645,53 @@ public class ApiService implements DataReceiveCallback {
                     String[] split = data.split("\\*")[1].split(RES_SPILT_CHAR);
                     try {
                         if (split[1].equals("08") && split[2].equals("0")) {
-                            ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
-                                @Override
-                                public void OnDataReceive(String data) {
-                                    if (split[0].equals("0") && split[2].equals("0")) {
-                                        ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
-                                            @Override
-                                            public void OnDataReceive(String data) {
-                                                if (split[0].equals("1") && split[2].equals("0")) {
-                                                    ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
-                                                        @Override
-                                                        public void OnDataReceive(String data) {
-                                                            if (split[0].equals("2") && split[2].equals("0")) {
-                                                                ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
-                                                                    @Override
-                                                                    public void OnDataReceive(String data) {
-                                                                        try {
-                                                                            responseTabId = "06";
-                                                                            int timerNo = Integer.parseInt(jsonArray.getJSONObject(0).getString("INPUTNO"));
-                                                                            String timerName = jsonArray.getJSONObject(0).getString("NAME_LABEL");
-                                                                            String lowAlarm = jsonArray.getJSONObject(0).getString("LEFT_LABEL");
-                                                                            String highAlarm = jsonArray.getJSONObject(0).getString("RIGHT_LABEL");
-                                                                            String[] splitTimer = jsonArray.getJSONObject(0).getString("REQ").split("#");
-                                                                            TimerConfigurationEntity timerConfigurationEntity = new TimerConfigurationEntity
-                                                                                    (timerNo, timerName, lowAlarm, highAlarm, splitTimer[0], splitTimer[1], splitTimer[2], splitTimer[3], splitTimer[4]);
-                                                                            List<TimerConfigurationEntity> entryListUpdate = new ArrayList<>();
-                                                                            entryListUpdate.add(timerConfigurationEntity);
-                                                                            updateTimerDB(entryListUpdate);
-                                                                            dataObj.put("INPUTNO", String.valueOf(timerNo));
-                                                                            dataObj.put("REQ", "ACK");
-                                                                            dataObj.put("NAME_LABEL", "");
-                                                                            dataObj.put("LEFT_LABEL", "");
-                                                                            dataObj.put("RIGHT_LABEL", "");
-                                                                            dataObj.put("SEQUENCE_NO", "");
-                                                                            dataObj.put("UNIT", "");
-                                                                            dataObj.put("TYPE", "");
-                                                                        } catch (Exception e) {
-                                                                            e.printStackTrace();
-                                                                            try {
-                                                                                dataObj.put("INPUTNO", "");
-                                                                                dataObj.put("REQ", "NACK");
-                                                                                dataObj.put("NAME_LABEL", "");
-                                                                                dataObj.put("LEFT_LABEL", "");
-                                                                                dataObj.put("RIGHT_LABEL", "");
-                                                                                dataObj.put("SEQUENCE_NO", "");
-                                                                                dataObj.put("UNIT", "");
-                                                                                dataObj.put("TYPE", "");
-                                                                            } catch (JSONException jsonException) {
-                                                                                jsonException.printStackTrace();
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }, splitTimer[4]);
-                                                            }
-                                                        }
-                                                    }, splitTimer[3]);
-                                                }
-                                            }
-                                        }, splitTimer[2]);
-                                    }
+                            timerFramePacket(splitTimer[1].substring(2, splitTimer[1].length() - 2));
+                        }
+                        if (split[0].equals("1") && split[2].equals("0")) {
+                            timerFramePacket(splitTimer[1].substring(2, splitTimer[1].length() - 2));
+                        }
+                        if (split[0].equals("2") && split[2].equals("0")) {
+                            timerFramePacket(splitTimer[1].substring(2, splitTimer[1].length() - 2));
+                        }
+                        if (split[0].equals("3") && split[2].equals("0")) {
+                            timerFramePacket(splitTimer[1].substring(2, splitTimer[1].length() - 2));
+                        }
+                        if (split[0].equals("4") && split[2].equals("0")) {
+                            try {
+                                responseTabId = "06";
+                                int timerNo = Integer.parseInt(jsonArray.getJSONObject(0).getString("INPUTNO"));
+                                String timerName = jsonArray.getJSONObject(0).getString("NAME_LABEL");
+                                String lowAlarm = jsonArray.getJSONObject(0).getString("LEFT_LABEL");
+                                String highAlarm = jsonArray.getJSONObject(0).getString("RIGHT_LABEL");
+                                String[] splitTimer = jsonArray.getJSONObject(0).getString("REQ").split("#");
+                                TimerConfigurationEntity timerConfigurationEntity = new TimerConfigurationEntity
+                                        (timerNo, timerName, lowAlarm, highAlarm, splitTimer[0], splitTimer[1], splitTimer[2], splitTimer[3], splitTimer[4]);
+                                List<TimerConfigurationEntity> entryListUpdate = new ArrayList<>();
+                                entryListUpdate.add(timerConfigurationEntity);
+                                updateTimerDB(entryListUpdate);
+                                dataObj.put("INPUTNO", String.valueOf(timerNo));
+                                dataObj.put("REQ", "ACK");
+                                dataObj.put("NAME_LABEL", "");
+                                dataObj.put("LEFT_LABEL", "");
+                                dataObj.put("RIGHT_LABEL", "");
+                                dataObj.put("SEQUENCE_NO", "");
+                                dataObj.put("UNIT", "");
+                                dataObj.put("TYPE", "");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                try {
+                                    dataObj.put("INPUTNO", "");
+                                    dataObj.put("REQ", "NACK");
+                                    dataObj.put("NAME_LABEL", "");
+                                    dataObj.put("LEFT_LABEL", "");
+                                    dataObj.put("RIGHT_LABEL", "");
+                                    dataObj.put("SEQUENCE_NO", "");
+                                    dataObj.put("UNIT", "");
+                                    dataObj.put("TYPE", "");
+                                } catch (JSONException jsonException) {
+                                    jsonException.printStackTrace();
                                 }
-                            }, splitTimer[1]);
+                            }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -699,7 +735,7 @@ public class ApiService implements DataReceiveCallback {
     public void handleResponse(String[] splitData, String data) {
 
         if (splitData[1].equals("08")) {
-            if (splitData[2].equals("0")){
+            if (splitData[2].equals("0")) {
 
             }
         }
@@ -750,7 +786,6 @@ public class ApiService implements DataReceiveCallback {
                         e.printStackTrace();
                     }
 
-                    Log.e(TAG, "handleResponse: " + responseTabData);
                     break;
             }
         }
@@ -907,5 +942,9 @@ public class ApiService implements DataReceiveCallback {
         dao.insert(entryList.toArray(new TimerConfigurationEntity[0]));
     }
 
+    public void updateOutPutDB(List<OutputConfigurationEntity> entryList) {
+        OutputConfigurationDao dao = DB.outputConfigurationDao();
+        dao.insert(entryList.toArray(new OutputConfigurationEntity[0]));
+    }
 
 }

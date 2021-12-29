@@ -46,6 +46,7 @@ import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.ApiService;
 import com.ionexchange.databinding.FragmentVirtualsensorConfigBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -685,6 +686,8 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
         List<VirtualConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(virtualConfigurationEntity);
         updateToDb(entryListUpdate);
+        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "07");
+
     }
 
     public void updateToDb(List<VirtualConfigurationEntity> entryList) {

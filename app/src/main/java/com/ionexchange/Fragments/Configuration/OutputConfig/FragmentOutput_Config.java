@@ -53,6 +53,7 @@ import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.ApiService;
 import com.ionexchange.databinding.FragmentOutputConfigBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -1890,5 +1891,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(entityUpdate);
         updateToDb(entryListUpdate);
+        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "05");
+
     }
+
 }

@@ -56,6 +56,7 @@ import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.ApiService;
 import com.ionexchange.databinding.FragmentInputsensorFlowBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -949,6 +950,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 updateToDb(entryFlowList);
                 break;
         }
+        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04");
 
     }
 }

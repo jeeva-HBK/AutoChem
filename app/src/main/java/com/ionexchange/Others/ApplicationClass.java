@@ -130,6 +130,8 @@ public class ApplicationClass extends Application {
             modBusTypeArr = {"ST500", "CR300 CS", "CR-300 CU", "ST-590", "ST-588", "ST-500 RO"},
             modBusUnitArr = {"ppb", "ppm", "mpy","ntu"},
             analogTypeArr = {"(4-20mA)", "(0-10V)"},
+            typeArr = {"None", "Fluorescence", "Turbidity Value", "Corrosion rate", "Pitting rate"
+                    , "Fluorescence value(ST588)", "Tagged Polymer value"},
             analogUnitArr = {"mA", "V"},
 
     calculationArr = {"Difference", "Ratio", "Total", "% Difference"},
@@ -607,33 +609,110 @@ public class ApplicationClass extends Application {
 
         /*Input_DB*/
         inputDAO = DB.inputConfigurationDao();
-        /*if (inputDAO.getInputConfigurationEntityList().isEmpty()) {
-            String sensorType = "SENSOR";
+        if (inputDAO.getInputConfigurationEntityList().isEmpty()) {
+            String sensorType = "SENSOR", writePacket = "" , sequenceName  = "";
+            int signalType= 0,sequenceNo=1;
+            int j = 1;
             for (int i = 1; i < 50; i++) {
                 if (i < 5) {
                     sensorType = "SENSOR";
+                    if (i == 1){
+                        sequenceName = "pH";
+                        writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$00$1$0$pH Sensor$0$0$+033.00$000$00.00$14.00$000$0$0*}";
+                    } else if (i == 2){
+                        sequenceName = "ORP";
+                        writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$01$1$0$ORP Sensor$000$-2000.00$+2000.00$000$0$0*}";
+                    } else if (i == 3){
+                        sequenceName = "Contacting Conductivity";
+                        writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$04$1$0$Contacting$0$+033.00$0$01.00$0$00.00$000$000000.00$300000.00$000$0$0*}";
+                    } else if (i == 4){
+                        sequenceName = "Toroidal Conductivity";
+                        writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$05$1$0$Torodial$0$+033.00$0$0$00.00$000$0000000.00$2000000.00$000$0$0*}";
+                    }
                 } else if (i > 4 && i < 15) {
                     sensorType = "MODBUS";
+                    if(i == 5) {
+                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$0$0$1$0$ST 500 - f$0$000.00$300.00$0000000$000$000.00$300.00$000$0$0*}";
+                    } else if(i == 6) {
+                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$0$0$2$0$ST 500 - t$3$000.00$150.00$0000000$000$000.00$150.00$000$0$0*}";
+                    } else if(i == 7) {
+                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$1$1$3$0$CR 300CS$2$000.00$005.00$0000000$000$000.00$005.00$000$0$0*}";
+                    } else if(i == 8) {
+                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$1$1$4$0$CR 300CS$2$000.00$005.00$0000000$000$000.00$005.00$000$0$0*}";
+                    } else if(i == 9) {
+                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$2$2$3$0$CR 300CU$2$000.00$005.00$0000000$000$000.00$005.00$000$0$0*}";
+                    } else if(i == 10) {
+                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$2$2$4$0$CR 300CU$2$000.00$005.00$0000000$000$000.00$005.00$000$0$0*}";
+                    } else if(i == 11) {
+                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$3$3$6$0$ST 590$1$000.00$030.00$0000000$000$000.00$000.00$000$0$0*}";
+                    } else if(i == 12) {
+                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$3$4$5$0$ST 588$0$000.00$200.00$0000000$000$000.00$200.00$000$0$0*}";
+                    } else if(i == 13) {
+                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$4$4$6$0$ST 588$1$000.00$020.00$0000000$000$000.00$020.00$000$0$0*}";
+                    } else if(i == 14) {
+                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$5$5$1$0$ST 500$0$000.00$040.00$0000000$000$000.00$040.00$000$0$0*}";
+                    }
+                    String[] splitmodbusData = writePacket.split("\\*")[1].split(RES_SPILT_CHAR);
+                    sequenceName = modBusTypeArr[Integer.parseInt(splitmodbusData[7])] + " - "+typeArr[Integer.parseInt(splitmodbusData[8])];
+                    sequenceNo = Integer.parseInt(splitmodbusData[6]);
                 } else if (i > 14 && i < 18) {
                     sensorType = "SENSOR";
+                    sequenceName = "Temperature -" + j;
+                    sequenceNo = j;
+                    writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$02$"+j+"$0$Temp "+j+"$+033.00$000$-005.00$+260.00$000$0$0*}";
+                    j++;
+                    if (i == 17) {
+                        j = 1;
+                    }
                 } else if (i > 17 && i < 26) {
                     sensorType = "Analog";
+                    sequenceName = j < 6 ? sensorType +" - "+ j + "(4-20mA)" : sensorType +" - "+ j + "(0-10mA)";
+                    int analogType = j < 6 ? 0 : 1;
+                    sequenceNo = j;
+                    writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$06$0$"+j+"$"+analogType+"$0$Analog "+j+"$0$04.00$20.00$000$04.00$20.00$000$0$0*}";
+                    j++;
+                    if (i == 25) {
+                        j = 1;
+                    }
                 } else if (i > 25 && i < 34) {
                     sensorType = "FLOWMETER";
+                    sequenceName = "Flow Meter - " + j;
+                    sequenceNo = j;
+                    writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$03$0$"+j+"$1$0$Flow "+j+"$0$0001.00$0000001.00$0000000.00$000$2000000000.00$0$0$0000000000.00$0000000000.00$2000000000.00$000$0$0*}";
+                    j++;
+                    if (i == 33) {
+                        j = 1;
+                    }
                 } else if (i > 33 && i < 42) {
+                    signalType =1;
                     sensorType = "DIGITAL";
+                    sequenceName = "Digital Sensor - " + j;
+                    sequenceNo = j;
+                    writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$08$"+j+"$0$Digital "+j+"$Open$Close$0$0$0$0$0$0$00*}";
+                    j++;
+                    if (i == 41) {
+                        j = 1;
+                    }
                 } else if (i > 41 && i < 50) {
                     sensorType = "TANK";
+                    signalType =1;
+                    sequenceName = "Tank Level - " + j;
+                    sequenceNo = j;
+                    writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$07$"+j+"$0$Tank "+j+"$Open$Close$0$0$0$0$0$0$00*}";
+                    j++;
+                    if (i == 49) {
+                        j = 1;
+                    }
                 }
-
+                String[] splitData = writePacket.split("\\*")[1].split(RES_SPILT_CHAR);
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                        (i, "N/A", sensorType, 0,"N/A",0, "N/A",
-                                "N/A", "N/A", "N/A", "N/A",0);
+                        (i, inputTypeArr[Integer.parseInt(splitData[5])], sensorType, signalType,sequenceName,sequenceNo, "N/A",
+                                "N/A", "N/A", "N/A", "N/A",0,writePacket);
                 List<InputConfigurationEntity> inputentryList = new ArrayList<>();
                 inputentryList.add(entityUpdate);
                 updateInputDB(inputentryList);
             }
-        }*/
+        }
 
         /*Output_DB*/
         outputDAO = DB.outputConfigurationDao();

@@ -44,6 +44,7 @@ import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.ApiService;
 import com.ionexchange.databinding.FragmentInputsensorModbusBinding;
 
 import java.util.ArrayList;
@@ -499,5 +500,8 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                 updateToDb(entryListUpdate);
                 break;
         }
+        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04");
+
     }
+
 }
