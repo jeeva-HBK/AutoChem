@@ -746,7 +746,7 @@ public class ApplicationClass extends Application {
                         (i - 49)+"$0$01$00$0$01$00$00.00$14.00$000$00.00$14.00$0$0*}";
                 VirtualConfigurationEntity entityUpdate = new VirtualConfigurationEntity
                         (i, "Virtual", 0, "VirtualInput"+(i - 49),
-                                "pH", "00.00","14.00",defaultwritePacket);
+                                "pH", "00.00","14.00","N/A",defaultwritePacket);
                 List<VirtualConfigurationEntity> virtualEntryList = new ArrayList<>();
                 virtualEntryList.add(entityUpdate);
                 updateVirtualDB(virtualEntryList);

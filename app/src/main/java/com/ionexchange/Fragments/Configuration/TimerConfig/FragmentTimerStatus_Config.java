@@ -16,6 +16,7 @@ import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -51,6 +52,7 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.ApiService;
+import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentTimerstatusConfigBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -813,7 +815,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                     int timerNum = Integer.parseInt(timerNo);
                     dao.updateTimer(mBinding.timerNameTxt.getText().toString(),
                             mBinding.txtOutputNameValueAct.getText().toString(), mBinding.txtModeValueAct.getText().toString(), timerNum);
-                    new EventLogDemo(timerNo, "TIMER" + timerNo, "Timer setting changed", getContext());
+                    new EventLogDemo(timerNo, "TIMER" + timerNo, "Timer setting changed", SharedPref.read(pref_USERLOGINID, ""), getContext());
                     timerEntity();
                     writeWeeklySchedule(week1, timerOne, 1);
                 }

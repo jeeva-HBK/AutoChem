@@ -21,6 +21,7 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.ApiService;
+import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentInputsensorCondBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +55,7 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.STARTPACKET;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
 //created by Silambu
 public class FragmentInputSensorConductivity_Config extends Fragment implements DataReceiveCallback {
@@ -357,7 +359,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 if (spiltData[3].equals(RES_SUCCESS)) {
                     conductivityEntity(Integer.parseInt(spiltData[2]));
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
-                    new EventLogDemo(inputNumber,"Temperature","Input Setting Changed",getContext());
+                    new EventLogDemo(inputNumber,"Temperature","Input Setting Changed",SharedPref.read(pref_USERLOGINID, ""),getContext());
                 } else if (spiltData[3].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }

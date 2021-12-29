@@ -31,6 +31,7 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.STARTPACKET;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -57,6 +58,7 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.ApiService;
+import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentInputsensorFlowBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -899,7 +901,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 } else if (splitData[0].equals(WRITE_PACKET)) {
                     if (splitData[3].equals(RES_SUCCESS)) {
                         flowMeterEntity(Integer.parseInt(splitData[2]));
-                        new EventLogDemo(inputNumber, "FlowMeter", "Input Setting Changed", getContext());
+                        new EventLogDemo(inputNumber, "FlowMeter", "Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""),getContext());
                         mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                     } else if (splitData[3].equals(RES_FAILED)) {
                         mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));

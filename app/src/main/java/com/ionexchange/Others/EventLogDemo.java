@@ -18,11 +18,11 @@ public class EventLogDemo {
     WaterTreatmentDb waterTreatmentDb;
     EventLogDao eventLogDao;
 
-    public EventLogDemo(String hardwareNo,String sensorType,String eventLog, Context applicationContext) {
+    public EventLogDemo(String hardwareNo,String sensorType,String eventLog, String userId,Context applicationContext) {
         waterTreatmentDb = WaterTreatmentDb.getDatabase(applicationContext);
         eventLogDao = waterTreatmentDb.eventLogDao();
         EventLogEntity eventLogEntity = new EventLogEntity(eventLogDao.getLastSno() + 1,
-                hardwareNo, sensorType, eventLog,  ApplicationClass.getCurrentTime(),
+                hardwareNo, sensorType, eventLog, userId, ApplicationClass.getCurrentTime(),
                 ApplicationClass.getCurrentDate());
         List<EventLogEntity> outputEntryList = new ArrayList<>();
         outputEntryList.add(eventLogEntity);

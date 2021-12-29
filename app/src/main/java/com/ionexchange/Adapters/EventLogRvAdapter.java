@@ -40,7 +40,7 @@ public class EventLogRvAdapter extends RecyclerView.Adapter<EventLogRvAdapter.it
         }
 
         holder.sensorType.setText(eventLogEntityList.get(position).sensorType);
-        holder.AlertName.setText(eventLogEntityList.get(position).alarmLog);
+        holder.AlertName.setText(eventLogEntityList.get(position).eventLog);
         holder.Date.setText(eventLogEntityList.get(position).date+" | "+eventLogEntityList.get(position).time);
     }
 

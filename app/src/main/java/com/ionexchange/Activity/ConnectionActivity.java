@@ -102,36 +102,6 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
         mAppClass = (ApplicationClass) getApplication();
         waterTreatmentDb = WaterTreatmentDb.getDatabase(getApplicationContext());
         inputConfigurationDao = waterTreatmentDb.inputConfigurationDao();
-
-
-        /* mBinding = DataBindingUtil.setContentView(this, R.layout.activity_connection);
-
-        mAppClass = (ApplicationClass) getApplication();
-
-        if (preferences.getBoolean("prefLoggedIn", false)) {
-            proceedToBaseAct();
-        }
-        try {
-            mBinding.ipAdressEdt.append(preferences.getString("prefIp", ""));
-            mBinding.portEdt.append(preferences.getString("prefPort", ""));
-        } catch (Exception e) {
-
-        }
-
-        mActivity = new BaseActivity();
-        mBinding.button.setOnClickListener(View -> {
-            if (validateField()) {
-                editor.putBoolean("prefLoggedIn", true);
-                editor.putString("prefIp", mBinding.ipAdressEdt.getText().toString());
-                editor.putString("prefPort", mBinding.portEdt.getText().toString());
-                editor.putString("prefPassword", mBinding.passwordEdt.getText().toString());
-                editor.apply();
-                mIPAddress = mBinding.ipAdressEdt.getText().toString();
-                mPortNumber = Integer.parseInt(mBinding.portEdt.getText().toString());
-                DEVICE_PASSWORD = mBinding.passwordEdt.getText().toString();
-                proceedToBaseAct();
-            }
-        });*/
         mContext = getApplicationContext();
         requestMultiplePermissionsContract = new ActivityResultContracts.RequestMultiplePermissions();
         multiplePermissionActivityResultLauncher = registerForActivityResult(requestMultiplePermissionsContract, isGranted -> {
@@ -362,39 +332,7 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
                         public void OnConnectSuccess() {
                             Log.e(TAG, "OnConnectSuccess: ");
                             startApp(mBleDevice.getAddress());
-                            /*try {
-                             */
-                            /*runOnUiThread(new Runnable() {
-                                    int i = 0;
-                                    @Override
-                                    public void run() {
-                                        while (i < 5) {
-                                            if (!dataReceived) {
-                                                sendPacket("01");
-                                            }
-                                            i++;
-                                        }
-                                    }
-                                });*/
-                            /*
-                            } catch (Exception e) {
-                                Log.e(TAG, "OnConnectSuccess: Catch");
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        //  mActivity.dismissProgress();
-                                        //  mAppClass.showSnackBar(mContext, "Error Occurred");
-                                        mBinding.txtConnect.setText("Rescan");
-                                        stopScan();
-                                    }
-                                });
-                                e.printStackTrace();
-                            }*/
-                            if(inputConfigurationDao.getInputConfigurationEntityList().isEmpty()){
-                                sendPacket(DEVICE_PASSWORD+SPILT_CHAR+CONN_TYPE+SPILT_CHAR+READ_PACKET+SPILT_CHAR+DEFAULT_CONFIG+SPILT_CHAR+"0"+SPILT_CHAR);
-                            }
                         }
-
                         @Override
                         public void OnConnectFailed(Exception e) {
                             e.printStackTrace();

@@ -20,6 +20,7 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.ApiService;
+import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentInputsensorTempBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -50,6 +51,7 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.STARTPACKET;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
 public class FragmentInputSensorTemp_config extends Fragment implements DataReceiveCallback {
     private static final String TAG = "FragmentInputSensorTemp";
@@ -200,7 +202,8 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[3].equals(RES_SUCCESS)) {
                     temperatureEntity(Integer.parseInt(splitData[2]));
-                    new EventLogDemo(inputNumber,"Temperature","Input Setting Changed",getContext());
+                    new EventLogDemo(inputNumber,"Temperature","Input Setting Changed",
+                            SharedPref.read(pref_USERLOGINID, ""),getContext());
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));

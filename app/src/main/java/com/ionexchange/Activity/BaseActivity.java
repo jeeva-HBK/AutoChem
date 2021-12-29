@@ -5,6 +5,7 @@ import static com.ionexchange.Others.ApplicationClass.DB;
 import static com.ionexchange.Others.ApplicationClass.defaultPassword;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Singleton.SharedPref.pref_LOGGEDIN;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINNAME;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINREQUIRED;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINROLE;
@@ -60,7 +61,6 @@ import com.ionexchange.Others.AdminReceiver;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
-import com.ionexchange.Singleton.ApiService;
 import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.ActivityBaseBinding;
 
@@ -387,17 +387,14 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 if (userName.getText().toString().equals("")) {
-                    // mAppClass.showSnackBar(BaseActivity.this, "Username should be empty");
                     Snackbar.make(dialogView, "Username should not be empty", Snackbar.LENGTH_LONG).show();
                     return;
                 }
                 if (password.getText().toString().equals("")) {
-                    //mAppClass.showSnackBar(BaseActivity.this, "Password should be empty");
                     Snackbar.make(dialogView, "Password should not be empty", Snackbar.LENGTH_LONG).show();
                     return;
                 }
                 if (userManagementDao.getPassword(userName.getText().toString()) == null) {
-                    // mAppClass.showSnackBar(BaseActivity.this, "user not found");
                     Snackbar.make(dialogView, "User not found", Snackbar.LENGTH_LONG).show();
                     return;
                 }
@@ -409,7 +406,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                     userType = SharedPref.read(pref_USERLOGINROLE, 0);
                     moveToConfig();
                 } else {
-                    // mAppClass.showSnackBar(BaseActivity.this, "password is Incorrect");
                     Snackbar.make(dialogView, "Password is Incorrect", Snackbar.LENGTH_LONG).show();
                 }
             }
@@ -445,7 +441,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             }
             if (!defPassword.getText().toString().equals(defaultPassword)) {
                 mAppClass.showSnackBar(BaseActivity.this, "Default Password not Matched");
-                return;
             } else {
                 userManagementDao.updatePassword(password.getText().toString(), SharedPref.read(pref_USERLOGINNAME, ""));
                 mAppClass.showSnackBar(getApplicationContext(), "Password changed");
@@ -456,7 +451,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void moveToConfig() {
-        new EventLogDemo("0", "-", "Menu accessed by " + SharedPref.read(pref_USERLOGINNAME, ""), getApplicationContext());
+        SharedPref.write(pref_USERLOGINID, userManagementDao.getUserId(SharedPref.read(pref_USERLOGINNAME, "")));
+        new EventLogDemo("0", "-", "Menu accessed by " + SharedPref.read(pref_USERLOGINNAME, ""),
+                userManagementDao.getUserId(SharedPref.read(pref_USERLOGINNAME, "")), getApplicationContext());
         setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText,
                 navGraph, R.id.siteSetting, mNavController);
         expandedListView();

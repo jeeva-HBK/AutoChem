@@ -15,7 +15,10 @@ public class EventLogEntity {
     public String sensorType;
 
     @ColumnInfo(name = "EventLog")
-    public String alarmLog;
+    public String eventLog;
+
+    @ColumnInfo(name = "userId")
+    public String userId;
 
     @ColumnInfo(name = "time")
     public String time;
@@ -23,12 +26,12 @@ public class EventLogEntity {
     @ColumnInfo(name = "date")
     public String date;
 
-
-    public EventLogEntity(int sNo, String hardwareNo, String sensorType, String alarmLog, String time, String date) {
+    public EventLogEntity(int sNo, String hardwareNo, String sensorType, String eventLog, String userId, String time, String date) {
         this.sNo = sNo;
         this.hardwareNo = hardwareNo;
         this.sensorType = sensorType;
-        this.alarmLog = alarmLog;
+        this.eventLog = eventLog;
+        this.userId = userId;
         this.time = time;
         this.date = date;
     }
@@ -57,12 +60,20 @@ public class EventLogEntity {
         this.sensorType = sensorType;
     }
 
-    public String getAlarmLog() {
-        return alarmLog;
+    public String getEventLog() {
+        return eventLog;
     }
 
-    public void setAlarmLog(String alarmLog) {
-        this.alarmLog = alarmLog;
+    public void setEventLog(String eventLog) {
+        this.eventLog = eventLog;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getTime() {
@@ -80,4 +91,6 @@ public class EventLogEntity {
     public void setDate(String date) {
         this.date = date;
     }
+
+
 }

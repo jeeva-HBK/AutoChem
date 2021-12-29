@@ -20,6 +20,7 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.ApiService;
+import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentInputsensorOrpBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +50,7 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.STARTPACKET;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
 public class FragmentInputSensorORP_Config extends Fragment implements DataReceiveCallback {
     FragmentInputsensorOrpBinding mBinding;
@@ -220,7 +222,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
             } else if (data[0].equals(WRITE_PACKET)) {
                 if (data[3].equals(RES_SUCCESS)) {
                     orpEntity(Integer.parseInt(data[2]));
-                    new EventLogDemo(inputNumber,"ORP","Input Setting Changed",getContext());
+                    new EventLogDemo(inputNumber,"ORP","Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""),getContext());
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 } else if (data[3].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));

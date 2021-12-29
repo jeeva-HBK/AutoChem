@@ -169,16 +169,16 @@ public class KeepAlive implements DataReceiveCallback {
                     updateToAlarmDb(outputEntryList);
                 }
 
-            } else if (data[4].equals("1")) {
+            } /*else if (data[4].equals("1")) {
                 EventLogEntity eventLogEntity = new EventLogEntity(eventLogDao.getLastSno() + 1,
                         data[3].substring(2, 4), sensorType,
-                        eventLogArr[Integer.parseInt(data[5])],
+                        eventLogArr[Integer.parseInt(data[5])],"",
                         ApplicationClass.getCurrentTime(), ApplicationClass.getCurrentDate());
                 List<EventLogEntity> eventLogEntities = new ArrayList<>();
                 eventLogEntities.add(eventLogEntity);
                 updateToEventDb(eventLogEntities);
             }
-
+*/
         }
     }
 

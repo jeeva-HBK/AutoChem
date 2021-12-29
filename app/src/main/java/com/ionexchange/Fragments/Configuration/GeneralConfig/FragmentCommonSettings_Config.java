@@ -13,6 +13,7 @@ import static com.ionexchange.Singleton.SharedPref.pref_CONTROLLERPASSWORD;
 import static com.ionexchange.Singleton.SharedPref.pref_SITEID;
 import static com.ionexchange.Singleton.SharedPref.pref_SITELOCATION;
 import static com.ionexchange.Singleton.SharedPref.pref_SITENAME;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
 import android.content.IntentSender;
 import android.os.Bundle;
@@ -281,7 +282,7 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
                 } else if (splitData[0].equals(WRITE_PACKET)) {
                     if (splitData[2].equals(RES_SUCCESS)) {
                         mAppClass.showSnackBar(getContext(), "Write Success");
-                        new EventLogDemo("0", "Site", "General settings changed", getContext());
+                        new EventLogDemo("0", "Site", "General settings changed", SharedPref.read(pref_USERLOGINID, ""), getContext());
                     } else if (splitData[2].equals(RES_FAILED)) {
                         mAppClass.showSnackBar(getContext(), "Write Failed");
                     }

@@ -23,6 +23,7 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.STARTPACKET;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -43,6 +44,7 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.ApiService;
+import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentInputsensorPhBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -319,7 +321,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[3].equals(RES_SUCCESS)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
-                    new EventLogDemo(inputNumber, "Ph", "Input Setting Changed", getContext());
+                    new EventLogDemo(inputNumber, "Ph", "Input Setting Changed",  SharedPref.read(pref_USERLOGINID, ""),getContext());
                     pHEntity(Integer.parseInt(splitData[2]));
 
                 } else if (splitData[3].equals(RES_FAILED)) {

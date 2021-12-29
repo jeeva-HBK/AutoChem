@@ -17,6 +17,7 @@ import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.STARTPACKET;
 import static com.ionexchange.Others.PacketControl.VIRTUAL_INPUT;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -47,6 +48,7 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.ApiService;
+import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentVirtualsensorConfigBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -357,7 +359,8 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
                     toString(3, mBinding.smoothingFactorViEDT) + SPILT_CHAR +
                     getTBtnValue(mBinding.sensor1TypeATXT, mBinding.lowAlarmTBtn) + toString(sensorLength, mBinding.lowAlarmViEDT) + "." + toString(2, mBinding.lowAlarmViDec) + SPILT_CHAR +
                     getTBtnValue(mBinding.sensor1TypeATXT, mBinding.highAlarmTBtn) + toString(sensorLength, mBinding.highAlarmViEDT) + "." + toString(2, mBinding.highAlarmDec) + SPILT_CHAR +
-                    getPosition(0, toString(mBinding.calculationViEDT), calculationArr) + SPILT_CHAR + "1";
+                    getPosition(0, toString(mBinding.calculationViEDT), calculationArr) + SPILT_CHAR + toString(0, mBinding.virtualInputValEdt) + SPILT_CHAR + "1";
+
             mAppClass.sendPacket(this, writePacket);
 
 
@@ -499,6 +502,9 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
             return false;
         } else if (isEmpty(mBinding.highAlarmViEDT)) {
             mAppClass.showSnackBar(getContext(), "High Range cannot be Empty");
+            return false;
+        } else if (isEmpty(mBinding.virtualInputValEdt)) {
+            mAppClass.showSnackBar(getContext(), "Virtual input unit cannot be empty");
             return false;
         } else if (isEmpty(mBinding.lowAlarmViEDT)) {
             mAppClass.showSnackBar(getContext(), "Alarm low cannot be Empty");
@@ -667,7 +673,8 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
             } else if (spiltData[0].equals(WRITE_PACKET)) {
                 if (spiltData[2].equals(RES_SUCCESS)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
-                    new EventLogDemo(String.valueOf(sensorInputNo), "Virtual", "Input Setting Changed", getContext());
+                    new EventLogDemo(String.valueOf(sensorInputNo), "Virtual", "Input Setting Changed",
+                            SharedPref.read(pref_USERLOGINID, ""), getContext());
                     virtualEntity();
                 } else if (spiltData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
@@ -682,7 +689,8 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
         VirtualConfigurationEntity virtualConfigurationEntity = new VirtualConfigurationEntity(
                 sensorInputNo, "Virtual", 0, toString(0, mBinding.labelViEDT), toString(0, mBinding.sensor1TypeATXT),
                 toString(6, mBinding.lowAlarmViEDT) + "." + toString(2, mBinding.lowAlarmViDec),
-                toString(6, mBinding.highAlarmViEDT) + "." + toString(2, mBinding.highAlarmDec), STARTPACKET + writePacket + ENDPACKET);
+                toString(6, mBinding.highAlarmViEDT) + "." + toString(2, mBinding.highAlarmDec), toString(0, mBinding.virtualInputValEdt),
+                STARTPACKET + writePacket + ENDPACKET);
         List<VirtualConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(virtualConfigurationEntity);
         updateToDb(entryListUpdate);

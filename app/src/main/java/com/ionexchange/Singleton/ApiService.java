@@ -3,9 +3,11 @@ package com.ionexchange.Singleton;
 import static com.ionexchange.Others.ApplicationClass.DB;
 import static com.ionexchange.Others.ApplicationClass.alertKeepAliveData;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
+import static com.ionexchange.Others.ApplicationClass.inputDAO;
 import static com.ionexchange.Others.ApplicationClass.inputKeepAliveData;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.modBusTypeArr;
+import static com.ionexchange.Others.ApplicationClass.outputDAO;
 import static com.ionexchange.Others.ApplicationClass.outputKeepAliveData;
 import static com.ionexchange.Others.ApplicationClass.triggerWebService;
 import static com.ionexchange.Others.ApplicationClass.typeArr;
@@ -312,7 +314,8 @@ public class ApiService implements DataReceiveCallback {
                     try {
                         String[] splitData = jsonArray.getJSONObject(0).getString("REQ").
                                 split("\\*")[1].split(RES_SPILT_CHAR);
-                        if (splitData[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
+                        String[] splitValidation = data.split("\\*")[1].split(RES_SPILT_CHAR);
+                        if (splitValidation[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
                             int hardWareNo = Integer.parseInt(jsonArray.getJSONObject(0).getString("INPUTNO"));
                             String inputLabel = jsonArray.getJSONObject(0).getString("NAME_LABEL");
                             String lowAlarm = jsonArray.getJSONObject(0).getString("LEFT_LABEL");
@@ -462,15 +465,20 @@ public class ApiService implements DataReceiveCallback {
                     try {
                         String[] splitData = jsonArray.getJSONObject(0).getString("REQ").
                                 split("\\*")[1].split(RES_SPILT_CHAR);
-
-                        if (splitData[1].equals(PCK_OUTPUT_CONFIG)) {
+                        String[] splitValidation = data.split("\\*")[1].split(RES_SPILT_CHAR);
+                        if (splitValidation[1].equals(PCK_OUTPUT_CONFIG)) {
                             int hardWareNo = Integer.parseInt(jsonArray.getJSONObject(0).getString("INPUTNO"));
                             String inputLabel = jsonArray.getJSONObject(0).getString("NAME_LABEL");
                             String lowAlarm = jsonArray.getJSONObject(0).getString("LEFT_LABEL");
                             String highAlarm = jsonArray.getJSONObject(0).getString("RIGHT_LABEL");
-                            int seqNo = Integer.parseInt(jsonArray.getJSONObject(0).getString("SEQUENCE_NO"));
-                            String unit = jsonArray.getJSONObject(0).getString("UNIT");
-                            int type = Integer.parseInt(jsonArray.getJSONObject(0).getString("TYPE"));
+                            if(hardWareNo > 14){
+                                if(highAlarm.contains("IN")){
+                                    highAlarm = "Input- "+highAlarm+ " ("+inputDAO.getInputLabel(Integer.parseInt(highAlarm))+")";
+                                }else{
+                                    highAlarm = "Output- "+highAlarm+ " ("+outputDAO.getOutputLabel(Integer.parseInt(highAlarm))+")";
+                                }
+
+                            }
                             dataObj.put("INPUTNO", "");
                             dataObj.put("REQ", "ACK");
                             dataObj.put("NAME_LABEL", "");
@@ -479,6 +487,14 @@ public class ApiService implements DataReceiveCallback {
                             dataObj.put("SEQUENCE_NO", "");
                             dataObj.put("UNIT", "");
                             dataObj.put("TYPE", "");
+
+                            OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
+                                    (hardWareNo, "Output- " + hardWareNo + "(" + inputLabel + ")", inputLabel,
+                                            lowAlarm,
+                                            highAlarm,jsonArray.getJSONObject(0).getString("REQ"));
+                            List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
+                            entryListUpdate.add(entityUpdate);
+                            updateOutPutDB(entryListUpdate);
                         }
 
                     } catch (Exception e) {
@@ -545,6 +561,7 @@ public class ApiService implements DataReceiveCallback {
                 public void OnDataReceive(String data) {
                     responseTabId = "07";
                     try {
+
                         int hardWareNo = Integer.parseInt(jsonArray.getJSONObject(0).getString("INPUTNO"));
                         String virtualLabel = jsonArray.getJSONObject(0).getString("NAME_LABEL");
                         String lowAlarm = jsonArray.getJSONObject(0).getString("LEFT_LABEL");
@@ -554,7 +571,7 @@ public class ApiService implements DataReceiveCallback {
 
                         VirtualConfigurationEntity entityUpdate = new VirtualConfigurationEntity
                                 (hardWareNo, "Virtual", seqNo, virtualLabel,
-                                        type, lowAlarm, highAlarm, jsonArray.getJSONObject(0).getString("REQ"));
+                                        type, lowAlarm, highAlarm, "",jsonArray.getJSONObject(0).getString("REQ"));
                         List<VirtualConfigurationEntity> virtualEntryList = new ArrayList<>();
                         virtualEntryList.add(entityUpdate);
                         updateVirtualDB(virtualEntryList);
@@ -648,13 +665,13 @@ public class ApiService implements DataReceiveCallback {
                             timerFramePacket(splitTimer[1].substring(2, splitTimer[1].length() - 2));
                         }
                         if (split[0].equals("1") && split[2].equals("0")) {
-                            timerFramePacket(splitTimer[1].substring(2, splitTimer[1].length() - 2));
+                            timerFramePacket(splitTimer[2].substring(2, splitTimer[2].length() - 2));
                         }
                         if (split[0].equals("2") && split[2].equals("0")) {
-                            timerFramePacket(splitTimer[1].substring(2, splitTimer[1].length() - 2));
+                            timerFramePacket(splitTimer[3].substring(2, splitTimer[3].length() - 2));
                         }
                         if (split[0].equals("3") && split[2].equals("0")) {
-                            timerFramePacket(splitTimer[1].substring(2, splitTimer[1].length() - 2));
+                            timerFramePacket(splitTimer[4].substring(2, splitTimer[4].length() - 2));
                         }
                         if (split[0].equals("4") && split[2].equals("0")) {
                             try {

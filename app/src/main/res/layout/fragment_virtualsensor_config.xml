@@ -316,6 +316,40 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/virtual_input_val"
+                    style="@style/config_Til"
+                    android:hint="Virtual Input Unit"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/virtual_input_val_edt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
 
         <!--Row 4-->

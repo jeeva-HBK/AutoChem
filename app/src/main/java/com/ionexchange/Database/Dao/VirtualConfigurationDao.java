@@ -32,4 +32,8 @@ public interface VirtualConfigurationDao {
 
     @Query("select subValueTwo FROM virtualconfigurationentity WHERE hardwareNo = :hardwareNo ")
     String getVirtualHighAlarm(int hardwareNo);
+
+    @Query("select unit  FROM virtualconfigurationentity WHERE  hardwareNo = :hardwareNo ")
+    String getUnit(int hardwareNo);
+
 }

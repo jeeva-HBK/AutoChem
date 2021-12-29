@@ -238,7 +238,6 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 currentMode.setText("Current Value");
                 lowKey.setText("Low Alarm");
                 highKey.setText("High Alarm");
-                unitOne.setVisibility(View.INVISIBLE);
                 typeOne.setVisibility(View.INVISIBLE);
                 seq.setText(mainConfigurationEntityList.get(position).inputType);
                 if (virtualConfigurationDao.getVirtualLabel(mainConfigurationEntityList.get(position).hardware_no) != null) {
@@ -251,21 +250,9 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 if (virtualConfigurationDao.getVirtualHighAlarm((mainConfigurationEntityList.get(position).hardware_no)) != null) {
                     highAlarmOne.setText(virtualConfigurationDao.getVirtualHighAlarm((mainConfigurationEntityList.get(position).hardware_no)));
                 }
-               /* if (inputConfigurationDao.getUnit((mainConfigurationEntityList.get(position).hardware_no)) != null) {
-                    if (inputConfigurationDao.getUnit((mainConfigurationEntityList.get(position).hardware_no)).equals("N/A")) {
-                        unitOne.setText("");
-                    } else {
-                        unitOne.setText(inputConfigurationDao.getUnit((mainConfigurationEntityList.get(position).hardware_no)));
-                    }
+                if (virtualConfigurationDao.getUnit(mainConfigurationEntityList.get(position).hardware_no)!=null){
+                    unitOne.setText(virtualConfigurationDao.getUnit(mainConfigurationEntityList.get(position).hardware_no));
                 }
-                if (inputConfigurationDao.getType((mainConfigurationEntityList.get(position).hardware_no)) != null) {
-                    if (inputConfigurationDao.getType((mainConfigurationEntityList.get(position).hardware_no)).equals("N/A")) {
-                        typeOne.setText("");
-                    } else {
-                        typeOne.setText(inputConfigurationDao.getType((mainConfigurationEntityList.get(position).hardware_no)));
-                    }
-                }
-*/
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     if (mainConfigurationEntityList.get(position).inputType != null) {
                         seq.setTooltipText(mainConfigurationEntityList.get(position).inputType);
@@ -282,12 +269,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     }
 
                     currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
-                   /* if (inputConfigurationDao.getUnit((mainConfigurationEntityList.get(position).hardware_no)) != null) {
-                        unitOne.setTooltipText(inputConfigurationDao.getUnit((mainConfigurationEntityList.get(position).hardware_no)));
-                    }
-                    if (inputConfigurationDao.getType((mainConfigurationEntityList.get(position).hardware_no)) != null) {
-                        typeOne.setTooltipText(inputConfigurationDao.getType((mainConfigurationEntityList.get(position).hardware_no)));
-                    }*/
+
                 }
             }
 
@@ -657,7 +639,9 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
         if (virtualConfigurationDao.getVirtualLabel(mainConfigurationEntityList.get(position).hardware_no) != null) {
             sensorLabel.setText(virtualConfigurationDao.getVirtualLabel(mainConfigurationEntityList.get(position).hardware_no));
         }
-
+        if (virtualConfigurationDao.getUnit(mainConfigurationEntityList.get(position).hardware_no)!=null){
+            unit.setText(virtualConfigurationDao.getUnit(mainConfigurationEntityList.get(position).hardware_no));
+        }
         if (virtualConfigurationDao.getVirtualLowAlarm((mainConfigurationEntityList.get(position).hardware_no)) != null) {
             lowAlarm.setText(virtualConfigurationDao.getVirtualLowAlarm((mainConfigurationEntityList.get(position).hardware_no)));
         }
