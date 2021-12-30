@@ -1256,8 +1256,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
-                    new EventLogDemo(String.valueOf(outputSensorNo), "output-" + outputSensorNo, "Output Setting Changed",
-                            SharedPref.read(pref_USERLOGINID, ""),getContext());
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                     outputConfigurationEntity();
                 } else if (splitData[2].equals(RES_FAILED)) {
@@ -1925,8 +1923,10 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(entityUpdate);
         updateToDb(entryListUpdate);
-        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "05");
-
+        new EventLogDemo(String.valueOf(outputSensorNo), "output-" + outputSensorNo, "Output Setting Changed",
+                SharedPref.read(pref_USERLOGINID, ""),getContext());
+        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Output Setting Changed - " +
+                SharedPref.read(pref_USERLOGINID, ""));
     }
 
 }

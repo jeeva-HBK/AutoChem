@@ -4,6 +4,7 @@ import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.getAdapter;
 import static com.ionexchange.Others.ApplicationClass.getCurrentDate;
 import static com.ionexchange.Others.ApplicationClass.lessThanAWeek;
+import static com.ionexchange.Others.ApplicationClass.virtualDAO;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -223,10 +225,10 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
                     barDataSet.put(1, getBarData(trendDao.getLessThenOneWeek(fromDate, toDate, formDigits(2, selectedSensor)), 1));
                     setBarChartData();
                 }
-                if (selectedSensorTwo != null) {
+               /* if (selectedSensorTwo != null) {
                     barDataSet.put(2, getBarData(trendDao.getLessThenOneWeek(fromDate, toDate, formDigits(2, selectedSensorTwo)), 2));
                     setBarChartData();
-                }
+                }*/
                 break;
             case 2:
                 if (selectedSensor != null) {
@@ -258,10 +260,10 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
                     barDataSet.put(1, getBarData(trendDao.getLessThenTwoWeek(fromDate, toDate, formDigits(2, selectedSensor)), 1));
                     setBarChartData();
                 }
-                if (selectedSensorTwo != null) {
+               /* if (selectedSensorTwo != null) {
                     barDataSet.put(2, getBarData(trendDao.getLessThenTwoWeek(fromDate, toDate, formDigits(2, selectedSensorTwo)), 2));
                     setBarChartData();
-                }
+                }*/
                 break;
             case 2:
                 if (selectedSensor != null) {
@@ -293,10 +295,10 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
                     barDataSet.put(1, getBarData(trendDao.getMoreThanTwoWeek(formDigits(2, selectedSensor)), 1));
                     setBarChartData();
                 }
-                if (selectedSensorTwo != null) {
+                /*if (selectedSensorTwo != null) {
                     barDataSet.put(2, getBarData(trendDao.getMoreThanTwoWeek(formDigits(2, selectedSensorTwo)), 2));
                     setBarChartData();
-                }
+                }*/
                 break;
             case 2:
                 if (selectedSensor != null) {
@@ -358,14 +360,16 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
         mBinding.trendLineChart.setVisibility(View.VISIBLE);
         mBinding.trendBarChart.setVisibility(View.GONE);
         lineDataSet = new HashMap<>();
-        mBinding.trendSensorOneTie.setAdapter(getAdapter(inputDao.getEnabledSensor(), getContext()));
-        mBinding.trendChartTypeTie.setText(chartTypeArr[0]);
-        mBinding.trendSensorOneTie.setText(mBinding.trendSensorOneTie.getAdapter().getItem(0).toString());
-        selectedSensor = mBinding.trendSensorOneTie.getAdapter().getItem(0).toString().split("-")[0].trim();
-        initLineChart();
-        lineDataSet.put(1, getLineData(trendDao.getLessThenOneWeek(lessThanAWeek(), getCurrentDate(), formDigits(2, selectedSensor)), 1));
-        setLineChartData();
-        setAdapter();
+        if(inputDao.getEnabledSensor().length > 0) {
+            mBinding.trendSensorOneTie.setAdapter(getAdapter(inputDao.getEnabledSensor(), getContext()));
+            mBinding.trendChartTypeTie.setText(chartTypeArr[0]);
+            mBinding.trendSensorOneTie.setText(mBinding.trendSensorOneTie.getAdapter().getItem(0).toString());
+            selectedSensor = mBinding.trendSensorOneTie.getAdapter().getItem(0).toString().split("-")[0].trim();
+            initLineChart();
+            lineDataSet.put(1, getLineData(trendDao.getLessThenOneWeek(lessThanAWeek(), getCurrentDate(), formDigits(2, selectedSensor)), 1));
+            setLineChartData();
+            setAdapter();
+        }
     }
 
     private void setLineChartData() {
@@ -374,23 +378,27 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
             dataSets.add(lineDataSet.get(1));
         }
         if (lineDataSet.get(2) != null) {
-          /*  LimitLine ll1 = new LimitLine(Float.parseFloat(inputDao.getLowAlarm(Integer.parseInt(
-                    formDigits(2, mBinding.trendSensorTwoTie.getAdapter().getItem(0).toString().split("-")[0].trim()))
+            LimitLine ll1 = new LimitLine(Integer.parseInt(selectedSensorTwo) < 34 ? Float.parseFloat(inputDao.getLowAlarm(Integer.parseInt(
+                    formDigits(2, selectedSensorTwo)))) : (Float.parseFloat(virtualDAO.getVirtualLowAlarm(Integer.parseInt(
+                    formDigits(2, selectedSensorTwo)))
             )), "Low Alarm");
             ll1.setLineWidth(2f);
             ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
             ll1.setTextSize(10f);
+            ll1.setLineColor(Color.YELLOW);
 
-            LimitLine ll2 = new LimitLine(Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(
-                    formDigits(2, mBinding.trendSensorTwoTie.getAdapter().getItem(0).toString().split("-")[0].trim()))
+            LimitLine ll2 = new LimitLine(Integer.parseInt(selectedSensorTwo) < 34 ? (Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(
+                    formDigits(2, selectedSensorTwo))))) : (Float.parseFloat(virtualDAO.getVirtualHighAlarm(Integer.parseInt(
+                    formDigits(2, selectedSensorTwo)))
             )), "High Alarm");
             ll2.setLineWidth(2f);
             ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-            ll2.setTextSize(10f);*/
+            ll2.setTextSize(10f);
+            ll2.setLineColor(Color.YELLOW);
 
             dataSets.add(lineDataSet.get(2));
-            /*yAxisRight.addLimitLine(ll1);
-            yAxisRight.addLimitLine(ll2);*/
+            yAxisRight.addLimitLine(ll1);
+            yAxisRight.addLimitLine(ll2);
         }
         LineData data = new LineData(dataSets);
         mBinding.trendLineChart.setData(data);
@@ -423,7 +431,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
             yAxisRight.addLimitLine(ll2);*/
         }
         BarData data = new BarData(dataSets);
-        data.setBarWidth(0.3f);
+        data.setBarWidth(0.01f);
         mBinding.trendBarChart.setData(data);
         mBinding.trendBarChart.notifyDataSetChanged();
         mBinding.trendBarChart.invalidate();
@@ -486,18 +494,23 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
         chart.getXAxis().setDrawGridLines(true);
         chart.getXAxis().setGridLineWidth(0.5f);
 
-        /*LimitLine ll1 = new LimitLine(Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(formDigits(2,selectedSensor)))), "Low Alarm");
+        LimitLine ll1 = new LimitLine(Integer.parseInt(selectedSensor) < 34 ?
+                (Float.parseFloat(inputDao.getLowAlarm(Integer.parseInt(formDigits(2,selectedSensor))))) :
+                (Float.parseFloat(virtualDAO.getVirtualLowAlarm(Integer.parseInt(formDigits(2,selectedSensor))))), "Low Alarm");
         ll1.setLineWidth(2f);
         ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
         ll1.setTextSize(10f);
-
-        LimitLine ll2 = new LimitLine(Float.parseFloat(inputDao.getLowAlarm(Integer.parseInt(formDigits(2,selectedSensor)))), "High Alarm");
+        ll1.setLineColor(Color.RED);
+        LimitLine ll2 = new LimitLine(Integer.parseInt(selectedSensor) < 34 ?
+                (Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(formDigits(2,selectedSensor))))) :
+                (Float.parseFloat(virtualDAO.getVirtualHighAlarm(Integer.parseInt(formDigits(2,selectedSensor))))), "High Alarm");
         ll2.setLineWidth(2f);
         ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
         ll2.setTextSize(10f);
+        ll2.setLineColor(Color.RED);
 
         yAxis.addLimitLine(ll1);
-        yAxis.addLimitLine(ll2);*/
+        yAxis.addLimitLine(ll2);
 
         yAxis.setDrawLimitLinesBehindData(true);
         xAxis.setDrawLimitLinesBehindData(true);
@@ -572,7 +585,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
 
         yAxis = chart.getAxisLeft();
         yAxisRight = chart.getAxisRight();
-        chart.getAxisRight().setEnabled(true);
+        chart.getAxisRight().setEnabled(false);
 
 
         chart.getAxisLeft().setDrawGridLines(true);
@@ -608,7 +621,13 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
             values.add(new Entry(Float.parseFloat(list.get(i).time.split("\\.")[0] + "." + list.get(i).time.split("\\.")[1]), val, getResources().getDrawable(R.drawable.circle_bg)));
         }
         LineDataSet set1;
-        set1 = new LineDataSet(values, inputDao.getInputType(Integer.parseInt(formDigits(2, pos == 1 ? selectedSensor : selectedSensorTwo))));
+        set1 = pos == 1 ? new LineDataSet(values, Integer.parseInt(selectedSensor) < 34 ?
+                        inputDao.getInputType(Integer.parseInt(formDigits(2, selectedSensor))) :
+                        "Virtual") :
+                       new LineDataSet(values, Integer.parseInt(selectedSensorTwo) < 34 ?
+                               inputDao.getInputType(Integer.parseInt(formDigits(2, selectedSensorTwo))) :
+                               "Virtual");
+
         set1.setDrawIcons(false);
 
         set1.setColor(pos == 1 ? Color.parseColor("#0097DB") : Color.parseColor("#ACE4C4"));
@@ -628,7 +647,12 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
             values.add(new BarEntry(Float.parseFloat(list.get(i).time.split("\\.")[0] + "." + list.get(i).time.split("\\.")[1]), val, getResources().getDrawable(R.drawable.circle_bg)));
         }
         BarDataSet set1;
-        set1 = new BarDataSet(values, inputDao.getInputType(Integer.parseInt(formDigits(2, pos == 1 ? selectedSensor : selectedSensorTwo))));
+        set1 = pos == 1 ? new BarDataSet(values, Integer.parseInt(selectedSensor) < 34 ?
+                inputDao.getInputType(Integer.parseInt(formDigits(2, selectedSensor))) :
+                "Virtual") :
+                new BarDataSet(values, Integer.parseInt(selectedSensorTwo) < 34 ?
+                        inputDao.getInputType(Integer.parseInt(formDigits(2, selectedSensorTwo))) :
+                        "Virtual");
         set1.setDrawIcons(false);
 
         set1.setColor(pos == 1 ? Color.parseColor("#0097DB") : Color.parseColor("#ACE4C4"));
@@ -648,7 +672,12 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
             values.add(new Entry(Float.parseFloat(list.get(i).time.split("\\.")[0] + "." + list.get(i).time.split("\\.")[1]), val, getResources().getDrawable(R.drawable.circle_bg)));
         }
         ScatterDataSet set1;
-        set1 = new ScatterDataSet(values, inputDao.getInputType(Integer.parseInt(formDigits(2, pos == 1 ? selectedSensor : selectedSensorTwo))));
+        set1 = pos == 1 ? new ScatterDataSet(values, Integer.parseInt(selectedSensor) < 34 ?
+                inputDao.getInputType(Integer.parseInt(formDigits(2, selectedSensor))) :
+                "Virtual") :
+                new ScatterDataSet(values, Integer.parseInt(selectedSensorTwo) < 34 ?
+                        inputDao.getInputType(Integer.parseInt(formDigits(2, selectedSensorTwo))) :
+                        "Virtual");
         set1.setDrawIcons(false);
 
         set1.setColor(pos == 1 ? Color.parseColor("#0097DB") : Color.parseColor("#ACE4C4"));

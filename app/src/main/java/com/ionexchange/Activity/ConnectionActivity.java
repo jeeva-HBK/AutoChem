@@ -11,6 +11,8 @@ import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Singleton.SharedPref.pref_MACADDRESS;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.WallpaperManager;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
@@ -55,6 +57,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -95,11 +98,19 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
             Manifest.permission.ACCESS_NETWORK_STATE,
     };
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(ConnectionActivity.this, R.layout.activity_connection);
         mAppClass = (ApplicationClass) getApplication();
+
+        WallpaperManager myWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
+        try {
+            myWallpaperManager.setResource(R.drawable.ion_exchange_logo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         waterTreatmentDb = WaterTreatmentDb.getDatabase(getApplicationContext());
         inputConfigurationDao = waterTreatmentDb.inputConfigurationDao();
         mContext = getApplicationContext();

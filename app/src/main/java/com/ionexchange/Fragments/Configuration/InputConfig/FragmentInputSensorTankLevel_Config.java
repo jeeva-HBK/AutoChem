@@ -97,7 +97,7 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
 
     private void save(View view) {
         if (validField()) {
-            sendData(sensorStatus);
+            sendData(1);
         }
     }
 
@@ -177,7 +177,6 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
             } else if (data[0].equals(WRITE_PACKET)) {
                 if (data[3].equals(RES_SUCCESS)) {
                     tankLevelEntity(Integer.parseInt(data[2]));
-                    new EventLogDemo(inputNumber,"Tank","Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""),getContext());
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 } else if (data[3].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
@@ -248,10 +247,13 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                         (Integer.parseInt(getStringValue(2, mBinding.tankLevelInputNumberTie)), "N/A",
                                 "TANK", 1, "N/A",
                                 1, "N/A", "N/A",
-                                "N/A", "N/A","N/A", 0,"N/A");
+                                "N/A", "N/A","N/A", 0,STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
+                new EventLogDemo(inputNumber,"Tank","Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 mBinding.backArrowIsc.performClick();
                 break;
 
@@ -268,9 +270,12 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);
+                new EventLogDemo(inputNumber,"Tank","Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 break;
         }
-        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04");
+
     }
     void changeUi(){
         switch (userType) {

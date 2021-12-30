@@ -265,25 +265,25 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         switch (Integer.parseInt(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr))) {
             case 0:
                 if (validAnalog()) {
-                    sendAnalogPacket(sensorStatus);
+                    sendAnalogPacket(1);
                     packetId = 0;
                 }
                 break;
             case 1:
                 if (validContactor()) {
-                    sendContactorPacket(sensorStatus);
+                    sendContactorPacket(1);
                     packetId = 1;
                 }
                 break;
             case 2:
                 if (validPaddleWheel()) {
-                    sendPaddleWheelPacket(sensorStatus);
+                    sendPaddleWheelPacket(1);
                     packetId = 2;
                 }
                 break;
             case 3:
                 if (validation3()) {
-                    sendFeedMonitorPacket(sensorStatus);
+                    sendFeedMonitorPacket(1);
                     packetId = 3;
                 }
                 break;
@@ -901,7 +901,6 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 } else if (splitData[0].equals(WRITE_PACKET)) {
                     if (splitData[3].equals(RES_SUCCESS)) {
                         flowMeterEntity(Integer.parseInt(splitData[2]));
-                        new EventLogDemo(inputNumber, "FlowMeter", "Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""),getContext());
                         mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                     } else if (splitData[3].equals(RES_FAILED)) {
                         mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
@@ -928,10 +927,13 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                         (Integer.parseInt(getStringValue(2, mBinding.flowInputNumberEdtIsc)),
                                 "N/A", "FLOWMETER", 0, "N/A", 1,
                                 "N/A", "N/A",
-                                "N/A", "N/A", "N/A", 0, "N/A");
+                                "N/A", "N/A", "N/A", 0, STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
+                new EventLogDemo(inputNumber, "FlowMeter", "Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 mBinding.orpBackArrowIsc.performClick();
                 break;
 
@@ -950,9 +952,11 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 List<InputConfigurationEntity> entryFlowList = new ArrayList<>();
                 entryFlowList.add(flowEntityUpdate);
                 updateToDb(entryFlowList);
+                new EventLogDemo(inputNumber, "FlowMeter", "Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 break;
         }
-        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04");
 
     }
 }

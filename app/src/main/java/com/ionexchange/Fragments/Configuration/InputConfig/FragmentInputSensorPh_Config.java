@@ -152,7 +152,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
 
     void save(View view) {
         if (validField()) {
-            sendData(sensorStatus);
+            sendData(1);
         }
     }
 
@@ -321,7 +321,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[3].equals(RES_SUCCESS)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
-                    new EventLogDemo(inputNumber, "Ph", "Input Setting Changed",  SharedPref.read(pref_USERLOGINID, ""),getContext());
+
                     pHEntity(Integer.parseInt(splitData[2]));
 
                 } else if (splitData[3].equals(RES_FAILED)) {
@@ -345,10 +345,14 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.phInputNumberEdtIsc)),
                                 "N/A", "SENSOR", 0, "N/A",
-                                1, "N/A", "N/A", "N/A", "N/A", "N/A", 0, "N/A");
+                                1, "N/A", "N/A", "N/A", "N/A", "N/A", 0,
+                                STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
+                new EventLogDemo(inputNumber, "Ph", "Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""), getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 mBinding.phBackArrowIsc.performClick();
                 break;
             case 0:
@@ -363,8 +367,11 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);
+                new EventLogDemo(inputNumber, "Ph", "Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""), getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 break;
         }
-        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04");
+
     }
 }

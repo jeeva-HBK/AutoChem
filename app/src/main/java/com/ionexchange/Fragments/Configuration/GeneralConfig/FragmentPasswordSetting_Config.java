@@ -7,6 +7,7 @@ import static com.ionexchange.Others.PacketControl.PCK_FACTORYRESET;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINNAME;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINPASSWORDCHANED;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -137,8 +138,9 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
             case R.id.saveFab:
             case R.id.saveLayout_unitIp:
                 if (validateFields()) {
-                    userManagementDao.updatePassword(mBinding.confirmChangePasswordEdt.getText().toString(),SharedPref.read(pref_USERLOGINNAME,""));
-                    mAppclass.showSnackBar(getContext(),"Password changed");
+                    userManagementDao.updatePassword(mBinding.confirmChangePasswordEdt.getText().toString(), SharedPref.read(pref_USERLOGINNAME, ""));
+                    SharedPref.write(pref_USERLOGINPASSWORDCHANED, "passwordChanged");
+                    mAppclass.showSnackBar(getContext(), "Password changed");
                 }
                 break;
         }
@@ -158,7 +160,7 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
             mAppclass.showSnackBar(getContext(), "Confirm Change Password Cannot be Empty");
             return false;
         } else if (!mBinding.currentPasswordEdt.getText().toString().
-                equals(userManagementDao.getPassword(SharedPref.read(pref_USERLOGINNAME,"")))) {
+                equals(userManagementDao.getPassword(SharedPref.read(pref_USERLOGINNAME, "")))) {
             mBinding.confirmChangePasswordEdt.requestFocus();
             mAppclass.showSnackBar(getContext(), "Current Password is wrong");
         }

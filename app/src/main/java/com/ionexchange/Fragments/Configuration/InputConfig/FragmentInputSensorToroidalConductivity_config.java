@@ -118,9 +118,9 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     private void save(View view) {
         if (validation()) {
             if (getPositionFromAtxt(1, getStringValue(mBinding.candCompensationAtxtIsc), TemperatureCompensationType).equals("0")) {
-                sendDataLinearTemperature(sensorStatus);
+                sendDataLinearTemperature(1);
             } else {
-                sendStandardNaClTemperature(sensorStatus);
+                sendStandardNaClTemperature(1);
             }
         }
     }
@@ -279,8 +279,6 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
             } else if (spiltData[0].equals(WRITE_PACKET)) {
                 if (spiltData[3].equals(RES_SUCCESS)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
-                    new EventLogDemo(inputNumber,"Toroidal Conductivity","Input Setting Changed",
-                            SharedPref.read(pref_USERLOGINID, ""),getContext());
                     tankLevelEntity(Integer.valueOf(spiltData[2]));
                 } else if (spiltData[3].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
@@ -369,11 +367,15 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.candInputNumberEdtIsc)),
                                 "N/A", "SENSOR", 0, "N/A",
-                                1, "N/A", "N/A", "N/A", "N/A", "N/A", 0,"N/A");
+                                1, "N/A", "N/A", "N/A", "N/A", "N/A", 0,STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
                 mBinding.candBackArrowIsc.performClick();
+                new EventLogDemo(inputNumber,"Toroidal Conductivity","Input Setting Deleted",
+                        SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 break;
 
             case 0:
@@ -389,9 +391,12 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);
+                new EventLogDemo(inputNumber,"Toroidal Conductivity","Input Setting Changed",
+                        SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 break;
         }
-        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04");
     }
 
     void userManagement() {

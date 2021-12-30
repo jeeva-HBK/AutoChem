@@ -11,6 +11,8 @@ import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINREQUIRED;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINROLE;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.WallpaperManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -44,6 +46,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
@@ -56,6 +59,7 @@ import com.ionexchange.Adapters.ExpandableListAdapter;
 import com.ionexchange.Database.Dao.AlarmLogDao;
 import com.ionexchange.Database.Dao.ServicesNotificationDao;
 import com.ionexchange.Database.Dao.UserManagementDao;
+import com.ionexchange.Database.Entity.UsermanagementEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Others.AdminReceiver;
 import com.ionexchange.Others.ApplicationClass;
@@ -64,6 +68,7 @@ import com.ionexchange.R;
 import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.ActivityBaseBinding;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,6 +104,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     static ApplicationClass msAppClass;
 
     AlarmLogDao alarmLogDao;
+
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -708,5 +714,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         });
 
     }
+
+
 }
 

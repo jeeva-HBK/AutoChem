@@ -201,7 +201,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
 
     private void save(View view) {
         if (validField()) {
-            sendData(sensorStatus);
+            sendData(1);
         }
     }
 
@@ -350,7 +350,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
             } else if (data[0].equals(WRITE_PACKET)) {
                 if (data[3].equals(RES_SUCCESS)) {
                     analogEntity(Integer.parseInt(data[2]));
-                    new EventLogDemo(inputNumber, "Analog", "Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""),getContext());
+
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 } else if (data[3].equals(RES_FAILED)) {
 
@@ -425,13 +425,18 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
     public void analogEntity(int flagValue) {
         switch (flagValue) {
             case 2:
+
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.analogInputNumberTie)), "N/A",
                                 "Analog", 0, "N/A",
-                                1, "N/A", "N/A", "N/A", "N/A", "N/A", 0, "N/A");
+                                1, "N/A", "N/A", "N/A", "N/A", "N/A",
+                                0, STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
+                new EventLogDemo(inputNumber, "Analog", "Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 mBinding.backArrowIsc.performClick();
                 break;
 
@@ -462,9 +467,11 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);
+                new EventLogDemo(inputNumber, "Analog", "Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 break;
         }
-        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04");
 
     }
 }

@@ -815,8 +815,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                     int timerNum = Integer.parseInt(timerNo);
                     dao.updateTimer(mBinding.timerNameTxt.getText().toString(),
                             mBinding.txtOutputNameValueAct.getText().toString(), mBinding.txtModeValueAct.getText().toString(), timerNum);
-                    new EventLogDemo(timerNo, "TIMER" + timerNo, "Timer setting changed", SharedPref.read(pref_USERLOGINID, ""), getContext());
-                    timerEntity();
+                     timerEntity();
                     writeWeeklySchedule(week1, timerOne, 1);
                 }
                 if (splitData[2].equals("1*}")) {
@@ -1313,7 +1312,9 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
         List<TimerConfigurationEntity> entryListDelete = new ArrayList<>();
         entryListDelete.add(entity);
         updateToDb(entryListDelete);
-        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "06");
+        new EventLogDemo(timerNo, "TIMER" + timerNo, "Timer setting changed", SharedPref.read(pref_USERLOGINID, ""), getContext());
+        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Timer Setting Changed - " +
+                SharedPref.read(pref_USERLOGINID, ""));
 
     }
 

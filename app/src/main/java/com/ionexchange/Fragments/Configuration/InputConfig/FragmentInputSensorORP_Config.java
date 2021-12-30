@@ -98,7 +98,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
 
     private void save(View view) {
         if (validation()) {
-            sendData(sensorStatus);
+            sendData(1);
         }
     }
 
@@ -222,7 +222,7 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
             } else if (data[0].equals(WRITE_PACKET)) {
                 if (data[3].equals(RES_SUCCESS)) {
                     orpEntity(Integer.parseInt(data[2]));
-                    new EventLogDemo(inputNumber,"ORP","Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""),getContext());
+
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 } else if (data[3].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
@@ -289,11 +289,14 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.orpInputNumberEdtIsc)), "N/A",
                                 "SENSOR", 0, "N/A",
-                                1, "N/A", "N/A", "N/A", "N/A","N/A",
+                                1, "N/A", "N/A", "N/A", "N/A",STARTPACKET + writePacket + ENDPACKET,
                                 0,"N/A");
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
+                new EventLogDemo(inputNumber,"ORP","Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 mBinding.orpBackArrowIsc.performClick();
                 break;
 
@@ -310,8 +313,11 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);
+                new EventLogDemo(inputNumber,"ORP","Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 break;
         }
-        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04");
+
     }
 }

@@ -140,8 +140,6 @@ public class FragmentEventLog extends Fragment {
         LinkedHashSet<String> dateset = new LinkedHashSet<>(date);
         date.clear();
         date.addAll(dateset);
-//        mBinding.edtFormDate.setAdapter(new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, date));
-//        mBinding.edtToDate.setAdapter(new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, date));
         mBinding.alertsType.setAdapter(getAdapter(eventLogArr,getContext()));
     }
 

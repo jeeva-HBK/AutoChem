@@ -29,7 +29,6 @@ public class EventLogDemo {
         updateToDb(outputEntryList);
     }
 
-
     public void updateToDb(List<EventLogEntity> entryList) {
         eventLogDao.insert(entryList.toArray(new EventLogEntity[0]));
     }

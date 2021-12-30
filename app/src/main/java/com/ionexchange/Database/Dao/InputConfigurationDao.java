@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
-import com.ionexchange.Database.Entity.OutputKeepAliveEntity;
 
 import java.util.List;
 
@@ -68,8 +67,10 @@ public interface InputConfigurationDao {
     @Query("select * from inputconfigurationentity WHERE flagKey = 1")
     List<InputConfigurationEntity> getConfigSensor();
 
-    @Query("select hardwareNo || ' - ' || inputType  FROM inputConfigurationEntity WHERE flagKey = 1 LIMIT  33")
+    @Query("select hardwareNo || ' - ' || inputType FROM inputConfigurationEntity where flagKey =1 and hardwareNo < 34 " +
+            "UNION  ALL select hardwareNo || ' - ' || virtualType from VirtualConfigurationEntity  ")
     String[] getEnabledSensor();
+
 
 
 }

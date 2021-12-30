@@ -119,9 +119,9 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     private void save(View view) {
         if (validation()) {
             if (getPositionFromAtxt(1, getStringValue(mBinding.conCompensationAtxtIsc), TemperatureCompensationType).equals("0")) {
-                sendDataLinearTemperature(sensorStatus);
+                sendDataLinearTemperature(1);
             } else {
-                sendStandardNaClTemperature(sensorStatus);
+                sendStandardNaClTemperature(1);
             }
         }
     }
@@ -358,8 +358,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
             } else if (spiltData[0].equals(WRITE_PACKET)) {
                 if (spiltData[3].equals(RES_SUCCESS)) {
                     conductivityEntity(Integer.parseInt(spiltData[2]));
-                    mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
-                    new EventLogDemo(inputNumber,"Temperature","Input Setting Changed",SharedPref.read(pref_USERLOGINID, ""),getContext());
+
                 } else if (spiltData[3].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }
@@ -379,18 +378,23 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     public void conductivityEntity(int flagValue) {
         switch (flagValue) {
             case 2:
+                mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.conInputNumberEdtIsc)), "N/A",
                                 "SENSOR", 0, "N/A",
-                                1, "N/A", "N/A", "N/A", "N/A", "N/A", 0,"N/A");
+                                1, "N/A", "N/A", "N/A", "N/A", "N/A", 0,STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
+                new EventLogDemo(inputNumber,"Temperature","Input Setting Deleted",SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 mBinding.conBackArrowIsc.performClick();
                 break;
 
             case 0:
             case 1:
+                mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.conInputNumberEdtIsc)),
                                 mBinding.conSensorTypeAtxtIsc.getText().toString(), "SENSOR", 0,
@@ -402,9 +406,12 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);
+                new EventLogDemo(inputNumber,"Temperature","Input Setting Changed",SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 break;
         }
-        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04");
+
 
     }
 

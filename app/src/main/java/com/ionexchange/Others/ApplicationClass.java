@@ -40,7 +40,6 @@ import androidx.navigation.Navigation;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -111,14 +110,14 @@ public class ApplicationClass extends Application {
             resetFlowTotalArr = {"No reset", "Reset"},
             sensorSequenceNumber = {"1-Sensor", "2-Sensor", "3-Sensor", "4-Sensor", "5-Sensor", "6-Sensor"},
             levelsensorSequenceNumber = {"None", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4",
-                    "Tank Level - 5", "Tank Level - 6","Tank Level - 7","Tank Level - 8"},
+                    "Tank Level - 5", "Tank Level - 6", "Tank Level - 7", "Tank Level - 8"},
             digitalsensorSequenceNumber = {"None", "Digital Sensor - 1", "Digital Sensor - 2", "Digital Sensor - 3", "Digital Sensor - 4",
-                    "Digital Sensor - 5", "Digital Sensor - 6","Digital Sensor - 7","Digital Sensor - 8"},
+                    "Digital Sensor - 5", "Digital Sensor - 6", "Digital Sensor - 7", "Digital Sensor - 8"},
             totalTimeArr = {"NC", "NO"},
             flowmeterSequenceNumber = {"None", "Flow Meter - 1", "Flow Meter - 2", "Flow Meter - 3", "Flow Meter - 4",
-                    "Flow Meter - 5", "Flow Meter - 6","Flow Meter - 7","Flow Meter - 8"},
+                    "Flow Meter - 5", "Flow Meter - 6", "Flow Meter - 7", "Flow Meter - 8"},
             analogSequenceNumber = {"None", "Analog - 1", "Analog - 2", "Analog - 3", "Analog - 4",
-                    "Analog - 5", "Analog - 6","Analog - 7","Analog - 8"},
+                    "Analog - 5", "Analog - 6", "Analog - 7", "Analog - 8"},
             typeOfValueRead = {"None", "Fluorescence", "Turbidity", "Corrosion rate", "Pitting rate", "Fluorescence", "Tagged Polymer"},
             flowMeterTypeArr = {"Analog", "Contactor", "Paddle Wheel", "Feed Monitor"},
             flowUnitArr = {"Volume", "Gallons", "Litres", "Cubic Meters", "Millions of Gallons"},
@@ -128,7 +127,7 @@ public class ApplicationClass extends Application {
 
     digitalArr = {"NC", "NO"},
             modBusTypeArr = {"ST500", "CR300 CS", "CR-300 CU", "ST-590", "ST-588", "ST-500 RO"},
-            modBusUnitArr = {"ppb", "ppm", "mpy","ntu"},
+            modBusUnitArr = {"ppb", "ppm", "mpy", "ntu"},
             analogTypeArr = {"(4-20mA)", "(0-10V)"},
             typeArr = {"None", "Fluorescence", "Turbidity Value", "Corrosion rate", "Pitting rate"
                     , "Fluorescence value(ST588)", "Tagged Polymer value"},
@@ -144,7 +143,7 @@ public class ApplicationClass extends Application {
             sensorsViArr = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49"},
             interlockChannel = {"Digital Input - 1", "Digital Input - 2", "Digital Input - 3", "Digital Input - 4", "Digital Input - 5", "Digital Input - 6", "Digital Input - 7", "Digital Input - 8", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4", "Tank Level - 5", "Tank Level - 6", "Tank Level - 7", "Tank Level - 8"},
             functionMode,
-            fMode = {"Disable","Inhibitor", "sensor", "Analog"},
+            fMode = {"Disable", "Inhibitor", "sensor", "Analog"},
             modeInhibitor = {"Continuous", "Bleed/Blow Down", "Water Meter/Biocide"},
             modeSensor = {"On/Off", "PID", "Fuzzy"}, modeAnalog = {"Disable", "Probe", "Test", "Pump Status", "Dosing"},
             flowMeters = {"Flow Meter 1", "Flow Meter 2", "Flow Meter 3", "Flow Meter 4", "Flow Meter 5", "Flow Meter 6", "Flow Meter 7", "Flow Meter 8"},
@@ -168,13 +167,13 @@ public class ApplicationClass extends Application {
     // outputControlShortForm = {"â’¹", "A OFF", "A ON", "M OFF", "M ON", "F OFF", "F ON", "M ON for"};
     outputControlShortForm = {"D", "A", "F̶", "F", "M for"},
 
-    eventLogArr={"General settings changed", "Input Setting Changed",
+    eventLogArr = {"General settings changed", "Input Setting Changed",
             "Output Setting Changed", "Timer setting changed"},
 
-    alarmArr = {"Low Alarm" ,"High Alarm", "Safety Low Alarm" ,
-           "Safety High Alarm", "Calibration Required Alarm" ,"Totalizer Alarm",
-            "DI Alarm" ,"Flow Verify Alarm", "Lockout Alarm"},
-    FlowanalogType = {"Analog - 1","Analog - 2","Analog - 3","Analog - 4","Analog - 5","Analog - 6","Analog - 7", "Analog - 8"};
+    alarmArr = {"Low Alarm", "High Alarm", "Safety Low Alarm",
+            "Safety High Alarm", "Calibration Required Alarm", "Totalizer Alarm",
+            "DI Alarm", "Flow Verify Alarm", "Lockout Alarm"},
+            FlowanalogType = {"Analog - 1", "Analog - 2", "Analog - 3", "Analog - 4", "Analog - 5", "Analog - 6", "Analog - 7", "Analog - 8"};
 
     /* Static Variables */
     public static String mIPAddress = "", TabletIPAddress = "", Packet, Acknowledge;
@@ -369,7 +368,7 @@ public class ApplicationClass extends Application {
                 httpRequestTimeout,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-         Log.e(API1, " --> " + new String(request.getBody()));
+        Log.e(API1, " --> " + new String(request.getBody()));
         requestQueue.add(request);
 
     }
@@ -383,8 +382,11 @@ public class ApplicationClass extends Application {
     public void unregisterBatteryReceiver() {
         try {
             mContext.unregisterReceiver(new MonitorBatteryLevel());
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
     public static String formDigits(int digits, String value) {
         String finalDigits = null;
         switch (digits) {
@@ -467,13 +469,17 @@ public class ApplicationClass extends Application {
     public void navigateTo(FragmentActivity fragAct, int desID) {
         try {
             Navigation.findNavController((Activity) fragAct, R.id.nav_host_frag).navigate(desID);
-        } catch (Exception e) { Log.e("TAG", "navigateToBundle: " + e); }
+        } catch (Exception e) {
+            Log.e("TAG", "navigateToBundle: " + e);
+        }
     }
 
     public void navigateToBundle(FragmentActivity activity, int fragmentIDinNavigation, Bundle b) {
         try {
             Navigation.findNavController((Activity) activity, R.id.nav_host_frag).navigate(fragmentIDinNavigation, b);
-        } catch (Exception e) { Log.e("TAG", "navigateToBundle: " + e); }
+        } catch (Exception e) {
+            Log.e("TAG", "navigateToBundle: " + e);
+        }
     }
 
     public void popStackBack(FragmentActivity activity) {
@@ -565,9 +571,11 @@ public class ApplicationClass extends Application {
     public static String getStringValue(AutoCompleteTextView editText) {
         return editText.getText().toString();
     }
+
     public static String getStringValue(TextInputEditText editText) {
         return editText.getText().toString();
     }
+
     public static Boolean isFieldEmpty(EditText editText) {
         if (editText.getText() == null || editText.getText().toString().equals("")) {
             editText.setError("Field shouldn't empty !");
@@ -610,66 +618,66 @@ public class ApplicationClass extends Application {
         /*Input_DB*/
         inputDAO = DB.inputConfigurationDao();
         if (inputDAO.getInputConfigurationEntityList().isEmpty()) {
-            String sensorType = "SENSOR", writePacket = "" , sequenceName  = "";
-            int signalType= 0,sequenceNo=1;
+            String sensorType = "SENSOR", writePacket = "", sequenceName = "";
+            int signalType = 0, sequenceNo = 1;
             int j = 1;
             for (int i = 1; i < 50; i++) {
                 if (i < 5) {
                     sensorType = "SENSOR";
-                    if (i == 1){
+                    if (i == 1) {
                         sequenceName = "pH";
-                        writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$00$1$0$pH Sensor$0$0$+033.00$000$00.00$14.00$000$0$0*}";
-                    } else if (i == 2){
+                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$00$1$0$pH Sensor$0$0$+033.00$000$00.00$14.00$000$0$0*}";
+                    } else if (i == 2) {
                         sequenceName = "ORP";
-                        writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$01$1$0$ORP Sensor$000$-2000.00$+2000.00$000$0$0*}";
-                    } else if (i == 3){
+                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$01$1$0$ORP Sensor$000$-2000.00$+2000.00$000$0$0*}";
+                    } else if (i == 3) {
                         sequenceName = "Contacting Conductivity";
-                        writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$04$1$0$Contacting$0$+033.00$0$01.00$0$00.00$000$000000.00$300000.00$000$0$0*}";
-                    } else if (i == 4){
+                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$04$1$0$Contacting$0$+033.00$0$01.00$0$00.00$000$000000.00$300000.00$000$0$0*}";
+                    } else if (i == 4) {
                         sequenceName = "Toroidal Conductivity";
-                        writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$05$1$0$Torodial$0$+033.00$0$0$00.00$000$0000000.00$2000000.00$000$0$0*}";
+                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$05$1$0$Torodial$0$+033.00$0$0$00.00$000$0000000.00$2000000.00$000$0$0*}";
                     }
                 } else if (i > 4 && i < 15) {
                     sensorType = "MODBUS";
-                    if(i == 5) {
+                    if (i == 5) {
                         writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$0$0$1$0$ST 500 - f$0$000.00$300.00$0000000$000$000.00$300.00$000$0$0*}";
-                    } else if(i == 6) {
+                    } else if (i == 6) {
                         writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$0$0$2$0$ST 500 - t$3$000.00$150.00$0000000$000$000.00$150.00$000$0$0*}";
-                    } else if(i == 7) {
+                    } else if (i == 7) {
                         writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$1$1$3$0$CR 300CS$2$000.00$005.00$0000000$000$000.00$005.00$000$0$0*}";
-                    } else if(i == 8) {
+                    } else if (i == 8) {
                         writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$1$1$4$0$CR 300CS$2$000.00$005.00$0000000$000$000.00$005.00$000$0$0*}";
-                    } else if(i == 9) {
+                    } else if (i == 9) {
                         writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$2$2$3$0$CR 300CU$2$000.00$005.00$0000000$000$000.00$005.00$000$0$0*}";
-                    } else if(i == 10) {
+                    } else if (i == 10) {
                         writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$2$2$4$0$CR 300CU$2$000.00$005.00$0000000$000$000.00$005.00$000$0$0*}";
-                    } else if(i == 11) {
+                    } else if (i == 11) {
                         writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$3$3$6$0$ST 590$1$000.00$030.00$0000000$000$000.00$000.00$000$0$0*}";
-                    } else if(i == 12) {
+                    } else if (i == 12) {
                         writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$3$4$5$0$ST 588$0$000.00$200.00$0000000$000$000.00$200.00$000$0$0*}";
-                    } else if(i == 13) {
+                    } else if (i == 13) {
                         writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$4$4$6$0$ST 588$1$000.00$020.00$0000000$000$000.00$020.00$000$0$0*}";
-                    } else if(i == 14) {
+                    } else if (i == 14) {
                         writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$09$5$5$1$0$ST 500$0$000.00$040.00$0000000$000$000.00$040.00$000$0$0*}";
                     }
                     String[] splitmodbusData = writePacket.split("\\*")[1].split(RES_SPILT_CHAR);
-                    sequenceName = modBusTypeArr[Integer.parseInt(splitmodbusData[7])] + " - "+typeArr[Integer.parseInt(splitmodbusData[8])];
+                    sequenceName = modBusTypeArr[Integer.parseInt(splitmodbusData[7])] + " - " + typeArr[Integer.parseInt(splitmodbusData[8])];
                     sequenceNo = Integer.parseInt(splitmodbusData[6]);
                 } else if (i > 14 && i < 18) {
                     sensorType = "SENSOR";
                     sequenceName = "Temperature -" + j;
                     sequenceNo = j;
-                    writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$02$"+j+"$0$Temp "+j+"$+033.00$000$-005.00$+260.00$000$0$0*}";
+                    writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$02$" + j + "$0$Temp " + j + "$+033.00$000$-005.00$+260.00$000$0$0*}";
                     j++;
                     if (i == 17) {
                         j = 1;
                     }
                 } else if (i > 17 && i < 26) {
                     sensorType = "Analog";
-                    sequenceName = j < 6 ? sensorType +" - "+ j + "(4-20mA)" : sensorType +" - "+ j + "(0-10mA)";
+                    sequenceName = j < 6 ? sensorType + " - " + j + "(4-20mA)" : sensorType + " - " + j + "(0-10mA)";
                     int analogType = j < 6 ? 0 : 1;
                     sequenceNo = j;
-                    writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$06$0$"+j+"$"+analogType+"$0$Analog "+j+"$0$04.00$20.00$000$04.00$20.00$000$0$0*}";
+                    writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$06$0$" + j + "$" + analogType + "$0$Analog " + j + "$0$04.00$20.00$000$04.00$20.00$000$0$0*}";
                     j++;
                     if (i == 25) {
                         j = 1;
@@ -678,27 +686,27 @@ public class ApplicationClass extends Application {
                     sensorType = "FLOWMETER";
                     sequenceName = "Flow Meter - " + j;
                     sequenceNo = j;
-                    writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$03$0$"+j+"$1$0$Flow "+j+"$0$0001.00$0000001.00$0000000.00$000$2000000000.00$0$0$0000000000.00$0000000000.00$2000000000.00$000$0$0*}";
+                    writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$03$0$" + j + "$1$0$Flow " + j + "$0$0001.00$0000001.00$0000000.00$000$2000000000.00$0$0$0000000000.00$0000000000.00$2000000000.00$000$0$0*}";
                     j++;
                     if (i == 33) {
                         j = 1;
                     }
                 } else if (i > 33 && i < 42) {
-                    signalType =1;
+                    signalType = 1;
                     sensorType = "DIGITAL";
                     sequenceName = "Digital Sensor - " + j;
                     sequenceNo = j;
-                    writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$08$"+j+"$0$Digital "+j+"$Open$Close$0$0$0$0$0$0$00*}";
+                    writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$08$" + j + "$0$Digital " + j + "$Open$Close$0$0$0$0$0$0$00*}";
                     j++;
                     if (i == 41) {
                         j = 1;
                     }
                 } else if (i > 41 && i < 50) {
                     sensorType = "TANK";
-                    signalType =1;
+                    signalType = 1;
                     sequenceName = "Tank Level - " + j;
                     sequenceNo = j;
-                    writePacket = "{*1234$0$0$04$"+formDigits(2,Integer.toString(i))+"$07$"+j+"$0$Tank "+j+"$Open$Close$0$0$0$0$0$0$00*}";
+                    writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$07$" + j + "$0$Tank " + j + "$Open$Close$0$0$0$0$0$0$00*}";
                     j++;
                     if (i == 49) {
                         j = 1;
@@ -706,8 +714,8 @@ public class ApplicationClass extends Application {
                 }
                 String[] splitData = writePacket.split("\\*")[1].split(RES_SPILT_CHAR);
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                        (i, inputTypeArr[Integer.parseInt(splitData[5])], sensorType, signalType,sequenceName,sequenceNo, "N/A",
-                                "N/A", "N/A", "N/A", "N/A",0,writePacket);
+                        (i, inputTypeArr[Integer.parseInt(splitData[5])], sensorType, signalType, sequenceName, sequenceNo, "N/A",
+                                "N/A", "N/A", "N/A", "N/A", 0, writePacket);
                 List<InputConfigurationEntity> inputentryList = new ArrayList<>();
                 inputentryList.add(entityUpdate);
                 updateInputDB(inputentryList);
@@ -719,19 +727,19 @@ public class ApplicationClass extends Application {
         if (outputDAO.getOutputConfigurationEntityList().isEmpty()) {
             String defaultwritePacket = "", outputMode = "", outputStatus = "";
             for (int i = 1; i < 23; i++) {
-                if(i < 16){
-                    defaultwritePacket = "{*1234$0$0$06$"+formDigits(2,Integer.toString(i))+"$1$Output"+i+"$34$35$0$000000001.00$000000001.00$0001*}";
-                    outputStatus ="Continuous";
+                if (i < 16) {
+                    defaultwritePacket = "{*1234$0$0$06$" + formDigits(2, Integer.toString(i)) + "$1$Output" + i + "$34$35$0$000000001.00$000000001.00$0001*}";
+                    outputStatus = "Continuous";
                     outputMode = "0001$000000001.00";
                 } else {
-                    defaultwritePacket = "{*1234$0$0$06$"+formDigits(2,Integer.toString(i))+"$1$Output"+i+"$1$I01$04.00$20.00$00.00$14.00*}";
-                    outputStatus ="Input- 1 (N/A)";
+                    defaultwritePacket = "{*1234$0$0$06$" + formDigits(2, Integer.toString(i)) + "$1$Output" + i + "$1$I01$04.00$20.00$00.00$14.00*}";
+                    outputStatus = "Input- 1 (N/A)";
                     outputMode = "Probe";
                 }
                 OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
-                        (i, "Output-" + i+"(Output"+i+")", "Output"+i,
+                        (i, "Output-" + i + "(Output" + i + ")", "Output" + i,
                                 outputMode,
-                                outputStatus,defaultwritePacket);
+                                outputStatus, defaultwritePacket);
                 List<OutputConfigurationEntity> outputEntryList = new ArrayList<>();
                 outputEntryList.add(entityUpdate);
                 updateOutPutDB(outputEntryList);
@@ -742,11 +750,11 @@ public class ApplicationClass extends Application {
         virtualDAO = DB.virtualConfigurationDao();
         if (virtualDAO.getVirtualConfigurationEntityList().isEmpty()) {
             for (int i = 50; i <= 57; i++) {
-                String defaultwritePacket = "{*1234$0$0$05$"+i+"$0$VirtualInput"+
-                        (i - 49)+"$0$01$00$0$01$00$00.00$14.00$000$00.00$14.00$0$0*}";
+                String defaultwritePacket = "{*1234$0$0$05$" + i + "$0$VirtualInput" +
+                        (i - 49) + "$0$01$00$0$01$00$00.00$14.00$000$00.00$14.00$0$0*}";
                 VirtualConfigurationEntity entityUpdate = new VirtualConfigurationEntity
-                        (i, "Virtual", 0, "VirtualInput"+(i - 49),
-                                "pH", "00.00","14.00","N/A",defaultwritePacket);
+                        (i, "Virtual", 0, "VirtualInput" + (i - 49),
+                                "pH", "00.00", "14.00", "N/A", defaultwritePacket);
                 List<VirtualConfigurationEntity> virtualEntryList = new ArrayList<>();
                 virtualEntryList.add(entityUpdate);
                 updateVirtualDB(virtualEntryList);
@@ -758,19 +766,19 @@ public class ApplicationClass extends Application {
         if (timerDAO.geTimerConfigurationEntityList().isEmpty()) {
             int j = 0;
             for (int i = 0; i < 6; i++) {
-                String mainTimerPacket = "{*1234$0$0$08$"+i+"$Timer"+(i + 1)+
+                String mainTimerPacket = "{*1234$0$0$08$" + i + "$Timer" + (i + 1) +
                         "$01$0$1$1$0$0$000000$01$0$2$0$0$000000$01$0$3$0$0$000000$01$0$4$0$0$000000$01$0$11203041*}";
-                String weekOnePacket = "{*1234$0$0$09$" + i + "$"+formDigits(2,Integer.toString(j))+
+                String weekOnePacket = "{*1234$0$0$09$" + i + "$" + formDigits(2, Integer.toString(j)) +
                         "$0$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000*}";
-                String weekTwoPacket = "{*1234$0$0$09$" + i + "$"+formDigits(2,Integer.toString(j + 1))+
+                String weekTwoPacket = "{*1234$0$0$09$" + i + "$" + formDigits(2, Integer.toString(j + 1)) +
                         "$0$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000*}";
-                String weekThreePacket = "{*1234$0$0$09$" + i + "$"+formDigits(2,Integer.toString(j + 2))+
+                String weekThreePacket = "{*1234$0$0$09$" + i + "$" + formDigits(2, Integer.toString(j + 2)) +
                         "$0$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000*}";
-                String weekFourPacket = "{*1234$0$0$09$" + i + "$"+formDigits(2,Integer.toString(j + 3))+
+                String weekFourPacket = "{*1234$0$0$09$" + i + "$" + formDigits(2, Integer.toString(j + 3)) +
                         "$0$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000*}";
-                j = j+4;
+                j = j + 4;
                 TimerConfigurationEntity entityUpdate = new TimerConfigurationEntity
-                        (i, "Timer"+(i + 1),
+                        (i, "Timer" + (i + 1),
                                 "Output- 1 (Output1)",
                                 "Timer", mainTimerPacket, weekOnePacket,
                                 weekTwoPacket, weekThreePacket, weekFourPacket);
@@ -785,8 +793,10 @@ public class ApplicationClass extends Application {
         if (userManagementDao.getUsermanagementEntity().isEmpty()) {
             List<UsermanagementEntity> entryListUpdate = new ArrayList<>();
             /* 0 - NONE | 1 - BASIC | 2 - INTERMEDIATE | 3 -ADVANCED   */
-            UsermanagementEntity adminEntityUpdate = new UsermanagementEntity("TU0001", "admin", 3, "12345", "0000000000", "0");
-            UsermanagementEntity userEntityUpdate = new UsermanagementEntity("TU0002", "user", 2, "12345", "0000000000", "0");
+            UsermanagementEntity adminEntityUpdate = new UsermanagementEntity("TU0001", "admin",
+                    3, "12345", "0000000000", "admin", getCurrentDate() + "" + getCurrentTime(), "");
+            UsermanagementEntity userEntityUpdate = new UsermanagementEntity("TU0002", "admin",
+                    2, "12345", "0000000000", "admin", getCurrentDate() + "" + getCurrentTime(), "");
 
             entryListUpdate.add(adminEntityUpdate);
             entryListUpdate.add(userEntityUpdate);
@@ -810,10 +820,10 @@ public class ApplicationClass extends Application {
 
         /*Set Default Layout_DB*/
         mainConfigurationDao = DB.mainConfigurationDao();
-        if (mainConfigurationDao.getMainConfigurationEntityList().isEmpty()){
+        if (mainConfigurationDao.getMainConfigurationEntityList().isEmpty()) {
             MainConfigurationEntity entityUpdate = new MainConfigurationEntity(
-                                       1,1,1,1,1,1,
-                    "Sensor not Added",0,"N/A",0);
+                    1, 1, 1, 1, 1, 1,
+                    "Sensor not Added", 0, "N/A", 0);
             List<MainConfigurationEntity> mainEntryList = new ArrayList<>();
             mainEntryList.add(entityUpdate);
             updateMainDB(mainEntryList);
@@ -1016,8 +1026,6 @@ public class ApplicationClass extends Application {
 
         }
     }
-
-
 
 
 }

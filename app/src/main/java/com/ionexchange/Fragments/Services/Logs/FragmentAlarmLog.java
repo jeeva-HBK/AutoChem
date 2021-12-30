@@ -166,7 +166,7 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
                 if (splitData[0].equals(WRITE_PACKET)) {
                     if (splitData[1].equals(PCK_LOCKOUT)) {
                         if (splitData[2].equals("1")) {
-                            alarmLogDao.updateLockAlarm(sNo, "0");
+                            alarmLogDao.updateLockAlarm(hardwareNo, "0");
                             button.setVisibility(View.INVISIBLE);
                         } else {
                             mAppClass.showSnackBar(getContext(), "Acknowledgement Failed");

@@ -38,9 +38,8 @@ public class EventLogRvAdapter extends RecyclerView.Adapter<EventLogRvAdapter.it
             holder.root.setBackgroundColor(context.getResources().getColor(R.color.ash));
 
         }
-
         holder.sensorType.setText(eventLogEntityList.get(position).sensorType);
-        holder.AlertName.setText(eventLogEntityList.get(position).eventLog);
+        holder.AlertName.setText(eventLogEntityList.get(position).eventLog+ " - " +eventLogEntityList.get(position).userId);
         holder.Date.setText(eventLogEntityList.get(position).date+" | "+eventLogEntityList.get(position).time);
     }
 

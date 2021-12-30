@@ -5,6 +5,7 @@ import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.getStringValue;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.userManagementDao;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
@@ -35,12 +36,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
+import com.ionexchange.Database.Entity.UsermanagementEntity;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
@@ -673,8 +676,7 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
             } else if (spiltData[0].equals(WRITE_PACKET)) {
                 if (spiltData[2].equals(RES_SUCCESS)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
-                    new EventLogDemo(String.valueOf(sensorInputNo), "Virtual", "Input Setting Changed",
-                            SharedPref.read(pref_USERLOGINID, ""), getContext());
+
                     virtualEntity();
                 } else if (spiltData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
@@ -694,7 +696,10 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
         List<VirtualConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(virtualConfigurationEntity);
         updateToDb(entryListUpdate);
-        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "07");
+        new EventLogDemo(String.valueOf(sensorInputNo), "Virtual", "Input Setting Changed",
+                SharedPref.read(pref_USERLOGINID, ""), getContext());
+        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
+                SharedPref.read(pref_USERLOGINID, ""));
 
     }
 

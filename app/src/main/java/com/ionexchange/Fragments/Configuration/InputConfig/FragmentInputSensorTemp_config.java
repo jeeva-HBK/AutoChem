@@ -1,5 +1,28 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Others.ApplicationClass.formDigits;
+import static com.ionexchange.Others.ApplicationClass.getAdapter;
+import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
+import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
+import static com.ionexchange.Others.ApplicationClass.getStringValue;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.ENDPACKET;
+import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.STARTPACKET;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,31 +50,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.ionexchange.Others.ApplicationClass.formDigits;
-import static com.ionexchange.Others.ApplicationClass.getAdapter;
-import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
-import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
-import static com.ionexchange.Others.ApplicationClass.getStringValue;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
-import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
-import static com.ionexchange.Others.ApplicationClass.userType;
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.ENDPACKET;
-import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.STARTPACKET;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
 public class FragmentInputSensorTemp_config extends Fragment implements DataReceiveCallback {
     private static final String TAG = "FragmentInputSensorTemp";
@@ -101,7 +99,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
 
     private void save(View view) {
         if (validation()) {
-            sendData(sensorStatus);
+            sendData(1);
         }
     }
 
@@ -152,11 +150,11 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     public void OnDataReceive(String data) {
         mActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
-            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {
-            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("Timeout")) {
             mAppClass.showSnackBar(getContext(), "TimeOut");
         } else if (data != null) {
@@ -169,31 +167,31 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {
                     try {
-                    mBinding.tempInputNumberEdtIsc.setText(splitData[3]);
-                    mBinding.temSensorTypeAtxtIsc.setText(mBinding.temSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
-                    mBinding.temSeqNumberAtxtIsc.setText(mBinding.temSeqNumberAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[5])).toString());
-                    sensorSequence = splitData[5];
-                    mBinding.tempSensorActivationAtxtIsc.setText(mBinding.tempSensorActivationAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
-                    mBinding.tempInputLabelEdtIsc.setText(splitData[7]);
-                    mBinding.tempTempValueTBtn.setChecked((splitData[8].substring(0, 1)).equals("+"));
-                    mBinding.tempTemperatureEdtIsc.setText(splitData[8].substring(1, 4));
-                    mBinding.tempTempDeciIsc.setText(splitData[8].substring(5, 7));
+                        mBinding.tempInputNumberEdtIsc.setText(splitData[3]);
+                        mBinding.temSensorTypeAtxtIsc.setText(mBinding.temSensorTypeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[4])).toString());
+                        mBinding.temSeqNumberAtxtIsc.setText(mBinding.temSeqNumberAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[5])).toString());
+                        sensorSequence = splitData[5];
+                        mBinding.tempSensorActivationAtxtIsc.setText(mBinding.tempSensorActivationAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
+                        mBinding.tempInputLabelEdtIsc.setText(splitData[7]);
+                        mBinding.tempTempValueTBtn.setChecked((splitData[8].substring(0, 1)).equals("+"));
+                        mBinding.tempTemperatureEdtIsc.setText(splitData[8].substring(1, 4));
+                        mBinding.tempTempDeciIsc.setText(splitData[8].substring(5, 7));
 
-                    mBinding.tempSmoothingFactorEdtIsc.setText(splitData[9]);
+                        mBinding.tempSmoothingFactorEdtIsc.setText(splitData[9]);
 
-                    mBinding.tempLowAlarmTBtn.setChecked(splitData[10].substring(0, 1).equals("+"));
-                    mBinding.tempLowAlarmEdtIsc.setText(splitData[10].substring(1, 4));
-                    mBinding.tempLowAlarmDeciIsc.setText(splitData[10].substring(5, 7));
+                        mBinding.tempLowAlarmTBtn.setChecked(splitData[10].substring(0, 1).equals("+"));
+                        mBinding.tempLowAlarmEdtIsc.setText(splitData[10].substring(1, 4));
+                        mBinding.tempLowAlarmDeciIsc.setText(splitData[10].substring(5, 7));
 
-                    mBinding.tempHighAlarmTBtn.setChecked(splitData[11].substring(0, 1).equals("+"));
-                    mBinding.tempHighAlarmEdtIsc.setText(splitData[11].substring(1, 4));
-                    mBinding.tempHighAlarmDeciIsc.setText(splitData[11].substring(5, 7));
+                        mBinding.tempHighAlarmTBtn.setChecked(splitData[11].substring(0, 1).equals("+"));
+                        mBinding.tempHighAlarmEdtIsc.setText(splitData[11].substring(1, 4));
+                        mBinding.tempHighAlarmDeciIsc.setText(splitData[11].substring(5, 7));
 
-                    mBinding.tempCalibRequiredAlarmEdtIsc.setText(splitData[12]);
-                    mBinding.tempResetCalibAtxtIsc.setText(mBinding.tempResetCalibAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
+                        mBinding.tempCalibRequiredAlarmEdtIsc.setText(splitData[12]);
+                        mBinding.tempResetCalibAtxtIsc.setText(mBinding.tempResetCalibAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
 
-                    initAdapter();
-                    } catch (Exception e){
+                        initAdapter();
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else if (splitData[2].equals(RES_FAILED)) {
@@ -202,8 +200,6 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[3].equals(RES_SUCCESS)) {
                     temperatureEntity(Integer.parseInt(splitData[2]));
-                    new EventLogDemo(inputNumber,"Temperature","Input Setting Changed",
-                            SharedPref.read(pref_USERLOGINID, ""),getContext());
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 } else if (splitData[2].equals(RES_FAILED)) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
@@ -252,10 +248,10 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
             return false;
         }
 
-        if(mBinding.tempTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.tempTemperatureEdtIsc)) > 500) {
+        if (mBinding.tempTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.tempTemperatureEdtIsc)) > 500) {
             mAppClass.showSnackBar(getContext(), getString(R.string.temp_limit_validation));
             return false;
-        } else if(!mBinding.tempTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.tempTemperatureEdtIsc)) > 20) {
+        } else if (!mBinding.tempTempValueTBtn.isChecked() && Integer.parseInt(getStringValue(3, mBinding.tempTemperatureEdtIsc)) > 20) {
             mAppClass.showSnackBar(getContext(), getString(R.string.temp_limit_validation));
             return false;
         }
@@ -269,7 +265,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
         dao.insert(entryList.toArray(new InputConfigurationEntity[0]));
     }
 
-    void  changeUi(){
+    void changeUi() {
         switch (userType) {
             case 1:
                 mBinding.tempInputLabelTilIsc.setEnabled(false);
@@ -306,31 +302,40 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
                 break;
         }
     }
+
     public void temperatureEntity(int flagValue) {
         switch (flagValue) {
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(getStringValue(2, mBinding.tempInputNumberEdtIsc)), "N/A", "SENSOR",0,"0",
-                                1, "N/A", "N/A", "N/A", "N/A","N/A", 0,"N/A");
+                        (Integer.parseInt(getStringValue(2, mBinding.tempInputNumberEdtIsc)), "N/A", "SENSOR", 0, "0",
+                                1, "N/A", "N/A", "N/A", "N/A", "N/A", 0, STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
+                new EventLogDemo(inputNumber, "Temperature", "Input Setting Deleted",
+                        SharedPref.read(pref_USERLOGINID, ""), getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 mBinding.tempBackArrowIsc.performClick();
                 break;
             case 0:
             case 1:
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.tempInputNumberEdtIsc)),
-                                mBinding.temSensorTypeAtxtIsc.getText().toString(),"SENSOR",0, mBinding.temSeqNumberAtxtIsc.getText().toString(),
+                                mBinding.temSensorTypeAtxtIsc.getText().toString(), "SENSOR", 0, mBinding.temSeqNumberAtxtIsc.getText().toString(),
                                 Integer.parseInt(sensorSequence), getStringValue(0, mBinding.tempInputLabelEdtIsc),
                                 getDecimalValue(mBinding.tempLowAlarmTBtn, mBinding.tempLowAlarmEdtIsc, 3, mBinding.tempLowAlarmDeciIsc, 2),
-                                getDecimalValue(mBinding.tempHighAlarmTBtn, mBinding.tempHighAlarmEdtIsc, 3, mBinding.tempHighAlarmDeciIsc, 2), "°C","N/A", 1,
+                                getDecimalValue(mBinding.tempHighAlarmTBtn, mBinding.tempHighAlarmEdtIsc, 3, mBinding.tempHighAlarmDeciIsc, 2), "°C", "N/A", 1,
                                 STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);
+                new EventLogDemo(inputNumber, "Temperature", "Input Setting Changed",
+                        SharedPref.read(pref_USERLOGINID, ""), getContext());
+                ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
+                        SharedPref.read(pref_USERLOGINID, ""));
                 break;
         }
-        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04");
+
     }
 }
