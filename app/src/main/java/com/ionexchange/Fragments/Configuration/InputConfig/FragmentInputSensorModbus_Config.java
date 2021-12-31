@@ -7,6 +7,7 @@ import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
 import static com.ionexchange.Others.ApplicationClass.getStringValue;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
+import static com.ionexchange.Others.ApplicationClass.mainConfigurationDao;
 import static com.ionexchange.Others.ApplicationClass.modBusTypeArr;
 import static com.ionexchange.Others.ApplicationClass.modBusUnitArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
@@ -485,7 +486,9 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                 new EventLogDemo(inputNumber, "ModBus", "Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""), getContext());
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
+                mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
                 mBinding.backArrowIsc.performClick();
+
                 break;
 
             case 0:
@@ -505,6 +508,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                 new EventLogDemo(inputNumber, "ModBus", "Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""), getContext());
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
+                mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));
                 break;
         }
 

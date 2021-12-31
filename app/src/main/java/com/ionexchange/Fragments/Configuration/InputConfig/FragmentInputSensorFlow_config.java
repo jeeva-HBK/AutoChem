@@ -15,6 +15,7 @@ import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
 import static com.ionexchange.Others.ApplicationClass.getStringValue;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
+import static com.ionexchange.Others.ApplicationClass.mainConfigurationDao;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.resetFlowTotalArr;
 import static com.ionexchange.Others.ApplicationClass.scheduleResetArr;
@@ -935,6 +936,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
                 mBinding.orpBackArrowIsc.performClick();
+                mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
                 break;
 
             case 0:
@@ -955,6 +957,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 new EventLogDemo(inputNumber, "FlowMeter", "Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""),getContext());
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
                         SharedPref.read(pref_USERLOGINID, ""));
+                mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));
                 break;
         }
 

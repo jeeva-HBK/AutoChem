@@ -7,6 +7,7 @@ import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
 import static com.ionexchange.Others.ApplicationClass.getStringValue;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
+import static com.ionexchange.Others.ApplicationClass.mainConfigurationDao;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
 import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
@@ -317,6 +318,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
                 mBinding.tempBackArrowIsc.performClick();
+                mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
                 break;
             case 0:
             case 1:
@@ -334,6 +336,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
                         SharedPref.read(pref_USERLOGINID, ""), getContext());
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
                         SharedPref.read(pref_USERLOGINID, ""));
+                mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));
                 break;
         }
 

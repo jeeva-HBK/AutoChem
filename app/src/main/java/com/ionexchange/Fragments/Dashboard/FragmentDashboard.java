@@ -121,6 +121,10 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     @Override
     public void onResume() {
         super.onResume();
+        maxPage = mainConfigurationDao.maxPageNo(screenNo, layout);
+        mBinding.rightArrowIsBtn.setVisibility(maxPage > pageNo ? View.VISIBLE : View.GONE);
+        mBinding.leftArrowIsBtn.setVisibility(pageNo != 1 ? View.VISIBLE : View.GONE);
+
     }
 
     @Override

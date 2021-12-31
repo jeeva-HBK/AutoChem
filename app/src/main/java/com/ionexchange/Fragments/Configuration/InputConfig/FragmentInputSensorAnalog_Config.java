@@ -9,6 +9,7 @@ import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
 import static com.ionexchange.Others.ApplicationClass.getStringValue;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
+import static com.ionexchange.Others.ApplicationClass.mainConfigurationDao;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
 import static com.ionexchange.Others.ApplicationClass.userType;
@@ -437,6 +438,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                 new EventLogDemo(inputNumber, "Analog", "Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""),getContext());
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
+                mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
                 mBinding.backArrowIsc.performClick();
                 break;
 
@@ -470,6 +472,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                 new EventLogDemo(inputNumber, "Analog", "Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""),getContext());
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
                         SharedPref.read(pref_USERLOGINID, ""));
+                mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));
                 break;
         }
 
