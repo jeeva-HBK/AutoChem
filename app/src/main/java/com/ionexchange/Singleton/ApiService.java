@@ -198,8 +198,8 @@ public class ApiService implements DataReceiveCallback {
                         break;
 
                 }
-            } else if (responseObject.getString("PACKET_TYPE").equals(READ_PACKET)) {
-                switch (responseObject.getString("JSON_SUB_ID")) {
+            } else if (packetType.equals(READ_PACKET)) {
+                switch (jsonSubID) {
                     case "00":
                         dataObj = new JSONObject();
                         dataObj.put("INPUTNO", "");
