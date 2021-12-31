@@ -300,7 +300,7 @@ public class ApiService implements DataReceiveCallback {
                 dataObj.put("RIGHT_LABEL", "");
                 dataObj.put("SEQUENCE_NO", inputDao.getInputConfigurationEntityList().get(i).inputSequenceNumber);
                 dataObj.put("UNIT", "");
-                dataObj.put("TYPE", "");
+                dataObj.put("TYPE", inputDao.getInputConfigurationEntityList().get(i).inputsequenceName);
                 dataObj.put("EVENT_TYPE", eventType);
             } catch (JSONException e) {
                 e.printStackTrace();

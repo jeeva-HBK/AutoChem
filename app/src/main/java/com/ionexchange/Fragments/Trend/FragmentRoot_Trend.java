@@ -385,7 +385,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
             ll1.setLineWidth(2f);
             ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
             ll1.setTextSize(10f);
-            ll1.setLineColor(Color.YELLOW);
+            ll1.setLineColor(Color.parseColor("#FF2D00"));
 
             LimitLine ll2 = new LimitLine(Integer.parseInt(selectedSensorTwo) < 34 ? (Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(
                     formDigits(2, selectedSensorTwo))))) : (Float.parseFloat(virtualDAO.getVirtualHighAlarm(Integer.parseInt(
@@ -394,7 +394,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
             ll2.setLineWidth(2f);
             ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
             ll2.setTextSize(10f);
-            ll2.setLineColor(Color.YELLOW);
+            ll2.setLineColor(Color.parseColor("#FF2D00"));
 
             dataSets.add(lineDataSet.get(2));
             yAxisRight.addLimitLine(ll1);
@@ -498,14 +498,14 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
                 (Float.parseFloat(inputDao.getLowAlarm(Integer.parseInt(formDigits(2,selectedSensor))))) :
                 (Float.parseFloat(virtualDAO.getVirtualLowAlarm(Integer.parseInt(formDigits(2,selectedSensor))))), "Low Alarm");
         ll1.setLineWidth(2f);
-        ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+        ll1.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
         ll1.setTextSize(10f);
         ll1.setLineColor(Color.RED);
         LimitLine ll2 = new LimitLine(Integer.parseInt(selectedSensor) < 34 ?
                 (Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(formDigits(2,selectedSensor))))) :
                 (Float.parseFloat(virtualDAO.getVirtualHighAlarm(Integer.parseInt(formDigits(2,selectedSensor))))), "High Alarm");
         ll2.setLineWidth(2f);
-        ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+        ll2.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_BOTTOM);
         ll2.setTextSize(10f);
         ll2.setLineColor(Color.RED);
 
@@ -622,11 +622,11 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
         }
         LineDataSet set1;
         set1 = pos == 1 ? new LineDataSet(values, Integer.parseInt(selectedSensor) < 34 ?
-                        inputDao.getInputType(Integer.parseInt(formDigits(2, selectedSensor))) :
-                        "Virtual") :
-                       new LineDataSet(values, Integer.parseInt(selectedSensorTwo) < 34 ?
-                               inputDao.getInputType(Integer.parseInt(formDigits(2, selectedSensorTwo))) :
-                               "Virtual");
+                inputDao.getInputType(Integer.parseInt(formDigits(2, selectedSensor))) :
+                "Virtual") :
+                new LineDataSet(values, Integer.parseInt(selectedSensorTwo) < 34 ?
+                        inputDao.getInputType(Integer.parseInt(formDigits(2, selectedSensorTwo))) :
+                        "Virtual");
 
         set1.setDrawIcons(false);
 

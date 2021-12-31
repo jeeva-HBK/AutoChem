@@ -450,8 +450,8 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                                     mBinding.analogSensorTypeTie.getText().toString(), "Analog", 0,
                                     mBinding.analogSequenceNumberTie.getText().toString(),
                                     Integer.parseInt(sequenceNo), getStringValue(0, mBinding.analogInputLabelTie),
-                                    (mBinding.analogLowAlarmTBtn.isChecked() ? "+" : "-") + mBinding.analogAlarmLowTie.getText().toString() + "." + mBinding.lowAlarmMinValueIsc.getText().toString(),
-                                    (mBinding.analogHighAlarmTBtn.isChecked() ? "+" : "-") + mBinding.analogHighLowTie.getText().toString() + "." + mBinding.highAlarmMinValueIsc.getText().toString(),
+                                    (mBinding.analogLowAlarmTBtn.isChecked() ? "+" : "-") + mBinding.analogAlarmLowTie.getText().toString() + "." + getStringValue(2,mBinding.lowAlarmMinValueIsc),
+                                    (mBinding.analogHighAlarmTBtn.isChecked() ? "+" : "-") + mBinding.analogHighLowTie.getText().toString() + "." +  getStringValue(2,mBinding.highAlarmMinValueIsc),
                                     getStringValue(mBinding.analogUnitMeasurementTie), "N/A", 1,STARTPACKET + writePacket + ENDPACKET);
                     // todo
                 } else {
@@ -460,8 +460,8 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                                     mBinding.analogSensorTypeTie.getText().toString(), "Analog", 0,
                                     mBinding.analogSequenceNumberTie.getText().toString(),
                                     Integer.parseInt(sequenceNo), getStringValue(0, mBinding.analogInputLabelTie),
-                                    mBinding.analogAlarmLowTie.getText().toString() + "." + mBinding.lowAlarmMinValueIsc.getText().toString(),
-                                    mBinding.analogHighLowTie.getText().toString() + "." + mBinding.highAlarmMinValueIsc.getText().toString(),
+                                    mBinding.analogAlarmLowTie.getText().toString() + "." + getStringValue(2,mBinding.lowAlarmMinValueIsc),
+                                    mBinding.analogHighLowTie.getText().toString() + "." + getStringValue(2,mBinding.highAlarmMinValueIsc),
                                     getStringValue(mBinding.analogUnitMeasurementTie), "N/A", 1,STARTPACKET + writePacket + ENDPACKET);
                 }
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
