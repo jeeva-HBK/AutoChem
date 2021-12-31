@@ -9,10 +9,9 @@ import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINNAME;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINREQUIRED;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINROLE;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINSTATUS;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.WallpaperManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -46,7 +45,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
@@ -59,7 +57,6 @@ import com.ionexchange.Adapters.ExpandableListAdapter;
 import com.ionexchange.Database.Dao.AlarmLogDao;
 import com.ionexchange.Database.Dao.ServicesNotificationDao;
 import com.ionexchange.Database.Dao.UserManagementDao;
-import com.ionexchange.Database.Entity.UsermanagementEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Others.AdminReceiver;
 import com.ionexchange.Others.ApplicationClass;
@@ -68,7 +65,6 @@ import com.ionexchange.R;
 import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.ActivityBaseBinding;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -124,6 +120,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         baseActivity = this;
         msBinding = mBinding;
         SharedPref.write(pref_USERLOGINREQUIRED, true);
+        SharedPref.write(pref_USERLOGINSTATUS, 0);
         checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 101);
         ComponentName admin = new ComponentName(this, AdminReceiver.class);
         Intent intent = new Intent(
@@ -169,6 +166,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     private void lock() {
         SharedPref.write(pref_USERLOGINREQUIRED, true);
+        SharedPref.write(pref_USERLOGINSTATUS, 0);
         mBinding.mainScreenBtn.performClick();
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         if (pm.isScreenOn()) {
@@ -458,6 +456,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     private void moveToConfig() {
         SharedPref.write(pref_USERLOGINID, userManagementDao.getUserId(SharedPref.read(pref_USERLOGINNAME, "")));
+        SharedPref.write(pref_USERLOGINSTATUS, 1);
         new EventLogDemo("0", "-", "Menu accessed by " + SharedPref.read(pref_USERLOGINNAME, ""),
                 userManagementDao.getUserId(SharedPref.read(pref_USERLOGINNAME, "")), getApplicationContext());
         setNewState(mBinding.configBigCircle, mBinding.configMain, mBinding.configSub, mBinding.configSmallCircle, mBinding.configText,
@@ -675,6 +674,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                     public void onClick(DialogInterface dialogInterface, int i) {
                         SharedPref.write(pref_LOGGEDIN, false);
                         SharedPref.write(pref_USERLOGINREQUIRED, true);
+                        SharedPref.write(pref_USERLOGINSTATUS, 0);
                         PackageManager packageManager = context.getPackageManager();
                         Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
                         ComponentName componentName = intent.getComponent();

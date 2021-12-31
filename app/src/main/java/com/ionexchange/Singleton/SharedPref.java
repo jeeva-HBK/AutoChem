@@ -16,6 +16,7 @@ public class SharedPref {
     public static final String pref_USERLOGINROLE = "USER_LOGIN_ROLE";
     public static final String pref_USERLOGINID = "USER_LOGIN_ID";
     public static final String pref_USERLOGINPASSWORDCHANED = "USER_LOGIN_ID";
+    public static final String pref_USERLOGINSTATUS = "USERLOGINSTATUS";
 
     // Site Info
     public static final String pref_SITEID = "SITE_ID";

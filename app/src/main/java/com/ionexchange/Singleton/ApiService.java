@@ -30,6 +30,7 @@ import static com.ionexchange.Singleton.SharedPref.pref_SITELOCATION;
 import static com.ionexchange.Singleton.SharedPref.pref_SITENAME;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINPASSWORDCHANED;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINSTATUS;
 
 import android.content.Context;
 import android.os.Handler;
@@ -242,8 +243,7 @@ public class ApiService implements DataReceiveCallback {
 
 
             }
-            String subID = responseObject.getString("JSON_SUB_ID");
-            Log.e(TAG, "processApiData: " + subID);
+
         } catch (JSONException jsonException) {
             jsonException.printStackTrace();
         }
@@ -968,8 +968,8 @@ public class ApiService implements DataReceiveCallback {
             dataObject.put("LABLE", "");
             dataObject.put("RESPONSE_WEB", "");
             dataObject.put("RESPONSE_TAB", getResponceTab() == null ? "NACK" : getResponceTab());
-            dataObject.put("USER_ID", "");
-            dataObject.put("LOGIN_STATUS", SharedPref.read(pref_USERLOGINID, ""));
+            dataObject.put("USER_ID", SharedPref.read(pref_USERLOGINID, ""));
+            dataObject.put("LOGIN_STATUS", SharedPref.read(pref_USERLOGINSTATUS,0));
             finalObject.put("DATAS", dataObject);
         } catch (JSONException e) {
             e.printStackTrace();
