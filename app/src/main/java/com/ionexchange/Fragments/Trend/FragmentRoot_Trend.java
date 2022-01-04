@@ -188,15 +188,14 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
             mBinding.trendChartTypeTie.setAdapter(getAdapter(chartTypeArr, getContext()));
             mBinding.trendSensorOneTie.setAdapter(getAdapter(inputDao.getEnabledSensor(), getContext()));
             mBinding.trendSensorTwoTie.setAdapter(getAdapter(inputDao.getEnabledSensor(), getContext()));
-
         }
     }
 
     private void filterChartResults() {
-        String fromDate = mBinding.trendFromDateTie.getText().toString().isEmpty() ? lessThanAWeek()
-                : mBinding.trendFromDateTie.getText().toString();
-        String toDate = mBinding.trendToDateTie.getText().toString().isEmpty() ? getCurrentDate()
+        String fromDate = mBinding.trendToDateTie.getText().toString().isEmpty() ? getCurrentDate()
                 : mBinding.trendToDateTie.getText().toString();
+        String toDate = mBinding.trendFromDateTie.getText().toString().isEmpty() ? lessThanAWeek()
+                : mBinding.trendFromDateTie.getText().toString();
         if (differencebetweendays < 7) {
             lessthanOneWeekChart(fromDate, toDate);
         } else if (differencebetweendays >= 7 && differencebetweendays < 14) {

@@ -1,23 +1,14 @@
 package com.ionexchange.Fragments.Dashboard;
 
-import static com.ionexchange.Others.ApplicationClass.DB;
 import static com.ionexchange.Others.ApplicationClass.bleConnected;
-import static com.ionexchange.Others.ApplicationClass.userType;
-import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINNAME;
-import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINREQUIRED;
-import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINROLE;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.Observable;
 import androidx.fragment.app.Fragment;
@@ -25,7 +16,6 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Adapters.DashboardRvAdapter;
 import com.ionexchange.Database.Dao.DefaultLayoutConfigurationDao;
@@ -37,7 +27,6 @@ import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
-import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentDashboardBinding;
 
 import java.util.List;
@@ -223,20 +212,14 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
 
     @Override
     public void onClick(MainConfigurationEntity mEntity) {
-        // if (ApplicationClass.userType == 3) {
-            if (!mEntity.inputType.contains("Output") && !mEntity.inputType.contains("virtual")) {
-                if (mEntity.flag_Value != 0) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("inputNumber", String.valueOf(mEntity.hardware_no));
-                    bundle.putString("inpuType", mEntity.inputType);
-                    mAppClass.navigateToBundle(getActivity(), R.id.action_Dashboard_to_sensorDetails1, bundle);
-                } else {
-                    mAppClass.showSnackBar(getContext(), "Sensor Not Added");
-                }
-            }
-       /* } else {
-            mAppClass.showSnackBar(getContext(), "Access Denied");
-        }*/
+        if (mEntity.flag_Value != 0) {
+            Bundle bundle = new Bundle();
+            bundle.putString("hardwareNumber", String.valueOf(mEntity.hardware_no));
+            bundle.putString("hardwareType", mEntity.inputType);
+            mAppClass.navigateToBundle(getActivity(), R.id.action_Dashboard_to_sensorDetails1, bundle);
+        } else {
+            mAppClass.showSnackBar(getContext(), "Sensor Not Added");
+        }
     }
 
 }

@@ -44,8 +44,6 @@ import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -99,13 +97,13 @@ public class FragmentSensorDetails extends Fragment {
 
         mContext = getActivity().getApplicationContext();
         mAppClass = (ApplicationClass) getActivity().getApplication();
-        inputNumber = getArguments().getString("inputNumber");
-        inputType = getArguments().getString("inpuType");
+        inputNumber = getArguments().getString("hardwareNumber");
+        inputType = getArguments().getString("hardwareType");
         mainScreenBtn = view.findViewById(mBinding.cardViewMultiMainScreen.getId());
         getTCPData(inputNumber, inputType);
         mBinding.btnTrendCalibartion.setChecked(true);
 
-        if (inputType.contains("Digital Input") || inputType.contains("Tank")) {
+        if (inputType.contains("Digital Input") || inputType.contains("Tank") || inputType.contains("Output")) {
             mBinding.cardViewMultiSelection.setVisibility(View.GONE);
             getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), new FragmentNoCalibration()).commit();
             /*mBinding.detailFrame.setVisibility(View.GONE);
@@ -149,10 +147,12 @@ public class FragmentSensorDetails extends Fragment {
                             case "ORP":
                             case "Contacting Conductivity":
                             case "Temperature":
+                               /* sensorCalibration = new FragmentSensorCalibration(inputNumber, getPosition(2, inputType, inputTypeArr));
+                                getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
+                                break;*/
+                            case "Analog Input":
                                 sensorCalibration = new FragmentSensorCalibration(inputNumber, getPosition(2, inputType, inputTypeArr));
                                 getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
-                                break;
-                            case "Analog":
                                 break;
                         }
                     }
@@ -390,8 +390,8 @@ public class FragmentSensorDetails extends Fragment {
         } else if (splitData[4].equals("1")) { // inhibitor
             tempMap.put("Output Mode", getValueFromArr(splitData[8], modeInhibitor));
             tempMap.put("Output Label", splitData[5]);
-            tempMap.put("Interlock channel", getValueFromArr(splitData[6], interlockChannel));
-            tempMap.put("Activate channel", getValueFromArr(splitData[7], interlockChannel));
+            tempMap.put("Interlock channel", getValueFromArr((Integer.parseInt(splitData[6]) - 30) + "", interlockChannel));
+            tempMap.put("Activate channel", getValueFromArr((Integer.parseInt(splitData[7]) - 30) + "", interlockChannel));
             if (userType == 3) {
                 if (splitData[8].equals("0")) { // Continuous
                     tempMap.put("Pump Flow Rate", splitData[9]);
@@ -422,14 +422,14 @@ public class FragmentSensorDetails extends Fragment {
             if (userType == 3) {
                 if (splitData[9].equals("0")) { // On/Off
                     tempMap.put("Set Point", splitData[10]);
-                    tempMap.put("Dose Type", getValueFromArr(splitData[11],doseTypeArr));
+                    tempMap.put("Dose Type", getValueFromArr(splitData[11], doseTypeArr));
                     tempMap.put("Link Input Sensor", getValueFromArr(splitData[8], getSensorInputArray()));
                     tempMap.put("Hysteresis", splitData[12]);
                     tempMap.put("Duty Cycle", splitData[13]);
                     tempMap.put("Lock Out Delay Time", splitData[14]);
                     tempMap.put("Safety Max", splitData[15]);
                     tempMap.put("Safety Min", splitData[16]);
-                } else if (splitData[9].equals("1")) {
+                } else if (splitData[9].equals("1")) { // PID
                     tempMap.put("set Point", splitData[10]);
                     tempMap.put("Gain", splitData[11]);
                     tempMap.put("Integral Time", splitData[12]);
@@ -445,14 +445,13 @@ public class FragmentSensorDetails extends Fragment {
                     tempMap.put("Safety Min", splitData[22]);
                 }
             } else if (splitData[9].equals("2")) { // Fuzzy
-
             }
         } else if (splitData[4].equals("3")) { // Analog
             tempMap.put("Sensor Mode", getValueFromArr(splitData[5], modeAnalog));
             tempMap.put("Link Input Relay", getValueFromArr(splitData[6], getSensorInputArray()));
-            if (splitData[5].equals("0")) {
+            if (splitData[5].equals("0")) { // Disable
 
-            } else if (splitData[5].equals("1") || splitData[5].equals("3") || splitData[5].equals("4")) {
+            } else if (splitData[5].equals("1") || splitData[5].equals("3") || splitData[5].equals("4")) { // other modes
                 tempMap.put("Min mA", splitData[6]);
                 tempMap.put("Max mA", splitData[7]);
                 tempMap.put("Min Value", splitData[8]);
@@ -499,9 +498,9 @@ public class FragmentSensorDetails extends Fragment {
     }
 
     private String getPckId(String inpuType) {
-        if (inpuType.equals("Relay Output") || inpuType.equals("Analog Output")) {
+        if (inpuType.contains("Output")) {
             return "06";
-        } else if (inpuType.equals("Virtual")) {
+        } else if (inpuType.contains("Virtual")) {
             return "05";
         }
         return "04";
