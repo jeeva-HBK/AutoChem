@@ -66,7 +66,6 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView_multi_selection"
             android:layout_width="0dp"
@@ -132,6 +131,7 @@
             android:layout_height="0dp"
             android:layout_margin="2dp"
             app:cardCornerRadius="6dp"
+            android:visibility="visible"
             app:cardElevation="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guideline2"
@@ -163,7 +163,7 @@
             android:layout_margin="2dp"
             app:layout_constraintBottom_toTopOf="@+id/btn_perv"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guideline2"
+            app:layout_constraintStart_toEndOf="@id/detailFrame"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button

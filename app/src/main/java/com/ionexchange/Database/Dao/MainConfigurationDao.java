@@ -23,7 +23,7 @@ public interface MainConfigurationDao {
     List<MainConfigurationEntity> getPageWiseSensor(int screen_no, int layout_no, int page_no);
 
 
-    @Query("select hardware_no || ' '  || inputType FROM MainConfigurationEntity WHERE screen_no = :screen_no and layout_no = :layout_no " +
+    @Query("select hardware_no || ' - '  || inputType FROM MainConfigurationEntity WHERE screen_no = :screen_no and layout_no = :layout_no " +
             "and window_no = :window_no and page_No =:page_no")
     String getSensorName(int screen_no, int layout_no, int window_no, int page_no);
 

@@ -63,8 +63,6 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentSensorDetailsBinding;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -98,6 +96,7 @@ public class FragmentSensorDetails extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         mContext = getActivity().getApplicationContext();
         mAppClass = (ApplicationClass) getActivity().getApplication();
         inputNumber = getArguments().getString("inputNumber");
@@ -107,16 +106,17 @@ public class FragmentSensorDetails extends Fragment {
         mBinding.btnTrendCalibartion.setChecked(true);
 
         if (inputType.contains("Digital Input") || inputType.contains("Tank")) {
-            mBinding.detailFrame.setVisibility(View.GONE);
+            mBinding.cardViewMultiSelection.setVisibility(View.GONE);
+            getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), new FragmentNoCalibration()).commit();
+            /*mBinding.detailFrame.setVisibility(View.GONE);
             mBinding.btnNext.setVisibility(View.GONE);
             mBinding.btnPerv.setVisibility(View.GONE);
-            mBinding.cardViewMultiSelection.setVisibility(View.GONE);
             mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 6)); // should change
             ConstraintLayout constraintLayout = view.findViewById(R.id.detailRootLayout);
             ConstraintSet constraintSet = new ConstraintSet();
             constraintSet.clone(constraintLayout);
-            constraintSet.connect(R.id.recyclerView, ConstraintSet.LEFT, R.id.cardView_multi_mainScreen, ConstraintSet.RIGHT, 0);
-            constraintSet.applyTo(constraintLayout);
+            constraintSet.connect(R.id.recyclerView, ConstraintSet.START, R.id.cardView_multi_mainScreen, ConstraintSet.RIGHT, 0);
+            constraintSet.applyTo(constraintLayout);*/
         }
 
         mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
@@ -163,6 +163,7 @@ public class FragmentSensorDetails extends Fragment {
                 }
             }
         });
+
         mBinding.btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -288,9 +289,11 @@ public class FragmentSensorDetails extends Fragment {
                                 setAdapter(formOutputMap(data.split("\\*")[1].split("\\$")));
                             }
                         }
-                    } else if (splitData[1].equals("05")) {
+                    } else if (splitData[1].equals("05")) { // virtual
                         if (splitData[0].equals(READ_PACKET)) {
                             if (splitData[2].equals(RES_SUCCESS)) {
+                                mBinding.cardViewMultiSelection.setVisibility(View.INVISIBLE);
+                                getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), new FragmentSensorStatistics(inputNumber, inputType)).commit();
                                 setAdapter(formVirtualMap(data.split("\\*")[1].split("\\$")));
                             }
                         }
@@ -311,8 +314,32 @@ public class FragmentSensorDetails extends Fragment {
                     tempMap.put("Input Number", splitData[3]);
                     tempMap.put("Sensor Activation", getValueFromArr(splitData[4], sensorActivationArr));
                     tempMap.put("Sensor Label", splitData[5]);
-                    tempMap.put("Sensor 1 Number", getValueFromArr(splitData[6], getSensorInputArray()));
-                    tempMap.put("Sensor 1 Constant", splitData[7]);
+                    tempMap.put("Input 1 Type", splitData[6].equals("0") ? "Physical" : "Constant");
+
+                    if (splitData[6].equals("0")) {
+                        tempMap.put("Input 1 Number", getInputName(splitData[7]));
+                        tempMap.put("Input 1 Type", getValueFromArr(splitData[8], inputTypeArr));
+                    } else if (splitData[6].equals("1")) {
+                        tempMap.put("Sensor 1 Constant Value", splitData[7]);
+                        tempMap.put("Input 1 Type", getValueFromArr(splitData[8], inputTypeArr));
+                    }
+
+                    tempMap.put("Input 2 Type", splitData[9].equals("0") ? "Physical" : "Constant");
+                    if (splitData[9].equals("0")) {
+                        tempMap.put("Input 2 Number", getInputName(splitData[10]));
+                        tempMap.put("Input 2 Type", getValueFromArr(splitData[11], inputTypeArr));
+                    } else if (splitData[9].equals("1")) {
+                        tempMap.put("Sensor 2 Constant Value", splitData[10]);
+                        tempMap.put("Input 2 Type", getValueFromArr(splitData[11], inputTypeArr));
+                    }
+                    tempMap.put("Low Range", splitData[12]);
+                    tempMap.put("High Range", splitData[13]);
+                    tempMap.put("Smoothing Factor", splitData[14]);
+                    tempMap.put("Alarm Low", splitData[15]);
+                    tempMap.put("Alarm High", splitData[16]);
+                    tempMap.put("Calculation", getValueFromArr(splitData[17], calculationArr));
+                    //  tempMap.put("Unit", splitData[19]); todo unComment this
+                   /* tempMap.put("Sensor 1 Constant", splitData[7]);
                     tempMap.put("Sensor 2 Number", getValueFromArr(splitData[8], getSensorInputArray()));
                     tempMap.put("Sensor 2 Constant", splitData[9]);
                     tempMap.put("Low Range", splitData[10]);
@@ -320,23 +347,23 @@ public class FragmentSensorDetails extends Fragment {
                     tempMap.put("Smoothing Factor", splitData[12]);
                     tempMap.put("Alarm Low", splitData[13]);
                     tempMap.put("Alarm High", splitData[14]);
-                    tempMap.put("Calculation", getValueFromArr(splitData[15], calculationArr));
+                    tempMap.put("Calculation", getValueFromArr(splitData[15], calculationArr));*/
                     switch (userType) {
                         case 1:
                             tempMap.remove("Sensor Activation");
-                            tempMap.remove("Sensor 1 Number");
-                            tempMap.remove("Sensor 1 Constant");
-                            tempMap.remove("Sensor 2 Number");
-                            tempMap.remove("Sensor 2 Constant");
+                            tempMap.remove("Input 1 Number");
+                            tempMap.remove("Sensor 1 Constant Value");
+                            tempMap.remove("Input 2 Number");
+                            tempMap.remove("Sensor 2 Constant Value");
                             tempMap.remove("Smoothing Factor");
                             tempMap.remove("Calculation");
                             break;
                         case 2:
                             tempMap.remove("Sensor Activation");
-                            tempMap.remove("Sensor 1 Number");
-                            tempMap.remove("Sensor 1 Constant");
-                            tempMap.remove("Sensor 2 Number");
-                            tempMap.remove("Sensor 2 Constant");
+                            tempMap.remove("Input 1 Number");
+                            tempMap.remove("Sensor 1 Constant Value");
+                            tempMap.remove("Input 2 Number");
+                            tempMap.remove("Sensor 2 Constant Value");
                             tempMap.remove("Calculation");
                             break;
                     }
@@ -348,6 +375,10 @@ public class FragmentSensorDetails extends Fragment {
         }
         finalSensorParamList = splitIntoParts(convertMap(tempMap), pageMax);
         return finalSensorParamList.get(0);
+    }
+
+    private String getInputName(String splitData) {
+        return ApplicationClass.DB.inputConfigurationDao().getSensorType(Integer.parseInt(splitData));
     }
 
     private List<String[]> formOutputMap(String[] splitData) {

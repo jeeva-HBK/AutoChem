@@ -366,7 +366,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
             mBinding.trendSensorOneTie.setText(mBinding.trendSensorOneTie.getAdapter().getItem(0).toString());
             selectedSensor = mBinding.trendSensorOneTie.getAdapter().getItem(0).toString().split("-")[0].trim();
             initLineChart();
-            lineDataSet.put(1, getLineData(trendDao.getLessThenOneWeek(lessThanAWeek(), getCurrentDate(), formDigits(2, selectedSensor)), 1));
+            lineDataSet.put(1, getLineData(trendDao.getLessThenOneWeek(getCurrentDate(), lessThanAWeek(), formDigits(2, selectedSensor)), 1));
             setLineChartData();
             setAdapter();
         }
@@ -412,23 +412,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
             dataSets.add(barDataSet.get(1));
         }
         if (barDataSet.get(2) != null) {
-          /*  LimitLine ll1 = new LimitLine(Float.parseFloat(inputDao.getLowAlarm(Integer.parseInt(
-                    formDigits(2, mBinding.trendSensorTwoTie.getAdapter().getItem(0).toString().split("-")[0].trim()))
-            )), "Low Alarm");
-            ll1.setLineWidth(2f);
-            ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-            ll1.setTextSize(10f);
-
-            LimitLine ll2 = new LimitLine(Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(
-                    formDigits(2, mBinding.trendSensorTwoTie.getAdapter().getItem(0).toString().split("-")[0].trim()))
-            )), "High Alarm");
-            ll2.setLineWidth(2f);
-            ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-            ll2.setTextSize(10f);*/
-
             dataSets.add(barDataSet.get(2));
-            /*yAxisRight.addLimitLine(ll1);
-            yAxisRight.addLimitLine(ll2);*/
         }
         BarData data = new BarData(dataSets);
         data.setBarWidth(0.01f);
@@ -443,23 +427,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
             dataSets.add(plotDataSet.get(1));
         }
         if (plotDataSet.get(2) != null) {
-          /*  LimitLine ll1 = new LimitLine(Float.parseFloat(inputDao.getLowAlarm(Integer.parseInt(
-                    formDigits(2, mBinding.trendSensorTwoTie.getAdapter().getItem(0).toString().split("-")[0].trim()))
-            )), "Low Alarm");
-            ll1.setLineWidth(2f);
-            ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-            ll1.setTextSize(10f);
-
-            LimitLine ll2 = new LimitLine(Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(
-                    formDigits(2, mBinding.trendSensorTwoTie.getAdapter().getItem(0).toString().split("-")[0].trim()))
-            )), "High Alarm");
-            ll2.setLineWidth(2f);
-            ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-            ll2.setTextSize(10f);*/
-
             dataSets.add(plotDataSet.get(2));
-            /*yAxisRight.addLimitLine(ll1);
-            yAxisRight.addLimitLine(ll2);*/
         }
         ScatterData data = new ScatterData(dataSets);
         mBinding.trendPlotChart.setData(data);

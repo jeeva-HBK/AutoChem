@@ -128,6 +128,7 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!--Constant-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -203,7 +204,6 @@
                     app:layout_constraintTop_toTopOf="@+id/sensor1Constant_vi" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         </LinearLayout>
 

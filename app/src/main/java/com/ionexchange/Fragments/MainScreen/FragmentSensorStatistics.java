@@ -3,11 +3,9 @@ package com.ionexchange.Fragments.MainScreen;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
@@ -24,32 +21,25 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IFillFormatter;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.android.material.chip.ChipGroup;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.TrendDao;
+import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.TrendEntity;
 import com.ionexchange.Others.ApplicationClass;
-
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentSensorStatisticsBinding;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 
 public class FragmentSensorStatistics extends Fragment implements OnChartValueSelectedListener {
@@ -59,6 +49,7 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
     String inputNumber, inputType;
     TrendDao trendDao;
     InputConfigurationDao inputDao;
+    VirtualConfigurationDao virtualDao;
     ArrayList<Entry> values;
 
     public FragmentSensorStatistics(String inputNumber, String inputType) {
@@ -80,23 +71,23 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
         mBinding.sensorName.setText(inputType + " Sensor");
         trendDao = ApplicationClass.DB.trendDao();
         inputDao = ApplicationClass.DB.inputConfigurationDao();
+        virtualDao = ApplicationClass.DB.virtualConfigurationDao();
         chart = mBinding.lineChart;
 
-        initChart(trendDao.getLessThenOneWeek(lessThanAWeek(),
-                ApplicationClass.getCurrentDate(), inputNumber));
+        mBinding.lessThanWeek.setChecked(true);
 
         mBinding.chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.lessThanWeek:
-                        initChart(trendDao.getLessThenOneWeek(lessThanAWeek(),
-                                ApplicationClass.getCurrentDate(), inputNumber));
+                        initChart(trendDao.getLessThenOneWeek(ApplicationClass.getCurrentDate(),
+                                lessThanAWeek(), inputNumber));
                         break;
 
                     case R.id.lessThanTwoWeek:
-                        initChart(trendDao.getLessThenTwoWeek(lessThanTwoWeek(),
-                                ApplicationClass.getCurrentDate(), inputNumber));
+                        initChart(trendDao.getLessThenTwoWeek(ApplicationClass.getCurrentDate(),
+                                lessThanTwoWeek(), inputNumber));
                         break;
 
                     case R.id.greaterThanTwoWeek:
@@ -111,8 +102,6 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
             public void onChanged(List<TrendEntity> list) {
                 if (mBinding.lessThanWeek.isChecked()){
                     setData(list);
-                    mBinding.lineChart.notifyDataSetChanged();
-                    mBinding.lineChart.invalidate();
                 }
             }
         });
@@ -148,7 +137,7 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
         xAxis = chart.getXAxis();
         YAxis yAxis;
         yAxis = chart.getAxisLeft();
-        chart.getAxisRight().setEnabled(false);
+        chart.getAxisRight().setEnabled(true);
 
         chart.getAxisLeft().setDrawGridLines(true);
         chart.getAxisLeft().setGridLineWidth(0.5f);
@@ -156,14 +145,12 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
         chart.getXAxis().setDrawGridLines(true);
         chart.getXAxis().setGridLineWidth(0.5f);
 
-
-
-        LimitLine ll1 = new LimitLine(Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(inputNumber))), "Low Alarm");
+        LimitLine ll1 = new LimitLine(getAlarm(1), "High Alarm");
         ll1.setLineWidth(2f);
         ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
         ll1.setTextSize(10f);
 
-        LimitLine ll2 = new LimitLine(Float.parseFloat(inputDao.getLowAlarm(Integer.parseInt(inputNumber))), "High Alarm");
+        LimitLine ll2 = new LimitLine(getAlarm(0), "Low Alarm");
         ll2.setLineWidth(2f);
         ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
         ll2.setTextSize(10f);
@@ -177,6 +164,20 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
         chart.animateX(1500);
         Legend l = chart.getLegend();
         l.setForm(Legend.LegendForm.LINE);
+    }
+
+    private float getAlarm(int type) {
+        if (Integer.parseInt(inputNumber) > 49) {
+            return Float.parseFloat(
+                    type == 0 ?
+                            virtualDao.getLowAlarm(Integer.parseInt(inputNumber)) :
+                            virtualDao.getHighAlarm(Integer.parseInt(inputNumber)));
+        }
+        return
+                Float.parseFloat(
+                        type == 0 ?
+                                inputDao.getLowAlarm(Integer.parseInt(inputNumber)) :
+                                inputDao.getHighAlarm(Integer.parseInt(inputNumber)));
     }
 
     private void setData(List<TrendEntity> list) {
@@ -221,6 +222,8 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
             LineData data = new LineData(dataSets);
             chart.setData(data);
         }
+        mBinding.lineChart.notifyDataSetChanged();
+        mBinding.lineChart.invalidate();
     }
 
     @Override

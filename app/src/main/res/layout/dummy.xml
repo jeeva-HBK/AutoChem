@@ -3,71 +3,197 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/detailRootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- <TextView
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:gravity="center"
-             android:text="Events &amp; Logs"/>-->
-
-        <Button
-            android:id="@+id/readNowBtn"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Read Now"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.2" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/readNowBtn">
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.76" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text=""
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent" />
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView_multi_mainScreen"
+            android:layout_width="0dp"
+            android:layout_height="140dp"
+            android:layout_margin="2dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="5dp"
+            app:cardMaxElevation="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:gravity="center"
-                android:text="Diagnostic Data"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_timer_retcangle">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Time Stamp"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent" />
+                <TextView
+                    android:id="@+id/txt_trend_mainScreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Main Screen"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view_trend_mainScreen" />
 
-        </LinearLayout>
+                <View
+                    android:id="@+id/view_trend_mainScreen"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/ic_dashboard"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/diagnosticRv"
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView_multi_selection"
+            android:layout_width="0dp"
+            android:layout_height="140dp"
+            android:layout_margin="2dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="5dp"
+            app:cardMaxElevation="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView_multi_mainScreen"
+            app:layout_constraintVertical_bias="0.03">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_timer_retcangle">
+
+                <TextView
+                    android:id="@+id/txt_trend_calibration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="TREND"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_trend_calibartion"
+                    app:layout_constraintEnd_toEndOf="@+id/btn_trend_calibartion"
+                    app:layout_constraintStart_toStartOf="@+id/btn_trend_calibartion" />
+
+                <View
+                    android:id="@+id/view_trend_calibration"
+                    android:layout_width="60dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/graph"
+                    app:layout_constraintBottom_toBottomOf="@id/btn_trend_calibartion"
+                    app:layout_constraintEnd_toEndOf="@id/btn_trend_calibartion"
+                    app:layout_constraintStart_toStartOf="@id/btn_trend_calibartion"
+                    app:layout_constraintTop_toTopOf="@id/btn_trend_calibartion" />
+
+                <ToggleButton
+                    android:id="@+id/btn_trend_calibartion"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="1dp"
+                    android:background="@null"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/detailFrame"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="10sp"
-            android:scrollIndicators="end"
+            android:layout_margin="2dp"
+            app:cardCornerRadius="6dp"
+            android:visibility="visible"
+            app:cardElevation="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline2"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                android:background="@drawable/bg_timer_retcangle">
+
+                <FrameLayout
+                    android:id="@+id/sensor_details_frame"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_perv"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+            app:layout_constraintStart_toEndOf="@id/detailFrame"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_perv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2.5dp"
+            android:backgroundTint="@color/colorSecondary"
+            android:text="Prev"
+            android:textColor="@color/black"
+            android:textSize="10dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_next"
+            app:layout_constraintStart_toEndOf="@id/guideline2" />
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2.5dp"
+            android:backgroundTint="@color/colorSecondary"
+            android:text="Next"
+            android:textColor="@color/black"
+            android:textSize="10dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_perv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_perv"
+            app:layout_constraintTop_toTopOf="@+id/btn_perv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
