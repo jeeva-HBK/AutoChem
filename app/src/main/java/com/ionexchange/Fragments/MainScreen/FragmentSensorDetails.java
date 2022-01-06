@@ -1,5 +1,6 @@
 package com.ionexchange.Fragments.MainScreen;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
 import static com.ionexchange.Others.ApplicationClass.analogInputArr;
 import static com.ionexchange.Others.ApplicationClass.bleedRelay;
 import static com.ionexchange.Others.ApplicationClass.bufferArr;
@@ -106,15 +107,6 @@ public class FragmentSensorDetails extends Fragment {
         if (inputType.contains("Digital Input") || inputType.contains("Tank") || inputType.contains("Output")) {
             mBinding.cardViewMultiSelection.setVisibility(View.GONE);
             getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), new FragmentNoCalibration()).commit();
-            /*mBinding.detailFrame.setVisibility(View.GONE);
-            mBinding.btnNext.setVisibility(View.GONE);
-            mBinding.btnPerv.setVisibility(View.GONE);
-            mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 6)); // should change
-            ConstraintLayout constraintLayout = view.findViewById(R.id.detailRootLayout);
-            ConstraintSet constraintSet = new ConstraintSet();
-            constraintSet.clone(constraintLayout);
-            constraintSet.connect(R.id.recyclerView, ConstraintSet.START, R.id.cardView_multi_mainScreen, ConstraintSet.RIGHT, 0);
-            constraintSet.applyTo(constraintLayout);*/
         }
 
         mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
@@ -147,9 +139,7 @@ public class FragmentSensorDetails extends Fragment {
                             case "ORP":
                             case "Contacting Conductivity":
                             case "Temperature":
-                               /* sensorCalibration = new FragmentSensorCalibration(inputNumber, getPosition(2, inputType, inputTypeArr));
-                                getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
-                                break;*/
+                            case "Flow/Water Meter":
                             case "Analog Input":
                                 sensorCalibration = new FragmentSensorCalibration(inputNumber, getPosition(2, inputType, inputTypeArr));
                                 getParentFragmentManager().beginTransaction().replace(mBinding.sensorDetailsFrame.getId(), sensorCalibration).commit();
@@ -203,6 +193,7 @@ public class FragmentSensorDetails extends Fragment {
         mAppClass.sendPacket(new DataReceiveCallback() {
             @Override
             public void OnDataReceive(String data) {
+                dismissProgress();
                 if (data.equals("FailedToConnect")) {
                     mAppClass.showSnackBar(getContext(), "Failed to connect");
                 } else if (data.equals("pckError")) {
@@ -302,8 +293,7 @@ public class FragmentSensorDetails extends Fragment {
                     }
                 }
             }
-        }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + getPckId(inpuType) + SPILT_CHAR + formDigits(2, inputNumber))
-        ;
+        }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + getPckId(inpuType) + SPILT_CHAR + formDigits(2, inputNumber));
     }
 
     private List<String[]> formVirtualMap(String[] splitData) {

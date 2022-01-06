@@ -1,5 +1,6 @@
 package com.ionexchange.Fragments.Dashboard;
 
+import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.ApplicationClass.bleConnected;
 
 import android.os.Bundle;
@@ -213,6 +214,7 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
     @Override
     public void onClick(MainConfigurationEntity mEntity) {
         if (mEntity.flag_Value != 0) {
+            showProgress();
             Bundle bundle = new Bundle();
             bundle.putString("hardwareNumber", String.valueOf(mEntity.hardware_no));
             bundle.putString("hardwareType", mEntity.inputType);

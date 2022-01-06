@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Configuration.OutputConfig;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.ApplicationClass.bleedRelay;
 import static com.ionexchange.Others.ApplicationClass.doseTypeArr;
 import static com.ionexchange.Others.ApplicationClass.flowMeterTypeArr;
@@ -440,16 +442,19 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                         switch (getPosition(0, toString(mBinding.modeOsATXT), modeInhibitor)) {
                             case "0":
                                 if (validation()) {
+                                    showProgress();
                                     sendContinuous();
                                 }
                                 break;
                             case "1":
                                 if (validation1()) {
+                                    showProgress();
                                     sendBleedBlow();
                                 }
                                 break;
                             case "2":
                                 if (validation2()) {
+                                    showProgress();
                                     sendWaterMeter();
                                 }
                                 break;
@@ -460,12 +465,14 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                         switch (getPosition(0, toString(mBinding.modeOsATXT), modeSensor)) {
                             case "0":
                                 if (validation3()) {
+                                    showProgress();
                                     sendOnOFf();
                                 }
 
                                 break;
                             case "1":
                                 if (validation4()) {
+                                    showProgress();
                                     sendPID();
                                 }
                                 break;
@@ -477,9 +484,11 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                         }
                         break;
                     case "Disabled":
+                        showProgress();
                         sendRelayDisable("0");
                         break;
                     case "Manual":
+                        showProgress();
                         sendRelayManual("4");
                         break;
                 }
@@ -491,6 +500,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                     if (isEmpty(mBinding.outputLabelOsEDT)) {
                         mAppClass.showSnackBar(getContext(), "Output Label  cannot be Empty");
                     } else {
+                        showProgress();
                         sendAnalogDisable();
                     }
                     break;
@@ -498,12 +508,16 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 case "3":
                 case "4":
                     if (validation6()) {
+                        showProgress();
                         sendAnalogValue();
                     }
                     break;
                 case "2":
-                    if (validation7())
+                    if (validation7()){
+                        showProgress();
                         sendAnalogTest();
+                    }
+
                     break;
             }
         }
@@ -765,10 +779,12 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     private int getInterlockChannaleHardwareNumber() {
         int interlockchannelPos = Integer.parseInt(getPosition(2, toString(mBinding.interLockChannelOsATXT), activateChannalsList));
         int hardwareNo;
-        if (interlockchannelPos < 16) {
-            hardwareNo = interlockchannelPos + 34;
+        if (interlockchannelPos == 0) {
+            hardwareNo = 0;
+        } else if (interlockchannelPos <= 16) {
+            hardwareNo = interlockchannelPos + 33;
         } else {
-            hardwareNo = interlockchannelPos - 15;
+            hardwareNo = interlockchannelPos - 16;
         }
         return hardwareNo;
     }
@@ -776,10 +792,12 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     private int getActiviateChannaleHardwareNumber() {
         int activatechannelPos = Integer.parseInt(getPosition(2, toString(mBinding.activateChannelOsATXT), activateChannalsList));
         int hardwareNo;
-        if (activatechannelPos < 16) {
-            hardwareNo = activatechannelPos + 34;
+        if (activatechannelPos == 0) {
+            hardwareNo = 0;
+        } else if (activatechannelPos <= 16) {
+            hardwareNo = activatechannelPos + 33;
         } else {
-            hardwareNo = activatechannelPos - 15;
+            hardwareNo = activatechannelPos - 16;
         }
         return hardwareNo;
     }
@@ -794,7 +812,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.pidLinkInputAtxtOsc.setAdapter(getAdapter(sensorInputArr));
         mBinding.pidDoseTypeAtxtOsc.setAdapter(getAdapter(doseTypeArr));
     }
-
 
     void enableDisabled() {
         currentFunctionMode = "Disabled";
@@ -813,7 +830,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.outputRow2.setVisibility(View.VISIBLE);
         Log.e(TAG, "enableManual: ");
     }
-
 
     private void enablePID() {
         mBinding.modeOs.setEnabled(true);
@@ -838,7 +854,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.waterFlowMeterTypeAtxtOsc.setAdapter(getAdapter(flowMeterTypeArr));
         mBinding.waterFlowMeterInputAtxtOsc.setAdapter(getAdapter(flowMeters));
     }
-
 
     private void enableBleed() {
         mBinding.modeOsATXT.setText(mBinding.modeOsATXT.getAdapter().getItem(1).toString());
@@ -898,7 +913,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.modeOsATXT.setText(mBinding.modeOsATXT.getAdapter().getItem(0).toString());
         mBinding.modeOsATXT.setAdapter(getAdapter(modeAnalog));
     }
-
 
     String getPlusMinusValue(ToggleButton toggleButton, TextInputEditText prefixEdt, int prefixDigit, EditText suffixEdt, int suffixDigit) {
         return (toggleButton.isChecked() ? "+" : "-") + toString(prefixDigit, prefixEdt) + "." + toString(suffixDigit, suffixEdt);
@@ -964,6 +978,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
     @Override
     public void OnDataReceive(String data) {
+        dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {
@@ -999,20 +1014,25 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                             if (!splitData[4].equals("0")) {
                                 int interlockChannelPos = Integer.parseInt(splitData[6]);
                                 int setInterlockChannelPos = interlockChannelPos;
-                                if (interlockChannelPos >= 34) {
-                                    setInterlockChannelPos = interlockChannelPos - 34;
+                                if(interlockChannelPos == 0) {
+                                    mBinding.interLockChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(interlockChannelPos).toString());
+                                }
+                                else if (interlockChannelPos >= 34) {
+                                    setInterlockChannelPos = interlockChannelPos - 33;
                                     mBinding.interLockChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(setInterlockChannelPos).toString());
                                 } else {
-                                    setInterlockChannelPos = interlockChannelPos + 15;
+                                    setInterlockChannelPos = interlockChannelPos + 16;
                                     mBinding.interLockChannelOsATXT.setText(mBinding.interLockChannelOsATXT.getAdapter().getItem(setInterlockChannelPos).toString());
                                 }
                                 int activiateChannelPos = Integer.parseInt(splitData[7]);
                                 int setActiivateChannelPos = activiateChannelPos;
-                                if (activiateChannelPos >= 34) {
-                                    setActiivateChannelPos = activiateChannelPos - 34;
+                                if(activiateChannelPos == 0) {
+                                    mBinding.activateChannelOsATXT.setText(mBinding.activateChannelOsATXT.getAdapter().getItem(activiateChannelPos).toString());
+                                } else if (activiateChannelPos >= 34) {
+                                    setActiivateChannelPos = activiateChannelPos - 33;
                                     mBinding.activateChannelOsATXT.setText(mBinding.activateChannelOsATXT.getAdapter().getItem(setActiivateChannelPos).toString());
                                 } else {
-                                    setActiivateChannelPos = activiateChannelPos + 15;
+                                    setActiivateChannelPos = activiateChannelPos + 16;
                                     mBinding.activateChannelOsATXT.setText(mBinding.activateChannelOsATXT.getAdapter().getItem(setActiivateChannelPos).toString());
                                 }
                             }

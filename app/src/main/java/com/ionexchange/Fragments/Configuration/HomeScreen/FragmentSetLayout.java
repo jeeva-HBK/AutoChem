@@ -149,7 +149,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                     mBinding.setSelected("layout3");
                     defaultWindowPage();
                     layoutNo = 3;
-                    mActivity.showProgress();
+
                     loopLayoutDetails();
 
                     break;
@@ -176,7 +176,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
     }
 
     void loopLayoutDetails() {
-        mActivity.showProgress();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -186,7 +186,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                     getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
                     i++;
                 }
-                mActivity.dismissProgress();
+
             }
         }, 1000);
 

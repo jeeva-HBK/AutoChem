@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.ApplicationClass.digitalArr;
 import static com.ionexchange.Others.ApplicationClass.getAdapter;
 import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
@@ -93,7 +95,9 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
     }
 
     private void delete(View view) {
-        sendData(2);
+        if (validField()){
+            sendData(2);
+        }
     }
 
     private void save(View view) {
@@ -103,7 +107,7 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
     }
 
     void sendData(int sensorStatus) {
-        mActivity.showProgress();
+        showProgress();
         writePacket = DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                 PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
                 getStringValue(2, mBinding.tankLevelInputNumberTie) + SPILT_CHAR +
@@ -135,7 +139,7 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
 
     @Override
     public void OnDataReceive(String data) {
-        mActivity.dismissProgress();
+        dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {
@@ -192,7 +196,7 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
     public void onResume() {
         super.onResume();
         if (sensorName == null) {
-            mActivity.showProgress();
+
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR+ READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +inputNumber);
         } else {
             mBinding.tankLevelInputNumberTie.setText(inputNumber);

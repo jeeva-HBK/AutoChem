@@ -63,7 +63,7 @@
 
     <fragment
         android:id="@+id/siteSetting"
-        android:name="com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentCommonSettings_Config"
+        android:name="com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentSiteSettings_Config"
         android:label="SiteSetting"
         tools:layout="@layout/fragment_commonsettings" />
 

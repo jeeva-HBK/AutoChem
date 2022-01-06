@@ -29,6 +29,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.ApplicationClass.TemperatureCompensationType;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.getAdapter;
@@ -110,15 +112,19 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
 
 
     private void delete(View view) {
-        if (getPositionFromAtxt(1, getStringValue(mBinding.conCompensationAtxtIsc), TemperatureCompensationType).equals("0")) {
-            sendDataLinearTemperature(2);
-        } else {
-            sendStandardNaClTemperature(2);
+        if (validation()){
+            showProgress();
+            if (getPositionFromAtxt(1, getStringValue(mBinding.conCompensationAtxtIsc), TemperatureCompensationType).equals("0")) {
+                sendDataLinearTemperature(2);
+            } else {
+                sendStandardNaClTemperature(2);
+            }
         }
     }
 
     private void save(View view) {
         if (validation()) {
+            showProgress();
             if (getPositionFromAtxt(1, getStringValue(mBinding.conCompensationAtxtIsc), TemperatureCompensationType).equals("0")) {
                 sendDataLinearTemperature(1);
             } else {
@@ -128,7 +134,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     }
 
     void sendDataLinearTemperature(int sensorStatus) {
-        mActivity.showProgress();
+
         writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -153,7 +159,6 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     }
 
     void sendStandardNaClTemperature(int sensorStatus) {
-        mActivity.showProgress();
         writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -242,12 +247,6 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 mAppClass.showSnackBar(getContext(), getString(R.string.compensation_factor_maxvalidation));
                 return false;
             }
-            /*if (Integer.parseInt(mBinding.conCompFactorEdtIsc.getText().toString()) == 20) {
-                if(!isFieldEmpty(mBinding.conCompFactorDeciIsc) && Integer.parseInt(mBinding.conCompFactorDeciIsc.getText().toString()) > 0) {
-                    mAppClass.showSnackBar(getContext(), getString(R.string.compensation_factor_decimal_validation));
-                    return false;
-                }
-            }*/
         }
 
         return true;
@@ -267,7 +266,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
     public void onResume() {
         super.onResume();
         if (sensorName == null) {
-            mActivity.showProgress();
+            showProgress();
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + formDigits(2, inputNumber));
         } else {
             mBinding.conInputNumberEdtIsc.setText(inputNumber);
@@ -279,7 +278,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
 
     @Override
     public void OnDataReceive(String data) {
-        mActivity.dismissProgress();
+        dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {

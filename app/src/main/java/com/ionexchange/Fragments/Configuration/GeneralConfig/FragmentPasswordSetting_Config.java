@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Configuration.GeneralConfig;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.PacketControl.ACK;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
@@ -11,6 +13,7 @@ import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINPASSWORDCHANED;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +69,7 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
         mBinding.reset.setOnClickListener(View -> {
             factoryResetConfirmation();
         });
+        dismissProgress();
     }
 
     private void factoryResetConfirmation() {
@@ -74,6 +78,7 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
                 .setPositiveButton("CONFIRM", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        showProgress();
                         sendResetPck(dialogInterface);
                     }
                 }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -89,13 +94,15 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
         return num % 2 == 0;
     }
 
-
     private void sendResetPck(DialogInterface dialog) {
+        final boolean[] dataReceived = {false};
         mAppclass.sendPacket(new DataReceiveCallback() { // {*0$0$17$0*}
             @Override
             public void OnDataReceive(String data) {
                 if (mAppclass.isValidPck(WRITE_PACKET, data, getContext())) {
                     if (data.split("\\*")[1].split("\\$")[2].equals("0")) {
+                        dataReceived[0] = true;
+                        dismissProgress();
                         if (mAppclass.factoryRest()) {
                             mAppclass.showSnackBar(getContext(), "Factory Reset Success");
                         } else {
@@ -113,6 +120,16 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
                 }
             }
         }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_FACTORYRESET + SPILT_CHAR + ACK);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!dataReceived[0]){
+                    dismissProgress();
+                    mAppclass.showSnackBar(getContext(), "Factory Reset Failed, try again later");
+                }
+            }
+        }, 10000);
     }
 
     private String toString(EditText editText) {
@@ -122,9 +139,7 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
     @Override
     public void onResume() {
         super.onResume();
-
     }
-
 
     private Boolean isEmpty(TextInputEditText editText) {
         if (editText == null || editText.getText().toString().equals("")) {
@@ -133,7 +148,6 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
         }
         return false;
     }
-
 
     @Override
     public void onClick(View v) {
@@ -169,5 +183,4 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
         }
         return true;
     }
-
 }

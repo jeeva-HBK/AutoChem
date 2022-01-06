@@ -7,6 +7,27 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <RelativeLayout
+            android:id="@+id/connectionProgress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.85"
+            android:background="@color/black"
+            android:clickable="false"
+            android:focusable="false"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerInParent="true"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/progress" />
+
+        </RelativeLayout>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.ApplicationClass.bufferArr;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.getAdapter;
@@ -148,7 +150,9 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     }
 
     void delete(View view) {
-        sendData(2);
+        if (validField()){
+            sendData(2);
+        }
     }
 
     void save(View view) {
@@ -158,7 +162,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     }
 
     void sendData(int sensorStatus) {
-        mActivity.showProgress();
+        showProgress();
         writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -243,7 +247,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
 
     @Override
     public void OnDataReceive(String data) {
-        mActivity.dismissProgress();
+        dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {
@@ -261,7 +265,7 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     public void onResume() {
         super.onResume();
         if (sensorName == null) {
-            mActivity.showProgress();
+
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + formDigits(2, inputNumber));
         } else {
             mBinding.phInputNumberEdtIsc.setText(inputNumber);
@@ -272,7 +276,6 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
     }
 
     void handleResponce(String[] splitData) {
-        mActivity.dismissProgress();
         if (splitData[1].equals("04")) {
             if (splitData[0].equals(READ_PACKET)) {
                 if (splitData[2].equals(RES_SUCCESS)) {

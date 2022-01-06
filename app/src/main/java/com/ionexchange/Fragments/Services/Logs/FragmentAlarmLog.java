@@ -91,6 +91,9 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
                         alarmLogEntityList = alarmLogDao.getDateWise(mBinding.edtFormDate.getText().toString(), mBinding.edtToDate.getText().toString());
                     }
                     setAdapter(alarmLogEntityList);
+                } else if (!mBinding.alertsType.getText().toString().isEmpty()){
+                    alarmLogEntityList = alarmLogDao.getTypeWise(mBinding.alertsType.getText().toString());
+                    setAdapter(alarmLogEntityList);
                 }
 
             }

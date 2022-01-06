@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Configuration.GeneralConfig;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_GENERAL;
@@ -50,7 +52,7 @@ import com.ionexchange.databinding.FragmentCommonsettingsBinding;
 import org.jetbrains.annotations.NotNull;
 
 //created by Silambu
-public class FragmentCommonSettings_Config extends Fragment implements DataReceiveCallback {
+public class FragmentSiteSettings_Config extends Fragment implements DataReceiveCallback {
     FragmentCommonsettingsBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;
@@ -70,13 +72,13 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
         mActivity = (BaseActivity) getActivity();
-
         mBinding.saveLayoutCommonSettings.setOnClickListener(this::onCLick);
         mBinding.saveFabCommonSettings.setOnClickListener(this::onCLick);
     }
 
     private void onCLick(View view) {
         if (validateFields()) {
+            showProgress();
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
                     CONN_TYPE + SPILT_CHAR +
                     WRITE_PACKET + SPILT_CHAR +
@@ -221,13 +223,12 @@ public class FragmentCommonSettings_Config extends Fragment implements DataRecei
     }
 
     private void readData() {
-        mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_GENERAL);
     }
 
     @Override
     public void OnDataReceive(String data) {
-        mActivity.dismissProgress();
+        dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(), "Failed to connect");
         } else if (data.equals("pckError")) {

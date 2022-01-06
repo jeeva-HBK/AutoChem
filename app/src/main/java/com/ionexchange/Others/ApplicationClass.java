@@ -141,8 +141,9 @@ public class ApplicationClass extends Application {
             digitalSensorArr = {"34", "35", "36", "37", "38", "39", "40", "41"},
             tankArr = {"42", "43", "44", "45", "46", "47", "48", "49"},
             sensorsViArr = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49"},
-            interlockChannel = {"Digital Input - 1", "Digital Input - 2", "Digital Input - 3", "Digital Input - 4", "Digital Input - 5", "Digital Input - 6", "Digital Input - 7", "Digital Input - 8", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4", "Tank Level - 5", "Tank Level - 6", "Tank Level - 7", "Tank Level - 8"},
-            functionMode,
+            interlockChannel = {"None", "Digital Input - 1", "Digital Input - 2", "Digital Input - 3", "Digital Input - 4", "Digital Input - 5", "Digital Input - 6", "Digital Input - 7", "Digital Input - 8", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4", "Tank Level - 5", "Tank Level - 6", "Tank Level - 7", "Tank Level - 8"},
+
+    functionMode,
             fMode = {"Disable", "Inhibitor", "sensor", "Analog"},
             modeInhibitor = {"Continuous", "Bleed/Blow Down", "Water Meter/Biocide"},
             modeSensor = {"On/Off", "PID", "Fuzzy"}, modeAnalog = {"Disable", "Probe", "Test", "Pump Status", "Dosing"},
@@ -795,10 +796,10 @@ public class ApplicationClass extends Application {
             List<UsermanagementEntity> entryListUpdate = new ArrayList<>();
             /* 0 - NONE | 1 - BASIC | 2 - INTERMEDIATE | 3 -ADVANCED */
             UsermanagementEntity adminEntityUpdate = new UsermanagementEntity("TU0001", "admin",
-                    3, "12345", "0000000000", "admin", getCurrentDate() + "" + getCurrentTime(), "");
+                    3, "123456", "0000000000", "admin", getCurrentDate() + "" + getCurrentTime(), "");
 
             UsermanagementEntity userEntityUpdate = new UsermanagementEntity("TU0002", "admin",
-                    2, "12345", "0000000000", "admin", getCurrentDate() + "" + getCurrentTime(), "");
+                    2, "123456", "0000000000", "admin", getCurrentDate() + "" + getCurrentTime(), "");
 
             entryListUpdate.add(adminEntityUpdate);
             entryListUpdate.add(userEntityUpdate);

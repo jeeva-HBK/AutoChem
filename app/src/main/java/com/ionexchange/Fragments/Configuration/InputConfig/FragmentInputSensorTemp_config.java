@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.getAdapter;
 import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
@@ -95,17 +97,20 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     }
 
     private void delete(View view) {
-        sendData(2);
+        if (validation()) {
+            showProgress();
+            sendData(2);
+        }
     }
 
     private void save(View view) {
         if (validation()) {
+            showProgress();
             sendData(1);
         }
     }
 
     void sendData(int sensorStatus) {
-        mActivity.showProgress();
         writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -136,7 +141,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
     public void onResume() {
         super.onResume();
         if (sensorName == null) {
-            mActivity.showProgress();
+            showProgress();
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + formDigits(2, inputNumber));
         } else {
             mBinding.tempInputNumberEdtIsc.setText(inputNumber);
@@ -149,7 +154,7 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
 
     @Override
     public void OnDataReceive(String data) {
-        mActivity.dismissProgress();
+        dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {

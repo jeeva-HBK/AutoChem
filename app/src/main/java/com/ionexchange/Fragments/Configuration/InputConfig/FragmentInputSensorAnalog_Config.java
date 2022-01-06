@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.ApplicationClass.analogInputArr;
 import static com.ionexchange.Others.ApplicationClass.analogSequenceNumber;
 import static com.ionexchange.Others.ApplicationClass.analogUnitArr;
@@ -207,7 +209,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
     }
 
     void sendData(int sensorStatus) {
-        mActivity.showProgress();
+        showProgress();
         if ((getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr).equals("2")) ||
                 (getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr).equals("3"))) {
             writePacket = DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
@@ -263,7 +265,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
     public void onResume() {
         super.onResume();
         if (sensorName == null) {
-            mActivity.showProgress();
+            showProgress();
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                     SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + inputNumber);
         } else {
@@ -280,7 +282,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
 
     @Override
     public void OnDataReceive(String data) {
-        mActivity.dismissProgress();
+        dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {
@@ -405,15 +407,6 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
             mAppClass.showSnackBar(getContext(), getString(R.string.sensor_activation_validation));
             return false;
         }
-        /*else if (Float.parseFloat(getDecimalValue(mBinding.analogAlarmLowTie, 2, mBinding.lowAlarmMinValueIsc, 2)) >=
-                Float.parseFloat(getDecimalValue(mBinding.analogHighLowTie, 2, mBinding.highAlarmMinValueIsc, 2))) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.alarm_limit_validation));
-            return false;
-        } else if (Float.parseFloat(getDecimalValue(mBinding.analogMinValueTie, 2, mBinding.analogMinValueIsc, 2)) >=
-                Float.parseFloat(getDecimalValue(mBinding.analogMaxValueTie, 2, mBinding.analogMaxValueIsc, 2))) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.maxmin_validation));
-            return false;
-        }*/
         return true;
     }
 

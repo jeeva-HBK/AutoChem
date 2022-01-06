@@ -313,12 +313,14 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.main_screen_btn:
+                //showProgress();
                 setNewState(mBinding.homeBigCircle, mBinding.homeMain, mBinding.homeSub, mBinding.homeSmallCircle,
                         mBinding.homeText, navGraph, R.id.Dashboard, mNavController);
                 mBinding.view.setVisibility(View.GONE);
                 break;
 
             case R.id.trend_screen_btn:
+                showProgress();
                 setNewState(mBinding.statisticsBigCircle, mBinding.statisticsMain, mBinding.statisticsSub, mBinding.statisticsSmallCircle,
                         mBinding.statisticsText, navGraph, R.id.trend, mNavController);
                 mBinding.view.setVisibility(View.GONE);
@@ -326,6 +328,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.event_logs_screen_btn:
+                showProgress();
                 setNewState(mBinding.supportBigCircle, mBinding.supportMain, mBinding.supportSub, mBinding.supportSmallCircle, mBinding.supportText,
                         navGraph, R.id.event_log, mNavController);
                 mBinding.view.setVisibility(View.GONE);
@@ -455,6 +458,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void moveToConfig() {
+        showProgress();
         SharedPref.write(pref_USERLOGINID, userManagementDao.getUserId(SharedPref.read(pref_USERLOGINNAME, "")));
         SharedPref.write(pref_USERLOGINSTATUS, 1);
         new EventLogDemo("0", "-", "Menu accessed by " + SharedPref.read(pref_USERLOGINNAME, ""),
@@ -475,34 +479,21 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     public void changeToolBarVisibility(int visibility) {
         // mBinding.toolBar.setVisibility(visibility);
     }
-
-    public void changeProgress(int visibility) {
-        mBinding.progressCircular.setVisibility(visibility);
-    }
-
-    public void showProgress() {
-        mBinding.progressCircular.setVisibility(View.VISIBLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+    public static void showProgress() {
+        msBinding.progressCircular.setVisibility(View.VISIBLE);
+        baseActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         canGoBack = false;
     }
 
-    public void dismissProgress() {
-        mBinding.progressCircular.setVisibility(View.GONE);
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        canGoBack = true;
-    }
-
-    public static void msDismissProgress() {
+    public static void dismissProgress() {
         msBinding.progressCircular.setVisibility(View.GONE);
-        // msAppClass.showSnackBar(baseActivity, "Timed out try again !");
         baseActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         canGoBack = true;
     }
 
     @Override
-    public void onBackPressed() {
-    }
+    public void onBackPressed() { }
 
     @Override
     public void onGroupExpand(int pos) {
@@ -528,9 +519,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onChildClick(ExpandableListView expandableListView, View v, int pos, int pos1, long id) {
         expandableListView.getChildAt((pos == 0) ? pos1 + 1 : pos1 + 2).setActivated(true);
-
         switch (pos) {
             case 0:
+                showProgress();
                 switch (pos1) {
                     case 0:
                         if (userType == 3) {
@@ -588,7 +579,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-
     }
 
 

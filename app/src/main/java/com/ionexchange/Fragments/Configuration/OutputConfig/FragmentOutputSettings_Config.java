@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Configuration.OutputConfig;
 
+import static com.ionexchange.Activity.BaseActivity.showProgress;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -146,6 +148,7 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
 
     @Override
     public void onClick(int sensorInputNo) {
+        showProgress();
         Bundle bundle = new Bundle();
         bundle.putInt("sensorInputNo", sensorInputNo);
         mAppClass.navigateToBundle(getActivity(), R.id.action_outputSetting_to_output, bundle);

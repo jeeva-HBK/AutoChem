@@ -57,7 +57,7 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
     List<OutputConfigurationEntity> outputConfigurationEntityList;
     List<OutputKeepAliveEntity> outputKeepAliveEntityList;
     String Hours;
-    BaseActivity baseActivity;
+    BaseActivity mActivity;
     public static boolean canReceive = true;
 
     @Nullable
@@ -73,7 +73,7 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
 
-        baseActivity = (BaseActivity) getActivity();
+        mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.outputConfigurationDao();
         outputKeepAliveDao = db.outputKeepAliveDao();
@@ -135,7 +135,6 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
 
     @Override
     public void OnDataReceive(String data) {
-        baseActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
             //mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
@@ -179,7 +178,7 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
     }
 
     void sendData(int outputNumber, AutoCompleteTextView autoCompleteTextView) {
-        baseActivity.showProgress();
+
         String outputType = getPosition(0, autoCompleteTextView.getText().toString(), outputControl);
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
                 OUTPUT_CONTROL_CONFIG + SPILT_CHAR + formDigits(2, String.valueOf(outputNumber)) + SPILT_CHAR +

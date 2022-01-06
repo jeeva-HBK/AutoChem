@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Configuration.VirtualConfig;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.ApplicationClass.calculationArr;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.getStringValue;
@@ -324,6 +326,7 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
 
     private void save(View view) {
         if (validField()) {
+            showProgress();
             String u_sensor1Type, u_sensor2Type, u_sensor1No, u_sensor2No, u_sensor1Constant,
                     u_sensor2Constant, u_sensor1type = "", u_sensor2type = "";
             if (toString(mBinding.sensor1ViATXT).isEmpty() || toString(mBinding.sensor1ViATXT).equalsIgnoreCase("Constant")) {
@@ -365,8 +368,6 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
                     getPosition(0, toString(mBinding.calculationViEDT), calculationArr) + SPILT_CHAR + toString(0, mBinding.virtualInputValEdt) + SPILT_CHAR + "1";
 
             mAppClass.sendPacket(this, writePacket);
-
-
         }
     }
 
@@ -555,6 +556,7 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
 
     @Override
     public void OnDataReceive(String data) {
+        dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {

@@ -85,7 +85,6 @@ public class FragmentTargetIpSettings_Config extends Fragment implements DataRec
     }
 
     private String formData() {
-        mActivity.showProgress();
         return DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -107,13 +106,12 @@ public class FragmentTargetIpSettings_Config extends Fragment implements DataRec
     }
 
     private void readData() {
-        mActivity.showProgress();
+
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_target_ip);
     }
 
     @Override
     public void OnDataReceive(String data) {
-        mActivity.dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(), "Failed to connect");
         } else if (data.equals("pckError")) {

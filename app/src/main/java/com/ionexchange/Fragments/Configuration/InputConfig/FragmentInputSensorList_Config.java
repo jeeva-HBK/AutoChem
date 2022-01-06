@@ -1,5 +1,6 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.ApplicationClass.analogArr;
 import static com.ionexchange.Others.ApplicationClass.digitalSensorArr;
 import static com.ionexchange.Others.ApplicationClass.flowmeterArr;
@@ -409,6 +410,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
 
     @Override
     public void onClick(String sensorInputNo, String sensorType) {
+        showProgress();
         frameLayout(sensorInputNo, sensorType);
     }
 

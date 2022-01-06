@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Configuration;
 
+import static com.ionexchange.Activity.BaseActivity.showProgress;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Adapters.ExpandableListAdapter;
-import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentCommonSettings_Config;
+import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentSiteSettings_Config;
 import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentPasswordSetting_Config;
 import com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentTargetIpSettings_Config;
 import com.ionexchange.Fragments.Configuration.HomeScreen.FragmentHomeScreen_Config;
@@ -119,8 +121,9 @@ public class FragmentRoot_Config extends Fragment implements ExpandableListView.
     public boolean onChildClick(ExpandableListView expandableListView, View view, int pos, int pos1, long pos2) {
         Log.e("TAG", "onChildClick: " + expandableListView + "|" + view + "|" + pos + "|" + pos1 + "|" + pos2);
         expandableListView.getChildAt((pos == 0) ? pos1 + 1 : pos1 + 2).setActivated(true);
-
+        showProgress();
         switch (pos) {
+
             case 0:
                 switch (pos1) {
                     case 0:
@@ -130,7 +133,7 @@ public class FragmentRoot_Config extends Fragment implements ExpandableListView.
                         cast(new FragmentTargetIpSettings_Config());
                         break;
                     case 2:
-                        cast(new FragmentCommonSettings_Config());
+                        cast(new FragmentSiteSettings_Config());
                         break;
                 }
                 break;

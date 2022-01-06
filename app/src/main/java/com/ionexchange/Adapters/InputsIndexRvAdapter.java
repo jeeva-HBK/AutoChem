@@ -27,8 +27,6 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
     List<InputConfigurationEntity> inputConfigurationEntityList;
     KeepAliveCurrentValueDao keepAliveCurrentValueDao;
 
-
-
     public InputsIndexRvAdapter(InputRvOnClick rvOnClick, List<InputConfigurationEntity>
             inputConfigurationEntityList,KeepAliveCurrentValueDao keepAliveCurrentValueDao) {
         this.rvOnClick = rvOnClick;

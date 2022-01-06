@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Services;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,7 @@ public class FragmentRootServices extends Fragment implements RadioGroup.OnCheck
         mBinding.serviceRadioGroup.setOnCheckedChangeListener(this);
 
         mBinding.serviceLogsRb.performClick();
+        dismissProgress();
     }
 
     @Override

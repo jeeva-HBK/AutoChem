@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Configuration.VirtualConfig;
 
+import static com.ionexchange.Activity.BaseActivity.showProgress;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,6 +71,7 @@ public class FragmentVirtualSensorList_Config extends Fragment implements RvOnCl
 
     @Override
     public void onClick(int sensorInputNo) {
+        showProgress();
         Bundle bundle = new Bundle();
         bundle.putInt("virtualInputNo", sensorInputNo);
         mAppClass.navigateToBundle(getActivity(), R.id.action_virtualSetting_to_virtual, bundle);

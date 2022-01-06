@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.getAdapter;
 import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
@@ -156,7 +158,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
 
     void sendData(int sensorStatus) {
         if (validField()) {
-            mActivity.showProgress();
+            showProgress();
             int typeOfValueRead = 0;
             int typeofValueReadPos = Integer.parseInt(getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeOfValueReadTie), typeOfValueArr)) + 1;
             switch (getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeTie), modBusTypeArr)) {
@@ -221,7 +223,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
     public void onResume() {
         super.onResume();
         if (sensorName == null) {
-            mActivity.showProgress();
+            showProgress();
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + formDigits(2, inputNumber));
         } else {
             mBinding.modBusInputNumberTie.setText(inputNumber);
@@ -260,7 +262,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
 
     @Override
     public void OnDataReceive(String data) {
-        mActivity.dismissProgress();
+        dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {

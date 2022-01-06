@@ -1,6 +1,8 @@
 
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.ApplicationClass.FlowanalogType;
 import static com.ionexchange.Others.ApplicationClass.bleedRelay;
 import static com.ionexchange.Others.ApplicationClass.flowAlarmMode;
@@ -237,24 +239,28 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         switch (Integer.parseInt(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr))) {
             case 0:
                 if (validAnalog()) {
+                    showProgress();
                     sendAnalogPacket(2);
                     packetId = 0;
                 }
                 break;
             case 1:
                 if (validContactor()) {
+                    showProgress();
                     sendContactorPacket(2);
                     packetId = 1;
                 }
                 break;
             case 2:
                 if (validPaddleWheel()) {
+                    showProgress();
                     sendPaddleWheelPacket(2);
                     packetId = 2;
                 }
                 break;
             case 3:
                 if (validation3()) {
+                    showProgress();
                     sendFeedMonitorPacket(2);
                     packetId = 3;
                 }
@@ -266,24 +272,28 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         switch (Integer.parseInt(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr))) {
             case 0:
                 if (validAnalog()) {
+                    showProgress();
                     sendAnalogPacket(1);
                     packetId = 0;
                 }
                 break;
             case 1:
                 if (validContactor()) {
+                    showProgress();
                     sendContactorPacket(1);
                     packetId = 1;
                 }
                 break;
             case 2:
                 if (validPaddleWheel()) {
+                    showProgress();
                     sendPaddleWheelPacket(1);
                     packetId = 2;
                 }
                 break;
             case 3:
                 if (validation3()) {
+                    showProgress();
                     sendFeedMonitorPacket(1);
                     packetId = 3;
                 }
@@ -456,20 +466,6 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
             mAppClass.showSnackBar(getContext(), "K Factor should be 1 to 100000");
             return false;
         }
-//        if(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("3") &&
-//                Integer.parseInt(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) == 0) {
-//            if (isFieldEmpty(mBinding.flowVolumeRateunitDeciIsc)) {
-//                mAppClass.showSnackBar(getContext(), "Volume decimal values should be greater then 001");
-//                return false;
-//            } else if (Integer.parseInt(mBinding.flowVolumeRateunitDeciIsc.getText().toString()) == 0) {
-//                mAppClass.showSnackBar(getContext(), "Volume decimal values should be greater then 001");
-//                return false;
-//            }
-//        }else if(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("3") &&
-//                (Integer.parseInt(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) > 1000)){
-//            mAppClass.showSnackBar(getContext(), "Volume values should be less than 1000");
-//            return false;
-//        }
         return true;
     }
 
@@ -615,7 +611,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     }
 
     private void sendFeedMonitorPacket(int sensorStatus) {
-        mActivity.showProgress();
+
         writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -645,7 +641,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     }
 
     private void sendPaddleWheelPacket(int sensorStatus) {
-        mActivity.showProgress();
+
         writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -670,7 +666,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     }
 
     private void sendContactorPacket(int sensorStatus) {
-        mActivity.showProgress();
+
         writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -694,7 +690,6 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
     }
 
     private void sendAnalogPacket(int sensorStatus) {
-        mActivity.showProgress();
         writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -753,7 +748,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
         super.onResume();
         mBinding.setFlowMeterType(Integer.toString(flowmeterType));
         if (sensorName == null) {
-            mActivity.showProgress();
+            showProgress();
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + formDigits(2, inputNumber));
         } else {
             mBinding.flowInputNumberEdtIsc.setText(inputNumber);
@@ -768,7 +763,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
 
     @Override
     public void OnDataReceive(String data) {
-        mActivity.dismissProgress();
+        dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {

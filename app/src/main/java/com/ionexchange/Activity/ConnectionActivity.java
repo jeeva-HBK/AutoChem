@@ -2,12 +2,7 @@ package com.ionexchange.Activity;
 
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.triggerWebService;
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEFAULT_CONFIG;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Singleton.SharedPref.pref_MACADDRESS;
 
 import android.Manifest;
@@ -24,6 +19,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +44,6 @@ import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.ItemClickListener;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
-import com.ionexchange.Singleton.ApiService;
 import com.ionexchange.Singleton.KeepAlive;
 import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.ActivityConnectionBinding;
@@ -217,7 +212,6 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
                                     updateRV(deviceList);
                                 }
                             }
-                            // mActivity.dismissProgress();
                             mBinding.txtConnect.setText("Rescan");
                         }
                     });
@@ -327,9 +321,9 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
 
     @Override
     public void OnItemClick(int pos) {
+        mBinding.connectionProgress.setVisibility(View.VISIBLE);
         stopScan();
         mBinding.txtConnect.setText("Connecting");
-        // mActivity.showProgress();
         BluetoothHelper helper = BluetoothHelper.getInstance(this);
         helper.disConnect();
         mBleDevice = scannedDevices.get(pos);
@@ -347,22 +341,28 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
                         @Override
                         public void OnConnectFailed(Exception e) {
                             e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     stopScan();
                                     mBinding.txtConnect.setText("Rescan");
+                                    mBinding.connectionProgress.setVisibility(View.GONE);
+                                    Toast.makeText(getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
                                     Log.e(TAG, "OnConnectSuccess: Failed");
                                 }
                             });
                         }
                     });
-                } catch (
-                        Exception e) {
+                } catch (Exception e) {
                     stopScan();
                     mBinding.txtConnect.setText("Rescan");
                     e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mBinding.connectionProgress.setVisibility(View.GONE);
+                        }
+                    });
                 }
             }
         });
@@ -370,7 +370,6 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
 
     private void startApp(String macAddress) {
         SharedPref.write(pref_MACADDRESS, macAddress);
-        startActivity(new Intent(this, BaseActivity.class));
         triggerWebService.set(true);
         runOnUiThread(new Runnable() {
             @Override
@@ -378,6 +377,7 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
                 KeepAlive.getInstance().collectTrendData();
             }
         });
+        startActivity(new Intent(this, BaseActivity.class));
         triggerWebService.set(true);
     }
 

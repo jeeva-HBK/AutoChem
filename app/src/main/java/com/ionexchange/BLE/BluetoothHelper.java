@@ -1,6 +1,7 @@
 package com.ionexchange.BLE;
 
-import static com.ionexchange.Activity.BaseActivity.msDismissProgress;
+
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
 import static com.ionexchange.Others.ApplicationClass.bleConnected;
 import static com.ionexchange.Others.ApplicationClass.lastKeepAliveData;
 import static com.ionexchange.Others.PacketControl.ENDPACKET;
@@ -310,10 +311,12 @@ public class BluetoothHelper implements SerialListener {
             @Override
             public void run() {
                 if (!dataReceived) {
-                    msDismissProgress();
+                    // dismissProgress();
+                    callback.OnDataReceive("Timeout");
+                    Log.e(TAG, "Config <-- TimeOut");
                 }
             }
-        }, 7000);
+        }, 10000);
     }
 
     public DataReceiveCallback getDataCallback() {

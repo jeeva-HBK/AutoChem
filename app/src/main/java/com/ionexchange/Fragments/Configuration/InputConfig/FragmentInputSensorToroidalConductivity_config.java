@@ -1,5 +1,34 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Activity.BaseActivity.showProgress;
+import static com.ionexchange.Others.ApplicationClass.TemperatureCompensationType;
+import static com.ionexchange.Others.ApplicationClass.getAdapter;
+import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
+import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
+import static com.ionexchange.Others.ApplicationClass.getStringValue;
+import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
+import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
+import static com.ionexchange.Others.ApplicationClass.mainConfigurationDao;
+import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
+import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
+import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
+import static com.ionexchange.Others.ApplicationClass.toStringValue;
+import static com.ionexchange.Others.ApplicationClass.unitArr;
+import static com.ionexchange.Others.ApplicationClass.userType;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
+import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.ENDPACKET;
+import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.READ_PACKET;
+import static com.ionexchange.Others.PacketControl.RES_FAILED;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.STARTPACKET;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,34 +57,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.ionexchange.Others.ApplicationClass.TemperatureCompensationType;
-import static com.ionexchange.Others.ApplicationClass.getAdapter;
-import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
-import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
-import static com.ionexchange.Others.ApplicationClass.getStringValue;
-import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
-import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
-import static com.ionexchange.Others.ApplicationClass.mainConfigurationDao;
-import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.sensorSequenceNumber;
-import static com.ionexchange.Others.ApplicationClass.tempLinkedArr;
-import static com.ionexchange.Others.ApplicationClass.toStringValue;
-import static com.ionexchange.Others.ApplicationClass.unitArr;
-import static com.ionexchange.Others.ApplicationClass.userType;
-import static com.ionexchange.Others.PacketControl.CONN_TYPE;
-import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.ENDPACKET;
-import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
-import static com.ionexchange.Others.PacketControl.READ_PACKET;
-import static com.ionexchange.Others.PacketControl.RES_FAILED;
-import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
-import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
-import static com.ionexchange.Others.PacketControl.STARTPACKET;
-import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
-import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
 public class FragmentInputSensorToroidalConductivity_config extends Fragment implements DataReceiveCallback {
     private static final String TAG = "FragmentInputSensorCond";
@@ -109,15 +110,19 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     }
 
     private void delete(View view) {
-        if (getPositionFromAtxt(1, getStringValue(mBinding.candCompensationAtxtIsc), TemperatureCompensationType).equals("0")) {
-            sendDataLinearTemperature(2);
-        } else {
-            sendStandardNaClTemperature(2);
+        if (validation()) {
+            showProgress();
+            if (getPositionFromAtxt(1, getStringValue(mBinding.candCompensationAtxtIsc), TemperatureCompensationType).equals("0")) {
+                sendDataLinearTemperature(2);
+            } else {
+                sendStandardNaClTemperature(2);
+            }
         }
     }
 
     private void save(View view) {
         if (validation()) {
+            showProgress();
             if (getPositionFromAtxt(1, getStringValue(mBinding.candCompensationAtxtIsc), TemperatureCompensationType).equals("0")) {
                 sendDataLinearTemperature(1);
             } else {
@@ -127,7 +132,6 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     }
 
     void sendDataLinearTemperature(int sensorStatus) {
-        mActivity.showProgress();
         writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -152,7 +156,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     }
 
     void sendStandardNaClTemperature(int sensorStatus) {
-        mActivity.showProgress();
+
         writePacket = DEVICE_PASSWORD + SPILT_CHAR +
                 CONN_TYPE + SPILT_CHAR +
                 WRITE_PACKET + SPILT_CHAR +
@@ -189,7 +193,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     public void onResume() {
         super.onResume();
         if (sensorName == null) {
-            mActivity.showProgress();
+            showProgress();
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR + "04");
         } else {
             mBinding.candInputNumberEdtIsc.setText(inputNumber);
@@ -201,7 +205,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
 
     @Override
     public void OnDataReceive(String data) {
-        mActivity.dismissProgress();
+        dismissProgress();
         if (data.equals("FailedToConnect")) {
             mAppClass.showSnackBar(getContext(),  getString(R.string.connection_failed));
         } else if (data.equals("pckError")) {
@@ -216,7 +220,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
     }
 
     private void handleResponse(String[] spiltData) {
-        mActivity.dismissProgress();
+
         if (spiltData[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
             if (spiltData[0].equals(READ_PACKET)) {
                 if (spiltData[2].equals(RES_SUCCESS)) {

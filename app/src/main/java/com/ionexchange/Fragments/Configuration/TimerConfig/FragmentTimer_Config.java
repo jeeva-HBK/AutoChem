@@ -59,6 +59,7 @@ public class FragmentTimer_Config extends Fragment implements RvOnClick {
 
     @Override
     public void onClick(String sensorInputNo) {
+
         switch (sensorInputNo) {
             case "0":
                 mAppClass.navigateToBundle(getActivity(), R.id.action_TimerSetting_to_Timer, putBundle("00", "01", "02", "03", "0"));

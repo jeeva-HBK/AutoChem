@@ -344,7 +344,9 @@ public class ApiService implements DataReceiveCallback {
                             int seqNo = Integer.parseInt(jsonObject.getString("SEQUENCE_NO"));
                             String unit = jsonObject.getString("UNIT");
                             int type = Integer.parseInt(jsonObject.getString("TYPE"));
-
+                            if (unit.equals("null")) {
+                                unit = "N/A";
+                            }
                             String sensorType = "SENSOR";
                             String sequenceName = "";
                             int flagValue = 0;
@@ -357,6 +359,7 @@ public class ApiService implements DataReceiveCallback {
                                 sensorType = "SENSOR";
                                 sequenceName = "ORP";
                                 flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                                unit = "mV";
                             } else if (hardWareNo == 3) {
                                 sensorType = "SENSOR";
                                 sequenceName = "Contacting Conductivity";
@@ -373,6 +376,7 @@ public class ApiService implements DataReceiveCallback {
                                 sensorType = "SENSOR";
                                 sequenceName = "Temperature -" + seqNo;
                                 flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                                unit = "°C";
                             } else if (hardWareNo < 25) {
                                 sensorType = "Analog";
                                 sequenceName = seqNo < 6 ? sensorType + " - " + seqNo + "(4-20mA)" : sensorType + " - " + seqNo + "(0-10mA)";

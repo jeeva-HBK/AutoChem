@@ -76,6 +76,9 @@ public class FragmentEventLog extends Fragment {
                         eventLogEntityList = eventLogDao.getDateWise(mBinding.edtFormDate.getText().toString(), mBinding.edtToDate.getText().toString());
                     }
                     setAdapter(eventLogEntityList);
+                } else if (!mBinding.alertsType.getText().toString().isEmpty()){
+                    eventLogEntityList = eventLogDao.getTypeWise(mBinding.alertsType.getText().toString());
+                    setAdapter(eventLogEntityList);
                 }
             }
         });

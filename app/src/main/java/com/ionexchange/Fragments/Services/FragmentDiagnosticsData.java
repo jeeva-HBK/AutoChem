@@ -1,5 +1,6 @@
 package com.ionexchange.Fragments.Services;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_DIAGNOSTIC;
@@ -51,7 +52,7 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     WaterTreatmentDb dB;
     InputConfigurationDao inputDao;
     List<DiagnosticDataEntity> diagnosticDataEntityList;
-    BaseActivity baseActivity;
+    BaseActivity mActivity;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -64,7 +65,7 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        baseActivity = (BaseActivity) getActivity();
+        mActivity = (BaseActivity) getActivity();
         mAppClass = (ApplicationClass) getActivity().getApplication();
         diagnosticDataEntityList = new ArrayList<>();
         dB = WaterTreatmentDb.getDatabase(getContext());
@@ -81,7 +82,7 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
         });
         setAdapter(diagnosticDataEntityList);
         mBinding.refresh.setOnClickListener(View -> {
-            baseActivity.showProgress();
+
             sendPacket("0");
             //setAdapter(diagnosticDataEntityList);
 
@@ -91,7 +92,7 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     @Override
     public void onResume() {
         super.onResume();
-        baseActivity.showProgress();
+
         sendPacket("0");
     }
 
@@ -119,12 +120,11 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
     @Override
     public void OnDataReceive(String data) {
         if (data.equals("FailedToConnect")) {
-            baseActivity.dismissProgress();
+
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("pckError") || data.equals("sendCatch")) {
-        //     baseActivity.dismissProgress();
         } else if (data.equals("Timeout")) {
-            baseActivity.dismissProgress();
+
             mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
         } else if (data != null) {
             handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
@@ -184,14 +184,14 @@ public class FragmentDiagnosticsData extends Fragment implements DataReceiveCall
                             sendPacket("5");
                             break;
                         case "5":
-                            baseActivity.dismissProgress();
+                            dismissProgress();
                             break;
                     }
                     setAdapter(dao.getDiagnosticDataList());
                 }
             }
         } else {
-            baseActivity.dismissProgress();
+
             Log.e(TAG, "handleResponse: Received Wrong Pck");
         }
     }

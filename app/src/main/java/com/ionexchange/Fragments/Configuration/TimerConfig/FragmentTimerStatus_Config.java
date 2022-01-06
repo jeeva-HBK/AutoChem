@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Configuration.TimerConfig;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+
 import static com.ionexchange.Others.ApplicationClass.accessoryTimerMode;
 import static com.ionexchange.Others.ApplicationClass.accessoryType;
 import static com.ionexchange.Others.ApplicationClass.bleedRelay;
@@ -230,7 +232,6 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
     @Override
     public void onResume() {
         super.onResume();
-        mActivity.showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                 SPILT_CHAR + READ_PACKET + SPILT_CHAR +
                 PCK_TIMER_CONFIG + SPILT_CHAR + timerNo);
@@ -776,7 +777,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
 
     @Override
     public void OnDataReceive(String data) {
-        mActivity.dismissProgress();
+        dismissProgress();
         if (data.equals("FailedToConnect") || data.equals("pckError") || data.equals("sendCatch")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("Timeout")) {
@@ -1059,14 +1060,14 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
     }
 
     void weeklyScheduleReadPacket(String week) {
-        mActivity.showProgress();
+
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                 SPILT_CHAR + READ_PACKET + SPILT_CHAR +
                 PCK_WEEKLY_CONFIG + SPILT_CHAR + timerNo + SPILT_CHAR + week);
     }
 
     void writeTimerConfiguration() {
-        mActivity.showProgress();
+
         try {
             accessoryTime = DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                     SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
@@ -1099,6 +1100,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
                     + SPILT_CHAR + accessoryTimer[30]
                     + SPILT_CHAR + accessoryTimer[31]
                     + SPILT_CHAR + "1" + timerOne[5] + "2" + timerTwo[5] + "3" + timerThree[5] + "4" + timerFour[5];
+
             mAppClass.sendPacket(this, accessoryTime);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1107,7 +1109,7 @@ public class FragmentTimerStatus_Config extends Fragment implements DataReceiveC
     }
 
     void writeWeeklySchedule(String week, String[] weekType, int loop) {
-        mActivity.showProgress();
+
         weeklyPacket = DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                 SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                 PCK_WEEKLY_CONFIG + SPILT_CHAR + timerNo

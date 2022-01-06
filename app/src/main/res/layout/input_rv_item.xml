@@ -4,7 +4,7 @@
     android:id="@+id/rv_view"
     android:layout_width="match_parent"
     android:layout_height="135dp"
-    android:layout_margin="1dp"
+    android:layout_margin="2dp"
     android:background="@drawable/blue_box">
 
     <!--Number-->

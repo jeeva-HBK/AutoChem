@@ -1,5 +1,6 @@
 package com.ionexchange.Fragments.Trend;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.getAdapter;
 import static com.ionexchange.Others.ApplicationClass.getCurrentDate;
@@ -180,7 +181,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
                 }
             }
         });
-
+        dismissProgress();
     }
 
     private void setAdapter() {

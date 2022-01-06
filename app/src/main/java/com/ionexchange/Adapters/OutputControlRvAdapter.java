@@ -70,8 +70,8 @@ public class OutputControlRvAdapter extends RecyclerView.Adapter<OutputControlRv
             }
         }
 
-        holder.outputName.setText(outputConfigurationEntityList.get(position).getOutputType()
-                + "-" + outputConfigurationEntityList.get(position).getOutputLabel());
+        holder.outputName.setText(outputConfigurationEntityList.get(position).getOutputType());
+
         String outputmode = "";
         switch (outputConfigurationEntityList.get(position).getOutputStatus()){
             case "Continuous":
