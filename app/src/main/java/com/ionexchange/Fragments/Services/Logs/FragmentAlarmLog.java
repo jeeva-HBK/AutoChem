@@ -31,7 +31,6 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.ionexchange.Adapters.AlarmLogRvAdapter;
 import com.ionexchange.Database.Dao.AlarmLogDao;
-import com.ionexchange.Database.Dao.ServicesNotificationDao;
 import com.ionexchange.Database.Entity.AlarmLogEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.BtnOnClick;
@@ -40,9 +39,7 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentAlarmLogBinding;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 
@@ -53,7 +50,7 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
     AlarmLogDao alarmLogDao;
     ApplicationClass mAppClass;
     List<AlarmLogEntity> alarmLogEntityList;
-    ServicesNotificationDao servicesNotificationDao;
+
 
     @Nullable
     @Override
@@ -68,7 +65,6 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
         super.onViewCreated(view, savedInstanceState);
         mAppClass = ApplicationClass.getInstance();
         waterTreatmentDb = WaterTreatmentDb.getDatabase(getContext());
-        servicesNotificationDao = waterTreatmentDb.servicesNotificationDao();
         alarmLogDao = waterTreatmentDb.alarmLogDao();
         alarmLogEntityList = alarmLogDao.getAlarmLogList();
 

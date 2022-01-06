@@ -192,6 +192,9 @@ public class ApplicationClass extends Application {
     public static UserManagementDao userManagementDao;
     public static KeepAliveCurrentValueDao keepaliveDAO;
     public static MainConfigurationDao mainConfigurationDao;
+    public static DefaultLayoutConfigurationDao defaultLayoutConfigurationDao;
+    KeepAliveCurrentValueDao keepAliveDao;
+    OutputKeepAliveDao outputKeepAliveDao;
 
     // WebService
     private static final int httpRequestTimeout = 10000;
@@ -241,7 +244,7 @@ public class ApplicationClass extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        init();
+        initDatabase();
         triggerWebService.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
@@ -609,11 +612,9 @@ public class ApplicationClass extends Application {
         return new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, strArr);
     }
 
-    private void init() {
+    public void initDatabase() {
         mContext = getApplicationContext();
         DB = WaterTreatmentDb.getDatabase(getApplicationContext());
-
-        keepaliveDAO = DB.keepAliveCurrentValueDao();
 
         /*Input_DB*/
         inputDAO = DB.inputConfigurationDao();
@@ -792,9 +793,10 @@ public class ApplicationClass extends Application {
         userManagementDao = DB.userManagementDao();
         if (userManagementDao.getUsermanagementEntity().isEmpty()) {
             List<UsermanagementEntity> entryListUpdate = new ArrayList<>();
-            /* 0 - NONE | 1 - BASIC | 2 - INTERMEDIATE | 3 -ADVANCED   */
+            /* 0 - NONE | 1 - BASIC | 2 - INTERMEDIATE | 3 -ADVANCED */
             UsermanagementEntity adminEntityUpdate = new UsermanagementEntity("TU0001", "admin",
                     3, "12345", "0000000000", "admin", getCurrentDate() + "" + getCurrentTime(), "");
+
             UsermanagementEntity userEntityUpdate = new UsermanagementEntity("TU0002", "admin",
                     2, "12345", "0000000000", "admin", getCurrentDate() + "" + getCurrentTime(), "");
 
@@ -804,8 +806,6 @@ public class ApplicationClass extends Application {
         }
 
         /*DefaultLayout Configuration*/
-        DefaultLayoutConfigurationDao defaultLayoutConfigurationDao;
-        DB = WaterTreatmentDb.getDatabase(getApplicationContext());
         defaultLayoutConfigurationDao = DB.defaultLayoutConfigurationDao();
         if (defaultLayoutConfigurationDao.getDefaultLayoutConfigurationEntityList().isEmpty()) {
             for (int i = 1; i < 6; i++) {
@@ -818,7 +818,7 @@ public class ApplicationClass extends Application {
             defaultLayoutConfigurationDao.update(1, 1);
         }
 
-        /*Set Default Layout_DB*/
+        /*Default Layout*/
         mainConfigurationDao = DB.mainConfigurationDao();
         if (mainConfigurationDao.getMainConfigurationEntityList().isEmpty()) {
             MainConfigurationEntity entityUpdate = new MainConfigurationEntity(
@@ -829,12 +829,9 @@ public class ApplicationClass extends Application {
             updateMainDB(mainEntryList);
         }
 
-        /* Input KeepAlive*/
-        KeepAliveCurrentValueDao dao;
-        OutputKeepAliveDao outputKeepAliveDao;
-        DB = WaterTreatmentDb.getDatabase(getApplicationContext());
-        dao = DB.keepAliveCurrentValueDao();
-        if (dao.getKeepAliveList().isEmpty()) {
+        /*KeepAlive*/
+        keepAliveDao = DB.keepAliveCurrentValueDao();
+        if (keepAliveDao.getKeepAliveList().isEmpty()) {
             for (int i = 1; i <= 57; i++) {
                 KeepAliveCurrentEntity keepAliveCurrentEntity =
                         new KeepAliveCurrentEntity(i, "N/A");
@@ -843,6 +840,7 @@ public class ApplicationClass extends Application {
                 insertKeepAliveDb(entryListUpdate);
             }
         }
+
         /* Output KeepAlive*/
         outputKeepAliveDao = DB.outputKeepAliveDao();
         if (outputKeepAliveDao.getOutputList().isEmpty()) {
@@ -856,6 +854,18 @@ public class ApplicationClass extends Application {
         }
     }
 
+    public boolean factoryRest() {
+        if (DB != null) {
+            inputDAO.deleteInputDao();
+            outputDAO.deleteOutputDao();
+            virtualDAO.deleteVirtualDao();
+            timerDAO.deleteTimerDao();
+            initDatabase();
+        } else {
+         return false;
+        }
+        return true;
+    }
 
     public static String getCurrentDate() {
         Format f = new SimpleDateFormat("dd/MM/yyyy");

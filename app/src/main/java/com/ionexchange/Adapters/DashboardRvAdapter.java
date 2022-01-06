@@ -1,6 +1,5 @@
 package com.ionexchange.Adapters;
 
-import static com.ionexchange.Others.ApplicationClass.inputDAO;
 import static com.ionexchange.Others.ApplicationClass.keepaliveDAO;
 import static com.ionexchange.Others.ApplicationClass.outputControlShortForm;
 
@@ -39,7 +38,6 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
     InputConfigurationDao inputConfigurationDao;
     VirtualConfigurationDao virtualConfigurationDao;
     OutputConfigurationDao outputConfigurationDao;
-
 
     public DashboardRvAdapter(int layout, List<MainConfigurationEntity> mainConfigurationEntityList, RvOnClick rvOnClick) {
         this.layout = layout;
@@ -81,8 +79,6 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull DashboardRvAdapter.itemHolder holder, int position) {
-
-
         ConstraintLayout.LayoutParams constraintLayoutParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         switch (layout) {
             case 1:
@@ -97,7 +93,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 holder.lowKeyOne.setTextSize(20);
                 holder.highKeyOne.setTextSize(20);
                 defaultLayout(holder.labeLOne, holder.sensorLabelOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne,
-                        holder.currentValueOne, holder.unitOne, holder.typeOne, holder.currentKeyOne, holder.lowKeyOne, holder.highKeyOne, position, 1);
+                        holder.currentValueOne, holder.unitOne, holder.typeOne, holder.currentKeyOne, holder.lowKeyOne, holder.highKeyOne, position, 1, holder.currentKeyOne);
                 break;
 
             case 2:
@@ -111,7 +107,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 holder.highKeyOne.setTextSize(20);
                 defaultLayout(holder.labeLOne, holder.sensorLabelOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne,
                         holder.currentValueOne, holder.unitOne, holder.typeOne, holder.currentKeyOne,
-                        holder.lowKeyOne, holder.highKeyOne, position, 2);
+                        holder.lowKeyOne, holder.highKeyOne, position, 2, holder.currentKeyOne);
                 break;
 
             case 3:
@@ -129,18 +125,20 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 holder.lowKeyOne.setTextSize(20);
                 holder.highKeyOne.setTextSize(20);
                 defaultLayout(holder.labeLOne, holder.sensorLabelOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne,
-                        holder.currentValueOne, holder.unitOne, holder.typeOne, holder.currentKeyOne, holder.lowKeyOne, holder.highKeyOne, position, 5);
+                        holder.currentValueOne, holder.unitOne, holder.typeOne,
+                        holder.currentKeyOne, holder.lowKeyOne, holder.highKeyOne, position, 5, holder.currentKeyOne);
                 break;
 
             case 6:
                 defaultLayout(holder.labeLOne, holder.sensorLabelOne, holder.hardwareNoOne, holder.lowAlarmOne, holder.highAlarmOne,
-                        holder.currentValueOne, holder.unitOne, holder.typeOne, holder.currentKeyOne, holder.lowKeyOne, holder.highKeyOne, position, 6);
+                        holder.currentValueOne, holder.unitOne, holder.typeOne, holder.currentKeyOne,
+                        holder.lowKeyOne, holder.highKeyOne, position, 6, holder.currentKeyOne);
                 break;
         }
     }
 
     void defaultLayout(TextView seq, TextView label, TextView hardwareNoOne, TextView lowAlarmOne, TextView highAlarmOne,
-                       TextView currentValue, TextView unitOne, TextView typeOne, TextView currentMode, TextView lowKey, TextView highKey, int position, int layout) {
+                       TextView currentValue, TextView unitOne, TextView typeOne, TextView currentMode, TextView lowKey, TextView highKey, int position, int layout, TextView currentKey) {
 
         if (mainConfigurationEntityList.get(position).inputType != null) {
             if (mainConfigurationEntityList.get(position).inputType.toUpperCase().contains("OUTPUT")) {
@@ -292,11 +290,8 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 highKey.setVisibility(View.VISIBLE);
                 lowAlarmOne.setVisibility(View.VISIBLE);
                 highAlarmOne.setVisibility(View.VISIBLE);
+
                 if (mainConfigurationEntityList.get(position).inputType.contains("Digital Input")) {
-                    /*lowKey.setText("Open\nMessage");
-                    highKey.setText("Close\nMessage");
-                    lowKey.setGravity(Gravity.CENTER);
-                    highKey.setGravity(Gravity.CENTER);*/
                     lowKey.setVisibility(View.INVISIBLE);
                     highKey.setVisibility(View.INVISIBLE);
                     lowAlarmOne.setVisibility(View.INVISIBLE);
@@ -366,6 +361,14 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 }
             }
         }
+
+        if (mainConfigurationEntityList.get(position).inputType.contains("Flow/Water Meter")) {
+            typeOne.setText("Pulse: " + keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
+            currentKey.setText("Totalized Volume");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                typeOne.setTooltipText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
+            }
+        }
     }
 
     void changedLayout(TextView seqOne, TextView hardwareNoOne, TextView lowAlarmOne, TextView highAlarmOne,
@@ -377,7 +380,6 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                        TextView sensorLabelThree, TextView uniThree, TextView typeThree,
                        TextView lowKeyOne, TextView lowKeyTwo, TextView lowKeyThree, TextView highKeyOne, TextView highKeyTwo, TextView highKeyThree,
                        TextView currentKeyOne, TextView currentKeyTwo, TextView currentKeyThree) {
-
 
         if (mainConfigurationEntityList.get(0).inputType.toUpperCase().contains("OUTPUT")) {
             setthreefourthLayoutOutput(lowKeyOne,lowAlarmOne,
@@ -467,10 +469,6 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
         type.setVisibility(View.VISIBLE);
         hardwareNo.setText(mainConfigurationEntityList.get(position).hardware_no + "");
         if (mainConfigurationEntityList.get(position).inputType.contains("Digital Input")) {
-                    /*lowKey.setText("Open\nMessage");
-                    highKey.setText("Close\nMessage");
-                    lowKey.setGravity(Gravity.CENTER);
-                    highKey.setGravity(Gravity.CENTER);*/
             lowKey.setVisibility(View.INVISIBLE);
             highKey.setVisibility(View.INVISIBLE);
             lowAlarm.setVisibility(View.INVISIBLE);
@@ -505,10 +503,15 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             highAlarm.setText(inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(position).hardware_no)));
         }
 
-           /* if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(0).hardware_no) != null) {
-                currentValueOne.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(0).hardware_no));
-            }*/
         setDigitalInput(currentValue, position);
+        if (mainConfigurationEntityList.get(position).inputType.contains("Flow/Water Meter")) {
+            type.setText("Pulse: " + keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
+            currentKey.setText("Totalized Volume");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                type.setTooltipText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
+            }
+        }
+
     }
 
 
@@ -651,6 +654,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
         if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no) != null) {
             currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
         }
+
     }
     private void setthreefourthLayoutOutput(TextView lowKey,TextView lowAlarm,TextView sensorLabel, TextView highAlarm,
                                             int position, TextView currentValue,TextView seqType,
@@ -697,6 +701,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 }
             }
         }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (outputLabel != null && !outputLabel.isEmpty()) {
                 sensorLabel.setTooltipText(outputLabel);
@@ -734,5 +739,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     break;
             }
         }
+
+
     }
 }

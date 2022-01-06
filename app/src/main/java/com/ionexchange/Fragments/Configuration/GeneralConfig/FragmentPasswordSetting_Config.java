@@ -96,16 +96,19 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
             public void OnDataReceive(String data) {
                 if (mAppclass.isValidPck(WRITE_PACKET, data, getContext())) {
                     if (data.split("\\*")[1].split("\\$")[2].equals("0")) {
+                        if (mAppclass.factoryRest()) {
+                            mAppclass.showSnackBar(getContext(), "Factory Reset Success");
+                        } else {
+                            mAppclass.showSnackBar(getContext(), "Factory Reset Failed, try again later");
+                        }
                         dialog.dismiss();
-                        mAppclass.showSnackBar(getContext(), "Factory Reset Success");
-
                     } else {
                         dialog.dismiss();
-                        mAppclass.showSnackBar(getContext(), "Factory Reset Failed");
+                        mAppclass.showSnackBar(getContext(), "Factory Reset Failed, try again later");
                     }
                 } else {
                     dialog.dismiss();
-                    mAppclass.showSnackBar(getContext(), "Factory Reset Failed");
+                    mAppclass.showSnackBar(getContext(), "Factory Reset Failed, try again later");
 
                 }
             }

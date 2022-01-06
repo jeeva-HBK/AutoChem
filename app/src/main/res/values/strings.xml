@@ -171,4 +171,6 @@
     <string name="output_link_validation">Output Relay Link cannot be Empty</string>
     <string name="analogtype_validation">Analog Type cannot be Empty</string>
     <string name="maxmin_validation">Max Value Should be Greater Than Min Value</string>
+
+    <string name="rateunit_valida">Rate Unit should be 1 to 100000</string>
 </resources>

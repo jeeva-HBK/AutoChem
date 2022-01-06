@@ -45,6 +45,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
@@ -55,8 +56,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.ionexchange.Adapters.ExpandableListAdapter;
 import com.ionexchange.Database.Dao.AlarmLogDao;
-import com.ionexchange.Database.Dao.ServicesNotificationDao;
 import com.ionexchange.Database.Dao.UserManagementDao;
+import com.ionexchange.Database.Entity.AlarmLogEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Others.AdminReceiver;
 import com.ionexchange.Others.ApplicationClass;
@@ -93,7 +94,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     Handler handler;
     WaterTreatmentDb db;
     UserManagementDao userManagementDao;
-    ServicesNotificationDao servicesNotificationDao;
     static ActivityBaseBinding msBinding;
     static Context msContext;
     static BaseActivity baseActivity;
@@ -138,17 +138,21 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         setNavigation(R.navigation.navigation, R.id.Dashboard);
 
         inactiveHandler();
-
-        if (alarmLogDao.getLockAlarmSize("Lockout Alarm", "1").size() == 0) {
-            mBinding.notficationTxt.setVisibility(View.INVISIBLE);
-            mBinding.notficationView.setVisibility(View.INVISIBLE);
-        } else {
-            mBinding.notficationTxt.setVisibility(View.VISIBLE);
-            mBinding.notficationView.setVisibility(View.VISIBLE);
-            mBinding.notficationTxt.setText(alarmLogDao.getLockAlarmSize("Lockout Alarm", "1").size() + "");
-        }
-
-        // mBinding.notficationTxt.setText();
+        mBinding.notficationTxt.setVisibility(View.INVISIBLE);
+        mBinding.notficationView.setVisibility(View.INVISIBLE);
+        alarmLogDao.getAlarmLiveList().observe(this, new Observer<List<AlarmLogEntity>>() {
+            @Override
+            public void onChanged(List<AlarmLogEntity> alarmLogEntities) {
+                if (alarmLogEntities.size() == 0) {
+                    mBinding.notficationTxt.setVisibility(View.INVISIBLE);
+                    mBinding.notficationView.setVisibility(View.INVISIBLE);
+                } else {
+                    mBinding.notficationTxt.setVisibility(View.VISIBLE);
+                    mBinding.notficationView.setVisibility(View.VISIBLE);
+                    mBinding.notficationTxt.setText(String.valueOf(alarmLogEntities.size()));
+                }
+            }
+        });
     }
 
     void inactiveHandler() {
@@ -189,7 +193,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onUserInteraction() {
-
         super.onUserInteraction();
         stopHandler();//stop first and then start
         startHandler();
@@ -282,7 +285,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.supportSub.setVisibility(View.INVISIBLE);
         mBinding.supportText.setVisibility(View.INVISIBLE);
         mBinding.notficationView.setVisibility(View.INVISIBLE);
-        mBinding.notficationTxt.setVisibility(View.INVISIBLE);
         mBinding.configBigCircle.setVisibility(View.INVISIBLE);
         mBinding.configSmallCircle.setVisibility(View.INVISIBLE);
         mBinding.configSub.setVisibility(View.INVISIBLE);
@@ -297,8 +299,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         sub.setVisibility(View.VISIBLE);
         txtView.setVisibility(View.VISIBLE);
         main.setVisibility(View.INVISIBLE);
-        mBinding.notficationView.setVisibility(View.VISIBLE);
-        mBinding.notficationTxt.setVisibility(View.VISIBLE);
         NavGraph.setStartDestination(fragment);
         navController.setGraph(navGraph);
 

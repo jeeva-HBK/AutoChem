@@ -22,4 +22,7 @@ public interface TimerConfigurationDao {
             ", mode=:mode WHERE timerNo = :timerNo")
     void updateTimer(String timerName,String outputLinked,String mode,int timerNo);
 
+    @Query("Delete from timerconfigurationentity")
+    void deleteTimerDao();
+
 }

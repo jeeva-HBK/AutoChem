@@ -20,7 +20,6 @@ import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.MainConfigurationDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
 import com.ionexchange.Database.Dao.OutputKeepAliveDao;
-import com.ionexchange.Database.Dao.ServicesNotificationDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
 import com.ionexchange.Database.Dao.TrendDao;
 import com.ionexchange.Database.Dao.UserManagementDao;
@@ -35,7 +34,7 @@ import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 import com.ionexchange.Database.Entity.MainConfigurationEntity;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
 import com.ionexchange.Database.Entity.OutputKeepAliveEntity;
-import com.ionexchange.Database.Entity.ServicesNotificationEntity;
+
 import com.ionexchange.Database.Entity.TimerConfigurationEntity;
 import com.ionexchange.Database.Entity.TrendEntity;
 import com.ionexchange.Database.Entity.UsermanagementEntity;
@@ -47,8 +46,7 @@ import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
         DefaultLayoutConfigurationEntity.class, MainConfigurationEntity.class,
         KeepAliveCurrentEntity.class, DiagnosticDataEntity.class, UsermanagementEntity.class,
         OutputKeepAliveEntity.class, CalibrationEntity.class, AlarmLogEntity.class,
-        EventLogEntity.class, ServicesNotificationEntity.class, TrendEntity.class},
-        version = 3, exportSchema = false)
+        EventLogEntity.class, TrendEntity.class}, version = 1, exportSchema = false)
 @TypeConverters(Converters.class)
 
 public abstract class WaterTreatmentDb extends RoomDatabase {
@@ -105,8 +103,6 @@ public abstract class WaterTreatmentDb extends RoomDatabase {
     public abstract AlarmLogDao alarmLogDao();
 
     public abstract EventLogDao eventLogDao();
-
-    public abstract ServicesNotificationDao servicesNotificationDao();
 
     public abstract TrendDao trendDao();
 

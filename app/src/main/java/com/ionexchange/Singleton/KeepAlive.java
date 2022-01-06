@@ -21,11 +21,9 @@ import com.ionexchange.Database.Dao.EventLogDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.OutputKeepAliveDao;
-import com.ionexchange.Database.Dao.ServicesNotificationDao;
 import com.ionexchange.Database.Dao.TrendDao;
 import com.ionexchange.Database.Entity.AlarmLogEntity;
 import com.ionexchange.Database.Entity.EventLogEntity;
-import com.ionexchange.Database.Entity.ServicesNotificationEntity;
 import com.ionexchange.Database.Entity.TrendEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
@@ -44,7 +42,6 @@ public class KeepAlive implements DataReceiveCallback {
     AlarmLogDao alarmLogDao;
     EventLogDao eventLogDao;
     InputConfigurationDao inputConfigurationDao;
-    ServicesNotificationDao servicesNotificationDao;
     TrendDao trendDao;
     String sensorType;
 
@@ -68,7 +65,6 @@ public class KeepAlive implements DataReceiveCallback {
             inputConfigurationDao = db.inputConfigurationDao();
             alarmLogDao = db.alarmLogDao();
             eventLogDao = db.eventLogDao();
-            servicesNotificationDao = db.servicesNotificationDao();
             trendDao = db.trendDao();
         }
         mAppClass = ApplicationClass.getInstance();
@@ -199,10 +195,6 @@ public class KeepAlive implements DataReceiveCallback {
         List<TrendEntity> trendEntities = new ArrayList<>();
         trendEntities.add(trendEntity);
         updateToTrend(trendEntities);
-    }
-
-    public void updateToNotificationDb(List<ServicesNotificationEntity> entryList) {
-        servicesNotificationDao.insert(entryList.toArray(new ServicesNotificationEntity[0]));
     }
 
     public void sendPacket(String packet) {

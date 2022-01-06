@@ -71,6 +71,7 @@ public interface InputConfigurationDao {
             "UNION  ALL select hardwareNo || ' - ' || virtualType from VirtualConfigurationEntity  ")
     String[] getEnabledSensor();
 
-
+    @Query("Delete from inputconfigurationentity")
+    void deleteInputDao();
 
 }

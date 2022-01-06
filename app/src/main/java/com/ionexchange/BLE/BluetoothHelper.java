@@ -377,32 +377,6 @@ public class BluetoothHelper implements SerialListener {
             public void run() {
                 dataBuilder.append(data);
                 if (dataBuilder.toString().contains(STARTPACKET) && dataBuilder.toString().contains(ENDPACKET)) {
-                    /*indexOfSplit = dataBuilder.indexOf(END_CHAR);
-                    String framedData = dataBuilder.toString().substring(0, indexOfSplit + (END_CHAR.length()));
-                    String data = framedData.split("PSIPS")[1].split("PSIPE")[0];
-                    String[] splitted = data.split(";");
-                    StringBuilder builder = new StringBuilder();
-                    for (int i = 0; i < splitted.length; i++) {
-                        if (i != splitted.length - 1) {
-                            builder.append(splitted[i]);
-                            builder.append(";");
-                        }
-                    }
-                    if (dataCallback != null) {
-                           if (UtilMethods.checkCRC(builder.toString(), splitted[splitted.length - 1])) {
-                            dataCallback.OnDataReceived(builder.toString());
-                        } else {
-                            dataCallback.OnDataReceivedError(new Exception("Invalid CRC"));
-                        }
-                        dataCallback.OnDataReceive(framedData);
-                        Log.e(TAG, "Received <--" + framedData);
-                    } else {
-                        Toast.makeText(mContext, "Please Restart and Try Again", Toast.LENGTH_SHORT).show();
-                    }
-                    String excessData = dataBuilder.toString().substring(indexOfSplit + (END_CHAR.length()));
-                    dataBuilder.setLength(0);
-                    dataBuilder.append(excessData);*/
-
                     String mData = data;
                         String[] splitData = mData.split("\\*")[1].split("\\$");
                         if (splitData[0].equals("0")) { // ConfigurationPackets
@@ -415,7 +389,7 @@ public class BluetoothHelper implements SerialListener {
                         } else if (splitData[0].equals("1")) { // KeepAlivePackets
                             lastKeepAliveData = "{*" + mData.substring(4);
                             Log.e("keepAlive <-", lastKeepAliveData);
-                            KeepAlive.getInstance().processKeepAlive(lastKeepAliveData, ApplicationClass.mContext);
+                           // KeepAlive.getInstance().processKeepAlive(lastKeepAliveData, ApplicationClass.mContext);
                         }
                     }
             }

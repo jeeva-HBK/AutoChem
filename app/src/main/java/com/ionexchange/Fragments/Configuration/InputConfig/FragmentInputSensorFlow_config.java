@@ -403,12 +403,12 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
             mAppClass.showSnackBar(getContext(), getString(R.string.flowunit_vali));
             return false;
         } else if (isFieldEmpty(mBinding.flowVolumeRateunitEdtIsc)) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.volume_vali));
+            mAppClass.showSnackBar(getContext(), getString(R.string.rateunit_vali));
             return false;
         } else if (!getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("3") &&
                 (Long.valueOf(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) == 0 ||
                         Long.valueOf(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) > 100000)) {
-            mBinding.flowVolumeRateunitEdtIsc.setError(getString(R.string.volume_valida));
+            mBinding.flowVolumeRateunitEdtIsc.setError(getString(R.string.rateunit_valida));
             return false;
         } else if (isFieldEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.setflowtotal_vali));
