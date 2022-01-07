@@ -7,7 +7,6 @@ import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.getStringValue;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
-import static com.ionexchange.Others.ApplicationClass.userManagementDao;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
@@ -38,14 +37,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
-import com.ionexchange.Database.Entity.UsermanagementEntity;
 import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
@@ -54,17 +51,17 @@ import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.ApiService;
 import com.ionexchange.Singleton.SharedPref;
-import com.ionexchange.databinding.FragmentVirtualsensorConfigBinding;
+import com.ionexchange.databinding.FragmentVirtualConfigBinding;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//created by Silambu
+// created by Silambu
 
-public class FragmentVirtualSensor_config extends Fragment implements DataReceiveCallback {
-    FragmentVirtualsensorConfigBinding mBinding;
+public class FragmentVirtualConfig extends Fragment implements DataReceiveCallback {
+    FragmentVirtualConfigBinding mBinding;
     ApplicationClass mAppClass;
     int sensorInputNo, sensorLength = 2;
     WaterTreatmentDb db;
@@ -79,7 +76,7 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_virtualsensor_config, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_virtual_config, container, false);
         return mBinding.getRoot();
     }
 
@@ -166,6 +163,7 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
                             mBinding.sensor1ConstantViEDT.setText(sensorValue.substring(1));
                             splitDecimal(sensorValue.substring(1), mBinding.sensor1ConstantViEDT, mBinding.sensor1ConstantDec);
                         } else {
+                            sensorValue = Integer.parseInt(hardwareNo) > 25 ? sensorValue.split("T")[1] : sensorValue;
                             mBinding.sensor1ConstantViEDT.setText(sensorValue);
                             splitDecimal(sensorValue, mBinding.sensor1ConstantViEDT, mBinding.sensor1ConstantDec);
                         }
@@ -219,6 +217,7 @@ public class FragmentVirtualSensor_config extends Fragment implements DataReceiv
                             mBinding.sensor2ConstantViEDT.setText(sensorValue.substring(1));
                             splitDecimal(sensorValue.substring(1), mBinding.sensor2ConstantViEDT, mBinding.sensor2ConstantDec);
                         } else {
+                            sensorValue = Integer.parseInt(hardwareNo) > 25 ? sensorValue.split("T")[1] : sensorValue;
                             mBinding.sensor2ConstantViEDT.setText(sensorValue);
                             splitDecimal(sensorValue, mBinding.sensor2ConstantViEDT, mBinding.sensor2ConstantDec);
                         }

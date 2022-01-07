@@ -55,7 +55,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 //created by Silambu
-public class FragmentInputSensorList_Config extends Fragment implements View.OnClickListener, InputRvOnClick {
+public class FragmentInputIndex extends Fragment implements View.OnClickListener, InputRvOnClick {
     FragmentInputsettingsBinding mBinding;
     AutoCompleteTextView sensorType, inputNumber, sensorName;
     ApplicationClass mAppClass;
@@ -92,7 +92,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
             @Override
             public void onClick(View view) {
                 currentPage--;
-                mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this,
+                mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputIndex.this,
                         dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset = pageOffset - 9),keepAliveCurrentValueDao));
                 mBinding.leftArrowIsBtn.setVisibility(currentPage <= 0 ? View.GONE : View.VISIBLE);
                 mBinding.rightArrowIsBtn.setVisibility(View.VISIBLE);
@@ -104,7 +104,7 @@ public class FragmentInputSensorList_Config extends Fragment implements View.OnC
             public void onClick(View view) {
                 currentPage++;
                 mBinding.leftArrowIsBtn.setVisibility(View.VISIBLE);
-                mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputSensorList_Config.this,
+                mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputIndex.this,
                         dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset = pageOffset + 9),keepAliveCurrentValueDao));
                 mBinding.rightArrowIsBtn.setVisibility(dao.getInputConfigurationEntityFlagKeyList
                         (1, 9, pageOffset + 9).isEmpty() ? View.GONE : View.VISIBLE);

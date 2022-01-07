@@ -69,7 +69,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentInputSensorFlow_config extends Fragment implements DataReceiveCallback {
+public class FragmentInputSensorFlow extends Fragment implements DataReceiveCallback {
     FragmentInputsensorFlowBinding mBinding;
     ApplicationClass mAppClass;
     private static final String TAG = "FragmentInputSensorFlow";
@@ -930,7 +930,6 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 new EventLogDemo(inputNumber, "FlowMeter", "Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""),getContext());
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
-                mBinding.orpBackArrowIsc.performClick();
                 mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
                 break;
 
@@ -938,8 +937,7 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
             case 1:
                 InputConfigurationEntity flowEntityUpdate = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.flowInputNumberEdtIsc)),
-                                mBinding.flowSensorTypeAtxtIsc.getText().toString(), "FLOWMETER",
-                                Integer.parseInt(getPositionFromAtxt(0, getStringValue(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr)),
+                                mBinding.flowSensorTypeAtxtIsc.getText().toString(), "FLOWMETER", 0,
                                 mBinding.flowSeqNumberAtxtIsc.getText().toString(),
                                 Integer.parseInt(sequenceNumber), getStringValue(0, mBinding.flowInputLabelEdtIsc),
                                 getDecimalValue(mBinding.flowAlarmLowEdtIsc, 10, mBinding.flowAlarmLowDeciIsc, 2),
@@ -955,6 +953,6 @@ public class FragmentInputSensorFlow_config extends Fragment implements DataRece
                 mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));
                 break;
         }
-
+        mBinding.orpBackArrowIsc.performClick();
     }
 }

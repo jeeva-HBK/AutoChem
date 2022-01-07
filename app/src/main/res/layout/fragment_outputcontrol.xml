@@ -80,6 +80,7 @@
             android:id="@+id/output_control_rv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:scrollIndicators="right"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_top" />
 

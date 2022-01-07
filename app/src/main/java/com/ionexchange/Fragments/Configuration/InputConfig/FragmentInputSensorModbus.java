@@ -57,7 +57,7 @@ import java.util.List;
 
 
 //created by Silambu
-public class FragmentInputSensorModbus_Config extends Fragment implements DataReceiveCallback {
+public class FragmentInputSensorModbus extends Fragment implements DataReceiveCallback {
 
     FragmentInputsensorModbusBinding mBinding;
     ApplicationClass mAppClass;
@@ -420,11 +420,6 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
             }
             return true;
         }
-
-        /*else if (isFieldEmpty(mBinding.modBusTimeTie) || mBinding.modBusTimeTie.getText().toString().length() > 6) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.time_validation));
-            return false;
-        }*/
         return true;
     }
 
@@ -489,8 +484,6 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
                 mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
-                mBinding.backArrowIsc.performClick();
-
                 break;
 
             case 0:
@@ -513,8 +506,7 @@ public class FragmentInputSensorModbus_Config extends Fragment implements DataRe
                 mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));
                 break;
         }
-
-
+        mBinding.backArrowIsc.performClick();
     }
 
 }

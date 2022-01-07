@@ -1,12 +1,16 @@
 package com.ionexchange.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.ionexchange.R;
 
@@ -18,12 +22,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Context _context;
     private List<String> _listDataHeader;
     private HashMap<String, List<String>> _listDataChild;
+    private boolean _isFirstChildVisible;
 
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
-                                 HashMap<String, List<String>> listChildData) {
+                                 HashMap<String, List<String>> listChildData,boolean isFirstChildVisible) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
+        this._isFirstChildVisible = isFirstChildVisible;
     }
 
     @Override
@@ -47,10 +53,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.nav_item_child, null);
         }
-
-        TextView txtListChild = (TextView) convertView
-                .findViewById(R.id.expList_childTxt);
-
+        TextView txtListChild = (TextView) convertView.findViewById(R.id.expList_childTxt);
+        if(childPosition > 0) {
+            if(groupPosition == 0) {
+                parent.getChildAt(1).setActivated(true);
+            }else if(groupPosition == 1 && childPosition >= 2) {
+                parent.getChildAt(2).setActivated(true);
+            }
+        }
         txtListChild.setText(childText);
         return convertView;
     }

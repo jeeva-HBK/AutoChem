@@ -54,7 +54,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentInputSensorTemp_config extends Fragment implements DataReceiveCallback {
+public class FragmentInputSensorTemp extends Fragment implements DataReceiveCallback {
     private static final String TAG = "FragmentInputSensorTemp";
     FragmentInputsensorTempBinding mBinding;
     ApplicationClass mAppClass;
@@ -322,7 +322,6 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
                         SharedPref.read(pref_USERLOGINID, ""), getContext());
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
-                mBinding.tempBackArrowIsc.performClick();
                 mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
                 break;
             case 0:
@@ -344,6 +343,6 @@ public class FragmentInputSensorTemp_config extends Fragment implements DataRece
                 mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));
                 break;
         }
-
+        mBinding.tempBackArrowIsc.performClick();
     }
 }

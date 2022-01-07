@@ -739,7 +739,7 @@ public class ApplicationClass extends Application {
                     outputMode = "Probe";
                 }
                 OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
-                        (i, "Output-" + i + "(Output" + i + ")", "Output" + i,
+                        (i, "Output-" + i + " (Output" + i + ")", "Output" + i,
                                 outputMode,
                                 outputStatus, defaultwritePacket);
                 List<OutputConfigurationEntity> outputEntryList = new ArrayList<>();
@@ -768,7 +768,7 @@ public class ApplicationClass extends Application {
         if (timerDAO.geTimerConfigurationEntityList().isEmpty()) {
             int j = 0;
             for (int i = 0; i < 6; i++) {
-                String mainTimerPacket = "{*1234$0$0$08$" + i + "$Timer" + (i + 1) +
+                String mainTimerPacket = "{*1234$0$0$08$" + i + "$Timer " + (i + 1) +
                         "$01$0$1$1$0$0$000000$01$0$2$0$0$000000$01$0$3$0$0$000000$01$0$4$0$0$000000$01$0$11203041*}";
                 String weekOnePacket = "{*1234$0$0$09$" + i + "$" + formDigits(2, Integer.toString(j)) +
                         "$0$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000*}";
@@ -780,7 +780,7 @@ public class ApplicationClass extends Application {
                         "$0$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000$0$000000$000000*}";
                 j = j + 4;
                 TimerConfigurationEntity entityUpdate = new TimerConfigurationEntity
-                        (i, "Timer" + (i + 1),
+                        (i, "Timer " + (i + 1),
                                 "Output- 1 (Output1)",
                                 "Timer", mainTimerPacket, weekOnePacket,
                                 weekTwoPacket, weekThreePacket, weekFourPacket);

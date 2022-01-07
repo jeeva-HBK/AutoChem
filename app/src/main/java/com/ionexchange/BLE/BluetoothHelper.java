@@ -1,7 +1,6 @@
 package com.ionexchange.BLE;
 
 
-import static com.ionexchange.Activity.BaseActivity.dismissProgress;
 import static com.ionexchange.Others.ApplicationClass.bleConnected;
 import static com.ionexchange.Others.ApplicationClass.lastKeepAliveData;
 import static com.ionexchange.Others.PacketControl.ENDPACKET;
@@ -392,7 +391,7 @@ public class BluetoothHelper implements SerialListener {
                         } else if (splitData[0].equals("1")) { // KeepAlivePackets
                             lastKeepAliveData = "{*" + mData.substring(4);
                             Log.e("keepAlive <-", lastKeepAliveData);
-                           // KeepAlive.getInstance().processKeepAlive(lastKeepAliveData, ApplicationClass.mContext);
+                            KeepAlive.getInstance().processKeepAlive(lastKeepAliveData, ApplicationClass.mContext);
                         }
                     }
             }

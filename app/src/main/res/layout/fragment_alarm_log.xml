@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
     <TextView
@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/to_date"
-        android:layout_margin="10dp"/>
+        android:layout_margin="5dp"/>
 
     <TextView
         android:id="@+id/to_date"
@@ -34,15 +34,14 @@
         android:id="@+id/txt_alerts"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/to_date"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginLeft="10dp"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="5dp"
+        android:text="Alerts"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="@id/to_date"
         app:layout_constraintBottom_toBottomOf="@id/to_date"
-        android:text="Alerts"/>
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toEndOf="@id/to_date"
+        app:layout_constraintTop_toTopOf="@id/to_date" />
 
     <TextView
         android:id="@+id/txt"
@@ -58,7 +57,7 @@
     <TextView
         android:id="@+id/edt_form_date"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         app:layout_constraintStart_toStartOf="@id/form_date"
         app:layout_constraintEnd_toEndOf="@id/form_date"
         android:layout_marginTop="5sp"
@@ -74,7 +73,7 @@
     <TextView
         android:id="@+id/edt_to_date"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:hint="DD-MM-YYYY"
         app:layout_constraintStart_toStartOf="@id/to_date"
         app:layout_constraintEnd_toEndOf="@id/to_date"
@@ -135,12 +134,12 @@
     <View
         android:id="@+id/root_head_view"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edt_to_date"
-        android:layout_margin="10dp"
-        android:background="@drawable/bg_secondary"/>
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_secondary"
+        app:layout_constraintEnd_toEndOf="@+id/txt_alerts"
+        app:layout_constraintStart_toStartOf="@+id/edt_form_date"
+        app:layout_constraintTop_toBottomOf="@id/edt_to_date" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

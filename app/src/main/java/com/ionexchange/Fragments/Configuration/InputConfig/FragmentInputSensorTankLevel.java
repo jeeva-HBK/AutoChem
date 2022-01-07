@@ -53,7 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //created by Silambu
-public class FragmentInputSensorTankLevel_Config extends Fragment implements DataReceiveCallback {
+public class FragmentInputSensorTankLevel extends Fragment implements DataReceiveCallback {
     FragmentInputSensorTankLevelBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;
@@ -259,7 +259,6 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                 new EventLogDemo(inputNumber,"Tank","Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""),getContext());
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
-                mBinding.backArrowIsc.performClick();
                 mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
                 break;
 
@@ -282,7 +281,7 @@ public class FragmentInputSensorTankLevel_Config extends Fragment implements Dat
                         SharedPref.read(pref_USERLOGINID, ""));
                 break;
         }
-
+        mBinding.backArrowIsc.performClick();
     }
     void changeUi(){
         switch (userType) {

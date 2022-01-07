@@ -71,7 +71,7 @@
     <!--Root-->
     <fragment
         android:id="@+id/inputSetting"
-        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorList_Config"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputIndex"
         android:label="InputSensorList"
         tools:layout="@layout/fragment_inputsettings">
         <action
@@ -112,66 +112,66 @@
 
     <fragment
         android:id="@+id/phConfig"
-        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorPh_Config"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorPh"
         android:label="phConfig"
         tools:layout="@layout/fragment_inputsensor_ph" />
 
     <fragment
         android:id="@+id/orpConfig"
-        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorORP_Config"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorORP"
         android:label="orpConfig"
         tools:layout="@layout/fragment_inputsensor_orp" />
 
     <fragment
         android:id="@+id/tempConfig"
-        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorTemp_config"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorTemp"
         android:label="tempConfig"
         tools:layout="@layout/fragment_inputsensor_temp" />
 
 
     <fragment
         android:id="@+id/conductivityConfig"
-        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorConductivity_Config"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorConductivity"
         android:label="tempConfig"
         tools:layout="@layout/fragment_inputsensor_cond" />
 
 
     <fragment
         android:id="@+id/ToroidalConfig"
-        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorToroidalConductivity_config"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorToroidalConductivity"
         android:label="FragmentInputSensorToroidalConductivity_config"
         tools:layout="@layout/fragment_inputsensor_toraidalconductivity" />
 
     <fragment
         android:id="@+id/modBusConfig"
-        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorModbus_Config"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorModbus"
         android:label="FragmentInputSensorModbus_Config"
         tools:layout="@layout/fragment_inputsensor_modbus" />
 
 
     <fragment
         android:id="@+id/tankLevel"
-        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorTankLevel_Config"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorTankLevel"
         android:label="FragmentInputSensorTankLevel_Config"
         tools:layout="@layout/fragment_input_sensor_tank_level" />
 
 
     <fragment
         android:id="@+id/digitalConfig"
-        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorDigital_config"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorDigital"
         android:label="FragmentInputSensorDigital_config"
         tools:layout="@layout/fragment_inputsensor_digital" />
 
 
     <fragment
         android:id="@+id/AnalogConfig"
-        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorAnalog_Config"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorAnalog"
         android:label="FragmentInputSensorAnalog_Config"
         tools:layout="@layout/fragment_inputsensor_analog" />
 
     <fragment
         android:id="@+id/flowConfig"
-        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorFlow_config"
+        android:name="com.ionexchange.Fragments.Configuration.InputConfig.FragmentInputSensorFlow"
         android:label="FragmentInputSensorFlow_config"
         tools:layout="@layout/fragment_inputsensor_flow" />
 
@@ -182,9 +182,9 @@
     <!--Root-->
     <fragment
         android:id="@+id/outputSetting"
-        android:name="com.ionexchange.Fragments.Configuration.OutputConfig.FragmentOutputSettings_Config"
+        android:name="com.ionexchange.Fragments.Configuration.OutputConfig.FragmentOutputIndex"
         android:label="FragmentOutput_Config"
-        tools:layout="@layout/fragment_outputsettings">
+        tools:layout="@layout/fragmentOutputIndex">
         <action
             android:id="@+id/action_outputSetting_to_output"
             app:destination="@id/output" />
@@ -204,9 +204,9 @@
 
     <fragment
         android:id="@+id/virtualSetting"
-        android:name="com.ionexchange.Fragments.Configuration.VirtualConfig.FragmentVirtualSensorList_Config"
+        android:name="com.ionexchange.Fragments.Configuration.VirtualConfig.FragmentVirtualIndex"
         android:label="FragmentVirtualSensorList_Config"
-        tools:layout="@layout/fragment_virtualsensor">
+        tools:layout="@layout/fragment_virtual_index">
         <action
             android:id="@+id/action_virtualSetting_to_virtual"
             app:destination="@id/virtual" />
@@ -215,16 +215,16 @@
 
     <fragment
         android:id="@+id/virtual"
-        android:name="com.ionexchange.Fragments.Configuration.VirtualConfig.FragmentVirtualSensor_config"
+        android:name="com.ionexchange.Fragments.Configuration.VirtualConfig.FragmentVirtualConfig"
         android:label="FragmentVirtualSensorList_Config"
-        tools:layout="@layout/fragment_virtualsensor_config" />
+        tools:layout="@layout/fragment_virtual_config" />
 
 
     <fragment
         android:id="@+id/TimerSetting"
-        android:name="com.ionexchange.Fragments.Configuration.TimerConfig.FragmentTimer_Config"
+        android:name="com.ionexchange.Fragments.Configuration.TimerConfig.FragmentTimerIndex"
         android:label="FragmentTimer_Config"
-        tools:layout="@layout/fragment_timerconfiguration">
+        tools:layout="@layout/fragment_timer_index">
         <action
             android:id="@+id/action_TimerSetting_to_Timer"
             app:destination="@id/Timer" />
@@ -233,9 +233,9 @@
 
     <fragment
         android:id="@+id/Timer"
-        android:name="com.ionexchange.Fragments.Configuration.TimerConfig.FragmentTimerStatus_Config"
+        android:name="com.ionexchange.Fragments.Configuration.TimerConfig.FragmentTimer_Config"
         android:label="FragmentTimer_Config"
-        tools:layout="@layout/fragment_timerstatus_config" />
+        tools:layout="@layout/fragment_timer_config" />
 
 
     <fragment

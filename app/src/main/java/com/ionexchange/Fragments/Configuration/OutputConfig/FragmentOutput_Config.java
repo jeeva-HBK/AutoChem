@@ -94,7 +94,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         dB = WaterTreatmentDb.getDatabase(getContext());
         dao = dB.outputConfigurationDao();
         outputSensorNo = getArguments().getInt("sensorInputNo");
-        FragmentOutputSettings_Config.hideToolbar();
+        FragmentOutputIndex.hideToolbar();
         initAdapter();
         mBinding.funtionModeOsATXT.setText(mBinding.funtionModeOsATXT.getAdapter().getItem(1).toString());
         if (outputSensorNo < 15) {
@@ -1936,10 +1936,10 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             e.printStackTrace();
         }
         OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
-                (outputSensorNo, "Output- " + outputSensorNo + "(" + toString(mBinding.outputLabelOsEDT) + ")", toString(0, mBinding.outputLabelOsEDT),
+                (outputSensorNo, "Output- " + outputSensorNo + " (" + toString(mBinding.outputLabelOsEDT) + ")", toString(0, mBinding.outputLabelOsEDT),
                         (mBinding.funtionModeOsATXT.getText().toString().equals("Analog") ? mBinding.modeOsATXT.getText().toString() : subValue1),
                         (mBinding.funtionModeOsATXT.getText().toString().equals("Analog") ? linkInputSensor : (mBinding.modeOsATXT.getText().toString().equals("")
-                                ? mBinding.funtionModeOsATXT.getText().toString() : mBinding.modeOsATXT.getText().toString())),writePacket);
+                                ? mBinding.funtionModeOsATXT.getText().toString() : mBinding.modeOsATXT.getText().toString())), writePacket);
         List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(entityUpdate);
         updateToDb(entryListUpdate);

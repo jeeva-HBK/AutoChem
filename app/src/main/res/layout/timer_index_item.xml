@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="230dp"
+    android:layout_height="204dp"
     android:layout_margin="2dp">
 
     <View
@@ -20,17 +21,16 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:background="@drawable/bg_timer_header"
-        app:layout_constraintBottom_toBottomOf="@id/view_1"
         app:layout_constraintEnd_toEndOf="@id/view_1"
         app:layout_constraintStart_toStartOf="@id/view_1"
-        app:layout_constraintTop_toTopOf="@id/view_1"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@id/view_1" />
 
 
     <TextView
         android:id="@+id/timer_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text=""
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +41,7 @@
         android:id="@+id/txt_timer_header_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Morning Timer"
+        android:text="Morning Timer "
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -55,12 +55,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
         android:text="Output"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/txt_output_value_1"
-        app:layout_constraintStart_toStartOf="@id/view_timer_header_1"
-        app:layout_constraintTop_toBottomOf="@id/view_timer_header_1" />
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/txt_mode_name_1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_timer_header_1" />
 
     <TextView
         android:id="@+id/txt_output_value_1"
@@ -68,10 +68,8 @@
         android:layout_height="wrap_content"
         android:text="Output 6"
         android:textColor="@color/primary"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/txt_mode_name_1"
-        app:layout_constraintStart_toStartOf="@id/txt_output_name_1"
-        app:layout_constraintTop_toBottomOf="@id/txt_output_name_1" />
+        app:layout_constraintStart_toStartOf="@+id/txt_mode_name_1"
+        app:layout_constraintTop_toBottomOf="@+id/txt_mode_name_1" />
 
     <View
         android:layout_width="50dp"
@@ -89,10 +87,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mode"
+        android:textStyle="bold"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/txt_mode_value_1"
-        app:layout_constraintStart_toStartOf="@id/txt_output_value_1"
-        app:layout_constraintTop_toBottomOf="@id/txt_output_value_1" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/txt_output_name_1"
+        app:layout_constraintTop_toBottomOf="@+id/txt_output_name_1" />
 
 
     <TextView
@@ -100,10 +99,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="off Before"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/txt_mode_name_1"
-        app:layout_constraintTop_toBottomOf="@id/txt_mode_name_1" />
+        android:textColor="@color/primary"
+        app:layout_constraintStart_toStartOf="@+id/txt_output_name_1"
+        app:layout_constraintTop_toBottomOf="@+id/txt_output_name_1" />
 
     <View
         android:id="@+id/view_hor_1_1"

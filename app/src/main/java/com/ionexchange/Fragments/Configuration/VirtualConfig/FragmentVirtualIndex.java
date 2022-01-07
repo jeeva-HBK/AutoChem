@@ -25,18 +25,18 @@ import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
-import com.ionexchange.databinding.FragmentVirtualsensorBinding;
+import com.ionexchange.databinding.FragmentVirtualIndexBinding;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-//created by Silambu
+// created by Silambu
 
-public class FragmentVirtualSensorList_Config extends Fragment implements RvOnClick {
+public class FragmentVirtualIndex extends Fragment implements RvOnClick {
     RvOnClick rvOnClick;
     ApplicationClass mAppClass;
-    FragmentVirtualsensorBinding mBinding;
+    FragmentVirtualIndexBinding mBinding;
     VirtualConfigurationDao dao;
     List<VirtualConfigurationEntity> virtualConfigurationEntityList;
     WaterTreatmentDb waterTreatmentDb;
@@ -46,7 +46,7 @@ public class FragmentVirtualSensorList_Config extends Fragment implements RvOnCl
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_virtualsensor, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_virtual_index, container, false);
         return mBinding.getRoot();
     }
 

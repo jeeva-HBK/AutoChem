@@ -61,7 +61,7 @@ import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
 //created by Silambu
-public class FragmentInputSensorConductivity_Config extends Fragment implements DataReceiveCallback {
+public class FragmentInputSensorConductivity extends Fragment implements DataReceiveCallback {
     private static final String TAG = "FragmentInputSensorCond";
     FragmentInputsensorCondBinding mBinding;
     ApplicationClass mAppClass;
@@ -390,7 +390,6 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
                 mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
-                mBinding.conBackArrowIsc.performClick();
                 break;
 
             case 0:
@@ -413,8 +412,7 @@ public class FragmentInputSensorConductivity_Config extends Fragment implements 
                 mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));
                 break;
         }
-
-
+        mBinding.conBackArrowIsc.performClick();
     }
 
     void userManagement() {

@@ -3,7 +3,6 @@ package com.ionexchange.Singleton;
 
 import static com.ionexchange.Others.ApplicationClass.alarmArr;
 import static com.ionexchange.Others.ApplicationClass.alertKeepAliveData;
-import static com.ionexchange.Others.ApplicationClass.eventLogArr;
 import static com.ionexchange.Others.ApplicationClass.inputKeepAliveData;
 import static com.ionexchange.Others.ApplicationClass.outputKeepAliveData;
 import static com.ionexchange.Others.ApplicationClass.trendDataCollector;
@@ -191,6 +190,7 @@ public class KeepAlive implements DataReceiveCallback {
     }
 
     public void trendEntity(int sNo, String hardwareNo, String keepValue, String date, String time, int row) {
+        keepValue = Integer.parseInt(hardwareNo) > 25 && Integer.parseInt(hardwareNo) < 34 ? keepValue.split("T")[1] : keepValue;
         TrendEntity trendEntity = new TrendEntity(sNo, hardwareNo, keepValue, date, time, row);
         List<TrendEntity> trendEntities = new ArrayList<>();
         trendEntities.add(trendEntity);

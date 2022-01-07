@@ -26,15 +26,15 @@ import com.ionexchange.Enum.AppEnum;
 import com.ionexchange.Interface.RvOnClick;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
-import com.ionexchange.databinding.FragmentOutputsettingsBinding;
+import com.ionexchange.databinding.FragmentOutputIndexBinding;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class FragmentOutputSettings_Config extends Fragment implements RvOnClick {
+public class FragmentOutputIndex extends Fragment implements RvOnClick {
 
-    static FragmentOutputsettingsBinding mBinding;
+    static FragmentOutputIndexBinding mBinding;
     ApplicationClass mAppClass;
     OutputConfigurationDao dao;
     int pageOffset = 0, currentPage = 0;
@@ -46,7 +46,7 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_outputsettings, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_output_index, container, false);
         return mBinding.getRoot();
     }
 
@@ -86,7 +86,7 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
                 currentPage--;
                 //mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this, dao.getOutputConfigurationEntityList(9, pageOffset = pageOffset - 9)));
 
-                mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this,
+                mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputIndex.this,
                         dao.getOutputHardWareNoConfigurationEntityList((outpuType == AppEnum.RELAY_OUTPUT ? 1 : 15), (outpuType == AppEnum.RELAY_OUTPUT ? 14 : 22), 9, pageOffset = pageOffset - 9),outputKeepAliveDao));
 
                 mBinding.leftArrowOsBtn.setVisibility(View.GONE);
@@ -108,7 +108,7 @@ public class FragmentOutputSettings_Config extends Fragment implements RvOnClick
                 mBinding.leftArrowOsBtn.setVisibility(View.VISIBLE);
                 // mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this, dao.getOutputConfigurationEntityList(9, pageOffset = pageOffset + 9)));
 
-                mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputSettings_Config.this,
+                mBinding.outputRv.setAdapter(new OutputIndexRvAdapter(FragmentOutputIndex.this,
                         dao.getOutputHardWareNoConfigurationEntityList((outpuType == AppEnum.RELAY_OUTPUT ? 1 : 15), (outpuType == AppEnum.RELAY_OUTPUT ? 14 : 22), 9, pageOffset = pageOffset + 9), outputKeepAliveDao));
 
                 mBinding.leftArrowOsBtn.setVisibility(View.VISIBLE);

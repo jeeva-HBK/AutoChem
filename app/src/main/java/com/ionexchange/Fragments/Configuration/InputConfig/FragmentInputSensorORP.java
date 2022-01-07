@@ -55,7 +55,7 @@ import static com.ionexchange.Others.PacketControl.STARTPACKET;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
-public class FragmentInputSensorORP_Config extends Fragment implements DataReceiveCallback {
+public class FragmentInputSensorORP extends Fragment implements DataReceiveCallback {
     FragmentInputsensorOrpBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;
@@ -300,7 +300,6 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
                 new EventLogDemo(inputNumber,"ORP","Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""),getContext());
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
-                mBinding.orpBackArrowIsc.performClick();
                 mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
                 break;
 
@@ -323,6 +322,6 @@ public class FragmentInputSensorORP_Config extends Fragment implements DataRecei
                 mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));
                 break;
         }
-
+        mBinding.orpBackArrowIsc.performClick();
     }
 }

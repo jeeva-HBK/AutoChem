@@ -55,7 +55,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentInputSensorPh_Config extends Fragment implements DataReceiveCallback {
+public class FragmentInputSensorPh extends Fragment implements DataReceiveCallback {
     FragmentInputsensorPhBinding mBinding;
     ApplicationClass mAppClass;
     BaseActivity mActivity;
@@ -357,7 +357,6 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                 new EventLogDemo(inputNumber, "Ph", "Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""), getContext());
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
-                mBinding.phBackArrowIsc.performClick();
                 mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
                 break;
             case 0:
@@ -378,6 +377,6 @@ public class FragmentInputSensorPh_Config extends Fragment implements DataReceiv
                         SharedPref.read(pref_USERLOGINID, ""));
                 break;
         }
-
+        mBinding.phBackArrowIsc.performClick();
     }
 }

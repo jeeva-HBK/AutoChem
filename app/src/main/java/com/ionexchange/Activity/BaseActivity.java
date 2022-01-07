@@ -27,6 +27,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -116,6 +117,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         userManagementDao = db.userManagementDao();
         alarmLogDao = db.alarmLogDao();
 
+        setNavigation(R.navigation.navigation, R.id.Dashboard);
         expandedListView();
         baseActivity = this;
         msBinding = mBinding;
@@ -135,7 +137,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.expList.setOnGroupExpandListener(this);
         mBinding.expList.setOnGroupClickListener(this);
         mBinding.expList.setOnChildClickListener(this);
-        setNavigation(R.navigation.navigation, R.id.Dashboard);
 
         inactiveHandler();
         mBinding.notficationTxt.setVisibility(View.INVISIBLE);
@@ -231,7 +232,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         childList.put("I/O Settings", ioList);
         childList.put("Home Settings", homescreenList);
 
-        mBinding.expList.setAdapter(new ExpandableListAdapter(this, headerList, childList));
+        mBinding.expList.setAdapter(new ExpandableListAdapter(this, headerList, childList,true));
 
         mBinding.expList.setChildDivider(getResources().getDrawable(R.color.primary));
         mBinding.expList.setDivider(getResources().getDrawable(R.color.primary));
@@ -385,7 +386,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         alertDialog.show();
 
         EditText userName = dialogView.findViewById(R.id.dialog_usernameEdt);
+        userName.setText("admin");
         EditText password = dialogView.findViewById(R.id.dialog_passwordEdt);
+        password.setText("123456");
         Button loginBtn = dialogView.findViewById(R.id.dialog_login);
         TextView forgotPassword = dialogView.findViewById(R.id.forgot_password);
         DB = WaterTreatmentDb.getDatabase(getApplicationContext());
@@ -454,7 +457,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 alertDialog.dismiss();
             }
         });
-
     }
 
     private void moveToConfig() {
@@ -506,7 +508,13 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onGroupClick(ExpandableListView expandableListView, View v, int groupPosition, long id) {
         expandableListView.setItemChecked(groupPosition, true);
-        if (groupPosition == 2) {
+        if(groupPosition == 0){
+            if(userType != 0) {
+                setNavGraph(navGraph, R.id.siteSetting, mNavController);
+            }
+        } else if(groupPosition == 1){
+            setNavGraph(navGraph, R.id.inputSetting, mNavController);
+        } else if (groupPosition == 2) {
             if (userType == 3) {
                 setNavGraph(navGraph, R.id.homeScreen, mNavController);
             } else {

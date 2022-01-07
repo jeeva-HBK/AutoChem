@@ -58,7 +58,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentInputSensorToroidalConductivity_config extends Fragment implements DataReceiveCallback {
+public class FragmentInputSensorToroidalConductivity extends Fragment implements DataReceiveCallback {
     private static final String TAG = "FragmentInputSensorCond";
     FragmentInputsensorToraidalconductivityBinding mBinding;
     ApplicationClass mAppClass;
@@ -376,7 +376,6 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
-                mBinding.candBackArrowIsc.performClick();
                 new EventLogDemo(inputNumber,"Toroidal Conductivity","Input Setting Deleted",
                         SharedPref.read(pref_USERLOGINID, ""),getContext());
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
@@ -404,6 +403,7 @@ public class FragmentInputSensorToroidalConductivity_config extends Fragment imp
                 mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));
                 break;
         }
+        mBinding.candBackArrowIsc.performClick();
     }
 
     void userManagement() {

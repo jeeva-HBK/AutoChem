@@ -57,7 +57,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //created by Silambu
-public class FragmentInputSensorAnalog_Config extends Fragment implements DataReceiveCallback {
+public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCallback {
 
     FragmentInputsensorAnalogBinding mBinding;
     ApplicationClass mAppClass;
@@ -432,7 +432,6 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
                 mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
-                mBinding.backArrowIsc.performClick();
                 break;
 
             case 0:
@@ -468,6 +467,7 @@ public class FragmentInputSensorAnalog_Config extends Fragment implements DataRe
                 mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));
                 break;
         }
+        mBinding.backArrowIsc.performClick();
 
     }
 }

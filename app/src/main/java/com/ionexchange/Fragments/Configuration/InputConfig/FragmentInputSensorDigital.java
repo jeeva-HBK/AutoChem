@@ -53,7 +53,7 @@ import com.ionexchange.databinding.FragmentInputsensorDigitalBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentInputSensorDigital_config extends Fragment implements DataReceiveCallback {
+public class FragmentInputSensorDigital extends Fragment implements DataReceiveCallback {
 
     FragmentInputsensorDigitalBinding mBinding;
     ApplicationClass mAppClass;
@@ -301,7 +301,6 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
                 mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
-                mBinding.backArrowIsc.performClick();
                 break;
 
             case 0:
@@ -323,8 +322,7 @@ public class FragmentInputSensorDigital_config extends Fragment implements DataR
                 mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));
                 break;
         }
-
-
+        mBinding.backArrowIsc.performClick();
     }
 }
 
