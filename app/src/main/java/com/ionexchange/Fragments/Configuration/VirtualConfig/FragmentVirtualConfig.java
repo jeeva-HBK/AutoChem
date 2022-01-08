@@ -419,13 +419,15 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
             case "Modbus Sensor":
                 sensorLength = 3;
                 break;
-            case "Flow/Water Meter":
             case "Toroidal Conductivity":
                 sensorLength = 7;
                 break;
             case "Contacting Conductivity":
             case "Tank Level":
                 sensorLength = 6;
+                break;
+            case "Flow/Water Meter":
+                sensorLength = 10;
                 break;
             default:
                 sensorLength = 2;

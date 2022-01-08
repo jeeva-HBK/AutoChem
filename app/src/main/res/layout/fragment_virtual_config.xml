@@ -148,7 +148,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/sensor1Constant_vi" />
 
-
                 <!--Sensor 1 Constant -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/sensor1Constant_vi"
@@ -338,7 +337,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:imeOptions="actionNext"
-                        android:inputType="number"
+                        android:inputType="text"
                         android:maxLength="6"
                         android:maxLines="1"
                         android:textAlignment="center"
@@ -356,7 +355,8 @@
         <LinearLayout
             android:id="@+id/vsRow3_isc"
             style="@style/config_rowLl"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
             <!--Low Range -->
             <androidx.constraintlayout.widget.ConstraintLayout

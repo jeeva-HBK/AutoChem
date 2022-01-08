@@ -130,10 +130,7 @@ public class SerialSocket extends BluetoothGattCallback {
     }
 
     public boolean isConnected() {
-        if (connected || gatt != null) {
-            return true;
-        }
-        return false;
+        return connected || gatt != null;
     }
 
     /**

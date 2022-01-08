@@ -16,7 +16,7 @@
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/activity_connection.xml" value="0.2" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/alarm_log_item.xml" value="0.1" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/dashboard_layout_four_item.xml" value="0.31851851851851853" />
-        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/dashboard_layout_one_item.xml" value="0.2" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/dashboard_layout_one_item.xml" value="0.18" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/dashboard_layout_three_item.xml" value="0.33" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/dialog_calib_onedt.xml" value="0.2" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/dialog_calib_reading.xml" value="0.2" />
@@ -55,7 +55,7 @@
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_timerstatus_config.xml" value="0.15833333333333333" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_trend.xml" value="0.25" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_unitipsettings.xml" value="0.1" />
-        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_virtual_config.xml" value="0.15208333333333332" />
+        <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_virtual_config.xml" value="0.33" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_virtual_index.xml" value="0.12" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/fragment_virtualsensor.xml" value="0.26666666666666666" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/layout/ic_baseline_notifications_24.xml" value="0.1" />

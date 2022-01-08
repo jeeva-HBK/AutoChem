@@ -5,9 +5,9 @@ import android.bluetooth.BluetoothDevice;
 import java.util.List;
 
 public interface BluetoothScannerCallback {
-    public void OnScanCompleted(List<BluetoothDevice> devices);
+    void OnScanCompleted(List<BluetoothDevice> devices);
 
-    public void SearchResult(BluetoothDevice device);
+    void SearchResult(BluetoothDevice device);
 
-    public void OnDeviceFoundUpdate(List<BluetoothDevice> devices);
+    void OnDeviceFoundUpdate(List<BluetoothDevice> devices);
 }

@@ -380,24 +380,33 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 lowAlarmOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(14)});
                 highAlarmOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(14)});
                 currentValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
+
+                label.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
                 break;
 
             case 2:
                 lowAlarmOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
                 highAlarmOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
                 currentValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(17)});
+
+                label.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
+
                 break;
 
             case 5:
                 lowAlarmOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
                 highAlarmOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
                 currentValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(14)});
+
+                label.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
                 break;
 
             case 6:
                 lowAlarmOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
                 highAlarmOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
                 currentValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(9)});
+
+                label.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
                 break;
         }
     }
@@ -500,6 +509,10 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 currentValueOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
                 currentValueTwo.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
                 currentValueThree.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
+
+                sensorLabelOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
+                sensorLabelTwo.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
+                sensorLabelThree.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
                 break;
         }
 

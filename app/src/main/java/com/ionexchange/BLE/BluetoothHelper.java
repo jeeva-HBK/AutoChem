@@ -30,25 +30,25 @@ public class BluetoothHelper implements SerialListener {
     private static final String TAG = "BLE";
     private static final String TAG1 = "Bluetooth";
     private static BluetoothHelper helper;
-    private static String END_CHAR = "}";
+    private static final String END_CHAR = "}";
     BluetoothConnectCallback connectCallback;
     private BluetoothScannerCallback callBack;
     private Boolean isRegistered = false;
-    private Activity mActivity;
+    private final Activity mActivity;
     private BluetoothAdapter mAdapter;
     private String searchParam = "";
     private SearchType searchType;
     private int mScanDeviceType;
     private DataReceiveCallback dataCallback, mTempCallback;
-    private List<BluetoothDevice> result;
-    private StringBuilder dataBuilder;
+    private final List<BluetoothDevice> result;
+    private final StringBuilder dataBuilder;
     private ConnectStatus mConnectStatus = ConnectStatus.NOTCONNECTED;
     private BluetoothDevice mConnectedDevice;
     private Context mContext;
     private boolean isConnected = false,
             dataReceived = false;
     private String mConnectPacket, mExpectedResponse;
-    private BroadcastReceiver scanResult = new BroadcastReceiver() {
+    private final BroadcastReceiver scanResult = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(BluetoothDevice.ACTION_FOUND)) {
@@ -94,7 +94,7 @@ public class BluetoothHelper implements SerialListener {
         }
     };
 
-    private CountDownTimer mConnectionListener = new CountDownTimer(Long.MAX_VALUE, 1000) {
+    private final CountDownTimer mConnectionListener = new CountDownTimer(Long.MAX_VALUE, 1000) {
         @Override
         public void onTick(long l) {
             if (isConnected) {
@@ -380,20 +380,20 @@ public class BluetoothHelper implements SerialListener {
                 dataBuilder.append(data);
                 if (dataBuilder.toString().contains(STARTPACKET) && dataBuilder.toString().contains(ENDPACKET)) {
                     String mData = data;
-                        String[] splitData = mData.split("\\*")[1].split("\\$");
-                        if (splitData[0].equals("0")) { // ConfigurationPackets
-                            String configPacket = "{*" + mData.substring(4);
-                            dataReceived = true;
-                            Log.e("Config <-", configPacket);
-                            if (dataCallback != null) {
-                                dataCallback.OnDataReceive(configPacket);
-                            }
-                        } else if (splitData[0].equals("1")) { // KeepAlivePackets
-                            lastKeepAliveData = "{*" + mData.substring(4);
-                            Log.e("keepAlive <-", lastKeepAliveData);
-                            KeepAlive.getInstance().processKeepAlive(lastKeepAliveData, ApplicationClass.mContext);
+                    String[] splitData = mData.split("\\*")[1].split("\\$");
+                    if (splitData[0].equals("0")) { // ConfigurationPackets
+                        String configPacket = "{*" + mData.substring(4);
+                        dataReceived = true;
+                        Log.e("Config <-", configPacket);
+                        if (dataCallback != null) {
+                            dataCallback.OnDataReceive(configPacket);
                         }
+                    } else if (splitData[0].equals("1")) { // KeepAlivePackets
+                        lastKeepAliveData = "{*" + mData.substring(4);
+                        Log.e("keepAlive <-", lastKeepAliveData);
+                        KeepAlive.getInstance().processKeepAlive(lastKeepAliveData, ApplicationClass.mContext);
                     }
+                }
             }
         });
     }
@@ -407,7 +407,7 @@ public class BluetoothHelper implements SerialListener {
 
     @Override
     public void onDisconnected() {
-        if(isConnected) {
+        if (isConnected) {
             BaseActivity.kickOut();
         }
         isConnected = false;

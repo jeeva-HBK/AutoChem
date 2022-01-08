@@ -126,13 +126,15 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
                 sensorLength = 3;
                 sensorLayoutVisibility(true);
                 break;
-            case "Flow/Water Meter":
             case "Toroidal Conductivity":
                 sensorLength = 7;
                 break;
             case "Contacting Conductivity":
             case "Tank Level":
                 sensorLength = 6;
+                break;
+            case "Flow/Water Meter":
+                sensorLength = 10;
                 break;
             default:
                 sensorLength = 2;
