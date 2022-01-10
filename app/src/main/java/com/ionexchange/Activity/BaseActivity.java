@@ -163,7 +163,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 screenTimeout();
-
             }
         };
         startHandler();
@@ -197,6 +196,12 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         super.onUserInteraction();
         stopHandler();//stop first and then start
         startHandler();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopHandler();
     }
 
     public void stopHandler() {
@@ -373,6 +378,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         btnCancel.setOnClickListener(V -> {
             alertDialog.dismiss();
             CountDownTimer.cancel();
+            onUserInteraction();
         });
     }
 
