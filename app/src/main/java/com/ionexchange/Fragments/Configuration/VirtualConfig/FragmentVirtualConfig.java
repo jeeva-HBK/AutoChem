@@ -659,7 +659,6 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
                         TBtnVisiblity(spiltData[13], mBinding.highRangeTBtn, mBinding.highRangeViEDT, mBinding.highRangeViDec);
 
                         mBinding.smoothingFactorViEDT.setText(spiltData[14]);
-
                         mBinding.lowAlarmViEDT.setText(spiltData[15].substring(0, sensorLength));
                         mBinding.lowAlarmViDec.setText(spiltData[15].substring(sensorLength + 1, sensorLength + 3));
                         TBtnVisiblity(spiltData[15], mBinding.lowAlarmTBtn, mBinding.lowAlarmViEDT, mBinding.lowAlarmViDec);
@@ -669,6 +668,7 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
                         TBtnVisiblity(spiltData[16], mBinding.highAlarmTBtn, mBinding.highAlarmViEDT, mBinding.highAlarmDec);
 
                         mBinding.calculationViEDT.setText(mBinding.calculationViEDT.getAdapter().getItem(Integer.parseInt(spiltData[17])).toString());
+                        mBinding.virtualInputValEdt.setText(spiltData[18]);
                         initAdapters();
                     } catch (Exception e) {
                         e.printStackTrace();

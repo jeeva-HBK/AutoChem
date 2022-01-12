@@ -201,9 +201,9 @@ public class ApplicationClass extends Application {
     private static final int httpRequestTimeout = 10000;
     public static int userType = 0;
     public static RequestQueue requestQueue;
-    public final static String baseURL = "http://192.168.1.82/WaterIOT.API/api/";
+    public final static String baseURL = "http://192.168.1.52/WaterIOT.API/api/";
 
-    // public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
+     //public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
 
     public static ObservableBoolean triggerWebService = new ObservableBoolean(false);
     public static ObservableBoolean bleConnected = new ObservableBoolean(true);

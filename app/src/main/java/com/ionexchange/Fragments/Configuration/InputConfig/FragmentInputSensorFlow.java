@@ -835,9 +835,9 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                                 mBinding.flowSetFlowTotalEdtIsc.setText(splitData[13].substring(0, 9));
                                 mBinding.flowSetFlowTotalDeciIsc.setText(splitData[13].substring(11, 13));
                                 mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[14])).toString());
-                                mBinding.flowAlarmLowEdtIsc.setText(splitData[15].substring(0, 9));
+                                mBinding.flowAlarmLowEdtIsc.setText(splitData[15].substring(0, 10));
                                 mBinding.flowAlarmLowDeciIsc.setText(splitData[15].substring(11, 13));
-                                mBinding.flowHighAlarmEdtIsc.setText(splitData[16].substring(0, 9));
+                                mBinding.flowHighAlarmEdtIsc.setText(splitData[16].substring(0, 10));
                                 mBinding.flowHighAlarmDeciIsc.setText(splitData[16].substring(11, 13));
 
                                 // Paddle wheel flow meter type
@@ -855,9 +855,9 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                                 mBinding.flowSetFlowTotalEdtIsc.setText(splitData[14].substring(0, 9));
                                 mBinding.flowSetFlowTotalDeciIsc.setText(splitData[14].substring(11, 13));
                                 mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[15])).toString());
-                                mBinding.flowAlarmLowEdtIsc.setText(splitData[16].substring(0, 9));
+                                mBinding.flowAlarmLowEdtIsc.setText(splitData[16].substring(0, 10));
                                 mBinding.flowAlarmLowDeciIsc.setText(splitData[16].substring(11, 13));
-                                mBinding.flowHighAlarmEdtIsc.setText(splitData[17].substring(0, 9));
+                                mBinding.flowHighAlarmEdtIsc.setText(splitData[17].substring(0, 10));
                                 mBinding.flowHighAlarmDeciIsc.setText(splitData[17].substring(11, 13));
 
                                 // Feed Monitor type
@@ -880,9 +880,9 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                                 mBinding.flowSetFlowTotalEdtIsc.setText(splitData[19].substring(0, 9));
                                 mBinding.flowSetFlowTotalDeciIsc.setText(splitData[19].substring(11, 13));
                                 mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[20])).toString());
-                                mBinding.flowAlarmLowEdtIsc.setText(splitData[21].substring(0, 9));
+                                mBinding.flowAlarmLowEdtIsc.setText(splitData[21].substring(0, 10));
                                 mBinding.flowAlarmLowDeciIsc.setText(splitData[21].substring(11, 13));
-                                mBinding.flowHighAlarmEdtIsc.setText(splitData[22].substring(0, 9));
+                                mBinding.flowHighAlarmEdtIsc.setText(splitData[22].substring(0, 10));
                                 mBinding.flowHighAlarmDeciIsc.setText(splitData[22].substring(11, 13));
                             }
                             initAdapter();

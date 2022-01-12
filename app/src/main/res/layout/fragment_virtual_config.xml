@@ -72,23 +72,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--Smoothing Factor -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/smoothingFactor_vi"
-                style="@style/config_Til">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/smoothingFactor_viEDT"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Smoothing Factor"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
         </LinearLayout>
 
         <!--Row 2-->
@@ -173,6 +156,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -203,6 +187,24 @@
                     app:layout_constraintTop_toTopOf="@+id/sensor1Constant_vi" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <!--Smoothing Factor -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/smoothingFactor_vi"
+                style="@style/config_Til">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/smoothingFactor_viEDT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Smoothing Factor"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 

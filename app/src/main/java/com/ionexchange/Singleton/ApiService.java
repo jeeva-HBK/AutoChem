@@ -181,8 +181,8 @@ public class ApiService implements DataReceiveCallback {
                                 getJSONObject(0).getJSONArray("REQ"));
                         break;
                     case "04":
-                           /* writeInputConfiguration(responseObject.getJSONArray("DATA").
-                                    getJSONObject(0));*/
+                        writeInputConfiguration(responseObject.getJSONArray("DATA").
+                                getJSONObject(0));
                         break;
 
                     case "05":
