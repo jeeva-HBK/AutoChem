@@ -355,10 +355,8 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
             } else if (data[0].equals(WRITE_PACKET)) {
                 if (data[3].equals(RES_SUCCESS)) {
                     analogEntity(Integer.parseInt(data[2]));
-
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 } else if (data[3].equals(RES_FAILED)) {
-
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }
             }

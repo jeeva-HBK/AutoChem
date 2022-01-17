@@ -704,9 +704,9 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 formDigits(2, "" + getInterlockChannaleHardwareNumber()) + SPILT_CHAR +
                 formDigits(2, "" + getActiviateChannaleHardwareNumber()) + SPILT_CHAR +
                 getPosition(1, toString(mBinding.modeOsATXT), modeInhibitor) + SPILT_CHAR +
-                getPosition(2, toString(mBinding.waterFlowMeterTypeAtxtOsc), flowMeterTypeArr) + SPILT_CHAR +
+                getPosition(1, toString(mBinding.waterFlowMeterTypeAtxtOsc), flowMeterTypeArr) + SPILT_CHAR +
                 (Integer.parseInt(getPosition(1, toString(mBinding.waterFlowMeterInputAtxtOsc), flowMeters)) + 1) + SPILT_CHAR +
-                (Integer.parseInt(getPosition(2, toString(mBinding.waterBleedRelayAtxtOsc), bleedArr)) + 1) + SPILT_CHAR +
+                formDigits(2,String.valueOf(Integer.parseInt(getPosition(2, toString(mBinding.waterBleedRelayAtxtOsc), bleedArr)) + 1)) + SPILT_CHAR +
                 getDecimalValue(mBinding.waterPumpFlowRateEdtOsc, 9, mBinding.waterPumpFlowRateDeciOsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.waterTargetPPMEdtOsc, 7, mBinding.waterTargetPPMDeciOsc, 2) + SPILT_CHAR +
                 toString(3, mBinding.waterConcentrationEdtOsc) + SPILT_CHAR +
@@ -727,7 +727,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 formDigits(2, "" + getInterlockChannaleHardwareNumber()) + SPILT_CHAR +
                 formDigits(2, "" + getActiviateChannaleHardwareNumber()) + SPILT_CHAR +
                 getPosition(0, toString(mBinding.modeOsATXT), modeInhibitor) + SPILT_CHAR +
-                (Integer.parseInt(getPosition(2, toString(mBinding.bleedLinkBleedRelayAtxtOsc), bleedArr)) + 1) + SPILT_CHAR +
+                formDigits(2,String.valueOf(Integer.parseInt(getPosition(2, toString(mBinding.bleedLinkBleedRelayAtxtOsc), bleedArr)) + 1)) + SPILT_CHAR +
                 getDecimalValue(mBinding.bleedBleedFlowRateEdtOsc, 6, mBinding.bleedBleedFlowrateDeciOsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.bleedPumpFlowRateEdtOsc, 9, mBinding.bleedPumpFlowRateDeciOsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.bleedTargetPPMEdtOsc, 7, mBinding.bleedTargetPPMDeciOsc, 2) + SPILT_CHAR +
@@ -1300,9 +1300,11 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.sensorSetPointEdtOsc.setText("");
         mBinding.sensorSafetyMinEdtOsc.setText("");
         mBinding.sensorSafetyMaxEdtOsc.setText("");
+        mBinding.pidHysteresisEdtOsc.setText("");
         mBinding.sensorSetpointvalueTBtn.setChecked(true);
         mBinding.sensorSafetyMinTBtn.setChecked(true);
         mBinding.sensorSafetyMaxTBtn.setChecked(true);
+        mBinding.pidHysteresisTBtn.setChecked(true);
         switch (inputType) {
             case "ORP":
                 sensorLength = 4;
@@ -1312,7 +1314,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 sensorLength = 3;
                 sensorLayoutVisibility(true);
                 break;
-            case "Flow/Water Meter":
             case "Toroidal Conductivity":
                 sensorLength = 7;
                 break;
@@ -1323,6 +1324,9 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             case "Modbus Sensor":
                 sensorLength = 3;
                 break;
+            case "Flow/Water Meter":
+                sensorLength = 10;
+                break;
             default:
                 sensorLength = 2;
                 break;
@@ -1330,6 +1334,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         mBinding.sensorSetPointEdtOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(sensorLength)});
         mBinding.sensorSafetyMinEdtOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(sensorLength)});
         mBinding.sensorSafetyMaxEdtOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(sensorLength)});
+        mBinding.pidHysteresisEdtOsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(sensorLength)});
     }
 
     void setMaxLengthPID() {
@@ -1360,7 +1365,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 sensorLength = 3;
                 sensorPidLayoutVisibility(true);
                 break;
-            case "Flow/Water Meter":
             case "Toroidal Conductivity":
                 sensorLength = 7;
                 break;
@@ -1370,6 +1374,9 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 break;
             case "Modbus Sensor":
                 sensorLength = 3;
+                break;
+            case "Flow/Water Meter":
+                sensorLength = 10;
                 break;
             default:
                 sensorLength = 2;
@@ -1406,7 +1413,6 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 sensorLength = 3;
                 sensorAnalogLayoutVisibility(true);
                 break;
-            case "Flow/Water Meter":
             case "Toroidal Conductivity":
                 sensorLength = 7;
                 break;
@@ -1416,6 +1422,9 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 break;
             case "Modbus Sensor":
                 sensorLength = 3;
+                break;
+            case "Flow/Water Meter":
+                sensorLength = 10;
                 break;
             default:
                 sensorLength = 2;
@@ -1458,10 +1467,12 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             mBinding.sensorSetpointvalueTBtn.setVisibility(View.VISIBLE);
             mBinding.sensorSafetyMinTBtn.setVisibility(View.VISIBLE);
             mBinding.sensorSafetyMaxTBtn.setVisibility(View.VISIBLE);
+            mBinding.pidHysteresisTBtn.setVisibility(View.VISIBLE);
         } else {
             mBinding.sensorSetpointvalueTBtn.setVisibility(View.GONE);
             mBinding.sensorSafetyMinTBtn.setVisibility(View.GONE);
             mBinding.sensorSafetyMaxTBtn.setVisibility(View.GONE);
+            mBinding.pidHysteresisTBtn.setVisibility(View.GONE);
         }
     }
 
