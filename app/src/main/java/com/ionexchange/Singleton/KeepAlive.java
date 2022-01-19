@@ -15,6 +15,7 @@ import android.content.Context;
 import android.os.CountDownTimer;
 import android.util.Log;
 
+import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Database.Dao.AlarmLogDao;
 import com.ionexchange.Database.Dao.EventLogDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;

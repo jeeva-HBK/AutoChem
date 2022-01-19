@@ -67,7 +67,7 @@ public class ApiService implements DataReceiveCallback {
     private static final String TAG = "API";
     String responseTabId = "00";
     String responseTabData = "";
-    String packetType;
+    String packetType = "1";
     String diagnosticsDataOne = "";
     String diagnosticsDataTwo = "";
     String diagnosticsDataThree = "";
@@ -77,6 +77,7 @@ public class ApiService implements DataReceiveCallback {
     JSONObject responseObject;
     JSONObject dataObj;
     JSONArray finalArr;
+    String jsonSubID = "00";
 
 
     private ApiService() {
@@ -85,6 +86,7 @@ public class ApiService implements DataReceiveCallback {
     public static ApiService getInstance(Context context) {
         if (apiService == null) {
             apiService = new ApiService();
+            apiService.processApiData("1", "00", "");
         }
         mContext = context;
         return apiService;
@@ -101,6 +103,7 @@ public class ApiService implements DataReceiveCallback {
         }
     }
 
+
     private void postData() {
         try {
             ApplicationClass.httpRequest(mContext, "Mobile/MobileData?Data=", getKeepAliveObject(),
@@ -108,18 +111,17 @@ public class ApiService implements DataReceiveCallback {
                         @Override
                         public void OnSuccess(JSONObject object) {
                             try {
-                                if (!object.getString("Response").equals("null")) {
-                                    responseObject = object.getJSONObject("Response")
-                                            .getJSONObject("DATAS").getJSONObject("RESPONSE_WEB");
-                                    packetType = responseObject.getString("PACKET_TYPE");
-                                    String jsonSubID = responseObject.getString("JSON_SUB_ID");
-                                    processApiData(packetType, jsonSubID, "");
-                                }
+
+                                responseObject = object.getJSONObject("Response")
+                                        .getJSONObject("DATAS").getJSONObject("RESPONSE_WEB");
+                                packetType = responseObject.getString("PACKET_TYPE");
+                                jsonSubID = responseObject.getString("JSON_SUB_ID");
+                                processApiData(packetType, jsonSubID, "");
+
+
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-
-
                         }
 
                         @Override
@@ -130,18 +132,20 @@ public class ApiService implements DataReceiveCallback {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         startApiService();
-        responseTabId = "00";
-        responseTabData = "";
+
     }
 
     public void processApiData(String packetType, String jsonSubID, String eventType) {
-        finalArr = new JSONArray();
+        if (!jsonSubID.equals("99")) {
+            finalArr = new JSONArray();
+        }
         try {
             if (packetType.equals(WRITE_PACKET)) {
                 switch (jsonSubID) {
                     case "00":
+                        responseTabId = "00";
+                        responseTabData = "";
                         if (SharedPref.read(pref_USERLOGINPASSWORDCHANED, "").equals("passwordChanged")) {
                             for (int i = 0; i < userManagementDao.getUsermanagementEntity().size(); i++) {
                                 dataObj = new JSONObject();
@@ -172,8 +176,20 @@ public class ApiService implements DataReceiveCallback {
                         }
                         break;
                     case "02":
-                        processUserList(responseObject.getJSONArray("DATA").
-                                getJSONObject(0).getJSONArray("REQ"));
+                        /* processUserList(responseObject.getJSONArray("DATA").
+                                getJSONObject(0).getJSONArray("REQ"));*/
+                        responseTabId = "02";
+                        dataObj = new JSONObject();
+                        dataObj.put("INPUTNO", "");
+                        dataObj.put("REQ", "");
+                        dataObj.put("NAME_LABEL", "");
+                        dataObj.put("LEFT_LABEL", "");
+                        dataObj.put("RIGHT_LABEL", "");
+                        dataObj.put("SEQUENCE_NO", "");
+                        dataObj.put("UNIT", "");
+                        dataObj.put("TYPE", "");
+                        dataObj.put("EVENT_TYPE", eventType);
+                        finalArr.put(dataObj);
 
                         break;
                     case "03":
@@ -202,17 +218,36 @@ public class ApiService implements DataReceiveCallback {
             } else if (packetType.equals(READ_PACKET)) {
                 switch (jsonSubID) {
                     case "00":
-                        dataObj = new JSONObject();
-                        dataObj.put("INPUTNO", "");
-                        dataObj.put("REQ", "");
-                        dataObj.put("NAME_LABEL", "");
-                        dataObj.put("LEFT_LABEL", "");
-                        dataObj.put("RIGHT_LABEL", "");
-                        dataObj.put("SEQUENCE_NO", "");
-                        dataObj.put("UNIT", "");
-                        dataObj.put("TYPE", "");
-                        dataObj.put("EVENT_TYPE", eventType);
-                        finalArr.put(dataObj);
+                        responseTabId = "00";
+                        responseTabData = "";
+                        if (SharedPref.read(pref_USERLOGINPASSWORDCHANED, "").equals("passwordChanged")) {
+                            for (int i = 0; i < userManagementDao.getUsermanagementEntity().size(); i++) {
+                                dataObj = new JSONObject();
+                                dataObj.put("INPUTNO", "");
+                                dataObj.put("REQ", userManagementDao.getUsermanagementEntity().get(i).userId + "#"
+                                        + userManagementDao.getUsermanagementEntity().get(i).userPassword);
+                                dataObj.put("NAME_LABEL", "");
+                                dataObj.put("LEFT_LABEL", "");
+                                dataObj.put("RIGHT_LABEL", "");
+                                dataObj.put("SEQUENCE_NO", "");
+                                dataObj.put("UNIT", "");
+                                dataObj.put("TYPE", "");
+                                dataObj.put("EVENT_TYPE", eventType);
+                                finalArr.put(dataObj);
+                            }
+                        } else {
+                            dataObj = new JSONObject();
+                            dataObj.put("INPUTNO", "");
+                            dataObj.put("REQ", "");
+                            dataObj.put("NAME_LABEL", "");
+                            dataObj.put("LEFT_LABEL", "");
+                            dataObj.put("RIGHT_LABEL", "");
+                            dataObj.put("SEQUENCE_NO", "");
+                            dataObj.put("UNIT", "");
+                            dataObj.put("TYPE", "");
+                            dataObj.put("EVENT_TYPE", eventType);
+                            finalArr.put(dataObj);
+                        }
                         break;
                     case "02":
                         processUserList(responseObject.getJSONArray("DATA").
@@ -343,7 +378,7 @@ public class ApiService implements DataReceiveCallback {
                             String highAlarm = jsonObject.getString("RIGHT_LABEL");
                             int seqNo = Integer.parseInt(jsonObject.getString("SEQUENCE_NO"));
                             String unit = jsonObject.getString("UNIT");
-                            int type = Integer.parseInt(jsonObject.getString("TYPE"));
+                            int type = 0;
                             if (unit.equals("null")) {
                                 unit = "N/A";
                             }
@@ -370,6 +405,7 @@ public class ApiService implements DataReceiveCallback {
                                 flagValue = Integer.parseInt(splitData[splitData.length - 1]);
                             } else if (hardWareNo < 14) {
                                 sensorType = "MODBUS";
+                                type = Integer.parseInt(jsonObject.getString("TYPE"));
                                 sequenceName = modBusTypeArr[seqNo] + typeArr[type];
                                 flagValue = Integer.parseInt(splitData[splitData.length - 1]);
                             } else if (hardWareNo < 17) {
@@ -405,7 +441,7 @@ public class ApiService implements DataReceiveCallback {
                             List<InputConfigurationEntity> inputentryList = new ArrayList<>();
                             inputentryList.add(entityUpdate);
                             updateInputDB(inputentryList);
-                            dataObj.put("INPUTNO", String.valueOf(hardWareNo));
+                            dataObj.put("INPUTNO", formDigits(2, String.valueOf(hardWareNo)));
                             dataObj.put("REQ", "ACK");
                             dataObj.put("NAME_LABEL", "");
                             dataObj.put("LEFT_LABEL", "");
@@ -423,7 +459,7 @@ public class ApiService implements DataReceiveCallback {
 
                 }
 
-            }, jsonObject.getString("REQ").substring(1, jsonObject.getString("REQ").length() - 2));
+            }, jsonObject.getString("REQ").substring(2, jsonObject.getString("REQ").length() - 2));
 
 
             Log.e(TAG, "writeInputConfiguration: " + jsonObject.getString("REQ"));

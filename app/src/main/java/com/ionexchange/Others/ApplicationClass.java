@@ -198,12 +198,12 @@ public class ApplicationClass extends Application {
     OutputKeepAliveDao outputKeepAliveDao;
 
     // WebService
-    private static final int httpRequestTimeout = 10000;
+    private static final int httpRequestTimeout = 3000;
     public static int userType = 0;
     public static RequestQueue requestQueue;
-    public final static String baseURL = "http://192.168.1.52/WaterIOT.API/api/";
+    public final static String baseURL = "http://192.168.1.241/WaterIOT.API/api/";
 
-     //public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
+    //public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
 
     public static ObservableBoolean triggerWebService = new ObservableBoolean(false);
     public static ObservableBoolean bleConnected = new ObservableBoolean(true);
@@ -369,12 +369,10 @@ public class ApplicationClass extends Application {
 
         JsonObjectRequest request = new JsonObjectRequest(method, URL, object, responseListener, volleyErrorListener);
         request.setRetryPolicy(new DefaultRetryPolicy(
-                httpRequestTimeout,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                httpRequestTimeout, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         Log.e(API1, " --> " + new String(request.getBody()));
         requestQueue.add(request);
-
     }
 
     public void registerBatteryReceiver() {
@@ -1037,6 +1035,4 @@ public class ApplicationClass extends Application {
 
         }
     }
-
-
 }

@@ -716,7 +716,10 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                         }).show();
             }
         });
+    }
 
+   void wakeScreen() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
 

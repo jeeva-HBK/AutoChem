@@ -4,6 +4,7 @@ import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.triggerWebService;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Singleton.SharedPref.pref_MACADDRESS;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
