@@ -1213,7 +1213,7 @@
                     android:id="@+id/sensor_lockoutTimeDelay_edt_osc"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="lockOut Time Delay"
+                    android:hint="lockOut Time Delay (In Mins)"
                     android:imeOptions="actionDone"
                     android:inputType="number"
                     android:maxLength="5"

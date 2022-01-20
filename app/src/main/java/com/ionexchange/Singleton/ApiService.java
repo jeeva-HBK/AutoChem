@@ -99,7 +99,7 @@ public class ApiService implements DataReceiveCallback {
                 public void run() {
                     postData();
                 }
-            }, 3000);
+            }, 5000);
         }
     }
 
@@ -176,9 +176,9 @@ public class ApiService implements DataReceiveCallback {
                         }
                         break;
                     case "02":
-                        /* processUserList(responseObject.getJSONArray("DATA").
-                                getJSONObject(0).getJSONArray("REQ"));*/
-                        responseTabId = "02";
+                         processUserList(responseObject.getJSONArray("DATA").
+                                getJSONObject(0).getJSONArray("REQ"));
+                       /* responseTabId = "02";
                         dataObj = new JSONObject();
                         dataObj.put("INPUTNO", "");
                         dataObj.put("REQ", "");
@@ -189,7 +189,7 @@ public class ApiService implements DataReceiveCallback {
                         dataObj.put("UNIT", "");
                         dataObj.put("TYPE", "");
                         dataObj.put("EVENT_TYPE", eventType);
-                        finalArr.put(dataObj);
+                        finalArr.put(dataObj);*/
 
                         break;
                     case "03":

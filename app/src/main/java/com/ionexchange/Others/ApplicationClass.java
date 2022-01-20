@@ -198,12 +198,14 @@ public class ApplicationClass extends Application {
     OutputKeepAliveDao outputKeepAliveDao;
 
     // WebService
-    private static final int httpRequestTimeout = 3000;
+    //private static final int httpRequestTimeout = 3000;
+    private static final int httpRequestTimeout = 5000;
     public static int userType = 0;
     public static RequestQueue requestQueue;
     public final static String baseURL = "http://192.168.1.241/WaterIOT.API/api/";
+    // public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
 
-    //public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
+    // public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
 
     public static ObservableBoolean triggerWebService = new ObservableBoolean(false);
     public static ObservableBoolean bleConnected = new ObservableBoolean(true);
