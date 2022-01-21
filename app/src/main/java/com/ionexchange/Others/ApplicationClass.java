@@ -5,6 +5,11 @@ import static android.util.Patterns.IP_ADDRESS;
 import static com.ionexchange.Database.WaterTreatmentDb.DB_NAME;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
+import static com.ionexchange.Singleton.SharedPref.pref_CONTROLLERISACTIVE;
+import static com.ionexchange.Singleton.SharedPref.pref_CONTROLLERPASSWORD;
+import static com.ionexchange.Singleton.SharedPref.pref_SITEID;
+import static com.ionexchange.Singleton.SharedPref.pref_SITELOCATION;
+import static com.ionexchange.Singleton.SharedPref.pref_SITENAME;
 
 import android.app.Activity;
 import android.app.Application;
@@ -200,9 +205,9 @@ public class ApplicationClass extends Application {
     // WebService
     //private static final int httpRequestTimeout = 3000;
     private static final int httpRequestTimeout = 5000;
-    public static int userType = 0;
+    public static int userType;
     public static RequestQueue requestQueue;
-    public final static String baseURL = "http://192.168.1.241/WaterIOT.API/api/";
+     public final static String baseURL = "http://192.168.1.241/WaterIOT.API/api/";
     // public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
 
     // public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
@@ -272,6 +277,12 @@ public class ApplicationClass extends Application {
                 SharedPref.init(getApplicationContext());
                 ApiService.getInstance(getApplicationContext());
                 KeepAlive.getInstance();
+
+                SharedPref.write(pref_SITEID, "SITE_0001");
+                SharedPref.write(pref_SITENAME, "WT_IOT");
+                SharedPref.write(pref_SITELOCATION, "N/A");
+                SharedPref.write(pref_CONTROLLERPASSWORD, "1234");
+                SharedPref.write(pref_CONTROLLERISACTIVE, true);
             }
 
             @Override
@@ -794,12 +805,12 @@ public class ApplicationClass extends Application {
         userManagementDao = DB.userManagementDao();
         if (userManagementDao.getUsermanagementEntity().isEmpty()) {
             List<UsermanagementEntity> entryListUpdate = new ArrayList<>();
-            /* 0 - NONE | 1 - BASIC | 2 - INTERMEDIATE | 3 -ADVANCED */
-            UsermanagementEntity adminEntityUpdate = new UsermanagementEntity("TU0001", "admin",
-                    3, "123456", "0000000000", "admin", getCurrentDate() + "" + getCurrentTime(), "");
+            /* 0 - NONE | 1 - BASIC | 2 - INTERMEDIATE | 3 - ADVANCED */
+            UsermanagementEntity adminEntityUpdate = new UsermanagementEntity("US0001", "admin",
+                    3, "123456", "0000000000", "SuperAdmin", getCurrentDate() + "" + getCurrentTime(), "");
 
-            UsermanagementEntity userEntityUpdate = new UsermanagementEntity("TU0002", "admin",
-                    2, "123456", "0000000000", "admin", getCurrentDate() + "" + getCurrentTime(), "");
+            UsermanagementEntity userEntityUpdate = new UsermanagementEntity("US0002", "admin",
+                    2, "123456", "0000000000", "DemoUser", getCurrentDate() + "" + getCurrentTime(), "");
 
             entryListUpdate.add(adminEntityUpdate);
             entryListUpdate.add(userEntityUpdate);

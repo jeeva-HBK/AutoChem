@@ -172,6 +172,7 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
         super.onResume();
         readData();
         setSiteDetailsFromPref();
+        dismissProgress();
     }
 
     private void setSiteDetailsFromPref() {
@@ -250,25 +251,25 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
                 // READ_Response
                 if (splitData[0].equals(READ_PACKET)) {
                     if (splitData[2].equals(RES_SUCCESS)) {
-                        mBinding.siteIdCommonSettingsEDT.setText(splitData[3]);
+                       /* mBinding.siteIdCommonSettingsEDT.setText(splitData[3]);
                         mBinding.siteNameCommonSettingsEDT.setText(splitData[4]);
-                        mBinding.sitePasswordCommonSettingsEDT.setText(splitData[5]);
+                        mBinding.sitePasswordCommonSettingsEDT.setText(splitData[5]);*/
 
-                        if (splitData[6].equals("0")) {
+                       /* if (splitData[6].equals("0")) {
                             mBinding.disableSite.setChecked(true);
                         } else if (splitData[6].equals("1")) {
                             mBinding.enableSite.setChecked(true);
-                        }
+                        }*/
 
-                        mBinding.siteLocationCommonSettingsEDT.setText(splitData[7]);
+                        //mBinding.siteLocationCommonSettingsEDT.setText(splitData[7]);
                         mBinding.alarmDelayCommonSettingsEDT.setText(splitData[8]);
 
-                        if (splitData[9].equals("0")) {
+                        /*if (splitData[9].equals("0")) {
                             mBinding.celsius.setChecked(true);
                         } else if (splitData[9].equals("1")) {
                             mBinding.fahrenheit.setChecked(true);
-                        }
-                        // FIXME: 22-07-2021 RTC -- by silam
+                        }*/
+
                         mBinding.Hours.setText(splitData[10].substring(0, 2));
                         mBinding.MM.setText(splitData[10].substring(2, 4));
                         mBinding.SS.setText(splitData[10].substring(4, 6));

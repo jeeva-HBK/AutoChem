@@ -2,436 +2,438 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <!--Site ID-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/siteId_commonSettings"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:enabled="false"
+            app:layout_constraintBottom_toTopOf="@+id/siteLocation_commonSettings"
+            app:layout_constraintEnd_toStartOf="@+id/siteName_commonSettings"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread_inside">
 
-            <!--Site ID-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/siteId_commonSettings"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/siteId_commonSettingsEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Site ID"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Site Name-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/siteName_commonSettings"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:enabled="false"
+            app:layout_constraintBottom_toBottomOf="@+id/siteId_commonSettings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/siteId_commonSettings"
+            app:layout_constraintTop_toTopOf="@+id/siteId_commonSettings">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/siteName_commonSettingsEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Site Name"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:maxLength="20"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Site Location-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/siteLocation_commonSettings"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            app:layout_constraintBottom_toTopOf="@+id/alarmDelay_commonSettings"
+            app:layout_constraintEnd_toEndOf="@+id/siteId_commonSettings"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/siteId_commonSettings"
+            app:layout_constraintTop_toBottomOf="@+id/siteId_commonSettings">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/siteLocation_commonSettingsEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:hint="Site Location"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:maxLength="10"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Site Password-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sitePassword_commonSettings"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:enabled="false"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/siteLocation_commonSettings"
+            app:layout_constraintEnd_toEndOf="@+id/siteName_commonSettings"
+            app:layout_constraintStart_toStartOf="@+id/siteName_commonSettings"
+            app:layout_constraintTop_toTopOf="@+id/siteLocation_commonSettings"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sitePassword_commonSettingsEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Site Password"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="4"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--SiteControl-->
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:text="Site Control"
+            android:textColor="@color/primary"
+            app:layout_constraintEnd_toEndOf="@+id/sitePassword_commonSettings"
+            app:layout_constraintStart_toStartOf="@+id/sitePassword_commonSettings"
+            app:layout_constraintTop_toTopOf="@+id/alarmDelay_commonSettings" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/alarmDelay_commonSettings"
+            app:layout_constraintEnd_toEndOf="@+id/sitePassword_commonSettings"
+            app:layout_constraintStart_toStartOf="@+id/sitePassword_commonSettings"
+            app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+            <RadioButton
+                android:id="@+id/enableSite"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
-                android:enabled="false"
-                app:layout_constraintBottom_toTopOf="@+id/siteLocation_commonSettings"
-                app:layout_constraintEnd_toStartOf="@+id/siteName_commonSettings"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/siteId_commonSettingsEDT"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Site ID"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--Site Name-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/siteName_commonSettings"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:enabled="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/siteId_commonSettings"
-                app:layout_constraintTop_toTopOf="@+id/siteId_commonSettings">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/siteName_commonSettingsEDT"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Site Name"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPersonName"
-                    android:maxLength="20"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--Site Location-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/siteLocation_commonSettings"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                app:layout_constraintBottom_toTopOf="@+id/alarmDelay_commonSettings"
-                app:layout_constraintEnd_toEndOf="@+id/siteId_commonSettings"
-                app:layout_constraintStart_toStartOf="@+id/siteId_commonSettings"
-                app:layout_constraintTop_toBottomOf="@+id/siteId_commonSettings">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/siteLocation_commonSettingsEDT"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="top"
-                    android:hint="Site Location"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:maxLength="10"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <!--Site Password-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/sitePassword_commonSettings"
-                style="@style/appEdtTxt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="@+id/siteName_commonSettings"
-                app:layout_constraintStart_toStartOf="@+id/siteName_commonSettings"
-                app:layout_constraintTop_toTopOf="@+id/siteLocation_commonSettings"
-                app:passwordToggleEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/sitePassword_commonSettingsEDT"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Site Password"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="4"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--SiteControl-->
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="5dp"
-                android:text="Site Control"
-                android:textColor="@color/primary"
-                app:layout_constraintEnd_toEndOf="@+id/sitePassword_commonSettings"
-                app:layout_constraintStart_toStartOf="@+id/sitePassword_commonSettings"
-                app:layout_constraintTop_toBottomOf="@+id/sitePassword_commonSettings" />
-
-            <RadioGroup
-                android:id="@+id/radioGroup"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:clickable="false"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="@+id/sitePassword_commonSettings"
-                app:layout_constraintStart_toStartOf="@+id/sitePassword_commonSettings"
-                app:layout_constraintTop_toBottomOf="@+id/textView2">
+                android:enabled="false"
+                android:text=" Enable" />
 
-                <RadioButton
-                    android:id="@+id/enableSite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="false"
-                    android:enabled="false"
-                    android:text=" Enable" />
-
-                <RadioButton
-                    android:id="@+id/disableSite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:checked="false"
-                    android:clickable="false"
-                    android:enabled="false"
-                    android:text=" Disable" />
-
-            </RadioGroup>
-
-            <!--Temperature Unit-->
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="0dp"
+            <RadioButton
+                android:id="@+id/disableSite"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Temperature Unit"
-                android:textColor="@color/primary"
-                app:layout_constraintEnd_toEndOf="@+id/textView2"
-                app:layout_constraintStart_toStartOf="@+id/textView2"
-                app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+                android:layout_weight="1"
+                android:checked="false"
+                android:clickable="false"
+                android:enabled="false"
+                android:text=" Disable" />
 
-            <RadioGroup
-                android:id="@+id/radioGroup2"
-                android:layout_width="0dp"
+        </RadioGroup>
+
+        <!--Temperature Unit-->
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Temperature Unit"
+            android:textColor="@color/primary"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/textView2"
+            app:layout_constraintStart_toStartOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="@+id/sitePassword_commonSettings"
+            app:layout_constraintStart_toStartOf="@+id/sitePassword_commonSettings"
+            app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+            <RadioButton
+                android:id="@+id/celsius"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-                app:layout_constraintEnd_toEndOf="@+id/sitePassword_commonSettings"
-                app:layout_constraintStart_toStartOf="@+id/sitePassword_commonSettings"
-                app:layout_constraintTop_toBottomOf="@+id/textView3">
+                android:layout_weight="1"
+                android:checked="true"
+                android:text=" Celsius" />
 
-                <RadioButton
-                    android:id="@+id/celsius"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:checked="true"
-                    android:text=" Celsius" />
+            <RadioButton
+                android:id="@+id/fahrenheit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text=" Fahrenheit" />
 
-                <RadioButton
-                    android:id="@+id/fahrenheit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=" Fahrenheit" />
+        </RadioGroup>
 
-            </RadioGroup>
+        <!--Alarm Delay-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/alarmDelay_commonSettings"
+            style="@style/appEdtTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="@+id/siteLocation_commonSettings"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/siteLocation_commonSettings"
+            app:layout_constraintTop_toBottomOf="@+id/siteLocation_commonSettings">
 
-            <!--Alarm Delay-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/alarmDelay_commonSettingsEDT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Alarm Delay"
+                android:inputType="number"
+                android:maxLength="2" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:text="RTC"
+            android:textColor="@color/primary"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/saveLayout_commonSettings"
+            app:layout_constraintEnd_toEndOf="@+id/radioGroup"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/alarmDelay_commonSettings"
+            app:layout_constraintTop_toBottomOf="@+id/alarmDelay_commonSettings">
+
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/alarmDelay_commonSettings"
                 style="@style/appEdtTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:helperText="in mins"
-                app:helperTextTextColor="@color/red"
-                app:layout_constraintBottom_toTopOf="@+id/textView4"
-                app:layout_constraintEnd_toEndOf="@+id/siteLocation_commonSettings"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/siteLocation_commonSettings"
-                app:layout_constraintTop_toBottomOf="@+id/siteLocation_commonSettings">
+                android:layout_weight="1">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/alarmDelay_commonSettingsEDT"
+                    android:id="@+id/Hours"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Alarm Delay"
+                    android:gravity="center"
+                    android:hint="HH"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
-                    android:maxLength="2" />
+                    android:maxLength="2"
+                    android:maxLines="1"
+                    android:textColorHint="@color/primary" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:text="RTC"
-                android:textColor="@color/primary"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-                app:layout_constraintStart_toStartOf="@+id/linearLayout"
-                app:layout_constraintTop_toBottomOf="@+id/alarmDelay_commonSettings" />
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="@+id/radioGroup2"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/alarmDelay_commonSettings"
-                app:layout_constraintTop_toBottomOf="@+id/textView4">
+                android:layout_weight="1">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/Hours"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:hint="HH"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1"
-                        android:textColorHint="@color/primary" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/MM"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:hint="MM"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1"
-                        android:textColorHint="@color/primary" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/SS"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:hint="SS"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1"
-                        android:textColorHint="@color/primary" />
-
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/NN"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:hint="N"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1"
-                        android:textColorHint="@color/primary" />
-
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/DD"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:hint="DD"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1"
-                        android:textColorHint="@color/primary" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/month"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:hint="MM"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1"
-                        android:textColorHint="@color/primary" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/appEdtTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/YYYY"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:hint="YY"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:maxLines="1"
-                        android:textColorHint="@color/primary" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-            </LinearLayout>
-
-            <!--saveLayout-->
-            <LinearLayout
-                android:id="@+id/saveLayout_commonSettings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-                <TextView
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/MM"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
-                    android:gravity="center"
-                    android:text="Save"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/saveFab_commonSettings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:src="@drawable/ic_round_right"
-                    app:maxImageSize="50dp" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="MM"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1"
+                    android:textColorHint="@color/primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/SS"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="SS"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1"
+                    android:textColorHint="@color/primary" />
 
 
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/NN"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="N"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1"
+                    android:textColorHint="@color/primary" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/DD"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="DD"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1"
+                    android:textColorHint="@color/primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/month"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:hint="MM"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1"
+                    android:textColorHint="@color/primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/YYYY"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="YY"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1"
+                    android:textColorHint="@color/primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+
+        <!--saveLayout-->
+        <LinearLayout
+            android:id="@+id/saveLayout_commonSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:text="Save"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/saveFab_commonSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_round_right"
+                app:maxImageSize="50dp" />
+
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

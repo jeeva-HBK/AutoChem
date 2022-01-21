@@ -15,7 +15,6 @@ import android.content.Context;
 import android.os.CountDownTimer;
 import android.util.Log;
 
-import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Database.Dao.AlarmLogDao;
 import com.ionexchange.Database.Dao.EventLogDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
@@ -108,12 +107,11 @@ public class KeepAlive implements DataReceiveCallback {
             int i = 0;
             while (i < 25) {
                 if (i < 3) {
-
-                } else if (i < 17) {
-                    outputKeepAliveDao.updateOutputStatus(i - 2, data[i]);
+               /* } else if (i < 17) {
+                    outputKeepAliveDao.updateOutputStatus(i - 2, data[i]);*/
                 } else {
                     outputKeepAliveDao.updateOutputStatus(i - 2, data[i].substring(0, 1));
-                    outputKeepAliveDao.updateOutputRelayStatus(i - 2, data[i].substring(1));
+                    outputKeepAliveDao.updateOutputRelayStatus(i - 2, data[i].length() > 1 ? data[i].substring(1) : "N/A");
                 }
                 i++;
             }
@@ -165,16 +163,7 @@ public class KeepAlive implements DataReceiveCallback {
                     updateToAlarmDb(outputEntryList);
                 }
 
-            } /*else if (data[4].equals("1")) {
-                EventLogEntity eventLogEntity = new EventLogEntity(eventLogDao.getLastSno() + 1,
-                        data[3].substring(2, 4), sensorType,
-                        eventLogArr[Integer.parseInt(data[5])],"",
-                        ApplicationClass.getCurrentTime(), ApplicationClass.getCurrentDate());
-                List<EventLogEntity> eventLogEntities = new ArrayList<>();
-                eventLogEntities.add(eventLogEntity);
-                updateToEventDb(eventLogEntities);
             }
-*/
         }
     }
 

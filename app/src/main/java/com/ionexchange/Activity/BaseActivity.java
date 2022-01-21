@@ -392,7 +392,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         alertDialog.show();
 
         EditText userName = dialogView.findViewById(R.id.dialog_usernameEdt);
-        userName.setText("admin");
+        userName.setText("SuperAdmin");
         EditText password = dialogView.findViewById(R.id.dialog_passwordEdt);
         password.setText("123456");
         Button loginBtn = dialogView.findViewById(R.id.dialog_login);
