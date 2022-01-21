@@ -11,6 +11,7 @@ import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINNAME;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINPASSWORDCHANED;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,16 +62,14 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
         mActivity = (BaseActivity) getActivity();
         db = WaterTreatmentDb.getDatabase(getContext());
         userManagementDao = db.userManagementDao();
-        mBinding.saveFab.setOnClickListener(this);
-        mBinding.saveLayoutUnitIp.setOnClickListener(this);
-        mBinding.logout.setOnClickListener(View -> {
-            BaseActivity.logOut();
-        });
 
-        mBinding.reset.setOnClickListener(View -> {
-            factoryResetConfirmation();
-        });
         dismissProgress();
+        mBinding.passwordSetting.setOnClickListener(this);
+        mBinding.factorySetting.setOnClickListener(this);
+        mBinding.getAllConfig.setOnClickListener(this);
+        mBinding.sendAllConfig.setOnClickListener(this);
+        mBinding.logOut.setOnClickListener(this);
+        mBinding.pendrive.setOnClickListener(this);
     }
 
     private void factoryResetConfirmation() {
@@ -87,7 +87,6 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
                 dialogInterface.dismiss();
             }
         }).show();
-
     }
 
     public static boolean isOdd(int num) {
@@ -152,33 +151,58 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.saveFab:
-            case R.id.saveLayout_unitIp:
-                if (validateFields()) {
-                    userManagementDao.updatePassword(mBinding.confirmChangePasswordEdt.getText().toString(), SharedPref.read(pref_USERLOGINNAME, ""));
-                    SharedPref.write(pref_USERLOGINPASSWORDCHANED, "passwordChanged");
-                    mAppclass.showSnackBar(getContext(), "Password changed");
-                }
+            case R.id.password_setting:
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = this.getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.dialog_password_settings, null);
+                dialogBuilder.setView(dialogView);
+                AlertDialog alertDialog = dialogBuilder.create();
+                alertDialog.setCanceledOnTouchOutside(false);
+                TextInputEditText currentPassword = dialogView.findViewById(R.id.current_password_edt);
+                TextInputEditText newPassword = dialogView.findViewById(R.id.newPassword_edt);
+                TextInputEditText confirmPasword = dialogView.findViewById(R.id.confirm_new_password_edt);
+                LinearLayout save = dialogView.findViewById(R.id.saveLayout_unitIp);
+
+                save.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (validateFields(currentPassword, newPassword, confirmPasword)) {
+                            userManagementDao.updatePassword(confirmPasword.getText().toString(), SharedPref.read(pref_USERLOGINNAME, ""));
+                            SharedPref.write(pref_USERLOGINPASSWORDCHANED, "passwordChanged");
+                            mAppclass.showSnackBar(getContext(), "Password changed");
+                        }
+                    }
+                });
+                alertDialog.show();
+                break;
+
+
+            case R.id.factory_setting:
+                factoryResetConfirmation();
+                break;
+
+            case R.id.logOut:
+                BaseActivity.logOut();
                 break;
         }
     }
 
-    private boolean validateFields() {
-        if (isEmpty(mBinding.currentPasswordEdt)) {
-            mBinding.changePasswordEdt.requestFocus();
+    private boolean validateFields(TextInputEditText currentPassword, TextInputEditText newPassword, TextInputEditText confirmPasword) {
+        if (isEmpty(currentPassword)) {
+            currentPassword.requestFocus();
             mAppclass.showSnackBar(getContext(), "Current Password Cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.changePasswordEdt)) {
-            mBinding.changePasswordEdt.requestFocus();
+        } else if (isEmpty(newPassword)) {
+            newPassword.requestFocus();
             mAppclass.showSnackBar(getContext(), "Change Password Cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.confirmChangePasswordEdt)) {
-            mBinding.confirmChangePasswordEdt.requestFocus();
+        } else if (isEmpty(confirmPasword)) {
+            confirmPasword.requestFocus();
             mAppclass.showSnackBar(getContext(), "Confirm Change Password Cannot be Empty");
             return false;
-        } else if (!mBinding.currentPasswordEdt.getText().toString().
+        } else if (!currentPassword.
                 equals(userManagementDao.getPassword(SharedPref.read(pref_USERLOGINNAME, "")))) {
-            mBinding.confirmChangePasswordEdt.requestFocus();
+            currentPassword.requestFocus();
             mAppclass.showSnackBar(getContext(), "Current Password is wrong");
         }
         return true;

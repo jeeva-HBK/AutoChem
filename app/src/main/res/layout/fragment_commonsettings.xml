@@ -97,17 +97,15 @@
             app:layout_constraintBottom_toBottomOf="@+id/siteLocation_commonSettings"
             app:layout_constraintEnd_toEndOf="@+id/siteName_commonSettings"
             app:layout_constraintStart_toStartOf="@+id/siteName_commonSettings"
-            app:layout_constraintTop_toTopOf="@+id/siteLocation_commonSettings"
-            app:passwordToggleEnabled="true">
+            app:layout_constraintTop_toTopOf="@+id/siteLocation_commonSettings">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/sitePassword_commonSettingsEDT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Site Password"
+                android:hint="DU Mac"
                 android:imeOptions="actionNext"
                 android:inputType="number"
-                android:maxLength="4"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>

@@ -19,6 +19,7 @@ import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
 import android.content.IntentSender;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,6 +75,7 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
         mActivity = (BaseActivity) getActivity();
         mBinding.saveLayoutCommonSettings.setOnClickListener(this::onCLick);
         mBinding.saveFabCommonSettings.setOnClickListener(this::onCLick);
+        mBinding.sitePasswordCommonSettingsEDT.setText(Settings.System.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID));
     }
 
     private void onCLick(View view) {
@@ -85,7 +87,7 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
                     PCK_GENERAL + SPILT_CHAR +
                     toString(0, mBinding.siteIdCommonSettingsEDT) + SPILT_CHAR +
                     toString(0, mBinding.siteNameCommonSettingsEDT) + SPILT_CHAR +
-                    toString(0, mBinding.sitePasswordCommonSettingsEDT) + SPILT_CHAR +
+                    "1234" + SPILT_CHAR +
                     getRadio(mBinding.radioGroup, mBinding.enableSite) + SPILT_CHAR +
                     toString(0, mBinding.siteLocationCommonSettingsEDT) + SPILT_CHAR +
                     toString(2, mBinding.alarmDelayCommonSettingsEDT) + SPILT_CHAR +
@@ -179,7 +181,7 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
         mBinding.siteIdCommonSettingsEDT.setText(SharedPref.read(pref_SITEID, ""));
         mBinding.siteNameCommonSettingsEDT.setText(SharedPref.read(pref_SITENAME, ""));
         mBinding.siteLocationCommonSettingsEDT.setText(SharedPref.read(pref_SITELOCATION, ""));
-        mBinding.sitePasswordCommonSettingsEDT.setText(SharedPref.read(pref_CONTROLLERPASSWORD, ""));
+        // mBinding.sitePasswordCommonSettingsEDT.setText(SharedPref.read(pref_CONTROLLERPASSWORD, ""));
 
         if (SharedPref.read(pref_CONTROLLERISACTIVE, false)) {
             mBinding.enableSite.setChecked(true);

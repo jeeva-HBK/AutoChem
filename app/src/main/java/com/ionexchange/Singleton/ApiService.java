@@ -15,6 +15,7 @@ import static com.ionexchange.Others.ApplicationClass.userManagementDao;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_DIAGNOSTIC;
+import static com.ionexchange.Others.PacketControl.PCK_GENERAL;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
 import static com.ionexchange.Others.PacketControl.PCK_OUTPUT_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
@@ -194,7 +195,7 @@ public class ApiService implements DataReceiveCallback {
                         break;
                     case "03":
                         processSiteDetails(responseObject.getJSONArray("DATA").
-                                getJSONObject(0).getJSONArray("REQ"));
+                                getJSONObject(0).getJSONArray("REQ"), 0);
                         break;
                     case "04":
                         writeInputConfiguration(responseObject.getJSONArray("DATA").
@@ -256,7 +257,7 @@ public class ApiService implements DataReceiveCallback {
                         break;
                     case "03":
                         processSiteDetails(responseObject.getJSONArray("DATA").
-                                getJSONObject(0).getJSONArray("REQ"));
+                                getJSONObject(0).getJSONArray("REQ"), 1);
 
                         break;
                     case "04":
@@ -953,27 +954,62 @@ public class ApiService implements DataReceiveCallback {
         }
     }
 
-    private void processSiteDetails(JSONArray siteDetailsObject) {
+    private void processSiteDetails(JSONArray siteDetailsObject, int pck) {
         try {
-
             SharedPref.write(pref_SITEID, siteDetailsObject.getJSONObject(0).getString("SITE_ID"));
             SharedPref.write(pref_SITENAME, siteDetailsObject.getJSONObject(0).getString("SITE_NAME"));
             SharedPref.write(pref_SITELOCATION, siteDetailsObject.getJSONObject(0).getString("SITE_LOCATION"));
             SharedPref.write(pref_CONTROLLERPASSWORD, siteDetailsObject.getJSONObject(0).getString("CONTROLLER_PASSWORD"));
             SharedPref.write(pref_CONTROLLERISACTIVE, (siteDetailsObject.getJSONObject(0).getString("ISACTIVE").equals("1")));
-            responseTabId = "03";
-            responseTabData = "ACK";
-            dataObj = new JSONObject();
-            dataObj.put("INPUTNO", "");
-            dataObj.put("REQ", responseTabData);
-            dataObj.put("NAME_LABEL", "");
-            dataObj.put("LEFT_LABEL", "");
-            dataObj.put("RIGHT_LABEL", "");
-            dataObj.put("SEQUENCE_NO", "");
-            dataObj.put("UNIT", "");
-            dataObj.put("TYPE", "");
-            dataObj.put("EVENT_TYPE", "");
-            finalArr.put(dataObj);
+
+            // if (pck == 1) { todo: should unComment
+                responseTabId = "03";
+                responseTabData = "ACK";
+                dataObj = new JSONObject();
+                dataObj.put("INPUTNO", "");
+                dataObj.put("REQ", responseTabData);
+                dataObj.put("NAME_LABEL", "");
+                dataObj.put("LEFT_LABEL", "");
+                dataObj.put("RIGHT_LABEL", "");
+                dataObj.put("SEQUENCE_NO", "");
+                dataObj.put("UNIT", "");
+                dataObj.put("TYPE", "");
+                dataObj.put("EVENT_TYPE", "");
+                finalArr.put(dataObj);
+            /* } else {
+                ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
+                    @Override
+                    public void OnDataReceive(String data) {
+                        try {
+                            responseTabId = "03";
+                            responseTabData = "ACK";
+                            dataObj = new JSONObject();
+                            dataObj.put("INPUTNO", "");
+                            dataObj.put("REQ", responseTabData);
+                            dataObj.put("NAME_LABEL", "");
+                            dataObj.put("LEFT_LABEL", "");
+                            dataObj.put("RIGHT_LABEL", "");
+                            dataObj.put("SEQUENCE_NO", "");
+                            dataObj.put("UNIT", "");
+                            dataObj.put("TYPE", "");
+                            dataObj.put("EVENT_TYPE", "");
+                            finalArr.put(dataObj);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, DEVICE_PASSWORD + SPILT_CHAR +
+                        CONN_TYPE + SPILT_CHAR +
+                        WRITE_PACKET + SPILT_CHAR +
+                        PCK_GENERAL + SPILT_CHAR +
+                        siteDetailsObject.getJSONObject(0).getString("SITE_ID") + SPILT_CHAR +
+                        siteDetailsObject.getJSONObject(0).getString("SITE_NAME") + SPILT_CHAR +
+                        siteDetailsObject.getJSONObject(0).getString("CONTROLLER_PASSWORD") + SPILT_CHAR +
+                        (siteDetailsObject.getJSONObject(0).getString("ISACTIVE").equals("1") ? "1" : "0") + SPILT_CHAR +
+                        siteDetailsObject.getJSONObject(0).getString("SITE_LOCATION") + SPILT_CHAR +
+                        siteDetailsObject.getJSONObject(0).getString("ALARM_DELAY") + SPILT_CHAR +
+                        "0" + SPILT_CHAR + siteDetailsObject.getJSONObject(0).getString("RTC"));
+            }*/
         } catch (JSONException e) {
             e.printStackTrace();
             try {
