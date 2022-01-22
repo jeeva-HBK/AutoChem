@@ -207,10 +207,10 @@ public class ApplicationClass extends Application {
     private static final int httpRequestTimeout = 5000;
     public static int userType;
     public static RequestQueue requestQueue;
-     public final static String baseURL = "http://192.168.1.241/WaterIOT.API/api/";
+    public final static String baseURL = "http://192.168.1.241/WaterIOT.API/api/";
     // public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
 
-    // public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
+     //public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
 
     public static ObservableBoolean triggerWebService = new ObservableBoolean(false);
     public static ObservableBoolean bleConnected = new ObservableBoolean(true);
@@ -280,7 +280,7 @@ public class ApplicationClass extends Application {
 
                 SharedPref.write(pref_SITEID, "SITE_0001");
                 SharedPref.write(pref_SITENAME, "WT_IOT");
-                SharedPref.write(pref_SITELOCATION, "N/A");
+                SharedPref.write(pref_SITELOCATION, "NA");
                 SharedPref.write(pref_CONTROLLERPASSWORD, "1234");
                 SharedPref.write(pref_CONTROLLERISACTIVE, true);
             }
@@ -806,11 +806,11 @@ public class ApplicationClass extends Application {
         if (userManagementDao.getUsermanagementEntity().isEmpty()) {
             List<UsermanagementEntity> entryListUpdate = new ArrayList<>();
             /* 0 - NONE | 1 - BASIC | 2 - INTERMEDIATE | 3 - ADVANCED */
-            UsermanagementEntity adminEntityUpdate = new UsermanagementEntity("US0001", "admin",
-                    3, "123456", "0000000000", "SuperAdmin", getCurrentDate() + "" + getCurrentTime(), "");
+            UsermanagementEntity adminEntityUpdate = new UsermanagementEntity("US0001", "SuperAdmin",
+                    3, "123456", "0000000000", "", getCurrentDate() + "" + getCurrentTime(), "");
 
-            UsermanagementEntity userEntityUpdate = new UsermanagementEntity("US0002", "admin",
-                    2, "123456", "0000000000", "DemoUser", getCurrentDate() + "" + getCurrentTime(), "");
+            UsermanagementEntity userEntityUpdate = new UsermanagementEntity("US0002", "DemoUser",
+                    2, "123456", "0000000000", "", getCurrentDate() + "" + getCurrentTime(), "");
 
             entryListUpdate.add(adminEntityUpdate);
             entryListUpdate.add(userEntityUpdate);

@@ -48,13 +48,12 @@
 
                 <ImageView
                     android:id="@+id/imageView4"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_marginTop="25sp"
-                    android:src="@drawable/password"
+                    android:src="@drawable/padlock"
                     app:layout_constraintBottom_toTopOf="@+id/textView14"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -95,20 +94,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/settings"
+                    app:layout_constraintBottom_toTopOf="@+id/textView30"
+                    app:layout_constraintEnd_toEndOf="@+id/textView30"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    android:layout_marginTop="25sp"
+                    app:layout_constraintStart_toStartOf="@+id/textView30"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
+                    android:id="@+id/textView30"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Factory Reset Device"
-                    android:textColor="@color/black"
                     android:layout_margin="5sp"
                     android:gravity="center"
-                    android:textStyle="bold"
+                    android:text="Factory Reset"
+                    android:textColor="@color/black"
                     android:textColorHint="@color/black"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    />
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -130,20 +142,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/logout"
+                    android:layout_marginTop="25sp"
+                    app:layout_constraintBottom_toTopOf="@+id/textView31"
+                    app:layout_constraintEnd_toEndOf="@+id/textView31"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="@+id/textView31"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
+                    android:id="@+id/textView31"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Logout"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
                     android:layout_margin="5sp"
+                    android:gravity="center"
+                    android:text="Logout"
+                    android:textColor="@color/black"
                     android:textColorHint="@color/black"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    />
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -164,20 +189,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/pendrive"
+                    android:layout_marginTop="25sp"
+                    app:layout_constraintBottom_toTopOf="@+id/textView32"
+                    app:layout_constraintEnd_toEndOf="@+id/textView32"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="@+id/textView32"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
+                    android:id="@+id/textView32"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5sp"
+                    android:gravity="center"
                     android:text="Pen Drive Copy"
                     android:textColor="@color/black"
-                    android:layout_margin="5sp"
-                    android:textStyle="bold"
-                    android:gravity="center"
                     android:textColorHint="@color/black"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    />
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView7" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -201,20 +239,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/send"
+                    android:layout_marginTop="25sp"
+                    app:layout_constraintBottom_toTopOf="@+id/textView33"
+                    app:layout_constraintEnd_toEndOf="@+id/textView33"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="@+id/textView33"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
+                    android:id="@+id/textView33"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Send All Config"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
                     android:layout_margin="5sp"
                     android:gravity="center"
+                    android:text="Send All Config"
+                    android:textColor="@color/black"
                     android:textColorHint="@color/black"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    />
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView8" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -238,27 +289,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/cloud"
+                    app:layout_constraintBottom_toTopOf="@+id/textView34"
+                    app:layout_constraintEnd_toEndOf="@+id/textView34"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    android:layout_marginTop="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
+                    android:id="@+id/textView34"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Get All Config"
-                    android:textColor="@color/black"
                     android:layout_margin="5sp"
                     android:gravity="center"
-                    android:textStyle="bold"
+                    android:text="Get All Config"
+                    android:textColor="@color/black"
                     android:textColorHint="@color/black"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    />
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView9" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
-
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

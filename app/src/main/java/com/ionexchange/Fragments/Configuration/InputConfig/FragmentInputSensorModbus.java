@@ -288,7 +288,7 @@ public class FragmentInputSensorModbus extends Fragment implements DataReceiveCa
                         mBinding.modBusTypeTie.setText(mBinding.modBusTypeTie.getAdapter().getItem(Integer.parseInt(data[6])).toString());
 
                         int typeOfValueRead = 0;
-                        switch (Integer.parseInt(data[4])) {
+                        switch (Integer.parseInt(data[6])) {
                             case 0:
                                 typeOfValueArr = new String[]{"Fluorescence", "Turbidity"};
                                 typeOfValueRead = Integer.parseInt(data[7]) - 1;

@@ -68,7 +68,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:enabled="false"
-            app:layout_constraintBottom_toTopOf="@+id/alarmDelay_commonSettings"
+            app:layout_constraintBottom_toTopOf="@+id/alarmDelay_root_isc"
             app:layout_constraintEnd_toEndOf="@+id/siteId_commonSettings"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/siteId_commonSettings"
@@ -121,7 +121,7 @@
             android:textColor="@color/primary"
             app:layout_constraintEnd_toEndOf="@+id/sitePassword_commonSettings"
             app:layout_constraintStart_toStartOf="@+id/sitePassword_commonSettings"
-            app:layout_constraintTop_toTopOf="@+id/alarmDelay_commonSettings" />
+            app:layout_constraintTop_toTopOf="@+id/alarmDelay_root_isc" />
 
         <RadioGroup
             android:id="@+id/radioGroup"
@@ -129,7 +129,7 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="@+id/alarmDelay_commonSettings"
+            app:layout_constraintBottom_toBottomOf="@+id/alarmDelay_root_isc"
             app:layout_constraintEnd_toEndOf="@+id/sitePassword_commonSettings"
             app:layout_constraintStart_toStartOf="@+id/sitePassword_commonSettings"
             app:layout_constraintTop_toBottomOf="@+id/textView2">
@@ -196,9 +196,8 @@
         </RadioGroup>
 
         <!--Alarm Delay-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/alarmDelay_commonSettings"
-            style="@style/appEdtTxt"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/alarmDelay_root_isc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -207,15 +206,58 @@
             app:layout_constraintStart_toStartOf="@+id/siteLocation_commonSettings"
             app:layout_constraintTop_toBottomOf="@+id/siteLocation_commonSettings">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/alarmDelay_commonSettingsEDT"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Alarm Delay"
-                android:inputType="number"
-                android:maxLength="2" />
+                style="@style/config_Til"
+                android:hint="Alarm Delay (MM:SS)"
+                app:expandedHintEnabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/alarmDelay_edt_isc"
+                    style="@style/config_Edt"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textView26"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:text=":"
+                app:layout_constraintBottom_toBottomOf="@+id/alarmDelay_deci_isc"
+                app:layout_constraintEnd_toStartOf="@+id/alarmDelay_deci_isc"
+                app:layout_constraintTop_toTopOf="@+id/alarmDelay_deci_isc" />
+
+            <EditText
+                android:id="@+id/alarmDelay_deci_isc"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="2dp"
+                android:background="@null"
+                android:gravity="center"
+                android:hint="@string/double_zero"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="2"
+                android:textColorHint="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="@id/alarmDelay_commonSettingsEDT"
+                app:layout_constraintEnd_toEndOf="@+id/alarmDelay_commonSettingsEDT"
+                app:layout_constraintHorizontal_bias="0.98"
+                app:layout_constraintStart_toStartOf="@+id/alarmDelay_commonSettingsEDT"
+                app:layout_constraintTop_toTopOf="@+id/alarmDelay_commonSettingsEDT" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <TextView
@@ -237,8 +279,8 @@
             app:layout_constraintBottom_toTopOf="@+id/saveLayout_commonSettings"
             app:layout_constraintEnd_toEndOf="@+id/radioGroup"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/alarmDelay_commonSettings"
-            app:layout_constraintTop_toBottomOf="@+id/alarmDelay_commonSettings">
+            app:layout_constraintStart_toStartOf="@+id/alarmDelay_root_isc"
+            app:layout_constraintTop_toBottomOf="@+id/alarmDelay_root_isc">
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/appEdtTxt"

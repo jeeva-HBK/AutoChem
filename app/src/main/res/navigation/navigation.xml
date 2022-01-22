@@ -49,9 +49,9 @@
 
     <fragment
         android:id="@+id/passwordSettings"
-        android:name="com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentPasswordSetting_Config"
+        android:name="com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentDuSetting_Config"
         android:label="unitIp"
-        tools:layout="@layout/fragment_passwordsettings" />
+        tools:layout="@layout/fragment_dusettings" />
 
 
     <fragment

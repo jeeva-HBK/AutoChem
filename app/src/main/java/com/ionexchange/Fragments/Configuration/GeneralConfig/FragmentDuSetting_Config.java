@@ -35,12 +35,12 @@ import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.SharedPref;
-import com.ionexchange.databinding.FragmentPasswordsettingsBinding;
+import com.ionexchange.databinding.FragmentDusettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FragmentPasswordSetting_Config extends Fragment implements View.OnClickListener {
-    FragmentPasswordsettingsBinding mBinding;
+public class FragmentDuSetting_Config extends Fragment implements View.OnClickListener {
+    FragmentDusettingsBinding mBinding;
     ApplicationClass mAppclass;
     BaseActivity mActivity;
     WaterTreatmentDb db;
@@ -51,7 +51,7 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_passwordsettings, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_dusettings, container, false);
         return mBinding.getRoot();
     }
 
@@ -157,7 +157,7 @@ public class FragmentPasswordSetting_Config extends Fragment implements View.OnC
                 View dialogView = inflater.inflate(R.layout.dialog_password_settings, null);
                 dialogBuilder.setView(dialogView);
                 AlertDialog alertDialog = dialogBuilder.create();
-                alertDialog.setCanceledOnTouchOutside(false);
+
                 TextInputEditText currentPassword = dialogView.findViewById(R.id.current_password_edt);
                 TextInputEditText newPassword = dialogView.findViewById(R.id.newPassword_edt);
                 TextInputEditText confirmPasword = dialogView.findViewById(R.id.confirm_new_password_edt);

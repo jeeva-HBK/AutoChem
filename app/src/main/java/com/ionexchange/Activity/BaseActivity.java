@@ -221,7 +221,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         headerList = new ArrayList<>();
 
         generaList.add("- Site Settings");
-        generaList.add("- Password Settings");
+        generaList.add("- DU Settings");
         // generaList.add("- Target IP Settings");
 
         ioList.add("- Input Settings");

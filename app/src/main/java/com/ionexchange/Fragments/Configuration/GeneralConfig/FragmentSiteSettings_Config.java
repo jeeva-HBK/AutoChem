@@ -90,7 +90,7 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
                     "1234" + SPILT_CHAR +
                     getRadio(mBinding.radioGroup, mBinding.enableSite) + SPILT_CHAR +
                     toString(0, mBinding.siteLocationCommonSettingsEDT) + SPILT_CHAR +
-                    toString(2, mBinding.alarmDelayCommonSettingsEDT) + SPILT_CHAR +
+                    toString(2, mBinding.alarmDelayEdtIsc) + toString(2, mBinding.alarmDelayDeciIsc) + SPILT_CHAR +
                     getRadio(mBinding.radioGroup2, mBinding.fahrenheit) + SPILT_CHAR +
                     toString(2, mBinding.Hours) + toString(2, mBinding.MM) +
                     toString(2, mBinding.SS) + toString(1, mBinding.NN) +
@@ -124,11 +124,14 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
         } else if (isEmpty(mBinding.sitePasswordCommonSettingsEDT)) {
             mAppClass.showSnackBar(getContext(), "Site Password  Cannot be Empty");
             return false;
-        } else if (isEmpty(mBinding.alarmDelayCommonSettingsEDT)) {
+        } else if (isEmpty(mBinding.alarmDelayEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "AlarmDelay  Cannot be Empty");
             return false;
-        } else if (Integer.parseInt(mBinding.alarmDelayCommonSettingsEDT.getText().toString()) > 60) {
-            mAppClass.showSnackBar(getContext(), "AlarmDelay should be less than 60");
+        } else if (Integer.parseInt(mBinding.alarmDelayEdtIsc.getText().toString()) > 59) {
+            mAppClass.showSnackBar(getContext(), "AlarmDelay should be less than 59:59");
+            return false;
+        } else if (Integer.parseInt(mBinding.alarmDelayDeciIsc.getText().toString()) > 59) {
+            mAppClass.showSnackBar(getContext(), "AlarmDelay should be less than 59:59");
             return false;
         } else if (isEmpty(mBinding.Hours)) {
             mAppClass.showSnackBar(getContext(), "Hours  Cannot be Empty");
@@ -256,22 +259,19 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
                        /* mBinding.siteIdCommonSettingsEDT.setText(splitData[3]);
                         mBinding.siteNameCommonSettingsEDT.setText(splitData[4]);
                         mBinding.sitePasswordCommonSettingsEDT.setText(splitData[5]);*/
-
                        /* if (splitData[6].equals("0")) {
                             mBinding.disableSite.setChecked(true);
                         } else if (splitData[6].equals("1")) {
                             mBinding.enableSite.setChecked(true);
                         }*/
-
                         //mBinding.siteLocationCommonSettingsEDT.setText(splitData[7]);
-                        mBinding.alarmDelayCommonSettingsEDT.setText(splitData[8]);
-
+                        mBinding.alarmDelayEdtIsc.setText(splitData[8].substring(0,2));
+                        mBinding.alarmDelayDeciIsc.setText(splitData[8].substring(2,4));
                         /*if (splitData[9].equals("0")) {
                             mBinding.celsius.setChecked(true);
                         } else if (splitData[9].equals("1")) {
                             mBinding.fahrenheit.setChecked(true);
                         }*/
-
                         mBinding.Hours.setText(splitData[10].substring(0, 2));
                         mBinding.MM.setText(splitData[10].substring(2, 4));
                         mBinding.SS.setText(splitData[10].substring(4, 6));

@@ -367,7 +367,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
         }
 
         if (mainConfigurationEntityList.get(position).inputType.contains("Flow/Water Meter")) {
-            typeOne.setText("Pulse: " + keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no).split("T")[0]);
+            typeOne.setText("fRate: " + keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no).split("T")[0]);
             currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no).split("T")[1]);
             currentKey.setText("Totalized Volume");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -566,7 +566,7 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
 
         setDigitalInput(currentValue, position);
         if (mainConfigurationEntityList.get(position).inputType.contains("Flow/Water Meter")) {
-            type.setText("Pulse: " + keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
+            type.setText("fRate: " + keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
             currentKey.setText("Totalized Volume");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 type.setTooltipText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
