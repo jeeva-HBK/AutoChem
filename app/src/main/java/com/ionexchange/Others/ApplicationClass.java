@@ -204,13 +204,13 @@ public class ApplicationClass extends Application {
 
     // WebService
     //private static final int httpRequestTimeout = 3000;
-    private static final int httpRequestTimeout = 5000;
+    private static final int httpRequestTimeout = 100000;
     public static int userType;
     public static RequestQueue requestQueue;
-    public final static String baseURL = "http://192.168.1.241/WaterIOT.API/api/";
+    // public final static String baseURL = "http://192.168.1.241/WaterIOT.API/api/";
     // public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
 
-     //public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
+     public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
 
     public static ObservableBoolean triggerWebService = new ObservableBoolean(false);
     public static ObservableBoolean bleConnected = new ObservableBoolean(true);
@@ -740,7 +740,7 @@ public class ApplicationClass extends Application {
         if (outputDAO.getOutputConfigurationEntityList().isEmpty()) {
             String defaultwritePacket = "", outputMode = "", outputStatus = "";
             for (int i = 1; i < 23; i++) {
-                if (i < 16) {
+                if (i < 15) {
                     defaultwritePacket = "{*1234$0$0$06$" + formDigits(2, Integer.toString(i)) + "$1$Output" + i + "$34$35$0$000000001.00$000000001.00$0001*}";
                     outputStatus = "Continuous";
                     outputMode = "0001$000000001.00";

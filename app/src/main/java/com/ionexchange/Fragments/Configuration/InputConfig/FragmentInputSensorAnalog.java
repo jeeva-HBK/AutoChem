@@ -365,7 +365,6 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
         }
     }
 
-
     private boolean validField() {
         if (isFieldEmpty(mBinding.analogInputLabelTie)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.input_name_validation));

@@ -7,21 +7,18 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!--Tool Bar-->
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/primary"
-            app:navigationIcon="@drawable/ic_back"
-            app:title="Virtual Sensor"
-            app:titleCentered="true"
-            app:titleTextColor="@color/white" />
-
         <!--Row 1-->
         <LinearLayout
             android:id="@+id/vsRow1_isc"
             style="@style/config_rowLl">
+
+
+            <ImageView
+                android:id="@+id/backArrow_isc"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/ic_back" />
 
             <!--Sensor_Label-->
             <com.google.android.material.textfield.TextInputLayout
@@ -111,6 +108,23 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!--Sensor 1  FlowType-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/flowType1_vi"
+                style="@style/config_AtxTil"
+                android:visibility="gone">
+
+                <AutoCompleteTextView
+                    android:id="@+id/flowType1_viEDT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Flow Type"
+                    android:imeOptions="actionNext" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <!--Constant-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
@@ -189,23 +203,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <!--Smoothing Factor -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/smoothingFactor_vi"
-                style="@style/config_Til">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/smoothingFactor_viEDT"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Smoothing Factor"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
         </LinearLayout>
 
         <!--Row 3.a-->
@@ -228,6 +225,7 @@
                     android:hint="Sensor 2 Input Number" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
             <!--Sensor 2 Input Type-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/sensor2Type_vi"
@@ -241,6 +239,23 @@
                     android:editable="false"
                     android:focusable="false"
                     android:hint="Sensor 2 Input Type" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--Sensor 2  FlowType-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/flowType2_vi"
+                style="@style/config_AtxTil"
+                android:visibility="gone">
+
+                <AutoCompleteTextView
+                    android:id="@+id/flowType2_viEDT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Flow Type"
+                    android:imeOptions="actionNext" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -317,48 +332,13 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="3dp"
-                android:layout_weight="1">
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/virtual_input_val"
-                    style="@style/config_Til"
-                    android:hint="Virtual Input Unit"
-                    app:expandedHintEnabled="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/virtual_input_val_edt"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:imeOptions="actionNext"
-                        android:inputType="text"
-                        android:maxLength="6"
-                        android:maxLines="1"
-                        android:textAlignment="center"
-                        app:textInputLayoutFocusedRectEnabled="true" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
         </LinearLayout>
 
         <!--Row 4-->
         <LinearLayout
             android:id="@+id/vsRow3_isc"
             style="@style/config_rowLl"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <!--Low Range -->
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -432,6 +412,7 @@
                     app:layout_constraintStart_toStartOf="@+id/lowRange_vi"
                     app:layout_constraintTop_toTopOf="@+id/lowRange_vi" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <!--High Range -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
@@ -505,6 +486,50 @@
                     app:layout_constraintTop_toTopOf="@+id/highRange_vi" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!--Virtual Unit-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:layout_weight="1">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/virtual_input_val"
+                    style="@style/config_Til"
+                    android:hint="Virtual Input Unit"
+                    app:expandedHintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/virtual_input_val_edt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLength="6"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        app:textInputLayoutFocusedRectEnabled="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </LinearLayout>
+
+        <!--Row 4.a-->
+        <LinearLayout
+            android:id="@+id/vsRow5_isc"
+            style="@style/config_rowLl">
+
+
+            <!--Low Alarm-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -578,6 +603,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!--High Alarm-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -651,10 +677,27 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!--Smoothing Factor -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/smoothingFactor_vi"
+                style="@style/config_Til">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/smoothingFactor_viEDT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Smoothing Factor"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
         </LinearLayout>
 
-        <!--Row 4-->
+        <!--Row 4.b-->
         <LinearLayout
             android:id="@+id/vsRow4_isc"
             style="@style/config_rowLl">

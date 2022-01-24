@@ -195,7 +195,7 @@ public class ApiService implements DataReceiveCallback {
                         break;
                     case "03":
                         processSiteDetails(responseObject.getJSONArray("DATA").
-                                getJSONObject(0).getJSONArray("REQ"), 0);
+                                getJSONObject(0).getJSONArray("REQ"), 1);
                         break;
                     case "04":
                         writeInputConfiguration(responseObject.getJSONArray("DATA").
@@ -979,7 +979,7 @@ public class ApiService implements DataReceiveCallback {
             SharedPref.write(pref_CONTROLLERPASSWORD, siteDetailsObject.getJSONObject(0).getString("CONTROLLER_PASSWORD"));
             SharedPref.write(pref_CONTROLLERISACTIVE, (siteDetailsObject.getJSONObject(0).getString("ISACTIVE").equals("1")));
 
-            // if (pck == 1) { todo: should unComment
+             if (pck == 1) {
                 responseTabId = "03";
                 responseTabData = "ACK";
                 dataObj = new JSONObject();
@@ -993,7 +993,7 @@ public class ApiService implements DataReceiveCallback {
                 dataObj.put("TYPE", "");
                 dataObj.put("EVENT_TYPE", "");
                 finalArr.put(dataObj);
-            /* } else {
+             } else {
                 ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
                     @Override
                     public void OnDataReceive(String data) {
@@ -1026,7 +1026,7 @@ public class ApiService implements DataReceiveCallback {
                         siteDetailsObject.getJSONObject(0).getString("SITE_LOCATION") + SPILT_CHAR +
                         siteDetailsObject.getJSONObject(0).getString("ALARM_DELAY") + SPILT_CHAR +
                         "0" + SPILT_CHAR + siteDetailsObject.getJSONObject(0).getString("RTC"));
-            }*/
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             try {

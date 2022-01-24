@@ -3,13 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <import type="android.view.View" />
-
         <variable
             name="flowMeterType"
             type="String" />
-
     </data>
 
     <LinearLayout
@@ -63,6 +60,12 @@
                     android:hint="@string/sequence_number" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
 
         </LinearLayout>
 
@@ -238,8 +241,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/flow_volumeRateunit_root_isc"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_margin="3dp"
+                android:visibility="@{flowMeterType.equals(`1`) ? View.VISIBLE : View.GONE}"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -258,7 +262,7 @@
                         style="@style/config_Edt"
                         android:imeOptions="actionNext"
                         android:inputType="number"
-                        android:maxLength="@{flowMeterType.equals(`1`)? 7:4}"
+                        android:maxLength="@{flowMeterType.equals(`1`)? 7 : 4 }"
                         android:maxLines="1"
                         android:textColorHint="@color/colorPrimary" />
 
@@ -297,11 +301,25 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!--Rate Unit-->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/config_AtxTil"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="@{flowMeterType.equals(`1`) ? View.GONE : View.VISIBLE}">
+
+                <AutoCompleteTextView
+                    style="@style/config_Atxt"
+                    android:hint="Rate Unit" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <!--set Flow Total-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/flow_setFlowTotal_root_isc"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="?attr/actionBarSize"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
@@ -309,7 +327,9 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/flow_setFlowTotal_til_isc"
                     style="@style/config_Til"
+                    android:layout_width="match_parent"
                     app:expandedHintEnabled="false"
+                    android:layout_height="match_parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -363,15 +383,17 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/flow_alarmLow_root_isc"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="?attr/actionBarSize"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/flow_alarmLow_til_isc"
-                    style="@style/config_Til"
                     app:expandedHintEnabled="false"
+                    style="@style/config_Til"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -425,13 +447,15 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/flow_highAlarm_root_isc"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="?attr/actionBarSize"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/flow_highAlarm_til_isc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     style="@style/config_Til"
                     android:layout_weight="1.5"
                     app:expandedHintEnabled="false"
@@ -636,7 +660,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/flow_feedVolume_root_isc"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="?attr/actionBarSize"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
@@ -644,6 +668,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/flow_feedVolume_til_isc"
                     style="@style/config_Til"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -754,7 +780,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/flow_min_root_isc"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="?attr/actionBarSize"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
@@ -762,6 +788,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/flow_min_edt_til_isc"
                     style="@style/config_Til"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -815,7 +843,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/flow_max_root_isc"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="?attr/actionBarSize"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
@@ -823,6 +851,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/flow_max_til_isc"
                     style="@style/config_Til"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1.5"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
