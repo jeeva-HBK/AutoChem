@@ -20,9 +20,23 @@ public interface TimerConfigurationDao {
 
     @Query("UPDATE TimerConfigurationEntity SET timerName =:timerName , outputLinked =:outputLinked " +
             ", mode=:mode WHERE timerNo = :timerNo")
-    void updateTimer(String timerName,String outputLinked,String mode,int timerNo);
+    void updateTimer(String timerName, String outputLinked, String mode, int timerNo);
 
     @Query("Delete from timerconfigurationentity")
     void deleteTimerDao();
 
+    @Query("select mainTimerPacket from timerconfigurationentity WHERE timerName = :timerNo ")
+    String getAccessoryPacket(int timerNo);
+
+    @Query("select weekOnePacket from timerconfigurationentity WHERE timerName = :timerNo ")
+    String getWeekOnePacket(int timerNo);
+
+    @Query("select weekOnePacket from timerconfigurationentity WHERE timerName = :timerNo ")
+    String getWeekTwoPacket(int timerNo);
+
+    @Query("select weekOnePacket from timerconfigurationentity WHERE timerName = :timerNo ")
+    String getWeekThreePacket(int timerNo);
+
+    @Query("select weekOnePacket from timerconfigurationentity WHERE timerName = :timerNo ")
+    String getWeekFourPacket(int timerNo);
 }

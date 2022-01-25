@@ -624,7 +624,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                 getPositionFromAtxt(0, getStringValue(mBinding.flowSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
                 getStringValue(0, mBinding.flowInputLabelEdtIsc) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr) + SPILT_CHAR +
-                // getDecimalValue(mBinding.flowFeedVolumeEdtIsc, 7, mBinding.flowFeedVolumeDeciIsc, 3) + SPILT_CHAR +
+                getDecimalValue(mBinding.flowFeedVolumeEdtIsc, 7, mBinding.flowFeedVolumeDeciIsc, 3) + SPILT_CHAR +
                 getPositionFromAtxt(0, mBinding.newRateUnit.getText().toString(), rateUnitArr) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowTotalAlarmModeAtxtIsc), totalAlarmMode) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowAlarmModeAtxtIsc), flowAlarmMode) + SPILT_CHAR +

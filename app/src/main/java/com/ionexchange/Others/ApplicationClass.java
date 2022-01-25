@@ -178,7 +178,7 @@ public class ApplicationClass extends Application {
 
     alarmArr = {"Low Alarm", "High Alarm", "Safety Low Alarm",
             "Safety High Alarm", "Calibration Required Alarm", "Totalizer Alarm",
-            "DI Alarm", "Flow Verify Alarm", "Lockout Alarm"},
+            "DI Alarm", "Flow Verify Alarm", "Lockout Alarm","Low Range Alarm(Virtual Input)", "High Range Alarm(Virtual Input)"},
             FlowanalogType = {"Analog - 1", "Analog - 2", "Analog - 3", "Analog - 4", "Analog - 5", "Analog - 6", "Analog - 7", "Analog - 8"};
 
     /* Static Variables */
@@ -203,14 +203,14 @@ public class ApplicationClass extends Application {
     OutputKeepAliveDao outputKeepAliveDao;
 
     // WebService
-    //private static final int httpRequestTimeout = 3000;
-    private static final int httpRequestTimeout = 100000;
+    private static final int httpRequestTimeout = 3000;
     public static int userType;
     public static RequestQueue requestQueue;
     // public final static String baseURL = "http://192.168.1.241/WaterIOT.API/api/";
     // public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
 
-     public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
+    public final static String baseURL = "http://183.82.35.93/WaterIOT.API/api/";
+    // public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
 
     public static ObservableBoolean triggerWebService = new ObservableBoolean(false);
     public static ObservableBoolean bleConnected = new ObservableBoolean(true);
@@ -980,7 +980,7 @@ public class ApplicationClass extends Application {
                 public void run() {
                     try {
                         String currentDBPath = getDatabasePath(DB_NAME).getAbsolutePath();
-                        String backupDBPath = "ion_exchange_db.db";
+                        String backupDBPath =  "ion_exchange_db.db";
                         File currentDB = new File(currentDBPath);
                         File backupDB = new File(sd, backupDBPath);
 
@@ -1014,10 +1014,11 @@ public class ApplicationClass extends Application {
             File sd = Environment.getExternalStorageDirectory().getAbsoluteFile();
             handler = new Handler();
             final Runnable r = new Runnable() {
+
                 public void run() {
                     try {
                         String currentDBPath = getDatabasePath(DB_NAME).getAbsolutePath();
-                        String backupDBPath = "ion_exchange_db.db";
+                        String backupDBPath = Environment.getExternalStorageDirectory().getPath( ) + "ion_exchange_db.db";
                         File currentDB = new File(currentDBPath);
                         File backupDB = new File(sd, backupDBPath);
 
@@ -1039,11 +1040,11 @@ public class ApplicationClass extends Application {
 
             handler.postDelayed(r, 3000);
 
-            Toast.makeText(getApplicationContext(), "Import Successful!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Export Successful!", Toast.LENGTH_SHORT).show();
 
         } catch (Exception e) {
 
-            Toast.makeText(getApplicationContext(), "Import Failed!", Toast.LENGTH_SHORT)
+            Toast.makeText(getApplicationContext(), "Export Failed!", Toast.LENGTH_SHORT)
                     .show();
 
         }

@@ -51,7 +51,14 @@
         android:id="@+id/passwordSettings"
         android:name="com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentDuSetting_Config"
         android:label="unitIp"
-        tools:layout="@layout/fragment_dusettings" />
+        tools:layout="@layout/fragment_dusettings" >
+        <action
+            android:id="@+id/action_passwordSettings_to_fragmentSendAllPacket"
+            app:destination="@id/fragmentSendAllPacket" />
+        <action
+            android:id="@+id/action_passwordSettings_to_fragmentGetAllPacket"
+            app:destination="@id/fragmentGetAllPacket" />
+    </fragment>
 
 
     <fragment
@@ -253,6 +260,16 @@
         android:name="com.ionexchange.Fragments.Configuration.HomeScreen.FragmentSetLayout"
         android:label="FragmentSetLayout"
         tools:layout="@layout/fragment_setlayout" />
+    <fragment
+        android:id="@+id/fragmentSendAllPacket"
+        android:name="com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentSendAllPacket"
+        android:label="FragmentSendAllPacket"
+        tools:layout="@layout/fragment_send_all"/>
+    <fragment
+        android:id="@+id/fragmentGetAllPacket"
+        android:name="com.ionexchange.Fragments.Configuration.GeneralConfig.FragmentGetAllPacket"
+        android:label="FragmentGetAllPacket"
+        tools:layout="@layout/item_get_all_packet"/>
 
 
 </navigation>

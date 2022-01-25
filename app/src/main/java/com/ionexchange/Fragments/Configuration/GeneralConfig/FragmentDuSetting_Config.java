@@ -14,6 +14,7 @@ import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINPASSWORDCHANED;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,12 @@ import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentDusettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 public class FragmentDuSetting_Config extends Fragment implements View.OnClickListener {
     FragmentDusettingsBinding mBinding;
@@ -184,6 +191,71 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
             case R.id.logOut:
                 BaseActivity.logOut();
                 break;
+
+
+            case R.id.pendrive:
+                String srcDir = Environment.getExternalStorageDirectory().toString()+"/MyFolder";
+                String dst = Environment.getExternalStorageDirectory().getPath() + "/Pictures";
+                copyFileOrDirectory(srcDir, dst);
+                // mAppclass.exportDB();
+                break;
+
+
+            case R.id.send_all_config:
+                mAppclass.navigateTo(getActivity(), R.id.action_passwordSettings_to_fragmentSendAllPacket);
+                break;
+
+            case R.id.get_all_config:
+                mAppclass.navigateTo(getActivity(), R.id.action_passwordSettings_to_fragmentGetAllPacket);
+                break;
+        }
+    }
+
+    private void copyFileOrDirectory(String srcDir, String dstDir) {
+
+        try {
+            File src = new File(srcDir);
+            File dst = new File(dstDir, src.getName());
+
+            if (src.isDirectory()) {
+
+                String files[] = src.list();
+                int filesLength = files.length;
+                for (int i = 0; i < filesLength; i++) {
+                    String src1 = (new File(src, files[i]).getPath());
+                    String dst1 = dst.getPath();
+                    copyFileOrDirectory(src1, dst1);
+                }
+            } else {
+                copyFile(src, dst);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void copyFile(File sourceFile, File destFile) throws IOException {
+        if (!destFile.getParentFile().exists())
+            destFile.getParentFile().mkdirs();
+
+        if (!destFile.exists()) {
+            destFile.createNewFile();
+        }
+
+        FileChannel source = null;
+        FileChannel destination = null;
+
+        try {
+            source = new FileInputStream(sourceFile).getChannel();
+            destination = new FileOutputStream(destFile).getChannel();
+            destination.transferFrom(source, 0, source.size());
+        } finally {
+            if (source != null) {
+                source.close();
+            }
+            if (destination != null) {
+                destination.close();
+            }
         }
     }
 

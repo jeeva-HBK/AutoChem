@@ -61,7 +61,7 @@ public interface InputConfigurationDao {
     @Query("select inputSequenceNumber from inputconfigurationentity WHERE hardwareNo = :hardwareNo")
     int getSeqNumber(int hardwareNo);
 
-    @Query("select writePacket from inputconfigurationentity WHERE hardwareNo = :hardwareNo AND flagKey = 1")
+    @Query("select writePacket from inputconfigurationentity WHERE hardwareNo = :hardwareNo ")
     String getWritePacket(int hardwareNo);
 
     @Query("select * from inputconfigurationentity WHERE flagKey = 1")

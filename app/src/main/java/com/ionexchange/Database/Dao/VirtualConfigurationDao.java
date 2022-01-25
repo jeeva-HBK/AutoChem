@@ -42,6 +42,9 @@ public interface VirtualConfigurationDao {
     @Query("select subValueTwo  FROM virtualconfigurationentity WHERE  hardwareNo = :hardwareNo ")
     String getHighAlarm(int hardwareNo);
 
+    @Query("select writePacket from virtualconfigurationentity WHERE hardwareNo = :hardwareNo ")
+    String getWritePacket(int hardwareNo);
+
     @Query("Delete from virtualconfigurationentity")
     void deleteVirtualDao();
 }
