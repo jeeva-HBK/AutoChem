@@ -15,6 +15,7 @@ import static com.ionexchange.Others.ApplicationClass.getDecimalValue;
 import static com.ionexchange.Others.ApplicationClass.getPosition;
 import static com.ionexchange.Others.ApplicationClass.getPositionFromAtxt;
 import static com.ionexchange.Others.ApplicationClass.getStringValue;
+import static com.ionexchange.Others.ApplicationClass.getValueFromArr;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
 import static com.ionexchange.Others.ApplicationClass.mainConfigurationDao;
@@ -82,7 +83,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
     InputConfigurationDao dao;
     String sequenceNumber;
     OutputConfigurationDao output_dao;
-    String[] outputNames;
+    String[] outputNames, rateUnitArr = {"Min", "Hour", "Day", "Month"};
     String writePacket;
 
     @Nullable
@@ -259,7 +260,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                 }
                 break;
             case 3:
-                if (validation3()) {
+                if (validFeedMonitor()) {
                     showProgress();
                     sendFeedMonitorPacket(2);
                     packetId = 3;
@@ -292,7 +293,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                 }
                 break;
             case 3:
-                if (validation3()) {
+                if (validFeedMonitor()) {
                     showProgress();
                     sendFeedMonitorPacket(1);
                     packetId = 3;
@@ -301,7 +302,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
         }
     }
 
-    private boolean validation3() {
+    private boolean validFeedMonitor() {
         if (isFieldEmpty(mBinding.flowInputLabelEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.input_name_validation));
             return false;
@@ -326,7 +327,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
         } else if (isFieldEmpty(mBinding.flowFlowUnitAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.flowunit_vali));
             return false;
-        } else if (isFieldEmpty(mBinding.flowVolumeRateunitEdtIsc)) {
+        } else if (mBinding.newRateUnit.getText().toString().equals("")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.rateunit_vali));
             return false;
         } else if (isFieldEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
@@ -412,7 +413,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
         } else if (isFieldEmpty(mBinding.flowFlowUnitAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.flowunit_vali));
             return false;
-        } else if (isFieldEmpty(mBinding.flowVolumeRateunitEdtIsc)) {
+        } else if (mBinding.newRateUnit.getText().toString().equals("")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.rateunit_vali));
             return false;
         } else if (!getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("3") &&
@@ -560,7 +561,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
         } else if (isFieldEmpty(mBinding.flowFlowUnitAtxtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.flowunit_vali));
             return false;
-        } else if (isFieldEmpty(mBinding.flowVolumeRateunitEdtIsc)) {
+        } else if (mBinding.newRateUnit.getText().toString().equals("")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.rateunit_vali));
             return false;
         } else if (isFieldEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
@@ -623,8 +624,8 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                 getPositionFromAtxt(0, getStringValue(mBinding.flowSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
                 getStringValue(0, mBinding.flowInputLabelEdtIsc) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr) + SPILT_CHAR +
-                getDecimalValue(mBinding.flowFeedVolumeEdtIsc, 7, mBinding.flowFeedVolumeDeciIsc, 3) + SPILT_CHAR +
-                getDecimalValue(mBinding.flowVolumeRateunitEdtIsc, 4, mBinding.flowVolumeRateunitDeciIsc, 2) + SPILT_CHAR +
+                // getDecimalValue(mBinding.flowFeedVolumeEdtIsc, 7, mBinding.flowFeedVolumeDeciIsc, 3) + SPILT_CHAR +
+                getPositionFromAtxt(0, mBinding.newRateUnit.getText().toString(), rateUnitArr) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowTotalAlarmModeAtxtIsc), totalAlarmMode) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowAlarmModeAtxtIsc), flowAlarmMode) + SPILT_CHAR +
                 getStringValue(4, mBinding.flowAlarmDelayEdtIsc) + SPILT_CHAR +
@@ -653,7 +654,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                 getPositionFromAtxt(0, getStringValue(mBinding.flowSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
                 getStringValue(0, mBinding.flowInputLabelEdtIsc) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr) + SPILT_CHAR +
-                getDecimalValue(mBinding.flowVolumeRateunitEdtIsc, 4, mBinding.flowVolumeRateunitDeciIsc, 2) + SPILT_CHAR +
+                getPositionFromAtxt(0, mBinding.newRateUnit.getText().toString(), rateUnitArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowKFactorEdtIsc, 7, mBinding.flowKFactorDeciIsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowTotalizerAlarmEdtIsc, 10, mBinding.flowTotalizerAlarmDeciIsc, 2) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowResetFlowTotalAtxtIsc), resetFlowTotalArr) + SPILT_CHAR +
@@ -702,7 +703,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                 getPositionFromAtxt(0, getStringValue(mBinding.flowSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
                 getStringValue(0, mBinding.flowInputLabelEdtIsc) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr) + SPILT_CHAR +
-                getDecimalValue(mBinding.flowVolumeRateunitEdtIsc, 4, mBinding.flowVolumeRateunitDeciIsc, 2) + SPILT_CHAR +
+                getPositionFromAtxt(0, mBinding.newRateUnit.getText().toString(), rateUnitArr) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowMaxEdtIsc, 7, mBinding.flowMaxDeciIsc, 2) + SPILT_CHAR +
                 getDecimalValue(mBinding.flowMinEdtIsc, 7, mBinding.flowMinDeciIsc, 2) + SPILT_CHAR +
                 getStringValue(3, mBinding.flowSmoothingFactorEdtIsc) + SPILT_CHAR +
@@ -730,6 +731,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
         mBinding.flowTotalAlarmModeAtxtIsc.setAdapter(getAdapter(totalAlarmMode, getContext()));
         mBinding.flowAlarmModeAtxtIsc.setAdapter(getAdapter(flowAlarmMode, getContext()));
         mBinding.flowAnalogTypeAtxt.setAdapter(getAdapter(FlowanalogType, getContext()));
+        mBinding.newRateUnit.setAdapter(getAdapter(rateUnitArr, getContext()));
         List<OutputConfigurationEntity> outputNameList = output_dao.getOutputHardWareNoConfigurationEntityList(1, 14);
         outputNames = new String[14];
         if (!outputNameList.isEmpty()) {
@@ -800,8 +802,9 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                                 mBinding.flowSensorActivationAtxtIsc.setText(mBinding.flowSensorActivationAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[8])).toString());
                                 mBinding.flowInputLabelEdtIsc.setText(splitData[9]);
                                 mBinding.flowFlowUnitAtxtIsc.setText(mBinding.flowFlowUnitAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[10])).toString());
-                                mBinding.flowVolumeRateunitEdtIsc.setText(splitData[11].substring(0, 4));
-                                mBinding.flowVolumeRateunitDeciIsc.setText(splitData[11].substring(5, 7));
+                               /* mBinding.flowVolumeRateunitEdtIsc.setText(splitData[11].substring(0, 4));
+                                mBinding.flowVolumeRateunitDeciIsc.setText(splitData[11].substring(5, 7));*/
+                                mBinding.newRateUnit.setText(mBinding.newRateUnit.getAdapter().getItem(Integer.parseInt(splitData[11])).toString());
                                 mBinding.flowMaxEdtIsc.setText(splitData[12].substring(0, 7));
                                 mBinding.flowMaxDeciIsc.setText(splitData[12].substring(8, 10));
                                 mBinding.flowMinEdtIsc.setText(splitData[13].substring(0, 7));
@@ -845,8 +848,9 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                                 mBinding.flowSensorActivationAtxtIsc.setText(mBinding.flowSensorActivationAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[7])).toString());
                                 mBinding.flowInputLabelEdtIsc.setText(splitData[8]);
                                 mBinding.flowFlowUnitAtxtIsc.setText(mBinding.flowFlowUnitAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[9])).toString());
-                                mBinding.flowVolumeRateunitEdtIsc.setText(splitData[10].substring(0, 4));
-                                mBinding.flowVolumeRateunitDeciIsc.setText(splitData[10].substring(5, 7));
+                                /*mBinding.flowVolumeRateunitEdtIsc.setText(splitData[10].substring(0, 4));
+                                mBinding.flowVolumeRateunitDeciIsc.setText(splitData[10].substring(5, 7));*/
+                                mBinding.newRateUnit.setText(mBinding.newRateUnit.getAdapter().getItem(Integer.parseInt(splitData[10])).toString());
                                 mBinding.flowKFactorEdtIsc.setText(splitData[11].substring(0, 7));
                                 mBinding.flowKFactorDeciIsc.setText(splitData[11].substring(8, 10));
                                 mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[12].substring(0, 10));
@@ -867,8 +871,9 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                                 mBinding.flowFlowUnitAtxtIsc.setText(mBinding.flowFlowUnitAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[9])).toString());
                                 mBinding.flowFeedVolumeEdtIsc.setText(splitData[10].substring(0, 7));
                                 mBinding.flowFeedVolumeDeciIsc.setText(splitData[10].substring(8, 11));
-                                mBinding.flowVolumeRateunitEdtIsc.setText(splitData[11].substring(0, 4));
-                                mBinding.flowVolumeRateunitDeciIsc.setText(splitData[11].substring(5, 7));
+                                /*mBinding.flowVolumeRateunitEdtIsc.setText(splitData[11].substring(0, 4));
+                                mBinding.flowVolumeRateunitDeciIsc.setText(splitData[11].substring(5, 7));*/
+                                mBinding.newRateUnit.setText(mBinding.newRateUnit.getAdapter().getItem(Integer.parseInt(splitData[11])).toString());
                                 mBinding.flowTotalAlarmModeAtxtIsc.setText(mBinding.flowTotalAlarmModeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[12])).toString());
                                 mBinding.flowAlarmModeAtxtIsc.setText(mBinding.flowAlarmModeAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
                                 mBinding.flowAlarmDelayEdtIsc.setText(splitData[14]);

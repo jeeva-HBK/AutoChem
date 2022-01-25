@@ -241,7 +241,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/flow_volumeRateunit_root_isc"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="?attr/actionBarSize"
                 android:layout_margin="3dp"
                 android:visibility="@{flowMeterType.equals(`1`) ? View.VISIBLE : View.GONE}"
                 android:layout_weight="1"
@@ -250,7 +250,9 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/flow_volumeRateunit_til_isc"
                     style="@style/config_Til"
-                    android:hint="@{flowMeterType.equals(`1`)? `Volume/Contact` : `Rate Unit`}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Volume/Contact"
                     app:expandedHintEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -262,7 +264,7 @@
                         style="@style/config_Edt"
                         android:imeOptions="actionNext"
                         android:inputType="number"
-                        android:maxLength="@{flowMeterType.equals(`1`)? 7 : 4 }"
+                        android:maxLength="7"
                         android:maxLines="1"
                         android:textColorHint="@color/colorPrimary" />
 
@@ -310,6 +312,7 @@
                 android:visibility="@{flowMeterType.equals(`1`) ? View.GONE : View.VISIBLE}">
 
                 <AutoCompleteTextView
+                    android:id="@+id/newRateUnit"
                     style="@style/config_Atxt"
                     android:hint="Rate Unit" />
 

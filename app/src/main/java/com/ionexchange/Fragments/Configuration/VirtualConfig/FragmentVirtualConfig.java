@@ -72,6 +72,8 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
     private static final String TAG = "FragmentVirtualSensor_c";
     String writePacket;
     String[] flowTypeArr = {"Flow Rate", "Totalized Volume"};
+    String sensor1Value = "";
+    String sensor2Value = "";
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -155,20 +157,20 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
                     if (!getStringValue(mBinding.sensor1ViATXT).isEmpty()) {
                         String[] gethardwareNo = getStringValue(mBinding.sensor1ViATXT).split("-");
                         String hardwareNo = gethardwareNo[0];
-                        String sensorValue = sensorvalueDao.getCurrentValue(Integer.parseInt(hardwareNo));
+                        sensor1Value = sensorvalueDao.getCurrentValue(Integer.parseInt(hardwareNo));
                         String inputType = inputTypeDao.getInputType(Integer.parseInt(hardwareNo));
-                        if (sensorValue.equalsIgnoreCase("N/A"))
-                            sensorValue = "0";
-                        if (sensorValue.contains("-")) {
+                        if (sensor1Value.equalsIgnoreCase("N/A"))
+                            sensor1Value = "0";
+                        if (sensor1Value.contains("-")) {
                             mBinding.pidConstant1valueTBtn.setChecked(false);
                         } else {
                             mBinding.pidConstant1valueTBtn.setChecked(true);
                         }
-                        if (sensorValue.contains("-") || sensorValue.contains("+")) {
-                            mBinding.sensor1ConstantViEDT.setText(sensorValue.substring(1));
-                            splitDecimal(sensorValue.substring(1), mBinding.sensor1ConstantViEDT, mBinding.sensor1ConstantDec);
+                        if (sensor1Value.contains("-") || sensor1Value.contains("+")) {
+                            mBinding.sensor1ConstantViEDT.setText(sensor1Value.substring(1));
+                            splitDecimal(sensor1Value.substring(1), mBinding.sensor1ConstantViEDT, mBinding.sensor1ConstantDec);
                         } else {
-                            sensorValue = Integer.parseInt(hardwareNo) > 25 ? sensorValue.split("T")[1] : sensorValue;
+                            String sensorValue = Integer.parseInt(hardwareNo) > 25 ? sensor1Value.split("T")[1] : sensor1Value;
                             mBinding.sensor1ConstantViEDT.setText(sensorValue);
                             splitDecimal(sensorValue, mBinding.sensor1ConstantViEDT, mBinding.sensor1ConstantDec);
                         }
@@ -212,20 +214,20 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
                     if (!getStringValue(mBinding.sensor2ViATXT).isEmpty()) {
                         String[] gethardwareNo = getStringValue(mBinding.sensor2ViATXT).split("-");
                         String hardwareNo = gethardwareNo[0];
-                        String sensorValue = sensorvalueDao.getCurrentValue(Integer.parseInt(hardwareNo));
+                        sensor2Value = sensorvalueDao.getCurrentValue(Integer.parseInt(hardwareNo));
                         String inputType = inputTypeDao.getInputType(Integer.parseInt(hardwareNo));
-                        if (sensorValue.equalsIgnoreCase("N/A"))
-                            sensorValue = "0";
-                        if (sensorValue.contains("-")) {
+                        if (sensor2Value.equalsIgnoreCase("N/A"))
+                            sensor2Value = "0";
+                        if (sensor2Value.contains("-")) {
                             mBinding.pidConstant2valueTBtn.setChecked(false);
                         } else {
                             mBinding.pidConstant2valueTBtn.setChecked(true);
                         }
-                        if (sensorValue.contains("-") || sensorValue.contains("+")) {
-                            mBinding.sensor2ConstantViEDT.setText(sensorValue.substring(1));
-                            splitDecimal(sensorValue.substring(1), mBinding.sensor2ConstantViEDT, mBinding.sensor2ConstantDec);
+                        if (sensor2Value.contains("-") || sensor2Value.contains("+")) {
+                            mBinding.sensor2ConstantViEDT.setText(sensor2Value.substring(1));
+                            splitDecimal(sensor2Value.substring(1), mBinding.sensor2ConstantViEDT, mBinding.sensor2ConstantDec);
                         } else {
-                            sensorValue = Integer.parseInt(hardwareNo) > 25 ? sensorValue.split("T")[1] : sensorValue;
+                            String sensorValue = Integer.parseInt(hardwareNo) > 25 ? sensor2Value.split("T")[1] : sensor2Value;
                             mBinding.sensor2ConstantViEDT.setText(sensorValue);
                             splitDecimal(sensorValue, mBinding.sensor2ConstantViEDT, mBinding.sensor2ConstantDec);
                         }
@@ -287,6 +289,21 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
             @Override
             public void onClick(View view) {
                 mAppClass.popStackBack(getActivity());
+            }
+        });
+
+
+        mBinding.flowType1ViEDT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mBinding.sensor1ConstantViEDT.setText(i == 0 ? sensor1Value.split("T")[0] : sensor1Value.split("T")[1]);
+            }
+        });
+
+        mBinding.flowType2ViEDT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mBinding.sensor2ConstantViEDT.setText(i == 0 ? sensor2Value.split("T")[0] : sensor2Value.split("T")[1]);
             }
         });
 
@@ -618,7 +635,7 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
         } else if (data.equals("sendCatch")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
+            mAppClass.showSnackBar(getActivity(), getString(R.string.timeout));
         } else if (data != null) {
             handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
         }
@@ -653,20 +670,25 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
                             } else {
                                 setCommonParamaters(spiltData, 9);
                             }
-                            String sensorValue = sensorvalueDao.getCurrentValue(Integer.parseInt(spiltData[7]));
-                            if (sensorValue.equalsIgnoreCase("N/A"))
-                                sensorValue = "0";
-                            if (sensorValue.contains("-")) {
+                            sensor1Value = sensorvalueDao.getCurrentValue(Integer.parseInt(spiltData[7]));
+                            if (sensor1Value.equalsIgnoreCase("N/A"))
+                                sensor1Value = "0";
+                            if (sensor1Value.contains("-")) {
                                 mBinding.pidConstant1valueTBtn.setChecked(false);
                             } else {
                                 mBinding.pidConstant1valueTBtn.setChecked(true);
                             }
-                            if (sensorValue.contains("-") || sensorValue.contains("+")) {
-                                mBinding.sensor1ConstantViEDT.setText(sensorValue.substring(1));
-                                splitDecimal(sensorValue.substring(1), mBinding.sensor1ConstantViEDT, mBinding.sensor1ConstantDec);
+                            if (sensor1Value.contains("-") || sensor1Value.contains("+")) {
+                                mBinding.sensor1ConstantViEDT.setText(sensor1Value.substring(1));
+                                splitDecimal(sensor1Value.substring(1), mBinding.sensor1ConstantViEDT, mBinding.sensor1ConstantDec);
                             } else {
-                                mBinding.sensor1ConstantViEDT.setText(sensorValue);
-                                splitDecimal(sensorValue, mBinding.sensor1ConstantViEDT, mBinding.sensor1ConstantDec);
+                                if (sensor1Value.contains("T")){
+                                    mBinding.sensor1ConstantViEDT.setText(mBinding.flowType1ViEDT.getText().toString().equals("Flow Rate") ?
+                                            sensor1Value.split("T")[0] : sensor1Value.split("T")[1]);
+                                } else {
+                                    mBinding.sensor1ConstantViEDT.setText(sensor1Value);
+                                }
+                                splitDecimal(mBinding.sensor1ConstantViEDT.getText().toString(), mBinding.sensor1ConstantViEDT, mBinding.sensor1ConstantDec);
                             }
                             mBinding.sensor1ConstantViEDT.setEnabled(false);
                             mBinding.sensor1ConstantDec.setEnabled(false);
@@ -702,7 +724,6 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
 
     void setCommonParamaters(String[] spiltData, int spiltValue) {
         int lowRange, highRange, lowAlarm, highAlarm, smoothingFactor, calcualtion, virtualUnit;
-        String sensorValue;
         mBinding.sensor2TypeATXT.setText(mBinding.sensor2TypeATXT.getAdapter().getItem(Integer.parseInt(spiltData[spiltValue + 2])).toString());
         if (spiltData[spiltValue].equalsIgnoreCase("1")) {
             mBinding.sensor2ViATXT.setText(mBinding.sensor2ViATXT.getAdapter().getItem(0).toString());
@@ -724,7 +745,7 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
             if (Integer.parseInt(spiltData[spiltValue + 1]) >= 26) {
                 mBinding.flowType2Vi.setVisibility(View.VISIBLE);
                 mBinding.flowType2ViEDT.setText(mBinding.flowType2ViEDT.getAdapter().getItem(Integer.parseInt(spiltData[spiltValue + 3])).toString());
-                sensorValue = sensorvalueDao.getCurrentValue(Integer.parseInt(spiltData[spiltValue + 1]));
+                sensor2Value = sensorvalueDao.getCurrentValue(Integer.parseInt(spiltData[spiltValue + 1]));
                 lowRange = spiltValue + 4;
                 highRange = spiltValue + 5;
                 smoothingFactor = spiltValue + 6;
@@ -733,7 +754,7 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
                 calcualtion = spiltValue + 9;
                 virtualUnit = spiltValue + 10;
             } else {
-                sensorValue = sensorvalueDao.getCurrentValue(Integer.parseInt(spiltData[spiltValue + 1]));
+                sensor2Value = sensorvalueDao.getCurrentValue(Integer.parseInt(spiltData[spiltValue + 1]));
                 lowRange = spiltValue + 3;
                 highRange = spiltValue + 4;
                 smoothingFactor = spiltValue + 5;
@@ -742,19 +763,25 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
                 calcualtion = spiltValue + 8;
                 virtualUnit = spiltValue + 9;
             }
-            if (sensorValue.equalsIgnoreCase("N/A"))
-                sensorValue = "0";
-            if (sensorValue.contains("-")) {
+            if (sensor2Value.equalsIgnoreCase("N/A"))
+                sensor2Value = "0";
+            if (sensor2Value.contains("-")) {
                 mBinding.pidConstant2valueTBtn.setChecked(false);
             } else {
                 mBinding.pidConstant2valueTBtn.setChecked(true);
             }
-            if (sensorValue.contains("-") || sensorValue.contains("+")) {
-                mBinding.sensor2ConstantViEDT.setText(sensorValue.substring(1));
-                splitDecimal(sensorValue.substring(1), mBinding.sensor2ConstantViEDT, mBinding.sensor2ConstantDec);
+            if (sensor2Value.contains("-") || sensor2Value.contains("+")) {
+                mBinding.sensor2ConstantViEDT.setText(sensor2Value.substring(1));
+                splitDecimal(sensor2Value.substring(1), mBinding.sensor2ConstantViEDT, mBinding.sensor2ConstantDec);
             } else {
-                mBinding.sensor2ConstantViEDT.setText(sensorValue);
-                splitDecimal(sensorValue, mBinding.sensor2ConstantViEDT, mBinding.sensor2ConstantDec);
+                if (sensor2Value.contains("T")){
+                    mBinding.sensor2ConstantViEDT.setText(mBinding.flowType2ViEDT.getText().toString().equals("Flow Rate") ?
+                            sensor2Value.split("T")[0] : sensor2Value.split("T")[1]);
+                } else {
+                    mBinding.sensor2ConstantViEDT.setText(sensor2Value);
+                }
+
+                splitDecimal(mBinding.sensor2ConstantViEDT.getText().toString(), mBinding.sensor2ConstantViEDT, mBinding.sensor2ConstantDec);
             }
             mBinding.sensor2ConstantViEDT.setEnabled(false);
             mBinding.sensor2ConstantDec.setEnabled(false);
@@ -785,17 +812,25 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
         mBinding.virtualInputValEdt.setText(spiltData[virtualUnit]);
     }
     void virtualEntity() {
+        String subValue1 , subValue2;
+        if (toString(0, mBinding.sensor1TypeATXT).equals("ORP") || toString(0, mBinding.sensor1TypeATXT).equals("Temperature")) {
+            subValue1 = (mBinding.lowAlarmTBtn.isChecked()?"+":"-") + toString(0, mBinding.lowAlarmViEDT) + "." + toString(2, mBinding.lowAlarmViDec);
+            subValue2 = (mBinding.highAlarmTBtn.isChecked()?"+":"-") + toString(0, mBinding.highAlarmViEDT)  + "." + toString(2, mBinding.highAlarmDec);
+        } else  {
+            subValue1 =  toString(0, mBinding.lowAlarmViEDT) + "." + toString(2, mBinding.lowAlarmViDec);
+            subValue2 =  toString(0, mBinding.highAlarmViEDT)  + "." + toString(2, mBinding.highAlarmDec);
+        }
+
         VirtualConfigurationEntity virtualConfigurationEntity = new VirtualConfigurationEntity(
                 sensorInputNo, "Virtual", 0, toString(0, mBinding.labelViEDT), toString(0, mBinding.sensor1TypeATXT),
-                toString(6, mBinding.lowAlarmViEDT) + "." + toString(2, mBinding.lowAlarmViDec),
-                toString(6, mBinding.highAlarmViEDT) + "." + toString(2, mBinding.highAlarmDec), toString(0, mBinding.virtualInputValEdt),
+                subValue1, subValue2, toString(0, mBinding.virtualInputValEdt),
                 STARTPACKET + writePacket + ENDPACKET);
         List<VirtualConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(virtualConfigurationEntity);
         updateToDb(entryListUpdate);
         new EventLogDemo(String.valueOf(sensorInputNo), "Virtual", "Input Setting Changed",
                 SharedPref.read(pref_USERLOGINID, ""), getContext());
-        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
+        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "07", "Input Setting Changed - " +
                 SharedPref.read(pref_USERLOGINID, ""));
 
     }
