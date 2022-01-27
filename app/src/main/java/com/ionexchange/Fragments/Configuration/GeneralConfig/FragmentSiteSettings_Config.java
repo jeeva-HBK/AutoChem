@@ -127,6 +127,9 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
         } else if (isEmpty(mBinding.alarmDelayEdtIsc)) {
             mAppClass.showSnackBar(getContext(), "AlarmDelay  Cannot be Empty");
             return false;
+        } else if (isEmpty(mBinding.alarmDelayDeciIsc)){
+         mAppClass.showSnackBar(getContext(), "AlarmDelay  Cannot be Empty");
+            return false;
         } else if (Integer.parseInt(mBinding.alarmDelayEdtIsc.getText().toString()) > 59) {
             mAppClass.showSnackBar(getContext(), "AlarmDelay should be less than 59:59");
             return false;

@@ -118,6 +118,19 @@ public class KeepAlive implements DataReceiveCallback {
         }
         if (data[2].equals(ALARM_STATUS)) {
             if (data[4].equals("0")) {
+                if (data[5].equals("11")) {
+                    if (Integer.parseInt(data[5].substring(2)) > 3000) {
+                        AlarmLogEntity alarmLogEntity = new AlarmLogEntity(alarmLogDao.getLastSno() + 1,
+                                data[3].substring(2, 4), data[3].substring(0, 2),
+                                alarmArr[Integer.parseInt(data[5])],
+                                ApplicationClass.getCurrentTime(),
+                                ApplicationClass.getCurrentDate(), "1");
+                        List<AlarmLogEntity> alarmEntryList = new ArrayList<>();
+                        alarmEntryList.add(alarmLogEntity);
+                        updateToAlarmDb(alarmEntryList);
+                    }
+                }
+
                 if (data[5].equals("08")) {
                     AlarmLogEntity alarmLogEntity = new AlarmLogEntity(alarmLogDao.getLastSno() + 1,
                             data[3].substring(2, 4), data[3].substring(0, 2),

@@ -107,6 +107,15 @@ public class FragmentDashboard extends Fragment implements View.OnClickListener,
         });
     }
 
+    void setConnected() {
+        mBinding.connectStatus.setImageResource(R.drawable.green_circle);
+        mBinding.connectTxt.setText("CONNECTED");
+    }
+
+    void setDiconnected() {
+        mBinding.connectStatus.setImageResource(R.drawable.green_circle);
+        mBinding.connectTxt.setText("CONNECTED");
+    }
 
     @Override
     public void onResume() {

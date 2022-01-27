@@ -246,7 +246,7 @@
                 android:layout_marginBottom="2dp"
                 android:background="@null"
                 android:gravity="center"
-                android:hint="@string/double_zero"
+                android:text="00"
                 android:imeOptions="actionNext"
                 android:inputType="number"
                 android:maxLength="2"

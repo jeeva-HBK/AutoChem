@@ -412,6 +412,7 @@ public class BluetoothHelper implements SerialListener {
         }
         isConnected = false;
         bleConnected.set(false);
+
         Log.e(TAG, "onDisconnected: ");
 
     }

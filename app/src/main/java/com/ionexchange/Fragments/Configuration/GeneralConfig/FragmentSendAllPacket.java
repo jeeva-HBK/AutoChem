@@ -300,6 +300,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("18", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(19));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 19) {
 
                     sendData(sendInputWritePacket(20));
@@ -309,6 +310,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("19", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(20));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 20) {
 
                     sendData(sendInputWritePacket(21));
@@ -318,6 +320,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("20", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(21));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 21) {
 
                     sendData(sendInputWritePacket(22));
@@ -327,6 +330,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("21", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(22));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 22) {
 
                     sendData(sendInputWritePacket(23));
@@ -366,6 +370,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("25", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(26));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 26) {
 
                     sendData(sendInputWritePacket(27));
@@ -375,6 +380,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("26", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(27));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 27) {
 
                     sendData(sendInputWritePacket(28));
@@ -404,6 +410,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("29", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(30));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 30) {
 
                     sendData(sendInputWritePacket(31));
@@ -453,6 +460,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("34", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(34));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 35) {
 
                     sendData(sendInputWritePacket(36));
@@ -472,6 +480,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("36", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(37));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 37) {
 
                     sendData(sendInputWritePacket(38));
@@ -481,6 +490,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("37", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(38));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 38) {
 
                     sendData(sendInputWritePacket(39));
@@ -520,6 +530,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("41", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(42));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 42) {
 
                     sendData(sendInputWritePacket(43));
@@ -529,6 +540,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("42", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(43));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 43) {
 
                     sendData(sendInputWritePacket(44));
@@ -538,6 +550,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("43", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(44));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 44) {
 
                     sendData(sendInputWritePacket(45));
@@ -547,6 +560,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("44", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(45));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 45) {
 
                     sendData(sendInputWritePacket(46));
@@ -566,6 +580,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("46", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(47));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 47) {
 
                     sendData(sendInputWritePacket(48));
@@ -575,6 +590,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("47", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(48));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 48) {
 
                     sendData(sendInputWritePacket(49));
@@ -584,6 +600,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("48", "INPUT", "FAILED"));
                     sendData(sendInputWritePacket(49));
+
                 } else if (split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[3].equals(RES_SUCCESS) && hardwareNo == 49) {
 
                     sendData(sendVirtualWritePacket(50));
@@ -594,7 +611,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
                     getAllPacketModelList.add(new GetAllPacketModel("49", "INPUT", "FAILED"));
                     sendData(sendVirtualWritePacket(50));
 
-                } else if (split[1].equals(VIRTUAL_INPUT) && split[3].equals(RES_SUCCESS) && hardwareNo == 50) {
+                } else if (split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_SUCCESS) && hardwareNo == 50) {
 
                     sendData(sendVirtualWritePacket(51));
                     getAllPacketModelList.add(new GetAllPacketModel("50", "VIRTUAL", "SUCCESS"));
@@ -603,6 +620,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("50", "VIRTUAL", "FAILED"));
                     sendData(sendVirtualWritePacket(51));
+
                 } else if (split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_SUCCESS) && hardwareNo == 51) {
 
                     sendData(sendVirtualWritePacket(52));
@@ -622,6 +640,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("52", "VIRTUAL", "FAILED"));
                     sendData(sendVirtualWritePacket(53));
+
                 } else if (split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_SUCCESS) && hardwareNo == 53) {
 
                     sendData(sendVirtualWritePacket(54));
@@ -631,6 +650,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("53", "VIRTUAL", "FAILED"));
                     sendData(sendVirtualWritePacket(54));
+
                 } else if (split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_SUCCESS) && hardwareNo == 54) {
 
                     sendData(sendVirtualWritePacket(55));
@@ -640,6 +660,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("54", "VIRTUAL", "FAILED"));
                     sendData(sendVirtualWritePacket(55));
+
                 } else if (split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_SUCCESS) && hardwareNo == 55) {
 
                     sendData(sendVirtualWritePacket(56));
@@ -649,6 +670,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("55", "VIRTUAL", "FAILED"));
                     sendData(sendVirtualWritePacket(56));
+
                 } else if (split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_SUCCESS) && hardwareNo == 56) {
 
                     sendData(sendVirtualWritePacket(57));
@@ -768,6 +790,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     getAllPacketModelList.add(new GetAllPacketModel("10", "OUTPUT", "FAILED"));
                     sendData(sendVirtualWritePacket(11));
+
                 } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 11) {
 
                     sendData(sendOutputWritePacket(12));
@@ -803,7 +826,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
                     sendData(sendOutputWritePacket(15));
                     getAllPacketModelList.add(new GetAllPacketModel("14", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[3].equals(RES_FAILED) && hardwareNo == 14) {
+                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 14) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("14", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(15));
@@ -892,7 +915,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     sendData(sendWeekOnePacket(0, 0));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 0) {
+                } else if (split[1].equals(PCK_TIMER_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 0) {
 
                     sendData(sendWeekOnePacket(0, 0));
 
@@ -903,6 +926,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
                 } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && week == 0) {
 
                     sendData(sendWeekTwoPacket(0, 1));
+
                 } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && week == 1) {
 
                     sendData(sendWeekThreePacket(0, 2));
@@ -910,6 +934,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
                 } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && week == 1) {
 
                     sendData(sendWeekThreePacket(0, 2));
+
                 } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && week == 2) {
 
                     sendData(sendWeekFourPacket(0, 3));
@@ -932,7 +957,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     sendData(sendWeekOnePacket(1, 4));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 1) {
+                } else if (split[1].equals(PCK_TIMER_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 1) {
 
                     sendData(sendWeekOnePacket(1, 4));
 
@@ -943,6 +968,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
                 } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && week == 4) {
 
                     sendData(sendWeekTwoPacket(1, 5));
+
                 } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && week == 5) {
 
                     sendData(sendWeekThreePacket(1, 6));
@@ -950,56 +976,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
                 } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && week == 5) {
 
                     sendData(sendWeekThreePacket(1, 6));
-                } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && week == 6) {
 
-                    sendData(sendWeekFourPacket(1, 7));
-
-                } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && week == 6) {
-
-                    sendData(sendWeekFourPacket(1, 7));
-
-                } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && week == 7) {
-
-                    sendData(sendAccessoryPacket(2));
-                    getAllPacketModelList.add(new GetAllPacketModel("01", "TIMER", "UPDATED"));
-
-                } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && week == 7) {
-
-                    sendData(sendAccessoryPacket(2));
-                    getAllPacketModelList.add(new GetAllPacketModel("01", "TIMER", "FAILED"));
-
-                } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && week == 3) {
-
-                    sendData(sendAccessoryPacket(1));
-                    getAllPacketModelList.add(new GetAllPacketModel("00", "TIMER", "UPDATED"));
-
-                } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && week == 3) {
-
-                    sendData(sendAccessoryPacket(1));
-                    getAllPacketModelList.add(new GetAllPacketModel("00", "TIMER", "FAILED"));
-
-                } else if (split[1].equals(PCK_TIMER_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 1) {
-
-                    sendData(sendWeekOnePacket(1, 4));
-
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 1) {
-
-                    sendData(sendWeekOnePacket(1, 4));
-
-                } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && week == 4) {
-
-                    sendData(sendWeekTwoPacket(1, 5));
-
-                } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && week == 4) {
-
-                    sendData(sendWeekTwoPacket(1, 5));
-                } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && week == 5) {
-
-                    sendData(sendWeekThreePacket(1, 6));
-
-                } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && week == 5) {
-
-                    sendData(sendWeekThreePacket(1, 6));
                 } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && week == 6) {
 
                     sendData(sendWeekFourPacket(1, 7));
@@ -1022,7 +999,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     sendData(sendWeekOnePacket(2, 8));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 2) {
+                } else if (split[1].equals(PCK_TIMER_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 2) {
 
                     sendData(sendWeekOnePacket(2, 8));
 
@@ -1033,6 +1010,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
                 } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && week == 8) {
 
                     sendData(sendWeekTwoPacket(2, 9));
+
                 } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && week == 9) {
 
                     sendData(sendWeekThreePacket(2, 10));
@@ -1040,6 +1018,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
                 } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && week == 9) {
 
                     sendData(sendWeekThreePacket(2, 10));
+
                 } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && week == 10) {
 
                     sendData(sendWeekFourPacket(2, 11));
@@ -1062,7 +1041,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     sendData(sendWeekOnePacket(3, 12));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 3) {
+                } else if (split[1].equals(PCK_TIMER_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 3) {
 
                     sendData(sendWeekOnePacket(3, 12));
 
@@ -1104,7 +1083,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     sendData(sendWeekOnePacket(4, 16));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 4) {
+                } else if (split[1].equals(PCK_TIMER_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 4) {
 
                     sendData(sendWeekOnePacket(4, 16));
 
@@ -1146,7 +1125,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     sendData(sendWeekOnePacket(5, 20));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 5) {
+                } else if (split[1].equals(PCK_TIMER_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 5) {
 
                     sendData(sendWeekOnePacket(5, 20));
 
