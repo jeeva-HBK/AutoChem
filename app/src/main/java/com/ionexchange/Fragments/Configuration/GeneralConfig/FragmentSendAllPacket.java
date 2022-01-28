@@ -2,17 +2,22 @@ package com.ionexchange.Fragments.Configuration.GeneralConfig;
 
 import static com.ionexchange.Activity.BaseActivity.dismissProgress;
 import static com.ionexchange.Activity.BaseActivity.showProgress;
+import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
-import static com.ionexchange.Others.PacketControl.OUTPUT_CONTROL_CONFIG;
+import static com.ionexchange.Others.PacketControl.PCK_OUTPUT_CONFIG;
+import static com.ionexchange.Others.PacketControl.PCK_BACKUP;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.PCK_OUTPUT_CONFIG;
 import static com.ionexchange.Others.PacketControl.PCK_TIMER_CONFIG;
 import static com.ionexchange.Others.PacketControl.PCK_WEEKLY_CONFIG;
 import static com.ionexchange.Others.PacketControl.RES_FAILED;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.VIRTUAL_INPUT;
+import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +35,8 @@ import com.ionexchange.Database.Dao.TimerConfigurationDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
-import com.ionexchange.Others.GetAllPacketModel;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.GetAllPacketModel;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentSendAllBinding;
 
@@ -39,8 +44,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentSendAllPacket extends Fragment implements DataReceiveCallback {
-
-
     ApplicationClass mAppClass;
     WaterTreatmentDb db;
     InputConfigurationDao inputConfigurationDao;
@@ -74,7 +77,12 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
     void sendData(String packet) {
         showProgress();
-        mAppClass.sendPacket(this, packet);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAppClass.sendPacket(FragmentSendAllPacket.this::OnDataReceive , packet);
+            }
+        }, 1000);
     }
 
     void setAdapter() {
@@ -84,7 +92,7 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
     }
 
     void sendAllPacket(String start) {
-        sendData(DEVICE_PASSWORD + SPILT_CHAR + "18" + SPILT_CHAR + "0" + SPILT_CHAR + start);
+        sendData(DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_BACKUP + SPILT_CHAR + "0" + SPILT_CHAR + start);
     }
 
     @Override
@@ -104,8 +112,8 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
                 mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
                 break;
             case "Timeout":
-                dismissProgress();
-                mAppClass.showSnackBar(getContext(), "TimeOut");
+                // dismissProgress();
+                // mAppClass.showSnackBar(getContext(), "TimeOut");
                 break;
             default:
                 handleResponse(data.split("\\*")[1].split("\\$"), data);
@@ -114,10 +122,10 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
     }
 
     private void handleResponse(String[] split, String data) {
-        if (split[0].equals("18") && split[2].equals("0")) {
+        if (split[1].equals("18") && split[3].equals("1") && split[4].equals("0")) {
             sendData(sendInputWritePacket(1));
         } else {
-            if (split[0].equals("18") && split[2].equals("1")) {
+            if (split[1].equals("18") && split[3].equals("1") && split[4].equals("1")) {
                 dismissProgress();
                 mAppClass.showSnackBar(getContext(), "Update Failed");
             } else {
@@ -691,222 +699,222 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
                     getAllPacketModelList.add(new GetAllPacketModel("57", "VIRTUAL", "FAILED"));
                     sendData(sendOutputWritePacket(1));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 1) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 1) {
 
                     sendData(sendOutputWritePacket(2));
                     getAllPacketModelList.add(new GetAllPacketModel("01", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 1) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 1) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("01", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(2));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 2) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 2) {
 
                     sendData(sendOutputWritePacket(3));
                     getAllPacketModelList.add(new GetAllPacketModel("02", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 2) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 2) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("02", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(3));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 3) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 3) {
 
                     sendData(sendOutputWritePacket(4));
                     getAllPacketModelList.add(new GetAllPacketModel("03", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 3) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 3) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("03", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(4));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 4) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 4) {
 
                     sendData(sendOutputWritePacket(5));
                     getAllPacketModelList.add(new GetAllPacketModel("04", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 4) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 4) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("04", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(5));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 5) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 5) {
 
                     sendData(sendOutputWritePacket(6));
                     getAllPacketModelList.add(new GetAllPacketModel("05", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 5) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 5) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("05", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(6));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 6) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 6) {
 
                     sendData(sendOutputWritePacket(7));
                     getAllPacketModelList.add(new GetAllPacketModel("06", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 6) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 6) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("06", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(7));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 7) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 7) {
 
                     sendData(sendOutputWritePacket(8));
                     getAllPacketModelList.add(new GetAllPacketModel("07", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 7) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 7) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("07", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(8));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 8) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 8) {
 
                     sendData(sendOutputWritePacket(9));
                     getAllPacketModelList.add(new GetAllPacketModel("08", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 8) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 8) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("08", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(9));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 9) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 9) {
 
                     sendData(sendOutputWritePacket(10));
                     getAllPacketModelList.add(new GetAllPacketModel("09", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 9) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 9) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("09", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(10));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 10) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 10) {
 
                     sendData(sendOutputWritePacket(11));
                     getAllPacketModelList.add(new GetAllPacketModel("10", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 10) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 10) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("10", "OUTPUT", "FAILED"));
                     sendData(sendVirtualWritePacket(11));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 11) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 11) {
 
                     sendData(sendOutputWritePacket(12));
                     getAllPacketModelList.add(new GetAllPacketModel("11", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 11) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 11) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("11", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(12));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 12) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 12) {
 
                     sendData(sendOutputWritePacket(13));
                     getAllPacketModelList.add(new GetAllPacketModel("12", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 12) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 12) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("12", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(13));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 13) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 13) {
 
                     sendData(sendOutputWritePacket(14));
                     getAllPacketModelList.add(new GetAllPacketModel("13", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 13) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 13) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("13", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(14));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 14) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 14) {
 
                     sendData(sendOutputWritePacket(15));
                     getAllPacketModelList.add(new GetAllPacketModel("14", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 14) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 14) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("14", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(15));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 15) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 15) {
 
                     sendData(sendOutputWritePacket(16));
                     getAllPacketModelList.add(new GetAllPacketModel("15", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 15) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 15) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("15", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(16));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 16) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 16) {
 
                     sendData(sendOutputWritePacket(17));
                     getAllPacketModelList.add(new GetAllPacketModel("16", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[3].equals(RES_FAILED) && hardwareNo == 16) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 16) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("16", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(17));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 17) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 17) {
 
                     sendData(sendOutputWritePacket(18));
                     getAllPacketModelList.add(new GetAllPacketModel("17", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 17) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 17) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("17", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(18));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 18) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 18) {
 
                     sendData(sendOutputWritePacket(19));
                     getAllPacketModelList.add(new GetAllPacketModel("18", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 18) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 18) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("18", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(19));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 19) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 19) {
 
                     sendData(sendOutputWritePacket(20));
                     getAllPacketModelList.add(new GetAllPacketModel("19", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 19) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 19) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("19", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(20));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 20) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 20) {
 
                     sendData(sendOutputWritePacket(21));
                     getAllPacketModelList.add(new GetAllPacketModel("20", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 20) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 20) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("20", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(21));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 21) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 21) {
 
                     sendData(sendOutputWritePacket(22));
                     getAllPacketModelList.add(new GetAllPacketModel("21", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 21) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 21) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("21", "OUTPUT", "FAILED"));
                     sendData(sendOutputWritePacket(22));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 22) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && hardwareNo == 22) {
 
                     sendData(sendAccessoryPacket(0));
                     getAllPacketModelList.add(new GetAllPacketModel("22", "OUTPUT", "SUCCESS"));
 
-                } else if (split[1].equals(OUTPUT_CONTROL_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 22) {
+                } else if (split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && hardwareNo == 22) {
 
                     sendData(sendAccessoryPacket(0));
                     getAllPacketModelList.add(new GetAllPacketModel("22", "OUTPUT", "FAILED"));
@@ -973,7 +981,8 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
                     sendData(sendWeekThreePacket(1, 6));
 
-                } else if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && week == 5) {
+               } else
+                    if (split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && week == 5) {
 
                     sendData(sendWeekThreePacket(1, 6));
 
@@ -1162,10 +1171,10 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
                     sendAllPacket("0");
                     getAllPacketModelList.add(new GetAllPacketModel("05", "TIMER", "FAILED"));
 
-                } else if (split[0].equals("18") && split[2].equals("0")) {
+                } else if (split[1].equals("18")  && split[3].equals("1") && split[4].equals("0")) {
                     dismissProgress();
                     mAppClass.showSnackBar(getContext(), "Update SuccessFully");
-                } else if (split[0].equals("18") && split[2].equals("1")) {
+                } else if (split[1].equals("18") && split[3].equals("1") && split[4].equals("1")) {
                     dismissProgress();
                     mAppClass.showSnackBar(getContext(), "Update Failed");
                 }
@@ -1193,35 +1202,40 @@ public class FragmentSendAllPacket extends Fragment implements DataReceiveCallba
 
     String sendAccessoryPacket(int timerNo) {
         hardwareNo = timerNo;
+        String mString = timerConfigurationDao.getAccessoryPacket(timerNo);
         return timerConfigurationDao.getAccessoryPacket(timerNo).
-                substring(2, timerConfigurationDao.getAccessoryPacket(timerNo).length() - 2);
+                substring(2, mString.length() - 2);
     }
 
     String sendWeekOnePacket(int timerNo, int weekly) {
         hardwareNo = timerNo;
         week = weekly;
+        String mString = timerConfigurationDao.getWeekOnePacket(timerNo);
         return timerConfigurationDao.getWeekOnePacket(timerNo).
-                substring(2, timerConfigurationDao.getWeekOnePacket(timerNo).length() - 2);
+                substring(2, mString.length() - 2);
     }
 
     String sendWeekTwoPacket(int timerNo, int weekly) {
         hardwareNo = timerNo;
         week = weekly;
+        String mString = timerConfigurationDao.getWeekTwoPacket(timerNo);
         return timerConfigurationDao.getWeekTwoPacket(timerNo).
-                substring(2, timerConfigurationDao.getWeekTwoPacket(timerNo).length() - 2);
+                substring(2, mString.length() - 2);
     }
 
     String sendWeekThreePacket(int timerNo, int weekly) {
         hardwareNo = timerNo;
         week = weekly;
+        String mString = timerConfigurationDao.getWeekThreePacket(timerNo);
         return timerConfigurationDao.getWeekThreePacket(timerNo).
-                substring(2, timerConfigurationDao.getWeekThreePacket(timerNo).length() - 2);
+                substring(2, mString.length() - 2);
     }
 
     String sendWeekFourPacket(int timerNo, int weekly) {
         hardwareNo = timerNo;
         week = weekly;
+        String mString = timerConfigurationDao.getWeekFourPacket(timerNo);
         return timerConfigurationDao.getWeekFourPacket(timerNo).
-                substring(2, timerConfigurationDao.getWeekFourPacket(timerNo).length() - 2);
+                substring(2, mString.length() - 2);
     }
 }

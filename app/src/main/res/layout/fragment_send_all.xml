@@ -3,8 +3,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="10dp">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/hardNo"
@@ -12,12 +11,13 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="No"
+            android:background="@color/ash"
+            android:padding="10dp"
             android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline4"
@@ -25,7 +25,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.15" />
-
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline9"
@@ -40,6 +39,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Type"
+            android:background="@color/ash"
+            android:padding="10dp"
             android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/guideline9"
@@ -52,6 +53,8 @@
             android:layout_height="wrap_content"
             android:text="Success"
             android:gravity="center"
+            android:background="@color/ash"
+            android:padding="10dp"
             android:textStyle="bold"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
@@ -62,12 +65,13 @@
             android:id="@+id/rv_get"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="5sp"
+            android:layout_marginTop="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/hardNo">
 
         </androidx.recyclerview.widget.RecyclerView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -102,7 +102,7 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
 
     private void sendResetPck(DialogInterface dialog) {
         final boolean[] dataReceived = {false};
-        mAppclass.sendPacket(new DataReceiveCallback() { // {*0$0$17$0*}
+        mAppclass.sendPacket(new DataReceiveCallback() { // {*0$17$0*}
             @Override
             public void OnDataReceive(String data) {
                 if (mAppclass.isValidPck(WRITE_PACKET, data, getContext())) {
@@ -122,7 +122,6 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
                 } else {
                     dialog.dismiss();
                     mAppclass.showSnackBar(getContext(), "Factory Reset Failed, try again later");
-
                 }
             }
         }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_FACTORYRESET + SPILT_CHAR + ACK);

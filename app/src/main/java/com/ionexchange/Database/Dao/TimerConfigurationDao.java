@@ -25,18 +25,18 @@ public interface TimerConfigurationDao {
     @Query("Delete from timerconfigurationentity")
     void deleteTimerDao();
 
-    @Query("select mainTimerPacket from timerconfigurationentity WHERE timerName = :timerNo ")
+    @Query("select mainTimerPacket from timerconfigurationentity WHERE timerNo = :timerNo ")
     String getAccessoryPacket(int timerNo);
 
-    @Query("select weekOnePacket from timerconfigurationentity WHERE timerName = :timerNo ")
+    @Query("select weekOnePacket from timerconfigurationentity WHERE timerNo = :timerNo ")
     String getWeekOnePacket(int timerNo);
 
-    @Query("select weekOnePacket from timerconfigurationentity WHERE timerName = :timerNo ")
+    @Query("select weekTwoPacket from timerconfigurationentity WHERE timerNo = :timerNo ")
     String getWeekTwoPacket(int timerNo);
 
-    @Query("select weekOnePacket from timerconfigurationentity WHERE timerName = :timerNo ")
+    @Query("select weekThreePacket from timerconfigurationentity WHERE timerNo = :timerNo ")
     String getWeekThreePacket(int timerNo);
 
-    @Query("select weekOnePacket from timerconfigurationentity WHERE timerName = :timerNo ")
+    @Query("select weekFourPacket from timerconfigurationentity WHERE timerNo = :timerNo ")
     String getWeekFourPacket(int timerNo);
 }
