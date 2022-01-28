@@ -58,6 +58,9 @@ public class OutputControlRvAdapter extends RecyclerView.Adapter<OutputControlRv
             if (outputKeepAliveEntityList.get(position).getOutputStatus().equals("5") ||
                     outputKeepAliveEntityList.get(position).getOutputStatus().equals("6")) {
                 holder.outputControl.setText(outputKeepAliveEntityList.get(position).getOutputRelayStatus());
+            } else if (outputKeepAliveEntityList.get(position).getOutputStatus().equals("8") ||
+                    outputKeepAliveEntityList.get(position).getOutputStatus().equals("9")) {
+                holder.outputControl.setText(holder.outputControl.getAdapter().getItem(1).toString());
             } else {
                 holder.outputControl.setText(holder.outputControl.getAdapter().
                         getItem(Integer.parseInt(outputKeepAliveEntityList.get(position).getOutputStatus())).toString());

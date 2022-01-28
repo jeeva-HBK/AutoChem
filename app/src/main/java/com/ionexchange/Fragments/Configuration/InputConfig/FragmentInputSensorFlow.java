@@ -416,11 +416,6 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
         } else if (mBinding.newRateUnit.getText().toString().equals("")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.rateunit_vali));
             return false;
-        } else if (!getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr).equals("3") &&
-                (Long.valueOf(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) == 0 ||
-                        Long.valueOf(mBinding.flowVolumeRateunitEdtIsc.getText().toString()) > 100000)) {
-            mBinding.flowVolumeRateunitEdtIsc.setError(getString(R.string.rateunit_valida));
-            return false;
         } else if (isFieldEmpty(mBinding.flowSetFlowTotalEdtIsc)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.setflowtotal_vali));
             return false;
@@ -835,7 +830,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                                 mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[11].substring(0, 10));
                                 mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[11].substring(11, 13));
                                 mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[12])).toString());
-                                mBinding.flowSetFlowTotalEdtIsc.setText(splitData[13].substring(0, 9));
+                                mBinding.flowSetFlowTotalEdtIsc.setText(splitData[13].substring(0, 10));
                                 mBinding.flowSetFlowTotalDeciIsc.setText(splitData[13].substring(11, 13));
                                 mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[14])).toString());
                                 mBinding.flowAlarmLowEdtIsc.setText(splitData[15].substring(0, 10));
@@ -856,7 +851,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                                 mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[12].substring(0, 10));
                                 mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[12].substring(11, 13));
                                 mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[13])).toString());
-                                mBinding.flowSetFlowTotalEdtIsc.setText(splitData[14].substring(0, 9));
+                                mBinding.flowSetFlowTotalEdtIsc.setText(splitData[14].substring(0, 10));
                                 mBinding.flowSetFlowTotalDeciIsc.setText(splitData[14].substring(11, 13));
                                 mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[15])).toString());
                                 mBinding.flowAlarmLowEdtIsc.setText(splitData[16].substring(0, 10));
@@ -882,7 +877,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                                 mBinding.flowTotalizerAlarmEdtIsc.setText(splitData[17].substring(0, 10));
                                 mBinding.flowTotalizerAlarmDeciIsc.setText(splitData[17].substring(11, 13));
                                 mBinding.flowResetFlowTotalAtxtIsc.setText(mBinding.flowResetFlowTotalAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[18])).toString());
-                                mBinding.flowSetFlowTotalEdtIsc.setText(splitData[19].substring(0, 9));
+                                mBinding.flowSetFlowTotalEdtIsc.setText(splitData[19].substring(0, 10));
                                 mBinding.flowSetFlowTotalDeciIsc.setText(splitData[19].substring(11, 13));
                                 mBinding.flowScheduleResetAtxtIsc.setText(mBinding.flowScheduleResetAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[20])).toString());
                                 mBinding.flowAlarmLowEdtIsc.setText(splitData[21].substring(0, 10));

@@ -141,6 +141,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         inactiveHandler();
         mBinding.notficationTxt.setVisibility(View.INVISIBLE);
         mBinding.notficationView.setVisibility(View.INVISIBLE);
+
         alarmLogDao.getAlarmLiveList().observe(this, new Observer<List<AlarmLogEntity>>() {
             @Override
             public void onChanged(List<AlarmLogEntity> alarmLogEntities) {
@@ -251,7 +252,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     public static void showSnack(String message) {
         Snackbar snackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT);
-        TextView tv = (TextView) snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
+        TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
         tv.setTextColor(Color.WHITE);
         snackbar.show();
     }

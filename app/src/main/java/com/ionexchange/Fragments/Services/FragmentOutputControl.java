@@ -145,7 +145,7 @@ public class FragmentOutputControl extends Fragment implements RvOutputControl, 
            // mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         }
         if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
+            mAppClass.showSnackBar(getActivity(), getString(R.string.timeout));
         }
         if (data != null) {
             handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));

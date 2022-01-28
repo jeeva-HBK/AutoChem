@@ -99,7 +99,7 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
     public void onResume() {
         getAllPacketModelList = new ArrayList<>();
         setAdapter();
-        getAllPacket("1");
+        getAllPacket("0");
         super.onResume();
     }
 
@@ -127,8 +127,8 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
                 mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
                 break;
             case "Timeout":
-                dismissProgress();
-                mAppClass.showSnackBar(getContext(), "TimeOut");
+               // dismissProgress();
+               // mAppClass.showSnackBar(getContext(), "TimeOut");
                 break;
             default:
                 handleResponse(data.split("\\*")[1].split("\\$"), data);
@@ -515,34 +515,34 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
 
                     spiltDigitalInputData(split, packet);
                     getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
-                    inputSendData("35");
+                    inputSendData("36");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("35")) {
 
                     getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
-                    inputSendData("35");
+                    inputSendData("36");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("36")) {
 
                     spiltDigitalInputData(split, packet);
                     getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
-                    inputSendData("36");
+                    inputSendData("37");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("36")) {
 
                     getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
-                    inputSendData("36");
+                    inputSendData("37");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("37")) {
 
                     spiltDigitalInputData(split, packet);
                     getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
-                    inputSendData("37");
+                    inputSendData("38");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("37")) {
 
                     getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
-                    inputSendData("37");
+                    inputSendData("38");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("38")) {
 
@@ -555,7 +555,7 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
                     getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
                     inputSendData("39");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("39")) {
+                }else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("39")) {
 
                     spiltDigitalInputData(split, packet);
                     getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
@@ -667,7 +667,7 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("49")) {
 
-                    spiltVirtualData(split, packet);
+                    spiltTankInputData(split, packet);
                     getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "UPDATED"));
                     virtualSendData("50");
 
@@ -1009,45 +1009,45 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
                     timerName = split[4];
                     outputLink = "Output- " + split[5] + " (" + outputDAO.getOutputLabel(Integer.parseInt(split[5])) + ")";
                     mode = timerOutputMode[Integer.parseInt(split[6])];
-                    timerWeekSendData("0", "0");
+                    timerWeekSendData("0", "00");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_TIMER_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("0")) {
 
-                    timerWeekSendData("0", "0");
+                    timerWeekSendData("0", "00");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("0") && split[4].equals("0")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("0") && split[4].equals("00")) {
 
                     weekOne = packet;
-                    timerWeekSendData("0", "1");
+                    timerWeekSendData("0", "01");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("0") && split[4].equals("0")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("0") && split[4].equals("00")) {
 
-                    timerWeekSendData("0", "1");
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("0") && split[4].equals("1")) {
+                    timerWeekSendData("0", "01");
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("0") && split[4].equals("01")) {
 
                     weekTwo = packet;
-                    timerWeekSendData("0", "2");
+                    timerWeekSendData("0", "02");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("0") && split[4].equals("1")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("0") && split[4].equals("01")) {
 
-                    timerWeekSendData("0", "2");
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("0") && split[4].equals("2")) {
+                    timerWeekSendData("0", "02");
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("0") && split[4].equals("02")) {
 
                     weekThree = packet;
-                    timerWeekSendData("0", "3");
+                    timerWeekSendData("0", "03");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("0") && split[4].equals("2")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("0") && split[4].equals("02")) {
 
-                    timerWeekSendData("0", "3");
+                    timerWeekSendData("0", "03");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("0") && split[4].equals("3")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("0") && split[4].equals("03")) {
 
                     weekFour = packet;
                     timerEntity(0, timerName, outputLink, mode, timerAccessor, weekOne, weekTwo, weekThree, weekFour);
                     timerAccessorySendData("1");
                     getAllPacketModelList.add(new GetAllPacketModel("0", "TIMER", "UPDATED"));
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("0") && split[4].equals("3")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("0") && split[4].equals("03")) {
 
                     getAllPacketModelList.add(new GetAllPacketModel("0", "TIMER", "FAILED"));
                     timerAccessorySendData("1");
@@ -1058,48 +1058,48 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
                     timerName = split[4];
                     outputLink = "Output- " + split[5] + " (" + outputDAO.getOutputLabel(Integer.parseInt(split[5])) + ")";
                     mode = timerOutputMode[Integer.parseInt(split[6])];
-                    timerWeekSendData("1", "4");
+                    timerWeekSendData("1", "04");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_TIMER_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("1")) {
 
-                    timerWeekSendData("1", "4");
+                    timerWeekSendData("1", "04");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("1") && split[4].equals("4")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("1") && split[4].equals("04")) {
 
                     weekOne = packet;
-                    timerWeekSendData("1", "5");
+                    timerWeekSendData("1", "05");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("1") && split[4].equals("4")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("1") && split[4].equals("04")) {
 
-                    timerWeekSendData("1", "5");
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("1") && split[4].equals("5")) {
+                    timerWeekSendData("1", "05");
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("1") && split[4].equals("05")) {
 
                     weekTwo = packet;
-                    timerWeekSendData("1", "6");
+                    timerWeekSendData("1", "06");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("1") && split[4].equals("5")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("1") && split[4].equals("05")) {
 
-                    timerWeekSendData("1", "6");
+                    timerWeekSendData("1", "06");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("1") && split[4].equals("6")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("1") && split[4].equals("06")) {
 
 
                     weekThree = packet;
-                    timerWeekSendData("1", "7");
+                    timerWeekSendData("1", "07");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("1") && split[4].equals("6")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("1") && split[4].equals("06")) {
 
 
-                    timerWeekSendData("1", "7");
+                    timerWeekSendData("1", "07");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("1") && split[4].equals("7")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("1") && split[4].equals("07")) {
 
                     weekFour = packet;
                     timerEntity(1, timerName, outputLink, mode, timerAccessor, weekOne, weekTwo, weekThree, weekFour);
                     getAllPacketModelList.add(new GetAllPacketModel("1", "TIMER", "UPDATED"));
                     timerAccessorySendData("2");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("1") && split[4].equals("7")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("1") && split[4].equals("07")) {
 
                     timerAccessorySendData("2");
                     getAllPacketModelList.add(new GetAllPacketModel("1", "TIMER", "FAILED"));
@@ -1110,26 +1110,26 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
                     timerName = split[4];
                     outputLink = "Output- " + split[5] + " (" + outputDAO.getOutputLabel(Integer.parseInt(split[5])) + ")";
                     mode = timerOutputMode[Integer.parseInt(split[6])];
-                    timerWeekSendData("2", "8");
+                    timerWeekSendData("2", "08");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_TIMER_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("2")) {
 
-                    timerWeekSendData("2", "8");
+                    timerWeekSendData("2", "08");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("2") && split[4].equals("8")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("2") && split[4].equals("08")) {
 
                     weekOne = packet;
-                    timerWeekSendData("2", "9");
+                    timerWeekSendData("2", "09");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("2") && split[4].equals("8")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("2") && split[4].equals("08")) {
 
-                    timerWeekSendData("2", "9");
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("2") && split[4].equals("9")) {
+                    timerWeekSendData("2", "09");
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("2") && split[4].equals("09")) {
 
                     weekTwo = packet;
                     timerWeekSendData("2", "10");
 
-                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("2") && split[4].equals("9")) {
+                } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("2") && split[4].equals("09")) {
 
                     timerWeekSendData("2", "10");
 
@@ -1297,17 +1297,17 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
                     weekFour = packet;
                     timerEntity(2, timerName, outputLink, mode, timerAccessor, weekOne, weekTwo, weekThree, weekFour);
                     getAllPacketModelList.add(new GetAllPacketModel("5", "TIMER", "UPDATED"));
-                    getAllPacket("0");
+                    getAllPacket("1");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_WEEKLY_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("5") && split[4].equals("23")) {
 
-                    getAllPacket("0");
+                    getAllPacket("1");
                     getAllPacketModelList.add(new GetAllPacketModel("5", "TIMER", "FAILED"));
 
-                } else if (split[0].equals("18") && split[2].equals("0")) {
+                } else if (split[1].equals("18") && split[3].equals("0")) {
                     dismissProgress();
                     mAppClass.showSnackBar(getContext(), "Update SuccessFully");
-                } else if (split[0].equals("18") && split[2].equals("1")) {
+                } else if (split[1].equals("18") && split[3].equals("1")) {
                     dismissProgress();
                     mAppClass.showSnackBar(getContext(), "Update Failed");
                 }
@@ -1383,7 +1383,7 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
         inputEntityUpdate(Integer.parseInt(split[3]), inputTypeArr[Integer.parseInt(split[4])],
                 "SENSOR", 0, tempLinkedArr[Integer.parseInt(split[5])],
                 Integer.parseInt(split[5]), split[7], split[10],
-                split[11], "Â°C", "N/A",
+                split[11], "°C", "N/A",
                 packet.charAt(packet.length() - 3) == 0 ? 0 : 1, packet);
 
     }
@@ -1473,8 +1473,8 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
                 break;
             case "3":
 
-                subValueLeft = modeAnalog[Integer.parseInt(split[8])];
-                subValueRight = split[8].equals("0") || split[8].equals("2") ? "" : split[9];
+                subValueLeft = modeAnalog[Integer.parseInt(split[6])];
+                subValueRight = split[6].equals("0") || split[6].equals("2") ? "" : split[7];
                 break;
 
             default:
@@ -1523,8 +1523,6 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
         }
         virtualEntity(Integer.parseInt(split[3]), "Virtual", 0, split[5],
                 inputTypeArr[Integer.parseInt(split[8])], lowAlarm, highAlarm, "N/A", packet);
-        virtualEntity(Integer.parseInt(split[3]), "Virtual", 0, split[5],
-                inputTypeArr[Integer.parseInt(split[8])], "", "", "N/A", packet);
     }
 
 
@@ -1587,15 +1585,14 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
                            String highValue, String unit, String type, int flagValue, String packet) {
         InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                 (hardWareNo, inputType, sensorType, signalType, inputSeqName,
-                        inputSeqNo, label, lowValue, highValue, unit, type, flagValue, STARTPACKET + packet + ENDPACKET);
+                        inputSeqNo, label, lowValue, highValue, unit, type, flagValue,  packet);
         List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(entityUpdate);
         updateInputToDb(entryListUpdate);
     }
 
     void outputEntityUpdate(int hardWareNo, String outputType, String outPutLabel, String outputMode, String outPutStatus, String packet) {
-        OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity(hardWareNo, outputType, outPutLabel, outputMode, outPutStatus,
-                STARTPACKET + packet + ENDPACKET);
+        OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity(hardWareNo, outputType, outPutLabel, outputMode, outPutStatus, packet);
         List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(entityUpdate);
         updateOutputDb(entryListUpdate);
@@ -1617,7 +1614,5 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
         List<TimerConfigurationEntity> entryListDelete = new ArrayList<>();
         entryListDelete.add(entity);
         updateTimerDb(entryListDelete);
-
-
     }
 }

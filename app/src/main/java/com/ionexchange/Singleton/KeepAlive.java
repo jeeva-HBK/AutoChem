@@ -93,6 +93,10 @@ public class KeepAlive implements DataReceiveCallback {
                         } else if (data[i + 3].substring(2, data[i + 3].length()).equals("2")) {
                             keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), "CLOSE");
                         }
+                    } else if (data[i + 3].substring(0, 2).equals("01")) {
+                        if (data[i + 3].split("\\.")[1].length() >= 1) {
+                            keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), data[i + 3].substring(2, 6));
+                        }
                     } else {
                         keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), data[i + 3].substring(2, data[i + 3].length()));
                     }
@@ -108,7 +112,7 @@ public class KeepAlive implements DataReceiveCallback {
             while (i < 25) {
                 if (i < 3) {
                /* } else if (i < 17) {
-                    outputKeepAliveDao.updateOutputStatus(i - 2, data[i]);*/
+                    outputKeepAliveDao.updateOutputStatus(i - 2, data[i]); */
                 } else {
                     outputKeepAliveDao.updateOutputStatus(i - 2, data[i].substring(0, 1));
                     outputKeepAliveDao.updateOutputRelayStatus(i - 2, data[i].length() > 1 ? data[i].substring(1) : "N/A");
@@ -225,7 +229,11 @@ public class KeepAlive implements DataReceiveCallback {
                         int maxRow = trendDao.lastRowNumber() == null ? 1 : trendDao.lastRowNumber() + 1;
                         while (i < 57) {
                             if (data[i + 3].length() > 2) {
-                                if (Integer.parseInt(data[i + 3].substring(0, 2)) <= 33) {
+                                if (data[i + 3].substring(0, 2).equals("01")) {
+                                    if (data[i + 3].split("\\.")[1].length() >= 1) {
+                                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), data[i + 3].substring(2, 6));
+                                    }
+                                } else if (Integer.parseInt(data[i + 3].substring(0, 2)) <= 33) {
                                     trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
                                             data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentDate(),
                                             ApplicationClass.getCurrentTime(), maxRow);
