@@ -1315,7 +1315,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
         entryListDelete.add(entity);
         updateToDb(entryListDelete);
         new EventLogDemo(timerNo, "TIMER" + timerNo, "Timer setting changed", SharedPref.read(pref_USERLOGINID, ""), getContext());
-        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Timer Setting Changed - " +
+        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "06", "Timer Setting Changed - " +
                 SharedPref.read(pref_USERLOGINID, ""));
 
     }

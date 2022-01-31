@@ -74,20 +74,21 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
         virtualDao = ApplicationClass.DB.virtualConfigurationDao();
         chart = mBinding.lineChart;
 
-        mBinding.lessThanWeek.setChecked(true);
+        initChart(trendDao.getLessThenOneWeek(lessThanAWeek(),
+                ApplicationClass.getCurrentDate(), inputNumber));
 
         mBinding.chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.lessThanWeek:
-                        initChart(trendDao.getLessThenOneWeek(ApplicationClass.getCurrentDate(),
-                                lessThanAWeek(), inputNumber));
+                        initChart(trendDao.getLessThenOneWeek(lessThanAWeek(),
+                                ApplicationClass.getCurrentDate(), inputNumber));
                         break;
 
                     case R.id.lessThanTwoWeek:
-                        initChart(trendDao.getLessThenTwoWeek(ApplicationClass.getCurrentDate(),
-                                lessThanTwoWeek(), inputNumber));
+                        initChart(trendDao.getLessThenTwoWeek(lessThanTwoWeek(),
+                                ApplicationClass.getCurrentDate(), inputNumber));
                         break;
 
                     case R.id.greaterThanTwoWeek:
@@ -122,6 +123,7 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
     }
 
     private void initChart(List<TrendEntity> dataSet) {
+        chart.clear();
         chart.getAxisLeft().setDrawGridLines(false);
         chart.getXAxis().setDrawGridLines(false);
         chart.setBackgroundColor(Color.WHITE);
@@ -145,25 +147,26 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
         chart.getXAxis().setDrawGridLines(true);
         chart.getXAxis().setGridLineWidth(0.5f);
 
-        LimitLine ll1 = new LimitLine(getAlarm(1), "High Alarm");
-        ll1.setLineWidth(2f);
-        ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-        ll1.setTextSize(10f);
+        yAxis.removeAllLimitLines();
+        LimitLine lowAlarm = new LimitLine(getAlarm(1), "High Alarm");
+        lowAlarm.setLineWidth(2f);
+        lowAlarm.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+        lowAlarm.setTextSize(10f);
 
-        LimitLine ll2 = new LimitLine(getAlarm(0), "Low Alarm");
-        ll2.setLineWidth(2f);
-        ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-        ll2.setTextSize(10f);
+        LimitLine highAlarm = new LimitLine(getAlarm(0), "Low Alarm");
+        highAlarm.setLineWidth(2f);
+        highAlarm.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+        highAlarm.setTextSize(10f);
 
         yAxis.setDrawLimitLinesBehindData(true);
         xAxis.setDrawLimitLinesBehindData(true);
 
-        yAxis.addLimitLine(ll1);
-        yAxis.addLimitLine(ll2);
+        yAxis.addLimitLine(lowAlarm);
+        yAxis.addLimitLine(highAlarm);
         setData(dataSet);
         chart.animateX(1500);
         Legend l = chart.getLegend();
-        l.setForm(Legend.LegendForm.LINE);
+        l.setForm(Legend.LegendForm.CIRCLE);
     }
 
     private float getAlarm(int type) {
@@ -173,8 +176,7 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
                             virtualDao.getLowAlarm(Integer.parseInt(inputNumber)) :
                             virtualDao.getHighAlarm(Integer.parseInt(inputNumber)));
         }
-        return
-                Float.parseFloat(
+        return Float.parseFloat(
                         type == 0 ?
                                 inputDao.getLowAlarm(Integer.parseInt(inputNumber)) :
                                 inputDao.getHighAlarm(Integer.parseInt(inputNumber)));
@@ -189,8 +191,7 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
         }
 
         LineDataSet set1;
-        if (chart.getData() != null &&
-                chart.getData().getDataSetCount() > 0) {
+        if (chart.getData() != null && chart.getData().getDataSetCount() > 0) {
             set1 = (LineDataSet) chart.getData().getDataSetByIndex(0);
             set1.setValues(values);
             set1.notifyDataSetChanged();

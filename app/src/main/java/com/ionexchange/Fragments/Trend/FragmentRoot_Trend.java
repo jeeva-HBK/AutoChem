@@ -53,6 +53,7 @@ import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentTrendBinding;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -69,7 +70,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
     InputConfigurationDao inputDao;
 
     String[] chartTypeArr = {"Line Chart", "Histogram Chart", "XY Chart"};
-    int selectedChart = 0, differencebetweendays = 6;
+    int selectedChart = 0, differencebetweendays;
     String selectedSensor, selectedSensorTwo;
     HashMap<Integer, LineDataSet> lineDataSet;
     HashMap<Integer, BarDataSet> barDataSet;
@@ -151,7 +152,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
                 public void onPositiveButtonClick(Object selection) {
                     String endDate = DateFormat.format("dd/MM/yyyy", new Date(materialDatePicker.getHeaderText())).toString();
                     mBinding.trendToDateTie.setText(endDate);
-                    if (!mBinding.trendFromDateTie.getText().toString().isEmpty()) {
+                    /*if (!mBinding.trendFromDateTie.getText().toString().isEmpty()) {
                         String[] splitStartDate = mBinding.trendFromDateTie.getText().toString().split("/");
                         String[] splitEndDate = mBinding.trendToDateTie.getText().toString().split("/");
                         String startDate = splitStartDate[0] + splitStartDate[1] + splitStartDate[2];
@@ -160,24 +161,33 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
                             Toast.makeText(getContext(), "To Date must be greater than From Date", Toast.LENGTH_SHORT).show();
                             mBinding.trendToDateTie.setText("");
                         }
-                    }
+                    }*/
+                    mBinding.filterbutton.performClick();
                 }
             });
         });
         mBinding.filterbutton.setOnClickListener(v -> {
             if (!mBinding.trendFromDateTie.getText().toString().isEmpty()) {
-                String[] splitStartDate = mBinding.trendFromDateTie.getText().toString().split("/");
-                String[] splitEndDate = mBinding.trendToDateTie.getText().toString().split("/");
-                String startDate = splitStartDate[0] + splitStartDate[1] + splitStartDate[2];
-                String FinalDate = splitEndDate[0] + splitEndDate[1] + splitEndDate[2];
-                if (Integer.parseInt(FinalDate) < Integer.parseInt(startDate)) {
-                    Toast.makeText(getContext(), "To Date must be greater than From Date", Toast.LENGTH_SHORT).show();
-                    mBinding.trendToDateTie.setText("");
-                } else {
-                    differencebetweendays = getDateDiffFromNow(mBinding.trendToDateTie.getText().toString(), mBinding.trendFromDateTie.getText().toString());
+               // String[] splitStartDate = mBinding.trendFromDateTie.getText().toString().split("/");
+               // String[] splitEndDate = mBinding.trendToDateTie.getText().toString().split("/");
+               // String startDate = splitStartDate[0] + splitStartDate[1] + splitStartDate[2];
+               // String FinalDate = splitEndDate[0] + splitEndDate[1] + splitEndDate[2];
 
-                    filterChartResults();
+                try {
+                    Date mStart = new SimpleDateFormat("dd/MM/yyyy").parse(mBinding.trendFromDateTie.getText().toString());
+                    Date mEnd = mBinding.trendToDateTie.getText().toString().isEmpty() ? new Date() :
+                            new SimpleDateFormat("dd/MM/yyyy").parse(mBinding.trendToDateTie.getText().toString());
 
+                    if (mStart.before(mEnd)) {
+                        differencebetweendays = getDateDiffFromNow(mBinding.trendToDateTie.getText().toString(), mBinding.trendFromDateTie.getText().toString());
+                        filterChartResults();
+                    } else {
+                        Toast.makeText(getContext(), "To Date must be greater than From Date", Toast.LENGTH_SHORT).show();
+                        mBinding.trendToDateTie.setText("");
+                    }
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -193,18 +203,16 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
     }
 
     private void filterChartResults() {
-        String fromDate = mBinding.trendToDateTie.getText().toString().isEmpty() ? getCurrentDate()
+        String toDate = mBinding.trendToDateTie.getText().toString().isEmpty() ? getCurrentDate()
                 : mBinding.trendToDateTie.getText().toString();
-        String toDate = mBinding.trendFromDateTie.getText().toString().isEmpty() ? lessThanAWeek()
+        String fromDate = mBinding.trendFromDateTie.getText().toString().isEmpty() ? lessThanAWeek()
                 : mBinding.trendFromDateTie.getText().toString();
-        if (differencebetweendays < 7) {
+        if (differencebetweendays <= 7) {
             lessthanOneWeekChart(fromDate, toDate);
-        } else if (differencebetweendays >= 7 && differencebetweendays < 14) {
+        } else if (differencebetweendays <= 14) {
             lessthanTwoWeekChart(fromDate, toDate);
-        } else if (differencebetweendays >= 14) {
-            morethanTwoWeekChart();
         } else {
-            lessthanOneWeekChart(fromDate, toDate);
+            morethanTwoWeekChart();
         }
     }
 
@@ -366,7 +374,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
             mBinding.trendSensorOneTie.setText(mBinding.trendSensorOneTie.getAdapter().getItem(0).toString());
             selectedSensor = mBinding.trendSensorOneTie.getAdapter().getItem(0).toString().split("-")[0].trim();
             initLineChart();
-            lineDataSet.put(1, getLineData(trendDao.getLessThenOneWeek(getCurrentDate(), lessThanAWeek(), formDigits(2, selectedSensor)), 1));
+            lineDataSet.put(1, getLineData(trendDao.getLessThenOneWeek(lessThanAWeek(),getCurrentDate() , formDigits(2, selectedSensor)), 1));
             setLineChartData();
             setAdapter();
         }
@@ -377,28 +385,29 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
         if (lineDataSet.get(1) != null) {
             dataSets.add(lineDataSet.get(1));
         }
+        yAxisRight.removeAllLimitLines();
         if (lineDataSet.get(2) != null) {
-            LimitLine ll1 = new LimitLine(Integer.parseInt(selectedSensorTwo) < 34 ? Float.parseFloat(inputDao.getLowAlarm(Integer.parseInt(
+            LimitLine lowAlarm = new LimitLine(Integer.parseInt(selectedSensorTwo) < 34 ? Float.parseFloat(inputDao.getLowAlarm(Integer.parseInt(
                     formDigits(2, selectedSensorTwo)))) : (Float.parseFloat(virtualDAO.getVirtualLowAlarm(Integer.parseInt(
                     formDigits(2, selectedSensorTwo)))
-            )), "Low Alarm");
-            ll1.setLineWidth(2f);
-            ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-            ll1.setTextSize(10f);
-            ll1.setLineColor(Color.parseColor("#FF2D00"));
+            )),  "Low Alarm - "+ inputDao.getInputLabel(Integer.parseInt(formDigits(2, selectedSensorTwo))));
+            lowAlarm.setLineWidth(2f);
+            lowAlarm.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+            lowAlarm.setTextSize(10f);
+            lowAlarm.setLineColor(Color.parseColor("#FB6B90"));
 
-            LimitLine ll2 = new LimitLine(Integer.parseInt(selectedSensorTwo) < 34 ? (Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(
+            LimitLine highAlarm = new LimitLine(Integer.parseInt(selectedSensorTwo) < 34 ? (Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(
                     formDigits(2, selectedSensorTwo))))) : (Float.parseFloat(virtualDAO.getVirtualHighAlarm(Integer.parseInt(
                     formDigits(2, selectedSensorTwo)))
-            )), "High Alarm");
-            ll2.setLineWidth(2f);
-            ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-            ll2.setTextSize(10f);
-            ll2.setLineColor(Color.parseColor("#FF2D00"));
+            )), "High Alarm - " + inputDao.getInputLabel(Integer.parseInt(formDigits(2, selectedSensorTwo))));
+            highAlarm.setLineWidth(2f);
+            highAlarm.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+            highAlarm.setTextSize(10f);
+            highAlarm.setLineColor(Color.parseColor("#FB6B90"));
 
             dataSets.add(lineDataSet.get(2));
-            yAxisRight.addLimitLine(ll1);
-            yAxisRight.addLimitLine(ll2);
+            yAxisRight.addLimitLine(lowAlarm);
+            yAxisRight.addLimitLine(highAlarm);
         }
         LineData data = new LineData(dataSets);
         mBinding.trendLineChart.setData(data);
@@ -462,23 +471,26 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
         chart.getXAxis().setDrawGridLines(true);
         chart.getXAxis().setGridLineWidth(0.5f);
 
-        LimitLine ll1 = new LimitLine(Integer.parseInt(selectedSensor) < 34 ?
+        LimitLine lowAlarm = new LimitLine(Integer.parseInt(selectedSensor) < 34 ?
                 (Float.parseFloat(inputDao.getLowAlarm(Integer.parseInt(formDigits(2,selectedSensor))))) :
-                (Float.parseFloat(virtualDAO.getVirtualLowAlarm(Integer.parseInt(formDigits(2,selectedSensor))))), "Low Alarm");
-        ll1.setLineWidth(2f);
-        ll1.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
-        ll1.setTextSize(10f);
-        ll1.setLineColor(Color.RED);
-        LimitLine ll2 = new LimitLine(Integer.parseInt(selectedSensor) < 34 ?
-                (Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(formDigits(2,selectedSensor))))) :
-                (Float.parseFloat(virtualDAO.getVirtualHighAlarm(Integer.parseInt(formDigits(2,selectedSensor))))), "High Alarm");
-        ll2.setLineWidth(2f);
-        ll2.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_BOTTOM);
-        ll2.setTextSize(10f);
-        ll2.setLineColor(Color.RED);
+                (Float.parseFloat(virtualDAO.getVirtualLowAlarm(Integer.parseInt(formDigits(2,selectedSensor))))), "Low Alarm - " +
+                inputDao.getInputLabel(Integer.parseInt(formDigits(2,selectedSensor))));
+        lowAlarm.setLineWidth(2f);
+        lowAlarm.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
+        lowAlarm.setTextSize(10f);
+        lowAlarm.setLineColor(Color.RED);
 
-        yAxis.addLimitLine(ll1);
-        yAxis.addLimitLine(ll2);
+        LimitLine highAlarm = new LimitLine(Integer.parseInt(selectedSensor) < 34 ?
+                (Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(formDigits(2,selectedSensor))))) :
+                (Float.parseFloat(virtualDAO.getVirtualHighAlarm(Integer.parseInt(formDigits(2,selectedSensor))))), "High Alarm - " +
+                inputDao.getInputLabel(Integer.parseInt(formDigits(2,selectedSensor))));
+        highAlarm.setLineWidth(2f);
+        highAlarm.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_BOTTOM);
+        highAlarm.setTextSize(10f);
+        highAlarm.setLineColor(Color.RED);
+
+        yAxis.addLimitLine(lowAlarm);
+        yAxis.addLimitLine(highAlarm);
 
         yAxis.setDrawLimitLinesBehindData(true);
         xAxis.setDrawLimitLinesBehindData(true);

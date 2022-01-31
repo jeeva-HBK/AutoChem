@@ -71,7 +71,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-///Created By silambu
+// Created By silambu
 public class BaseActivity extends AppCompatActivity implements View.OnClickListener,
         ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupClickListener,
         ExpandableListView.OnChildClickListener {

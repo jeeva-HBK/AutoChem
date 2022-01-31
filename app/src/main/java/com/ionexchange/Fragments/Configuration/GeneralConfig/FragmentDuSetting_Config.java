@@ -105,7 +105,7 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
         mAppclass.sendPacket(new DataReceiveCallback() { // {*0$17$0*}
             @Override
             public void OnDataReceive(String data) {
-                if (mAppclass.isValidPck(WRITE_PACKET, data, getContext())) {
+                if (data != null) {
                     if (data.split("\\*")[1].split("\\$")[2].equals("0")) {
                         dataReceived[0] = true;
                         dismissProgress();
@@ -117,11 +117,8 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
                         dialog.dismiss();
                     } else {
                         dialog.dismiss();
-                        mAppclass.showSnackBar(getContext(), "Factory Reset Failed, try again later");
+                        mAppclass.showSnackBar(getContext(), "Factory Reset Failed");
                     }
-                } else {
-                    dialog.dismiss();
-                    mAppclass.showSnackBar(getContext(), "Factory Reset Failed, try again later");
                 }
             }
         }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_FACTORYRESET + SPILT_CHAR + ACK);

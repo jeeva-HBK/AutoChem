@@ -95,7 +95,10 @@ public class KeepAlive implements DataReceiveCallback {
                         }
                     } else if (data[i + 3].substring(0, 2).equals("01")) {
                         if (data[i + 3].split("\\.")[1].length() >= 1) {
-                            keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), data[i + 3].substring(2, 6));
+                            keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), data[i + 3].split("\\.")[0].substring(2) +
+                                    "." + data[i + 3].split("\\.")[1].substring(0, 2));
+                        } else {
+                            keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), data[i + 3]);
                         }
                     } else {
                         keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), data[i + 3].substring(2, data[i + 3].length()));
@@ -214,6 +217,7 @@ public class KeepAlive implements DataReceiveCallback {
 
     public void collectTrendData() {
         Log.e("TAG", "collectTrendData: ");
+        collect();
 
         new CountDownTimer(60 * 1000, 100) {
             @Override
@@ -222,38 +226,45 @@ public class KeepAlive implements DataReceiveCallback {
 
             @Override
             public void onFinish() {
-                try {
-                    String[] data = trendDataCollector.split("\\*")[1].split("\\$");
-                    if (data[2].equals(INPUT_VOLTAGE)) {
-                        int i = 0;
-                        int maxRow = trendDao.lastRowNumber() == null ? 1 : trendDao.lastRowNumber() + 1;
-                        while (i < 57) {
-                            if (data[i + 3].length() > 2) {
-                                if (data[i + 3].substring(0, 2).equals("01")) {
-                                    if (data[i + 3].split("\\.")[1].length() >= 1) {
-                                        keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), data[i + 3].substring(2, 6));
-                                    }
-                                } else if (Integer.parseInt(data[i + 3].substring(0, 2)) <= 33) {
-                                    trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
-                                            data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentDate(),
-                                            ApplicationClass.getCurrentTime(), maxRow);
-                                } else if (Integer.parseInt(data[i + 3].substring(0, 2)) > 49) {
-                                    trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
-                                            data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentDate(),
-                                            ApplicationClass.getCurrentTime(), maxRow);
-                                }
-                            }
-                            i++;
-                        }
-                    }
-                    trendDataCollector = "00";
-                    start();
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                collect();
+                start();
             }
         }.start();
+    }
+
+    private void collect() {
+        try {
+            String[] data = trendDataCollector.split("\\*")[1].split("\\$");
+            if (data[2].equals(INPUT_VOLTAGE)) {
+                int i = 0;
+                int maxRow = trendDao.lastRowNumber() == null ? 1 : trendDao.lastRowNumber() + 1;
+                while (i < 57) {
+                    if (data[i + 3].length() > 2) {
+                        if (data[i + 3].substring(0, 2).equals("01")) {
+                            if (data[i + 3].split("\\.")[1].length() >= 1) {
+                                trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
+                                        data[i + 3].split("\\.")[0].substring(2) + "." + data[i + 3].split("\\.")[1].substring(0, 2),
+                                        ApplicationClass.getCurrentDate(), ApplicationClass.getCurrentTime(), maxRow);
+                            } else {
+                                trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2), data[i + 3],
+                                        ApplicationClass.getCurrentDate(), ApplicationClass.getCurrentTime(), maxRow);
+                            }
+                        } else if (Integer.parseInt(data[i + 3].substring(0, 2)) <= 33) {
+                            trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
+                                    data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentDate(),
+                                    ApplicationClass.getCurrentTime(), maxRow);
+                        } else if (Integer.parseInt(data[i + 3].substring(0, 2)) > 49) {
+                            trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
+                                    data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentDate(),
+                                    ApplicationClass.getCurrentTime(), maxRow);
+                        }
+                    }
+                    i++;
+                }
+            }
+            trendDataCollector = "00";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
