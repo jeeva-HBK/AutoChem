@@ -5,6 +5,7 @@ import static com.ionexchange.Others.ApplicationClass.DB;
 import static com.ionexchange.Others.ApplicationClass.defaultPassword;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Singleton.SharedPref.pref_LOGGEDIN;
+import static com.ionexchange.Singleton.SharedPref.pref_MACADDRESS;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINNAME;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINREQUIRED;
@@ -13,6 +14,7 @@ import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINSTATUS;
 
 import android.Manifest;
 import android.app.admin.DevicePolicyManager;
+import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,6 +27,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
@@ -56,6 +59,9 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.ionexchange.Adapters.ExpandableListAdapter;
+import com.ionexchange.BLE.BluetoothConnectCallback;
+import com.ionexchange.BLE.BluetoothHelper;
+import com.ionexchange.BLE.BluetoothScannerCallback;
 import com.ionexchange.Database.Dao.AlarmLogDao;
 import com.ionexchange.Database.Dao.UserManagementDao;
 import com.ionexchange.Database.Entity.AlarmLogEntity;
@@ -99,8 +105,11 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     static Context msContext;
     static BaseActivity baseActivity;
     static ApplicationClass msAppClass;
+    static android.app.AlertDialog reconnectDialog;
 
     AlarmLogDao alarmLogDao;
+    static int retryCount = 0;
+    static boolean tempBool = true;
 
 
     @RequiresApi(api = Build.VERSION_CODES.R)
@@ -110,7 +119,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_base);
         mAppClass = (ApplicationClass) getApplication();
         msAppClass = (ApplicationClass) getApplication();
-        msContext = getApplicationContext();
         msContext = getApplicationContext();
         context = BaseActivity.this;
         db = WaterTreatmentDb.getDatabase(getApplicationContext());
@@ -586,12 +594,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        startHandler();
-    }
-
-    @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
     }
@@ -695,28 +697,114 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         }).show();
     }
 
-    public static void kickOut() {
-        baseActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                new MaterialAlertDialogBuilder(context)
-                        .setTitle("Bluetooth Disconnected")
-                        .setMessage("Please try to reconnect the bluetooth")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+    public static void reconnect() {
+        if (!SharedPref.read(pref_MACADDRESS, "").equals("")) {
+            baseActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    baseActivity.stopHandler();
+                    android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(context);
+                    LayoutInflater inflater = baseActivity.getLayoutInflater();
+                    View dialogView = inflater.inflate(R.layout.dialog_reconnect, null);
+                    dialogBuilder.setView(dialogView);
+                    dialogBuilder.setCancelable(false);
+                    reconnectDialog = dialogBuilder.create();
+                    tempBool = true;
+                    startReconnect();
+                    reconnectDialog.show();
+                }
+            });
+        }
+    }
+
+    private static void startReconnect() {
+        Log.e(TAG, "Reconnect: start");
+        if (retryCount < 5) {
+            showSnack("Retrying count " + retryCount);
+            Log.e(TAG, "run: scan will start in 5 sec");
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        BluetoothHelper.getInstance().scanBLE(new BluetoothScannerCallback() {
                             @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                SharedPref.write(pref_LOGGEDIN, false);
-                                SharedPref.write(pref_USERLOGINREQUIRED, true);
-                                PackageManager packageManager = context.getPackageManager();
-                                Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
-                                ComponentName componentName = intent.getComponent();
-                                Intent mainIntent = Intent.makeRestartActivityTask(componentName);
-                                context.startActivity(mainIntent);
-                                Runtime.getRuntime().exit(0);
+                            public void OnScanCompleted(List<BluetoothDevice> devices) {
+                                Log.e(TAG, "OnScanCompleted: ");
+                                if (tempBool) {
+                                    retryCount++;
+                                    startReconnect();
+                                }
+                                for (int i = 0; i < devices.size(); i++) {
+                                    if (devices.get(i).getAddress().equals(SharedPref.read(pref_MACADDRESS, ""))) {
+                                        Log.e(TAG, "device found");
+                                        tempBool = false;
+                                        connect(devices.get(i));
+                                        break;
+                                    }
+                                }
                             }
-                        }).show();
+
+                            @Override
+                            public void SearchResult(BluetoothDevice device) {
+                            }
+
+                            @Override
+                            public void OnDeviceFoundUpdate(List<BluetoothDevice> devices) {
+                            }
+                        });
+                    } catch (Exception e) {
+                        retryCount++;
+                        startReconnect();
+                        e.printStackTrace();
+                    }
+                }
+            }, 5000);
+
+
+        } else {
+            if (reconnectDialog != null && reconnectDialog.isShowing()) {
+                reconnectDialog.dismiss();
             }
-        });
+            showSnack("Failed to reconnect, try again later");
+            baseActivity.kickOut();
+            retryCount = 0;
+        }
+    }
+
+    private void kickOut() {
+        Intent intent = new Intent(this, ConnectionActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    private static void connect(BluetoothDevice bluetoothDevice) {
+        if (retryCount < 5) {
+            try {
+                if (BluetoothHelper.getInstance() != null) {
+                    BluetoothHelper.getInstance().disConnect();
+                    BluetoothHelper.getInstance().connectBLE(context, bluetoothDevice, new BluetoothConnectCallback() {
+                        @Override
+                        public void OnConnectSuccess() {
+                            tempBool = false;
+                            reconnectDialog.dismiss();
+                            retryCount = 0;
+                            showSnack("Reconnected to " + bluetoothDevice.getName() + " Successfully");
+                        }
+
+                        @Override
+                        public void OnConnectFailed(Exception e) {
+                            Log.e(TAG, "OnConnectFailed: ");
+                            retryCount++;
+                            startReconnect();
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                retryCount++;
+                startReconnect();
+                e.printStackTrace();
+            }
+        }
     }
 
 }

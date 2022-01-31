@@ -407,8 +407,8 @@ public class BluetoothHelper implements SerialListener {
 
     @Override
     public void onDisconnected() {
-        if (isConnected) {
-            BaseActivity.kickOut();
+        if (bleConnected.get()) {
+            BaseActivity.reconnect();
         }
         isConnected = false;
         bleConnected.set(false);

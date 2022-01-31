@@ -216,7 +216,7 @@ public class ApplicationClass extends Application {
     // public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
 
     public static ObservableBoolean triggerWebService = new ObservableBoolean(false);
-    public static ObservableBoolean bleConnected = new ObservableBoolean(true);
+    public static ObservableBoolean bleConnected = new ObservableBoolean(false);
 
     Handler handler;
     DataReceiveCallback listener;
@@ -766,7 +766,7 @@ public class ApplicationClass extends Application {
                     outputStatus = "Continuous";
                     outputMode = "0001$000000001.00";
                 } else {
-                    defaultwritePacket = "{*1234$0$0$06$" + formDigits(2, Integer.toString(i)) + "$1$Output" + i + "$1$I01$04.00$20.00$00.00$14.00*}";
+                    defaultwritePacket = "{*1234$0$0$06$" + formDigits(2, Integer.toString(i)) + "$3$Output" + i + "$1$I01$04.00$20.00$00.00$14.00*}";
                     outputStatus = "Input- 1 (N/A)";
                     outputMode = "Probe";
                 }

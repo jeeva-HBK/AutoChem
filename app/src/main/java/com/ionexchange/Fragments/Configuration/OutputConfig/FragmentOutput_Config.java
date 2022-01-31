@@ -19,11 +19,13 @@ import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Others.ApplicationClass.virtualDAO;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.ENDPACKET;
 import static com.ionexchange.Others.PacketControl.PCK_OUTPUT_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_FAILED;
 import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.STARTPACKET;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
@@ -1950,13 +1952,13 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 (outputSensorNo, "Output- " + outputSensorNo + " (" + toString(mBinding.outputLabelOsEDT) + ")", toString(0, mBinding.outputLabelOsEDT),
                         (mBinding.funtionModeOsATXT.getText().toString().equals("Analog") ? mBinding.modeOsATXT.getText().toString() : subValue1),
                         (mBinding.funtionModeOsATXT.getText().toString().equals("Analog") ? linkInputSensor : (mBinding.modeOsATXT.getText().toString().equals("")
-                                ? mBinding.funtionModeOsATXT.getText().toString() : mBinding.modeOsATXT.getText().toString())), writePacket);
+                                ? mBinding.funtionModeOsATXT.getText().toString() : mBinding.modeOsATXT.getText().toString())), STARTPACKET + writePacket + ENDPACKET);
         List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(entityUpdate);
         updateToDb(entryListUpdate);
         new EventLogDemo(String.valueOf(outputSensorNo), "output-" + outputSensorNo, "Output Setting Changed",
                 SharedPref.read(pref_USERLOGINID, ""),getContext());
-        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Output Setting Changed - " +
+        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "05", "Output Setting Changed - " +
                 SharedPref.read(pref_USERLOGINID, ""));
     }
 

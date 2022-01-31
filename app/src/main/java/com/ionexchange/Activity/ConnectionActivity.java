@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
@@ -323,50 +324,56 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
     @Override
     public void OnItemClick(int pos) {
         mBinding.connectionProgress.setVisibility(View.VISIBLE);
-        stopScan();
-        mBinding.txtConnect.setText("Connecting");
-        BluetoothHelper helper = BluetoothHelper.getInstance(this);
-        helper.disConnect();
-        mBleDevice = scannedDevices.get(pos);
-
-        runOnUiThread(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                try {
-                    helper.connectBLE(mContext, mBleDevice, new BluetoothConnectCallback() {
-                        @Override
-                        public void OnConnectSuccess() {
-                            Log.e(TAG, "OnConnectSuccess: ");
-                            startApp(mBleDevice.getAddress());
-                        }
-                        @Override
-                        public void OnConnectFailed(Exception e) {
+                stopScan();
+                mBinding.txtConnect.setText("Connecting");
+                BluetoothHelper helper = BluetoothHelper.getInstance();
+                helper.disConnect();
+                mBleDevice = scannedDevices.get(pos);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            helper.connectBLE(mContext, mBleDevice, new BluetoothConnectCallback() {
+                                @Override
+                                public void OnConnectSuccess() {
+                                    Log.e(TAG, "OnConnectSuccess: ");
+                                    startApp(mBleDevice.getAddress());
+                                }
+                                @Override
+                                public void OnConnectFailed(Exception e) {
+                                    e.printStackTrace();
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            stopScan();
+                                            mBinding.txtConnect.setText("Rescan");
+                                            mBinding.connectionProgress.setVisibility(View.GONE);
+                                            Toast.makeText(getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                                            Log.e(TAG, "OnConnectSuccess: Failed");
+                                        }
+                                    });
+                                }
+                            });
+                        } catch (Exception e) {
+                            stopScan();
+                            mBinding.txtConnect.setText("Rescan");
                             e.printStackTrace();
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    stopScan();
-                                    mBinding.txtConnect.setText("Rescan");
                                     mBinding.connectionProgress.setVisibility(View.GONE);
-                                    Toast.makeText(getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
-                                    Log.e(TAG, "OnConnectSuccess: Failed");
                                 }
                             });
                         }
-                    });
-                } catch (Exception e) {
-                    stopScan();
-                    mBinding.txtConnect.setText("Rescan");
-                    e.printStackTrace();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mBinding.connectionProgress.setVisibility(View.GONE);
-                        }
-                    });
-                }
+                    }
+                });
             }
-        });
+        }, 5000);
+
     }
 
     private void startApp(String macAddress) {

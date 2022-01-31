@@ -268,7 +268,6 @@
                 app:layout_constraintStart_toStartOf="@+id/supportMain"
                 app:layout_constraintTop_toTopOf="@id/view2" />
 
-
             <TextView
                 android:id="@+id/notfication_txt"
                 android:layout_width="wrap_content"
