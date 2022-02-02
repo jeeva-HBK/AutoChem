@@ -1,10 +1,13 @@
 package com.ionexchange.Fragments.Trend;
 
 import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Others.ApplicationClass.DateformatConversion;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.getAdapter;
 import static com.ionexchange.Others.ApplicationClass.getCurrentDate;
+import static com.ionexchange.Others.ApplicationClass.getCurrentTrendFormatDate;
 import static com.ionexchange.Others.ApplicationClass.lessThanAWeek;
+import static com.ionexchange.Others.ApplicationClass.lessThanTwoWeek;
 import static com.ionexchange.Others.ApplicationClass.virtualDAO;
 
 import android.graphics.Color;
@@ -138,6 +141,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
                 public void onPositiveButtonClick(Object selection) {
                     String startDate = DateFormat.format("dd/MM/yyyy", new Date(materialDatePicker.getHeaderText())).toString();
                     mBinding.trendFromDateTie.setText(startDate);
+                    mBinding.filterbutton.performClick();
                 }
             });
         });
@@ -207,14 +211,21 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
                 : mBinding.trendToDateTie.getText().toString();
         String fromDate = mBinding.trendFromDateTie.getText().toString().isEmpty() ? lessThanAWeek()
                 : mBinding.trendFromDateTie.getText().toString();
+        fromDate = DateformatConversion(fromDate);
+        toDate = DateformatConversion(toDate);
+
         if (differencebetweendays <= 7) {
             lessthanOneWeekChart(fromDate, toDate);
         } else if (differencebetweendays <= 14) {
+            fromDate = mBinding.trendFromDateTie.getText().toString().isEmpty() ? lessThanTwoWeek()
+                    : mBinding.trendFromDateTie.getText().toString();
             lessthanTwoWeekChart(fromDate, toDate);
         } else {
             morethanTwoWeekChart();
         }
     }
+
+
 
     private void lessthanOneWeekChart(String fromDate, String toDate) {
         switch (selectedChart) {
@@ -374,7 +385,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
             mBinding.trendSensorOneTie.setText(mBinding.trendSensorOneTie.getAdapter().getItem(0).toString());
             selectedSensor = mBinding.trendSensorOneTie.getAdapter().getItem(0).toString().split("-")[0].trim();
             initLineChart();
-            lineDataSet.put(1, getLineData(trendDao.getLessThenOneWeek(lessThanAWeek(),getCurrentDate() , formDigits(2, selectedSensor)), 1));
+            lineDataSet.put(1, getLineData(trendDao.getLessThenOneWeek(DateformatConversion(lessThanAWeek()),getCurrentTrendFormatDate() , formDigits(2, selectedSensor)), 1));
             setLineChartData();
             setAdapter();
         }
@@ -612,8 +623,8 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
 
         set1.setColor(pos == 1 ? Color.parseColor("#0097DB") : Color.parseColor("#ACE4C4"));
         set1.setCircleColor(pos == 1 ? Color.parseColor("#0097DB") : Color.parseColor("#ACE4C4"));
-        set1.setLineWidth(3f);
-        set1.setCircleRadius(3f);
+        set1.setLineWidth(2f);
+        set1.setCircleRadius(2f);
         set1.setDrawCircleHole(false);
         set1.setValueTextSize(9f);
         set1.setAxisDependency(pos == 1 ? YAxis.AxisDependency.LEFT : YAxis.AxisDependency.RIGHT);

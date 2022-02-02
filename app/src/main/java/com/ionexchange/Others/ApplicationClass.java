@@ -84,12 +84,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.text.Format;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -209,11 +209,11 @@ public class ApplicationClass extends Application {
     private static final int httpRequestTimeout = 3000;
     public static int userType;
     public static RequestQueue requestQueue;
-    public final static String baseURL = "http://192.168.1.241/WaterIOT.API/api/";
+    //public final static String baseURL = "http://192.168.1.82/WaterIOT.API/api/";
     // public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
 
     // public final static String baseURL = "http://183.82.35.93/WaterIOT.API/api/";
-    // public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
+     public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
 
     public static ObservableBoolean triggerWebService = new ObservableBoolean(false);
     public static ObservableBoolean bleConnected = new ObservableBoolean(false);
@@ -255,23 +255,6 @@ public class ApplicationClass extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        String[] strArr = {"chennai", "mumbai", "zimbabwe", "kochin"};
-        char[] charArr = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-        LinkedHashMap<Integer, String> finalMap = new LinkedHashMap<>();
-        int i = 0;
-        while (i < strArr.length) {
-            int j = 0;
-            while (j <= 25) {
-                if (strArr[i].charAt(0) == charArr[j]) {
-                    Log.e("MyProgram", "Sorting ->" + strArr[i] + " " + j);
-                    finalMap.put(j, strArr[i]);
-                    break;
-                }
-                j++;
-            }
-            i++;
-        }
-
 
         initDatabase();
         triggerWebService.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
@@ -905,11 +888,19 @@ public class ApplicationClass extends Application {
         return f.format(new Date());
     }
 
+    public static String getCurrentTrendFormatDate() {
+        Format f = new SimpleDateFormat("yyyy/MM/dd");
+        return f.format(new Date());
+    }
+
     public static String formatDate(Date date) {
         Format f = new SimpleDateFormat("dd/MM/yyyy");
         return f.format(date);
     }
-
+    public static String getCurrentTrendFormatDate(Date date) {
+        Format f = new SimpleDateFormat("yyyy/MM/dd");
+        return f.format(date);
+    }
 
     public static String getCurrentTime() {
         Format f = new SimpleDateFormat("HH.mm.ss");
@@ -988,9 +979,28 @@ public class ApplicationClass extends Application {
 
     public static String lessThanAWeek() {
         Calendar cal = new GregorianCalendar();
-        cal.add(Calendar.DAY_OF_MONTH, -7);
+        cal.add(Calendar.DAY_OF_MONTH, - 6);
         Date sevenDaysAgo = cal.getTime();
         return ApplicationClass.formatDate(sevenDaysAgo);
+    }
+
+    public static String lessThanTwoWeek() {
+        Calendar cal = new GregorianCalendar();
+        cal.add(Calendar.DAY_OF_MONTH, - 13);
+        Date sevenDaysAgo = cal.getTime();
+        return ApplicationClass.formatDate(sevenDaysAgo);
+    }
+
+    public static String DateformatConversion(String enteredDate) {
+        try {
+
+            Date inputDate = new SimpleDateFormat("dd/MM/yyyy").parse(enteredDate);
+            enteredDate = new SimpleDateFormat("yyyy/MM/dd").format(inputDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return enteredDate;
     }
 
     public void importDB() {

@@ -1,5 +1,6 @@
 package com.ionexchange.Fragments.MainScreen;
 
+import android.app.Application;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.os.Bundle;
@@ -41,6 +42,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import static com.ionexchange.Others.ApplicationClass.DateformatConversion;
+import static com.ionexchange.Others.ApplicationClass.getCurrentTrendFormatDate;
+import static com.ionexchange.Others.ApplicationClass.lessThanAWeek;
+import static com.ionexchange.Others.ApplicationClass.lessThanTwoWeek;
+
 
 public class FragmentSensorStatistics extends Fragment implements OnChartValueSelectedListener {
 
@@ -74,21 +80,21 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
         virtualDao = ApplicationClass.DB.virtualConfigurationDao();
         chart = mBinding.lineChart;
 
-        initChart(trendDao.getLessThenOneWeek(lessThanAWeek(),
-                ApplicationClass.getCurrentDate(), inputNumber));
+        initChart(trendDao.getLessThenOneWeek(DateformatConversion(lessThanAWeek()),
+                getCurrentTrendFormatDate(), inputNumber));
 
         mBinding.chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.lessThanWeek:
-                        initChart(trendDao.getLessThenOneWeek(lessThanAWeek(),
-                                ApplicationClass.getCurrentDate(), inputNumber));
+                        initChart(trendDao.getLessThenOneWeek(DateformatConversion(lessThanAWeek()),
+                                getCurrentTrendFormatDate(), inputNumber));
                         break;
 
                     case R.id.lessThanTwoWeek:
-                        initChart(trendDao.getLessThenTwoWeek(lessThanTwoWeek(),
-                                ApplicationClass.getCurrentDate(), inputNumber));
+                        initChart(trendDao.getLessThenTwoWeek(DateformatConversion(lessThanTwoWeek()),
+                                getCurrentTrendFormatDate(), inputNumber));
                         break;
 
                     case R.id.greaterThanTwoWeek:
@@ -98,7 +104,8 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
             }
         });
 
-        trendDao.getTrendLiveList(inputNumber).observe(getViewLifecycleOwner(), new Observer<List<TrendEntity>>() {
+        trendDao.getTrendLiveList(inputNumber, DateformatConversion(lessThanAWeek()),
+                getCurrentTrendFormatDate()).observe(getViewLifecycleOwner(), new Observer<List<TrendEntity>>() {
             @Override
             public void onChanged(List<TrendEntity> list) {
                 if (mBinding.lessThanWeek.isChecked()){
@@ -106,20 +113,6 @@ public class FragmentSensorStatistics extends Fragment implements OnChartValueSe
                 }
             }
         });
-    }
-
-    String lessThanAWeek() {
-        Calendar cal = new GregorianCalendar();
-        cal.add(Calendar.DAY_OF_MONTH, -7);
-        Date sevenDaysAgo = cal.getTime();
-        return ApplicationClass.formatDate(sevenDaysAgo);
-    }
-
-    String lessThanTwoWeek() {
-        Calendar cal = new GregorianCalendar();
-        cal.add(Calendar.DAY_OF_MONTH, -14);
-        Date sevenDaysAgo = cal.getTime();
-        return ApplicationClass.formatDate(sevenDaysAgo);
     }
 
     private void initChart(List<TrendEntity> dataSet) {

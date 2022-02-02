@@ -29,6 +29,7 @@ import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 //created by Silambu
@@ -244,18 +245,18 @@ public class KeepAlive implements DataReceiveCallback {
                             if (data[i + 3].split("\\.")[1].length() >= 1) {
                                 trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
                                         data[i + 3].split("\\.")[0].substring(2) + "." + data[i + 3].split("\\.")[1].substring(0, 2),
-                                        ApplicationClass.getCurrentDate(), ApplicationClass.getCurrentTime(), maxRow);
+                                        ApplicationClass.getCurrentTrendFormatDate(), ApplicationClass.getCurrentTime(), maxRow);
                             } else {
                                 trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2), data[i + 3],
-                                        ApplicationClass.getCurrentDate(), ApplicationClass.getCurrentTime(), maxRow);
+                                        ApplicationClass.getCurrentTrendFormatDate(), ApplicationClass.getCurrentTime(), maxRow);
                             }
                         } else if (Integer.parseInt(data[i + 3].substring(0, 2)) <= 33) {
                             trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
-                                    data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentDate(),
+                                    data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentTrendFormatDate(),
                                     ApplicationClass.getCurrentTime(), maxRow);
                         } else if (Integer.parseInt(data[i + 3].substring(0, 2)) > 49) {
                             trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
-                                    data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentDate(),
+                                    data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentTrendFormatDate(),
                                     ApplicationClass.getCurrentTime(), maxRow);
                         }
                     }

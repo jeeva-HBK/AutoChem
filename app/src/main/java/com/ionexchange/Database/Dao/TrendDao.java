@@ -19,8 +19,8 @@ public interface TrendDao {
     @Query("select * FROM TrendEntity where hardwareNo = :hNo")
     List<TrendEntity> getTrendList(String hNo);
 
-    @Query("select * FROM TrendEntity where hardwareNo = :hNo")
-    LiveData<List<TrendEntity>> getTrendLiveList(String hNo);
+    @Query("select * FROM TrendEntity where date BETWEEN :formDate AND :toDate AND hardwareNo = :hNo")
+    LiveData<List<TrendEntity>> getTrendLiveList(String hNo, String formDate, String toDate);
 
     @Query("SELECT sNo FROM TrendEntity order by 1 desc limit 1")
     int getLastSno();
