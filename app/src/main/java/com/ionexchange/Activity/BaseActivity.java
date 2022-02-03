@@ -110,6 +110,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     AlarmLogDao alarmLogDao;
     static int retryCount = 0;
     static boolean tempBool = true;
+    static TextView attemptTxt;
 
 
     @RequiresApi(api = Build.VERSION_CODES.R)
@@ -246,7 +247,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         childList.put("I/O Settings", ioList);
         childList.put("Home Settings", homescreenList);
 
-        mBinding.expList.setAdapter(new ExpandableListAdapter(this, headerList, childList,true));
+        mBinding.expList.setAdapter(new ExpandableListAdapter(this, headerList, childList, true));
 
         mBinding.expList.setChildDivider(getResources().getDrawable(R.color.primary));
         mBinding.expList.setDivider(getResources().getDrawable(R.color.primary));
@@ -496,6 +497,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     public void changeToolBarVisibility(int visibility) {
         // mBinding.toolBar.setVisibility(visibility);
     }
+
     public static void showProgress() {
         msBinding.progressCircular.setVisibility(View.VISIBLE);
         baseActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
@@ -510,7 +512,8 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onBackPressed() { }
+    public void onBackPressed() {
+    }
 
     @Override
     public void onGroupExpand(int pos) {
@@ -523,11 +526,11 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onGroupClick(ExpandableListView expandableListView, View v, int groupPosition, long id) {
         expandableListView.setItemChecked(groupPosition, true);
-        if(groupPosition == 0){
-            if(userType != 0) {
+        if (groupPosition == 0) {
+            if (userType != 0) {
                 setNavGraph(navGraph, R.id.siteSetting, mNavController);
             }
-        } else if(groupPosition == 1){
+        } else if (groupPosition == 1) {
             setNavGraph(navGraph, R.id.inputSetting, mNavController);
         } else if (groupPosition == 2) {
             if (userType == 3) {
@@ -706,6 +709,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                     android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(context);
                     LayoutInflater inflater = baseActivity.getLayoutInflater();
                     View dialogView = inflater.inflate(R.layout.dialog_reconnect, null);
+                    attemptTxt = dialogView.findViewById(R.id.attempt);
                     dialogBuilder.setView(dialogView);
                     dialogBuilder.setCancelable(false);
                     reconnectDialog = dialogBuilder.create();
@@ -719,6 +723,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     private static void startReconnect() {
         Log.e(TAG, "Reconnect: start");
+        if (attemptTxt != null) {
+            attemptTxt.setText("attempt : " + retryCount + "/5");
+        }
         if (retryCount < 5) {
             showSnack("Retrying count " + retryCount);
             Log.e(TAG, "run: scan will start in 5 sec");
@@ -767,6 +774,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             }
             showSnack("Failed to reconnect, try again later");
             baseActivity.kickOut();
+            baseActivity.startHandler();
             retryCount = 0;
         }
     }
@@ -789,6 +797,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                             reconnectDialog.dismiss();
                             retryCount = 0;
                             showSnack("Reconnected to " + bluetoothDevice.getName() + " Successfully");
+                            baseActivity.startHandler();
                         }
 
                         @Override

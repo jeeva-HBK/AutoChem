@@ -2,13 +2,13 @@ plugins {
     id 'com.android.application'
 }
 android {
-    compileSdkVersion 30
+    compileSdkVersion 32
     buildToolsVersion "30.0.3"
     android.buildFeatures.dataBinding = true
     defaultConfig {
         applicationId "com.ionexchange"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 32
         versionCode 1
         versionName "1.1"
 
@@ -61,4 +61,10 @@ dependencies {
 
     // mpChart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // OTG Storage
+    implementation 'me.jahnen.libaums:core:0.9.1'
+
+    implementation 'commons-io:commons-io:2.6'
+
 }

@@ -1,16 +1,6 @@
 package com.ionexchange.Singleton;
 
 
-import static com.ionexchange.Others.ApplicationClass.alarmArr;
-import static com.ionexchange.Others.ApplicationClass.alertKeepAliveData;
-import static com.ionexchange.Others.ApplicationClass.inputKeepAliveData;
-import static com.ionexchange.Others.ApplicationClass.outputKeepAliveData;
-import static com.ionexchange.Others.ApplicationClass.trendDataCollector;
-import static com.ionexchange.Others.PacketControl.ALARM_STATUS;
-import static com.ionexchange.Others.PacketControl.INPUT_VOLTAGE;
-import static com.ionexchange.Others.PacketControl.OUTPUT_STATUS;
-import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
-
 import android.content.Context;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -29,8 +19,17 @@ import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import static com.ionexchange.Others.ApplicationClass.alarmArr;
+import static com.ionexchange.Others.ApplicationClass.alertKeepAliveData;
+import static com.ionexchange.Others.ApplicationClass.inputKeepAliveData;
+import static com.ionexchange.Others.ApplicationClass.outputKeepAliveData;
+import static com.ionexchange.Others.ApplicationClass.trendDataCollector;
+import static com.ionexchange.Others.PacketControl.ALARM_STATUS;
+import static com.ionexchange.Others.PacketControl.INPUT_VOLTAGE;
+import static com.ionexchange.Others.PacketControl.OUTPUT_STATUS;
+import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 
 //created by Silambu
 public class KeepAlive implements DataReceiveCallback {
@@ -267,5 +266,6 @@ public class KeepAlive implements DataReceiveCallback {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 }

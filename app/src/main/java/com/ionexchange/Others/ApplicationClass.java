@@ -100,7 +100,7 @@ public class ApplicationClass extends Application {
     private static final String API = "API";
     private static final String API1 = "SERVER";
 
-    public static String defaultPassword = "12345";
+    public static String defaultPassword = "123456";
     public static String[] sensorActivationArr = {"ENABLE", "DISABLE"},
             roleType = {"None", "Basic", "Intermediate", "Advanced"},
             sensorTypeArr = {"Sensor", "Temperature", "Modbus", "Analog Input", "Flow/Water Meter",
@@ -209,18 +209,18 @@ public class ApplicationClass extends Application {
     private static final int httpRequestTimeout = 3000;
     public static int userType;
     public static RequestQueue requestQueue;
-    //public final static String baseURL = "http://192.168.1.82/WaterIOT.API/api/";
+    public final static String baseURL = "http://192.168.1.82/WaterIOT.API/api/";
     // public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
 
     // public final static String baseURL = "http://183.82.35.93/WaterIOT.API/api/";
-     public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
+     // public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
 
     public static ObservableBoolean triggerWebService = new ObservableBoolean(false);
     public static ObservableBoolean bleConnected = new ObservableBoolean(false);
 
     Handler handler;
     DataReceiveCallback listener;
-    public static String lastKeepAliveData = "", trendDataCollector = "NoDataReceived",
+    public static String lastKeepAliveData = "", trendDataCollector = "",
             inputKeepAliveData = "", outputKeepAliveData = "", alertKeepAliveData = "";
     static ApplicationClass mAppclass;
 
@@ -282,10 +282,10 @@ public class ApplicationClass extends Application {
                 ApiService.getInstance(getApplicationContext());
                 KeepAlive.getInstance();
 
-                SharedPref.write(pref_SITEID, "SITE_0001");
-                SharedPref.write(pref_SITENAME, "WT_IOT");
-                SharedPref.write(pref_SITELOCATION, "NA");
-                SharedPref.write(pref_CONTROLLERPASSWORD, "1234");
+                SharedPref.write(pref_SITEID, SharedPref.read(pref_SITEID,"SITE_0001"));
+                SharedPref.write(pref_SITENAME, SharedPref.read(pref_SITENAME,"WT_IOT"));
+                SharedPref.write(pref_SITELOCATION, SharedPref.read(pref_SITELOCATION,"NA"));
+                SharedPref.write(pref_CONTROLLERPASSWORD, SharedPref.read(pref_CONTROLLERPASSWORD,"1234"));
                 SharedPref.write(pref_CONTROLLERISACTIVE, true);
             }
 
@@ -1020,8 +1020,6 @@ public class ApplicationClass extends Application {
                             FileChannel dst = new FileOutputStream(backupDB).getChannel();
                             dst.transferFrom(src, 0, src.size());
                             src.close();
-                            Log.e(TAG, "importDB: " + currentDBPath);
-                            Log.e(TAG, "importDB: " + backupDB);
                             dst.close();
                             Toast.makeText(getApplicationContext(), "Backup Successful!", Toast.LENGTH_SHORT).show();
                         }
@@ -1058,8 +1056,7 @@ public class ApplicationClass extends Application {
                             FileChannel dst = new FileOutputStream(currentDB).getChannel();
                             dst.transferFrom(src, 0, src.size());
                             src.close();
-                            Log.e(TAG, "importDB: " + currentDBPath);
-                            Log.e(TAG, "importDB: " + backupDB);
+
                             dst.close();
                         }
 

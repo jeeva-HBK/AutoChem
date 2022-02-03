@@ -378,7 +378,6 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
 
     private void startApp(String macAddress) {
         SharedPref.write(pref_MACADDRESS, macAddress);
-        triggerWebService.set(true);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

@@ -11,7 +11,6 @@ import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 import static com.ionexchange.Singleton.SharedPref.pref_CONTROLLERISACTIVE;
-import static com.ionexchange.Singleton.SharedPref.pref_CONTROLLERPASSWORD;
 import static com.ionexchange.Singleton.SharedPref.pref_SITEID;
 import static com.ionexchange.Singleton.SharedPref.pref_SITELOCATION;
 import static com.ionexchange.Singleton.SharedPref.pref_SITENAME;
@@ -128,7 +127,7 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
             mAppClass.showSnackBar(getContext(), "AlarmDelay  Cannot be Empty");
             return false;
         } else if (isEmpty(mBinding.alarmDelayDeciIsc)){
-         mAppClass.showSnackBar(getContext(), "AlarmDelay  Cannot be Empty");
+            mAppClass.showSnackBar(getContext(), "AlarmDelay  Cannot be Empty");
             return false;
         } else if (Integer.parseInt(mBinding.alarmDelayEdtIsc.getText().toString()) > 59) {
             mAppClass.showSnackBar(getContext(), "AlarmDelay should be less than 59:59");

@@ -32,6 +32,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Activity.BaseActivity.showProgress;
+
 //Created by Silambu
 public class FragmentSetLayout extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
     FragmentSetlayoutBinding mBinding;
@@ -118,7 +121,14 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
         mBinding.layout6Delete5.setOnClickListener(this);
         mBinding.layout6Delete6.setOnClickListener(this);
         mBinding.saveBtn.setOnClickListener(this);
-        getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
+        showProgress();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
+            }
+        }, 1000);
+
     }
 
     private void getBundleValue() {
@@ -176,7 +186,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
     }
 
     void loopLayoutDetails() {
-
+        showProgress();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -186,7 +196,6 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                     getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
                     i++;
                 }
-
             }
         }, 1000);
 
@@ -462,19 +471,32 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
     }
 
     void windowNextPage() {
+        showProgress();
         if (pageNo >= 2) {
             mBinding.leftArrowIsBtn.setVisibility(View.VISIBLE);
         }
-        getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
+            }
+        }, 1000);
     }
 
 
     void windowPrevPage() {
+        showProgress();
         if (pageNo == 1) {
             mBinding.leftArrowIsBtn.setVisibility(View.GONE);
         }
-        getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
+            }
+        }, 1000);
     }
+
 
     void defaultWindowPage() {
         pageNo = 1;
@@ -482,6 +504,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
     }
 
     void getSensorWindowNextPage(List<TextView> textViewList, List<View> viewList, int pageNo) {
+
         //root of the code
         mBinding.pageNo.setText("PageNo - " + pageNo);
         if (mainConfigurationDao.getSensorName(screenNo, layoutNo, windowNo, pageNo) != null
@@ -807,7 +830,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
             }
 
         }
-
+        dismissProgress();
     }
 
     void deleteSensorWindowPage(int window, View delete) {

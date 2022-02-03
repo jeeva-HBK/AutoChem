@@ -2,6 +2,7 @@ package com.ionexchange.Singleton;
 
 import static com.ionexchange.Others.ApplicationClass.DB;
 import static com.ionexchange.Others.ApplicationClass.alertKeepAliveData;
+import static com.ionexchange.Others.ApplicationClass.bleConnected;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.inputDAO;
 import static com.ionexchange.Others.ApplicationClass.inputKeepAliveData;
@@ -94,7 +95,7 @@ public class ApiService implements DataReceiveCallback {
     }
 
     public void startApiService() {
-        if (triggerWebService.get()) {
+        if (triggerWebService.get() && bleConnected.get()) {
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -214,7 +215,6 @@ public class ApiService implements DataReceiveCallback {
                         writeVirtualConfiguration(responseObject.getJSONArray("DATA").
                                 getJSONObject(0));
                         break;
-
                 }
             } else if (packetType.equals(READ_PACKET)) {
                 switch (jsonSubID) {
@@ -380,10 +380,7 @@ public class ApiService implements DataReceiveCallback {
                                 String highAlarm = jsonObject.getString("RIGHT_LABEL");
                                 int seqNo = Integer.parseInt(jsonObject.getString("SEQUENCE_NO"));
                                 String unit = jsonObject.getString("UNIT");
-                                int type = 0;
-                                if (unit.equals("null")) {
-                                    unit = "N/A";
-                                }
+                                String type = jsonObject.getString("TYPE");
                                 String sensorType = "SENSOR";
                                 String sequenceName = "";
                                 int flagValue = 0;
@@ -407,8 +404,9 @@ public class ApiService implements DataReceiveCallback {
                                     flagValue = Integer.parseInt(splitData[splitData.length - 1]);
                                 } else if (hardWareNo < 14) {
                                     sensorType = "MODBUS";
-                                    type = Integer.parseInt(jsonObject.getString("TYPE"));
-                                    sequenceName = modBusTypeArr[seqNo] + typeArr[type];
+                                    int modbustype = Integer.parseInt(jsonObject.getString("TYPE"));
+                                    type = typeArr[modbustype];
+                                    sequenceName = modBusTypeArr[seqNo] + typeArr[modbustype];
                                     flagValue = Integer.parseInt(splitData[splitData.length - 1]);
                                 } else if (hardWareNo < 17) {
                                     sensorType = "SENSOR";
@@ -438,7 +436,7 @@ public class ApiService implements DataReceiveCallback {
                                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                                         (hardWareNo, inputTypeArr[Integer.parseInt(splitData[5])],
                                                 sensorType, signalType, sequenceName, seqNo, inputLabel,
-                                                lowAlarm, highAlarm, unit, typeArr[type], flagValue,
+                                                lowAlarm, highAlarm, unit, type, flagValue,
                                                 jsonObject.getString("REQ"));
                                 List<InputConfigurationEntity> inputentryList = new ArrayList<>();
                                 inputentryList.add(entityUpdate);

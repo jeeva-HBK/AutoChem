@@ -2,20 +2,30 @@ package com.ionexchange.Fragments.Configuration.GeneralConfig;
 
 import static com.ionexchange.Activity.BaseActivity.dismissProgress;
 import static com.ionexchange.Activity.BaseActivity.showProgress;
+import static com.ionexchange.Activity.BaseActivity.showSnack;
+import static com.ionexchange.Database.WaterTreatmentDb.DB_NAME;
 import static com.ionexchange.Others.PacketControl.ACK;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_FACTORYRESET;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import static com.ionexchange.Singleton.SharedPref.pref_MACADDRESS;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINNAME;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINPASSWORDCHANED;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +54,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+
+import me.jahnen.libaums.core.UsbMassStorageDevice;
+import me.jahnen.libaums.core.fs.FileSystem;
+import me.jahnen.libaums.core.fs.UsbFile;
+import me.jahnen.libaums.core.fs.UsbFileOutputStream;
 
 public class FragmentDuSetting_Config extends Fragment implements View.OnClickListener {
     FragmentDusettingsBinding mBinding;
@@ -53,6 +73,71 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
     WaterTreatmentDb db;
     UserManagementDao userManagementDao;
     private static final String TAG = "FragmentUnitIpSettings";
+    boolean otgDetected = false;
+    private static final String ACTION_USB_PERMISSION = "com.ionexchange.USB_PERMISSION";
+
+    private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (ACTION_USB_PERMISSION.equals(action)) {
+                synchronized (this) {
+                    UsbDevice device = (UsbDevice) intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+                    if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
+                        if (device != null) {
+                            otgDetected = true;
+                            UsbMassStorageDevice[] devices = UsbMassStorageDevice.getMassStorageDevices(getContext());
+                            if (devices.length > 0) {
+                                UsbMassStorageDevice mSelectedDevice = devices[0];
+                                try {
+                                    mSelectedDevice.init();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    dismissProgress();
+                                    showSnack("Backup Failed, Try again later");
+                                    getActivity().unregisterReceiver(mUsbReceiver);
+                                }
+                                FileSystem fs = mSelectedDevice.getPartitions().get(0).getFileSystem();
+                                UsbFile root = fs.getRootDirectory();
+                                Log.e(TAG, "onReceive: ");
+                                try {
+                                    String currentDBPath = getActivity().getDatabasePath(DB_NAME).getAbsolutePath();
+
+                                    String backupDBPath = SharedPref.read(pref_MACADDRESS, "").substring(SharedPref.read(pref_MACADDRESS, "").length() - 5).replace(":", "") +"-"+
+                                            new SimpleDateFormat("dd-mm-yy HH-mm-ss").format(new Date()) +"-" + "WT-IOT-DB";
+
+                                    File currentDB = new File(currentDBPath);
+                                    int len;
+                                    InputStream in = new FileInputStream(currentDB);
+                                    ByteBuffer buffer = ByteBuffer.allocate(4096);
+                                    UsbFile file =  root.createDirectory(backupDBPath).createFile("AutoChemDataBase.db");
+                                    UsbFileOutputStream mOutPut = new UsbFileOutputStream(file);
+
+                                    while ((len = in.read(buffer.array())) > 0) {
+                                        mOutPut.write(buffer.array());
+                                    }
+
+                                    in.close();
+                                    file.close();
+                                    mOutPut.close();
+                                    dismissProgress();
+                                    showSnack("Backup Complete | Dir :" + device.getManufacturerName() +"/" + backupDBPath + "AutoChem.db");
+                                    getActivity().unregisterReceiver(mUsbReceiver);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    dismissProgress();
+                                    showSnack("Backup Failed, Try again later");
+                                    getActivity().unregisterReceiver(mUsbReceiver);
+                                }
+                            }
+                        }
+                    }
+                    Log.e(TAG, "onReceive: ");
+                }
+            }
+        }
+    };
+
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -70,13 +155,13 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
         db = WaterTreatmentDb.getDatabase(getContext());
         userManagementDao = db.userManagementDao();
 
-        dismissProgress();
         mBinding.passwordSetting.setOnClickListener(this);
         mBinding.factorySetting.setOnClickListener(this);
         mBinding.getAllConfig.setOnClickListener(this);
         mBinding.sendAllConfig.setOnClickListener(this);
         mBinding.logOut.setOnClickListener(this);
         mBinding.pendrive.setOnClickListener(this);
+        dismissProgress();
     }
 
     private void factoryResetConfirmation() {
@@ -126,7 +211,7 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!dataReceived[0]){
+                if (!dataReceived[0]) {
                     dismissProgress();
                     mAppclass.showSnackBar(getContext(), "Factory Reset Failed, try again later");
                 }
@@ -190,10 +275,46 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
 
 
             case R.id.pendrive:
-                String srcDir = Environment.getExternalStorageDirectory().toString()+"/MyFolder";
-                String dst = Environment.getExternalStorageDirectory().getPath() + "/Pictures";
-                copyFileOrDirectory(srcDir, dst);
-                // mAppclass.exportDB();
+                otgDetected = false;
+                new MaterialAlertDialogBuilder(getContext()).setTitle("Backup")
+                        .setMessage("Please insert your OTG-USB and press continue")
+                        .setPositiveButton("continue", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showProgress();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        UsbDevice device = null;
+                                        UsbManager mUsbManager = (UsbManager) getActivity().getSystemService(Context.USB_SERVICE);
+                                        HashMap<String, UsbDevice> deviceList = mUsbManager.getDeviceList();
+                                        for (UsbDevice usbDevice : deviceList.values()) {
+                                            device = usbDevice;
+                                        }
+                                        PendingIntent mPermissionIntent = PendingIntent.getBroadcast(getContext(), 0, new Intent(ACTION_USB_PERMISSION), 0);
+                                        IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
+                                        getActivity().registerReceiver(mUsbReceiver, filter);
+                                        if (device != null) {
+                                            mUsbManager.requestPermission(device, mPermissionIntent);
+                                        }
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (!otgDetected) {
+                                                    dismissProgress();
+                                                    showSnack("Unable to Detect OTG-USB, Please try again later !");
+                                                }
+                                            }
+                                        }, 10000);
+                                    }
+                                }, 5000);
+                            }
+                        }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
                 break;
 
 
