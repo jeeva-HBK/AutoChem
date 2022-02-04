@@ -202,7 +202,6 @@ public class ApplicationClass extends Application {
     public static KeepAliveCurrentValueDao keepaliveDAO;
     public static MainConfigurationDao mainConfigurationDao;
     public static DefaultLayoutConfigurationDao defaultLayoutConfigurationDao;
-    KeepAliveCurrentValueDao keepAliveDao;
     OutputKeepAliveDao outputKeepAliveDao;
 
     // WebService
@@ -846,8 +845,8 @@ public class ApplicationClass extends Application {
         }
 
         /*KeepAlive*/
-        keepAliveDao = DB.keepAliveCurrentValueDao();
-        if (keepAliveDao.getKeepAliveList().isEmpty()) {
+        keepaliveDAO = DB.keepAliveCurrentValueDao();
+        if (keepaliveDAO.getKeepAliveList().isEmpty()) {
             for (int i = 1; i <= 57; i++) {
                 KeepAliveCurrentEntity keepAliveCurrentEntity =
                         new KeepAliveCurrentEntity(i, "N/A");
@@ -1020,6 +1019,8 @@ public class ApplicationClass extends Application {
                             FileChannel dst = new FileOutputStream(backupDB).getChannel();
                             dst.transferFrom(src, 0, src.size());
                             src.close();
+                            Log.e(TAG, "importDB: " + currentDBPath);
+                            Log.e(TAG, "importDB: " + backupDB);
                             dst.close();
                             Toast.makeText(getApplicationContext(), "Backup Successful!", Toast.LENGTH_SHORT).show();
                         }
@@ -1056,7 +1057,8 @@ public class ApplicationClass extends Application {
                             FileChannel dst = new FileOutputStream(currentDB).getChannel();
                             dst.transferFrom(src, 0, src.size());
                             src.close();
-
+                            Log.e(TAG, "importDB: " + currentDBPath);
+                            Log.e(TAG, "importDB: " + backupDB);
                             dst.close();
                         }
 

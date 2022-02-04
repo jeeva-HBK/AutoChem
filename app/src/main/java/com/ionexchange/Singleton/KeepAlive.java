@@ -234,35 +234,37 @@ public class KeepAlive implements DataReceiveCallback {
 
     private void collect() {
         try {
-            String[] data = trendDataCollector.split("\\*")[1].split("\\$");
-            if (data[2].equals(INPUT_VOLTAGE)) {
-                int i = 0;
-                int maxRow = trendDao.lastRowNumber() == null ? 1 : trendDao.lastRowNumber() + 1;
-                while (i < 57) {
-                    if (data[i + 3].length() > 2) {
-                        if (data[i + 3].substring(0, 2).equals("01")) {
-                            if (data[i + 3].split("\\.")[1].length() >= 1) {
+            if(!trendDataCollector.isEmpty() && !trendDataCollector.equalsIgnoreCase("00")) {
+                String[] data = trendDataCollector.split("\\*")[1].split("\\$");
+                if (data[2].equals(INPUT_VOLTAGE)) {
+                    int i = 0;
+                    int maxRow = trendDao.lastRowNumber() == null ? 1 : trendDao.lastRowNumber() + 1;
+                    while (i < 57) {
+                        if (data[i + 3].length() > 2) {
+                            if (data[i + 3].substring(0, 2).equals("01")) {
+                                if (data[i + 3].split("\\.")[1].length() >= 1) {
+                                    trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
+                                            data[i + 3].split("\\.")[0].substring(2) + "." + data[i + 3].split("\\.")[1].substring(0, 2),
+                                            ApplicationClass.getCurrentTrendFormatDate(), ApplicationClass.getCurrentTime(), maxRow);
+                                } else {
+                                    trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2), data[i + 3],
+                                            ApplicationClass.getCurrentTrendFormatDate(), ApplicationClass.getCurrentTime(), maxRow);
+                                }
+                            } else if (Integer.parseInt(data[i + 3].substring(0, 2)) <= 33) {
                                 trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
-                                        data[i + 3].split("\\.")[0].substring(2) + "." + data[i + 3].split("\\.")[1].substring(0, 2),
-                                        ApplicationClass.getCurrentTrendFormatDate(), ApplicationClass.getCurrentTime(), maxRow);
-                            } else {
-                                trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2), data[i + 3],
-                                        ApplicationClass.getCurrentTrendFormatDate(), ApplicationClass.getCurrentTime(), maxRow);
+                                        data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentTrendFormatDate(),
+                                        ApplicationClass.getCurrentTime(), maxRow);
+                            } else if (Integer.parseInt(data[i + 3].substring(0, 2)) > 49) {
+                                trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
+                                        data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentTrendFormatDate(),
+                                        ApplicationClass.getCurrentTime(), maxRow);
                             }
-                        } else if (Integer.parseInt(data[i + 3].substring(0, 2)) <= 33) {
-                            trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
-                                    data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentTrendFormatDate(),
-                                    ApplicationClass.getCurrentTime(), maxRow);
-                        } else if (Integer.parseInt(data[i + 3].substring(0, 2)) > 49) {
-                            trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
-                                    data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentTrendFormatDate(),
-                                    ApplicationClass.getCurrentTime(), maxRow);
                         }
+                        i++;
                     }
-                    i++;
                 }
+                trendDataCollector = "00";
             }
-            trendDataCollector = "00";
         } catch (Exception e) {
             e.printStackTrace();
         }

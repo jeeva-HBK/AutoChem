@@ -302,6 +302,7 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
                                             public void run() {
                                                 if (!otgDetected) {
                                                     dismissProgress();
+                                                    getActivity().unregisterReceiver(mUsbReceiver);
                                                     showSnack("Unable to Detect OTG-USB, Please try again later !");
                                                 }
                                             }
@@ -312,6 +313,7 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
                         }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        getActivity().unregisterReceiver(mUsbReceiver);
                         dialogInterface.dismiss();
                     }
                 }).show();

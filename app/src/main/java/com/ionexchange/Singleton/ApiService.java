@@ -120,7 +120,6 @@ public class ApiService implements DataReceiveCallback {
                                 jsonSubID = responseObject.getString("JSON_SUB_ID");
                                 processApiData(packetType, jsonSubID, "");
 
-
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -533,6 +532,7 @@ public class ApiService implements DataReceiveCallback {
                 dataObj.put("SEQUENCE_NO", "");
                 dataObj.put("UNIT", "");
                 dataObj.put("TYPE", "");
+                dataObj.put("EVENT_TYPE", "");
                 finalArr.put(dataObj);
             } catch (JSONException jsonException) {
                 jsonException.printStackTrace();
@@ -551,20 +551,19 @@ public class ApiService implements DataReceiveCallback {
                         String[] splitData = jsonObject.getString("REQ").
                                 split("\\*")[1].split(RES_SPILT_CHAR);
                         String[] splitValidation = data.split("\\*")[1].split(RES_SPILT_CHAR);
-                        if (splitValidation[1].equals(PCK_OUTPUT_CONFIG)) {
-                            int hardWareNo = Integer.parseInt(jsonObject.getString("INPUTNO"));
+                        int hardWareNo = Integer.parseInt(jsonObject.getString("INPUTNO"));
+                        if (splitValidation[1].equals(PCK_OUTPUT_CONFIG) && splitValidation[2].equals(RES_SUCCESS)) {
                             String inputLabel = jsonObject.getString("NAME_LABEL");
                             String lowAlarm = jsonObject.getString("LEFT_LABEL");
                             String highAlarm = jsonObject.getString("RIGHT_LABEL");
-                            if (hardWareNo > 14) {
+                            if (hardWareNo > 14 && !highAlarm.isEmpty()) {
                                 if (highAlarm.contains("IN")) {
                                     highAlarm = "Input- " + highAlarm + " (" + inputDAO.getInputLabel(Integer.parseInt(highAlarm)) + ")";
                                 } else {
                                     highAlarm = "Output- " + highAlarm + " (" + outputDAO.getOutputLabel(Integer.parseInt(highAlarm)) + ")";
                                 }
-
                             }
-                            dataObj.put("INPUTNO", "");
+                            dataObj.put("INPUTNO", jsonObject.getString("INPUTNO"));
                             dataObj.put("REQ", "ACK");
                             dataObj.put("NAME_LABEL", "");
                             dataObj.put("LEFT_LABEL", "");
@@ -573,21 +572,32 @@ public class ApiService implements DataReceiveCallback {
                             dataObj.put("UNIT", "");
                             dataObj.put("TYPE", "");
                             dataObj.put("EVENT_TYPE", "");
-
+                            finalArr.put(dataObj);
                             OutputConfigurationEntity entityUpdate = new OutputConfigurationEntity
-                                    (hardWareNo, "Output- " + hardWareNo + "(" + inputLabel + ")", inputLabel,
+                                    (hardWareNo, "Output-" + hardWareNo + "(" + inputLabel + ")", inputLabel,
                                             lowAlarm,
                                             highAlarm, jsonObject.getString("REQ"));
                             List<OutputConfigurationEntity> entryListUpdate = new ArrayList<>();
                             entryListUpdate.add(entityUpdate);
                             updateOutPutDB(entryListUpdate);
+                        } else {
+                            dataObj.put("INPUTNO", jsonObject.getString("INPUTNO"));
+                            dataObj.put("REQ", "NACK");
+                            dataObj.put("NAME_LABEL", "");
+                            dataObj.put("LEFT_LABEL", "");
+                            dataObj.put("RIGHT_LABEL", "");
+                            dataObj.put("SEQUENCE_NO", "");
+                            dataObj.put("UNIT", "");
+                            dataObj.put("TYPE", "");
+                            dataObj.put("EVENT_TYPE", "");
+                            finalArr.put(dataObj);
                         }
 
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-            }, jsonObject.getString("REQ").substring(1, jsonObject.getString("REQ").length() - 2));
+            }, jsonObject.getString("REQ").substring(2, jsonObject.getString("REQ").length() - 2));
         } catch (JSONException e) {
             e.printStackTrace();
             try {
@@ -600,6 +610,7 @@ public class ApiService implements DataReceiveCallback {
                 dataObj.put("UNIT", "");
                 dataObj.put("TYPE", "");
                 dataObj.put("EVENT_TYPE", "");
+                finalArr.put(dataObj);
             } catch (JSONException jsonException) {
                 jsonException.printStackTrace();
             }
@@ -678,7 +689,7 @@ public class ApiService implements DataReceiveCallback {
                         e.printStackTrace();
                     }
                 }
-            }, jsonObject.getString("REQ").substring(1, jsonObject.getString("REQ").length() - 2));
+            }, jsonObject.getString("REQ").substring(2, jsonObject.getString("REQ").length() - 2));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1057,6 +1068,7 @@ public class ApiService implements DataReceiveCallback {
             dataObject.put("OUTPUT_RESPONSE", outputKeepAliveData);
             dataObject.put("MSG_FIELD", inputKeepAliveData);
             dataObject.put("LABLE", "");
+
             dataObject.put("RESPONSE_WEB", "");
             dataObject.put("RESPONSE_TAB", getResponceTab() == null ? "NACK" : getResponceTab());
             dataObject.put("USER_ID", SharedPref.read(pref_USERLOGINID, ""));

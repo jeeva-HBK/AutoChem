@@ -135,7 +135,7 @@ public class OutputIndexRvAdapter extends RecyclerView.Adapter<OutputIndexRvAdap
                         holder.outputMode.setText((inputType <= 49) ? inputDAO.getInputType(inputType) : virtualDAO.getInputType(inputType));
                         holder.outputNumber.setText(keepaliveDAO.getCurrentValue(inputType));
                         holder.outputNumber.setTextSize(15f);
-                    }catch (Exception e){
+                    } catch (Exception e){
                         e.printStackTrace();
                     }
                     break;
