@@ -93,7 +93,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.regex.Matcher;
 
-/* Created by Jeeva on 13/07/2021 */
+/*  Created by Jeeva on 13/07/2021  */
 public class ApplicationClass extends Application {
     private static final String TAG = "ApplicationClass";
     public static final String LOG_DIVIDER = " <----------------------------------------------------------------------------------------------------------------------------> ";
