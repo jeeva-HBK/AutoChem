@@ -1958,6 +1958,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         updateToDb(entryListUpdate);
         new EventLogDemo(String.valueOf(outputSensorNo), "output-" + outputSensorNo, "Output Setting Changed",
                 SharedPref.read(pref_USERLOGINID, ""),getContext());
+        ApiService.tempString = "0";
         ApiService.getInstance(getContext()).processApiData(READ_PACKET, "05", "Output Setting Changed - " +
                 SharedPref.read(pref_USERLOGINID, ""));
     }

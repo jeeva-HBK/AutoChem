@@ -70,6 +70,7 @@ public class ApiService implements DataReceiveCallback {
     String responseTabId = "00";
     String responseTabData = "";
     String packetType = "1";
+    public static String tempString = "0";
     String diagnosticsDataOne = "";
     String diagnosticsDataTwo = "";
     String diagnosticsDataThree = "";
@@ -80,7 +81,10 @@ public class ApiService implements DataReceiveCallback {
     JSONObject dataObj;
     JSONArray finalArr;
     String jsonSubID = "00";
+    String[] splitTimer;
+    JSONObject timerJson;
 
+    int weekly;
 
     private ApiService() {
     }
@@ -116,7 +120,9 @@ public class ApiService implements DataReceiveCallback {
 
                                 responseObject = object.getJSONObject("Response")
                                         .getJSONObject("DATAS").getJSONObject("RESPONSE_WEB");
-                                packetType = responseObject.getString("PACKET_TYPE");
+                                String[] spiltData = responseObject.getString("PACKET_TYPE").split("\\$");
+                                packetType = spiltData[0];
+                                tempString = spiltData[1];
                                 jsonSubID = responseObject.getString("JSON_SUB_ID");
                                 processApiData(packetType, jsonSubID, "");
 
@@ -138,6 +144,7 @@ public class ApiService implements DataReceiveCallback {
     }
 
     public void processApiData(String packetType, String jsonSubID, String eventType) {
+
         if (!jsonSubID.equals("99")) {
             finalArr = new JSONArray();
         }
@@ -207,6 +214,7 @@ public class ApiService implements DataReceiveCallback {
                                 getJSONObject(0));
                         break;
                     case "06":
+                        weekly = 1;
                         writTimerConfiguration(responseObject.getJSONArray("DATA").
                                 getJSONObject(0));
                         break;
@@ -485,6 +493,7 @@ public class ApiService implements DataReceiveCallback {
 
     private void sendNack() {
         try {
+            dataObj = new JSONObject();
             dataObj.put("INPUTNO", "");
             dataObj.put("REQ", "NACK");
             dataObj.put("NAME_LABEL", "");
@@ -760,84 +769,10 @@ public class ApiService implements DataReceiveCallback {
 
     private void writTimerConfiguration(JSONObject jsonObject) {
         try {
-            String[] splitTimer = jsonObject.getString("REQ").split("#");
-            ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
-                @Override
-                public void OnDataReceive(String data) {
-                    String[] split = data.split("\\*")[1].split(RES_SPILT_CHAR);
-                    try {
-                        if (split[1].equals("08") && split[2].equals("0")) {
-                            timerFramePacket(splitTimer[1].substring(2, splitTimer[1].length() - 2));
-                        }
-                        if (split[0].equals("1") && split[2].equals("0")) {
-                            timerFramePacket(splitTimer[2].substring(2, splitTimer[2].length() - 2));
-                        }
-                        if (split[0].equals("2") && split[2].equals("0")) {
-                            timerFramePacket(splitTimer[3].substring(2, splitTimer[3].length() - 2));
-                        }
-                        if (split[0].equals("3") && split[2].equals("0")) {
-                            timerFramePacket(splitTimer[4].substring(2, splitTimer[4].length() - 2));
-                        }
-                        if (split[0].equals("4") && split[2].equals("0")) {
-                            try {
-                                responseTabId = "06";
-                                int timerNo = Integer.parseInt(jsonObject.getString("INPUTNO"));
-                                String timerName = jsonObject.getString("NAME_LABEL");
-                                String lowAlarm = jsonObject.getString("LEFT_LABEL");
-                                String highAlarm = jsonObject.getString("RIGHT_LABEL");
-                                String[] splitTimer = jsonObject.getString("REQ").split("#");
-                                TimerConfigurationEntity timerConfigurationEntity = new TimerConfigurationEntity
-                                        (timerNo, timerName, lowAlarm, highAlarm, splitTimer[0], splitTimer[1], splitTimer[2], splitTimer[3], splitTimer[4]);
-                                List<TimerConfigurationEntity> entryListUpdate = new ArrayList<>();
-                                entryListUpdate.add(timerConfigurationEntity);
-                                updateTimerDB(entryListUpdate);
-                                dataObj.put("INPUTNO", String.valueOf(timerNo));
-                                dataObj.put("REQ", "ACK");
-                                dataObj.put("NAME_LABEL", "");
-                                dataObj.put("LEFT_LABEL", "");
-                                dataObj.put("RIGHT_LABEL", "");
-                                dataObj.put("SEQUENCE_NO", "");
-                                dataObj.put("UNIT", "");
-                                dataObj.put("TYPE", "");
-                                dataObj.put("EVENT_TYPE", "");
-                                finalArr.put(dataObj);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                try {
-                                    dataObj.put("INPUTNO", "");
-                                    dataObj.put("REQ", "NACK");
-                                    dataObj.put("NAME_LABEL", "");
-                                    dataObj.put("LEFT_LABEL", "");
-                                    dataObj.put("RIGHT_LABEL", "");
-                                    dataObj.put("SEQUENCE_NO", "");
-                                    dataObj.put("UNIT", "");
-                                    dataObj.put("TYPE", "");
-                                    dataObj.put("EVENT_TYPE", "");
-                                    finalArr.put(dataObj);
-                                } catch (JSONException jsonException) {
-                                    jsonException.printStackTrace();
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        try {
-                            dataObj.put("INPUTNO", "");
-                            dataObj.put("REQ", "NACK");
-                            dataObj.put("NAME_LABEL", "");
-                            dataObj.put("LEFT_LABEL", "");
-                            dataObj.put("RIGHT_LABEL", "");
-                            dataObj.put("SEQUENCE_NO", "");
-                            dataObj.put("UNIT", "");
-                            dataObj.put("TYPE", "");
-                            dataObj.put("EVENT_TYPE", "");
-                            finalArr.put(dataObj);
-                        } catch (JSONException jsonException) {
-                            jsonException.printStackTrace();
-                        }
-                    }
-                }
-            }, splitTimer[0]);
+            splitTimer = jsonObject.getString("REQ").split("#");
+            timerJson = new JSONObject();
+            timerJson = jsonObject;
+            timerFramePacket(splitTimer[0].substring(2, splitTimer[0].length() - 2));
         } catch (JSONException e) {
             e.printStackTrace();
             try {
@@ -858,7 +793,17 @@ public class ApiService implements DataReceiveCallback {
 
     @Override
     public void OnDataReceive(String data) {
-        handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR), data);
+        if (data.equals("FailedToConnect")) {
+        } else if (data.equals("pckError")) {
+            Log.e(TAG, "pckError: ");
+        } else if (data.equals("sendCatch")) {
+            Log.e(TAG, "sendCatch: ");
+        } else if (data.equals("Timeout")) {
+            Log.e(TAG, "Timeout: ");
+        } else if (data != null) {
+            handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR), data);
+        }
+
     }
 
     public void handleResponse(String[] splitData, String data) {
@@ -914,6 +859,78 @@ public class ApiService implements DataReceiveCallback {
                     break;
             }
         }
+        if (splitData[1].equals("08") || splitData[1].equals("09")) {
+
+            try {
+                if (splitData[0].equals("0") && splitData[1].equals("08") && splitData[2].equals("0")) {
+                    timerFramePacket(splitTimer[1].substring(2, splitTimer[1].length() - 2));
+                    weekly = 1;
+
+                } else if (splitData[0].equals("0") && splitData[1].equals("09") && splitData[2].equals("0")) {
+                    switch (weekly) {
+                        case 1:
+                            weekly = 2;
+                            timerFramePacket(splitTimer[2].substring(2, splitTimer[2].length() - 2));
+
+                            break;
+                        case 2:
+                            weekly = 3;
+                            timerFramePacket(splitTimer[3].substring(2, splitTimer[3].length() - 2));
+
+                            break;
+                        case 3:
+                            weekly = 4;
+                            timerFramePacket(splitTimer[4].substring(2, splitTimer[4].length() - 2));
+                            break;
+                        case 4:
+                            responseTabId = "06";
+                            weekly = 0;
+                            int timerNo = Integer.parseInt(timerJson.getString("INPUTNO"));
+                            String timerName = timerJson.getString("NAME_LABEL");
+                            String lowAlarm = timerJson.getString("LEFT_LABEL");
+                            String highAlarm = timerJson.getString("RIGHT_LABEL");
+                            String[] splitTimer = timerJson.getString("REQ").split("#");
+                            TimerConfigurationEntity timerConfigurationEntity = new TimerConfigurationEntity
+                                    (timerNo, timerName, lowAlarm, highAlarm, splitTimer[0], splitTimer[1], splitTimer[2], splitTimer[3], splitTimer[4]);
+                            List<TimerConfigurationEntity> entryListUpdate = new ArrayList<>();
+                            entryListUpdate.add(timerConfigurationEntity);
+                            updateTimerDB(entryListUpdate);
+                            dataObj.put("INPUTNO", String.valueOf(timerNo));
+                            dataObj.put("REQ", "ACK");
+                            dataObj.put("NAME_LABEL", "");
+                            dataObj.put("LEFT_LABEL", "");
+                            dataObj.put("RIGHT_LABEL", "");
+                            dataObj.put("SEQUENCE_NO", "");
+                            dataObj.put("UNIT", "");
+                            dataObj.put("TYPE", "");
+                            dataObj.put("EVENT_TYPE", "");
+                            finalArr.put(dataObj);
+                            break;
+                    }
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    dataObj.put("INPUTNO", "");
+                    dataObj.put("REQ", "NACK");
+                    dataObj.put("NAME_LABEL", "");
+                    dataObj.put("LEFT_LABEL", "");
+                    dataObj.put("RIGHT_LABEL", "");
+                    dataObj.put("SEQUENCE_NO", "");
+                    dataObj.put("UNIT", "");
+                    dataObj.put("TYPE", "");
+                    dataObj.put("EVENT_TYPE", "");
+                    finalArr.put(dataObj);
+                } catch (JSONException jsonException) {
+                    jsonException.printStackTrace();
+
+                }
+            }
+
+        }
+
     }
 
     private String getInputSensorConfig(String inputNo) {
@@ -1084,7 +1101,7 @@ public class ApiService implements DataReceiveCallback {
         try {
             JSONObject responseObj = new JSONObject();
             responseObj.put("JSON_SUB_ID", responseTabId);
-            responseObj.put("PACKET_TYPE", packetType);
+            responseObj.put("PACKET_TYPE", packetType + "$" + tempString);
             responseObj.put("DATA", finalArr);
             return responseObj;
         } catch (JSONException e) {

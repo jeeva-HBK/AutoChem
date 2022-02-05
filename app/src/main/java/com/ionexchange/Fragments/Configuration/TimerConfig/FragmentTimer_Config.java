@@ -1,7 +1,6 @@
 package com.ionexchange.Fragments.Configuration.TimerConfig;
 
 import static com.ionexchange.Activity.BaseActivity.dismissProgress;
-
 import static com.ionexchange.Others.ApplicationClass.accessoryTimerMode;
 import static com.ionexchange.Others.ApplicationClass.accessoryType;
 import static com.ionexchange.Others.ApplicationClass.bleedRelay;
@@ -12,11 +11,13 @@ import static com.ionexchange.Others.ApplicationClass.timerOutputMode;
 import static com.ionexchange.Others.ApplicationClass.toStringValue;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.ENDPACKET;
 import static com.ionexchange.Others.PacketControl.PCK_TIMER_CONFIG;
 import static com.ionexchange.Others.PacketControl.PCK_WEEKLY_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+import static com.ionexchange.Others.PacketControl.STARTPACKET;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
@@ -95,8 +96,11 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
     WaterTreatmentDb dB;
     OutputConfigurationDao dao;
     TimerConfigurationDao timerConfigurationDao;
-
     String weeklyPacket;
+    String weeklyPacketOne;
+    String weeklyPacketTwo;
+    String weeklyPacketThree;
+    String weeklyPacketFour;
     String accessoryTime;
 
     @Nullable
@@ -779,9 +783,9 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
     public void OnDataReceive(String data) {
         dismissProgress();
         if (data.equals("FailedToConnect") || data.equals("pckError") || data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getActivity(), getString(R.string.connection_failed));
+            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getActivity(), getString(R.string.timeout));
+            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
         } else if (data != null) {
             handleResponse(data.split(RES_SPILT_CHAR), 0);
         }
@@ -799,7 +803,6 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                 flowSensorVisibility(Integer.parseInt(splitData[6]));
                 mBinding.txtModeValueAct.setText(mBinding.txtModeValueAct.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
                 mBinding.txtFlowSensorValueAct.setText(mBinding.txtFlowSensorValueAct.getAdapter().getItem(Integer.parseInt(splitData[7])).toString());
-
                 //accessoryTimer- set background
                 setAccessoryTimerBackground(splitData[9], mBinding.AccessoryCheckbox1, 1);
                 setAccessoryTimerBackground(splitData[15], mBinding.AccessoryCheckbox2, 2);
@@ -816,8 +819,8 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                     int timerNum = Integer.parseInt(timerNo);
                     dao.updateTimer(mBinding.timerNameTxt.getText().toString(),
                             mBinding.txtOutputNameValueAct.getText().toString(), mBinding.txtModeValueAct.getText().toString(), timerNum);
-                     timerEntity();
                     writeWeeklySchedule(week1, timerOne, 1);
+                    timerEntity();
                 }
                 if (splitData[2].equals("1*}")) {
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
@@ -1067,7 +1070,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
     }
 
     void writeTimerConfiguration() {
-
+        BaseActivity.showProgress();
         try {
             accessoryTime = DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                     SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
@@ -1135,8 +1138,13 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                 + SPILT_CHAR + weekType[23]
                 + SPILT_CHAR + weekType[24]
                 + SPILT_CHAR + weekType[25]
-                + SPILT_CHAR + weekType[26];
+                + SPILT_CHAR + weekType[26].substring(0, weekType[26].length() - 2);
         mAppClass.sendPacket(this, weeklyPacket);
+
+        weeklyPacketOne = STARTPACKET + weeklyPacket;
+        weeklyPacketTwo = STARTPACKET + weeklyPacket;
+        weeklyPacketThree = STARTPACKET + weeklyPacket;
+        weeklyPacketFour = STARTPACKET + weeklyPacket;
         loopWeeklyPacket = loop;
     }
 
@@ -1308,13 +1316,15 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
     }
 
     public void timerEntity() {
+        BaseActivity.dismissProgress();
         TimerConfigurationEntity entity = new TimerConfigurationEntity(Integer.parseInt(timerNo), mBinding.timerNameTxt.getText().toString(),
                 mBinding.txtOutputNameValueAct.getText().toString(), mBinding.txtModeValueAct.getText().toString(),
-                accessoryTime, weeklyPacket, weeklyPacket, weeklyPacket, weeklyPacket);
+                STARTPACKET + accessoryTime + ENDPACKET, weeklyPacketOne, weeklyPacketTwo, weeklyPacketThree, weeklyPacketFour);
         List<TimerConfigurationEntity> entryListDelete = new ArrayList<>();
         entryListDelete.add(entity);
         updateToDb(entryListDelete);
         new EventLogDemo(timerNo, "TIMER" + timerNo, "Timer setting changed", SharedPref.read(pref_USERLOGINID, ""), getContext());
+        ApiService.tempString = "0";
         ApiService.getInstance(getContext()).processApiData(READ_PACKET, "06", "Timer Setting Changed - " +
                 SharedPref.read(pref_USERLOGINID, ""));
 

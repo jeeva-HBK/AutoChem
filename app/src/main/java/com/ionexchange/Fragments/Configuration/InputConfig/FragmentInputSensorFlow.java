@@ -928,6 +928,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
                 new EventLogDemo(inputNumber, "FlowMeter", "Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.tempString = "0";
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
                 mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
@@ -948,6 +949,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                 entryFlowList.add(flowEntityUpdate);
                 updateToDb(entryFlowList);
                 new EventLogDemo(inputNumber, "FlowMeter", "Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.tempString = "0";
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
                         SharedPref.read(pref_USERLOGINID, ""));
                 mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));

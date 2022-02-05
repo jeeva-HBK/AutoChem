@@ -85,15 +85,17 @@ public class FragmentInputIndex extends Fragment implements View.OnClickListener
         mBinding.rightArrowIsBtn.setVisibility((dao.getInputConfigurationEntityFlagKeyList(1).size() / 9) > 0 ? View.VISIBLE : View.GONE);
         mBinding.addsensorIsBtn.setOnClickListener(this);
 
+        mBinding.addsensorIsBtn.setVisibility(userType == 3 ? View.VISIBLE : View.GONE);
+
         mBinding.inputsRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(this, dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset),keepAliveCurrentValueDao));
+        mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(this, dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset), keepAliveCurrentValueDao));
 
         mBinding.leftArrowIsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 currentPage--;
                 mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(FragmentInputIndex.this,
-                        dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset = pageOffset - 9),keepAliveCurrentValueDao));
+                        dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset = pageOffset - 9), keepAliveCurrentValueDao));
                 mBinding.leftArrowIsBtn.setVisibility(currentPage <= 0 ? View.GONE : View.VISIBLE);
                 mBinding.rightArrowIsBtn.setVisibility(View.VISIBLE);
             }

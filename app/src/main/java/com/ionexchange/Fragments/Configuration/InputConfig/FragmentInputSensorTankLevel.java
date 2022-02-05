@@ -257,6 +257,7 @@ public class FragmentInputSensorTankLevel extends Fragment implements DataReceiv
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
                 new EventLogDemo(inputNumber,"Tank","Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.tempString = "0";
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
                 mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
@@ -277,6 +278,7 @@ public class FragmentInputSensorTankLevel extends Fragment implements DataReceiv
                 updateToDb(entryListUpdate);
                 mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));
                 new EventLogDemo(inputNumber,"Tank","Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.tempString = "0";
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
                         SharedPref.read(pref_USERLOGINID, ""));
                 break;

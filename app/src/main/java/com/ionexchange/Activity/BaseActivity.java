@@ -727,7 +727,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             attemptTxt.setText("attempt : " + retryCount + "/5");
         }
         if (retryCount < 5) {
-            showSnack("Retrying count " + retryCount);
             Log.e(TAG, "run: scan will start in 5 sec");
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
@@ -757,6 +756,14 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
                             @Override
                             public void OnDeviceFoundUpdate(List<BluetoothDevice> devices) {
+                                for (int i = 0; i < devices.size(); i++) {
+                                    if (devices.get(i).getAddress().equals(SharedPref.read(pref_MACADDRESS, ""))) {
+                                        Log.e(TAG, "device found");
+                                        tempBool = false;
+                                        connect(devices.get(i));
+                                        break;
+                                    }
+                                }
                             }
                         });
                     } catch (Exception e) {
@@ -796,7 +803,20 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                             tempBool = false;
                             reconnectDialog.dismiss();
                             retryCount = 0;
-                            showSnack("Reconnected to " + bluetoothDevice.getName() + " Successfully");
+                            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                //                                          int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                                showSnack("Reconnected to " + bluetoothDevice.getName() + " Successfully");
+                                return;
+                            } else {
+                                showSnack("Cant connect to device, try to connect manually");
+                            }
+
                             baseActivity.startHandler();
                         }
 

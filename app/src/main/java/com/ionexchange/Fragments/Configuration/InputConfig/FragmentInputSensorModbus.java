@@ -481,6 +481,7 @@ public class FragmentInputSensorModbus extends Fragment implements DataReceiveCa
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
                 new EventLogDemo(inputNumber, "ModBus", "Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""), getContext());
+                ApiService.tempString = "0";
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
                 mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
@@ -501,6 +502,7 @@ public class FragmentInputSensorModbus extends Fragment implements DataReceiveCa
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);
                 new EventLogDemo(inputNumber, "ModBus", "Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""), getContext());
+                ApiService.tempString = "0";
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
                 mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));

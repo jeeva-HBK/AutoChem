@@ -292,12 +292,13 @@ public class FragmentInputSensorORP extends Fragment implements DataReceiveCallb
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.orpInputNumberEdtIsc)), "N/A",
                                 "SENSOR", 0, "N/A",
-                                1, "N/A", "N/A", "N/A", "N/A",STARTPACKET + writePacket + ENDPACKET,
-                                0,"N/A");
+                                1, "N/A", "N/A", "N/A", "N/A","N/A",
+                                0,STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
                 new EventLogDemo(inputNumber,"ORP","Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.tempString = "0";
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
                 mainConfigurationDao.updateAddSensorValue(0, Integer.parseInt(inputNumber));
@@ -317,6 +318,7 @@ public class FragmentInputSensorORP extends Fragment implements DataReceiveCallb
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);
                 new EventLogDemo(inputNumber,"ORP","Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""),getContext());
+                ApiService.tempString = "0";
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
                         SharedPref.read(pref_USERLOGINID, ""));
                 mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));

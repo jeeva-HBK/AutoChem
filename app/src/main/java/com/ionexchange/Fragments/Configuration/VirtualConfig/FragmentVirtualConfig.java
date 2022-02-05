@@ -830,6 +830,7 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
         updateToDb(entryListUpdate);
         new EventLogDemo(String.valueOf(sensorInputNo), "Virtual", "Input Setting Changed",
                 SharedPref.read(pref_USERLOGINID, ""), getContext());
+        ApiService.tempString = "0";
         ApiService.getInstance(getContext()).processApiData(READ_PACKET, "07", "Input Setting Changed - " +
                 SharedPref.read(pref_USERLOGINID, ""));
 
