@@ -252,8 +252,8 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     private String[] getSensorInputArray() {
         WaterTreatmentDb DB = WaterTreatmentDb.getDatabase(getContext());
         InputConfigurationDao DAO = DB.inputConfigurationDao();
-        List<InputConfigurationEntity> inputNameList = DAO.getInputHardWareNoConfigurationEntityList(1, 17);
-        String[] inputNames = new String[17];
+        List<InputConfigurationEntity> inputNameList = DAO.getInputHardWareNoConfigurationEntityList(1, 25);
+        String[] inputNames = new String[25];
         if (!inputNameList.isEmpty()) {
             for (int i = 0; i < inputNameList.size(); i++) {
                 inputNames[i] = "Input- " + inputNameList.get(i).getHardwareNo() + " (" + inputNameList.get(i).getInputLabel() + ")";
@@ -759,7 +759,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
     private String getLinkInputSensor(AutoCompleteTextView sensorLinkInputSensorAtxtOsc) {
         int analoginputHardwareno = Integer.parseInt(getPosition(2, toString(sensorLinkInputSensorAtxtOsc), sensorInputArr)) + 1;
-        if (analoginputHardwareno >= 18) {
+        if (analoginputHardwareno >= 25) {
             analoginputHardwareno = Integer.parseInt(getPosition(2, toString(sensorLinkInputSensorAtxtOsc), sensorInputArr)) + 33;
         }
         return "" + analoginputHardwareno;
@@ -1101,7 +1101,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                 enableSensorLayout();
                                 if (splitData[9].equals("0")) { // On/Off
                                     enableOnOff();
-                                    if (Integer.parseInt(splitData[8]) < 18) {
+                                    if (Integer.parseInt(splitData[8]) < 26) {
                                         mBinding.sensorLinkInputSensorAtxtOsc.setText(mBinding.sensorLinkInputSensorAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) - 1).toString());
                                     } else {
                                         mBinding.sensorLinkInputSensorAtxtOsc.setText(mBinding.sensorLinkInputSensorAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) - 33).toString());
@@ -1139,7 +1139,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                     mBinding.sensorLinkInputSensorAtxtOsc.setAdapter(getAdapter(sensorInputArr));
                                 } else if (splitData[9].equals("1")) { // PID
                                     enablePID();
-                                    if (Integer.parseInt(splitData[8]) < 18) {
+                                    if (Integer.parseInt(splitData[8]) < 26) {
                                         mBinding.pidLinkInputAtxtOsc.setText(mBinding.pidLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) - 1).toString());
                                     } else {
                                         mBinding.pidLinkInputAtxtOsc.setText(mBinding.pidLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) - 33).toString());
@@ -1293,7 +1293,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     void setMaxLength() {
         String[] sensorLink = mBinding.sensorLinkInputSensorAtxtOsc.getText().toString().split("-");
         String[] inputhardwareNo = sensorLink[1].split("\\(");
-        if (Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")) < 18) {
+        if (Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")) < 26) {
             inputType = inputDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
         } else {
             inputType = virtualDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));

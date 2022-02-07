@@ -783,9 +783,9 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
     public void OnDataReceive(String data) {
         dismissProgress();
         if (data.equals("FailedToConnect") || data.equals("pckError") || data.equals("sendCatch")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
+          //  mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
+           // mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
         } else if (data != null) {
             handleResponse(data.split(RES_SPILT_CHAR), 0);
         }
@@ -802,7 +802,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                 mBinding.txtOutputNameValueAct.setText(mBinding.txtOutputNameValueAct.getAdapter().getItem(Integer.parseInt(splitData[5]) - 1).toString());
                 flowSensorVisibility(Integer.parseInt(splitData[6]));
                 mBinding.txtModeValueAct.setText(mBinding.txtModeValueAct.getAdapter().getItem(Integer.parseInt(splitData[6])).toString());
-                mBinding.txtFlowSensorValueAct.setText(mBinding.txtFlowSensorValueAct.getAdapter().getItem(Integer.parseInt(splitData[7])).toString());
+                mBinding.txtFlowSensorValueAct.setText(mBinding.txtFlowSensorValueAct.getAdapter().getItem(Integer.parseInt(splitData[7]) - 1).toString());
                 //accessoryTimer- set background
                 setAccessoryTimerBackground(splitData[9], mBinding.AccessoryCheckbox1, 1);
                 setAccessoryTimerBackground(splitData[15], mBinding.AccessoryCheckbox2, 2);
@@ -1077,7 +1077,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                     PCK_TIMER_CONFIG + SPILT_CHAR + timerNo + SPILT_CHAR + mBinding.timerNameTxt.getText().toString()
                     + SPILT_CHAR + formDigits(2, "" + (Integer.parseInt(getPosition(2, toStringValue(mBinding.txtOutputNameValueAct), outputNames)) + 1))
                     + SPILT_CHAR + getPosition(1, toStringValue(mBinding.txtModeValueAct), timerOutputMode)
-                    + SPILT_CHAR + getPosition(1, toStringValue(mBinding.txtFlowSensorValueAct), timerFlowSensor)
+                    + SPILT_CHAR + (Integer.parseInt(getPosition(1, toStringValue(mBinding.txtFlowSensorValueAct), timerFlowSensor)) + 1)
                     + SPILT_CHAR + "1"
                     + SPILT_CHAR + accessoryTimer[9]
                     + SPILT_CHAR + accessoryTimer[10]

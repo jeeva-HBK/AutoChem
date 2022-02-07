@@ -510,7 +510,6 @@ public class ApiService implements DataReceiveCallback {
         }
     }
 
-
     //outputConfiguration
     public void readOutputConfiguration(String eventType) {
         responseTabId = "05";
@@ -566,10 +565,10 @@ public class ApiService implements DataReceiveCallback {
                             String lowAlarm = jsonObject.getString("LEFT_LABEL");
                             String highAlarm = jsonObject.getString("RIGHT_LABEL");
                             if (hardWareNo > 14 && !highAlarm.isEmpty()) {
-                                if (highAlarm.contains("IN")) {
-                                    highAlarm = "Input- " + highAlarm + " (" + inputDAO.getInputLabel(Integer.parseInt(highAlarm)) + ")";
+                                if (highAlarm.contains("I")) {
+                                    highAlarm = "Input- " + highAlarm.substring(1) + " (" + inputDAO.getInputLabel(Integer.parseInt(highAlarm.substring(1))) + ")";
                                 } else {
-                                    highAlarm = "Output- " + highAlarm + " (" + outputDAO.getOutputLabel(Integer.parseInt(highAlarm)) + ")";
+                                    highAlarm = "Output- " + highAlarm.substring(1) + " (" + outputDAO.getOutputLabel(Integer.parseInt(highAlarm.substring(1))) + ")";
                                 }
                             }
                             dataObj.put("INPUTNO", jsonObject.getString("INPUTNO"));
@@ -625,7 +624,6 @@ public class ApiService implements DataReceiveCallback {
             }
         }
     }
-
 
     //virtualConfiguration
     private void readVirtualConfiguration(String eventType) {
@@ -718,7 +716,6 @@ public class ApiService implements DataReceiveCallback {
             }
         }
     }
-
 
     //timerConfiguration
     private void readTimerConfiguration(String eventType) {
