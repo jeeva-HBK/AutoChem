@@ -1393,11 +1393,15 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
 
     void setMaxLengthAnalog() {
         String[] sensorLink = mBinding.analogLinkInputAtxtOsc.getText().toString().split("-");
-        String[] inputhardwareNo = sensorLink[1].split("\\(");
-        if (Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")) < 18) {
-            inputType = inputDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
+        if(!sensorLink[0].equals("Output")) {
+            String[] inputhardwareNo = sensorLink[1].split("\\(");
+            if (Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")) < 18) {
+                inputType = inputDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
+            } else {
+                inputType = virtualDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
+            }
         } else {
-            inputType = virtualDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
+            inputType = "";
         }
         sensorAnalogLayoutVisibility(false);
         mBinding.analogMinValueEdtOsc.setText("");

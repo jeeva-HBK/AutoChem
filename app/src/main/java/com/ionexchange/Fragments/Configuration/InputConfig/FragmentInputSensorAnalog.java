@@ -12,6 +12,7 @@ import static com.ionexchange.Others.ApplicationClass.getStringValue;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
 import static com.ionexchange.Others.ApplicationClass.mainConfigurationDao;
+import static com.ionexchange.Others.ApplicationClass.modBusTypeArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
 import static com.ionexchange.Others.ApplicationClass.userType;
@@ -69,6 +70,8 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
     InputConfigurationDao dao;
     String writePacket;
 
+    String[] typeOfValueArr = {""};
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -112,8 +115,42 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
                 mBinding.analogHighLowTie.setText("");
                 sensorLayoutVisibility(false);
                 setMaxLength();
+
+                if (i == 8) {
+                    mBinding.analogRow21Isc.setVisibility(View.VISIBLE);
+                } else {
+                    mBinding.analogRow21Isc.setVisibility(View.GONE);
+                }
             }
         });
+
+        mBinding.analogModbusTypeTie.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // Toast.makeText(getContext(), mBinding.modbusSequenceNumberTie.getAdapter().getItem(i).toString(), Toast.LENGTH_SHORT).show();
+                mBinding.analogModbusUnitTie.setText("");
+                switch (i) {
+                    case 0:
+                        typeOfValueArr = new String[]{"Fluorescence", "Turbidity"};
+                        break;
+                    case 1:
+                    case 2:
+                        typeOfValueArr = new String[]{"Corrosion rate", "Pitting rate"};
+                        break;
+                    case 3:
+                        typeOfValueArr = new String[]{"Tagged Polymer"};
+                        break;
+                    case 4:
+                        typeOfValueArr = new String[]{"Fluorescence", "Tagged Polymer"};
+                        break;
+                    case 5:
+                        typeOfValueArr = new String[]{"Fluorescence"};
+                        break;
+                }
+                mBinding.analogModbusUnitTie.setAdapter(getAdapter(typeOfValueArr, getContext()));
+            }
+        });
+
     }
 
     void setMaxLength() {
@@ -232,6 +269,27 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
                     getPositionFromAtxt(1, getStringValue(mBinding.analogResetCalibrationTie), resetCalibrationArr) + SPILT_CHAR +
                     sensorStatus;
             mAppClass.sendPacket(this, writePacket);
+        } else if (getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr).equals("8")) {
+            writePacket = DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                    PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                    getStringValue(2, mBinding.analogInputNumberTie) + SPILT_CHAR +
+                    getPositionFromAtxt(2, getStringValue(mBinding.analogSensorTypeTie), inputTypeArr) + SPILT_CHAR +
+                    getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr) + SPILT_CHAR +
+                    getPositionFromAtxt(1, getStringValue(mBinding.analogModbusTypeTie), modBusTypeArr) + SPILT_CHAR +
+                    getPositionFromAtxt(1, getStringValue(mBinding.analogModbusUnitTie), typeOfValueArr) + SPILT_CHAR +
+                    sequenceNo + SPILT_CHAR + analogType + SPILT_CHAR +
+                    getPositionFromAtxt(1, getStringValue(mBinding.analogSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
+                    getStringValue(0, mBinding.analogInputLabelTie) + SPILT_CHAR +
+                    getPositionFromAtxt(1, getStringValue(mBinding.analogUnitMeasurementTie), analogUnitArr) + SPILT_CHAR +
+                    getDecimalValue(mBinding.analogminvalueTBtn, mBinding.analogMinValueTie, sensorLength, mBinding.analogMinValueIsc, 2) + SPILT_CHAR +
+                    getDecimalValue(mBinding.analogmaxvalueTBtn, mBinding.analogMaxValueTie, sensorLength, mBinding.analogMaxValueIsc, 2) + SPILT_CHAR +
+                    getStringValue(3, mBinding.analogSmoothingFactorTie) + SPILT_CHAR +
+                    getDecimalValue(mBinding.analogLowAlarmTBtn, mBinding.analogAlarmLowTie, sensorLength, mBinding.lowAlarmMinValueIsc, 2) + SPILT_CHAR +
+                    getDecimalValue(mBinding.analogHighAlarmTBtn, mBinding.analogHighLowTie, sensorLength, mBinding.highAlarmMinValueIsc, 2) + SPILT_CHAR +
+                    getStringValue(3, mBinding.analogCalibrationRequiredAlarmTie) + SPILT_CHAR +
+                    getPositionFromAtxt(1, getStringValue(mBinding.analogResetCalibrationTie), resetCalibrationArr) + SPILT_CHAR +
+                    sensorStatus;
+            mAppClass.sendPacket(this, writePacket);
         } else {
             writePacket = DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                     PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
@@ -261,6 +319,9 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
         mBinding.analogUnitMeasurementTie.setAdapter(getAdapter(analogUnitArr, getContext()));
         mBinding.analogResetCalibrationTie.setAdapter(getAdapter(resetCalibrationArr, getContext()));
         mBinding.analogSequenceNumberTie.setAdapter(getAdapter(analogSequenceNumber, getContext()));
+
+        mBinding.analogModbusTypeTie.setAdapter(getAdapter(modBusTypeArr, getContext()));
+        mBinding.analogModbusUnitTie.setAdapter(getAdapter(typeOfValueArr, getContext()));
     }
 
     @Override
@@ -305,46 +366,86 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
                     try {
                         mBinding.analogInputNumberTie.setText(data[3]);
                         mBinding.analogSensorTypeTie.setText(mBinding.analogSensorTypeTie.getAdapter().getItem(Integer.parseInt(data[4])).toString());
-                        if (data[7].equals("1")) {
-                            analog_type = "(0 - 10V)";
-                        } else {
-                            analog_type = "(4 - 20mA)";
-                        }
-                        sequenceNo = data[6];
-                        mBinding.analogSequenceNumberTie.setText(mBinding.analogSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[6])).toString() + " " + analog_type);
+
                         mBinding.analogTypeTie.setText(mBinding.analogTypeTie.getAdapter().getItem(Integer.parseInt(data[5])).toString());
-                        mBinding.analogSensorActivationTie.setText(mBinding.analogSensorActivationTie.getAdapter().getItem(Integer.parseInt(data[8])).toString());
-                        mBinding.analogInputLabelTie.setText(data[9]);
-                        mBinding.analogUnitMeasurementTie.setText(mBinding.analogUnitMeasurementTie.getAdapter().getItem(Integer.parseInt(data[10])).toString());
-                        setMaxLength();
+
                         if (data[5].equals("2") || data[5].equals("3")) {
+                            sequenceNo = data[6];
+                            mBinding.analogSequenceNumberTie.setText(mBinding.analogSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[6])).toString() + " " + analog_type);
+                            if (data[7].equals("1")) {
+                                analog_type = "(0 - 10V)";
+                            } else {
+                                analog_type = "(4 - 20mA)";
+                            }
+                            mBinding.analogSensorActivationTie.setText(mBinding.analogSensorActivationTie.getAdapter().getItem(Integer.parseInt(data[8])).toString());
+                            mBinding.analogInputLabelTie.setText(data[9]);
+                            mBinding.analogUnitMeasurementTie.setText(mBinding.analogUnitMeasurementTie.getAdapter().getItem(Integer.parseInt(data[10])).toString());
+
                             mBinding.analogminvalueTBtn.setChecked((data[11].substring(0, 1)).equals("+"));
                             mBinding.analogMinValueTie.setText(data[11].substring(1, sensorLength + 1));
                             mBinding.analogMinValueIsc.setText(data[11].substring(sensorLength + 2, sensorLength + 4));
                             mBinding.analogmaxvalueTBtn.setChecked((data[12].substring(0, 1)).equals("+"));
                             mBinding.analogMaxValueTie.setText(data[12].substring(1, sensorLength + 1));
                             mBinding.analogMaxValueIsc.setText(data[12].substring(sensorLength + 2, sensorLength + 4));
+                            mBinding.analogSmoothingFactorTie.setText(data[13]);
                             mBinding.analogLowAlarmTBtn.setChecked((data[14].substring(0, 1)).equals("+"));
                             mBinding.analogAlarmLowTie.setText(data[14].substring(1, sensorLength + 1));
                             mBinding.lowAlarmMinValueIsc.setText(data[14].substring(sensorLength + 2, sensorLength + 4));
                             mBinding.analogHighAlarmTBtn.setChecked((data[15].substring(0, 1)).equals("+"));
                             mBinding.analogHighLowTie.setText(data[15].substring(1, sensorLength + 1));
                             mBinding.highAlarmMinValueIsc.setText(data[15].substring(sensorLength + 2, sensorLength + 4));
+                            mBinding.analogCalibrationRequiredAlarmTie.setText(data[16]);
+                            mBinding.analogResetCalibrationTie.setText(mBinding.analogResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[17])).toString());
+
+                        } else if (data[5].equals("8")) {
+                            mBinding.analogModbusTypeTie.setText(mBinding.analogModbusTypeTie.getAdapter().getItem(Integer.parseInt(data[6])).toString());
+                            mBinding.analogModbusUnitTie.setText(mBinding.analogModbusUnitTie.getAdapter().getItem(Integer.parseInt(data[7])).toString());
+                            sequenceNo = data[8];
+                            mBinding.analogSequenceNumberTie.setText(mBinding.analogSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[8])).toString() + " " + analog_type);
+                            if (data[9].equals("1")) {
+                                analog_type = "(0 - 10V)";
+                            } else {
+                                analog_type = "(4 - 20mA)";
+                            }
+                            mBinding.analogSensorActivationTie.setText(mBinding.analogSensorActivationTie.getAdapter().getItem(Integer.parseInt(data[10])).toString());
+                            mBinding.analogInputLabelTie.setText(data[11]);
+                            mBinding.analogUnitMeasurementTie.setText(mBinding.analogUnitMeasurementTie.getAdapter().getItem(Integer.parseInt(data[12])).toString());
+                            mBinding.analogMinValueTie.setText(data[13].substring(0, sensorLength));
+                            mBinding.analogMinValueIsc.setText(data[13].substring(sensorLength + 1, sensorLength + 3));
+                            mBinding.analogMaxValueTie.setText(data[14].substring(0, sensorLength));
+                            mBinding.analogMaxValueIsc.setText(data[14].substring(sensorLength + 1, sensorLength + 3));
+                            mBinding.analogAlarmLowTie.setText(data[15].substring(0, sensorLength));
+                            mBinding.lowAlarmMinValueIsc.setText(data[15].substring(sensorLength + 1, sensorLength + 3));
+                            mBinding.analogHighLowTie.setText(data[16].substring(0, sensorLength));
+                            mBinding.highAlarmMinValueIsc.setText(data[16].substring(sensorLength + 1, sensorLength + 3));
+                            mBinding.analogCalibrationRequiredAlarmTie.setText(data[17]);
+                            mBinding.analogResetCalibrationTie.setText(mBinding.analogResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[18])).toString());
+
                         } else {
+                            sequenceNo = data[6];
+                            mBinding.analogSequenceNumberTie.setText(mBinding.analogSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[6])).toString() + " " + analog_type);
+                            if (data[7].equals("1")) {
+                                analog_type = "(0 - 10V)";
+                            } else {
+                                analog_type = "(4 - 20mA)";
+                            }
+                            mBinding.analogSensorActivationTie.setText(mBinding.analogSensorActivationTie.getAdapter().getItem(Integer.parseInt(data[8])).toString());
+                            mBinding.analogInputLabelTie.setText(data[9]);
+                            mBinding.analogUnitMeasurementTie.setText(mBinding.analogUnitMeasurementTie.getAdapter().getItem(Integer.parseInt(data[10])).toString());
+
                             mBinding.analogMinValueTie.setText(data[11].substring(0, sensorLength));
                             mBinding.analogMinValueIsc.setText(data[11].substring(sensorLength + 1, sensorLength + 3));
                             mBinding.analogMaxValueTie.setText(data[12].substring(0, sensorLength));
                             mBinding.analogMaxValueIsc.setText(data[12].substring(sensorLength + 1, sensorLength + 3));
+                            mBinding.analogSmoothingFactorTie.setText(data[13]);
                             mBinding.analogAlarmLowTie.setText(data[14].substring(0, sensorLength));
                             mBinding.lowAlarmMinValueIsc.setText(data[14].substring(sensorLength + 1, sensorLength + 3));
                             mBinding.analogHighLowTie.setText(data[15].substring(0, sensorLength));
                             mBinding.highAlarmMinValueIsc.setText(data[15].substring(sensorLength + 1, sensorLength + 3));
+                            mBinding.analogCalibrationRequiredAlarmTie.setText(data[16]);
+                            mBinding.analogResetCalibrationTie.setText(mBinding.analogResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[17])).toString());
                         }
-
-                        mBinding.analogSmoothingFactorTie.setText(data[13]);
-
-                        mBinding.analogCalibrationRequiredAlarmTie.setText(data[16]);
-                        mBinding.analogResetCalibrationTie.setText(mBinding.analogResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[17])).toString());
+                        setMaxLength();
                         initAdapter();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -405,6 +506,14 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
         } else if (isFieldEmpty(mBinding.analogSensorActivationTie)) {
             mAppClass.showSnackBar(getContext(), getString(R.string.sensor_activation_validation));
             return false;
+        } else if (mBinding.analogTypeTie.getText().toString().equals("Modbus Sensor")) {
+            if (isFieldEmpty(mBinding.analogModbusTypeTie)) {
+                mAppClass.showSnackBar(getContext(), "Select Modbus Type");
+                return false;
+            } else if (isFieldEmpty(mBinding.analogModbusUnitTie)) {
+                mAppClass.showSnackBar(getContext(), "Select Unit Of Measurement");
+                return false;
+            }
         }
         return true;
     }

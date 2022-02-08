@@ -122,6 +122,50 @@
 
         </LinearLayout>
 
+
+    <!--Row 2-->
+    <LinearLayout
+        android:id="@+id/analogRow2.1_isc"
+        style="@style/config_rowLl">
+
+        <!--Modbus Type-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/analog_modbusType"
+            style="@style/config_AtxTil">
+
+            <AutoCompleteTextView
+                android:id="@+id/analog_modbusType_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="Modbus Type"
+                android:maxLines="1"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Modbus Unit-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/analog_modbusUnit"
+            style="@style/config_AtxTil">
+
+            <AutoCompleteTextView
+                android:id="@+id/analog_modbusUnit_tie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="Unit of Measurement"
+                android:maxLines="1"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </LinearLayout>
+
+
         <!--Row 3-->
         <LinearLayout
             android:id="@+id/analogRow3_isc"
@@ -140,9 +184,8 @@
                     android:editable="false"
                     android:focusable="false"
                     android:hint="@string/measurement_unit"
-                    android:maxLines="1">
+                    android:maxLines="1"/>
 
-                </AutoCompleteTextView>
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

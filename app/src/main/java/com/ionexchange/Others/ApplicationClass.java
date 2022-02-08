@@ -108,7 +108,7 @@ public class ApplicationClass extends Application {
             inputTypeArr = {"pH", "ORP", "Temperature", "Flow/Water Meter", "Contacting Conductivity",
                     "Toroidal Conductivity", "Analog Input", "Tank Level", "Digital Input", "Modbus Sensor"},
             analogInputArr = {"Analog Input", "pH", "ORP", "Temperature", "Flow/Water Meter",
-                    "Contacting Conductivity", "Toroidal Conductivity", "Tank Level"},
+                    "Contacting Conductivity", "Toroidal Conductivity", "Tank Level", "Modbus Sensor"},
             bufferArr = {"Auto", "Manual"},
             tempLinkedArr = {"None", "Temperature 1", "Temperature 2", "Temperature 3"},
             resetCalibrationArr = {"No Reset", "Reset"},

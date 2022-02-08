@@ -182,7 +182,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
                     Date mEnd = mBinding.trendToDateTie.getText().toString().isEmpty() ? new Date() :
                             new SimpleDateFormat("dd/MM/yyyy").parse(mBinding.trendToDateTie.getText().toString());
 
-                    if (mStart.before(mEnd)) {
+                    if (mStart.before(mEnd) || mStart.equals(mEnd)) {
                         differencebetweendays = getDateDiffFromNow(mBinding.trendToDateTie.getText().toString(), mBinding.trendFromDateTie.getText().toString());
                         filterChartResults();
                     } else {

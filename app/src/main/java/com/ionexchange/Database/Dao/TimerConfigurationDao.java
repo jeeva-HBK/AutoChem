@@ -25,6 +25,9 @@ public interface TimerConfigurationDao {
     @Query("Delete from timerconfigurationentity")
     void deleteTimerDao();
 
+    @Query("select timerName from timerconfigurationentity WHERE timerNo = :timerNo ")
+    String getTimerName(int timerNo);
+
     @Query("select mainTimerPacket from timerconfigurationentity WHERE timerNo = :timerNo ")
     String getAccessoryPacket(int timerNo);
 
