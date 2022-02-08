@@ -2,6 +2,7 @@ package com.ionexchange.Activity;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static com.ionexchange.Others.ApplicationClass.DB;
+import static com.ionexchange.Others.ApplicationClass.bleConnected;
 import static com.ionexchange.Others.ApplicationClass.defaultPassword;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Singleton.SharedPref.pref_LOGGEDIN;
@@ -804,8 +805,8 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                             reconnectDialog.dismiss();
                             retryCount = 0;
                             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
-
                                 showSnack("Reconnected to " + bluetoothDevice.getName() + " Successfully");
+                                bleConnected.set(true);
                                 return;
                             }
                             baseActivity.startHandler();

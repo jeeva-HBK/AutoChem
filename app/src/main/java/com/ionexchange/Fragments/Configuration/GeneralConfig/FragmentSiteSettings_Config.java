@@ -16,10 +16,8 @@ import static com.ionexchange.Singleton.SharedPref.pref_SITELOCATION;
 import static com.ionexchange.Singleton.SharedPref.pref_SITENAME;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
-import android.content.IntentSender;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,19 +26,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.ionexchange.Activity.BaseActivity;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
@@ -50,8 +38,12 @@ import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentCommonsettingsBinding;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-//created by Silambu
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+// created by Silambu
 public class FragmentSiteSettings_Config extends Fragment implements DataReceiveCallback {
     FragmentCommonsettingsBinding mBinding;
     ApplicationClass mAppClass;
@@ -60,22 +52,48 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
 
 
     @Nullable
-    @org.jetbrains.annotations.Nullable
     @Override
-    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_commonsettings, container, false);
         return mBinding.getRoot();
     }
 
     @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAppClass = (ApplicationClass) getActivity().getApplication();
         mActivity = (BaseActivity) getActivity();
         mBinding.saveLayoutCommonSettings.setOnClickListener(this::onCLick);
         mBinding.saveFabCommonSettings.setOnClickListener(this::onCLick);
         mBinding.sitePasswordCommonSettingsEDT.setText(Settings.System.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+
+        mBinding.refresh.setOnClickListener(view1 -> {
+            readData();
+        });
+
+        mBinding.sync.setOnClickListener(view1 -> {
+            if (!mBinding.alarmDelayEdtIsc.getText().toString().equals("")) {
+                showProgress();
+                mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
+                        CONN_TYPE + SPILT_CHAR +
+                        WRITE_PACKET + SPILT_CHAR +
+                        PCK_GENERAL + SPILT_CHAR +
+                        toString(0, mBinding.siteIdCommonSettingsEDT) + SPILT_CHAR +
+                        toString(0, mBinding.siteNameCommonSettingsEDT) + SPILT_CHAR +
+                        "1234" + SPILT_CHAR +
+                        getRadio(mBinding.radioGroup, mBinding.enableSite) + SPILT_CHAR +
+                        toString(0, mBinding.siteLocationCommonSettingsEDT) + SPILT_CHAR +
+                        toString(2, mBinding.alarmDelayEdtIsc) + toString(2, mBinding.alarmDelayDeciIsc) + SPILT_CHAR +
+                        getRadio(mBinding.radioGroup2, mBinding.fahrenheit) + SPILT_CHAR +
+                        toString(2, mBinding.duHours) + toString(2, mBinding.duMM) +
+                        toString(2, mBinding.duSS) + toString(1, mBinding.duNN) +
+                        toString(2, mBinding.duDD) +
+                        toString(2, mBinding.dumonth) +
+                        toString(2, mBinding.duYYYY));
+            }
+        });
     }
+
 
     private void onCLick(View view) {
         if (validateFields()) {
@@ -183,6 +201,15 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
     }
 
     private void setSiteDetailsFromPref() {
+        // Du RTC
+        mBinding.duHours.setText(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
+        mBinding.duMM.setText(new SimpleDateFormat("mm").format(Calendar.getInstance().getTime()));
+        mBinding.duSS.setText(new SimpleDateFormat("ss").format(Calendar.getInstance().getTime()));
+        mBinding.duNN.setText(new SimpleDateFormat("W").format(Calendar.getInstance().getTime()));
+        mBinding.duDD.setText(new SimpleDateFormat("dd").format(Calendar.getInstance().getTime()));
+        mBinding.dumonth.setText(new SimpleDateFormat("MM").format(Calendar.getInstance().getTime()));
+        mBinding.duYYYY.setText(new SimpleDateFormat("yy").format(Calendar.getInstance().getTime()));
+
         mBinding.siteIdCommonSettingsEDT.setText(SharedPref.read(pref_SITEID, ""));
         mBinding.siteNameCommonSettingsEDT.setText(SharedPref.read(pref_SITENAME, ""));
         mBinding.siteLocationCommonSettingsEDT.setText(SharedPref.read(pref_SITELOCATION, ""));
@@ -195,7 +222,7 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
         }
     }
 
-    private void loca() {
+    /*private void loca() {
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(getContext())
                 .addApi(LocationServices.API).build();
         googleApiClient.connect();
@@ -228,7 +255,7 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
                 }
             }
         });
-    }
+    }*/
 
     private void readData() {
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_GENERAL);
@@ -244,7 +271,7 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
         } else if (data.equals("sendCatch")) {
             mAppClass.showSnackBar(getContext(), "Failed to connect");
         } else if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getContext(), "TimeOut");
+            mAppClass.showSnackBar(getContext(), "TimeOut, unable to get device RTC");
         } else if (data != null) {
             handleResponce(data.split("\\*")[1].split("\\$"));
         }
@@ -281,6 +308,14 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
                         mBinding.DD.setText(splitData[10].substring(7, 9));
                         mBinding.month.setText(splitData[10].substring(9, 11));
                         mBinding.YYYY.setText(splitData[10].substring(11, 13));
+
+                        mBinding.duHours.setText(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
+                        mBinding.duMM.setText(new SimpleDateFormat("mm").format(Calendar.getInstance().getTime()));
+                        mBinding.duSS.setText(new SimpleDateFormat("ss").format(Calendar.getInstance().getTime()));
+                        mBinding.duNN.setText(new SimpleDateFormat("W").format(Calendar.getInstance().getTime()));
+                        mBinding.duDD.setText(new SimpleDateFormat("dd").format(Calendar.getInstance().getTime()));
+                        mBinding.dumonth.setText(new SimpleDateFormat("MM").format(Calendar.getInstance().getTime()));
+                        mBinding.duYYYY.setText(new SimpleDateFormat("yy").format(Calendar.getInstance().getTime()));
 
                     } else if (splitData[2].equals(RES_FAILED)) {
                         mAppClass.showSnackBar(getContext(), String.valueOf(R.string.readFailed));

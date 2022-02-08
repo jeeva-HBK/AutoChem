@@ -92,8 +92,8 @@
             android:id="@+id/sitePassword_commonSettings"
             style="@style/appEdtTxt"
             android:layout_width="0dp"
-            android:enabled="false"
             android:layout_height="wrap_content"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="@+id/siteLocation_commonSettings"
             app:layout_constraintEnd_toEndOf="@+id/siteName_commonSettings"
             app:layout_constraintStart_toStartOf="@+id/siteName_commonSettings"
@@ -200,7 +200,7 @@
             android:id="@+id/alarmDelay_root_isc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintBottom_toTopOf="@+id/textView4"
             app:layout_constraintEnd_toEndOf="@+id/siteLocation_commonSettings"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/siteLocation_commonSettings"
@@ -246,10 +246,10 @@
                 android:layout_marginBottom="2dp"
                 android:background="@null"
                 android:gravity="center"
-                android:text="00"
                 android:imeOptions="actionNext"
                 android:inputType="number"
                 android:maxLength="2"
+                android:text="00"
                 android:textColorHint="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="@id/alarmDelay_commonSettingsEDT"
                 app:layout_constraintEnd_toEndOf="@+id/alarmDelay_commonSettingsEDT"
@@ -265,22 +265,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="5dp"
-            android:text="RTC"
+            android:text="Device RTC"
             android:textColor="@color/primary"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-            app:layout_constraintStart_toStartOf="@+id/linearLayout" />
+            app:layout_constraintStart_toStartOf="@+id/linearLayout"
+            app:layout_constraintTop_toBottomOf="@+id/alarmDelay_root_isc" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/saveLayout_commonSettings"
+            app:layout_constraintBottom_toTopOf="@+id/dutextView4"
             app:layout_constraintEnd_toEndOf="@+id/radioGroup"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/alarmDelay_root_isc"
-            app:layout_constraintTop_toBottomOf="@+id/alarmDelay_root_isc">
+            app:layout_constraintTop_toBottomOf="@+id/textView4">
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/appEdtTxt"
@@ -294,6 +294,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:hint="HH"
+                    android:enabled="false"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
@@ -317,6 +318,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:hint="MM"
+                    android:enabled="false"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
@@ -339,6 +341,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:hint="SS"
+                    android:enabled="false"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
@@ -362,6 +365,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:hint="N"
+                    android:enabled="false"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
@@ -385,6 +389,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:hint="DD"
+                    android:enabled="false"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
@@ -408,6 +413,7 @@
                     android:hint="MM"
                     android:imeOptions="actionNext"
                     android:inputType="number"
+                    android:enabled="false"
                     android:maxLength="2"
                     android:maxLines="1"
                     android:textColorHint="@color/primary" />
@@ -428,6 +434,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:hint="YY"
+                    android:enabled="false"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="2"
@@ -438,6 +445,211 @@
 
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/dutextView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:text="DU RTC"
+            android:textColor="@color/primary"
+            app:layout_constraintBottom_toTopOf="@+id/dulinearLayout"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+        <LinearLayout
+            android:id="@+id/dulinearLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/saveLayout_commonSettings"
+            app:layout_constraintEnd_toEndOf="@+id/radioGroup"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/alarmDelay_root_isc"
+            app:layout_constraintTop_toBottomOf="@+id/dutextView4">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/duHours"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:hint="HH"
+                    android:enabled="false"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1"
+                    android:textColorHint="@color/primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/duMM"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="MM"
+                    android:enabled="false"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1"
+                    android:textColorHint="@color/primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/duSS"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="SS"
+                    android:enabled="false"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1"
+                    android:textColorHint="@color/primary" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/duNN"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="N"
+                    android:enabled="false"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1"
+                    android:textColorHint="@color/primary" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/duDD"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="DD"
+                    android:enabled="false"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1"
+                    android:textColorHint="@color/primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dumonth"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="MM"
+                    android:enabled="false"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1"
+                    android:textColorHint="@color/primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/appEdtTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/duYYYY"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="YY"
+                    android:enabled="false"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:maxLines="1"
+                    android:textColorHint="@color/primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Refresh RTC"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/dulinearLayout"
+            app:layout_constraintTop_toBottomOf="@+id/dulinearLayout" />
+
+        <Button
+            android:id="@+id/sync"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Sync RTC"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/refresh"
+            app:layout_constraintTop_toBottomOf="@+id/dulinearLayout" />
 
         <!--saveLayout-->
         <LinearLayout
@@ -450,7 +662,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+            app:layout_constraintTop_toBottomOf="@+id/dulinearLayout">
 
             <TextView
                 android:layout_width="match_parent"
@@ -472,7 +684,6 @@
 
 
         </LinearLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

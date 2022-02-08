@@ -11,6 +11,7 @@ import static com.ionexchange.Others.PacketControl.PCK_FACTORYRESET;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 import static com.ionexchange.Singleton.SharedPref.pref_MACADDRESS;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINNAME;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINPASSWORDCHANED;
 
@@ -44,6 +45,7 @@ import com.ionexchange.Database.Dao.UserManagementDao;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentDusettingsBinding;
@@ -122,6 +124,7 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
                                     mOutPut.close();
                                     dismissProgress();
                                     showSnack("Backup Complete | Dir :" + device.getManufacturerName() +"/" + backupDBPath + "AutoChem.db");
+                                    new EventLogDemo("", "", "Data backuped with OTG", SharedPref.read(pref_USERLOGINID, ""),getContext());
                                     getActivity().unregisterReceiver(mUsbReceiver);
                                 } catch (IOException e) {
                                     e.printStackTrace();
