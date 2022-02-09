@@ -47,6 +47,7 @@ import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.ApiService;
 import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentDusettingsBinding;
 
@@ -123,8 +124,9 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
                                     file.close();
                                     mOutPut.close();
                                     dismissProgress();
-                                    showSnack("Backup Complete | Dir :" + device.getManufacturerName() +"/" + backupDBPath + "AutoChem.db");
-                                    new EventLogDemo("", "", "Data backuped with OTG", SharedPref.read(pref_USERLOGINID, ""),getContext());
+                                    showSnack("Backup Complete | Dir :" + device.getManufacturerName() + "/" + backupDBPath + "AutoChem.db");
+                                    new EventLogDemo("", "", "Data backuped with OTG", SharedPref.read(pref_USERLOGINID, ""), getContext());
+                                    ApiService.getInstance(getContext()).processApiData("1", "00", ("Data Backuped with OTG by #" + SharedPref.read(pref_USERLOGINID, "")));
                                     getActivity().unregisterReceiver(mUsbReceiver);
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -199,6 +201,8 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
                         dismissProgress();
                         if (mAppclass.factoryRest()) {
                             mAppclass.showSnackBar(getContext(), "Factory Reset Success");
+                            new EventLogDemo("", "", "Factory Reset by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
+                            ApiService.getInstance(getContext()).processApiData("1", "00", ("Factory Reset by #" + SharedPref.read(pref_USERLOGINID, "")));
                         } else {
                             mAppclass.showSnackBar(getContext(), "Factory Reset Failed, try again later");
                         }

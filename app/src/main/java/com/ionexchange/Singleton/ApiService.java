@@ -117,7 +117,6 @@ public class ApiService implements DataReceiveCallback {
                         @Override
                         public void OnSuccess(JSONObject object) {
                             try {
-
                                 responseObject = object.getJSONObject("Response")
                                         .getJSONObject("DATAS").getJSONObject("RESPONSE_WEB");
                                 String[] spiltData = responseObject.getString("PACKET_TYPE").split("\\$");
@@ -213,11 +212,13 @@ public class ApiService implements DataReceiveCallback {
                         writeOutputConfiguration(responseObject.getJSONArray("DATA").
                                 getJSONObject(0));
                         break;
+
                     case "06":
                         weekly = 1;
                         writTimerConfiguration(responseObject.getJSONArray("DATA").
                                 getJSONObject(0));
                         break;
+
                     case "07":
                         writeVirtualConfiguration(responseObject.getJSONArray("DATA").
                                 getJSONObject(0));

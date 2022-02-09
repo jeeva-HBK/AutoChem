@@ -98,6 +98,7 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
 
         mBinding.analogSaveFabIsc.setOnClickListener(this::save);
         mBinding.analogDeleteFabIsc.setOnClickListener(this::delete);
+        mBinding.analogRow21Isc.setVisibility(View.GONE);
 
         mBinding.backArrowIsc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,11 +282,11 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
                     getPositionFromAtxt(1, getStringValue(mBinding.analogSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
                     getStringValue(0, mBinding.analogInputLabelTie) + SPILT_CHAR +
                     getPositionFromAtxt(1, getStringValue(mBinding.analogUnitMeasurementTie), analogUnitArr) + SPILT_CHAR +
-                    getDecimalValue(mBinding.analogminvalueTBtn, mBinding.analogMinValueTie, sensorLength, mBinding.analogMinValueIsc, 2) + SPILT_CHAR +
-                    getDecimalValue(mBinding.analogmaxvalueTBtn, mBinding.analogMaxValueTie, sensorLength, mBinding.analogMaxValueIsc, 2) + SPILT_CHAR +
+                    getDecimalValue(mBinding.analogMinValueTie, sensorLength, mBinding.analogMinValueIsc, 2) + SPILT_CHAR +
+                    getDecimalValue(mBinding.analogMaxValueTie, sensorLength, mBinding.analogMaxValueIsc, 2) + SPILT_CHAR +
                     getStringValue(3, mBinding.analogSmoothingFactorTie) + SPILT_CHAR +
-                    getDecimalValue(mBinding.analogLowAlarmTBtn, mBinding.analogAlarmLowTie, sensorLength, mBinding.lowAlarmMinValueIsc, 2) + SPILT_CHAR +
-                    getDecimalValue(mBinding.analogHighAlarmTBtn, mBinding.analogHighLowTie, sensorLength, mBinding.highAlarmMinValueIsc, 2) + SPILT_CHAR +
+                    getDecimalValue(mBinding.analogAlarmLowTie, sensorLength, mBinding.lowAlarmMinValueIsc, 2) + SPILT_CHAR +
+                    getDecimalValue(mBinding.analogHighLowTie, sensorLength, mBinding.highAlarmMinValueIsc, 2) + SPILT_CHAR +
                     getStringValue(3, mBinding.analogCalibrationRequiredAlarmTie) + SPILT_CHAR +
                     getPositionFromAtxt(1, getStringValue(mBinding.analogResetCalibrationTie), resetCalibrationArr) + SPILT_CHAR +
                     sensorStatus;
