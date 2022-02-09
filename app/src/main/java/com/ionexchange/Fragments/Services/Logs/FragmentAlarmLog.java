@@ -9,6 +9,7 @@ import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_LOCKOUT;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
+import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -36,7 +37,10 @@ import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Interface.BtnOnClick;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
+import com.ionexchange.Singleton.ApiService;
+import com.ionexchange.Singleton.SharedPref;
 import com.ionexchange.databinding.FragmentAlarmLogBinding;
 
 import java.util.Date;
@@ -167,6 +171,8 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
                         if (splitData[2].equals("1")) {
                             alarmLogDao.updateLockAlarm(hardwareNo, "0");
                             button.setVisibility(View.INVISIBLE);
+                            new EventLogDemo("", "", "LockOut Alarm Acknowledged by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
+                            ApiService.getInstance(getContext()).processApiData("1", "00", ("LockOut Alarm Acknowledged by #" + SharedPref.read(pref_USERLOGINID, "")));
                         } else {
                             mAppClass.showSnackBar(getContext(), "Acknowledgement Failed");
                         }

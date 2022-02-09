@@ -3,6 +3,7 @@ package com.ionexchange.BLE;
 
 import static com.ionexchange.Others.ApplicationClass.bleConnected;
 import static com.ionexchange.Others.ApplicationClass.lastKeepAliveData;
+import static com.ionexchange.Others.ApplicationClass.triggerWebService;
 import static com.ionexchange.Others.PacketControl.ENDPACKET;
 import static com.ionexchange.Others.PacketControl.STARTPACKET;
 
@@ -412,6 +413,7 @@ public class BluetoothHelper implements SerialListener {
         }
         isConnected = false;
         bleConnected.set(false);
+        triggerWebService.set(false);
 
         Log.e(TAG, "onDisconnected: ");
 

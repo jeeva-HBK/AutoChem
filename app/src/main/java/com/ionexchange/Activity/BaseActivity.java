@@ -4,6 +4,7 @@ import static android.os.Build.VERSION.SDK_INT;
 import static com.ionexchange.Others.ApplicationClass.DB;
 import static com.ionexchange.Others.ApplicationClass.bleConnected;
 import static com.ionexchange.Others.ApplicationClass.defaultPassword;
+import static com.ionexchange.Others.ApplicationClass.triggerWebService;
 import static com.ionexchange.Others.ApplicationClass.userType;
 import static com.ionexchange.Singleton.SharedPref.pref_LOGGEDIN;
 import static com.ionexchange.Singleton.SharedPref.pref_MACADDRESS;
@@ -686,12 +687,39 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                         SharedPref.write(pref_LOGGEDIN, false);
                         SharedPref.write(pref_USERLOGINREQUIRED, true);
                         SharedPref.write(pref_USERLOGINSTATUS, 0);
+                        /*PackageManager packageManager = context.getPackageManager();
+                        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+                        ComponentName componentName = intent.getComponent();
+                        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+                        context.startActivity(mainIntent);
+                        Runtime.getRuntime().exit(0);*/
+                        msBinding.mainScreenBtn.performClick();
+                    }
+                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        }).show();
+    }
+
+    public static void disconnectBle() {
+        new MaterialAlertDialogBuilder(context)
+                .setTitle("LOGOUT")
+                .setMessage("Are you sure, you want to Logout ?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        SharedPref.write(pref_LOGGEDIN, false);
+                        SharedPref.write(pref_USERLOGINREQUIRED, true);
+                        SharedPref.write(pref_USERLOGINSTATUS, 0);
                         PackageManager packageManager = context.getPackageManager();
                         Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
                         ComponentName componentName = intent.getComponent();
                         Intent mainIntent = Intent.makeRestartActivityTask(componentName);
                         context.startActivity(mainIntent);
                         Runtime.getRuntime().exit(0);
+                        msBinding.mainScreenBtn.performClick();
                     }
                 }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override
@@ -725,9 +753,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     private static void startReconnect() {
         Log.e(TAG, "Reconnect: start");
         if (attemptTxt != null) {
-            attemptTxt.setText("attempt : " + retryCount + "/5");
+            attemptTxt.setText("attempt : " + retryCount + "/3");
         }
-        if (retryCount < 5) {
+        if (retryCount < 3) {
             Log.e(TAG, "run: scan will start in 5 sec");
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
@@ -757,14 +785,14 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
                             @Override
                             public void OnDeviceFoundUpdate(List<BluetoothDevice> devices) {
-                                for (int i = 0; i < devices.size(); i++) {
+                               /* for (int i = 0; i < devices.size(); i++) {
                                     if (devices.get(i).getAddress().equals(SharedPref.read(pref_MACADDRESS, ""))) {
                                         Log.e(TAG, "device found");
                                         tempBool = false;
                                         connect(devices.get(i));
                                         break;
                                     }
-                                }
+                                }*/
                             }
                         });
                     } catch (Exception e) {
@@ -774,8 +802,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
             }, 5000);
-
-
         } else {
             if (reconnectDialog != null && reconnectDialog.isShowing()) {
                 reconnectDialog.dismiss();
@@ -794,7 +820,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private static void connect(BluetoothDevice bluetoothDevice) {
-        if (retryCount < 5) {
+        if (retryCount < 3) {
             try {
                 if (BluetoothHelper.getInstance() != null) {
                     BluetoothHelper.getInstance().disConnect();
@@ -807,6 +833,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                                 showSnack("Reconnected to " + bluetoothDevice.getName() + " Successfully");
                                 bleConnected.set(true);
+                                triggerWebService.set(true);
                                 return;
                             }
                             baseActivity.startHandler();
@@ -814,7 +841,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
                         @Override
                         public void OnConnectFailed(Exception e) {
-                            Log.e(TAG, "OnConnectFailed: ");
+                            Log.e(TAG, "OnConnectFailed:");
                             retryCount++;
                             startReconnect();
                         }

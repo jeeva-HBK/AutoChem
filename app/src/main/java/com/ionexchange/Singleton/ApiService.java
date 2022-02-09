@@ -99,7 +99,7 @@ public class ApiService implements DataReceiveCallback {
     }
 
     public void startApiService() {
-        if (triggerWebService.get() && bleConnected.get()) {
+        if (triggerWebService.get()) {
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -108,7 +108,6 @@ public class ApiService implements DataReceiveCallback {
             }, 5000);
         }
     }
-
 
     private void postData() {
         try {
@@ -223,6 +222,12 @@ public class ApiService implements DataReceiveCallback {
                         writeVirtualConfiguration(responseObject.getJSONArray("DATA").
                                 getJSONObject(0));
                         break;
+
+
+                    case "08": // todo : Should Change
+                        writeLockOutAck(responseObject.getJSONArray("DATA").
+                                getJSONObject(0));
+                        break;
                 }
             } else if (packetType.equals(READ_PACKET)) {
                 switch (jsonSubID) {
@@ -284,8 +289,6 @@ public class ApiService implements DataReceiveCallback {
                         readDiagnostics();
                         break;
                 }
-
-
             }
 
         } catch (JSONException jsonException) {
@@ -293,17 +296,18 @@ public class ApiService implements DataReceiveCallback {
         }
     }
 
+    private void writeLockOutAck(JSONObject jObj) {
+
+    }
 
     public void readDiagnostics() {
         frameDiagnosticsPacket("0");
     }
 
-
     public void frameDiagnosticsPacket(String setId) {
         ApplicationClass.getInstance().sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
                 READ_PACKET + SPILT_CHAR + PCK_DIAGNOSTIC + SPILT_CHAR + setId);
     }
-
 
    /* private void processDefaultConfiguration(JSONObject data) {
         responseTabId = "12";
@@ -331,7 +335,6 @@ public class ApiService implements DataReceiveCallback {
 
     //inputConfiguration
     public void readInputConfiguration(String eventType) {
-
         responseTabId = "04";
         InputConfigurationDao inputDao = DB.inputConfigurationDao();
         for (int i = 0; i < inputDao.getInputConfigurationEntityList().size(); i++) {
@@ -1107,7 +1110,6 @@ public class ApiService implements DataReceiveCallback {
         }
         return null;
     }
-
 
     public boolean isValidPck(String pckType, String data, Context context) {
         if (data.equals("FailedToConnect")) {

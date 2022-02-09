@@ -280,7 +280,6 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
                 BaseActivity.logOut();
                 break;
 
-
             case R.id.pendrive:
                 otgDetected = false;
                 new MaterialAlertDialogBuilder(getContext()).setTitle("Backup")

@@ -129,29 +129,33 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // Toast.makeText(getContext(), mBinding.modbusSequenceNumberTie.getAdapter().getItem(i).toString(), Toast.LENGTH_SHORT).show();
-                mBinding.analogModbusUnitTie.setText("");
-                switch (i) {
-                    case 0:
-                        typeOfValueArr = new String[]{"Fluorescence", "Turbidity"};
-                        break;
-                    case 1:
-                    case 2:
-                        typeOfValueArr = new String[]{"Corrosion rate", "Pitting rate"};
-                        break;
-                    case 3:
-                        typeOfValueArr = new String[]{"Tagged Polymer"};
-                        break;
-                    case 4:
-                        typeOfValueArr = new String[]{"Fluorescence", "Tagged Polymer"};
-                        break;
-                    case 5:
-                        typeOfValueArr = new String[]{"Fluorescence"};
-                        break;
-                }
-                mBinding.analogModbusUnitTie.setAdapter(getAdapter(typeOfValueArr, getContext()));
+                getModbusUnit(i);
             }
         });
 
+    }
+
+    private void getModbusUnit(int i) {
+        mBinding.analogModbusUnitTie.setText("");
+        switch (i) {
+            case 0:
+                typeOfValueArr = new String[]{"Fluorescence", "Turbidity"};
+                break;
+            case 1:
+            case 2:
+                typeOfValueArr = new String[]{"Corrosion rate", "Pitting rate"};
+                break;
+            case 3:
+                typeOfValueArr = new String[]{"Tagged Polymer"};
+                break;
+            case 4:
+                typeOfValueArr = new String[]{"Fluorescence", "Tagged Polymer"};
+                break;
+            case 5:
+                typeOfValueArr = new String[]{"Fluorescence"};
+                break;
+        }
+        mBinding.analogModbusUnitTie.setAdapter(getAdapter(typeOfValueArr, getContext()));
     }
 
     void setMaxLength() {
@@ -174,6 +178,11 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
             case "Flow/Water Meter":
                 sensorLength = 10;
                 break;
+
+            case "Modbus Sensor":
+                sensorLength = 3;
+                break;
+
             default:
                 sensorLength = 2;
                 break;
@@ -311,6 +320,7 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
                     sensorStatus;
             mAppClass.sendPacket(this, writePacket);
         }
+        initAdapter();
     }
 
     private void initAdapter() {
@@ -328,6 +338,7 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
     @Override
     public void onResume() {
         super.onResume();
+        initAdapter();
         if (sensorName == null) {
             showProgress();
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
@@ -369,8 +380,9 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
                         mBinding.analogSensorTypeTie.setText(mBinding.analogSensorTypeTie.getAdapter().getItem(Integer.parseInt(data[4])).toString());
 
                         mBinding.analogTypeTie.setText(mBinding.analogTypeTie.getAdapter().getItem(Integer.parseInt(data[5])).toString());
-
+                        setMaxLength();
                         if (data[5].equals("2") || data[5].equals("3")) {
+                            mBinding.analogRow21Isc.setVisibility(View.GONE);
                             sequenceNo = data[6];
                             mBinding.analogSequenceNumberTie.setText(mBinding.analogSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[6])).toString() + " " + analog_type);
                             if (data[7].equals("1")) {
@@ -399,7 +411,9 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
                             mBinding.analogResetCalibrationTie.setText(mBinding.analogResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[17])).toString());
 
                         } else if (data[5].equals("8")) {
+                            mBinding.analogRow21Isc.setVisibility(View.VISIBLE);
                             mBinding.analogModbusTypeTie.setText(mBinding.analogModbusTypeTie.getAdapter().getItem(Integer.parseInt(data[6])).toString());
+                            getModbusUnit(Integer.parseInt(data[7]));
                             mBinding.analogModbusUnitTie.setText(mBinding.analogModbusUnitTie.getAdapter().getItem(Integer.parseInt(data[7])).toString());
                             sequenceNo = data[8];
                             mBinding.analogSequenceNumberTie.setText(mBinding.analogSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[8])).toString() + " " + analog_type);
@@ -415,14 +429,16 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
                             mBinding.analogMinValueIsc.setText(data[13].substring(sensorLength + 1, sensorLength + 3));
                             mBinding.analogMaxValueTie.setText(data[14].substring(0, sensorLength));
                             mBinding.analogMaxValueIsc.setText(data[14].substring(sensorLength + 1, sensorLength + 3));
-                            mBinding.analogAlarmLowTie.setText(data[15].substring(0, sensorLength));
-                            mBinding.lowAlarmMinValueIsc.setText(data[15].substring(sensorLength + 1, sensorLength + 3));
-                            mBinding.analogHighLowTie.setText(data[16].substring(0, sensorLength));
-                            mBinding.highAlarmMinValueIsc.setText(data[16].substring(sensorLength + 1, sensorLength + 3));
-                            mBinding.analogCalibrationRequiredAlarmTie.setText(data[17]);
-                            mBinding.analogResetCalibrationTie.setText(mBinding.analogResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[18])).toString());
+                            mBinding.analogSmoothingFactorTie.setText(data[15]);
+                            mBinding.analogAlarmLowTie.setText(data[16].substring(0, sensorLength));
+                            mBinding.lowAlarmMinValueIsc.setText(data[16].substring(sensorLength + 1, sensorLength + 3));
+                            mBinding.analogHighLowTie.setText(data[17].substring(0, sensorLength));
+                            mBinding.highAlarmMinValueIsc.setText(data[17].substring(sensorLength + 1, sensorLength + 3));
+                            mBinding.analogCalibrationRequiredAlarmTie.setText(data[18]);
+                            mBinding.analogResetCalibrationTie.setText(mBinding.analogResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[19])).toString());
 
                         } else {
+                            mBinding.analogRow21Isc.setVisibility(View.GONE);
                             sequenceNo = data[6];
                             mBinding.analogSequenceNumberTie.setText(mBinding.analogSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[6])).toString() + " " + analog_type);
                             if (data[7].equals("1")) {
@@ -446,7 +462,6 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
                             mBinding.analogCalibrationRequiredAlarmTie.setText(data[16]);
                             mBinding.analogResetCalibrationTie.setText(mBinding.analogResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[17])).toString());
                         }
-                        setMaxLength();
                         initAdapter();
                     } catch (Exception e) {
                         e.printStackTrace();
