@@ -423,7 +423,7 @@ public class ApiService implements DataReceiveCallback {
                                     sensorType = "SENSOR";
                                     sequenceName = "Temperature -" + seqNo;
                                     flagValue = Integer.parseInt(splitData[splitData.length - 1]);
-                                    unit = "°C";
+                                    unit = "Â°C";
                                 } else if (hardWareNo < 25) {
                                     sensorType = "Analog";
                                     sequenceName = seqNo < 6 ? sensorType + " - " + seqNo + "(4-20mA)" : sensorType + " - " + seqNo + "(0-10mA)";
@@ -677,12 +677,12 @@ public class ApiService implements DataReceiveCallback {
                         String virtualLabel = jsonObject.getString("NAME_LABEL");
                         String lowAlarm = jsonObject.getString("LEFT_LABEL");
                         String highAlarm = jsonObject.getString("RIGHT_LABEL");
-                        int seqNo = Integer.parseInt(jsonObject.getString("SEQUENCE_NO"));
-                        String type = jsonObject.getString("type");
-
+                        int sensor_type = Integer.parseInt(jsonObject.getString("TYPE"));
+                        String type = inputTypeArr[sensor_type];
+                        String unit = jsonObject.getString("UNIT");
                         VirtualConfigurationEntity entityUpdate = new VirtualConfigurationEntity
-                                (hardWareNo, "Virtual", seqNo, virtualLabel,
-                                        type, lowAlarm, highAlarm, "", jsonObject.getString("REQ"));
+                                (hardWareNo, "Virtual", 0, virtualLabel,
+                                        type, lowAlarm, highAlarm, unit, jsonObject.getString("REQ"));
                         List<VirtualConfigurationEntity> virtualEntryList = new ArrayList<>();
                         virtualEntryList.add(entityUpdate);
                         updateVirtualDB(virtualEntryList);
@@ -698,6 +698,21 @@ public class ApiService implements DataReceiveCallback {
                         finalArr.put(dataObj);
                     } catch (Exception e) {
                         e.printStackTrace();
+                        try {
+                            dataObj.put("INPUTNO", "");
+                            dataObj.put("REQ", "NACK");
+                            dataObj.put("NAME_LABEL", "");
+                            dataObj.put("LEFT_LABEL", "");
+                            dataObj.put("RIGHT_LABEL", "");
+                            dataObj.put("SEQUENCE_NO", "");
+                            dataObj.put("UNIT", "");
+                            dataObj.put("TYPE", "");
+                            dataObj.put("EVENT_TYPE", "");
+                            finalArr.put(dataObj);
+                        } catch (JSONException jsonException) {
+                            jsonException.printStackTrace();
+                        }
+
                     }
                 }
             }, jsonObject.getString("REQ").substring(2, jsonObject.getString("REQ").length() - 2));

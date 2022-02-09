@@ -166,6 +166,7 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
         mBinding.sendAllConfig.setOnClickListener(this);
         mBinding.logOut.setOnClickListener(this);
         mBinding.pendrive.setOnClickListener(this);
+        mBinding.disconnectDuConfig.setOnClickListener(this);
         dismissProgress();
     }
 
@@ -332,6 +333,10 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
 
             case R.id.get_all_config:
                 mAppclass.navigateTo(getActivity(), R.id.action_passwordSettings_to_fragmentGetAllPacket);
+                break;
+
+            case R.id.disconnect_du_config:
+                BaseActivity.disconnectBle();
                 break;
         }
     }

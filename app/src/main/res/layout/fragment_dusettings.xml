@@ -27,20 +27,19 @@
 
         </RelativeLayout>
 
-
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/password_setting"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:cardBackgroundColor="@color/colorSecondary"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:elevation="20sp"
+            app:cardBackgroundColor="@color/colorSecondary"
             app:cardCornerRadius="5sp"
-            app:layout_constraintBottom_toTopOf="@id/pendrive"
-            app:layout_constraintEnd_toStartOf="@id/factory_setting"
+            app:layout_constraintBottom_toTopOf="@+id/send_all_config"
+            app:layout_constraintEnd_toStartOf="@+id/factory_setting"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/relativeLayout" >
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -76,19 +75,18 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/factory_setting"
             android:layout_width="0dp"
-            app:cardBackgroundColor="@color/colorSecondary"
             android:layout_height="0dp"
-            app:cardCornerRadius="5sp"
             android:elevation="20sp"
-            android:layout_marginRight="10dp"
-            app:layout_constraintBottom_toBottomOf="@id/password_setting"
-            app:layout_constraintEnd_toStartOf="@id/logOut"
-            app:layout_constraintStart_toEndOf="@id/password_setting"
-            app:layout_constraintTop_toTopOf="@+id/password_setting" >
+            app:cardBackgroundColor="@color/colorSecondary"
+            app:cardCornerRadius="5sp"
+            app:layout_constraintBottom_toBottomOf="@+id/password_setting"
+            app:layout_constraintEnd_toStartOf="@+id/logOut"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/password_setting"
+            app:layout_constraintTop_toTopOf="@+id/password_setting">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -98,11 +96,11 @@
                     android:id="@+id/imageView5"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    android:layout_marginTop="25sp"
                     android:src="@drawable/settings"
                     app:layout_constraintBottom_toTopOf="@+id/textView30"
                     app:layout_constraintEnd_toEndOf="@+id/textView30"
                     app:layout_constraintHorizontal_bias="0.5"
-                    android:layout_marginTop="25sp"
                     app:layout_constraintStart_toStartOf="@+id/textView30"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -129,14 +127,15 @@
             android:id="@+id/logOut"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginStart="5dp"
             android:elevation="20sp"
             app:cardBackgroundColor="@color/colorSecondary"
             app:cardCornerRadius="5sp"
-            app:layout_constraintBottom_toBottomOf="@+id/password_setting"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/factory_setting"
-            app:layout_constraintTop_toTopOf="@+id/factory_setting" >
+            app:layout_constraintBottom_toBottomOf="@+id/factory_setting"
+            app:layout_constraintEnd_toStartOf="@+id/pendrive"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/factory_setting"
+            app:layout_constraintTop_toTopOf="@+id/factory_setting">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -146,8 +145,8 @@
                     android:id="@+id/imageView6"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/logout"
                     android:layout_marginTop="25sp"
+                    android:src="@drawable/logout"
                     app:layout_constraintBottom_toTopOf="@+id/textView31"
                     app:layout_constraintEnd_toEndOf="@+id/textView31"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -177,13 +176,15 @@
             android:id="@+id/pendrive"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:cardCornerRadius="5sp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             app:cardBackgroundColor="@color/colorSecondary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/password_setting"
-            app:layout_constraintStart_toStartOf="@+id/password_setting"
-            app:layout_constraintTop_toBottomOf="@id/password_setting" >
+            app:cardCornerRadius="5sp"
+            app:layout_constraintBottom_toBottomOf="@+id/logOut"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/logOut"
+            app:layout_constraintTop_toTopOf="@+id/logOut">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -193,8 +194,8 @@
                     android:id="@+id/imageView7"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/pendrive"
                     android:layout_marginTop="25sp"
+                    android:src="@drawable/pendrive"
                     app:layout_constraintBottom_toTopOf="@+id/textView32"
                     app:layout_constraintEnd_toEndOf="@+id/textView32"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -207,7 +208,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5sp"
                     android:gravity="center"
-                    android:text="Pen Drive Copy"
+                    android:text="Backup"
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"
                     android:textStyle="bold"
@@ -225,15 +226,15 @@
             android:id="@+id/send_all_config"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
             android:elevation="20sp"
-            app:cardCornerRadius="5sp"
-            android:layout_marginBottom="10dp"
             app:cardBackgroundColor="@color/colorSecondary"
+            app:cardCornerRadius="5sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/factory_setting"
-            app:layout_constraintStart_toStartOf="@+id/factory_setting"
-            app:layout_constraintTop_toBottomOf="@id/factory_setting" >
+            app:layout_constraintEnd_toEndOf="@+id/password_setting"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_setting">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -243,8 +244,8 @@
                     android:id="@+id/imageView8"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/send"
                     android:layout_marginTop="25sp"
+                    android:src="@drawable/send"
                     app:layout_constraintBottom_toTopOf="@+id/textView33"
                     app:layout_constraintEnd_toEndOf="@+id/textView33"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -275,15 +276,14 @@
             android:id="@+id/get_all_config"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
             android:elevation="20sp"
-            android:layout_marginBottom="10dp"
-            app:cardCornerRadius="5sp"
             app:cardBackgroundColor="@color/colorSecondary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/logOut"
-            app:layout_constraintStart_toStartOf="@+id/logOut"
-            app:layout_constraintTop_toBottomOf="@+id/logOut" >
+            app:cardCornerRadius="5sp"
+            app:layout_constraintBottom_toBottomOf="@+id/send_all_config"
+            app:layout_constraintEnd_toEndOf="@+id/factory_setting"
+            app:layout_constraintStart_toEndOf="@+id/send_all_config"
+            app:layout_constraintTop_toTopOf="@+id/send_all_config">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -293,11 +293,11 @@
                     android:id="@+id/imageView9"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    android:layout_marginTop="25sp"
                     android:src="@drawable/cloud"
                     app:layout_constraintBottom_toTopOf="@+id/textView34"
                     app:layout_constraintEnd_toEndOf="@+id/textView34"
                     app:layout_constraintHorizontal_bias="0.5"
-                    android:layout_marginTop="25sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -316,6 +316,103 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/last_du_config"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:elevation="20sp"
+            app:cardBackgroundColor="@color/colorSecondary"
+            app:cardCornerRadius="5sp"
+            app:layout_constraintBottom_toBottomOf="@+id/get_all_config"
+            app:layout_constraintEnd_toEndOf="@+id/logOut"
+            app:layout_constraintStart_toEndOf="@+id/get_all_config"
+            app:layout_constraintTop_toTopOf="@+id/get_all_config">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/last_duIv"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="25sp"
+                    android:src="@drawable/bootloader"
+                    app:layout_constraintBottom_toTopOf="@+id/last_duTxt"
+                    app:layout_constraintEnd_toEndOf="@+id/last_duTxt"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/last_duTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5sp"
+                    android:gravity="center"
+                    android:text="Boot-loader"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/last_duIv" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/disconnect_du_config"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:elevation="20sp"
+            app:cardBackgroundColor="@color/colorSecondary"
+            app:cardCornerRadius="5sp"
+            app:layout_constraintBottom_toBottomOf="@+id/last_du_config"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/last_du_config"
+            app:layout_constraintTop_toTopOf="@+id/last_du_config">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/disconnect_duIv"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="25sp"
+                    android:src="@drawable/bluetooth"
+                    app:layout_constraintBottom_toTopOf="@+id/disconnect_txt"
+                    app:layout_constraintEnd_toEndOf="@+id/disconnect_txt"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/disconnect_txt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5sp"
+                    android:gravity="center"
+                    android:text="Disconnect"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/disconnect_duIv" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

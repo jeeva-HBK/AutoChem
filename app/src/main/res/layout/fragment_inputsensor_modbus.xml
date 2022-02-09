@@ -264,7 +264,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/modbus_diagnosticTime"
                 style="@style/config_Til"
-                android:visibility="@{modbusType.equals(`0`) ? View.VISIBLE : View.GONE}">
+                android:visibility="@{modbusType.equals(`0`) ? View.GONE : View.VISIBLE}">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/mod_bus_time_tie"
