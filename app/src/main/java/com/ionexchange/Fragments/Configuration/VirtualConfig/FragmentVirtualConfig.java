@@ -828,10 +828,10 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
         List<VirtualConfigurationEntity> entryListUpdate = new ArrayList<>();
         entryListUpdate.add(virtualConfigurationEntity);
         updateToDb(entryListUpdate);
-        new EventLogDemo(String.valueOf(sensorInputNo), "Virtual", "Input Setting Changed",
+        new EventLogDemo(String.valueOf(sensorInputNo), "Virtual", "Virtual Setting Changed",
                 SharedPref.read(pref_USERLOGINID, ""), getContext());
         ApiService.tempString = "0";
-        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "07", "Input Setting Changed - " +
+        ApiService.getInstance(getContext()).processApiData(READ_PACKET, "07", "Virtual Setting Changed - " +
                 SharedPref.read(pref_USERLOGINID, ""));
 
     }

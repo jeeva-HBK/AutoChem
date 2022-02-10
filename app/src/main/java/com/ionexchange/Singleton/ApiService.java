@@ -2,7 +2,6 @@ package com.ionexchange.Singleton;
 
 import static com.ionexchange.Others.ApplicationClass.DB;
 import static com.ionexchange.Others.ApplicationClass.alertKeepAliveData;
-import static com.ionexchange.Others.ApplicationClass.bleConnected;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.inputDAO;
 import static com.ionexchange.Others.ApplicationClass.inputKeepAliveData;
@@ -18,6 +17,7 @@ import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_DIAGNOSTIC;
 import static com.ionexchange.Others.PacketControl.PCK_GENERAL;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
+import static com.ionexchange.Others.PacketControl.PCK_LOCKOUT;
 import static com.ionexchange.Others.PacketControl.PCK_OUTPUT_CONFIG;
 import static com.ionexchange.Others.PacketControl.READ_PACKET;
 import static com.ionexchange.Others.PacketControl.RES_SPILT_CHAR;
@@ -42,6 +42,7 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.ionexchange.Database.Dao.AlarmLogDao;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
@@ -55,6 +56,7 @@ import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Interface.VolleyCallback;
 import com.ionexchange.Others.ApplicationClass;
+import com.ionexchange.Others.EventLogDemo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -85,6 +87,47 @@ public class ApiService implements DataReceiveCallback {
     JSONObject timerJson;
 
     int weekly;
+
+    /* JSON Structure of API Communication - Response */
+    /*{
+        "Response": {
+        "JSON_ID": "00",
+                "DU_MAC": "45b64335276aab8b",
+                "DEVICE_MAC": "4C:EB:D6:73:64:BE",
+                "TIMESTAMP": "1644471278",
+                "DATAS": {
+            "ALERT_RESPONSE": "",
+                    "OUTPUT_RESPONSE": "",
+                    "MSG_FIELD": "",
+                    "LABLE": "",
+                    "RESPONSE_WEB": {
+                "JSON_SUB_ID": "07",
+                        "PACKET_TYPE": "0$0",
+                        "DATA": [
+                {
+                    "INPUTNO": "50",
+                        "REQ": "{*1234$1$0$05$50$0$vir$0$02$01$1$-2000.00$01$-2000.00$+2000.00$021$-2000.00$+2000.00$0$cc$1*}",
+                        "NAME_LABEL": "vir",
+                        "LEFT_LABEL": "-2000.00",
+                        "RIGHT_LABEL": "+2000.00",
+                        "SEQUENCE_NO": null,
+                        "UNIT": "cc",
+                        "TYPE": "01",
+                        "EVENT_TYPE": null
+                }
+        ]
+            },
+            "RESPONSE_TAB": {
+                "JSON_SUB_ID": null,
+                        "PACKET_TYPE": null,
+                        "DATA": null
+            },
+            "USER_ID": "US0001",
+                    "LOGIN_STATUS": "1"
+        }
+    }
+    }*/
+
 
     private ApiService() {
     }
@@ -296,8 +339,69 @@ public class ApiService implements DataReceiveCallback {
         }
     }
 
-    private void writeLockOutAck(JSONObject jObj) {
+    private void writeLockOutAck(JSONObject jsonObject) {
+        try {
+            ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
+                @Override
+                public void OnDataReceive(String data) {
+                    String[] splitData = data.split("\\*")[1].split("\\$");
+                    if (splitData[0].equals(WRITE_PACKET)) {
+                        if (splitData[1].equals(PCK_LOCKOUT)) {
+                            if (splitData[2].equals("1")) {
+                                // processApiData("1", "00", ("LockOut Alarm Acknowledged by #" + SharedPref.read(pref_USERLOGINID, "")));
+                                // Ack
+                                try {
+                                    String hNo = jsonObject.getString("REQ").split("\\*")[1].split("\\$")[4];
+                                    AlarmLogDao alarmLogDao = DB.alarmLogDao();
+                                    alarmLogDao.updateLockAlarm(Integer.parseInt(hNo), "0");
+                                    dataObj.put("INPUTNO", "");
+                                    dataObj.put("REQ", "ACK");
+                                    dataObj.put("NAME_LABEL", "");
+                                    dataObj.put("LEFT_LABEL", "");
+                                    dataObj.put("RIGHT_LABEL", "");
+                                    dataObj.put("SEQUENCE_NO", "");
+                                    dataObj.put("UNIT", "");
+                                    dataObj.put("TYPE", "");
+                                    dataObj.put("EVENT_TYPE", "");
+                                    finalArr.put(dataObj);
+                                    new EventLogDemo("", "", "LockOut Alarm Acknowledged by #", jsonObject.getString("EVENT_TYPE"), mContext);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                // nAck
+                                nack();
+                            }
+                        } else {
+                            // nAck
+                            nack();
+                        }
+                    } else {
+                        // nAck
+                        nack();
+                    }
+                }
+            }, jsonObject.getString("REQ").substring(2, jsonObject.getString("REQ").length() - 2));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
+    private void nack() {
+        try {
+            dataObj.put("INPUTNO", "");
+            dataObj.put("REQ", "NACK");
+            dataObj.put("NAME_LABEL", "");
+            dataObj.put("LEFT_LABEL", "");
+            dataObj.put("RIGHT_LABEL", "");
+            dataObj.put("SEQUENCE_NO", "");
+            dataObj.put("UNIT", "");
+            dataObj.put("TYPE", "");
+            dataObj.put("EVENT_TYPE", "");
+            finalArr.put(dataObj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void readDiagnostics() {
@@ -423,7 +527,7 @@ public class ApiService implements DataReceiveCallback {
                                     sensorType = "SENSOR";
                                     sequenceName = "Temperature -" + seqNo;
                                     flagValue = Integer.parseInt(splitData[splitData.length - 1]);
-                                    unit = "Â°C";
+                                    unit = "°C";
                                 } else if (hardWareNo < 25) {
                                     sensorType = "Analog";
                                     sequenceName = seqNo < 6 ? sensorType + " - " + seqNo + "(4-20mA)" : sensorType + " - " + seqNo + "(0-10mA)";
@@ -443,15 +547,16 @@ public class ApiService implements DataReceiveCallback {
                                     sequenceName = "Tank Level -" + seqNo;
                                     flagValue = Integer.parseInt(splitData[splitData.length - 2]);
                                 }
-
-                                InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                                        (hardWareNo, inputTypeArr[Integer.parseInt(splitData[5])],
-                                                sensorType, signalType, sequenceName, seqNo, inputLabel,
-                                                lowAlarm, highAlarm, unit, type, flagValue,
-                                                jsonObject.getString("REQ"));
-                                List<InputConfigurationEntity> inputentryList = new ArrayList<>();
-                                inputentryList.add(entityUpdate);
-                                updateInputDB(inputentryList);
+                               if(hardWareNo != 0) {
+                                   InputConfigurationEntity entityUpdate = new InputConfigurationEntity
+                                           (hardWareNo, inputTypeArr[Integer.parseInt(splitData[5])],
+                                                   sensorType, signalType, sequenceName, seqNo, inputLabel,
+                                                   lowAlarm, highAlarm, unit, type, flagValue,
+                                                   jsonObject.getString("REQ"));
+                                   List<InputConfigurationEntity> inputentryList = new ArrayList<>();
+                                   inputentryList.add(entityUpdate);
+                                   updateInputDB(inputentryList);
+                               }
                                 dataObj.put("INPUTNO", formDigits(2, String.valueOf(hardWareNo)));
                                 dataObj.put("REQ", "ACK");
                                 dataObj.put("NAME_LABEL", "");

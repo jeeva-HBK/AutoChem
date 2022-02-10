@@ -8,6 +8,7 @@ import static com.ionexchange.Others.PacketControl.ACK;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_FACTORYRESET;
+import static com.ionexchange.Others.PacketControl.PCK_SENDALLCONFIG;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 import static com.ionexchange.Singleton.SharedPref.pref_MACADDRESS;
@@ -246,7 +247,7 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        switch (v.getId())  {
             case R.id.password_setting:
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
                 LayoutInflater inflater = this.getLayoutInflater();
@@ -337,6 +338,36 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
 
             case R.id.disconnect_du_config:
                 BaseActivity.disconnectBle();
+                break;
+
+            case R.id.last_du_config:
+                showProgress();
+                mAppclass.sendPacket(new DataReceiveCallback() {
+                    @Override
+                    public void OnDataReceive(String data) {
+                        if (data != null) {
+                            if (data.equals("Timeout")) {
+                                showSnack("Timed Out");
+                            } else {
+                                if (data.split("\\*")[1].split("\\$")[2].equals("0")) {
+                                    dismissProgress();
+                                    if (mAppclass.factoryRest()) {
+                                        dismissProgress();
+                                        mAppclass.showSnackBar(getContext(), "BootLoader Success");
+                                        new EventLogDemo("", "", "BootLoader Accessed by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
+                                        ApiService.getInstance(getContext()).processApiData("1", "00", ("BootLoader by #" + SharedPref.read(pref_USERLOGINID, "")));
+                                    } else {
+                                        dismissProgress();
+                                        mAppclass.showSnackBar(getContext(), "BootLoader Failed, try again later");
+                                    }
+                                } else {
+                                    dismissProgress();
+                                    mAppclass.showSnackBar(getContext(), "BootLoader Failed");
+                                }
+                            }
+                        }
+                    }
+                }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR + PCK_SENDALLCONFIG + SPILT_CHAR + "1");
                 break;
         }
     }

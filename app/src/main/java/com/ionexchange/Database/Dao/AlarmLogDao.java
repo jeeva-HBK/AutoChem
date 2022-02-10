@@ -44,7 +44,10 @@ public interface AlarmLogDao {
     @Query("Delete FROM alarmlogentity WHERE sNo in (SELECT sNo FROM AlarmLogEntity limit 1)")
     void deleteFirstRow();
 
-    @Query("select * FROM AlarmLogEntity")
+    @Query("select * FROM AlarmLogEntity WHERE lockOutAlarm = 1")
     LiveData<List<AlarmLogEntity>> getAlarmLiveList();
+
+    @Query("select * FROM AlarmLogEntity")
+    LiveData<List<AlarmLogEntity>> getAlarmList();
 
 }

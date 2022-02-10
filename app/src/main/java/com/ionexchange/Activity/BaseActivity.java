@@ -830,10 +830,10 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                             tempBool = false;
                             reconnectDialog.dismiss();
                             retryCount = 0;
+                            bleConnected.set(true);
+                            triggerWebService.set(true);
                             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                                 showSnack("Reconnected to " + bluetoothDevice.getName() + " Successfully");
-                                bleConnected.set(true);
-                                triggerWebService.set(true);
                                 return;
                             }
                             baseActivity.startHandler();

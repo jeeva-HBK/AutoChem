@@ -73,7 +73,7 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
         alarmLogEntityList = alarmLogDao.getAlarmLogList();
 
         /*LiveData*/
-        alarmLogDao.getAlarmLiveList().observe(getViewLifecycleOwner(), new Observer<List<AlarmLogEntity>>() {
+        alarmLogDao.getAlarmList().observe(getViewLifecycleOwner(), new Observer<List<AlarmLogEntity>>() {
             @Override
             public void onChanged(List<AlarmLogEntity> alarmLogEntities) {
                 setAdapter(alarmLogEntities);

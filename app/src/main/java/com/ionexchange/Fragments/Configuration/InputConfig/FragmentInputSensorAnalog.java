@@ -280,13 +280,39 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
                     sensorStatus;
             mAppClass.sendPacket(this, writePacket);
         } else if (getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr).equals("8")) {
+            int typeOfValueRead = 0;
+            int typeofValueReadPos = Integer.parseInt(getPositionFromAtxt(1, getStringValue(mBinding.analogModbusUnitTie), typeOfValueArr)) + 1;
+            switch (getPositionFromAtxt(1, getStringValue(mBinding.analogModbusTypeTie), modBusTypeArr)) {
+                case "0":
+                case "5":
+                    typeOfValueRead = typeofValueReadPos;
+                    break;
+                case "1":
+                case "2":
+                    if (typeofValueReadPos == 1) {
+                        typeOfValueRead = 3;
+                    } else {
+                        typeOfValueRead = 4;
+                    }
+                    break;
+                case "3":
+                    typeOfValueRead = 6;
+                    break;
+                case "4":
+                    if (typeofValueReadPos == 1) {
+                        typeOfValueRead = 5;
+                    } else {
+                        typeOfValueRead = 6;
+                    }
+                    break;
+            }
             writePacket = DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                     PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
                     getStringValue(2, mBinding.analogInputNumberTie) + SPILT_CHAR +
                     getPositionFromAtxt(2, getStringValue(mBinding.analogSensorTypeTie), inputTypeArr) + SPILT_CHAR +
                     getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr) + SPILT_CHAR +
                     getPositionFromAtxt(1, getStringValue(mBinding.analogModbusTypeTie), modBusTypeArr) + SPILT_CHAR +
-                    getPositionFromAtxt(1, getStringValue(mBinding.analogModbusUnitTie), typeOfValueArr) + SPILT_CHAR +
+                    typeOfValueRead + SPILT_CHAR +
                     sequenceNo + SPILT_CHAR + analogType + SPILT_CHAR +
                     getPositionFromAtxt(1, getStringValue(mBinding.analogSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
                     getStringValue(0, mBinding.analogInputLabelTie) + SPILT_CHAR +
@@ -414,9 +440,35 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
                             mBinding.analogRow21Isc.setVisibility(View.VISIBLE);
                             mBinding.analogModbusTypeTie.setText(mBinding.analogModbusTypeTie.getAdapter().getItem(Integer.parseInt(data[6])).toString());
                             getModbusUnit(Integer.parseInt(data[7]));
-                            mBinding.analogModbusUnitTie.setText(mBinding.analogModbusUnitTie.getAdapter().getItem(Integer.parseInt(data[7])).toString());
                             sequenceNo = data[8];
                             mBinding.analogSequenceNumberTie.setText(mBinding.analogSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[8])).toString() + " " + analog_type);
+                            int typeOfValueRead = 0;
+                            switch (Integer.parseInt(data[6])) {
+                                case 0:
+                                    typeOfValueArr = new String[]{"Fluorescence", "Turbidity"};
+                                    typeOfValueRead = Integer.parseInt(data[7]) - 1;
+                                    break;
+                                case 1:
+                                case 2:
+                                    typeOfValueArr = new String[]{"Corrosion rate", "Pitting rate"};
+                                    typeOfValueRead = Integer.parseInt(data[7]) - 3;
+                                    break;
+                                case 3:
+                                    typeOfValueArr = new String[]{"Tagged Polymer"};
+                                    typeOfValueRead = 0;
+                                    break;
+                                case 4:
+                                    typeOfValueArr = new String[]{"Fluorescence", "Tagged Polymer"};
+                                    typeOfValueRead = Integer.parseInt(data[7]) - 5;
+                                    break;
+                                case 5:
+                                    typeOfValueArr = new String[]{"Fluorescence"};
+                                    typeOfValueRead = 0;
+                                    break;
+                            }
+                            mBinding.analogModbusUnitTie.setAdapter(getAdapter(typeOfValueArr, getContext()));
+                            mBinding.analogModbusUnitTie.setText(mBinding.analogModbusUnitTie.getAdapter().getItem(typeOfValueRead).toString());
+
                             if (data[9].equals("1")) {
                                 analog_type = "(0 - 10V)";
                             } else {
