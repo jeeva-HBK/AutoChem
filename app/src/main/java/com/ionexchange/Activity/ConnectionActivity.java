@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -156,6 +157,7 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
 
     void init() {
         mBinding.deviceMacAddress.setText(Settings.System.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID));
+
         preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         mBinding.btnScan.setAlpha(.5f);
         mBinding.btnScan.setEnabled(false);
@@ -165,14 +167,6 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
         mBinding.rvBluetoothList.setLayoutManager(new LinearLayoutManager(mContext));
         startScan();
     }
-
-    private String getBluetoothMacAddress() {
-        WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
-        WifiInfo wInfo = wifiManager.getConnectionInfo();
-        return wInfo.getMacAddress();
-    }
-
-
 
     private void startScan() {
         deviceList.clear();
@@ -388,13 +382,9 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
     }
 
     @Override
-    public void onSaveClicked(String mac) {
-
-    }
+    public void onSaveClicked(String mac) { }
 
     @Override
-    public void onUnSave(String mac) {
-
-    }
+    public void onUnSave(String mac) { }
 
 }

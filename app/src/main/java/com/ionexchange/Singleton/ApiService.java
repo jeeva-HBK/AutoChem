@@ -14,6 +14,7 @@ import static com.ionexchange.Others.ApplicationClass.typeArr;
 import static com.ionexchange.Others.ApplicationClass.userManagementDao;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
+import static com.ionexchange.Others.PacketControl.OUTPUT_CONTROL_CONFIG;
 import static com.ionexchange.Others.PacketControl.PCK_DIAGNOSTIC;
 import static com.ionexchange.Others.PacketControl.PCK_GENERAL;
 import static com.ionexchange.Others.PacketControl.PCK_INPUT_SENSOR_CONFIG;
@@ -105,7 +106,7 @@ public class ApiService implements DataReceiveCallback {
                         "PACKET_TYPE": "0$0",
                         "DATA": [
                 {
-                    "INPUTNO": "50",
+                        "INPUTNO": "50",
                         "REQ": "{*1234$1$0$05$50$0$vir$0$02$01$1$-2000.00$01$-2000.00$+2000.00$021$-2000.00$+2000.00$0$cc$1*}",
                         "NAME_LABEL": "vir",
                         "LEFT_LABEL": "-2000.00",
@@ -166,7 +167,6 @@ public class ApiService implements DataReceiveCallback {
                                 tempString = spiltData[1];
                                 jsonSubID = responseObject.getString("JSON_SUB_ID");
                                 processApiData(packetType, jsonSubID, "");
-
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -239,8 +239,8 @@ public class ApiService implements DataReceiveCallback {
                         dataObj.put("TYPE", "");
                         dataObj.put("EVENT_TYPE", eventType);
                         finalArr.put(dataObj);*/
-
                         break;
+
                     case "03":
                         processSiteDetails(responseObject.getJSONArray("DATA").
                                 getJSONObject(0).getJSONArray("REQ"), 1);
@@ -266,10 +266,13 @@ public class ApiService implements DataReceiveCallback {
                                 getJSONObject(0));
                         break;
 
-
                     case "08": // todo : Should Change
                         writeLockOutAck(responseObject.getJSONArray("DATA").
                                 getJSONObject(0));
+                        break;
+
+                    case "09":
+                        writeLockOut(responseObject.getJSONArray("DATA").getJSONObject(0));
                         break;
                 }
             } else if (packetType.equals(READ_PACKET)) {
@@ -336,6 +339,54 @@ public class ApiService implements DataReceiveCallback {
 
         } catch (JSONException jsonException) {
             jsonException.printStackTrace();
+        }
+    }
+
+    private void writeLockOut(JSONObject data) {
+
+        try {
+            ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
+                @Override
+                public void OnDataReceive(String data) {
+                    if (data != null) {
+                        if (data.equals("Timeout")) {
+                            String[] spiltData = data.split("\\*")[1].split("\\$");
+                            if (spiltData[0].equals(WRITE_PACKET)) {
+                                if (spiltData[1].equals(OUTPUT_CONTROL_CONFIG)) {
+                                    if (spiltData[2].equals(RES_SUCCESS)) {
+                                        try {
+                                            dataObj.put("INPUTNO", "");
+                                            dataObj.put("REQ", "ACK");
+                                            dataObj.put("NAME_LABEL", "");
+                                            dataObj.put("LEFT_LABEL", "");
+                                            dataObj.put("RIGHT_LABEL", "");
+                                            dataObj.put("SEQUENCE_NO", "");
+                                            dataObj.put("UNIT", "");
+                                            dataObj.put("TYPE", "");
+                                            dataObj.put("EVENT_TYPE", "");
+                                            finalArr.put(dataObj);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    } else {
+                                        nack();
+                                    }
+                                } else {
+                                    nack();
+                                }
+                            } else {
+                                nack();
+                            }
+                        } else {
+                            nack();
+                        }
+                    } else {
+                        nack();
+                    }
+                }
+            }, data.getString("REQ").substring(2, data.getString("REQ").length() - 2));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
