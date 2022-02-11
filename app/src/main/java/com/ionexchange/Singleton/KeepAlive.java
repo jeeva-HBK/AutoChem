@@ -182,7 +182,6 @@ public class KeepAlive implements DataReceiveCallback {
                     outputEntryList.add(alarmLogEntity);
                     updateToAlarmDb(outputEntryList);
                 }
-
             }
         }
     }
@@ -212,8 +211,7 @@ public class KeepAlive implements DataReceiveCallback {
     }
 
     @Override
-    public void OnDataReceive(String data) {
-    }
+    public void OnDataReceive(String data) { }
 
     public void collectTrendData() {
         Log.e("TAG", "collectTrendData: ");

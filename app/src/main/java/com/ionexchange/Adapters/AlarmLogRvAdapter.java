@@ -12,9 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
-import com.ionexchange.Database.Dao.KeepAliveCurrentValueDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
-import com.ionexchange.Database.Dao.OutputKeepAliveDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
 import com.ionexchange.Database.Entity.AlarmLogEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
@@ -31,7 +29,8 @@ public class AlarmLogRvAdapter extends RecyclerView.Adapter<AlarmLogRvAdapter.it
     OutputConfigurationDao outputConfigurationDao;
     InputConfigurationDao inputConfigurationDao;
     TimerConfigurationDao timerConfigurationDao;
-    public AlarmLogRvAdapter(List<AlarmLogEntity> alarmLogEntityList,BtnOnClick btnOnClick) {
+
+    public AlarmLogRvAdapter(List<AlarmLogEntity> alarmLogEntityList, BtnOnClick btnOnClick) {
         this.alarmLogEntityList = alarmLogEntityList;
         this.btnOnClick = btnOnClick;
     }
@@ -58,7 +57,6 @@ public class AlarmLogRvAdapter extends RecyclerView.Adapter<AlarmLogRvAdapter.it
         if (position % 2 == 0) {
             holder.root.setBackgroundColor(context.getResources().getColor(R.color.ash));
             holder.button.setBackgroundColor(context.getResources().getColor(R.color.ash));
-
         }
 
         switch (alarmLogEntityList.get(position).getSensorType()){
@@ -80,7 +78,7 @@ public class AlarmLogRvAdapter extends RecyclerView.Adapter<AlarmLogRvAdapter.it
         }
 
         holder.AlertName.setText(alarmLogEntityList.get(position).alarmLog);
-        if (alarmLogEntityList.get(position).lockOutAlarm.equals("1")){
+        if (alarmLogEntityList.get(position).lockOutAlarm.equals("1")) {
             holder.button.setVisibility(View.VISIBLE);
         }else {
             holder.button.setVisibility(View.INVISIBLE);
@@ -89,7 +87,8 @@ public class AlarmLogRvAdapter extends RecyclerView.Adapter<AlarmLogRvAdapter.it
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnOnClick.OnItemClick(alarmLogEntityList.get(position).sNo, Integer.parseInt(alarmLogEntityList.get(position).hardwareNo), holder.button, alarmLogEntityList.get(position).lockOutAlarm);
+                btnOnClick.OnItemClick(alarmLogEntityList.get(position).sNo, Integer.parseInt(alarmLogEntityList.get(position).hardwareNo),
+                        holder.button, alarmLogEntityList.get(position).lockOutAlarm);
             }
         });
     }
@@ -108,8 +107,6 @@ public class AlarmLogRvAdapter extends RecyclerView.Adapter<AlarmLogRvAdapter.it
     public int getItemViewType(int position) {
         return position;
     }
-
-
 
     public class itemHolder extends RecyclerView.ViewHolder {
         ConstraintLayout root;

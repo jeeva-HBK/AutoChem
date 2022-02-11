@@ -122,12 +122,13 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
         mBinding.layout6Delete6.setOnClickListener(this);
         mBinding.saveBtn.setOnClickListener(this);
         showProgress();
+        getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
             }
-        }, 1000);
+        }, 100);
 
     }
 
@@ -196,8 +197,8 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
                     getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
                     i++;
                 }
-            }
-        }, 1000);
+             }
+       }, 100);
 
     }
 
@@ -475,12 +476,7 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
         if (pageNo >= 2) {
             mBinding.leftArrowIsBtn.setVisibility(View.VISIBLE);
         }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
-            }
-        }, 1000);
+        getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
     }
 
 
@@ -489,12 +485,9 @@ public class FragmentSetLayout extends Fragment implements CompoundButton.OnChec
         if (pageNo == 1) {
             mBinding.leftArrowIsBtn.setVisibility(View.GONE);
         }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
-            }
-        }, 1000);
+
+        getSensorWindowNextPage(getTextViewNo(), getViewNo(), pageNo);
+
     }
 
 

@@ -271,8 +271,12 @@ public class ApiService implements DataReceiveCallback {
                                 getJSONObject(0));
                         break;
 
-                    case "09":
+                    case "09": // todo : Should Change
                         writeLockOut(responseObject.getJSONArray("DATA").getJSONObject(0));
+                        break;
+
+                    case "10": // todo : Should Change
+                        writeDiagnosticSweep(responseObject.getJSONArray("DATA").getJSONObject(0));
                         break;
                 }
             } else if (packetType.equals(READ_PACKET)) {
@@ -340,6 +344,52 @@ public class ApiService implements DataReceiveCallback {
         } catch (JSONException jsonException) {
             jsonException.printStackTrace();
         }
+    }
+
+    private void writeDiagnosticSweep(JSONObject data) {
+
+        try {
+            String[] spiltData = data.getString("REQ").split("\\*")[1].split("\\$");
+            // ex req -> {*0$11$05$0*}
+            if (spiltData[0].equals(WRITE_PACKET)) {
+                if (spiltData[1].equals(PCK_DIAGNOSTIC)) {
+                    if (spiltData[3].equals(RES_SUCCESS)) {
+                        DB.alarmLogDao().updateLockAlarm(Integer.parseInt(spiltData[2]), "0");
+                        new EventLogDemo("", "", "Diagnostic Sweep Acknowledged by #", SharedPref.read(pref_USERLOGINID, ""), mContext);
+                        ApiService.getInstance(mContext).processApiData("1", "00", ("Diagnostic Sweep Acknowledged by #" + SharedPref.read(pref_USERLOGINID, "")));
+                        dataObj.put("INPUTNO", "");
+                        dataObj.put("REQ", "ACK");
+                        dataObj.put("NAME_LABEL", "");
+                        dataObj.put("LEFT_LABEL", "");
+                        dataObj.put("RIGHT_LABEL", "");
+                        dataObj.put("SEQUENCE_NO", "");
+                        dataObj.put("UNIT", "");
+                        dataObj.put("TYPE", "");
+                        dataObj.put("EVENT_TYPE", "");
+                        finalArr.put(dataObj);
+                    } else {
+                        dataObj.put("INPUTNO", "");
+                        dataObj.put("REQ", "ACK");
+                        dataObj.put("NAME_LABEL", "");
+                        dataObj.put("LEFT_LABEL", "");
+                        dataObj.put("RIGHT_LABEL", "");
+                        dataObj.put("SEQUENCE_NO", "");
+                        dataObj.put("UNIT", "");
+                        dataObj.put("TYPE", "");
+                        dataObj.put("EVENT_TYPE", "");
+                        finalArr.put(dataObj);
+                        // do nothing
+                    }
+                } else {
+                    nack();
+                }
+            } else {
+                nack();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void writeLockOut(JSONObject data) {

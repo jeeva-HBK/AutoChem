@@ -162,28 +162,35 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
 
     @Override
     public void OnItemClick(int sNo,int hardwareNo, Button button, String lockOutAlarm) {
-        mAppClass.sendPacket(new DataReceiveCallback() {
-            @Override
-            public void OnDataReceive(String data) {
-                String[] splitData = data.split("\\*")[1].split("\\$");
-                if (splitData[0].equals(WRITE_PACKET)) {
-                    if (splitData[1].equals(PCK_LOCKOUT)) {
-                        if (splitData[2].equals("1")) {
-                            alarmLogDao.updateLockAlarm(hardwareNo, "0");
-                            button.setVisibility(View.INVISIBLE);
-                            new EventLogDemo("", "", "LockOut Alarm Acknowledged by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
-                            ApiService.getInstance(getContext()).processApiData("1", "00", ("LockOut Alarm Acknowledged by #" + SharedPref.read(pref_USERLOGINID, "")));
+        if (hardwareNo >= 5 && hardwareNo <=14) {
+            alarmLogDao.updateLockAlarm(hardwareNo, "0");
+            button.setVisibility(View.INVISIBLE);
+            new EventLogDemo("", "", "Diagnostic Sweep Acknowledged by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
+            ApiService.getInstance(getContext()).processApiData("1", "00", ("Diagnostic Sweep Acknowledged by #" + SharedPref.read(pref_USERLOGINID, "")));
+        } else {
+            mAppClass.sendPacket(new DataReceiveCallback() {
+                @Override
+                public void OnDataReceive(String data) {
+                    String[] splitData = data.split("\\*")[1].split("\\$");
+                    if (splitData[0].equals(WRITE_PACKET)) {
+                        if (splitData[1].equals(PCK_LOCKOUT)) {
+                            if (splitData[2].equals("1")) {
+                                alarmLogDao.updateLockAlarm(hardwareNo, "0");
+                                button.setVisibility(View.INVISIBLE);
+                                new EventLogDemo("", "", "LockOut Alarm Acknowledged by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
+                                ApiService.getInstance(getContext()).processApiData("1", "00", ("LockOut Alarm Acknowledged by #" + SharedPref.read(pref_USERLOGINID, "")));
+                            } else {
+                                mAppClass.showSnackBar(getContext(), "Acknowledgement Failed");
+                            }
                         } else {
                             mAppClass.showSnackBar(getContext(), "Acknowledgement Failed");
                         }
                     } else {
                         mAppClass.showSnackBar(getContext(), "Acknowledgement Failed");
                     }
-                } else {
-                    mAppClass.showSnackBar(getContext(), "Acknowledgement Failed");
                 }
-            }
-        }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
-                WRITE_PACKET + SPILT_CHAR + PCK_LOCKOUT + SPILT_CHAR + formDigits(2, String.valueOf(hardwareNo)) + SPILT_CHAR + ACK);
+            }, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR +
+                    WRITE_PACKET + SPILT_CHAR + PCK_LOCKOUT + SPILT_CHAR + formDigits(2, String.valueOf(hardwareNo)) + SPILT_CHAR + ACK);
+        }
     }
 }
