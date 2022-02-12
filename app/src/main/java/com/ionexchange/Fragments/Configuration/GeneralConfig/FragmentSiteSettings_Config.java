@@ -285,10 +285,10 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
                 // READ_Response
                 if (splitData[0].equals(READ_PACKET)) {
                     if (splitData[2].equals(RES_SUCCESS)) {
-                       /* mBinding.siteIdCommonSettingsEDT.setText(splitData[3]);
+                        /* mBinding.siteIdCommonSettingsEDT.setText(splitData[3]);
                         mBinding.siteNameCommonSettingsEDT.setText(splitData[4]);
                         mBinding.sitePasswordCommonSettingsEDT.setText(splitData[5]);*/
-                       /* if (splitData[6].equals("0")) {
+                        /* if (splitData[6].equals("0")) {
                             mBinding.disableSite.setChecked(true);
                         } else if (splitData[6].equals("1")) {
                             mBinding.enableSite.setChecked(true);
@@ -323,7 +323,7 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
                 } else if (splitData[0].equals(WRITE_PACKET)) {
                     if (splitData[2].equals(RES_SUCCESS)) {
                         mAppClass.showSnackBar(getContext(), "Write Success");
-                        new EventLogDemo("0", "Site", "General settings changed", SharedPref.read(pref_USERLOGINID, ""), getContext());
+                        new EventLogDemo("0", "Site", "General settings changed by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
                     } else if (splitData[2].equals(RES_FAILED)) {
                         mAppClass.showSnackBar(getContext(), "Write Failed");
                     }

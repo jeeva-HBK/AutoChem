@@ -129,7 +129,6 @@ public class ApiService implements DataReceiveCallback {
     }
     }*/
 
-
     private ApiService() {
     }
 
@@ -185,7 +184,6 @@ public class ApiService implements DataReceiveCallback {
     }
 
     public void processApiData(String packetType, String jsonSubID, String eventType) {
-
         if (!jsonSubID.equals("99")) {
             finalArr = new JSONArray();
         }
@@ -347,7 +345,6 @@ public class ApiService implements DataReceiveCallback {
     }
 
     private void writeDiagnosticSweep(JSONObject data) {
-
         try {
             String[] spiltData = data.getString("REQ").split("\\*")[1].split("\\$");
             // ex req -> {*0$11$05$0*}
@@ -393,7 +390,6 @@ public class ApiService implements DataReceiveCallback {
     }
 
     private void writeLockOut(JSONObject data) {
-
         try {
             ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
                 @Override
@@ -405,6 +401,7 @@ public class ApiService implements DataReceiveCallback {
                                 if (spiltData[1].equals(OUTPUT_CONTROL_CONFIG)) {
                                     if (spiltData[2].equals(RES_SUCCESS)) {
                                         try {
+                                            dataObj = new JSONObject();
                                             dataObj.put("INPUTNO", "");
                                             dataObj.put("REQ", "ACK");
                                             dataObj.put("NAME_LABEL", "");
@@ -455,6 +452,7 @@ public class ApiService implements DataReceiveCallback {
                                     String hNo = jsonObject.getString("REQ").split("\\*")[1].split("\\$")[4];
                                     AlarmLogDao alarmLogDao = DB.alarmLogDao();
                                     alarmLogDao.updateLockAlarm(Integer.parseInt(hNo), "0");
+                                    dataObj = new JSONObject();
                                     dataObj.put("INPUTNO", "");
                                     dataObj.put("REQ", "ACK");
                                     dataObj.put("NAME_LABEL", "");
@@ -490,6 +488,7 @@ public class ApiService implements DataReceiveCallback {
 
     private void nack() {
         try {
+            dataObj = new JSONObject();
             dataObj.put("INPUTNO", "");
             dataObj.put("REQ", "NACK");
             dataObj.put("NAME_LABEL", "");
@@ -583,6 +582,7 @@ public class ApiService implements DataReceiveCallback {
             ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
                 @Override
                 public void OnDataReceive(String data) {
+                    dataObj = new JSONObject();
                     responseTabId = "04";
                     try {
                         String[] splitData = jsonObject.getString("REQ").
@@ -878,7 +878,6 @@ public class ApiService implements DataReceiveCallback {
                 public void OnDataReceive(String data) {
                     responseTabId = "07";
                     try {
-
                         int hardWareNo = Integer.parseInt(jsonObject.getString("INPUTNO"));
                         String virtualLabel = jsonObject.getString("NAME_LABEL");
                         String lowAlarm = jsonObject.getString("LEFT_LABEL");
@@ -1025,7 +1024,6 @@ public class ApiService implements DataReceiveCallback {
         } else if (data != null) {
             handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR), data);
         }
-
     }
 
     public void handleResponse(String[] splitData, String data) {
@@ -1082,7 +1080,6 @@ public class ApiService implements DataReceiveCallback {
             }
         }
         if (splitData[1].equals("08") || splitData[1].equals("09")) {
-
             try {
                 if (splitData[0].equals("0") && splitData[1].equals("08") && splitData[2].equals("0")) {
                     timerFramePacket(splitTimer[1].substring(2, splitTimer[1].length() - 2));
@@ -1130,8 +1127,6 @@ public class ApiService implements DataReceiveCallback {
                             break;
                     }
                 }
-
-
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
@@ -1245,6 +1240,25 @@ public class ApiService implements DataReceiveCallback {
                 ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
                     @Override
                     public void OnDataReceive(String data) {
+                        if (data != null) {
+                            if (data.equals("Timeout")) {
+                                String[] spiltData = data.split("\\*")[1].split("\\$");
+                                if (spiltData[0].equals(WRITE_PACKET)) {
+                                    if (spiltData[2].equals(RES_SUCCESS)) {
+                                        new EventLogDemo("0", "Site", "General settings changed by #", SharedPref.read(pref_USERLOGINID, ""), mContext);
+                                    } else {
+                                        nack();
+                                    }
+                                } else {
+                                    nack();
+                                }
+                            } else {
+                                nack();
+                            }
+                        } else {
+                            nack();
+                        }
+
                         try {
                             responseTabId = "03";
                             responseTabData = "ACK";
