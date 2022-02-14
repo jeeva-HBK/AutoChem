@@ -694,7 +694,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                 getPositionFromAtxt(2, getStringValue(mBinding.flowSensorTypeAtxtIsc), inputTypeArr) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowFlowMeterTypeAtxtIsc), flowMeterTypeArr) + SPILT_CHAR +
                 sequenceNumber + SPILT_CHAR +
-                getPositionFromAtxt(0, getStringValue(mBinding.flowAnalogTypeAtxt), FlowanalogType) + SPILT_CHAR +
+                (Integer.parseInt(getPositionFromAtxt(0, getStringValue(mBinding.flowAnalogTypeAtxt), FlowanalogType)) + 1) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowSensorActivationAtxtIsc), sensorActivationArr) + SPILT_CHAR +
                 getStringValue(0, mBinding.flowInputLabelEdtIsc) + SPILT_CHAR +
                 getPositionFromAtxt(0, getStringValue(mBinding.flowFlowUnitAtxtIsc), flowUnitArr) + SPILT_CHAR +
@@ -793,7 +793,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
                             mBinding.flowVolumeRateunitDeciIsc.setFilters(new InputFilter[]{new InputFilter.LengthFilter(2)});
                             // Analog Flow Meter
                             if (splitData[5].equals("0")) {
-                                mBinding.flowAnalogTypeAtxt.setText(mBinding.flowAnalogTypeAtxt.getAdapter().getItem(Integer.parseInt(splitData[7])).toString());
+                                mBinding.flowAnalogTypeAtxt.setText(mBinding.flowAnalogTypeAtxt.getAdapter().getItem(Integer.parseInt(splitData[7]) - 1).toString());
                                 mBinding.flowSensorActivationAtxtIsc.setText(mBinding.flowSensorActivationAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[8])).toString());
                                 mBinding.flowInputLabelEdtIsc.setText(splitData[9]);
                                 mBinding.flowFlowUnitAtxtIsc.setText(mBinding.flowFlowUnitAtxtIsc.getAdapter().getItem(Integer.parseInt(splitData[10])).toString());

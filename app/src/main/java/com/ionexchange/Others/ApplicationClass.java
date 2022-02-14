@@ -209,7 +209,7 @@ public class ApplicationClass extends Application {
     public static int userType;
     public static RequestQueue requestQueue;
     public final static String baseURL = "http://192.168.1.82/WaterIOT.API/api/";
-    // public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
+    //public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
 
     // public final static String baseURL = "http://183.82.35.93/WaterIOT.API/api/";
     // public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
@@ -381,7 +381,6 @@ public class ApplicationClass extends Application {
                 callBack.OnFailure(error);
             }
         };
-
 
         JsonObjectRequest request = new JsonObjectRequest(method, URL, object, responseListener, volleyErrorListener);
         request.setRetryPolicy(new DefaultRetryPolicy(
@@ -896,6 +895,7 @@ public class ApplicationClass extends Application {
         Format f = new SimpleDateFormat("dd/MM/yyyy");
         return f.format(date);
     }
+
     public static String getCurrentTrendFormatDate(Date date) {
         Format f = new SimpleDateFormat("yyyy/MM/dd");
         return f.format(date);
@@ -1079,4 +1079,5 @@ public class ApplicationClass extends Application {
 
         }
     }
+
 }

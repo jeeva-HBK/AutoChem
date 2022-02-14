@@ -94,11 +94,15 @@ public class KeepAlive implements DataReceiveCallback {
                             keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), "CLOSE");
                         }
                     } else if (data[i + 3].substring(0, 2).equals("01")) {
-                        if (data[i + 3].split("\\.")[1].length() >= 1) {
-                            keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), data[i + 3].split("\\.")[0].substring(2) +
-                                    "." + data[i + 3].split("\\.")[1].substring(0, 2));
+                        if(!data[i+3].equals("010")) {
+                            if (data[i + 3].split("\\.")[1].length() >= 1) {
+                                keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), data[i + 3].split("\\.")[0].substring(2) +
+                                        "." + data[i + 3].split("\\.")[1].substring(0, 2));
+                            } else {
+                                keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), data[i + 3]);
+                            }
                         } else {
-                            keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), data[i + 3]);
+                            keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), "0");
                         }
                     } else {
                         keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), data[i + 3].substring(2, data[i + 3].length()));
