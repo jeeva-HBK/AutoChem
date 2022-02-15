@@ -367,12 +367,16 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
         }
 
         if (mainConfigurationEntityList.get(position).inputType.contains("Flow/Water Meter")) {
-            typeOne.setText("fRate: " + keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no).split("T")[0]);
-            currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no).split("T")[1]);
-            currentKey.setText("Totalized Volume");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                typeOne.setTooltipText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no).split("T")[0]);
-                currentValue.setTooltipText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no).split("T")[1]);
+            try {
+                typeOne.setText("fRate: " + keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no).split("T")[0]);
+                currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no).split("T")[1]);
+                currentKey.setText("Totalized Volume");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    typeOne.setTooltipText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no).split("T")[0]);
+                    currentValue.setTooltipText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no).split("T")[1]);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
             }
         }
         switch (layout) {

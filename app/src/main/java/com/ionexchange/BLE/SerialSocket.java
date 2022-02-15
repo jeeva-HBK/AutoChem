@@ -1,5 +1,6 @@
 package com.ionexchange.BLE;
 
+import android.Manifest;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
@@ -11,8 +12,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+
+import androidx.core.app.ActivityCompat;
 
 import com.ionexchange.BuildConfig;
 
@@ -277,10 +283,17 @@ public class SerialSocket extends BluetoothGattCallback {
             onSerialConnectError(new IOException("no indication/notification for read characteristic (" + readProperties + ")"));
             return;
         }
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (!gatt.writeDescriptor(readDescriptor)) {
+                    onSerialConnectError(new IOException("read characteristic CCCD descriptor not writable"));
+                }
+            }
+        }, 500);
         Log.d(TAG, "writing read characterictic descriptor");
-        if (!gatt.writeDescriptor(readDescriptor)) {
-            onSerialConnectError(new IOException("read characteristic CCCD descriptor not writable"));
-        }
+
         Log.d(TAG, "writing read characteristic descriptor");
         // continues asynchronously in onDescriptorWrite()
     }
@@ -358,11 +371,18 @@ public class SerialSocket extends BluetoothGattCallback {
         }
         if (data0 != null) {
             writeCharacteristic.setValue(data0);
-            if (!gatt.writeCharacteristic(writeCharacteristic)) {
-                onSerialIoError(new IOException("write failed"));
-            } else {
-                Log.d(TAG, "write started, len=" + data0.length);
-            }
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (!gatt.writeCharacteristic(writeCharacteristic)) {
+                        onSerialIoError(new IOException("write failed"));
+                    } /*else {
+                        Log.d(TAG, "write started, len=" + data0.length);
+                    }*/
+                }
+            }, 500);
+
         }
         // continues asynchronously in onCharacteristicWrite()
     }
@@ -394,11 +414,17 @@ public class SerialSocket extends BluetoothGattCallback {
         }
         if (data != null) {
             writeCharacteristic.setValue(data);
-            if (!gatt.writeCharacteristic(writeCharacteristic)) {
-                onSerialIoError(new IOException("write failed"));
-            } else {
-                Log.d(TAG, "write started, len=" + data.length);
-            }
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (!gatt.writeCharacteristic(writeCharacteristic)) {
+                        onSerialIoError(new IOException("write failed"));
+                    } /*else {
+                        Log.d(TAG, "write started, len=" + data0.length);
+                    }*/
+                }
+            }, 500);
         }
     }
 

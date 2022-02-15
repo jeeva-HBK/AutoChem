@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.ionexchange.Activity.BaseActivity;
@@ -24,6 +25,7 @@ import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Singleton.KeepAlive;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -171,26 +173,35 @@ public class BluetoothHelper implements SerialListener {
                     try {
                         packetTimeout.start();
                         mTempCallback = getDataCallback();
-
-                        sendDataBLE(new DataReceiveCallback() {
+                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                             @Override
-                            public void OnDataReceive(String data) {
-                                dataCallback = mTempCallback;
-                                mConnectionListener.start();
-                                if (data.contains(mExpectedResponse)) {
-                                    isConnected = true;
-                                    bleConnected.set(true);
-                                    mConnectStatus = ConnectStatus.CONNECTED;
-                                    packetTimeout.cancel();
-                                } else {
-                                    isConnected = false;
-                                    bleConnected.set(false);
-                                    mConnectStatus = ConnectStatus.NOTCONNECTED;
-                                    mConnectionListener.start();
-                                }
+                            public void run() {
+                                try {
+                                    sendDataBLE(new DataReceiveCallback() {
+                                        @Override
+                                        public void OnDataReceive(String data) {
+                                            dataCallback = mTempCallback;
+                                            mConnectionListener.start();
+                                            if (data.contains(mExpectedResponse)) {
+                                                isConnected = true;
+                                                bleConnected.set(true);
+                                                mConnectStatus = ConnectStatus.CONNECTED;
+                                                packetTimeout.cancel();
+                                            } else {
+                                                isConnected = false;
+                                                bleConnected.set(false);
+                                                mConnectStatus = ConnectStatus.NOTCONNECTED;
+                                                mConnectionListener.start();
+                                            }
 
+                                        }
+                                    }, mConnectPacket);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        }, mConnectPacket);
+                        }, 500);
+
 
                     } catch (Exception e) {
                         dataCallback = mTempCallback;
@@ -299,7 +310,6 @@ public class BluetoothHelper implements SerialListener {
 
 
     public void sendDataBLE(DataReceiveCallback callback, String data) throws Exception {
-
         data = STARTPACKET + data + ENDPACKET;
         this.dataCallback = callback;
         SerialSocket socket = SerialSocket.getInstance();

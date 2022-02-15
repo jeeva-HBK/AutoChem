@@ -197,7 +197,7 @@ public class FragmentInputSensorModbus extends Fragment implements DataReceiveCa
                     getPositionFromAtxt(1, getStringValue(mBinding.modBusUnitMeasurementTie), modBusUnitArr) + SPILT_CHAR +
                     getStringValue(3, mBinding.modBusMinValueTie) + "." + getStringValue(2, mBinding.modbusMinDeciIsc) + SPILT_CHAR +
                     getStringValue(3, mBinding.modBusMaxValueTie) + "." + getStringValue(2, mBinding.modbusMaxDeciIsc) + SPILT_CHAR +
-                    getPositionFromAtxt(1, getStringValue(mBinding.modBusDiagnosticSweepTie), sensorActivationArr) + getStringValue(6, mBinding.modBusTimeTie) + SPILT_CHAR +
+                    (getPositionFromAtxt(1, getStringValue(mBinding.modBusDiagnosticSweepTie), sensorActivationArr).equals("1")  ? "0" : "1") + getStringValue(6, mBinding.modBusTimeTie) + SPILT_CHAR +
                     getStringValue(3, mBinding.modBusSmoothingFactorTie) + SPILT_CHAR +
                     getStringValue(3, mBinding.modBusAlarmLowTie) + "." + getStringValue(2, mBinding.modbusAlarmLowIsc) + SPILT_CHAR +
                     getStringValue(3, mBinding.modBusAlarmHighTie) + "." + getStringValue(2, mBinding.modbusAlarmHighIsc) + SPILT_CHAR +
@@ -320,8 +320,8 @@ public class FragmentInputSensorModbus extends Fragment implements DataReceiveCa
                         mBinding.modbusMinDeciIsc.setText(data[11].substring(4, 6));
                         mBinding.modBusMaxValueTie.setText(data[12].substring(0, 3));
                         mBinding.modbusMaxDeciIsc.setText(data[12].substring(4, 6));
-                        mBinding.modBusDiagnosticSweepTie.setText(mBinding.modBusDiagnosticSweepTie.getAdapter().getItem(Integer.parseInt(data[13].substring(0, 1))).toString());
-                        mBinding.setModbusType(data[13].substring(0, 1));
+                        mBinding.modBusDiagnosticSweepTie.setText(mBinding.modBusDiagnosticSweepTie.getAdapter().getItem(Integer.parseInt(data[13].substring(0, 1)) == 1 ? 0 : 1).toString());
+                        mBinding.setModbusType(data[13].substring(0, 1).equals("1") ? "0" : "1");
                         mBinding.modBusTimeTie.setText(data[13].substring(1, 7));
                         mBinding.modBusSmoothingFactorTie.setText(data[14]);
                         mBinding.modBusAlarmLowTie.setText(data[15].substring(0, 3));

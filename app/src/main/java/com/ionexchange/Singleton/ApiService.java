@@ -223,7 +223,7 @@ public class ApiService implements DataReceiveCallback {
                         }
                         break;
                     case "02":
-                         processUserList(responseObject.getJSONArray("DATA").
+                        processUserList(responseObject.getJSONArray("DATA").
                                 getJSONObject(0).getJSONArray("REQ"));
                        /* responseTabId = "02";
                         dataObj = new JSONObject();
@@ -354,6 +354,8 @@ public class ApiService implements DataReceiveCallback {
                         DB.alarmLogDao().updateLockAlarm(Integer.parseInt(spiltData[2]), "0");
                         new EventLogDemo("", "", "Diagnostic Sweep Acknowledged by #", SharedPref.read(pref_USERLOGINID, ""), mContext);
                         ApiService.getInstance(mContext).processApiData("1", "00", ("Diagnostic Sweep Acknowledged by #" + SharedPref.read(pref_USERLOGINID, "")));
+                        finalArr = new JSONArray();
+                        dataObj = new JSONObject();
                         dataObj.put("INPUTNO", "");
                         dataObj.put("REQ", "ACK");
                         dataObj.put("NAME_LABEL", "");
@@ -365,6 +367,8 @@ public class ApiService implements DataReceiveCallback {
                         dataObj.put("EVENT_TYPE", "");
                         finalArr.put(dataObj);
                     } else {
+                        finalArr = new JSONArray();
+                        dataObj = new JSONObject();
                         dataObj.put("INPUTNO", "");
                         dataObj.put("REQ", "ACK");
                         dataObj.put("NAME_LABEL", "");
@@ -488,6 +492,7 @@ public class ApiService implements DataReceiveCallback {
 
     private void nack() {
         try {
+            finalArr = new JSONArray();
             dataObj = new JSONObject();
             dataObj.put("INPUTNO", "");
             dataObj.put("REQ", "NACK");
@@ -556,6 +561,8 @@ public class ApiService implements DataReceiveCallback {
             } catch (JSONException e) {
                 e.printStackTrace();
                 try {
+                    finalArr = new JSONArray();
+                    dataObj = new JSONObject();
                     dataObj.put("INPUTNO", "");
                     dataObj.put("REQ", "NACK");
                     dataObj.put("NAME_LABEL", "");
@@ -582,7 +589,7 @@ public class ApiService implements DataReceiveCallback {
             ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
                 @Override
                 public void OnDataReceive(String data) {
-                    dataObj = new JSONObject();
+
                     responseTabId = "04";
                     try {
                         String[] splitData = jsonObject.getString("REQ").
@@ -648,16 +655,18 @@ public class ApiService implements DataReceiveCallback {
                                     sequenceName = "Tank Level -" + seqNo;
                                     flagValue = Integer.parseInt(splitData[splitData.length - 2]);
                                 }
-                               if(hardWareNo != 0) {
-                                   InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                                           (hardWareNo, inputTypeArr[Integer.parseInt(splitData[5])],
-                                                   sensorType, signalType, sequenceName, seqNo, inputLabel,
-                                                   lowAlarm, highAlarm, unit, type, flagValue,
-                                                   jsonObject.getString("REQ"));
-                                   List<InputConfigurationEntity> inputentryList = new ArrayList<>();
-                                   inputentryList.add(entityUpdate);
-                                   updateInputDB(inputentryList);
-                               }
+                                if(hardWareNo != 0) {
+                                    InputConfigurationEntity entityUpdate = new InputConfigurationEntity
+                                            (hardWareNo, inputTypeArr[Integer.parseInt(splitData[5])],
+                                                    sensorType, signalType, sequenceName, seqNo, inputLabel,
+                                                    lowAlarm, highAlarm, unit, type, flagValue,
+                                                    jsonObject.getString("REQ"));
+                                    List<InputConfigurationEntity> inputentryList = new ArrayList<>();
+                                    inputentryList.add(entityUpdate);
+                                    updateInputDB(inputentryList);
+                                }
+                                finalArr = new JSONArray();
+                                dataObj = new JSONObject();
                                 dataObj.put("INPUTNO", formDigits(2, String.valueOf(hardWareNo)));
                                 dataObj.put("REQ", "ACK");
                                 dataObj.put("NAME_LABEL", "");
@@ -669,6 +678,8 @@ public class ApiService implements DataReceiveCallback {
                                 dataObj.put("EVENT_TYPE", "");
                                 finalArr.put(dataObj);
                             } else {
+                                finalArr = new JSONArray();
+                                dataObj = new JSONObject();
                                 dataObj.put("INPUTNO", formDigits(2, String.valueOf(hardWareNo)));
                                 dataObj.put("REQ", "NACK");
                                 dataObj.put("NAME_LABEL", "");
@@ -695,7 +706,7 @@ public class ApiService implements DataReceiveCallback {
 
             Log.e(TAG, "writeInputConfiguration: " + jsonObject.getString("REQ"));
         } catch (Exception e) {
-             sendNack();
+            sendNack();
         }
         finalArr.put(dataObj);
 
@@ -703,6 +714,7 @@ public class ApiService implements DataReceiveCallback {
 
     private void sendNack() {
         try {
+            finalArr = new JSONArray();
             dataObj = new JSONObject();
             dataObj.put("INPUTNO", "");
             dataObj.put("REQ", "NACK");
@@ -742,6 +754,7 @@ public class ApiService implements DataReceiveCallback {
         } catch (Exception e) {
             e.printStackTrace();
             try {
+                finalArr = new JSONArray();
                 dataObj.put("INPUTNO", "");
                 dataObj.put("REQ", "NACK");
                 dataObj.put("NAME_LABEL", "");
@@ -799,6 +812,7 @@ public class ApiService implements DataReceiveCallback {
                             entryListUpdate.add(entityUpdate);
                             updateOutPutDB(entryListUpdate);
                         } else {
+                            finalArr = new JSONArray();
                             dataObj.put("INPUTNO", jsonObject.getString("INPUTNO"));
                             dataObj.put("REQ", "NACK");
                             dataObj.put("NAME_LABEL", "");
@@ -819,6 +833,7 @@ public class ApiService implements DataReceiveCallback {
         } catch (JSONException e) {
             e.printStackTrace();
             try {
+                finalArr = new JSONArray();
                 dataObj.put("INPUTNO", "");
                 dataObj.put("REQ", "NACK");
                 dataObj.put("NAME_LABEL", "");
@@ -854,6 +869,7 @@ public class ApiService implements DataReceiveCallback {
             } catch (JSONException e) {
                 e.printStackTrace();
                 try {
+                    finalArr = new JSONArray();
                     dataObj.put("INPUTNO", "");
                     dataObj.put("REQ", "NACK");
                     dataObj.put("NAME_LABEL", "");
@@ -904,6 +920,7 @@ public class ApiService implements DataReceiveCallback {
                     } catch (Exception e) {
                         e.printStackTrace();
                         try {
+                            finalArr = new JSONArray();
                             dataObj.put("INPUTNO", "");
                             dataObj.put("REQ", "NACK");
                             dataObj.put("NAME_LABEL", "");
@@ -925,6 +942,7 @@ public class ApiService implements DataReceiveCallback {
         } catch (JSONException e) {
             e.printStackTrace();
             try {
+                finalArr = new JSONArray();
                 dataObj.put("INPUTNO", "");
                 dataObj.put("REQ", "NACK");
                 dataObj.put("NAME_LABEL", "");
@@ -965,6 +983,7 @@ public class ApiService implements DataReceiveCallback {
             } catch (JSONException e) {
                 e.printStackTrace();
                 try {
+                    finalArr = new JSONArray();
                     dataObj.put("INPUTNO", "");
                     dataObj.put("REQ", "NACK");
                     dataObj.put("NAME_LABEL", "");
@@ -997,6 +1016,7 @@ public class ApiService implements DataReceiveCallback {
         } catch (JSONException e) {
             e.printStackTrace();
             try {
+                finalArr = new JSONArray();
                 dataObj.put("INPUTNO", "");
                 dataObj.put("REQ", "NACK");
                 dataObj.put("NAME_LABEL", "");
@@ -1130,6 +1150,7 @@ public class ApiService implements DataReceiveCallback {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
+                    finalArr = new JSONArray();
                     dataObj.put("INPUTNO", "");
                     dataObj.put("REQ", "NACK");
                     dataObj.put("NAME_LABEL", "");
@@ -1198,6 +1219,7 @@ public class ApiService implements DataReceiveCallback {
         } catch (JSONException e) {
             e.printStackTrace();
             try {
+                finalArr = new JSONArray();
                 dataObj.put("INPUTNO", "");
                 dataObj.put("REQ", "NACK");
                 dataObj.put("NAME_LABEL", "");
@@ -1222,7 +1244,7 @@ public class ApiService implements DataReceiveCallback {
             SharedPref.write(pref_CONTROLLERPASSWORD, siteDetailsObject.getJSONObject(0).getString("CONTROLLER_PASSWORD"));
             SharedPref.write(pref_CONTROLLERISACTIVE, (siteDetailsObject.getJSONObject(0).getString("ISACTIVE").equals("1")));
 
-             if (pck == 1) {
+            if (pck == 1) {
                 responseTabId = "03";
                 responseTabData = "ACK";
                 dataObj = new JSONObject();
@@ -1236,7 +1258,7 @@ public class ApiService implements DataReceiveCallback {
                 dataObj.put("TYPE", "");
                 dataObj.put("EVENT_TYPE", "");
                 finalArr.put(dataObj);
-             } else {
+            } else {
                 ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
                     @Override
                     public void OnDataReceive(String data) {
@@ -1292,6 +1314,7 @@ public class ApiService implements DataReceiveCallback {
         } catch (JSONException e) {
             e.printStackTrace();
             try {
+                finalArr = new JSONArray();
                 dataObj.put("INPUTNO", "");
                 dataObj.put("REQ", "NACK");
                 dataObj.put("NAME_LABEL", "");

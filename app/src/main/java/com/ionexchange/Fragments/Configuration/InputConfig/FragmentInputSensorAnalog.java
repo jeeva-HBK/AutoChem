@@ -391,7 +391,7 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
         } else if (data.equals("sendCatch")) {
             mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("Timeout")) {
-            mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
+            //mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
         } else if (data != null) {
             handleResponse(data.split("\\*")[1].split(RES_SPILT_CHAR));
         }
