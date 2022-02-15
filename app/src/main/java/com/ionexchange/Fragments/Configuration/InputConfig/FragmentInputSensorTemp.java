@@ -313,8 +313,10 @@ public class FragmentInputSensorTemp extends Fragment implements DataReceiveCall
         switch (flagValue) {
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(getStringValue(2, mBinding.tempInputNumberEdtIsc)), "N/A", "SENSOR", 0, "0",
-                                1, "N/A", "N/A", "N/A", "N/A", "N/A", 0, STARTPACKET + writePacket + ENDPACKET);
+                        (Integer.parseInt(getStringValue(2, mBinding.tempInputNumberEdtIsc)),
+                                mBinding.temSensorTypeAtxtIsc.getText().toString(), "SENSOR", 0, mBinding.temSeqNumberAtxtIsc.getText().toString(),
+                                Integer.parseInt(sensorSequence), getStringValue(0, mBinding.tempInputLabelEdtIsc), "N/A", "N/A",
+                                "N/A", "N/A", 0, STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
@@ -332,7 +334,7 @@ public class FragmentInputSensorTemp extends Fragment implements DataReceiveCall
                                 mBinding.temSensorTypeAtxtIsc.getText().toString(), "SENSOR", 0, mBinding.temSeqNumberAtxtIsc.getText().toString(),
                                 Integer.parseInt(sensorSequence), getStringValue(0, mBinding.tempInputLabelEdtIsc),
                                 getDecimalValue(mBinding.tempLowAlarmTBtn, mBinding.tempLowAlarmEdtIsc, 3, mBinding.tempLowAlarmDeciIsc, 2),
-                                getDecimalValue(mBinding.tempHighAlarmTBtn, mBinding.tempHighAlarmEdtIsc, 3, mBinding.tempHighAlarmDeciIsc, 2), "°C", "N/A", 1,
+                                getDecimalValue(mBinding.tempHighAlarmTBtn, mBinding.tempHighAlarmEdtIsc, 3, mBinding.tempHighAlarmDeciIsc, 2), "Â°C", "N/A", 1,
                                 STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListUpdate = new ArrayList<>();
                 entryListUpdate.add(entityUpdate);

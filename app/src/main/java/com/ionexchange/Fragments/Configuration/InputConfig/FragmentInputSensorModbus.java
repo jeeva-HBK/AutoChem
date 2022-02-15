@@ -474,8 +474,9 @@ public class FragmentInputSensorModbus extends Fragment implements DataReceiveCa
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.modBusInputNumberTie)),
-                                "N/A", "MODBUS", 0, "N/A", 1,
-                                "N/A", "N/A",
+                                mBinding.modBusSensorTypeTie.getText().toString(), "MODBUS", 0,
+                                mBinding.modBusTypeTie.getText().toString() + " - " + mBinding.modBusTypeOfValueReadTie.getText().toString(),
+                                1, getStringValue(0, mBinding.modBusInputLabelTie), "N/A",
                                 "N/A", "N/A", "N/A", 0,STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);

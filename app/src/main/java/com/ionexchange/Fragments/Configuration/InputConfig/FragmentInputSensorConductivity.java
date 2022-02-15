@@ -380,9 +380,9 @@ public class FragmentInputSensorConductivity extends Fragment implements DataRec
             case 2:
                 mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(getStringValue(2, mBinding.conInputNumberEdtIsc)), "N/A",
-                                "SENSOR", 0, "N/A",
-                                1, "N/A", "N/A", "N/A", "N/A", "N/A", 0,STARTPACKET + writePacket + ENDPACKET);
+                        (Integer.parseInt(getStringValue(2, mBinding.conInputNumberEdtIsc)), mBinding.conSensorTypeAtxtIsc.getText().toString(),
+                                "SENSOR", 0, mBinding.conSensorTypeAtxtIsc.getText().toString(),
+                                1, getStringValue(0, mBinding.conInputLabelEdtIsc), "N/A", "N/A", "N/A", "N/A", 0,STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);

@@ -597,9 +597,9 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
             case 2:
 
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(getStringValue(2, mBinding.analogInputNumberTie)), "N/A",
-                                "Analog", 0, "N/A",
-                                1, "N/A", "N/A", "N/A", "N/A", "N/A",
+                        (Integer.parseInt(getStringValue(2, mBinding.analogInputNumberTie)), mBinding.analogSensorTypeTie.getText().toString(),
+                                "Analog", 0,  mBinding.analogSequenceNumberTie.getText().toString(),
+                                Integer.parseInt(sequenceNo), getStringValue(0, mBinding.analogInputLabelTie), "N/A", "N/A", "N/A", "N/A",
                                 0, STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);

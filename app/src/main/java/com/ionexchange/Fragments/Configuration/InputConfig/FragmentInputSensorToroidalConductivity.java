@@ -371,8 +371,11 @@ public class FragmentInputSensorToroidalConductivity extends Fragment implements
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.candInputNumberEdtIsc)),
-                                "N/A", "SENSOR", 0, "N/A",
-                                1, "N/A", "N/A", "N/A", "N/A", "N/A", 0,STARTPACKET + writePacket + ENDPACKET);
+                                mBinding.candSensorTypeAtxtIsc.getText().toString(), "SENSOR",
+                                0, mBinding.candSensorTypeAtxtIsc.getText().toString(),
+                                1, getStringValue(0, mBinding.candInputLabelEdtIsc),
+                                "N/A", "N/A", "N/A", "N/A", 0,
+                                STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);

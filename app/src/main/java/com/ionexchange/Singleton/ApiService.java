@@ -194,6 +194,7 @@ public class ApiService implements DataReceiveCallback {
                         responseTabId = "00";
                         responseTabData = "";
                         if (SharedPref.read(pref_USERLOGINPASSWORDCHANED, "").equals("passwordChanged")) {
+                            finalArr = new JSONArray();
                             for (int i = 0; i < userManagementDao.getUsermanagementEntity().size(); i++) {
                                 dataObj = new JSONObject();
                                 dataObj.put("INPUTNO", "");
@@ -209,6 +210,7 @@ public class ApiService implements DataReceiveCallback {
                                 finalArr.put(dataObj);
                             }
                         } else {
+                            finalArr = new JSONArray();
                             dataObj = new JSONObject();
                             dataObj.put("INPUTNO", "");
                             dataObj.put("REQ", "");
@@ -283,6 +285,7 @@ public class ApiService implements DataReceiveCallback {
                         responseTabId = "00";
                         responseTabData = "";
                         if (SharedPref.read(pref_USERLOGINPASSWORDCHANED, "").equals("passwordChanged")) {
+                            finalArr = new JSONArray();
                             for (int i = 0; i < userManagementDao.getUsermanagementEntity().size(); i++) {
                                 dataObj = new JSONObject();
                                 dataObj.put("INPUTNO", "");
@@ -298,6 +301,7 @@ public class ApiService implements DataReceiveCallback {
                                 finalArr.put(dataObj);
                             }
                         } else {
+                            finalArr = new JSONArray();
                             dataObj = new JSONObject();
                             dataObj.put("INPUTNO", "");
                             dataObj.put("REQ", "");
@@ -405,6 +409,7 @@ public class ApiService implements DataReceiveCallback {
                                 if (spiltData[1].equals(OUTPUT_CONTROL_CONFIG)) {
                                     if (spiltData[2].equals(RES_SUCCESS)) {
                                         try {
+                                            finalArr = new JSONArray();
                                             dataObj = new JSONObject();
                                             dataObj.put("INPUTNO", "");
                                             dataObj.put("REQ", "ACK");
@@ -456,6 +461,7 @@ public class ApiService implements DataReceiveCallback {
                                     String hNo = jsonObject.getString("REQ").split("\\*")[1].split("\\$")[4];
                                     AlarmLogDao alarmLogDao = DB.alarmLogDao();
                                     alarmLogDao.updateLockAlarm(Integer.parseInt(hNo), "0");
+                                    finalArr = new JSONArray();
                                     dataObj = new JSONObject();
                                     dataObj.put("INPUTNO", "");
                                     dataObj.put("REQ", "ACK");
@@ -546,6 +552,7 @@ public class ApiService implements DataReceiveCallback {
     public void readInputConfiguration(String eventType) {
         responseTabId = "04";
         InputConfigurationDao inputDao = DB.inputConfigurationDao();
+        finalArr = new JSONArray();
         for (int i = 0; i < inputDao.getInputConfigurationEntityList().size(); i++) {
             dataObj = new JSONObject();
             try {
@@ -659,7 +666,7 @@ public class ApiService implements DataReceiveCallback {
                                     InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                                             (hardWareNo, inputTypeArr[Integer.parseInt(splitData[5])],
                                                     sensorType, signalType, sequenceName, seqNo, inputLabel,
-                                                    lowAlarm, highAlarm, unit, type, flagValue,
+                                                    lowAlarm, highAlarm, unit, type, flagValue == 2 ? 0 : 1 ,
                                                     jsonObject.getString("REQ"));
                                     List<InputConfigurationEntity> inputentryList = new ArrayList<>();
                                     inputentryList.add(entityUpdate);
@@ -736,6 +743,7 @@ public class ApiService implements DataReceiveCallback {
     public void readOutputConfiguration(String eventType) {
         responseTabId = "05";
         OutputConfigurationDao outputDao = DB.outputConfigurationDao();
+        finalArr = new JSONArray();
         try {
             for (int i = 0; i < outputDao.getOutputConfigurationEntityList().size(); i++) {
                 dataObj = new JSONObject();
@@ -755,6 +763,7 @@ public class ApiService implements DataReceiveCallback {
             e.printStackTrace();
             try {
                 finalArr = new JSONArray();
+                dataObj = new JSONObject();
                 dataObj.put("INPUTNO", "");
                 dataObj.put("REQ", "NACK");
                 dataObj.put("NAME_LABEL", "");
@@ -794,6 +803,8 @@ public class ApiService implements DataReceiveCallback {
                                     highAlarm = "Output- " + highAlarm.substring(1) + " (" + outputDAO.getOutputLabel(Integer.parseInt(highAlarm.substring(1))) + ")";
                                 }
                             }
+                            finalArr = new JSONArray();
+                            dataObj = new JSONObject();
                             dataObj.put("INPUTNO", jsonObject.getString("INPUTNO"));
                             dataObj.put("REQ", "ACK");
                             dataObj.put("NAME_LABEL", "");
@@ -813,6 +824,7 @@ public class ApiService implements DataReceiveCallback {
                             updateOutPutDB(entryListUpdate);
                         } else {
                             finalArr = new JSONArray();
+                            dataObj = new JSONObject();
                             dataObj.put("INPUTNO", jsonObject.getString("INPUTNO"));
                             dataObj.put("REQ", "NACK");
                             dataObj.put("NAME_LABEL", "");
@@ -834,6 +846,7 @@ public class ApiService implements DataReceiveCallback {
             e.printStackTrace();
             try {
                 finalArr = new JSONArray();
+                dataObj = new JSONObject();
                 dataObj.put("INPUTNO", "");
                 dataObj.put("REQ", "NACK");
                 dataObj.put("NAME_LABEL", "");
@@ -854,6 +867,7 @@ public class ApiService implements DataReceiveCallback {
     private void readVirtualConfiguration(String eventType) {
         responseTabId = "07";
         VirtualConfigurationDao virtualConfigurationDao = DB.virtualConfigurationDao();
+        finalArr = new JSONArray();
         for (int i = 0; i < virtualConfigurationDao.getVirtualConfigurationEntityList().size(); i++) {
             dataObj = new JSONObject();
             try {
@@ -870,6 +884,7 @@ public class ApiService implements DataReceiveCallback {
                 e.printStackTrace();
                 try {
                     finalArr = new JSONArray();
+                    dataObj = new JSONObject();
                     dataObj.put("INPUTNO", "");
                     dataObj.put("REQ", "NACK");
                     dataObj.put("NAME_LABEL", "");
@@ -907,6 +922,8 @@ public class ApiService implements DataReceiveCallback {
                         List<VirtualConfigurationEntity> virtualEntryList = new ArrayList<>();
                         virtualEntryList.add(entityUpdate);
                         updateVirtualDB(virtualEntryList);
+                        finalArr = new JSONArray();
+                        dataObj = new JSONObject();
                         dataObj.put("INPUTNO", String.valueOf(hardWareNo));
                         dataObj.put("REQ", "ACK");
                         dataObj.put("NAME_LABEL", "");
@@ -921,6 +938,7 @@ public class ApiService implements DataReceiveCallback {
                         e.printStackTrace();
                         try {
                             finalArr = new JSONArray();
+                            dataObj = new JSONObject();
                             dataObj.put("INPUTNO", "");
                             dataObj.put("REQ", "NACK");
                             dataObj.put("NAME_LABEL", "");
@@ -943,6 +961,7 @@ public class ApiService implements DataReceiveCallback {
             e.printStackTrace();
             try {
                 finalArr = new JSONArray();
+                dataObj = new JSONObject();
                 dataObj.put("INPUTNO", "");
                 dataObj.put("REQ", "NACK");
                 dataObj.put("NAME_LABEL", "");
@@ -963,6 +982,7 @@ public class ApiService implements DataReceiveCallback {
     private void readTimerConfiguration(String eventType) {
         responseTabId = "06";
         TimerConfigurationDao timerConfigurationDao = DB.timerConfigurationDao();
+        finalArr = new JSONArray();
         for (int i = 0; i < timerConfigurationDao.geTimerConfigurationEntityList().size(); i++) {
             dataObj = new JSONObject();
             try {
@@ -984,6 +1004,7 @@ public class ApiService implements DataReceiveCallback {
                 e.printStackTrace();
                 try {
                     finalArr = new JSONArray();
+                    dataObj = new JSONObject();
                     dataObj.put("INPUTNO", "");
                     dataObj.put("REQ", "NACK");
                     dataObj.put("NAME_LABEL", "");
@@ -1017,6 +1038,7 @@ public class ApiService implements DataReceiveCallback {
             e.printStackTrace();
             try {
                 finalArr = new JSONArray();
+                dataObj = new JSONObject();
                 dataObj.put("INPUTNO", "");
                 dataObj.put("REQ", "NACK");
                 dataObj.put("NAME_LABEL", "");
@@ -1104,7 +1126,6 @@ public class ApiService implements DataReceiveCallback {
                 if (splitData[0].equals("0") && splitData[1].equals("08") && splitData[2].equals("0")) {
                     timerFramePacket(splitTimer[1].substring(2, splitTimer[1].length() - 2));
                     weekly = 1;
-
                 } else if (splitData[0].equals("0") && splitData[1].equals("09") && splitData[2].equals("0")) {
                     switch (weekly) {
                         case 1:
@@ -1134,6 +1155,8 @@ public class ApiService implements DataReceiveCallback {
                             List<TimerConfigurationEntity> entryListUpdate = new ArrayList<>();
                             entryListUpdate.add(timerConfigurationEntity);
                             updateTimerDB(entryListUpdate);
+                            finalArr = new JSONArray();
+                            dataObj = new JSONObject();
                             dataObj.put("INPUTNO", String.valueOf(timerNo));
                             dataObj.put("REQ", "ACK");
                             dataObj.put("NAME_LABEL", "");
@@ -1146,11 +1169,14 @@ public class ApiService implements DataReceiveCallback {
                             finalArr.put(dataObj);
                             break;
                     }
+                } else{
+                    nack();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
                     finalArr = new JSONArray();
+                    dataObj = new JSONObject();
                     dataObj.put("INPUTNO", "");
                     dataObj.put("REQ", "NACK");
                     dataObj.put("NAME_LABEL", "");
@@ -1205,6 +1231,7 @@ public class ApiService implements DataReceiveCallback {
             dao.insert(userList.toArray(new UsermanagementEntity[0]));
             responseTabId = "02";
             responseTabData = "ACK";
+            finalArr = new JSONArray();
             dataObj = new JSONObject();
             dataObj.put("INPUTNO", "");
             dataObj.put("REQ", responseTabData);
@@ -1220,6 +1247,7 @@ public class ApiService implements DataReceiveCallback {
             e.printStackTrace();
             try {
                 finalArr = new JSONArray();
+                dataObj = new JSONObject();
                 dataObj.put("INPUTNO", "");
                 dataObj.put("REQ", "NACK");
                 dataObj.put("NAME_LABEL", "");
@@ -1247,6 +1275,7 @@ public class ApiService implements DataReceiveCallback {
             if (pck == 1) {
                 responseTabId = "03";
                 responseTabData = "ACK";
+                finalArr = new JSONArray();
                 dataObj = new JSONObject();
                 dataObj.put("INPUTNO", "");
                 dataObj.put("REQ", responseTabData);
@@ -1284,6 +1313,7 @@ public class ApiService implements DataReceiveCallback {
                         try {
                             responseTabId = "03";
                             responseTabData = "ACK";
+                            finalArr = new JSONArray();
                             dataObj = new JSONObject();
                             dataObj.put("INPUTNO", "");
                             dataObj.put("REQ", responseTabData);
@@ -1315,6 +1345,7 @@ public class ApiService implements DataReceiveCallback {
             e.printStackTrace();
             try {
                 finalArr = new JSONArray();
+                dataObj = new JSONObject();
                 dataObj.put("INPUTNO", "");
                 dataObj.put("REQ", "NACK");
                 dataObj.put("NAME_LABEL", "");

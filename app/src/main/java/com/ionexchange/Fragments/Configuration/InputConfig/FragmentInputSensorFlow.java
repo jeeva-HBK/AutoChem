@@ -921,8 +921,9 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.flowInputNumberEdtIsc)),
-                                "N/A", "FLOWMETER", 0, "N/A", 1,
-                                "N/A", "N/A",
+                                mBinding.flowSensorTypeAtxtIsc.getText().toString(), "FLOWMETER", 0,
+                                mBinding.flowSeqNumberAtxtIsc.getText().toString(),
+                                Integer.parseInt(sequenceNumber), getStringValue(0, mBinding.flowInputLabelEdtIsc), "N/A",
                                 "N/A", "N/A", "N/A", 0, STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);

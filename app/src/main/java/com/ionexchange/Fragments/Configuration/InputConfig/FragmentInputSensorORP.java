@@ -290,9 +290,9 @@ public class FragmentInputSensorORP extends Fragment implements DataReceiveCallb
         switch (flagValue) {
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(getStringValue(2, mBinding.orpInputNumberEdtIsc)), "N/A",
-                                "SENSOR", 0, "N/A",
-                                1, "N/A", "N/A", "N/A", "N/A","N/A",
+                        (Integer.parseInt(getStringValue(2, mBinding.orpInputNumberEdtIsc)), mBinding.orpSensorTypeAtxtIsc.getText().toString(),
+                                "SENSOR", 0, mBinding.orpSensorTypeAtxtIsc.getText().toString(),
+                                1, getStringValue(0, mBinding.orpInputLabelEdtIsc), "N/A", "N/A", "N/A","N/A",
                                 0,STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);

@@ -249,9 +249,9 @@ public class FragmentInputSensorTankLevel extends Fragment implements DataReceiv
         switch (flagValue) {
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
-                        (Integer.parseInt(getStringValue(2, mBinding.tankLevelInputNumberTie)), "N/A",
-                                "TANK", 1, "N/A",
-                                1, "N/A", "N/A",
+                        (Integer.parseInt(getStringValue(2, mBinding.tankLevelInputNumberTie)), mBinding.tankLevelInputSensorTypeTie.getText().toString(),
+                                "TANK", 1, mBinding.tankLevelSequenceNumberTie.getText().toString(),
+                                Integer.parseInt(sensorSequence), getStringValue(0, mBinding.tankLevelInputSensorLabelTie), "N/A",
                                 "N/A", "N/A","N/A", 0,STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);

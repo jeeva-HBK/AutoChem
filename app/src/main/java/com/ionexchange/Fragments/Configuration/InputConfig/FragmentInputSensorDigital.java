@@ -291,8 +291,10 @@ public class FragmentInputSensorDigital extends Fragment implements DataReceiveC
 
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.digitalInputNumberTie)),
-                                "N/A", "DIGITAL", 1, "N/A",1,
-                                "N/A", "N/A", "N/A", "N/A","N/A", 0,STARTPACKET + writePacket + ENDPACKET);
+                                mBinding.digitalInputSensorTypeTie.getText().toString(), "DIGITAL",
+                                1, mBinding.digitalLevelSequenceNumberTie.getText().toString(),
+                                Integer.parseInt(sensorSequence), getStringValue(0, mBinding.digitalInputSensorLabelTie),
+                                "N/A", "N/A", "N/A","N/A", 0,STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);

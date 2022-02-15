@@ -348,13 +348,13 @@ public class FragmentInputSensorPh extends Fragment implements DataReceiveCallba
             case 2:
                 InputConfigurationEntity entityDelete = new InputConfigurationEntity
                         (Integer.parseInt(getStringValue(2, mBinding.phInputNumberEdtIsc)),
-                                "N/A", "SENSOR", 0, "N/A",
-                                1, "N/A", "N/A", "N/A", "N/A", "N/A", 0,
+                                mBinding.phSensorTypeAtxtIsc.getText().toString(), "SENSOR", 0, mBinding.phSensorTypeAtxtIsc.getText().toString(),
+                                1, getStringValue(0, mBinding.phInputLabelEdtIsc), "N/A", "N/A", "N/A", "N/A", 0,
                                 STARTPACKET + writePacket + ENDPACKET);
                 List<InputConfigurationEntity> entryListDelete = new ArrayList<>();
                 entryListDelete.add(entityDelete);
                 updateToDb(entryListDelete);
-                new EventLogDemo(inputNumber, "Ph", "Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""), getContext());
+                new EventLogDemo(inputNumber, "pH", "Input Setting Deleted", SharedPref.read(pref_USERLOGINID, ""), getContext());
                 ApiService.tempString = "0";
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Deleted - " +
                         SharedPref.read(pref_USERLOGINID, ""));
@@ -373,7 +373,7 @@ public class FragmentInputSensorPh extends Fragment implements DataReceiveCallba
                 entryListUpdate.add(entityUpdate);
                 updateToDb(entryListUpdate);
                 mainConfigurationDao.updateAddSensorValue(1, Integer.parseInt(inputNumber));
-                new EventLogDemo(inputNumber, "Ph", "Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""), getContext());
+                new EventLogDemo(inputNumber, "pH", "Input Setting Changed", SharedPref.read(pref_USERLOGINID, ""), getContext());
                 ApiService.tempString = "0";
                 ApiService.getInstance(getContext()).processApiData(READ_PACKET, "04", "Input Setting Changed - " +
                         SharedPref.read(pref_USERLOGINID, ""));

@@ -209,10 +209,11 @@ public class ApplicationClass extends Application {
     public static int userType;
     public static RequestQueue requestQueue;
     // public final static String baseURL = "http://192.168.1.82/WaterIOT.API/api/";
-    // public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
+    public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
+
     //public final static String baseURL = "http://183.82.35.93/WaterIOT.API/api/";
     //public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
-    public final static String baseURL = "http://183.82.35.93/Water.API/api/";
+    //public final static String baseURL = "http://183.82.35.93/Water.API/api/";
 
 
     public static ObservableBoolean triggerWebService = new ObservableBoolean(false);
@@ -651,7 +652,7 @@ public class ApplicationClass extends Application {
                         writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$04$1$0$Contacting$0$+033.00$0$01.00$0$00.00$000$000000.00$300000.00$000$0$2*}";
                     } else {
                         sequenceName = "Toroidal Conductivity";
-                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$05$1$0$Torodial$0$+033.00$0$0$00.00$000$0000000.00$2000000.00$000$0$2*}";
+                        writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$05$1$0$Toroidial$0$+033.00$0$0$00.00$000$0000000.00$2000000.00$000$0$2*}";
                     }
                 } else if (i < 15) {
                     sensorType = "MODBUS";
