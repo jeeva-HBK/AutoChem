@@ -753,7 +753,12 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     private static void startReconnect() {
         Log.e(TAG, "Reconnect: start");
         if (attemptTxt != null) {
-            attemptTxt.setText("attempt : " + retryCount + "/3");
+            baseActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    attemptTxt.setText("attempt : " + retryCount + "/3");
+                }
+            });
         }
         if (retryCount < 3) {
             Log.e(TAG, "run: scan will start in 5 sec");

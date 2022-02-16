@@ -495,7 +495,24 @@ public class ApiService implements DataReceiveCallback {
             e.printStackTrace();
         }
     }
-
+    private void packetProcessingAck() {
+        try {
+            finalArr = new JSONArray();
+            dataObj = new JSONObject();
+            dataObj.put("INPUTNO", "");
+            dataObj.put("REQ", "PROCESS");
+            dataObj.put("NAME_LABEL", "");
+            dataObj.put("LEFT_LABEL", "");
+            dataObj.put("RIGHT_LABEL", "");
+            dataObj.put("SEQUENCE_NO", "");
+            dataObj.put("UNIT", "");
+            dataObj.put("TYPE", "");
+            dataObj.put("EVENT_TYPE", "");
+            finalArr.put(dataObj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     private void nack() {
         try {
             finalArr = new JSONArray();
@@ -1392,6 +1409,9 @@ public class ApiService implements DataReceiveCallback {
             JSONObject responseObj = new JSONObject();
             responseObj.put("JSON_SUB_ID", responseTabId);
             responseObj.put("PACKET_TYPE", packetType + "$" + tempString);
+            if(finalArr.length() == 0){
+                packetProcessingAck();
+            }
             responseObj.put("DATA", finalArr);
             return responseObj;
         } catch (JSONException e) {

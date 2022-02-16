@@ -1,6 +1,7 @@
 package com.ionexchange.Fragments.Configuration.TimerConfig;
 
 import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.ApplicationClass.accessoryTimerMode;
 import static com.ionexchange.Others.ApplicationClass.accessoryType;
 import static com.ionexchange.Others.ApplicationClass.bleedRelay;
@@ -236,6 +237,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
     @Override
     public void onResume() {
         super.onResume();
+        showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                 SPILT_CHAR + READ_PACKET + SPILT_CHAR +
                 PCK_TIMER_CONFIG + SPILT_CHAR + timerNo);
@@ -306,7 +308,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                                 startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
                         break;
                     case 7:
-                        setWeekDatas(timerOne[24], timerOne[25], timerOne[26], enableSchedule, startHourDay,
+                        setWeekDatas(timerOne[24], timerOne[25],  timerOne[26].length() == 6 ? timerOne[26] :timerOne[26].substring(0,timerOne[26].length() - 2), enableSchedule, startHourDay,
                                 startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
                         break;
                 }
@@ -341,7 +343,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                                 startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
                         break;
                     case 7:
-                        setWeekDatas(timerTwo[24], timerTwo[25], timerTwo[26], enableSchedule, startHourDay,
+                        setWeekDatas(timerTwo[24], timerTwo[25],  timerTwo[26].length() == 6 ? timerTwo[26] :timerTwo[26].substring(0,timerTwo[26].length() - 2), enableSchedule, startHourDay,
                                 startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
                         break;
                 }
@@ -376,7 +378,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                                 startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
                         break;
                     case 7:
-                        setWeekDatas(timerThree[24], timerThree[25], timerThree[26], enableSchedule, startHourDay,
+                        setWeekDatas(timerThree[24], timerThree[25], timerThree[26].length() == 6 ? timerThree[26] : timerThree[26].substring(0,timerThree[26].length() - 2), enableSchedule, startHourDay,
                                 startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
                         break;
                 }
@@ -411,7 +413,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                                 startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
                         break;
                     case 7:
-                        setWeekDatas(timerFour[24], timerFour[25], timerFour[26], enableSchedule, startHourDay,
+                        setWeekDatas(timerFour[24], timerFour[25],  timerFour[26].length() == 6 ? timerFour[26] : timerFour[26].substring(0,timerFour[26].length() - 2), enableSchedule, startHourDay,
                                 startMinDay, startSecDay, endHourDay, endMinDay, endSecDay);
                         break;
                 }
@@ -781,10 +783,12 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
 
     @Override
     public void OnDataReceive(String data) {
-        dismissProgress();
+
         if (data.equals("FailedToConnect") || data.equals("pckError") || data.equals("sendCatch")) {
+            dismissProgress();
           //  mAppClass.showSnackBar(getContext(), getString(R.string.connection_failed));
         } else if (data.equals("Timeout")) {
+            // dismissProgress();
            // mAppClass.showSnackBar(getContext(), getString(R.string.timeout));
         } else if (data != null) {
             handleResponse(data.split(RES_SPILT_CHAR), 0);
@@ -795,7 +799,6 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
     private void handleResponse(String[] splitData, int mode) {
         //Timer
         try {
-
             if (splitData[0].equals("{*1") && splitData[1].equals("08")) {
                 accessoryTimer = splitData;
                 mBinding.timerNameTxt.setText(splitData[4]);
@@ -820,9 +823,10 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                     dao.updateTimer(mBinding.timerNameTxt.getText().toString(),
                             mBinding.txtOutputNameValueAct.getText().toString(), mBinding.txtModeValueAct.getText().toString(), timerNum);
                     writeWeeklySchedule(week1, timerOne, 1);
-                    timerEntity();
+                   // timerEntity();
                 }
                 if (splitData[2].equals("1*}")) {
+                    dismissProgress();
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }
             }
@@ -869,6 +873,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                             mBinding.weekCheckbox4.setBackground(getResources().getDrawable(R.drawable.four_cheched));
                         }
                         setWeekBackground(splitData);
+                        dismissProgress();
                         handleResponse(timerOne, 1);
                     }
                 }
@@ -894,7 +899,6 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
 
             if (splitData[0].equals("{*0") && splitData[1].equals("09")) {
                 if (splitData[2].equals("0*}")) {
-                    mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
                     switch (loopWeeklyPacket) {
                         case 1:
                             writeWeeklySchedule(week2, timerTwo, 2);
@@ -903,11 +907,18 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                             writeWeeklySchedule(week3, timerThree, 3);
                             break;
                         case 3:
-                            writeWeeklySchedule(week4, timerFour, 0);
+                            writeWeeklySchedule(week4, timerFour, 4);
+                            break;
+                        case 4:
+                            dismissProgress();
+                            mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
+                            timerEntity();
                             break;
                     }
+
                 }
                 if (splitData[2].equals("1*}")) {
+                    dismissProgress();
                     mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
                 }
             }
@@ -915,8 +926,10 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
 
 
         } catch (Exception e) {
+            dismissProgress();
             e.printStackTrace();
         }
+
     }
 
     private void setWeekBackground(String[] splitData) {
@@ -1112,7 +1125,6 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
     }
 
     void writeWeeklySchedule(String week, String[] weekType, int loop) {
-
         weeklyPacket = DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE +
                 SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                 PCK_WEEKLY_CONFIG + SPILT_CHAR + timerNo
@@ -1138,14 +1150,24 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                 + SPILT_CHAR + weekType[23]
                 + SPILT_CHAR + weekType[24]
                 + SPILT_CHAR + weekType[25]
-                + SPILT_CHAR + weekType[26].substring(0, weekType[26].length() - 2);
+                + SPILT_CHAR + (weekType[26].length() == 6 ?
+                weekType[26] : weekType[26].substring(0, weekType[26].length() - 2));
         mAppClass.sendPacket(this, weeklyPacket);
-
-        weeklyPacketOne = STARTPACKET + weeklyPacket;
-        weeklyPacketTwo = STARTPACKET + weeklyPacket;
-        weeklyPacketThree = STARTPACKET + weeklyPacket;
-        weeklyPacketFour = STARTPACKET + weeklyPacket;
-        loopWeeklyPacket = loop;
+       switch (loop){
+           case 1:
+               weeklyPacketOne = STARTPACKET + weeklyPacket + ENDPACKET;
+               break;
+           case 2:
+               weeklyPacketTwo = STARTPACKET + weeklyPacket + ENDPACKET;
+               break;
+           case 3:
+               weeklyPacketThree = STARTPACKET + weeklyPacket + ENDPACKET;
+               break;
+           case 4:
+               weeklyPacketFour = STARTPACKET + weeklyPacket + ENDPACKET;
+               break;
+       }
+       loopWeeklyPacket = loop;
     }
 
     boolean accessoryTimeValidation() {
