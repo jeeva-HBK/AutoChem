@@ -283,18 +283,9 @@ public class SerialSocket extends BluetoothGattCallback {
             onSerialConnectError(new IOException("no indication/notification for read characteristic (" + readProperties + ")"));
             return;
         }
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                if (!gatt.writeDescriptor(readDescriptor)) {
-                    onSerialConnectError(new IOException("read characteristic CCCD descriptor not writable"));
-                }
-            }
-        }, 500);
-        Log.d(TAG, "writing read characterictic descriptor");
-
-        Log.d(TAG, "writing read characteristic descriptor");
+        if (!gatt.writeDescriptor(readDescriptor)) {
+            onSerialConnectError(new IOException("read characteristic CCCD descriptor not writable"));
+        }
         // continues asynchronously in onDescriptorWrite()
     }
 

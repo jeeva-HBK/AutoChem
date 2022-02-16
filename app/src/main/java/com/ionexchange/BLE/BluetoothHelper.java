@@ -17,7 +17,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
 import com.ionexchange.Activity.BaseActivity;
@@ -25,7 +24,6 @@ import com.ionexchange.Interface.DataReceiveCallback;
 import com.ionexchange.Others.ApplicationClass;
 import com.ionexchange.Singleton.KeepAlive;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -173,36 +171,29 @@ public class BluetoothHelper implements SerialListener {
                     try {
                         packetTimeout.start();
                         mTempCallback = getDataCallback();
-                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    sendDataBLE(new DataReceiveCallback() {
-                                        @Override
-                                        public void OnDataReceive(String data) {
-                                            dataCallback = mTempCallback;
-                                            mConnectionListener.start();
-                                            if (data.contains(mExpectedResponse)) {
-                                                isConnected = true;
-                                                bleConnected.set(true);
-                                                mConnectStatus = ConnectStatus.CONNECTED;
-                                                packetTimeout.cancel();
-                                            } else {
-                                                isConnected = false;
-                                                bleConnected.set(false);
-                                                mConnectStatus = ConnectStatus.NOTCONNECTED;
-                                                mConnectionListener.start();
-                                            }
+                        try {
+                            sendDataBLE(new DataReceiveCallback() {
+                                @Override
+                                public void OnDataReceive(String data) {
+                                    dataCallback = mTempCallback;
+                                    mConnectionListener.start();
+                                    if (data.contains(mExpectedResponse)) {
+                                        isConnected = true;
+                                        bleConnected.set(true);
+                                        mConnectStatus = ConnectStatus.CONNECTED;
+                                        packetTimeout.cancel();
+                                    } else {
+                                        isConnected = false;
+                                        bleConnected.set(false);
+                                        mConnectStatus = ConnectStatus.NOTCONNECTED;
+                                        mConnectionListener.start();
+                                    }
 
-                                        }
-                                    }, mConnectPacket);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
                                 }
-                            }
-                        }, 500);
-
-
+                            }, mConnectPacket);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     } catch (Exception e) {
                         dataCallback = mTempCallback;
                         mConnectionListener.start();
