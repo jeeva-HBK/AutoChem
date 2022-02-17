@@ -1213,7 +1213,7 @@
                     android:id="@+id/sensor_lockoutTimeDelay_edt_osc"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="lockOut Time Delay (In Mins)"
+                    android:hint="lockOut Delay (In mins)"
                     android:imeOptions="actionDone"
                     android:inputType="number"
                     android:maxLength="5"
@@ -1450,7 +1450,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
             <!--Input Max-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/pid_inputMax_root_osc"
@@ -1525,6 +1524,7 @@
                     app:layout_constraintTop_toTopOf="@+id/pid_inputMax_til_osc" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <!--Output Min-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/pid_minOutput_til_osc"
@@ -1760,7 +1760,7 @@
                     android:id="@+id/pid_lockoutDelay_edt_osc"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Lockout Delay"
+                    android:hint="Lockout Delay (In mins)"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="5"

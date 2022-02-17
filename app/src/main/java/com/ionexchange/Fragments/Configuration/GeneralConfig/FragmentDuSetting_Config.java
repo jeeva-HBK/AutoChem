@@ -198,20 +198,23 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
             @Override
             public void OnDataReceive(String data) {
                 if (data != null) {
-                    if (data.split("\\*")[1].split("\\$")[2].equals("0")) {
-                        dataReceived[0] = true;
-                        dismissProgress();
-                        if (mAppclass.factoryRest()) {
-                            mAppclass.showSnackBar(getContext(), "Factory Reset Success");
-                            new EventLogDemo("", "", "Factory Reset by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
-                            ApiService.getInstance(getContext()).processApiData("1", "00", ("Factory Reset by #" + SharedPref.read(pref_USERLOGINID, "")));
+                    if (!data.equals("Timeout")) {
+                        String[] splitData = data.split("\\*")[1].split("\\$");
+                        if (splitData[2].equals("0")) {
+                            dataReceived[0] = true;
+                            dismissProgress();
+                            if (mAppclass.factoryRest()) {
+                                mAppclass.showSnackBar(getContext(), "Factory Reset Success");
+                                new EventLogDemo("", "", "Factory Reset by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
+                                ApiService.getInstance(getContext()).processApiData("1", "00", ("Factory Reset by #" + SharedPref.read(pref_USERLOGINID, "")));
+                            } else {
+                                mAppclass.showSnackBar(getContext(), "Factory Reset Failed, try again later");
+                            }
+                            dialog.dismiss();
                         } else {
-                            mAppclass.showSnackBar(getContext(), "Factory Reset Failed, try again later");
+                            dialog.dismiss();
+                            mAppclass.showSnackBar(getContext(), "Factory Reset Failed");
                         }
-                        dialog.dismiss();
-                    } else {
-                        dialog.dismiss();
-                        mAppclass.showSnackBar(getContext(), "Factory Reset Failed");
                     }
                 }
             }
@@ -223,6 +226,8 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
                 if (!dataReceived[0]) {
                     dismissProgress();
                     mAppclass.showSnackBar(getContext(), "Factory Reset Failed, try again later");
+                } else {
+                    dataReceived[0] = false;
                 }
             }
         }, 10000);

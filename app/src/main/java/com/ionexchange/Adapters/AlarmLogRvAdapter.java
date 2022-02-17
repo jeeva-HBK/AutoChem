@@ -1,5 +1,7 @@
 package com.ionexchange.Adapters;
 
+import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,7 +90,7 @@ public class AlarmLogRvAdapter extends RecyclerView.Adapter<AlarmLogRvAdapter.it
             @Override
             public void onClick(View v) {
                 btnOnClick.OnItemClick(alarmLogEntityList.get(position).sNo, Integer.parseInt(alarmLogEntityList.get(position).hardwareNo),
-                        holder.button, alarmLogEntityList.get(position).lockOutAlarm);
+                        holder.button, alarmLogEntityList.get(position).getSensorType());
             }
         });
     }

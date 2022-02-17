@@ -73,6 +73,7 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
 
         mBinding.sync.setOnClickListener(view1 -> {
             if (!mBinding.alarmDelayEdtIsc.getText().toString().equals("")) {
+                // should check 59_Min
                 showProgress();
                 mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
                         CONN_TYPE + SPILT_CHAR +
@@ -197,7 +198,6 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
         super.onResume();
         readData();
         setSiteDetailsFromPref();
-        dismissProgress();
     }
 
     private void setSiteDetailsFromPref() {
@@ -258,6 +258,7 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
     }*/
 
     private void readData() {
+        showProgress();
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_GENERAL);
     }
 

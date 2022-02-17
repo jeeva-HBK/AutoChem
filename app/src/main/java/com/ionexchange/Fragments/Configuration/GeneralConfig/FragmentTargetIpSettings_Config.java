@@ -1,5 +1,7 @@
 package com.ionexchange.Fragments.Configuration.GeneralConfig;
 
+import static com.ionexchange.Activity.BaseActivity.dismissProgress;
+import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.ApplicationClass.mPortNumber;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
@@ -106,7 +108,6 @@ public class FragmentTargetIpSettings_Config extends Fragment implements DataRec
     }
 
     private void readData() {
-
         mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + READ_PACKET + SPILT_CHAR + PCK_target_ip);
     }
 

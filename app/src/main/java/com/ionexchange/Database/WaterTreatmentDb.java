@@ -46,7 +46,7 @@ import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
         DefaultLayoutConfigurationEntity.class, MainConfigurationEntity.class,
         KeepAliveCurrentEntity.class, DiagnosticDataEntity.class, UsermanagementEntity.class,
         OutputKeepAliveEntity.class, CalibrationEntity.class, AlarmLogEntity.class,
-        EventLogEntity.class, TrendEntity.class}, version = 1, exportSchema = true)
+        EventLogEntity.class, TrendEntity.class}, version = 1, exportSchema = false)
 @TypeConverters(Converters.class)
 
 public abstract class WaterTreatmentDb extends RoomDatabase {

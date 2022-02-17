@@ -161,23 +161,23 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
     public void OnDataReceive(String data) { }
 
     @Override
-    public void OnItemClick(int sNo,int hardwareNo, Button button, String lockOutAlarm) {
-        if (hardwareNo >= 5 && hardwareNo <=14) {
-            alarmLogDao.updateLockAlarm(hardwareNo, "0");
+    public void OnItemClick(int sNo, int hardwareNo, Button button, String sensorType) {
+        if (sensorType.equals("IN") && hardwareNo >= 5 && hardwareNo <= 14) {
+            alarmLogDao.updateLockAlarm(hardwareNo, "0", sensorType);
             button.setVisibility(View.INVISIBLE);
-            new EventLogDemo("", "", "Diagnostic Sweep Acknowledged by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
+            new EventLogDemo(String.valueOf(hardwareNo), "IN", "Diagnostic Sweep Acknowledged by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
             ApiService.getInstance(getContext()).processApiData("1", "00", ("Diagnostic Sweep Acknowledged by #" + SharedPref.read(pref_USERLOGINID, "")));
-        } else {
+        } else if (sensorType.equals("OP")) {
             mAppClass.sendPacket(new DataReceiveCallback() {
                 @Override
                 public void OnDataReceive(String data) {
                     String[] splitData = data.split("\\*")[1].split("\\$");
                     if (splitData[0].equals(WRITE_PACKET)) {
                         if (splitData[1].equals(PCK_LOCKOUT)) {
-                            if (splitData[2].equals("1")) {
-                                alarmLogDao.updateLockAlarm(hardwareNo, "0");
+                            if (splitData[2].equals("0")) {
+                                alarmLogDao.updateLockAlarm(hardwareNo, "0", sensorType);
                                 button.setVisibility(View.INVISIBLE);
-                                new EventLogDemo("", "", "LockOut Alarm Acknowledged by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
+                                new EventLogDemo(String.valueOf(hardwareNo), "OP", "LockOut Alarm Acknowledged by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
                                 ApiService.getInstance(getContext()).processApiData("1", "00", ("LockOut Alarm Acknowledged by #" + SharedPref.read(pref_USERLOGINID, "")));
                             } else {
                                 mAppClass.showSnackBar(getContext(), "Acknowledgement Failed");

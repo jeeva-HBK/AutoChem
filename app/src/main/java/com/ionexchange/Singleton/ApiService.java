@@ -266,16 +266,16 @@ public class ApiService implements DataReceiveCallback {
                                 getJSONObject(0));
                         break;
 
-                    case "08": // todo : Should Change
+                    case "10": // todo : Should Change
                         writeLockOutAck(responseObject.getJSONArray("DATA").
                                 getJSONObject(0));
                         break;
 
-                    case "09": // todo : Should Change
-                        writeLockOut(responseObject.getJSONArray("DATA").getJSONObject(0));
+                    case "11": // todo : Should Change
+                        writeOutputControl(responseObject.getJSONArray("DATA").getJSONObject(0));
                         break;
 
-                    case "10": // todo : Should Change
+                    case "12": // todo : Should Change
                         writeDiagnosticSweep(responseObject.getJSONArray("DATA").getJSONObject(0));
                         break;
                 }
@@ -349,18 +349,19 @@ public class ApiService implements DataReceiveCallback {
     }
 
     private void writeDiagnosticSweep(JSONObject data) {
+        responseTabId = "12";
         try {
             String[] spiltData = data.getString("REQ").split("\\*")[1].split("\\$");
             // ex req -> {*0$11$05$0*}
             if (spiltData[0].equals(WRITE_PACKET)) {
                 if (spiltData[1].equals(PCK_DIAGNOSTIC)) {
                     if (spiltData[3].equals(RES_SUCCESS)) {
-                        DB.alarmLogDao().updateLockAlarm(Integer.parseInt(spiltData[2]), "0");
-                        new EventLogDemo("", "", "Diagnostic Sweep Acknowledged by #", SharedPref.read(pref_USERLOGINID, ""), mContext);
+                        DB.alarmLogDao().updateLockAlarm(Integer.parseInt(spiltData[2]), "0", "IN");
+                        new EventLogDemo(spiltData[2], "IN", "Diagnostic Sweep Acknowledged by #", SharedPref.read(pref_USERLOGINID, ""), mContext);
                         ApiService.getInstance(mContext).processApiData("1", "00", ("Diagnostic Sweep Acknowledged by #" + SharedPref.read(pref_USERLOGINID, "")));
                         finalArr = new JSONArray();
                         dataObj = new JSONObject();
-                        dataObj.put("INPUTNO", "");
+                        dataObj.put("INPUTNO", spiltData[2]);
                         dataObj.put("REQ", "ACK");
                         dataObj.put("NAME_LABEL", "");
                         dataObj.put("LEFT_LABEL", "");
@@ -371,19 +372,7 @@ public class ApiService implements DataReceiveCallback {
                         dataObj.put("EVENT_TYPE", "");
                         finalArr.put(dataObj);
                     } else {
-                        finalArr = new JSONArray();
-                        dataObj = new JSONObject();
-                        dataObj.put("INPUTNO", "");
-                        dataObj.put("REQ", "ACK");
-                        dataObj.put("NAME_LABEL", "");
-                        dataObj.put("LEFT_LABEL", "");
-                        dataObj.put("RIGHT_LABEL", "");
-                        dataObj.put("SEQUENCE_NO", "");
-                        dataObj.put("UNIT", "");
-                        dataObj.put("TYPE", "");
-                        dataObj.put("EVENT_TYPE", "");
-                        finalArr.put(dataObj);
-                        // do nothing
+                        nack();
                     }
                 } else {
                     nack();
@@ -397,21 +386,22 @@ public class ApiService implements DataReceiveCallback {
 
     }
 
-    private void writeLockOut(JSONObject data) {
+    private void writeOutputControl(JSONObject data) {
+        responseTabId = "11";
         try {
             ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
                 @Override
-                public void OnDataReceive(String data) {
-                    if (data != null) {
-                        if (data.equals("Timeout")) {
-                            String[] spiltData = data.split("\\*")[1].split("\\$");
+                public void OnDataReceive(String bleData) {
+                    if (bleData != null) {
+                        if (!bleData.equals("Timeout")) {
+                            String[] spiltData = bleData.split("\\*")[1].split("\\$");
                             if (spiltData[0].equals(WRITE_PACKET)) {
                                 if (spiltData[1].equals(OUTPUT_CONTROL_CONFIG)) {
                                     if (spiltData[2].equals(RES_SUCCESS)) {
                                         try {
                                             finalArr = new JSONArray();
                                             dataObj = new JSONObject();
-                                            dataObj.put("INPUTNO", "");
+                                            dataObj.put("INPUTNO", data.getString("REQ").substring(2, data.getString("REQ").length() - 2).split("\\*")[1].split("\\$")[4]);
                                             dataObj.put("REQ", "ACK");
                                             dataObj.put("NAME_LABEL", "");
                                             dataObj.put("LEFT_LABEL", "");
@@ -447,35 +437,40 @@ public class ApiService implements DataReceiveCallback {
     }
 
     private void writeLockOutAck(JSONObject jsonObject) {
+        responseTabId = "10";
         try {
             ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
                 @Override
                 public void OnDataReceive(String data) {
-                    String[] splitData = data.split("\\*")[1].split("\\$");
-                    if (splitData[0].equals(WRITE_PACKET)) {
-                        if (splitData[1].equals(PCK_LOCKOUT)) {
-                            if (splitData[2].equals("1")) {
-                                // processApiData("1", "00", ("LockOut Alarm Acknowledged by #" + SharedPref.read(pref_USERLOGINID, "")));
-                                // Ack
-                                try {
-                                    String hNo = jsonObject.getString("REQ").split("\\*")[1].split("\\$")[4];
-                                    AlarmLogDao alarmLogDao = DB.alarmLogDao();
-                                    alarmLogDao.updateLockAlarm(Integer.parseInt(hNo), "0");
-                                    finalArr = new JSONArray();
-                                    dataObj = new JSONObject();
-                                    dataObj.put("INPUTNO", "");
-                                    dataObj.put("REQ", "ACK");
-                                    dataObj.put("NAME_LABEL", "");
-                                    dataObj.put("LEFT_LABEL", "");
-                                    dataObj.put("RIGHT_LABEL", "");
-                                    dataObj.put("SEQUENCE_NO", "");
-                                    dataObj.put("UNIT", "");
-                                    dataObj.put("TYPE", "");
-                                    dataObj.put("EVENT_TYPE", "");
-                                    finalArr.put(dataObj);
-                                    new EventLogDemo("", "", "LockOut Alarm Acknowledged by #", jsonObject.getString("EVENT_TYPE"), mContext);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                    if (!data.equals("Timeout")){
+                        String[] splitData = data.split("\\*")[1].split("\\$");
+                        if (splitData[0].equals(WRITE_PACKET)) {
+                            if (splitData[1].equals(PCK_LOCKOUT)) {
+                                if (splitData[2].equals("0")) {
+                                    try {
+                                        String hNo = jsonObject.getString("REQ").split("\\*")[1].split("\\$")[4];
+                                        finalArr = new JSONArray();
+                                        dataObj = new JSONObject();
+                                        dataObj.put("INPUTNO", hNo);
+                                        dataObj.put("REQ", "ACK");
+                                        dataObj.put("NAME_LABEL", "");
+                                        dataObj.put("LEFT_LABEL", "");
+                                        dataObj.put("RIGHT_LABEL", "");
+                                        dataObj.put("SEQUENCE_NO", "");
+                                        dataObj.put("UNIT", "");
+                                        dataObj.put("TYPE", "");
+                                        dataObj.put("EVENT_TYPE", "LockOut Alarm Acknowledged by #" + jsonObject.getString("EVENT_TYPE"));
+                                        finalArr.put(dataObj);
+
+                                        AlarmLogDao alarmLogDao = DB.alarmLogDao();
+                                        alarmLogDao.updateLockAlarm(Integer.parseInt(hNo), "0", "OP");
+                                        new EventLogDemo(hNo, "OP", "LockOut Alarm Acknowledged by #", jsonObject.getString("EVENT_TYPE"), mContext);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    // nAck
+                                    nack();
                                 }
                             } else {
                                 // nAck
@@ -485,9 +480,6 @@ public class ApiService implements DataReceiveCallback {
                             // nAck
                             nack();
                         }
-                    } else {
-                        // nAck
-                        nack();
                     }
                 }
             }, jsonObject.getString("REQ").substring(2, jsonObject.getString("REQ").length() - 2));
@@ -495,6 +487,7 @@ public class ApiService implements DataReceiveCallback {
             e.printStackTrace();
         }
     }
+
     private void packetProcessingAck() {
         try {
             finalArr = new JSONArray();
@@ -513,6 +506,7 @@ public class ApiService implements DataReceiveCallback {
             e.printStackTrace();
         }
     }
+
     private void nack() {
         try {
             finalArr = new JSONArray();

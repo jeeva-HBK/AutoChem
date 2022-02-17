@@ -74,4 +74,7 @@ public interface InputConfigurationDao {
     @Query("Delete from inputconfigurationentity")
     void deleteInputDao();
 
+    @Query("select flagKey from inputconfigurationentity where hardwareNo = :hNo")
+    int getFlag(String hNo);
+
 }

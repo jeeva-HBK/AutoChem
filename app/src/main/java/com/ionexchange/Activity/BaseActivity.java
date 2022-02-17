@@ -2,6 +2,8 @@ package com.ionexchange.Activity;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static com.ionexchange.Others.ApplicationClass.DB;
+import static com.ionexchange.Others.ApplicationClass.alarmArr;
+import static com.ionexchange.Others.ApplicationClass.alertKeepAliveData;
 import static com.ionexchange.Others.ApplicationClass.bleConnected;
 import static com.ionexchange.Others.ApplicationClass.defaultPassword;
 import static com.ionexchange.Others.ApplicationClass.triggerWebService;
@@ -16,6 +18,7 @@ import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINSTATUS;
 
 import android.Manifest;
 import android.app.admin.DevicePolicyManager;
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Context;
@@ -165,6 +168,24 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                     mBinding.notficationTxt.setText(String.valueOf(alarmLogEntities.size()));
                 }
             }
+        });
+        mBinding.lockOut.setOnClickListener(V -> {
+            String[] data = "{*150$001$03$OP05$0$08*}".split("\\*")[1].split("\\$");
+            AlarmLogEntity alarmLogEntity = new AlarmLogEntity(alarmLogDao.getLastSno() + 1,
+                    data[3].substring(2, 4), data[3].substring(0, 2),
+                    alarmArr[Integer.parseInt(data[5])],
+                    ApplicationClass.getCurrentTime(),
+                    ApplicationClass.getCurrentDate(), "1");
+            List<AlarmLogEntity> outputEntryList = new ArrayList<>();
+            outputEntryList.add(alarmLogEntity);
+            alarmLogDao.insert(outputEntryList.toArray(new AlarmLogEntity[0]));
+            alertKeepAliveData = "{*150$001$03$OP05$0$08*}";
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    alertKeepAliveData = "";
+                }
+            }, 5000);
         });
     }
 
@@ -319,7 +340,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         main.setVisibility(View.INVISIBLE);
         NavGraph.setStartDestination(fragment);
         navController.setGraph(navGraph);
-
     }
 
     void setNavGraph(NavGraph NavGraph, int fragment, NavController navController) {
@@ -761,52 +781,47 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             });
         }
         if (retryCount < 3) {
-            Log.e(TAG, "run: scan will start in 5 sec");
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        BluetoothHelper.getInstance().scanBLE(new BluetoothScannerCallback() {
-                            @Override
-                            public void OnScanCompleted(List<BluetoothDevice> devices) {
-                                Log.e(TAG, "OnScanCompleted: ");
-                                if (tempBool) {
-                                    retryCount++;
-                                    startReconnect();
-                                }
-                                for (int i = 0; i < devices.size(); i++) {
-                                    if (devices.get(i).getAddress().equals(SharedPref.read(pref_MACADDRESS, ""))) {
-                                        Log.e(TAG, "device found");
-                                        tempBool = false;
-                                        connect(devices.get(i));
-                                        break;
-                                    }
-                                }
+            try {
+                BluetoothHelper.getInstance().scanBLE(new BluetoothScannerCallback() {
+                    @Override
+                    public void OnScanCompleted(List<BluetoothDevice> devices) {
+                        Log.e(TAG, "OnScanCompleted: ");
+                        if (tempBool) {
+                            retryCount++;
+                            startReconnect();
+                        }
+                        for (int i = 0; i < devices.size(); i++) {
+                            if (devices.get(i).getAddress().equals(SharedPref.read(pref_MACADDRESS, ""))) {
+                                Log.e(TAG, "device found");
+                                tempBool = false;
+                                connect(devices.get(i));
+                                break;
                             }
-
-                            @Override
-                            public void SearchResult(BluetoothDevice device) {
-                            }
-
-                            @Override
-                            public void OnDeviceFoundUpdate(List<BluetoothDevice> devices) {
-                               /* for (int i = 0; i < devices.size(); i++) {
-                                    if (devices.get(i).getAddress().equals(SharedPref.read(pref_MACADDRESS, ""))) {
-                                        Log.e(TAG, "device found");
-                                        tempBool = false;
-                                        connect(devices.get(i));
-                                        break;
-                                    }
-                                }*/
-                            }
-                        });
-                    } catch (Exception e) {
-                        retryCount++;
-                        startReconnect();
-                        e.printStackTrace();
+                        }
                     }
-                }
-            }, 5000);
+
+                    @Override
+                    public void SearchResult(BluetoothDevice device) {
+                    }
+
+                    @Override
+                    public void OnDeviceFoundUpdate(List<BluetoothDevice> devices) {
+                        Log.e(TAG, "OnDeviceFoundUpdate: " + devices.size());
+                        for (BluetoothDevice d :devices) {
+                            if (d.getAddress().equals(SharedPref.read(pref_MACADDRESS, ""))) {
+                                Log.e(TAG, "device found -> " + d);
+                                tempBool = false;
+                                connect(d);
+                                break;
+                            }
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                retryCount++;
+                startReconnect();
+                e.printStackTrace();
+            }
         } else {
             if (reconnectDialog != null && reconnectDialog.isShowing()) {
                 reconnectDialog.dismiss();
@@ -825,39 +840,44 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private static void connect(BluetoothDevice bluetoothDevice) {
-        if (retryCount < 3) {
-            try {
-                if (BluetoothHelper.getInstance() != null) {
-                    BluetoothHelper.getInstance().disConnect();
-                    BluetoothHelper.getInstance().connectBLE(context, bluetoothDevice, new BluetoothConnectCallback() {
-                        @Override
-                        public void OnConnectSuccess() {
-                            tempBool = false;
-                            reconnectDialog.dismiss();
-                            retryCount = 0;
-                            bleConnected.set(true);
-                            triggerWebService.set(true);
-                            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
-                                showSnack("Reconnected to " + bluetoothDevice.getName() + " Successfully");
-                                return;
-                            }
-                            baseActivity.startHandler();
-                        }
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (retryCount < 3) {
+                    try {
+                        if (BluetoothHelper.getInstance() != null) {
+                            BluetoothHelper.getInstance().disConnect();
+                            BluetoothHelper.getInstance().connectBLE(context, bluetoothDevice, new BluetoothConnectCallback() {
+                                @Override
+                                public void OnConnectSuccess() {
+                                    tempBool = false;
+                                    reconnectDialog.dismiss();
+                                    retryCount = 0;
+                                    bleConnected.set(true);
+                                    triggerWebService.set(true);
+                                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                                        showSnack("Reconnected to " + bluetoothDevice.getName() + " Successfully");
+                                        return;
+                                    }
+                                    baseActivity.startHandler();
+                                }
 
-                        @Override
-                        public void OnConnectFailed(Exception e) {
-                            Log.e(TAG, "OnConnectFailed:");
-                            retryCount++;
-                            startReconnect();
+                                @Override
+                                public void OnConnectFailed(Exception e) {
+                                    Log.e(TAG, "OnConnectFailed:");
+                                    retryCount++;
+                                    startReconnect();
+                                }
+                            });
                         }
-                    });
+                    } catch (Exception e) {
+                        retryCount++;
+                        startReconnect();
+                        e.printStackTrace();
+                    }
                 }
-            } catch (Exception e) {
-                retryCount++;
-                startReconnect();
-                e.printStackTrace();
             }
-        }
+        }, 5000);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.ionexchange.Fragments.Configuration.InputConfig;
 
 import static com.ionexchange.Activity.BaseActivity.showProgress;
+import static com.ionexchange.Others.ApplicationClass.DB;
 import static com.ionexchange.Others.ApplicationClass.analogArr;
 import static com.ionexchange.Others.ApplicationClass.digitalSensorArr;
 import static com.ionexchange.Others.ApplicationClass.flowmeterArr;
@@ -88,6 +89,7 @@ public class FragmentInputIndex extends Fragment implements View.OnClickListener
         mBinding.addsensorIsBtn.setVisibility(userType == 3 ? View.VISIBLE : View.GONE);
 
         mBinding.inputsRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
+
         mBinding.inputsRv.setAdapter(new InputsIndexRvAdapter(this, dao.getInputConfigurationEntityFlagKeyList(1, 9, pageOffset), keepAliveCurrentValueDao));
 
         mBinding.leftArrowIsBtn.setOnClickListener(new View.OnClickListener() {
@@ -112,12 +114,14 @@ public class FragmentInputIndex extends Fragment implements View.OnClickListener
                         (1, 9, pageOffset + 9).isEmpty() ? View.GONE : View.VISIBLE);
             }
         });
+
         keepAliveCurrentValueDao.getLiveList().observe(getViewLifecycleOwner(), new Observer<List<KeepAliveCurrentEntity>>() {
             @Override
             public void onChanged(List<KeepAliveCurrentEntity> keepAliveCurrentEntities) {
                 mBinding.inputsRv.getAdapter().notifyDataSetChanged(); // connect ble
             }
         });
+
     }
 
     public void updateToDb(List<InputConfigurationEntity> entryList) {
@@ -129,7 +133,6 @@ public class FragmentInputIndex extends Fragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
-
         mBinding.leftArrowIsBtn.setVisibility(currentPage <= 0 ? View.GONE : View.VISIBLE);
         mBinding.rightArrowIsBtn.setVisibility(dao.getInputConfigurationEntityFlagKeyList
                 (1, 9, pageOffset + 9).isEmpty() ? View.GONE : View.VISIBLE);
@@ -392,20 +395,21 @@ public class FragmentInputIndex extends Fragment implements View.OnClickListener
             sensorType.requestFocus();
             mAppClass.showSnackBar(getContext(), "Select Sensor Type");
             return false;
-        }
-        if (inputNumber.getText().toString().isEmpty()) {
+        } else if (inputNumber.getText().toString().isEmpty()) {
             inputNumber.requestFocus();
             mAppClass.showSnackBar(getContext(), "Input Number Cannot be Empty");
             return false;
-        }
-        if (sensorName.getText().toString().isEmpty()) {
+        } else if (sensorName.getText().toString().isEmpty()) {
             inputNumber.requestFocus();
             mAppClass.showSnackBar(getContext(), "sensorName Cannot be Empty");
             return false;
-        }
-        if (sensorName.getText().toString().equals("N/A")) {
+        } else if (sensorName.getText().toString().equals("N/A")) {
             inputNumber.requestFocus();
             mAppClass.showSnackBar(getContext(), "sensorName Cannot be Empty");
+            return false;
+        } else if (DB.inputConfigurationDao().getFlag(inputNumber.getText().toString()) == 1) {
+            mAppClass.showSnackBar(getContext(), "sensor already added");
+            return false;
         }
         return true;
     }
