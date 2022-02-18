@@ -352,11 +352,11 @@ public class ApiService implements DataReceiveCallback {
         responseTabId = "12";
         try {
             String[] spiltData = data.getString("REQ").split("\\*")[1].split("\\$");
-            // ex req -> {*0$11$05$0*}
+            // ex req -> {*0$12$05$0*}
             if (spiltData[0].equals(WRITE_PACKET)) {
                 if (spiltData[1].equals(PCK_DIAGNOSTIC)) {
                     if (spiltData[3].equals(RES_SUCCESS)) {
-                        DB.alarmLogDao().updateLockAlarm(Integer.parseInt(spiltData[2]), "0", "IN");
+                        DB.alarmLogDao().updateLockAlarm(formDigits(2, spiltData[2]), "0", "IN");
                         new EventLogDemo(spiltData[2], "IN", "Diagnostic Sweep Acknowledged by #", SharedPref.read(pref_USERLOGINID, ""), mContext);
                         ApiService.getInstance(mContext).processApiData("1", "00", ("Diagnostic Sweep Acknowledged by #" + SharedPref.read(pref_USERLOGINID, "")));
                         finalArr = new JSONArray();
@@ -453,7 +453,7 @@ public class ApiService implements DataReceiveCallback {
                                         dataObj = new JSONObject();
                                         dataObj.put("INPUTNO", hNo);
                                         dataObj.put("REQ", "ACK");
-                                        dataObj.put("NAME_LABEL", "");
+                                        dataObj.put("NAME_LABEL", "LockOut Alarm");
                                         dataObj.put("LEFT_LABEL", "");
                                         dataObj.put("RIGHT_LABEL", "");
                                         dataObj.put("SEQUENCE_NO", "");
@@ -463,7 +463,7 @@ public class ApiService implements DataReceiveCallback {
                                         finalArr.put(dataObj);
 
                                         AlarmLogDao alarmLogDao = DB.alarmLogDao();
-                                        alarmLogDao.updateLockAlarm(Integer.parseInt(hNo), "0", "OP");
+                                        alarmLogDao.updateLockAlarm(formDigits(2, hNo), "0", "OP");
                                         new EventLogDemo(hNo, "OP", "LockOut Alarm Acknowledged by #", jsonObject.getString("EVENT_TYPE"), mContext);
                                     } catch (JSONException e) {
                                         e.printStackTrace();

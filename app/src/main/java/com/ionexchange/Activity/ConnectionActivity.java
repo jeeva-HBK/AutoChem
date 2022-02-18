@@ -108,6 +108,7 @@ public class ConnectionActivity extends AppCompatActivity implements BluetoothDa
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         waterTreatmentDb = WaterTreatmentDb.getDatabase(getApplicationContext());
         inputConfigurationDao = waterTreatmentDb.inputConfigurationDao();
         mContext = getApplicationContext();

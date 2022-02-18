@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.ionexchange.Database.Entity.AlarmLogEntity;
-import com.ionexchange.Database.Entity.KeepAliveCurrentEntity;
 
 import java.util.List;
 
@@ -26,8 +25,8 @@ public interface AlarmLogDao {
     @Query("select * FROM alarmlogentity WHERE  date BETWEEN :formDate AND :toDate order by sNo desc")
     List<AlarmLogEntity> getDateWise(String formDate, String toDate);
 
-    @Query("Update alarmlogentity SET lockOutAlarm = :cValue WHERE sNo = :hardWareNo AND sensorType = :sensorType")
-    void updateLockAlarm(int hardWareNo, String cValue, String sensorType);
+    @Query("Update alarmlogentity SET lockOutAlarm = :cValue WHERE hardwareNo = :hardWareNo AND sensorType = :sensorType")
+    void updateLockAlarm(String hardWareNo, String cValue, String sensorType);
 
     @Query("select * FROM alarmlogentity WHERE  alarmLog =:type AND date BETWEEN :formDate AND :toDate order by sNo desc")
     List<AlarmLogEntity> getDateWiseAndType(String formDate, String toDate,String type);

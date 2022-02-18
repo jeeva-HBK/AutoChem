@@ -771,7 +771,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private static void startReconnect() {
-        Log.e(TAG, "Reconnect: start");
+        Log.e(TAG, "Reconnect: start" + "tempBool - " + tempBool + "retryCount -" + retryCount);
         if (attemptTxt != null) {
             baseActivity.runOnUiThread(new Runnable() {
                 @Override
@@ -785,14 +785,14 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 BluetoothHelper.getInstance().scanBLE(new BluetoothScannerCallback() {
                     @Override
                     public void OnScanCompleted(List<BluetoothDevice> devices) {
-                        Log.e(TAG, "OnScanCompleted: ");
+                        Log.e(TAG, "OnScanCompleted: " + "tempBool - " + tempBool + "retryCount -" + retryCount);
                         if (tempBool) {
                             retryCount++;
                             startReconnect();
                         }
                         for (int i = 0; i < devices.size(); i++) {
                             if (devices.get(i).getAddress().equals(SharedPref.read(pref_MACADDRESS, ""))) {
-                                Log.e(TAG, "device found");
+                                Log.e(TAG, "OnScanDevice found -> "  + "tempBool - " + tempBool + "retryCount -" + retryCount);
                                 tempBool = false;
                                 connect(devices.get(i));
                                 break;
@@ -806,10 +806,10 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void OnDeviceFoundUpdate(List<BluetoothDevice> devices) {
-                        Log.e(TAG, "OnDeviceFoundUpdate: " + devices.size());
+                        Log.e(TAG, "OnDeviceFoundUpdate: " +"Devices size" +devices.size()  + "tempBool - " + tempBool + "retryCount -" + retryCount);
                         for (BluetoothDevice d :devices) {
                             if (d.getAddress().equals(SharedPref.read(pref_MACADDRESS, ""))) {
-                                Log.e(TAG, "device found -> " + d);
+                                Log.e(TAG, "onFounDevice found -> " + d + "tempBool - " + tempBool + "retryCount -" + retryCount);
                                 tempBool = false;
                                 connect(d);
                                 break;
@@ -818,6 +818,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
             } catch (Exception e) {
+                Log.e(TAG, "startReconnect: Catch"  + "tempBool - " + tempBool + "retryCount -" + retryCount);
                 retryCount++;
                 startReconnect();
                 e.printStackTrace();
@@ -826,7 +827,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             if (reconnectDialog != null && reconnectDialog.isShowing()) {
                 reconnectDialog.dismiss();
             }
-            showSnack("Failed to reconnect, try again later");
+            showSnack("Failed to reconnect, try again later" + "tempBool - " + tempBool + "retryCount -" + retryCount);
             baseActivity.kickOut();
             baseActivity.startHandler();
             retryCount = 0;
@@ -871,10 +872,13 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                             });
                         }
                     } catch (Exception e) {
+                        Log.e(TAG, "ConnectElse: " + "tempBool - " + tempBool + "retryCount -" + retryCount );
                         retryCount++;
                         startReconnect();
                         e.printStackTrace();
                     }
+                } else {
+                    Log.e(TAG, "ConnectElse: " + "tempBool - " + tempBool + "retryCount -" + retryCount );
                 }
             }
         }, 5000);

@@ -7,6 +7,7 @@ import static com.ionexchange.Others.PacketControl.ACK;
 import static com.ionexchange.Others.PacketControl.CONN_TYPE;
 import static com.ionexchange.Others.PacketControl.DEVICE_PASSWORD;
 import static com.ionexchange.Others.PacketControl.PCK_LOCKOUT;
+import static com.ionexchange.Others.PacketControl.RES_SUCCESS;
 import static com.ionexchange.Others.PacketControl.SPILT_CHAR;
 import static com.ionexchange.Others.PacketControl.WRITE_PACKET;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
@@ -163,7 +164,7 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
     @Override
     public void OnItemClick(int sNo, int hardwareNo, Button button, String sensorType) {
         if (sensorType.equals("IN") && hardwareNo >= 5 && hardwareNo <= 14) {
-            alarmLogDao.updateLockAlarm(hardwareNo, "0", sensorType);
+            alarmLogDao.updateLockAlarm(formDigits(2, String.valueOf(hardwareNo)), "0", sensorType);
             button.setVisibility(View.INVISIBLE);
             new EventLogDemo(String.valueOf(hardwareNo), "IN", "Diagnostic Sweep Acknowledged by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
             ApiService.getInstance(getContext()).processApiData("1", "00", ("Diagnostic Sweep Acknowledged by #" + SharedPref.read(pref_USERLOGINID, "")));
@@ -174,9 +175,9 @@ public class FragmentAlarmLog extends Fragment implements BtnOnClick, DataReceiv
                     String[] splitData = data.split("\\*")[1].split("\\$");
                     if (splitData[0].equals(WRITE_PACKET)) {
                         if (splitData[1].equals(PCK_LOCKOUT)) {
-                            if (splitData[2].equals("0")) {
-                                alarmLogDao.updateLockAlarm(hardwareNo, "0", sensorType);
-                                button.setVisibility(View.INVISIBLE);
+                            if (splitData[2].equals(RES_SUCCESS)) {
+                                alarmLogDao.updateLockAlarm(formDigits(2, String.valueOf(hardwareNo)), "0", sensorType);
+                                // button.setVisibility(View.INVISIBLE);
                                 new EventLogDemo(String.valueOf(hardwareNo), "OP", "LockOut Alarm Acknowledged by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
                                 ApiService.getInstance(getContext()).processApiData("1", "00", ("LockOut Alarm Acknowledged by #" + SharedPref.read(pref_USERLOGINID, "")));
                             } else {
