@@ -2,8 +2,6 @@ package com.ionexchange.Activity;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static com.ionexchange.Others.ApplicationClass.DB;
-import static com.ionexchange.Others.ApplicationClass.alarmArr;
-import static com.ionexchange.Others.ApplicationClass.alertKeepAliveData;
 import static com.ionexchange.Others.ApplicationClass.bleConnected;
 import static com.ionexchange.Others.ApplicationClass.defaultPassword;
 import static com.ionexchange.Others.ApplicationClass.triggerWebService;
@@ -18,7 +16,6 @@ import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINSTATUS;
 
 import android.Manifest;
 import android.app.admin.DevicePolicyManager;
-import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Context;
@@ -168,24 +165,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                     mBinding.notficationTxt.setText(String.valueOf(alarmLogEntities.size()));
                 }
             }
-        });
-        mBinding.lockOut.setOnClickListener(V -> {
-            String[] data = "{*150$001$03$OP05$0$08*}".split("\\*")[1].split("\\$");
-            AlarmLogEntity alarmLogEntity = new AlarmLogEntity(alarmLogDao.getLastSno() + 1,
-                    data[3].substring(2, 4), data[3].substring(0, 2),
-                    alarmArr[Integer.parseInt(data[5])],
-                    ApplicationClass.getCurrentTime(),
-                    ApplicationClass.getCurrentDate(), "1");
-            List<AlarmLogEntity> outputEntryList = new ArrayList<>();
-            outputEntryList.add(alarmLogEntity);
-            alarmLogDao.insert(outputEntryList.toArray(new AlarmLogEntity[0]));
-            alertKeepAliveData = "{*150$001$03$OP05$0$08*}";
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    alertKeepAliveData = "";
-                }
-            }, 5000);
         });
     }
 

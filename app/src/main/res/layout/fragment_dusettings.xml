@@ -321,7 +321,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/last_du_config"
+            android:id="@+id/bootLoader_config"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="5dp"
@@ -377,10 +377,10 @@
             android:elevation="20sp"
             app:cardBackgroundColor="@color/colorSecondary"
             app:cardCornerRadius="5sp"
-            app:layout_constraintBottom_toBottomOf="@+id/last_du_config"
+            app:layout_constraintBottom_toBottomOf="@+id/bootLoader_config"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/last_du_config"
-            app:layout_constraintTop_toTopOf="@+id/last_du_config">
+            app:layout_constraintStart_toEndOf="@+id/bootLoader_config"
+            app:layout_constraintTop_toTopOf="@+id/bootLoader_config">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

@@ -168,6 +168,7 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
         mBinding.logOut.setOnClickListener(this);
         mBinding.pendrive.setOnClickListener(this);
         mBinding.disconnectDuConfig.setOnClickListener(this);
+        mBinding.bootLoaderConfig.setOnClickListener(this);
         dismissProgress();
     }
 
@@ -345,13 +346,14 @@ public class FragmentDuSetting_Config extends Fragment implements View.OnClickLi
                 BaseActivity.disconnectBle();
                 break;
 
-            case R.id.last_du_config:
+            case R.id.bootLoader_config:
                 showProgress();
                 mAppclass.sendPacket(new DataReceiveCallback() {
                     @Override
                     public void OnDataReceive(String data) {
                         if (data != null) {
                             if (data.equals("Timeout")) {
+                                dismissProgress();
                                 showSnack("Timed Out");
                             } else {
                                 if (data.split("\\*")[1].split("\\$")[2].equals("0")) {
