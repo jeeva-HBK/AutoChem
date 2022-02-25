@@ -271,7 +271,7 @@ public class ApiService implements DataReceiveCallback {
                                 getJSONObject(0));
                         break;
 
-                    case "11": // todo : Should Change
+                    case "13":
                         writeOutputControl(responseObject.getJSONArray("DATA").getJSONObject(0));
                         break;
 
@@ -387,7 +387,7 @@ public class ApiService implements DataReceiveCallback {
     }
 
     private void writeOutputControl(JSONObject data) {
-        responseTabId = "11";
+        responseTabId = "13";
         try {
             ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
                 @Override
@@ -401,7 +401,7 @@ public class ApiService implements DataReceiveCallback {
                                         try {
                                             finalArr = new JSONArray();
                                             dataObj = new JSONObject();
-                                            dataObj.put("INPUTNO", data.getString("REQ").substring(2, data.getString("REQ").length() - 2).split("\\*")[1].split("\\$")[4]);
+                                            dataObj.put("INPUTNO", data.getString("INPUTNO"));
                                             dataObj.put("REQ", "ACK");
                                             dataObj.put("NAME_LABEL", "");
                                             dataObj.put("LEFT_LABEL", "");
@@ -676,7 +676,7 @@ public class ApiService implements DataReceiveCallback {
                                 if(hardWareNo != 0) {
                                     InputConfigurationEntity entityUpdate = new InputConfigurationEntity
                                             (hardWareNo, inputTypeArr[Integer.parseInt(splitData[5])],
-                                                    sensorType, signalType, sequenceName, seqNo, inputLabel,
+                                                    sensorType.trim(), signalType, sequenceName, seqNo, inputLabel,
                                                     lowAlarm, highAlarm, unit, type, flagValue == 2 ? 0 : 1 ,
                                                     jsonObject.getString("REQ"));
                                     List<InputConfigurationEntity> inputentryList = new ArrayList<>();

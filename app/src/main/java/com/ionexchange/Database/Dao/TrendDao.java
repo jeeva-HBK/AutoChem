@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+
 import com.ionexchange.Database.Entity.TrendEntity;
 
 import java.util.List;
@@ -36,4 +37,7 @@ public interface TrendDao {
 
     @Query("SELECT max(rowNumber) FROM TrendEntity")
     Integer lastRowNumber();
+
+    @Query("Delete from TrendEntity")
+    void deleteTrendDao();
 }

@@ -209,11 +209,17 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                             lowKey.setText("Dose Period");
                             lowAlarmOne.setText(outputmode.contains("$") ? outputmode.split("\\$")[0] : outputmode);
                             currentValue.setText(outputmode.contains("$") ? outputmode.split("\\$")[1] : outputmode);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                currentValue.setTooltipText(outputmode.contains("$") ? outputmode.split("\\$")[1] : outputmode);
+                            }
                             break;
                         case "Bleed/Blow Down":
                         case "Water Meter/Biocide":
                             lowKey.setText("Accumulated Vol");
                             currentValue.setText(outputmode);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                currentValue.setTooltipText(outputmode);
+                            }
                             break;
                         case "On/Off":
                         case "PID":
@@ -221,6 +227,9 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                             try {
                                 lowAlarmOne.setText(outputmode.contains("$") ? outputmode.split("\\$")[0] : outputmode);
                                 currentValue.setText(keepaliveDAO.getCurrentValue(Integer.parseInt(outputmode.split("\\$")[1])));
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    currentValue.setTooltipText(keepaliveDAO.getCurrentValue(Integer.parseInt(outputmode.split("\\$")[1])));
+                                }
                             }catch (Exception e){
                                 e.printStackTrace();
                             }
@@ -408,7 +417,13 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
             case 6:
                 lowAlarmOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
                 highAlarmOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
-                currentValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(9)});
+                if (mainConfigurationEntityList.get(position).inputType != null) {
+                    if (mainConfigurationEntityList.get(position).inputType.toUpperCase().contains("OUTPUT")) {
+                        currentValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7)});
+                    }
+                }else {
+                    currentValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(9)});
+                }
 
                 label.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
                 break;
@@ -509,11 +524,21 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                 highAlarmOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10)});
                 highAlarmTwo.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10)});
                 highAlarmThree.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10)});
-
-                currentValueOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
-                currentValueTwo.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
-                currentValueThree.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
-
+                if (mainConfigurationEntityList.get(0).inputType.toUpperCase().contains("OUTPUT")) {
+                    currentValueOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+                }else {
+                    currentValueOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
+                }
+                if (mainConfigurationEntityList.get(2).inputType.toUpperCase().contains("OUTPUT")) {
+                    currentValueTwo.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+                }else {
+                    currentValueTwo.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
+                }
+                if (mainConfigurationEntityList.get(2).inputType.toUpperCase().contains("OUTPUT")) {
+                    currentValueThree.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+                }else {
+                    currentValueThree.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
+                }
                 sensorLabelOne.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
                 sensorLabelTwo.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
                 sensorLabelThree.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
@@ -673,11 +698,17 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     lowKey.setText("Dose Period");
                     lowAlarm.setText(outputMode.contains("$") ? outputMode.split("\\$")[0] : outputMode);
                     currentValue.setText(outputMode.contains("$") ? outputMode.split("\\$")[1] : outputMode);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        currentValue.setTooltipText(outputMode.contains("$") ? outputMode.split("\\$")[1] : outputMode);
+                    }
                     break;
                 case "Bleed/Blow Down":
                 case "Water Meter/Biocide":
                     lowKey.setText("Accumulated Vol");
                     currentValue.setText(outputMode);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        currentValue.setTooltipText(outputMode);
+                    }
                     break;
                 case "On/Off":
                 case "PID":
@@ -685,6 +716,9 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     if (outputMode.contains("$")) {
                         lowAlarm.setText(outputMode.split("\\$")[0]);
                         currentValue.setText(keepaliveDAO.getCurrentValue(Integer.parseInt(outputMode.split("\\$")[1])));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            currentValue.setTooltipText(keepaliveDAO.getCurrentValue(Integer.parseInt(outputMode.split("\\$")[1])));
+                        }
                     }
                     break;
                 default:
@@ -776,7 +810,9 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     constraintLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            rvOnClick.onClick(mainConfigurationEntityList.get(getAdapterPosition()));
+                            if(getAdapterPosition() >= 0) {
+                                rvOnClick.onClick(mainConfigurationEntityList.get(getAdapterPosition()));
+                            }
                         }
                     });
                     break;

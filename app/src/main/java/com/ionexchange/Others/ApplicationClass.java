@@ -58,6 +58,7 @@ import com.ionexchange.Database.Dao.MainConfigurationDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
 import com.ionexchange.Database.Dao.OutputKeepAliveDao;
 import com.ionexchange.Database.Dao.TimerConfigurationDao;
+import com.ionexchange.Database.Dao.TrendDao;
 import com.ionexchange.Database.Dao.UserManagementDao;
 import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.DefaultLayoutConfigurationEntity;
@@ -150,7 +151,7 @@ public class ApplicationClass extends Application {
             interlockChannel = {"None", "Digital Input - 1", "Digital Input - 2", "Digital Input - 3", "Digital Input - 4", "Digital Input - 5", "Digital Input - 6", "Digital Input - 7", "Digital Input - 8", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4", "Tank Level - 5", "Tank Level - 6", "Tank Level - 7", "Tank Level - 8"},
 
     functionMode,
-            fMode = {"Disable", "Inhibitor", "sensor", "Analog"},
+            fMode = {"Disable", "Inhibitor", "sensor", "Analog","Manual"},
             modeInhibitor = {"Continuous", "Bleed/Blow Down", "Water Meter/Biocide"},
             modeSensor = {"On/Off", "PID", "Fuzzy"}, modeAnalog = {"Disable", "Probe", "Test", "Pump Status", "Dosing"},
             flowMeters = {"Flow Meter 1", "Flow Meter 2", "Flow Meter 3", "Flow Meter 4", "Flow Meter 5", "Flow Meter 6", "Flow Meter 7", "Flow Meter 8"},
@@ -198,6 +199,7 @@ public class ApplicationClass extends Application {
     public static OutputConfigurationDao outputDAO;
     public static VirtualConfigurationDao virtualDAO;
     public static TimerConfigurationDao timerDAO;
+    public static TrendDao trendDAO;
     public static UserManagementDao userManagementDao;
     public static KeepAliveCurrentValueDao keepaliveDAO;
     public static MainConfigurationDao mainConfigurationDao;
@@ -209,9 +211,9 @@ public class ApplicationClass extends Application {
     public static int userType;
     public static RequestQueue requestQueue;
 
-    public final static String baseURL = "http://192.168.1.82/WaterIOT.API/api/";
-    // public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
-    // public final static String baseURL = "http://192.168.1.52/WaterIOT.API/api/";
+    //public final static String baseURL = "http://192.168.1.82/WaterIOT.API/api/";
+     //public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
+     public final static String baseURL = "http://192.168.1.52/WaterIOT.API/api/";
 
     // public final static String baseURL = "http://183.82.35.93/WaterIOT.API/api/";
     // public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
@@ -753,7 +755,8 @@ public class ApplicationClass extends Application {
                 }
                 String[] splitData = writePacket.split("\\*")[1].split(RES_SPILT_CHAR);
                 InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                        (i, inputTypeArr[Integer.parseInt(splitData[5])], sensorType, signalType, sequenceName, sequenceNo, labelName,
+                        (i, inputTypeArr[Integer.parseInt(splitData[5])], sensorType.trim(),
+                                signalType, sequenceName, sequenceNo, labelName,
                                 "N/A", "N/A", "N/A", "N/A", 0, writePacket);
                 List<InputConfigurationEntity> inputentryList = new ArrayList<>();
                 inputentryList.add(entityUpdate);
@@ -890,6 +893,8 @@ public class ApplicationClass extends Application {
                 insertOutputKeepAliveDb(entryListUpdate);
             }
         }
+
+        trendDAO = DB.trendDao();
     }
 
     public boolean factoryRest() {
@@ -898,6 +903,7 @@ public class ApplicationClass extends Application {
             outputDAO.deleteOutputDao();
             virtualDAO.deleteVirtualDao();
             timerDAO.deleteTimerDao();
+            trendDAO.deleteTrendDao();
             initDatabase();
         } else {
          return false;

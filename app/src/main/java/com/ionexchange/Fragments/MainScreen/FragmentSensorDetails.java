@@ -21,6 +21,7 @@ import static com.ionexchange.Others.ApplicationClass.modBusUnitArr;
 import static com.ionexchange.Others.ApplicationClass.modeAnalog;
 import static com.ionexchange.Others.ApplicationClass.modeInhibitor;
 import static com.ionexchange.Others.ApplicationClass.modeSensor;
+import static com.ionexchange.Others.ApplicationClass.outputDAO;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.scheduleResetArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
@@ -53,8 +54,10 @@ import com.google.android.material.card.MaterialCardView;
 import com.ionexchange.Adapters.SensorDetailsParamsRvAdapter;
 import com.ionexchange.Database.Dao.InputConfigurationDao;
 import com.ionexchange.Database.Dao.OutputConfigurationDao;
+import com.ionexchange.Database.Dao.VirtualConfigurationDao;
 import com.ionexchange.Database.Entity.InputConfigurationEntity;
 import com.ionexchange.Database.Entity.OutputConfigurationEntity;
+import com.ionexchange.Database.Entity.VirtualConfigurationEntity;
 import com.ionexchange.Database.WaterTreatmentDb;
 import com.ionexchange.Fragments.MainScreen.Calibration.FragmentModbusCalibration;
 import com.ionexchange.Interface.DataReceiveCallback;
@@ -63,6 +66,7 @@ import com.ionexchange.R;
 import com.ionexchange.databinding.FragmentSensorDetailsBinding;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +88,7 @@ public class FragmentSensorDetails extends Fragment {
             compType = "Compensation Type", compFactor = "Compensation Factor", analogType = "Analog Type", assigned = "Assigned To Sensor", minValue = "Min Value",
             maxValue = "Max Value", openMsg = "Open Message", closeMsg = "Close Message", interLock = "Interlock", alarm = "Alarm", totalTime = "Total Time",
             resetTotalTime = "Reset Total Time";
-
+    String[] activateChannalsList;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -371,17 +375,52 @@ public class FragmentSensorDetails extends Fragment {
         return ApplicationClass.DB.inputConfigurationDao().getSensorType(Integer.parseInt(splitData));
     }
 
+    private void getinterlockArray(){
+        List<OutputConfigurationEntity> outputNameList = outputDAO.getOutputHardWareNoConfigurationEntityList(1, 14);
+        String[] outputNames = new String[14];
+        if (!outputNameList.isEmpty()) {
+            for (int i = 0; i < outputNameList.size(); i++) {
+                outputNames[i] = "Output- " + outputNameList.get(i).getOutputHardwareNo() + " (" + outputNameList.get(i).getOutputLabel() + ")";
+            }
+        }
+        List digitalinputlist = new ArrayList(Arrays.asList(interlockChannel));
+        digitalinputlist.addAll(Arrays.asList(outputNames));
+        activateChannalsList = (String[]) digitalinputlist.toArray(new String[0]);
+
+    }
     private List<String[]> formOutputMap(String[] splitData) {
         LinkedHashMap<String, String> tempMap = new LinkedHashMap<>();
         tempMap.put("OutPut Number", splitData[3]);
         tempMap.put("Function Mode", getValueFromArr(splitData[4], fMode));
+        getinterlockArray();
         if (splitData[4].equals("0")) {
             // Disable
         } else if (splitData[4].equals("1")) { // inhibitor
             tempMap.put("Output Mode", getValueFromArr(splitData[8], modeInhibitor));
             tempMap.put("Output Label", splitData[5]);
-            tempMap.put("Interlock channel", getValueFromArr((Integer.parseInt(splitData[6]) - 30) + "", interlockChannel));
-            tempMap.put("Activate channel", getValueFromArr((Integer.parseInt(splitData[7]) - 30) + "", interlockChannel));
+            int interlockChannelPos = Integer.parseInt(splitData[6]);
+            int setInterlockChannelPos = interlockChannelPos;
+            if(interlockChannelPos == 0) {
+                tempMap.put("Interlock channel", getValueFromArr(interlockChannelPos + "", activateChannalsList));
+            }
+            else if (interlockChannelPos >= 34) {
+                setInterlockChannelPos = interlockChannelPos - 33;
+                tempMap.put("Interlock channel", getValueFromArr(setInterlockChannelPos + "", activateChannalsList));
+            } else {
+                setInterlockChannelPos = interlockChannelPos + 16;
+                tempMap.put("Interlock channel", getValueFromArr(setInterlockChannelPos + "", activateChannalsList));
+            }
+            int activiateChannelPos = Integer.parseInt(splitData[7]);
+            int setActiivateChannelPos = activiateChannelPos;
+            if(activiateChannelPos == 0) {
+                tempMap.put("Activate channel", getValueFromArr(interlockChannelPos + "", activateChannalsList));
+            } else if (activiateChannelPos >= 34) {
+                setActiivateChannelPos = activiateChannelPos - 33;
+                tempMap.put("Activate channel", getValueFromArr(setActiivateChannelPos + "", activateChannalsList));
+            } else {
+                setActiivateChannelPos = activiateChannelPos + 16;
+                tempMap.put("Activate channel", getValueFromArr(setActiivateChannelPos + "", activateChannalsList));
+            }
             if (userType == 3) {
                 if (splitData[8].equals("0")) { // Continuous
                     tempMap.put("Pump Flow Rate", splitData[9]);
@@ -407,19 +446,49 @@ public class FragmentSensorDetails extends Fragment {
         } else if (splitData[4].equals("2")) { // Sensor
             tempMap.put("Sensor Mode", getValueFromArr(splitData[9], modeSensor));
             tempMap.put("Output Label", splitData[5]);
-            tempMap.put("Interlock channel", getValueFromArr((Integer.parseInt(splitData[6]) - 30) + "", interlockChannel));
-            tempMap.put("Activate channel", getValueFromArr((Integer.parseInt(splitData[7]) - 30) + "", interlockChannel));
+            int interlockChannelPos = Integer.parseInt(splitData[6]);
+            int setInterlockChannelPos = interlockChannelPos;
+            if(interlockChannelPos == 0) {
+                tempMap.put("Interlock channel", getValueFromArr(interlockChannelPos + "", activateChannalsList));
+            }
+            else if (interlockChannelPos >= 34) {
+                setInterlockChannelPos = interlockChannelPos - 33;
+                tempMap.put("Interlock channel", getValueFromArr(setInterlockChannelPos + "", activateChannalsList));
+            } else {
+                setInterlockChannelPos = interlockChannelPos + 16;
+                tempMap.put("Interlock channel", getValueFromArr(setInterlockChannelPos + "", activateChannalsList));
+            }
+            int activiateChannelPos = Integer.parseInt(splitData[7]);
+            int setActiivateChannelPos = activiateChannelPos;
+            if(activiateChannelPos == 0) {
+                tempMap.put("Activate channel", getValueFromArr(activiateChannelPos + "", activateChannalsList));
+            } else if (activiateChannelPos >= 34) {
+                setActiivateChannelPos = activiateChannelPos - 33;
+                tempMap.put("Activate channel", getValueFromArr(setActiivateChannelPos + "", activateChannalsList));
+            } else {
+                setActiivateChannelPos = activiateChannelPos + 16;
+                tempMap.put("Activate channel", getValueFromArr(setActiivateChannelPos + "", activateChannalsList));
+            }
             if (userType == 3) {
                 if (splitData[9].equals("0")) { // On/Off
                     tempMap.put("Set Point", splitData[10]);
                     tempMap.put("Dose Type", getValueFromArr(splitData[11], doseTypeArr));
-                    tempMap.put("Link Input Sensor", getValueFromArr(splitData[8], getSensorInputArray()));
+                    if (Integer.parseInt(splitData[8]) < 26) {
+                        tempMap.put("Link Input Sensor", getValueFromArr((Integer.parseInt(splitData[8]) - 1) + "" , getSensorInputArray()));
+                    } else {
+                        tempMap.put("Link Input Sensor", getValueFromArr((Integer.parseInt(splitData[8]) - 33) + "", getSensorInputArray()));
+                    }
                     tempMap.put("Hysteresis", splitData[12]);
                     tempMap.put("Duty Cycle", splitData[13]);
                     tempMap.put("Lock Out Delay Time", splitData[14]);
                     tempMap.put("Safety Max", splitData[15]);
                     tempMap.put("Safety Min", splitData[16]);
                 } else if (splitData[9].equals("1")) { // PID
+                    if (Integer.parseInt(splitData[8]) < 26) {
+                        tempMap.put("Link Input Sensor", getValueFromArr((Integer.parseInt(splitData[8]) - 1) + "" , getSensorInputArray()));
+                    } else {
+                        tempMap.put("Link Input Sensor", getValueFromArr((Integer.parseInt(splitData[8]) - 33) + "", getSensorInputArray()));
+                    }
                     tempMap.put("set Point", splitData[10]);
                     tempMap.put("Gain", splitData[11]);
                     tempMap.put("Integral Time", splitData[12]);
@@ -437,38 +506,88 @@ public class FragmentSensorDetails extends Fragment {
             } else if (splitData[9].equals("2")) { // Fuzzy
             }
         } else if (splitData[4].equals("3")) { // Analog
-            tempMap.put("Sensor Mode", getValueFromArr(splitData[5], modeAnalog));
-            tempMap.put("Link Input Relay", getValueFromArr(splitData[6], getSensorInputArray()));
-            if (splitData[5].equals("0")) { // Disable
+            tempMap.put("Sensor Mode", getValueFromArr(splitData[6], modeAnalog));
 
-            } else if (splitData[5].equals("1") || splitData[5].equals("3") || splitData[5].equals("4")) { // other modes
-                tempMap.put("Min mA", splitData[6]);
-                tempMap.put("Max mA", splitData[7]);
-                tempMap.put("Min Value", splitData[8]);
-                tempMap.put("Max Value", splitData[9]);
-            } else if (splitData[5].equals("2")) {
-                tempMap.put("Fixed Value", splitData[6]);
+            if (splitData[6].equals("0")) { // Disable
+
+            } else if (splitData[6].equals("1") || splitData[6].equals("3") || splitData[6].equals("4")) { // other modes
+                String gethardwareNo = splitData[7].substring(1, 3);
+                if (splitData[7].startsWith("I")) {
+                    if (Integer.parseInt(gethardwareNo) < 18) {
+                        tempMap.put("Link Input Relay", getValueFromArr(String.valueOf(Integer.parseInt(gethardwareNo) - 1), getAnalogInputArray()));
+                    } else {
+                        tempMap.put("Link Input Relay", getValueFromArr(String.valueOf(Integer.parseInt(gethardwareNo) - 33), getAnalogInputArray()));
+                    }
+                } else {
+                    tempMap.put("Link Input Relay", getValueFromArr(String.valueOf(Integer.parseInt(gethardwareNo) + 24), getAnalogInputArray()));
+                }
+                tempMap.put("Min mA", splitData[8]);
+                tempMap.put("Max mA", splitData[9]);
+                tempMap.put("Min Value", splitData[10]);
+                tempMap.put("Max Value", splitData[11]);
+            } else if (splitData[6].equals("2")) {
+                tempMap.put("Fixed Value", splitData[7]);
             }
         }
 
         finalSensorParamList = splitIntoParts(convertMap(tempMap), pageMax);
         return finalSensorParamList.get(0);
     }
-
-    private String[] getSensorInputArray() {
+    private String[] getAnalogInputArray() {
         WaterTreatmentDb DB = WaterTreatmentDb.getDatabase(getContext());
         InputConfigurationDao DAO = DB.inputConfigurationDao();
-        List<InputConfigurationEntity> inputNameList = DAO.getInputHardWareNoConfigurationEntityList(1, 13);
-        String[] inputNames = new String[13];
+        List<InputConfigurationEntity> inputNameList = DAO.getInputHardWareNoConfigurationEntityList(1, 17);
+        String[] inputNames = new String[17];
         if (!inputNameList.isEmpty()) {
             for (int i = 0; i < inputNameList.size(); i++) {
                 inputNames[i] = "Input- " + inputNameList.get(i).getHardwareNo() + " (" + inputNameList.get(i).getInputLabel() + ")";
             }
         }
-        if (inputNames.length == 0) {
-            inputNames = inputAnalogSensors;
+        VirtualConfigurationDao DAOV = DB.virtualConfigurationDao();
+        List<VirtualConfigurationEntity> virtualinputNameList = DAOV.getVirtualHardWareNoConfigurationEntityList(50, 57);
+        String[] vinputNames = new String[8];
+        if (!virtualinputNameList.isEmpty()) {
+            for (int i = 0; i < virtualinputNameList.size(); i++) {
+                vinputNames[i] = "Input- " + virtualinputNameList.get(i).getHardwareNo() + " (" + virtualinputNameList.get(i).getInputLabel() + ")";
+            }
         }
-        return inputNames;
+        OutputConfigurationDao outputDao = DB.outputConfigurationDao();
+        List<OutputConfigurationEntity> outputNameList = outputDao.getOutputHardWareNoConfigurationEntityList(1, 14);
+        String[] outputNames = new String[14];
+        if (!outputNameList.isEmpty()) {
+            for (int i = 0; i < outputNameList.size(); i++) {
+                outputNames[i] = "Output- " + outputNameList.get(i).getOutputHardwareNo() + " (" + outputNameList.get(i).getOutputLabel() + ")";
+            }
+        }
+        List analoginputlist = new ArrayList(Arrays.asList(inputNames));
+        analoginputlist.addAll(Arrays.asList(vinputNames));
+        analoginputlist.addAll(Arrays.asList(outputNames));
+        String[] analogInputList = (String[]) analoginputlist.toArray(new String[0]);
+        return analogInputList;
+    }
+    private String[] getSensorInputArray() {
+        WaterTreatmentDb DB = WaterTreatmentDb.getDatabase(getContext());
+        InputConfigurationDao DAO = DB.inputConfigurationDao();
+        List<InputConfigurationEntity> inputNameList = DAO.getInputHardWareNoConfigurationEntityList(1, 25);
+        String[] inputNames = new String[25];
+        if (!inputNameList.isEmpty()) {
+            for (int i = 0; i < inputNameList.size(); i++) {
+                inputNames[i] = "Input- " + inputNameList.get(i).getHardwareNo() + " (" + inputNameList.get(i).getInputLabel() + ")";
+            }
+        }
+        VirtualConfigurationDao DAOV = DB.virtualConfigurationDao();
+        List<VirtualConfigurationEntity> virtualinputNameList = DAOV.getVirtualHardWareNoConfigurationEntityList(50, 57);
+        String[] vinputNames = new String[8];
+        if (!virtualinputNameList.isEmpty()) {
+            for (int i = 0; i < virtualinputNameList.size(); i++) {
+                vinputNames[i] = "Input- " + virtualinputNameList.get(i).getHardwareNo() + " (" + virtualinputNameList.get(i).getInputLabel() + ")";
+            }
+        }
+
+        List inputlist = new ArrayList(Arrays.asList(inputNames));
+        inputlist.addAll(Arrays.asList(vinputNames));
+        String[] inputList = (String[]) inputlist.toArray(new String[0]);
+        return inputList;
     }
 
     String[] getBleedArray() {

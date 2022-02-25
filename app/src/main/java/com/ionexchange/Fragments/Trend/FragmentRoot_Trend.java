@@ -378,6 +378,11 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
     private void indexChart() {
         mBinding.trendLineChart.setVisibility(View.VISIBLE);
         mBinding.trendBarChart.setVisibility(View.GONE);
+
+        //mBinding.trendLineChart.getViewPortHandler().setMaximumScaleX(2.5f);
+        //mBinding.trendLineChart.getViewPortHandler().setMaximumScaleY(2.5f);
+        //mBinding.trendLineChart.getViewPortHandler().setMinimumScaleX(2f);
+        //mBinding.trendLineChart.getViewPortHandler().setMaximumScaleY(2f);
         lineDataSet = new HashMap<>();
         if(inputDao.getEnabledSensor().length > 0) {
             mBinding.trendSensorOneTie.setAdapter(getAdapter(inputDao.getEnabledSensor(), getContext()));
@@ -395,6 +400,27 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         if (lineDataSet.get(1) != null) {
             dataSets.add(lineDataSet.get(1));
+            yAxis.removeAllLimitLines();
+            LimitLine lowAlarm = new LimitLine(Integer.parseInt(selectedSensor) < 34 ?
+                    (Float.parseFloat(inputDao.getLowAlarm(Integer.parseInt(formDigits(2,selectedSensor))))) :
+                    (Float.parseFloat(virtualDAO.getVirtualLowAlarm(Integer.parseInt(formDigits(2,selectedSensor))))), "Low Alarm - " +
+                    inputDao.getInputLabel(Integer.parseInt(formDigits(2,selectedSensor))));
+            lowAlarm.setLineWidth(2f);
+            lowAlarm.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
+            lowAlarm.setTextSize(10f);
+            lowAlarm.setLineColor(Color.RED);
+
+            LimitLine highAlarm = new LimitLine(Integer.parseInt(selectedSensor) < 34 ?
+                    (Float.parseFloat(inputDao.getHighAlarm(Integer.parseInt(formDigits(2,selectedSensor))))) :
+                    (Float.parseFloat(virtualDAO.getVirtualHighAlarm(Integer.parseInt(formDigits(2,selectedSensor))))), "High Alarm - " +
+                    inputDao.getInputLabel(Integer.parseInt(formDigits(2,selectedSensor))));
+            highAlarm.setLineWidth(2f);
+            highAlarm.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_BOTTOM);
+            highAlarm.setTextSize(10f);
+            highAlarm.setLineColor(Color.RED);
+
+            yAxis.addLimitLine(lowAlarm);
+            yAxis.addLimitLine(highAlarm);
         }
         yAxisRight.removeAllLimitLines();
         if (lineDataSet.get(2) != null) {
