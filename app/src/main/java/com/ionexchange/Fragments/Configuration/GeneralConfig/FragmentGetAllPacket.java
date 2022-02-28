@@ -95,13 +95,13 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
         mAppClass = (ApplicationClass) getActivity().getApplication();
         db = WaterTreatmentDb.getDatabase(getContext());
         dao = db.inputConfigurationDao();
+        getAllPacketModelList = new ArrayList<>();
+        setAdapter();
+        getAllPacket("0");
     }
 
     @Override
     public void onResume() {
-        getAllPacketModelList = new ArrayList<>();
-        setAdapter();
-        getAllPacket("0");
         super.onResume();
     }
 
@@ -159,859 +159,859 @@ public class FragmentGetAllPacket extends Fragment implements DataReceiveCallbac
                 if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("01")) {
 
                     spiltPhData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT SENSOR", "UPDATED"));
                     inputSendData("02");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("01")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT SENSOR", "FAILED"));
                     inputSendData("02");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("02")) {
 
                     spiltORPData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT SENSOR", "UPDATED"));
                     inputSendData("03");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("02")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT SENSOR", "FAILED"));
                     inputSendData("03");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("03")) {
 
                     spiltContactingConductivityData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT SENSOR", "UPDATED"));
                     inputSendData("04");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("03")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT SENSOR", "FAILED"));
                     inputSendData("04");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("04")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT SENSOR", "UPDATED"));
                     spiltToroidalConductivityData(split, packet);
                     inputSendData("05");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("04")) {
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT SENSOR", "FAILED"));
                     inputSendData("05");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("05")) {
 
                     spiltModBusData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "UPDATED"));
                     inputSendData("06");
 
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("05")) {
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "FAILED"));
                     inputSendData("06");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("06")) {
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "UPDATED"));
                     spiltModBusData(split, packet);
                     inputSendData("07");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("06")) {
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "FAILED"));
                     inputSendData("07");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("07")) {
 
                     spiltModBusData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "UPDATED"));
                     inputSendData("08");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("07")) {
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "FAILED"));
                     inputSendData("08");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("08")) {
 
                     spiltModBusData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "UPDATED"));
                     inputSendData("09");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("08")) {
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "FAILED"));
                     inputSendData("09");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("09")) {
 
                     spiltModBusData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "UPDATED"));
                     inputSendData("10");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("09")) {
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "FAILED"));
                     inputSendData("10");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("10")) {
 
                     spiltModBusData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "UPDATED"));
                     inputSendData("11");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("10")) {
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "FAILED"));
                     inputSendData("11");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("11")) {
 
                     spiltModBusData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "UPDATED"));
                     inputSendData("12");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("11")) {
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "FAILED"));
                     inputSendData("12");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("12")) {
 
                     spiltModBusData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "UPDATED"));
                     inputSendData("13");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("12")) {
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "FAILED"));
                     inputSendData("13");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("13")) {
 
                     spiltModBusData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "UPDATED"));
                     inputSendData("14");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("13")) {
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "FAILED"));
                     inputSendData("14");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("14")) {
 
                     spiltModBusData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "UPDATED"));
                     inputSendData("15");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("14")) {
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "MODBUS SENSOR", "FAILED"));
                     inputSendData("15");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("15")) {
 
                     spiltTemperatureData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TEMPERATURE SENSOR", "UPDATED"));
                     inputSendData("16");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("15")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TEMPERATURE SENSOR", "FAILED"));
                     inputSendData("16");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("16")) {
 
                     spiltTemperatureData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TEMPERATURE SENSOR", "UPDATED"));
                     inputSendData("17");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("16")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TEMPERATURE SENSOR", "FAILED"));
                     inputSendData("17");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("17")) {
 
                     spiltTemperatureData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TEMPERATURE SENSOR", "UPDATED"));
                     inputSendData("18");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("17")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TEMPERATURE SENSOR", "FAILED"));
                     inputSendData("18");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("18")) {
 
                     spiltAnalogInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG SENSOR", "UPDATED"));
                     inputSendData("19");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("18")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG SENSOR", "FAILED"));
                     inputSendData("19");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("19")) {
 
                     spiltAnalogInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG SENSOR", "UPDATED"));
                     inputSendData("20");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("19")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG SENSOR", "FAILED"));
                     inputSendData("20");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("20")) {
 
                     spiltAnalogInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG SENSOR", "UPDATED"));
                     inputSendData("21");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("20")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG SENSOR", "FAILED"));
                     inputSendData("21");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("21")) {
 
                     spiltAnalogInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG SENSOR", "UPDATED"));
                     inputSendData("22");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("21")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG SENSOR", "FAILED"));
                     inputSendData("22");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("22")) {
 
                     spiltAnalogInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG SENSOR", "UPDATED"));
                     inputSendData("23");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("22")) {
 
                     inputSendData("23");
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG SENSOR", "FAILED"));
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("23")) {
 
                     spiltAnalogInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG SENSOR", "UPDATED"));
                     inputSendData("24");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("23")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG SENSOR", "FAILED"));
                     inputSendData("24");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("24")) {
 
                     spiltAnalogInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "UPDATED"));
                     inputSendData("25");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("24")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "FAILED"));
                     inputSendData("25");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("25")) {
 
                     spiltAnalogInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "UPDATED"));
                     inputSendData("26");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("25")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "FAILED"));
                     inputSendData("26");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("26")) {
 
                     spiltFlowWaterInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "UPDATED"));
                     inputSendData("27");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("26")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "FAILED"));
                     inputSendData("27");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("27")) {
 
                     spiltFlowWaterInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "UPDATED"));
                     inputSendData("28");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("27")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "FAILED"));
                     inputSendData("28");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("28")) {
 
                     spiltFlowWaterInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "UPDATED"));
                     inputSendData("29");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("28")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "FAILED"));
                     inputSendData("29");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("29")) {
 
                     spiltFlowWaterInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "UPDATED"));
                     inputSendData("30");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("29")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "FAILED"));
                     inputSendData("30");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("30")) {
 
                     spiltFlowWaterInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "UPDATED"));
                     inputSendData("31");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("30")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "FAILED"));
                     inputSendData("31");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("31")) {
 
                     spiltFlowWaterInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "UPDATED"));
                     inputSendData("32");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("31")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "FAILED"));
                     inputSendData("32");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("32")) {
 
                     spiltFlowWaterInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "UPDATED"));
                     inputSendData("33");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("32")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "FAILED"));
                     inputSendData("33");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("33")) {
 
                     spiltFlowWaterInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "UPDATED"));
                     inputSendData("34");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("33")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "FLOW SENSOR", "FAILED"));
                     inputSendData("34");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("34")) {
 
                     spiltDigitalInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "UPDATED"));
                     inputSendData("35");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("34")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "FAILED"));
                     inputSendData("35");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("35")) {
 
                     spiltDigitalInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "UPDATED"));
                     inputSendData("36");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("35")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "FAILED"));
                     inputSendData("36");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("36")) {
 
                     spiltDigitalInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "UPDATED"));
                     inputSendData("37");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("36")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "FAILED"));
                     inputSendData("37");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("37")) {
 
                     spiltDigitalInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "UPDATED"));
                     inputSendData("38");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("37")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "FAILED"));
                     inputSendData("38");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("38")) {
 
                     spiltDigitalInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "UPDATED"));
                     inputSendData("39");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("38")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "FAILED"));
                     inputSendData("39");
 
                 }else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("39")) {
 
                     spiltDigitalInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "UPDATED"));
                     inputSendData("40");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("39")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "FAILED"));
                     inputSendData("40");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("40")) {
 
                     spiltDigitalInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "UPDATED"));
                     inputSendData("41");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("40")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "FAILED"));
                     inputSendData("41");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("41")) {
 
                     spiltDigitalInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "UPDATED"));
                     inputSendData("42");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("41")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "DIGITAL SENSOR", "FAILED"));
                     inputSendData("42");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("42")) {
 
                     spiltTankInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TANK SENSOR", "UPDATED"));
                     inputSendData("43");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("42")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TANK SENSOR", "FAILED"));
                     inputSendData("43");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("43")) {
 
                     spiltTankInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TANK SENSOR", "UPDATED"));
                     inputSendData("44");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("43")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TANK SENSOR", "FAILED"));
                     inputSendData("44");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("44")) {
 
                     spiltTankInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TANK SENSOR", "UPDATED"));
                     inputSendData("45");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("44")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TANK SENSOR", "FAILED"));
                     inputSendData("45");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("45")) {
 
                     spiltTankInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TANK SENSOR", "UPDATED"));
                     inputSendData("46");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("45")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TANK SENSOR", "FAILED"));
                     inputSendData("46");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("46")) {
 
                     spiltTankInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TANK SENSOR", "UPDATED"));
                     inputSendData("47");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("46")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TANK SENSOR", "FAILED"));
                     inputSendData("47");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("47")) {
 
                     spiltTankInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TANK SENSOR", "UPDATED"));
                     inputSendData("48");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("47")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TANK SENSOR", "FAILED"));
                     inputSendData("48");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("48")) {
 
                     spiltTankInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TANK SENSOR", "UPDATED"));
                     inputSendData("49");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("48")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "INPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "TANK SENSOR", "FAILED"));
                     inputSendData("49");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("49")) {
 
                     spiltTankInputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "UPDATED"));
                     virtualSendData("50");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_INPUT_SENSOR_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("49")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "FAILED"));
                     virtualSendData("50");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_SUCCESS) && split[3].equals("50")) {
 
                     spiltVirtualData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "UPDATED"));
                     virtualSendData("51");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_FAILED) && split[3].equals("50")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "FAILED"));
                     virtualSendData("51");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_SUCCESS) && split[3].equals("51")) {
 
                     spiltVirtualData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "UPDATED"));
                     virtualSendData("52");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_FAILED) && split[3].equals("51")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "FAILED"));
                     virtualSendData("52");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_SUCCESS) && split[3].equals("52")) {
 
                     spiltVirtualData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "UPDATED"));
                     virtualSendData("53");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_FAILED) && split[3].equals("52")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "FAILED"));
                     virtualSendData("53");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_SUCCESS) && split[3].equals("53")) {
 
                     spiltVirtualData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "UPDATED"));
                     virtualSendData("54");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_FAILED) && split[3].equals("53")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "FAILED"));
                     virtualSendData("54");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_SUCCESS) && split[3].equals("54")) {
 
                     spiltVirtualData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "UPDATED"));
                     virtualSendData("55");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_FAILED) && split[3].equals("54")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "FAILED"));
                     virtualSendData("55");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_SUCCESS) && split[3].equals("55")) {
 
                     spiltVirtualData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "UPDATED"));
                     virtualSendData("56");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_FAILED) && split[3].equals("55")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "FAILED"));
                     virtualSendData("56");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_SUCCESS) && split[3].equals("56")) {
 
                     spiltVirtualData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "UPDATED"));
                     virtualSendData("57");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_FAILED) && split[3].equals("56")) {
 
                     virtualSendData("57");
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "FAILED"));
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_SUCCESS) && split[3].equals("57")) {
 
                     spiltVirtualData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "UPDATED"));
                     outputSendData("1");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(VIRTUAL_INPUT) && split[2].equals(RES_FAILED) && split[3].equals("57")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "VIRTUAL SENSOR", "FAILED"));
                     outputSendData("1");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("01")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "UPDATED"));
                     outputSendData("2");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("01")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "FAILED"));
                     outputSendData("2");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("02")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "UPDATED"));
                     outputSendData("3");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("02")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "FAILED"));
                     outputSendData("3");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("03")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "UPDATED"));
                     outputSendData("4");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("03")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "FAILED"));
                     outputSendData("4");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("04")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "UPDATED"));
                     outputSendData("5");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("04")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "FAILED"));
                     outputSendData("5");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("05")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "UPDATED"));
                     outputSendData("6");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("05")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "FAILED"));
                     outputSendData("6");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("06")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "UPDATED"));
                     outputSendData("7");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("06")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "FAILED"));
                     outputSendData("7");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("07")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "UPDATED"));
                     outputSendData("8");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("07")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "FAILED"));
                     outputSendData("8");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("08")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "UPDATED"));
                     outputSendData("9");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("08")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "FAILED"));
                     outputSendData("9");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("09")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "UPDATED"));
                     outputSendData("10");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("09")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "FAILED"));
                     outputSendData("10");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("10")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "UPDATED"));
                     outputSendData("11");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("10")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "FAILED"));
                     outputSendData("11");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("11")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "UPDATED"));
                     outputSendData("12");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("11")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "FAILED"));
                     outputSendData("12");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("12")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "UPDATED"));
                     outputSendData("13");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("12")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "FAILED"));
                     outputSendData("13");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("13")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "UPDATED"));
                     outputSendData("14");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("13")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "FAILED"));
                     outputSendData("14");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("14")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "UPDATED"));
                     outputSendData("15");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("14")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "RELAY OUTPUT", "FAILED"));
                     outputSendData("15");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("15")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "UPDATED"));
                     outputSendData("16");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("15")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "FAILED"));
                     outputSendData("16");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("16")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "UPDATED"));
                     outputSendData("17");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("16")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "FAILED"));
                     outputSendData("17");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("17")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "UPDATED"));
                     outputSendData("18");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("17")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "FAILED"));
                     outputSendData("18");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("18")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "UPDATED"));
                     outputSendData("19");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("18")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "FAILED"));
                     outputSendData("19");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("19")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "UPDATED"));
                     outputSendData("20");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("19")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "FAILED"));
                     outputSendData("20");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("20")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "UPDATED"));
                     outputSendData("21");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("20")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "FAILED"));
                     outputSendData("21");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("21")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "UPDATED"));
                     outputSendData("22");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("21")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "FAILED"));
                     outputSendData("22");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("22")) {
 
                     spiltOutputData(split, packet);
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "UPDATED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "UPDATED"));
                     timerAccessorySendData("0");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_OUTPUT_CONFIG) && split[2].equals(RES_FAILED) && split[3].equals("22")) {
 
-                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "OUTPUT", "FAILED"));
+                    getAllPacketModelList.add(new GetAllPacketModel(split[3], "ANALOG OUTPUT", "FAILED"));
                     timerAccessorySendData("0");
 
                 } else if (split[0].equals(READ_PACKET) && split[1].equals(PCK_TIMER_CONFIG) && split[2].equals(RES_SUCCESS) && split[3].equals("0")) {

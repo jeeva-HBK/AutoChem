@@ -1,5 +1,6 @@
 package com.ionexchange.Fragments.Trend;
 
+import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 import static com.ionexchange.Activity.BaseActivity.dismissProgress;
 import static com.ionexchange.Others.ApplicationClass.DateformatConversion;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
@@ -59,6 +60,7 @@ import com.ionexchange.databinding.FragmentTrendBinding;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -79,6 +81,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
     HashMap<Integer, BarDataSet> barDataSet;
     HashMap<Integer, ScatterDataSet> plotDataSet;
     YAxis yAxis, yAxisRight;
+    XAxis xAxis;
 
     @Nullable
     @Override
@@ -383,6 +386,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
         //mBinding.trendLineChart.getViewPortHandler().setMaximumScaleY(2.5f);
         //mBinding.trendLineChart.getViewPortHandler().setMinimumScaleX(2f);
         //mBinding.trendLineChart.getViewPortHandler().setMaximumScaleY(2f);
+
         lineDataSet = new HashMap<>();
         if(inputDao.getEnabledSensor().length > 0) {
             mBinding.trendSensorOneTie.setAdapter(getAdapter(inputDao.getEnabledSensor(), getContext()));
@@ -400,6 +404,14 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         if (lineDataSet.get(1) != null) {
             dataSets.add(lineDataSet.get(1));
+            float yMinvalue = lineDataSet.get(1).getYMin();
+            float yMaxvalue = lineDataSet.get(1).getYMax();
+            float xMinvalue = lineDataSet.get(1).getXMin();
+            float xMaxvalue = lineDataSet.get(1).getXMax();
+            /*yAxis.setAxisMaximum(yMaxvalue);
+            yAxis.setAxisMinimum(yMinvalue);
+            xAxis.setAxisMinimum(xMinvalue);
+            xAxis.setAxisMaximum(xMaxvalue);*/
             yAxis.removeAllLimitLines();
             LimitLine lowAlarm = new LimitLine(Integer.parseInt(selectedSensor) < 34 ?
                     (Float.parseFloat(inputDao.getLowAlarm(Integer.parseInt(formDigits(2,selectedSensor))))) :
@@ -494,17 +506,15 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
         chart.setScaleEnabled(true);
         chart.setPinchZoom(true);
         chart.setGridBackgroundColor(Color.WHITE);
-        XAxis xAxis;
         xAxis = chart.getXAxis();
 
         yAxis = chart.getAxisLeft();
         yAxisRight = chart.getAxisRight();
         chart.getAxisRight().setEnabled(true);
-
-
         chart.getAxisLeft().setDrawGridLines(true);
         chart.getAxisLeft().setGridLineWidth(0.5f);
-
+        //yAxis.setAxisMaximum(14);
+       // yAxis.setAxisMinimum(0);
         chart.getXAxis().setDrawGridLines(true);
         chart.getXAxis().setGridLineWidth(0.5f);
 
@@ -534,7 +544,7 @@ public class FragmentRoot_Trend extends Fragment implements DataReceiveCallback,
 
         chart.animateX(1500);
         Legend l = chart.getLegend();
-        l.setForm(Legend.LegendForm.LINE);
+        l.setForm(Legend.LegendForm.CIRCLE);
     }
 
     private void initBarChart() {

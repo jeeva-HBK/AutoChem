@@ -1,5 +1,6 @@
 package com.ionexchange.Adapters;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,9 @@ public class GetAllPacketAdapter extends RecyclerView.Adapter<GetAllPacketAdapte
         holder.no.setText(getAllPacketModelList.get(position).getNo());
         holder.type.setText(getAllPacketModelList.get(position).getType());
         holder.updated.setText(getAllPacketModelList.get(position).getUpdate());
+        holder.updated.setTextColor((getAllPacketModelList.get(position).getUpdate().equals("UPDATED") ||
+                getAllPacketModelList.get(position).getUpdate().equals("SUCCESS")) ?
+                Color.parseColor("#006400") : Color.RED);
     }
 
     @Override

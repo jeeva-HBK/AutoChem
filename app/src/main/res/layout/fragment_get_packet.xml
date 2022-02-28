@@ -5,7 +5,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="10dp">
+        >
 
         <TextView
             android:id="@+id/hardNo"
@@ -13,8 +13,10 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="No"
-            android:textColor="@color/black"
+            android:background="@color/ash"
+            android:textColor="@color/white"
             android:textStyle="bold"
+            android:padding="10dp"
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -41,8 +43,10 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Type"
-            android:textColor="@color/black"
+            android:background="@color/ash"
+            android:textColor="@color/white"
             android:textStyle="bold"
+            android:padding="10dp"
             app:layout_constraintEnd_toStartOf="@+id/guideline9"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
             app:layout_constraintTop_toTopOf="parent" />
@@ -51,10 +55,12 @@
             android:id="@+id/Update"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Success"
+            android:text="Status"
             android:gravity="center"
             android:textStyle="bold"
-            android:textColor="@color/black"
+            android:padding="10dp"
+            android:background="@color/ash"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/type"
             app:layout_constraintTop_toTopOf="parent" />
