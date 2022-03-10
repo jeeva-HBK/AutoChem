@@ -3,13 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/GIT/Repository/Auto_Chem_ION/app/src/main/res/layout/activity_base.xml" value="0.12864583333333332" />
         <entry key="..\:/GIT/Repository/Auto_Chem_ION/app/src/main/res/layout/dashboard_layout_four_item.xml" value="0.12864583333333332" />
         <entry key="..\:/GIT/Repository/Auto_Chem_ION/app/src/main/res/layout/dashboard_layout_one_item.xml" value="0.1" />
         <entry key="..\:/GIT/Repository/Auto_Chem_ION/app/src/main/res/layout/dialog_accessory_picker.xml" value="0.12864583333333332" />
+        <entry key="..\:/GIT/Repository/Auto_Chem_ION/app/src/main/res/layout/dialog_reconnect.xml" value="0.10560068405301411" />
         <entry key="..\:/GIT/Repository/Auto_Chem_ION/app/src/main/res/layout/dialog_time_out.xml" value="0.1" />
         <entry key="..\:/GIT/Repository/Auto_Chem_ION/app/src/main/res/layout/dialog_timer_day.xml" value="0.12864583333333332" />
         <entry key="..\:/GIT/Repository/Auto_Chem_ION/app/src/main/res/layout/fragment_get_packet.xml" value="0.12864583333333332" />
         <entry key="..\:/GIT/Repository/Auto_Chem_ION/app/src/main/res/layout/fragment_send_all.xml" value="0.2" />
+        <entry key="..\:/GIT/Repository/Auto_Chem_ION/app/src/main/res/layout/input_rv_item.xml" value="0.12864583333333332" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/drawable/bg_blue_item.xml" value="0.2814814814814815" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/drawable/bg_circle.xml" value="0.3828125" />
         <entry key="..\:/JeevAndroid/Android/Grepo/Auto_Chem_ION/app/src/main/res/drawable/bg_timer_header.xml" value="0.30925925925925923" />

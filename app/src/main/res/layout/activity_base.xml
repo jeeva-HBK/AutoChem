@@ -433,6 +433,7 @@
                 android:visibility="gone">
 
                 <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/progress_bar"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_centerHorizontal="true"

@@ -53,7 +53,7 @@ public class InputsIndexRvAdapter extends RecyclerView.Adapter<InputsIndexRvAdap
         holder.currentValue.setText(inputConfigurationEntityList.get(position).inputType.equals("Flow/Water Meter") ?
                         keepAliveCurrentValueDao.getCurrentValue(inputConfigurationEntityList.get(position).hardwareNo).split("T")[1] :
                         keepAliveCurrentValueDao.getCurrentValue(inputConfigurationEntityList.get(position).hardwareNo));
-
+        holder.currentValue.setTextSize(holder.currentValue.getText().equals("DISABLED") ? 20 : 25);
         holder.lowAlarmKey.setText("Low Alarm");
         holder.highAlarmKey.setText("High Alarm");
         if(inputConfigurationEntityList.get(position).inputType.equalsIgnoreCase("Digital Input")) {

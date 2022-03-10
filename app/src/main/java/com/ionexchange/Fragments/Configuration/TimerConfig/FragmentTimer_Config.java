@@ -286,8 +286,10 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
         });
 
         dayalertDialog.show();
-        int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.7);
-        int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.8);
+        /*int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.7);
+        int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.8);*/
+        int width = 900;
+        int height = 700;
         dayalertDialog.getWindow().setLayout(width, height);
 
         //DataReceive status
@@ -450,9 +452,6 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                         weekupdateData(enableSchedule, day, timerFour);
                     }
                     dayalertDialog.dismiss();
-                } else{
-                    Log.e("onTick: ", "else");
-                    dayalertDialog.dismiss();
                 }
 
             }
@@ -608,8 +607,8 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
         View dialogView = inflater.inflate(R.layout.dialog_accessory_picker, null);
         dialogBuilder.setView(dialogView);
         accessoryTimerDialog = dialogBuilder.create();
-        accessoryTimerDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        accessoryTimerDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        /*accessoryTimerDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);*/
         //init
         TextView txt_header = dialogView.findViewById(R.id.txt_date);
         TextInputLayout outputNameTil = dialogView.findViewById(R.id.output_til);
@@ -662,9 +661,10 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
 
         //dialog size
         accessoryTimerDialog.show();
-        int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.7);
-        int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.8);
-
+       /* int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.7);
+        int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.8);*/
+        int width = 900;
+        int height = 700;
         accessoryTimerDialog.getWindow().setLayout(width, height);
 
         okBtn.setOnClickListener(new View.OnClickListener() {
@@ -686,7 +686,6 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                         accessoryTimer[12] = formDigits(2, "" + outputNo1);
                         accessoryTimer[13] = getPosition(1, toStringValue(type), accessoryType);
                         accessoryTimerDialog.dismiss();
-                    } else{
                     }
                 }
                 if (timer == 2) {

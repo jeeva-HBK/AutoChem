@@ -130,7 +130,12 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public static void dismissProgress() {
+        Log.e(TAG, "Config-dismissProgress: ");
         msBinding.progressCircular.setVisibility(View.GONE);
+        msBinding.progressBar.loop(false);
+        msBinding.progressBar.pauseAnimation();
+        msBinding.progressBar.clearAnimation();
+        msBinding.progressBar.cancelAnimation();
         baseActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         canGoBack = true;
     }
@@ -299,6 +304,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                                 public void OnConnectFailed(Exception e) {
                                     Log.e(TAG, "OnConnectFailed:");
                                     retryCount++;
+                                    tempBool = true;
                                     startReconnect();
                                 }
                             });
@@ -422,7 +428,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void startHandler() {
-        handler.postDelayed(userInactive, 1 * 60 * 1000); //for 5 minutes
+        handler.postDelayed(userInactive, 5 * 60 * 1000); //for 5 minutes
     }
 
     void expandedListView() {

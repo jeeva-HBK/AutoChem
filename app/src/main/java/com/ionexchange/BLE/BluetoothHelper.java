@@ -176,7 +176,7 @@ public class BluetoothHelper implements SerialListener {
                                 @Override
                                 public void OnDataReceive(String data) {
                                     dataCallback = mTempCallback;
-                                    mConnectionListener.start();
+                                   // mConnectionListener.start();
                                     if (data.contains(mExpectedResponse)) {
                                         isConnected = true;
                                         bleConnected.set(true);
@@ -186,7 +186,7 @@ public class BluetoothHelper implements SerialListener {
                                         isConnected = false;
                                         bleConnected.set(false);
                                         mConnectStatus = ConnectStatus.NOTCONNECTED;
-                                        mConnectionListener.start();
+                                      // mConnectionListener.start();
                                     }
 
                                 }
@@ -196,7 +196,7 @@ public class BluetoothHelper implements SerialListener {
                         }
                     } catch (Exception e) {
                         dataCallback = mTempCallback;
-                        mConnectionListener.start();
+                       // mConnectionListener.start();
                         e.printStackTrace();
                     }
                 }
@@ -204,21 +204,13 @@ public class BluetoothHelper implements SerialListener {
                 @Override
                 public void OnConnectFailed(Exception e) {
                     dataCallback = mTempCallback;
-                    mConnectionListener.start();
+                    //mConnectionListener.start();
                 }
             });
         } catch (Exception e) {
             dataCallback = mTempCallback;
             mConnectionListener.start();
             e.printStackTrace();
-        }
-    }
-
-    public void autoReconnect(String requestPacket, String expectedResponse) {
-        this.mConnectPacket = requestPacket;
-        this.mExpectedResponse = expectedResponse;
-        if (mConnectionListener != null) {
-            mConnectionListener.start();
         }
     }
 

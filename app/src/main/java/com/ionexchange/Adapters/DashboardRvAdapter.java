@@ -356,7 +356,8 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                         if (mainConfigurationEntityList.get(position).inputType.contains("Digital Input")) {
                             currentValue.setTooltipText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no)
                                     .equals("OPEN") ? inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(position).hardware_no)) :
-                                    inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(position).hardware_no)));
+                                    keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no)
+                                            .equals("CLOSE") ? inputConfigurationDao.getHighAlarm(mainConfigurationEntityList.get(position).hardware_no) : "Disabled");
                         }
                     }
                 }
@@ -369,7 +370,8 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
                     if (mainConfigurationEntityList.get(position).inputType.contains("Digital Input")) {
                         currentValue.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no)
                                 .equals("OPEN") ? inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(position).hardware_no)) :
-                                inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(position).hardware_no)));
+                                keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no)
+                                        .equals("CLOSE") ? inputConfigurationDao.getHighAlarm(mainConfigurationEntityList.get(position).hardware_no) : "Disabled");
                     }
                 }
             }
@@ -731,14 +733,16 @@ public class DashboardRvAdapter extends RecyclerView.Adapter<DashboardRvAdapter.
     }
 
 
-    void setDigitalInput(TextView txtView, int pos) {
-        if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(pos).hardware_no) != null) {
-            txtView.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(pos).hardware_no));
+    void setDigitalInput(TextView txtView, int position) {
+        if (keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no) != null) {
+            txtView.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no));
 
-            if (mainConfigurationEntityList.get(pos).inputType.contains("Digital Input")) {
-                txtView.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(pos).hardware_no)
-                        .equals("OPEN") ? inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(pos).hardware_no)) :
-                        inputConfigurationDao.getHighAlarm((mainConfigurationEntityList.get(pos).hardware_no)));
+            if (mainConfigurationEntityList.get(position).inputType.contains("Digital Input")) {
+                txtView.setText(keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no)
+                        .equals("OPEN") ? inputConfigurationDao.getLowAlarm((mainConfigurationEntityList.get(position).hardware_no)) :
+                        keepAliveCurrentValueDao.getCurrentValue(mainConfigurationEntityList.get(position).hardware_no)
+                                .equals("CLOSE") ? inputConfigurationDao.getHighAlarm(mainConfigurationEntityList.get(position).hardware_no) : "Disabled");
+
             }
         }
     }

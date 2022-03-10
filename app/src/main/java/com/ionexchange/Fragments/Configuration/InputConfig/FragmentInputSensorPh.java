@@ -319,21 +319,21 @@ public class FragmentInputSensorPh extends Fragment implements DataReceiveCallba
                         e.printStackTrace();
                     }
                 } else if (splitData[2].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), getString(R.string.readFailed));
+                    mAppClass.showSnackBar(getActivity(), getString(R.string.readFailed));
                 }
 
             } else if (splitData[0].equals(WRITE_PACKET)) {
                 if (splitData[3].equals(RES_SUCCESS)) {
-                    mAppClass.showSnackBar(getContext(), getString(R.string.update_success));
+                    mAppClass.showSnackBar(getActivity(), getString(R.string.update_success));
 
                     pHEntity(Integer.parseInt(splitData[2]));
 
                 } else if (splitData[3].equals(RES_FAILED)) {
-                    mAppClass.showSnackBar(getContext(), getString(R.string.update_failed));
+                    mAppClass.showSnackBar(getActivity(), getString(R.string.update_failed));
                 }
             }
         } else {
-            mAppClass.showSnackBar(getContext(), getString(R.string.wrongPack));
+            mAppClass.showSnackBar(getActivity(), getString(R.string.wrongPack));
         }
     }
 

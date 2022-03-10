@@ -616,85 +616,100 @@ public class ApiService implements DataReceiveCallback {
                         if (splitValidation[1].equals(PCK_INPUT_SENSOR_CONFIG)) {
                             int hardWareNo = Integer.parseInt(jsonObject.getString("INPUTNO"));
                             if (splitValidation[3].equals(RES_SUCCESS)) {
-                                String inputLabel = jsonObject.getString("NAME_LABEL");
-                                String lowAlarm = jsonObject.getString("LEFT_LABEL");
-                                String highAlarm = jsonObject.getString("RIGHT_LABEL");
-                                int seqNo = Integer.parseInt(jsonObject.getString("SEQUENCE_NO"));
-                                String unit = jsonObject.getString("UNIT");
-                                String type = jsonObject.getString("TYPE");
-                                String sensorType = "SENSOR";
-                                String sequenceName = "";
-                                int flagValue = 0;
-                                int signalType = 0;
-                                if (hardWareNo == 1) {
-                                    sensorType = "SENSOR";
-                                    sequenceName = "pH";
-                                    flagValue = Integer.parseInt(splitData[splitData.length - 1]);
-                                } else if (hardWareNo == 2) {
-                                    sensorType = "SENSOR";
-                                    sequenceName = "ORP";
-                                    flagValue = Integer.parseInt(splitData[splitData.length - 1]);
-                                    unit = "mV";
-                                } else if (hardWareNo == 3) {
-                                    sensorType = "SENSOR";
-                                    sequenceName = "Contacting Conductivity";
-                                    flagValue = Integer.parseInt(splitData[splitData.length - 1]);
-                                } else if (hardWareNo == 4) {
-                                    sensorType = "SENSOR";
-                                    sequenceName = "Toroidal Conductivity";
-                                    flagValue = Integer.parseInt(splitData[splitData.length - 1]);
-                                } else if (hardWareNo < 14) {
-                                    sensorType = "MODBUS";
-                                    int modbustype = Integer.parseInt(jsonObject.getString("TYPE"));
-                                    type = typeArr[modbustype];
-                                    sequenceName = modBusTypeArr[seqNo] + typeArr[modbustype];
-                                    flagValue = Integer.parseInt(splitData[splitData.length - 1]);
-                                } else if (hardWareNo < 17) {
-                                    sensorType = "SENSOR";
-                                    sequenceName = "Temperature -" + seqNo;
-                                    flagValue = Integer.parseInt(splitData[splitData.length - 1]);
-                                    unit = "°C";
-                                } else if (hardWareNo < 25) {
-                                    sensorType = "Analog";
-                                    sequenceName = seqNo < 6 ? sensorType + " - " + seqNo + "(4-20mA)" : sensorType + " - " + seqNo + "(0-10mA)";
-                                    flagValue = Integer.parseInt(splitData[splitData.length - 1]);
-                                } else if (hardWareNo < 33) {
-                                    sensorType = "FLOWMETER";
-                                    sequenceName = "Flow Meter - " + seqNo;
-                                    flagValue = Integer.parseInt(splitData[splitData.length - 1]);
-                                } else if (hardWareNo < 41) {
-                                    sensorType = "DIGITAL";
-                                    signalType = 1;
-                                    sequenceName = "Digital Sensor -" + seqNo;
-                                    flagValue = Integer.parseInt(splitData[splitData.length - 2]);
-                                } else {
-                                    sensorType = "TANK";
-                                    signalType = 1;
-                                    sequenceName = "Tank Level -" + seqNo;
-                                    flagValue = Integer.parseInt(splitData[splitData.length - 2]);
-                                }
                                 if(hardWareNo != 0) {
-                                    InputConfigurationEntity entityUpdate = new InputConfigurationEntity
-                                            (hardWareNo, inputTypeArr[Integer.parseInt(splitData[5])],
-                                                    sensorType.trim(), signalType, sequenceName, seqNo, inputLabel,
-                                                    lowAlarm, highAlarm, unit, type, flagValue == 2 ? 0 : 1 ,
-                                                    jsonObject.getString("REQ"));
-                                    List<InputConfigurationEntity> inputentryList = new ArrayList<>();
-                                    inputentryList.add(entityUpdate);
-                                    updateInputDB(inputentryList);
+                                    String inputLabel = jsonObject.getString("NAME_LABEL");
+                                    String lowAlarm = jsonObject.getString("LEFT_LABEL");
+                                    String highAlarm = jsonObject.getString("RIGHT_LABEL");
+                                    int seqNo = Integer.parseInt(jsonObject.getString("SEQUENCE_NO"));
+                                    String unit = jsonObject.getString("UNIT");
+                                    String type = jsonObject.getString("TYPE");
+                                    String sensorType = "SENSOR";
+                                    String sequenceName = "";
+                                    int flagValue = 0;
+                                    int signalType = 0;
+                                    if (hardWareNo == 1) {
+                                        sensorType = "SENSOR";
+                                        sequenceName = "pH";
+                                        flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                                    } else if (hardWareNo == 2) {
+                                        sensorType = "SENSOR";
+                                        sequenceName = "ORP";
+                                        flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                                        unit = "mV";
+                                    } else if (hardWareNo == 3) {
+                                        sensorType = "SENSOR";
+                                        sequenceName = "Contacting Conductivity";
+                                        flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                                    } else if (hardWareNo == 4) {
+                                        sensorType = "SENSOR";
+                                        sequenceName = "Toroidal Conductivity";
+                                        flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                                    } else if (hardWareNo < 14) {
+                                        sensorType = "MODBUS";
+                                        int modbustype = Integer.parseInt(jsonObject.getString("TYPE"));
+                                        type = typeArr[modbustype];
+                                        sequenceName = modBusTypeArr[seqNo] + typeArr[modbustype];
+                                        flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                                    } else if (hardWareNo < 17) {
+                                        sensorType = "SENSOR";
+                                        sequenceName = "Temperature -" + seqNo;
+                                        flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                                        unit = "°C";
+                                    } else if (hardWareNo < 25) {
+                                        sensorType = "Analog";
+                                        sequenceName = seqNo < 6 ? sensorType + " - " + seqNo + "(4-20mA)" : sensorType + " - " + seqNo + "(0-10mA)";
+                                        flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                                    } else if (hardWareNo < 33) {
+                                        sensorType = "FLOWMETER";
+                                        sequenceName = "Flow Meter - " + seqNo;
+                                        flagValue = Integer.parseInt(splitData[splitData.length - 1]);
+                                    } else if (hardWareNo < 41) {
+                                        sensorType = "DIGITAL";
+                                        signalType = 1;
+                                        sequenceName = "Digital Sensor -" + seqNo;
+                                        flagValue = Integer.parseInt(splitData[splitData.length - 2]);
+                                    } else {
+                                        sensorType = "TANK";
+                                        signalType = 1;
+                                        sequenceName = "Tank Level -" + seqNo;
+                                        flagValue = Integer.parseInt(splitData[splitData.length - 2]);
+                                    }
+                                    if (hardWareNo != 0) {
+                                        InputConfigurationEntity entityUpdate = new InputConfigurationEntity
+                                                (hardWareNo, inputTypeArr[Integer.parseInt(splitData[5])],
+                                                        sensorType.trim(), signalType, sequenceName, seqNo, inputLabel,
+                                                        lowAlarm, highAlarm, unit, type, flagValue == 2 ? 0 : 1,
+                                                        jsonObject.getString("REQ"));
+                                        List<InputConfigurationEntity> inputentryList = new ArrayList<>();
+                                        inputentryList.add(entityUpdate);
+                                        updateInputDB(inputentryList);
+                                    }
+                                    finalArr = new JSONArray();
+                                    dataObj = new JSONObject();
+                                    dataObj.put("INPUTNO", formDigits(2, String.valueOf(hardWareNo)));
+                                    dataObj.put("REQ", "ACK");
+                                    dataObj.put("NAME_LABEL", "");
+                                    dataObj.put("LEFT_LABEL", "");
+                                    dataObj.put("RIGHT_LABEL", "");
+                                    dataObj.put("SEQUENCE_NO", "");
+                                    dataObj.put("UNIT", "");
+                                    dataObj.put("TYPE", "");
+                                    dataObj.put("EVENT_TYPE", "");
+                                    finalArr.put(dataObj);
+                                } else{
+                                    finalArr = new JSONArray();
+                                    dataObj = new JSONObject();
+                                    dataObj.put("INPUTNO", formDigits(2, String.valueOf(hardWareNo)));
+                                    dataObj.put("REQ", "NACK");
+                                    dataObj.put("NAME_LABEL", "");
+                                    dataObj.put("LEFT_LABEL", "");
+                                    dataObj.put("RIGHT_LABEL", "");
+                                    dataObj.put("SEQUENCE_NO", "");
+                                    dataObj.put("UNIT", "");
+                                    dataObj.put("TYPE", "");
+                                    dataObj.put("EVENT_TYPE", "");
+                                    finalArr.put(dataObj);
                                 }
-                                finalArr = new JSONArray();
-                                dataObj = new JSONObject();
-                                dataObj.put("INPUTNO", formDigits(2, String.valueOf(hardWareNo)));
-                                dataObj.put("REQ", "ACK");
-                                dataObj.put("NAME_LABEL", "");
-                                dataObj.put("LEFT_LABEL", "");
-                                dataObj.put("RIGHT_LABEL", "");
-                                dataObj.put("SEQUENCE_NO", "");
-                                dataObj.put("UNIT", "");
-                                dataObj.put("TYPE", "");
-                                dataObj.put("EVENT_TYPE", "");
-                                finalArr.put(dataObj);
                             } else {
                                 finalArr = new JSONArray();
                                 dataObj = new JSONObject();

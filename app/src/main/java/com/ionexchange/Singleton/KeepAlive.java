@@ -88,7 +88,9 @@ public class KeepAlive implements DataReceiveCallback {
             while (i < 57) {
                 if (data[i + 3].length() > 2) {
                     if (Integer.parseInt(data[i + 3].substring(0, 2)) > 33 && Integer.parseInt(data[i + 3].substring(0, 2)) < 50) { // DIGITAL & TANK
-                        if (data[i + 3].substring(2, data[i + 3].length()).equals("1")) {
+                        if (data[i + 3].substring(2, data[i + 3].length()).equals("0")) {
+                            keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), "DISABLED");
+                        } if (data[i + 3].substring(2, data[i + 3].length()).equals("1")) {
                             keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), "OPEN");
                         } else if (data[i + 3].substring(2, data[i + 3].length()).equals("2")) {
                             keepAliveCurrentValueDao.updateCurrentValue(Integer.parseInt(data[i + 3].substring(0, 2)), "CLOSE");
