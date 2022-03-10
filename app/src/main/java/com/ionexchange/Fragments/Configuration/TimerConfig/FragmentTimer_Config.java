@@ -24,11 +24,15 @@ import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -36,6 +40,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -57,6 +62,7 @@ import com.ionexchange.Others.EventLogDemo;
 import com.ionexchange.R;
 import com.ionexchange.Singleton.ApiService;
 import com.ionexchange.Singleton.SharedPref;
+import com.ionexchange.customClass.InputFilterMinMax;
 import com.ionexchange.databinding.FragmentTimerConfigBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -103,7 +109,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
     String weeklyPacketThree;
     String weeklyPacketFour;
     String accessoryTime;
-
+    public static AlertDialog dayalertDialog,accessoryTimerDialog;
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
@@ -248,7 +254,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_timer_day, null);
         dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
+        dayalertDialog = dialogBuilder.create();
         CheckBox enableSchedule = dialogView.findViewById(R.id.checkbox_enable_time);
         Button btnOk = dialogView.findViewById(R.id.btn_ok);
         Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
@@ -256,11 +262,17 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
         TextView title = dialogView.findViewById(R.id.txt_date);
         title.setText(titleName);
         startHourDay = dialogView.findViewById(R.id.number_picker_hour);
+        startHourDay.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "24")});
         startMinDay = dialogView.findViewById(R.id.number_min_hour);
+        startMinDay.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "60")});
         startSecDay = dialogView.findViewById(R.id.number_sec_hour);
+        startSecDay.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "60")});
         endHourDay = dialogView.findViewById(R.id.number_dur_picker_hour);
+        endHourDay.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "24")});
         endMinDay = dialogView.findViewById(R.id.number_dur_min_hour);
+        endMinDay.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "60")});
         endSecDay = dialogView.findViewById(R.id.number_dur_sec_hour);
+        endSecDay.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "60")});
 
         enableDayScreen(enableSchedule.isChecked(), startHourDay, startMinDay, startSecDay,
                 endHourDay, endMinDay, endSecDay);
@@ -273,10 +285,10 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
             }
         });
 
-        alertDialog.show();
+        dayalertDialog.show();
         int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.7);
         int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.8);
-        alertDialog.getWindow().setLayout(width, height);
+        dayalertDialog.getWindow().setLayout(width, height);
 
         //DataReceive status
         //Week-1
@@ -437,7 +449,10 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                     if (week.equals("Week-4") && timerFour != null) {
                         weekupdateData(enableSchedule, day, timerFour);
                     }
-                    alertDialog.dismiss();
+                    dayalertDialog.dismiss();
+                } else{
+                    Log.e("onTick: ", "else");
+                    dayalertDialog.dismiss();
                 }
 
             }
@@ -445,7 +460,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog.dismiss();
+                dayalertDialog.dismiss();
             }
         });
 
@@ -459,25 +474,25 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                         weekupdateData(enableSchedule, day, timerOne);
                         applyToAllTime(timerOne, timerOne, day);
                         handleResponse(timerOne, 1);
-                        alertDialog.dismiss();
+                        dayalertDialog.dismiss();
                     }
                     if (week.equals("Week-2") && timerTwo != null) {
                         weekupdateData(enableSchedule, day, timerTwo);
                         applyToAllTime(timerTwo, timerTwo, day);
                         handleResponse(timerTwo, 1);
-                        alertDialog.dismiss();
+                        dayalertDialog.dismiss();
                     }
                     if (week.equals("Week-3") && timerThree != null) {
                         weekupdateData(enableSchedule, day, timerThree);
                         applyToAllTime(timerThree, timerThree, day);
                         handleResponse(timerThree, 1);
-                        alertDialog.dismiss();
+                        dayalertDialog.dismiss();
                     }
                     if (week.equals("Week-4") && timerFour != null) {
                         weekupdateData(enableSchedule, day, timerFour);
                         applyToAllTime(timerFour, timerFour, day);
                         handleResponse(timerFour, 1);
-                        alertDialog.dismiss();
+                        dayalertDialog.dismiss();
                     }
                 }
             }
@@ -588,11 +603,13 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
 
     void accessoryTimer(int timer) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = this.getLayoutInflater();
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService
+                (Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_accessory_picker, null);
         dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
-
+        accessoryTimerDialog = dialogBuilder.create();
+        accessoryTimerDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        accessoryTimerDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         //init
         TextView txt_header = dialogView.findViewById(R.id.txt_date);
         TextInputLayout outputNameTil = dialogView.findViewById(R.id.output_til);
@@ -600,8 +617,11 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
         TextInputLayout typeTil = dialogView.findViewById(R.id.outputType);
 
         startHour = dialogView.findViewById(R.id.number_picker_hour);
+        startHour.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "24")});
         startMin = dialogView.findViewById(R.id.number_min_hour);
+        startMin.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "60")});
         startSec = dialogView.findViewById(R.id.number_sec_hour);
+        startSec.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "60")});
         Button okBtn = dialogView.findViewById(R.id.btn_ok);
         Button cancelBtn = dialogView.findViewById(R.id.btn_cancel);
         accessory = dialogView.findViewById(R.id.checkbox_enable_time);
@@ -611,7 +631,6 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
         mode.setAdapter(getAdapter(accessoryTimerMode));
         type.setAdapter(getAdapter(accessoryType));
         outputName.setAdapter(getAdapter(outputNames));
-
         txt_header.setText(getString(R.string.accessories_timer_header) + " " + timer);
 
         setAccessoryTimerEnabled(accessory.isChecked(), startHour, startMin, startSec, outputNameTil, modeTil, typeTil);
@@ -642,10 +661,11 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
         }
 
         //dialog size
-        alertDialog.show();
+        accessoryTimerDialog.show();
         int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.7);
         int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.8);
-        alertDialog.getWindow().setLayout(width, height);
+
+        accessoryTimerDialog.getWindow().setLayout(width, height);
 
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -665,7 +685,8 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                         accessoryTimer[11] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
                         accessoryTimer[12] = formDigits(2, "" + outputNo1);
                         accessoryTimer[13] = getPosition(1, toStringValue(type), accessoryType);
-                        alertDialog.dismiss();
+                        accessoryTimerDialog.dismiss();
+                    } else{
                     }
                 }
                 if (timer == 2) {
@@ -682,7 +703,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                         accessoryTimer[17] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
                         accessoryTimer[18] = formDigits(2, "" + outputNo2);
                         accessoryTimer[19] = getPosition(1, toStringValue(type), accessoryType);
-                        alertDialog.dismiss();
+                        accessoryTimerDialog.dismiss();
                     }
 
                 }
@@ -701,7 +722,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                         accessoryTimer[23] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
                         accessoryTimer[24] = formDigits(2, "" + outputNo3);
                         accessoryTimer[25] = getPosition(1, toStringValue(type), accessoryType);
-                        alertDialog.dismiss();
+                        accessoryTimerDialog.dismiss();
                     }
 
                 }
@@ -719,7 +740,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
                         accessoryTimer[29] = formDigits(2, startHour.getText().toString()) + formDigits(2, startMin.getText().toString()) + formDigits(2, startSec.getText().toString());
                         accessoryTimer[30] = formDigits(2, "" + outputNo4);
                         accessoryTimer[31] = getPosition(1, toStringValue(type), accessoryType);
-                        alertDialog.dismiss();
+                        accessoryTimerDialog.dismiss();
                     }
                 }
 
@@ -734,7 +755,7 @@ public class FragmentTimer_Config extends Fragment implements DataReceiveCallbac
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog.dismiss();
+                accessoryTimerDialog.dismiss();
             }
         });
     }

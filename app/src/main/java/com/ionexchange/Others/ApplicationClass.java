@@ -212,13 +212,13 @@ public class ApplicationClass extends Application {
     public static RequestQueue requestQueue;
 
     //public final static String baseURL = "http://192.168.1.82/WaterIOT.API/api/";
-     //public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
-     public final static String baseURL = "http://192.168.1.52/WaterIOT.API/api/";
+     public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
+    // public final static String baseURL = "http://192.168.1.52/WaterIOT.API/api/";
 
     // public final static String baseURL = "http://183.82.35.93/WaterIOT.API/api/";
-    // public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
+     //public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
 
-    // public final static String baseURL = "http://183.82.35.93/Water.API/api/";
+     //public final static String baseURL = "http://183.82.35.93/Water.API/api/";
 
 
     public static ObservableBoolean triggerWebService = new ObservableBoolean(false);

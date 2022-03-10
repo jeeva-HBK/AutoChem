@@ -1,6 +1,8 @@
 package com.ionexchange.Activity;
 
 import static android.os.Build.VERSION.SDK_INT;
+import static com.ionexchange.Fragments.Configuration.TimerConfig.FragmentTimer_Config.accessoryTimerDialog;
+import static com.ionexchange.Fragments.Configuration.TimerConfig.FragmentTimer_Config.dayalertDialog;
 import static com.ionexchange.Others.ApplicationClass.DB;
 import static com.ionexchange.Others.ApplicationClass.bleConnected;
 import static com.ionexchange.Others.ApplicationClass.defaultPassword;
@@ -83,37 +85,236 @@ import java.util.List;
 public class BaseActivity extends AppCompatActivity implements View.OnClickListener,
         ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupClickListener,
         ExpandableListView.OnChildClickListener {
-    ActivityBaseBinding mBinding;
     private static final int PERMISSION_REQUEST_CODE = 2296;
     private static final String TAG = "BaseActivity";
-    public static boolean canGoBack;
-    AppBarConfiguration mAppBarConfiguration;
-    NavController mNavController;
-    NavGraph navGraph;
-    static CoordinatorLayout coordinatorLayout;
-    ApplicationClass mAppClass;
-    static Context context;
-    private int lastPosition = -1;
-    HashMap<String, List<String>> childList;
-    List<String> generaList, ioList, homescreenList, headerList;
-    boolean permission = false;
     private static final String DEBUG_TAG = "Gestures";
-    GestureDetector gestureDetector;
-    Runnable userInactive;
-    Handler handler;
-    WaterTreatmentDb db;
-    UserManagementDao userManagementDao;
+    public static boolean canGoBack;
+    static CoordinatorLayout coordinatorLayout;
+    static Context context;
     static ActivityBaseBinding msBinding;
     static Context msContext;
     static BaseActivity baseActivity;
     static ApplicationClass msAppClass;
     static android.app.AlertDialog reconnectDialog;
-
-    AlarmLogDao alarmLogDao;
     static int retryCount = 0;
     static boolean tempBool = true;
     static TextView attemptTxt;
+    ActivityBaseBinding mBinding;
+    AppBarConfiguration mAppBarConfiguration;
+    NavController mNavController;
+    NavGraph navGraph;
+    ApplicationClass mAppClass;
+    HashMap<String, List<String>> childList;
+    List<String> generaList, ioList, homescreenList, headerList;
+    boolean permission = false;
+    GestureDetector gestureDetector;
+    Runnable userInactive;
+    Handler handler;
+    WaterTreatmentDb db;
+    UserManagementDao userManagementDao;
+    AlarmLogDao alarmLogDao;
+    private int lastPosition = -1;
 
+    public static void showSnack(String message) {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT);
+        TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
+        tv.setTextColor(Color.WHITE);
+        snackbar.show();
+    }
+
+    public static void showProgress() {
+        msBinding.progressCircular.setVisibility(View.VISIBLE);
+        baseActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        canGoBack = false;
+    }
+
+    public static void dismissProgress() {
+        msBinding.progressCircular.setVisibility(View.GONE);
+        baseActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        canGoBack = true;
+    }
+
+    public static void logOut() {
+        new MaterialAlertDialogBuilder(context)
+                .setTitle("LOGOUT")
+                .setMessage("Are you sure, you want to Logout ?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        SharedPref.write(pref_LOGGEDIN, false);
+                        SharedPref.write(pref_USERLOGINREQUIRED, true);
+                        SharedPref.write(pref_USERLOGINSTATUS, 0);
+                        /*PackageManager packageManager = context.getPackageManager();
+                        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+                        ComponentName componentName = intent.getComponent();
+                        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+                        context.startActivity(mainIntent);
+                        Runtime.getRuntime().exit(0);*/
+                        msBinding.mainScreenBtn.performClick();
+                    }
+                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        }).show();
+    }
+
+    public static void disconnectBle() {
+        new MaterialAlertDialogBuilder(context)
+                .setTitle("LOGOUT")
+                .setMessage("Are you sure, you want to Logout ?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        SharedPref.write(pref_LOGGEDIN, false);
+                        SharedPref.write(pref_USERLOGINREQUIRED, true);
+                        SharedPref.write(pref_USERLOGINSTATUS, 0);
+                        PackageManager packageManager = context.getPackageManager();
+                        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+                        ComponentName componentName = intent.getComponent();
+                        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+                        context.startActivity(mainIntent);
+                        Runtime.getRuntime().exit(0);
+                        msBinding.mainScreenBtn.performClick();
+                    }
+                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        }).show();
+    }
+
+    public static void reconnect() {
+        if (!SharedPref.read(pref_MACADDRESS, "").equals("")) {
+            baseActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    baseActivity.stopHandler();
+                    android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(context);
+                    LayoutInflater inflater = baseActivity.getLayoutInflater();
+                    View dialogView = inflater.inflate(R.layout.dialog_reconnect, null);
+                    attemptTxt = dialogView.findViewById(R.id.attempt);
+                    dialogBuilder.setView(dialogView);
+                    dialogBuilder.setCancelable(false);
+                    reconnectDialog = dialogBuilder.create();
+                    tempBool = true;
+                    startReconnect();
+                    reconnectDialog.show();
+                }
+            });
+        }
+    }
+
+    private static void startReconnect() {
+        Log.e(TAG, "Reconnect: start" + "tempBool - " + tempBool + "retryCount -" + retryCount);
+        if (attemptTxt != null) {
+            baseActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    attemptTxt.setText("attempt : " + retryCount + "/3");
+                }
+            });
+        }
+        if (retryCount < 3) {
+            try {
+                BluetoothHelper.getInstance().scanBLE(new BluetoothScannerCallback() {
+                    @Override
+                    public void OnScanCompleted(List<BluetoothDevice> devices) {
+                        Log.e(TAG, "OnScanCompleted: " + "tempBool - " + tempBool + "retryCount -" + retryCount);
+                        if (tempBool) {
+                            retryCount++;
+                            startReconnect();
+                        }
+                        for (int i = 0; i < devices.size(); i++) {
+                            if (devices.get(i).getAddress().equals(SharedPref.read(pref_MACADDRESS, ""))) {
+                                Log.e(TAG, "OnScanDevice found -> " + "tempBool - " + tempBool + "retryCount -" + retryCount);
+                                tempBool = false;
+                                connect(devices.get(i));
+                                break;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void SearchResult(BluetoothDevice device) {
+                    }
+
+                    @Override
+                    public void OnDeviceFoundUpdate(List<BluetoothDevice> devices) {
+                        Log.e(TAG, "OnDeviceFoundUpdate: " + "Devices size" + devices.size() + "tempBool - " + tempBool + "retryCount -" + retryCount);
+                        for (BluetoothDevice d : devices) {
+                            if (d.getAddress().equals(SharedPref.read(pref_MACADDRESS, ""))) {
+                                Log.e(TAG, "onFounDevice found -> " + d + "tempBool - " + tempBool + "retryCount -" + retryCount);
+                                tempBool = false;
+                                connect(d);
+                                break;
+                            }
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(TAG, "startReconnect: Catch" + "tempBool - " + tempBool + "retryCount -" + retryCount);
+                retryCount++;
+                startReconnect();
+                e.printStackTrace();
+            }
+        } else {
+            if (reconnectDialog != null && reconnectDialog.isShowing()) {
+                reconnectDialog.dismiss();
+            }
+            showSnack("Failed to reconnect, try again later" + "tempBool - " + tempBool + "retryCount -" + retryCount);
+            baseActivity.kickOut();
+            baseActivity.startHandler();
+            retryCount = 0;
+        }
+    }
+
+    private static void connect(BluetoothDevice bluetoothDevice) {
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (retryCount < 3) {
+                    try {
+                        if (BluetoothHelper.getInstance() != null) {
+                            BluetoothHelper.getInstance().disConnect();
+                            BluetoothHelper.getInstance().connectBLE(context, bluetoothDevice, new BluetoothConnectCallback() {
+                                @Override
+                                public void OnConnectSuccess() {
+                                    tempBool = false;
+                                    reconnectDialog.dismiss();
+                                    retryCount = 0;
+                                    bleConnected.set(true);
+                                    triggerWebService.set(true);
+                                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                                        showSnack("Reconnected to " + bluetoothDevice.getName() + " Successfully");
+                                        return;
+                                    }
+                                    baseActivity.startHandler();
+                                }
+
+                                @Override
+                                public void OnConnectFailed(Exception e) {
+                                    Log.e(TAG, "OnConnectFailed:");
+                                    retryCount++;
+                                    startReconnect();
+                                }
+                            });
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "ConnectElse: " + "tempBool - " + tempBool + "retryCount -" + retryCount);
+                        retryCount++;
+                        startReconnect();
+                        e.printStackTrace();
+                    }
+                } else {
+                    Log.e(TAG, "ConnectElse: " + "tempBool - " + tempBool + "retryCount -" + retryCount);
+                }
+            }
+        }, 5000);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -221,7 +422,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void startHandler() {
-        handler.postDelayed(userInactive, 5 * 60 * 1000); //for 5 minutes
+        handler.postDelayed(userInactive, 1 * 60 * 1000); //for 5 minutes
     }
 
     void expandedListView() {
@@ -259,13 +460,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.expList.expandGroup(0);
         onGroupClick(mBinding.expList, null, 0, 0);
 
-    }
-
-    public static void showSnack(String message) {
-        Snackbar snackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT);
-        TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
-        tv.setTextColor(Color.WHITE);
-        snackbar.show();
     }
 
     public void setNavigation(int navigation, int des) {
@@ -361,7 +555,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
     private void screenTimeout() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BaseActivity.this);
         LayoutInflater inflater = this.getLayoutInflater();
@@ -376,11 +569,22 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         CountDownTimer CountDownTimer = new CountDownTimer(30000, 1000) {
 
             public void onTick(long millisUntilFinished) {
+                Log.e(TAG, "onTick: "+ millisUntilFinished / 1000 + ""+ millisUntilFinished);
                 dialog_timeout_txt.setText(millisUntilFinished / 1000 + "");
             }
 
             public void onFinish() {
                 alertDialog.dismiss();
+                if (dayalertDialog != null) {
+                    if (dayalertDialog.isShowing()) {
+                        dayalertDialog.dismiss();
+                    }
+                }
+                if (accessoryTimerDialog != null) {
+                    if (accessoryTimerDialog.isShowing()) {
+                        accessoryTimerDialog.dismiss();
+                    }
+                }
                 lock();
 
             }
@@ -490,26 +694,12 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
     public void changeActionBarText(String titile) {
         //  mBinding.toolbarText.setText(titile);
     }
 
     public void changeToolBarVisibility(int visibility) {
         // mBinding.toolBar.setVisibility(visibility);
-    }
-
-    public static void showProgress() {
-        msBinding.progressCircular.setVisibility(View.VISIBLE);
-        baseActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        canGoBack = false;
-    }
-
-    public static void dismissProgress() {
-        msBinding.progressCircular.setVisibility(View.GONE);
-        baseActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        canGoBack = true;
     }
 
     @Override
@@ -602,7 +792,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         super.onWindowFocusChanged(hasFocus);
     }
 
-
     public void checkPermission(String permission, int requestCode) {
         if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
@@ -676,191 +865,10 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
-    public static void logOut() {
-        new MaterialAlertDialogBuilder(context)
-                .setTitle("LOGOUT")
-                .setMessage("Are you sure, you want to Logout ?")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        SharedPref.write(pref_LOGGEDIN, false);
-                        SharedPref.write(pref_USERLOGINREQUIRED, true);
-                        SharedPref.write(pref_USERLOGINSTATUS, 0);
-                        /*PackageManager packageManager = context.getPackageManager();
-                        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
-                        ComponentName componentName = intent.getComponent();
-                        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
-                        context.startActivity(mainIntent);
-                        Runtime.getRuntime().exit(0);*/
-                        msBinding.mainScreenBtn.performClick();
-                    }
-                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        }).show();
-    }
-
-    public static void disconnectBle() {
-        new MaterialAlertDialogBuilder(context)
-                .setTitle("LOGOUT")
-                .setMessage("Are you sure, you want to Logout ?")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        SharedPref.write(pref_LOGGEDIN, false);
-                        SharedPref.write(pref_USERLOGINREQUIRED, true);
-                        SharedPref.write(pref_USERLOGINSTATUS, 0);
-                        PackageManager packageManager = context.getPackageManager();
-                        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
-                        ComponentName componentName = intent.getComponent();
-                        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
-                        context.startActivity(mainIntent);
-                        Runtime.getRuntime().exit(0);
-                        msBinding.mainScreenBtn.performClick();
-                    }
-                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        }).show();
-    }
-
-    public static void reconnect() {
-        if (!SharedPref.read(pref_MACADDRESS, "").equals("")) {
-            baseActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    baseActivity.stopHandler();
-                    android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(context);
-                    LayoutInflater inflater = baseActivity.getLayoutInflater();
-                    View dialogView = inflater.inflate(R.layout.dialog_reconnect, null);
-                    attemptTxt = dialogView.findViewById(R.id.attempt);
-                    dialogBuilder.setView(dialogView);
-                    dialogBuilder.setCancelable(false);
-                    reconnectDialog = dialogBuilder.create();
-                    tempBool = true;
-                    startReconnect();
-                    reconnectDialog.show();
-                }
-            });
-        }
-    }
-
-    private static void startReconnect() {
-        Log.e(TAG, "Reconnect: start" + "tempBool - " + tempBool + "retryCount -" + retryCount);
-        if (attemptTxt != null) {
-            baseActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    attemptTxt.setText("attempt : " + retryCount + "/3");
-                }
-            });
-        }
-        if (retryCount < 3) {
-            try {
-                BluetoothHelper.getInstance().scanBLE(new BluetoothScannerCallback() {
-                    @Override
-                    public void OnScanCompleted(List<BluetoothDevice> devices) {
-                        Log.e(TAG, "OnScanCompleted: " + "tempBool - " + tempBool + "retryCount -" + retryCount);
-                        if (tempBool) {
-                            retryCount++;
-                            startReconnect();
-                        }
-                        for (int i = 0; i < devices.size(); i++) {
-                            if (devices.get(i).getAddress().equals(SharedPref.read(pref_MACADDRESS, ""))) {
-                                Log.e(TAG, "OnScanDevice found -> "  + "tempBool - " + tempBool + "retryCount -" + retryCount);
-                                tempBool = false;
-                                connect(devices.get(i));
-                                break;
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void SearchResult(BluetoothDevice device) {
-                    }
-
-                    @Override
-                    public void OnDeviceFoundUpdate(List<BluetoothDevice> devices) {
-                        Log.e(TAG, "OnDeviceFoundUpdate: " +"Devices size" +devices.size()  + "tempBool - " + tempBool + "retryCount -" + retryCount);
-                        for (BluetoothDevice d :devices) {
-                            if (d.getAddress().equals(SharedPref.read(pref_MACADDRESS, ""))) {
-                                Log.e(TAG, "onFounDevice found -> " + d + "tempBool - " + tempBool + "retryCount -" + retryCount);
-                                tempBool = false;
-                                connect(d);
-                                break;
-                            }
-                        }
-                    }
-                });
-            } catch (Exception e) {
-                Log.e(TAG, "startReconnect: Catch"  + "tempBool - " + tempBool + "retryCount -" + retryCount);
-                retryCount++;
-                startReconnect();
-                e.printStackTrace();
-            }
-        } else {
-            if (reconnectDialog != null && reconnectDialog.isShowing()) {
-                reconnectDialog.dismiss();
-            }
-            showSnack("Failed to reconnect, try again later" + "tempBool - " + tempBool + "retryCount -" + retryCount);
-            baseActivity.kickOut();
-            baseActivity.startHandler();
-            retryCount = 0;
-        }
-    }
-
     private void kickOut() {
         Intent intent = new Intent(this, ConnectionActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-    }
-
-    private static void connect(BluetoothDevice bluetoothDevice) {
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (retryCount < 3) {
-                    try {
-                        if (BluetoothHelper.getInstance() != null) {
-                            BluetoothHelper.getInstance().disConnect();
-                            BluetoothHelper.getInstance().connectBLE(context, bluetoothDevice, new BluetoothConnectCallback() {
-                                @Override
-                                public void OnConnectSuccess() {
-                                    tempBool = false;
-                                    reconnectDialog.dismiss();
-                                    retryCount = 0;
-                                    bleConnected.set(true);
-                                    triggerWebService.set(true);
-                                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
-                                        showSnack("Reconnected to " + bluetoothDevice.getName() + " Successfully");
-                                        return;
-                                    }
-                                    baseActivity.startHandler();
-                                }
-
-                                @Override
-                                public void OnConnectFailed(Exception e) {
-                                    Log.e(TAG, "OnConnectFailed:");
-                                    retryCount++;
-                                    startReconnect();
-                                }
-                            });
-                        }
-                    } catch (Exception e) {
-                        Log.e(TAG, "ConnectElse: " + "tempBool - " + tempBool + "retryCount -" + retryCount );
-                        retryCount++;
-                        startReconnect();
-                        e.printStackTrace();
-                    }
-                } else {
-                    Log.e(TAG, "ConnectElse: " + "tempBool - " + tempBool + "retryCount -" + retryCount );
-                }
-            }
-        }, 5000);
     }
 
 }
