@@ -19,6 +19,7 @@ import static com.ionexchange.Others.ApplicationClass.getValueFromArr;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.isFieldEmpty;
 import static com.ionexchange.Others.ApplicationClass.mainConfigurationDao;
+import static com.ionexchange.Others.ApplicationClass.rateUnitArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.resetFlowTotalArr;
 import static com.ionexchange.Others.ApplicationClass.scheduleResetArr;
@@ -83,7 +84,7 @@ public class FragmentInputSensorFlow extends Fragment implements DataReceiveCall
     InputConfigurationDao dao;
     String sequenceNumber;
     OutputConfigurationDao output_dao;
-    String[] outputNames, rateUnitArr = {"Min", "Hour", "Day", "Month"};
+    String[] outputNames;
     String writePacket;
 
     @Nullable

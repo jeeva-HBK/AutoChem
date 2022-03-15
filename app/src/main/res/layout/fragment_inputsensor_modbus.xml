@@ -9,6 +9,10 @@
         <variable
             name="modbusType"
             type="String" />
+
+        <variable
+            name="modbusFactor"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -115,6 +119,22 @@
                     android:hint="@string/modbus_type" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!--Alloy coefficient Factor-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/modbus_factor"
+                style="@style/config_Til"
+                android:enabled="false"
+                android:visibility="@{modbusFactor.equals(`1`) ? View.VISIBLE : View.GONE}">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/mod_bus_alloy_factor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/modbus_factor"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="20" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 

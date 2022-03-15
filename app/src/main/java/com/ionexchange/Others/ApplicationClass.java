@@ -182,7 +182,7 @@ public class ApplicationClass extends Application {
             "Safety High Alarm", "Calibration Required Alarm", "Totalizer Alarm",
             "DI Alarm", "Flow Verify Alarm", "Lockout Alarm", "Low Range Alarm(Virtual Input)", "High Range Alarm(Virtual Input)", "Diagnostic Sweep"},
 
-
+    rateUnitArr = {"Min", "Hour", "Day", "Month"}, flowTypeArr = {"Flow Rate", "Totalized Volume"},
     FlowanalogType = {"Analog - 1", "Analog - 2", "Analog - 3", "Analog - 4", "Analog - 5", "Analog - 6", "Analog - 7", "Analog - 8"};
 
     /* Static Variables */
@@ -215,10 +215,9 @@ public class ApplicationClass extends Application {
      public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
     // public final static String baseURL = "http://192.168.1.52/WaterIOT.API/api/";
 
-    // public final static String baseURL = "http://183.82.35.93/WaterIOT.API/api/";
-     //public final static String baseURL = "http://192.168.1.10/WaterIOT.API/api/";
-
      //public final static String baseURL = "http://183.82.35.93/Water.API/api/";
+     //public final static String baseURL = "http://192.168.1.10/Water.API/api/";
+
 
 
     public static ObservableBoolean triggerWebService = new ObservableBoolean(false);

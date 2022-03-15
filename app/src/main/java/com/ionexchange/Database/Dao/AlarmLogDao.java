@@ -46,7 +46,7 @@ public interface AlarmLogDao {
     @Query("select * FROM AlarmLogEntity WHERE lockOutAlarm = 1")
     LiveData<List<AlarmLogEntity>> getAlarmLiveList();
 
-    @Query("select * FROM AlarmLogEntity")
+    @Query("select * FROM AlarmLogEntity order by sNo desc")
     LiveData<List<AlarmLogEntity>> getAlarmList();
 
 }

@@ -9,11 +9,11 @@ import static com.ionexchange.Others.ApplicationClass.doseTypeArr;
 import static com.ionexchange.Others.ApplicationClass.fMode;
 import static com.ionexchange.Others.ApplicationClass.flowAlarmMode;
 import static com.ionexchange.Others.ApplicationClass.flowMeterTypeArr;
+import static com.ionexchange.Others.ApplicationClass.flowTypeArr;
 import static com.ionexchange.Others.ApplicationClass.flowUnitArr;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.getPosition;
 import static com.ionexchange.Others.ApplicationClass.getValueFromArr;
-import static com.ionexchange.Others.ApplicationClass.inputAnalogSensors;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
 import static com.ionexchange.Others.ApplicationClass.interlockChannel;
 import static com.ionexchange.Others.ApplicationClass.modBusTypeArr;
@@ -22,6 +22,7 @@ import static com.ionexchange.Others.ApplicationClass.modeAnalog;
 import static com.ionexchange.Others.ApplicationClass.modeInhibitor;
 import static com.ionexchange.Others.ApplicationClass.modeSensor;
 import static com.ionexchange.Others.ApplicationClass.outputDAO;
+import static com.ionexchange.Others.ApplicationClass.rateUnitArr;
 import static com.ionexchange.Others.ApplicationClass.resetCalibrationArr;
 import static com.ionexchange.Others.ApplicationClass.scheduleResetArr;
 import static com.ionexchange.Others.ApplicationClass.sensorActivationArr;
@@ -311,27 +312,28 @@ public class FragmentSensorDetails extends Fragment {
                     tempMap.put("Input 1 Type", splitData[6].equals("0") ? "Physical" : "Constant");
 
                     if (splitData[6].equals("0")) {
-                        tempMap.put("Input 1 Number", getInputName(splitData[7]));
-                        tempMap.put("Input 1 Type", getValueFromArr(splitData[8], inputTypeArr));
+                        tempMap.put("Input Type", getValueFromArr(splitData[8], inputTypeArr));
+                        if (Integer.parseInt(splitData[7]) >= 26) {
+                            tempMap.put("Flow 1 Type", getValueFromArr(splitData[9], flowTypeArr));
+                            getVirtualCommonParamatersDetails(splitData,10,tempMap);
+                        } else {
+                            getVirtualCommonParamatersDetails(splitData,9,tempMap);
+                        }
                     } else if (splitData[6].equals("1")) {
-                        tempMap.put("Sensor 1 Constant Value", splitData[7]);
-                        tempMap.put("Input 1 Type", getValueFromArr(splitData[8], inputTypeArr));
+                        tempMap.put("Input 1 Constant Value", splitData[7]);
+                        tempMap.put("Input Type", getValueFromArr(splitData[8], inputTypeArr));
+                        getVirtualCommonParamatersDetails(splitData,9,tempMap);
                     }
 
-                    tempMap.put("Input 2 Type", splitData[9].equals("0") ? "Physical" : "Constant");
+                   /* tempMap.put("Input 2 Type", splitData[9].equals("0") ? "Physical" : "Constant");
                     if (splitData[9].equals("0")) {
                         tempMap.put("Input 2 Number", getInputName(splitData[10]));
                         tempMap.put("Input 2 Type", getValueFromArr(splitData[11], inputTypeArr));
                     } else if (splitData[9].equals("1")) {
                         tempMap.put("Sensor 2 Constant Value", splitData[10]);
                         tempMap.put("Input 2 Type", getValueFromArr(splitData[11], inputTypeArr));
-                    }
-                    tempMap.put("Low Range", splitData[12]);
-                    tempMap.put("High Range", splitData[13]);
-                    tempMap.put("Smoothing Factor", splitData[14]);
-                    tempMap.put("Alarm Low", splitData[15]);
-                    tempMap.put("Alarm High", splitData[16]);
-                    tempMap.put("Calculation", getValueFromArr(splitData[17], calculationArr));
+                    }*/
+
                     //  tempMap.put("Unit", splitData[19]); todo unComment this
                    /* tempMap.put("Sensor 1 Constant", splitData[7]);
                     tempMap.put("Sensor 2 Number", getValueFromArr(splitData[8], getSensorInputArray()));
@@ -371,6 +373,46 @@ public class FragmentSensorDetails extends Fragment {
         return finalSensorParamList.get(0);
     }
 
+    void getVirtualCommonParamatersDetails(String[] splitData,int splitValue,LinkedHashMap<String, String> tempMap){
+        int lowRange, highRange, lowAlarm, highAlarm, smoothingFactor, calcualtion, virtualUnit;
+        tempMap.put("Input 2 Type", splitData[splitValue].equals("0") ? "Physical" : "Constant");
+        if (splitData[splitValue].equalsIgnoreCase("1")) {
+            lowRange = splitValue + 3;
+            highRange = splitValue + 4;
+            smoothingFactor = splitValue + 5;
+            lowAlarm = splitValue + 6;
+            highAlarm = splitValue + 7;
+            calcualtion = splitValue + 8;
+            virtualUnit = splitValue + 9;
+            tempMap.put("Input 2 Constant", splitData[splitValue + 1]);
+        } else{
+            if (Integer.parseInt(splitData[splitValue + 1]) >= 26) {
+                lowRange = splitValue + 4;
+                highRange = splitValue + 5;
+                smoothingFactor = splitValue + 6;
+                lowAlarm = splitValue + 7;
+                highAlarm = splitValue + 8;
+                calcualtion = splitValue + 9;
+                virtualUnit = splitValue + 10;
+                tempMap.put("Input 2 Flow Type", getValueFromArr(splitData[splitValue + 3], flowTypeArr));
+            } else {
+                lowRange = splitValue + 3;
+                highRange = splitValue + 4;
+                smoothingFactor = splitValue + 5;
+                lowAlarm = splitValue + 6;
+                highAlarm = splitValue + 7;
+                calcualtion = splitValue + 8;
+                virtualUnit = splitValue + 9;
+            }
+        }
+        tempMap.put("Low Range", splitData[lowRange]);
+        tempMap.put("High Range", splitData[highRange]);
+        tempMap.put("Smoothing Factor", splitData[smoothingFactor]);
+        tempMap.put("Alarm Low", splitData[lowAlarm]);
+        tempMap.put("Alarm High", splitData[highAlarm]);
+        tempMap.put("Calculation", getValueFromArr(splitData[calcualtion], calculationArr));
+        tempMap.put("Unit", splitData[virtualUnit]);
+    }
     private String getInputName(String splitData) {
         return ApplicationClass.DB.inputConfigurationDao().getSensorType(Integer.parseInt(splitData));
     }
@@ -808,7 +850,7 @@ public class FragmentSensorDetails extends Fragment {
         tempMap.put(assigned, getValueFromArr(splitData[5], analogInputArr));
         tempMap.put(seqNumber, splitData[6]);
         tempMap.put(analogType, (splitData[7].equals("0") ? "4-20mA" : "0-10V"));
-        tempMap.put(sensorActivation, splitData[8]);
+        tempMap.put(sensorActivation, getValueFromArr(splitData[8],sensorActivationArr));
         tempMap.put(inputLabel, splitData[9]);
         tempMap.put(unitOfMeasurement, (splitData[10].equals("0") ? "mA" : "V"));
         tempMap.put(minValue, splitData[11]);
@@ -835,19 +877,24 @@ public class FragmentSensorDetails extends Fragment {
     }
 
     private List<String[]> formTankMap(String[] splitData) {
-        LinkedHashMap<String, String> tempMap = new LinkedHashMap<>();
-        tempMap.put(inNumber, splitData[3]);
-        tempMap.put(inpuType, getValueFromArr(splitData[4], inputTypeArr));
-        tempMap.put(seqNumber, splitData[5]);
-        tempMap.put(sensorActivation, splitData[6]);
-        tempMap.put(inputLabel, splitData[7]);
-        tempMap.put(openMsg, splitData[8]);
-        tempMap.put(closeMsg, splitData[9]);
-        tempMap.put(interLock, (splitData[10].equals("0") ? "NC" : "NO"));
-        tempMap.put(alarm, (splitData[11].equals("0") ? "NC" : "NO"));
-        tempMap.put(totalTime, (splitData[12].equals("0") ? "NC" : "NO"));
-        tempMap.put(resetTotalTime, splitData[13].equals("0") ? "No Time" : "Reset Time");
-        tempMap.put("Total Time Amount", splitData[16]);
+        LinkedHashMap<String, String> tempMap = null;
+        try {
+            tempMap = new LinkedHashMap<>();
+            tempMap.put(inNumber, splitData[3]);
+            tempMap.put(inpuType, getValueFromArr(splitData[4], inputTypeArr));
+            tempMap.put(seqNumber, splitData[5]);
+            tempMap.put(sensorActivation, getValueFromArr(splitData[6],sensorActivationArr));
+            tempMap.put(inputLabel, splitData[7]);
+            tempMap.put(openMsg, splitData[8]);
+            tempMap.put(closeMsg, splitData[9]);
+            tempMap.put(interLock, (splitData[10].equals("0") ? "NC" : "NO"));
+            tempMap.put(alarm, (splitData[11].equals("0") ? "NC" : "NO"));
+            tempMap.put(totalTime, (splitData[12].equals("0") ? "NC" : "NO"));
+            tempMap.put(resetTotalTime, splitData[13].equals("0") ? "No Time" : "Reset Time");
+            tempMap.put("Total Time Amount", splitData[16]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         switch (userType) {
             case 1:
@@ -861,19 +908,25 @@ public class FragmentSensorDetails extends Fragment {
     }
 
     private List<String[]> formDigitalMap(String[] splitData) {
-        LinkedHashMap<String, String> tempMap = new LinkedHashMap<>();
-        tempMap.put(inNumber, splitData[3]);
-        tempMap.put(inpuType, getValueFromArr(splitData[4], inputTypeArr));
-        tempMap.put(seqNumber, splitData[5]);
-        tempMap.put(sensorActivation, splitData[6]);
-        tempMap.put(inputLabel, splitData[7]);
-        tempMap.put(openMsg, splitData[8]);
-        tempMap.put(closeMsg, splitData[9]);
-        tempMap.put(interLock, (splitData[10].equals("0") ? "NC" : "NO"));
-        tempMap.put(alarm, (splitData[11].equals("0") ? "NC" : "NO"));
-        tempMap.put(totalTime, (splitData[12].equals("0") ? "NC" : "NO"));
-        tempMap.put(resetTotalTime, splitData[13].equals("0") ? "No Time" : "Reset Time");
-        tempMap.put("Total Time Amount", splitData[16]);
+
+        LinkedHashMap<String, String> tempMap = null;
+        try {
+            tempMap = new LinkedHashMap<>();
+            tempMap.put(inNumber, splitData[3]);
+            tempMap.put(inpuType, getValueFromArr(splitData[4], inputTypeArr));
+            tempMap.put(seqNumber, splitData[5]);
+            tempMap.put(sensorActivation, getValueFromArr(splitData[6],sensorActivationArr));
+            tempMap.put(inputLabel, splitData[7]);
+            tempMap.put(openMsg, splitData[8]);
+            tempMap.put(closeMsg, splitData[9]);
+            tempMap.put(interLock, (splitData[10].equals("0") ? "NC" : "NO"));
+            tempMap.put(alarm, (splitData[11].equals("0") ? "NC" : "NO"));
+            tempMap.put(totalTime, (splitData[12].equals("0") ? "NC" : "NO"));
+            tempMap.put(resetTotalTime, splitData[13].equals("0") ? "No Time" : "Reset Time");
+            tempMap.put("Total Time Amount", splitData[16]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         switch (userType) {
             case 1:
@@ -887,24 +940,34 @@ public class FragmentSensorDetails extends Fragment {
     }
 
     private List<String[]> formModbusMap(String[] splitData) {
-        LinkedHashMap<String, String> tempMap = new LinkedHashMap<>();
-        tempMap.put(inNumber, splitData[3]);
-        tempMap.put(inpuType, getValueFromArr(splitData[4], inputTypeArr));
-        tempMap.put(seqNumber, splitData[5]);
-        tempMap.put("modbusType", getValueFromArr(splitData[6], modBusTypeArr));
-        tempMap.put("typeOfValueRead", getValueFromArr(splitData[7], typeOfValueRead));
-        tempMap.put(sensorActivation, splitData[8]);
-        tempMap.put(inputLabel, splitData[9]);
-        tempMap.put(unitOfMeasurement, getValueFromArr(splitData[10], modBusUnitArr));
-        tempMap.put(minValue, splitData[11]);
-        tempMap.put(maxValue, splitData[12]);
-        tempMap.put("Diagnostic Sweep",splitData[13]); // todo need 2 change
-        tempMap.put(smoothingFactor,splitData[14]);
-        tempMap.put(alarmLow, splitData[15]);
-        tempMap.put(alarmHigh, splitData[16]);
-        tempMap.put(calibrationRequiredAlarm, splitData[17]);
-        tempMap.put(resetCalibration, splitData[18]);
-
+        LinkedHashMap<String, String> tempMap = null;
+        try {
+            tempMap = new LinkedHashMap<>();
+            tempMap.put(inNumber, splitData[3]);
+            tempMap.put(inpuType, getValueFromArr(splitData[4], inputTypeArr));
+            //tempMap.put(seqNumber, splitData[5]);
+            tempMap.put("modbusType", getValueFromArr(splitData[6], modBusTypeArr));
+            tempMap.put("typeOfValueRead", getValueFromArr(splitData[7], typeOfValueRead));
+            tempMap.put(sensorActivation, getValueFromArr(splitData[8],sensorActivationArr));
+            tempMap.put(inputLabel, splitData[9]);
+            tempMap.put(unitOfMeasurement, getValueFromArr(splitData[10], modBusUnitArr));
+            tempMap.put(minValue, splitData[11]);
+            tempMap.put(maxValue, splitData[12]);
+            tempMap.put("Diagnostic Sweep", splitData[13].charAt(0) == '0' ? "Disable" : "Enable");
+            if (splitData[13].charAt(0) == '1') {
+                tempMap.put("Diagnostic Time",splitData[13].substring(1));
+            }
+            tempMap.put(smoothingFactor,splitData[14]);
+            tempMap.put(alarmLow, splitData[15]);
+            tempMap.put(alarmHigh, splitData[16]);
+            tempMap.put(calibrationRequiredAlarm, splitData[17]);
+            tempMap.put(resetCalibration, splitData[18].equals("0") ? "No Time" : "Reset Time");
+            if(splitData[6].equals("1") || splitData[6].equals("2")){
+                tempMap.put("Alloy coefficient factor", splitData[19]);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         switch (userType) {
             case 1:
                 tempMap.remove(smoothingFactor);
@@ -926,25 +989,28 @@ public class FragmentSensorDetails extends Fragment {
         tempMap.put(inpuType, getValueFromArr(splitData[4], inputTypeArr));
         tempMap.put("Flow Meter Type", getValueFromArr(splitData[5], flowMeterTypeArr));
         tempMap.put(seqNumber, splitData[6]);
-        tempMap.put(sensorActivation, getValueFromArr(splitData[7], sensorActivationArr));
-        tempMap.put(inputLabel, splitData[8]);
-        tempMap.put("Flow Unit", getValueFromArr(splitData[9], flowUnitArr));
-
         if (splitData[5].equals("0")) {
-            tempMap.put("Rate Unit", splitData[10]);
-            tempMap.put("Flow Meter Max", splitData[11]);
-            tempMap.put("Flow Meter Min", splitData[12]);
-            tempMap.put(smoothingFactor, splitData[13]);
-            tempMap.put("Totalizer Alarm", splitData[14]);
-            tempMap.put("Reset Flow Total", splitData[15].equals("0") ? "No Reset" : "Reset");
-            tempMap.put("Schedule Reset", getValueFromArr(splitData[16], scheduleResetArr));
-            tempMap.put("Set Flow Total", splitData[17]);
-            tempMap.put(alarmLow, splitData[18]);
-            tempMap.put(alarmHigh, splitData[19]);
-            tempMap.put(calibrationRequiredAlarm, splitData[20]);
-            tempMap.put(resetCalibration, getValueFromArr(splitData[21], resetCalibrationArr));
+            tempMap.put("Assigned Analog", "Analog - " + splitData[7]);
+            tempMap.put(sensorActivation, getValueFromArr(splitData[8], sensorActivationArr));
+            tempMap.put(inputLabel, splitData[9]);
+            tempMap.put("Flow Unit", getValueFromArr(splitData[10], flowUnitArr));
+            tempMap.put("Rate Unit", getValueFromArr(splitData[11],rateUnitArr));
+            tempMap.put("Flow Meter Max", splitData[12]);
+            tempMap.put("Flow Meter Min", splitData[13]);
+            tempMap.put(smoothingFactor, splitData[14]);
+            tempMap.put("Totalizer Alarm", splitData[15]);
+            tempMap.put("Reset Flow Total", splitData[16].equals("0") ? "No Reset" : "Reset");
+            tempMap.put("Schedule Reset", getValueFromArr(splitData[17], scheduleResetArr));
+            tempMap.put("Set Flow Total", splitData[18]);
+            tempMap.put(alarmLow, splitData[19]);
+            tempMap.put(alarmHigh, splitData[20]);
+            tempMap.put(calibrationRequiredAlarm, splitData[21]);
+            tempMap.put(resetCalibration, getValueFromArr(splitData[22], resetCalibrationArr));
 
         } else if (splitData[5].equals("1")) {
+            tempMap.put(sensorActivation, getValueFromArr(splitData[7], sensorActivationArr));
+            tempMap.put(inputLabel, splitData[8]);
+            tempMap.put("Flow Unit", getValueFromArr(splitData[9], flowUnitArr));
             tempMap.put("Volume/Contactor", splitData[10]);
             tempMap.put("Totalizer Alarm", splitData[11]);
             tempMap.put("Reset Flow Total", splitData[12].equals("0") ? "No Reset" : "Reset");
@@ -954,7 +1020,10 @@ public class FragmentSensorDetails extends Fragment {
             tempMap.put(alarmHigh, splitData[16]);
 
         } else if (splitData[5].equals("2")) {
-            tempMap.put("Rate Unit", splitData[10]);
+            tempMap.put(sensorActivation, getValueFromArr(splitData[7], sensorActivationArr));
+            tempMap.put(inputLabel, splitData[8]);
+            tempMap.put("Flow Unit", getValueFromArr(splitData[9], flowUnitArr));
+            tempMap.put("Rate Unit", getValueFromArr(splitData[10],rateUnitArr));
             tempMap.put("K-Factor", splitData[11]);
             tempMap.put("Totalizer Alarm", splitData[12]);
             tempMap.put("Reset Flow Total", splitData[13].equals("0") ? "No Reset" : "Reset");
@@ -964,13 +1033,16 @@ public class FragmentSensorDetails extends Fragment {
             tempMap.put(alarmHigh, splitData[17]);
 
         } else if (splitData[5].equals("3")) {
+            tempMap.put(sensorActivation, getValueFromArr(splitData[7], sensorActivationArr));
+            tempMap.put(inputLabel, splitData[8]);
+            tempMap.put("Flow Unit", getValueFromArr(splitData[9], flowUnitArr));
             tempMap.put("Volume/Contactor", splitData[10]);
-            tempMap.put("Rate Unit", splitData[11]);
+            tempMap.put("Rate Unit", getValueFromArr(splitData[11],rateUnitArr));
             tempMap.put("Total Alarm Mode", splitData[12].equals("0") ? "Interlock" : "Maintain");
             tempMap.put("Flow Alarm Mode", getValueFromArr(splitData[13], flowAlarmMode));
             tempMap.put("Flow Alarm Delay", splitData[14]);
             tempMap.put("Flow Alarm Clear", splitData[15]);
-            // OutPutRelayLink todo Hold
+            tempMap.put("OutPut Relay Link", outputDAO.getOutputLabel(Integer.parseInt(splitData[16])));
             tempMap.put("Totalizer Alarm", splitData[17]);
             tempMap.put("Reset Flow Total", splitData[18].equals("0") ? "No Reset" : "Reset");
             tempMap.put("Set Flow Total", splitData[19]);

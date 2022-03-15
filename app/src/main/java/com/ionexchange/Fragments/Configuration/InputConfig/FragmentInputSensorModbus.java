@@ -119,19 +119,24 @@ public class FragmentInputSensorModbus extends Fragment implements DataReceiveCa
                 switch (i) {
                     case 0:
                         typeOfValueArr = new String[]{"Fluorescence", "Turbidity"};
+                        mBinding.setModbusFactor("0");
                         break;
                     case 1:
                     case 2:
                         typeOfValueArr = new String[]{"Corrosion rate", "Pitting rate"};
+                        mBinding.setModbusFactor("1");
                         break;
                     case 3:
                         typeOfValueArr = new String[]{"Tagged Polymer"};
+                        mBinding.setModbusFactor("0");
                         break;
                     case 4:
                         typeOfValueArr = new String[]{"Fluorescence", "Tagged Polymer"};
+                        mBinding.setModbusFactor("0");
                         break;
                     case 5:
                         typeOfValueArr = new String[]{"Fluorescence"};
+                        mBinding.setModbusFactor("0");
                         break;
                 }
                 mBinding.modBusTypeOfValueReadTie.setAdapter(getAdapter(typeOfValueArr, getContext()));
@@ -185,24 +190,48 @@ public class FragmentInputSensorModbus extends Fragment implements DataReceiveCa
                     }
                     break;
             }
-            writePacket = DEVICE_PASSWORD + SPILT_CHAR + "0" + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
-                    PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
-                    getStringValue(2, mBinding.modBusInputNumberTie) + SPILT_CHAR +
-                    getPositionFromAtxt(2, getStringValue(mBinding.modBusSensorTypeTie), inputTypeArr) + SPILT_CHAR +
-                    getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeTie), modBusTypeArr) + SPILT_CHAR +
-                    getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeTie), modBusTypeArr) + SPILT_CHAR +
-                    typeOfValueRead + SPILT_CHAR +
-                    getPositionFromAtxt(1, getStringValue(mBinding.modBusSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
-                    getStringValue(0, mBinding.modBusInputLabelTie) + SPILT_CHAR +
-                    getPositionFromAtxt(1, getStringValue(mBinding.modBusUnitMeasurementTie), modBusUnitArr) + SPILT_CHAR +
-                    getStringValue(3, mBinding.modBusMinValueTie) + "." + getStringValue(2, mBinding.modbusMinDeciIsc) + SPILT_CHAR +
-                    getStringValue(3, mBinding.modBusMaxValueTie) + "." + getStringValue(2, mBinding.modbusMaxDeciIsc) + SPILT_CHAR +
-                    (getPositionFromAtxt(1, getStringValue(mBinding.modBusDiagnosticSweepTie), sensorActivationArr).equals("1")  ? "0" : "1") + getStringValue(6, mBinding.modBusTimeTie) + SPILT_CHAR +
-                    getStringValue(3, mBinding.modBusSmoothingFactorTie) + SPILT_CHAR +
-                    getStringValue(3, mBinding.modBusAlarmLowTie) + "." + getStringValue(2, mBinding.modbusAlarmLowIsc) + SPILT_CHAR +
-                    getStringValue(3, mBinding.modBusAlarmHighTie) + "." + getStringValue(2, mBinding.modbusAlarmHighIsc) + SPILT_CHAR +
-                    getStringValue(3, mBinding.modBusCalibrationRequiredAlarmTie) + SPILT_CHAR +
-                    getPositionFromAtxt(1, getStringValue(mBinding.modBusResetCalibrationTie), resetCalibrationArr) + SPILT_CHAR + sensorStatus;
+            if(getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeTie), modBusTypeArr).equals("1") ||
+                    getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeTie), modBusTypeArr).equals("2")){
+                writePacket = DEVICE_PASSWORD + SPILT_CHAR + "0" + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                        PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                        getStringValue(2, mBinding.modBusInputNumberTie) + SPILT_CHAR +
+                        getPositionFromAtxt(2, getStringValue(mBinding.modBusSensorTypeTie), inputTypeArr) + SPILT_CHAR +
+                        getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeTie), modBusTypeArr) + SPILT_CHAR +
+                        getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeTie), modBusTypeArr) + SPILT_CHAR +
+                        typeOfValueRead + SPILT_CHAR +
+                        getPositionFromAtxt(1, getStringValue(mBinding.modBusSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
+                        getStringValue(0, mBinding.modBusInputLabelTie) + SPILT_CHAR +
+                        getPositionFromAtxt(1, getStringValue(mBinding.modBusUnitMeasurementTie), modBusUnitArr) + SPILT_CHAR +
+                        getStringValue(3, mBinding.modBusMinValueTie) + "." + getStringValue(2, mBinding.modbusMinDeciIsc) + SPILT_CHAR +
+                        getStringValue(3, mBinding.modBusMaxValueTie) + "." + getStringValue(2, mBinding.modbusMaxDeciIsc) + SPILT_CHAR +
+                        (getPositionFromAtxt(1, getStringValue(mBinding.modBusDiagnosticSweepTie), sensorActivationArr).equals("1") ? "0" : "1") + getStringValue(6, mBinding.modBusTimeTie) + SPILT_CHAR +
+                        getStringValue(3, mBinding.modBusSmoothingFactorTie) + SPILT_CHAR +
+                        getStringValue(3, mBinding.modBusAlarmLowTie) + "." + getStringValue(2, mBinding.modbusAlarmLowIsc) + SPILT_CHAR +
+                        getStringValue(3, mBinding.modBusAlarmHighTie) + "." + getStringValue(2, mBinding.modbusAlarmHighIsc) + SPILT_CHAR +
+                        getStringValue(3, mBinding.modBusCalibrationRequiredAlarmTie) + SPILT_CHAR +
+                        getPositionFromAtxt(1, getStringValue(mBinding.modBusResetCalibrationTie), resetCalibrationArr) + SPILT_CHAR +
+                        (mBinding.modBusAlloyFactor.getText().toString().isEmpty() ? "0" : mBinding.modBusAlloyFactor.getText().toString()) + SPILT_CHAR + sensorStatus;
+            } else {
+                writePacket = DEVICE_PASSWORD + SPILT_CHAR + "0" + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
+                        PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
+                        getStringValue(2, mBinding.modBusInputNumberTie) + SPILT_CHAR +
+                        getPositionFromAtxt(2, getStringValue(mBinding.modBusSensorTypeTie), inputTypeArr) + SPILT_CHAR +
+                        getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeTie), modBusTypeArr) + SPILT_CHAR +
+                        getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeTie), modBusTypeArr) + SPILT_CHAR +
+                        typeOfValueRead + SPILT_CHAR +
+                        getPositionFromAtxt(1, getStringValue(mBinding.modBusSensorActivationTie), sensorActivationArr) + SPILT_CHAR +
+                        getStringValue(0, mBinding.modBusInputLabelTie) + SPILT_CHAR +
+                        getPositionFromAtxt(1, getStringValue(mBinding.modBusUnitMeasurementTie), modBusUnitArr) + SPILT_CHAR +
+                        getStringValue(3, mBinding.modBusMinValueTie) + "." + getStringValue(2, mBinding.modbusMinDeciIsc) + SPILT_CHAR +
+                        getStringValue(3, mBinding.modBusMaxValueTie) + "." + getStringValue(2, mBinding.modbusMaxDeciIsc) + SPILT_CHAR +
+                        (getPositionFromAtxt(1, getStringValue(mBinding.modBusDiagnosticSweepTie), sensorActivationArr).equals("1") ? "0" : "1") + getStringValue(6, mBinding.modBusTimeTie) + SPILT_CHAR +
+                        getStringValue(3, mBinding.modBusSmoothingFactorTie) + SPILT_CHAR +
+                        getStringValue(3, mBinding.modBusAlarmLowTie) + "." + getStringValue(2, mBinding.modbusAlarmLowIsc) + SPILT_CHAR +
+                        getStringValue(3, mBinding.modBusAlarmHighTie) + "." + getStringValue(2, mBinding.modbusAlarmHighIsc) + SPILT_CHAR +
+                        getStringValue(3, mBinding.modBusCalibrationRequiredAlarmTie) + SPILT_CHAR +
+                        getPositionFromAtxt(1, getStringValue(mBinding.modBusResetCalibrationTie), resetCalibrationArr) + SPILT_CHAR +
+                        sensorStatus;
+            }
             mAppClass.sendPacket(this, writePacket);
         }
     }
@@ -230,6 +259,7 @@ public class FragmentInputSensorModbus extends Fragment implements DataReceiveCa
             mBinding.modBusSensorTypeTie.setText(sensorName);
             mBinding.modbusDeleteLayoutIsc.setVisibility(View.GONE);
             mBinding.modBusTypeTie.setText(mBinding.modBusTypeTie.getAdapter().getItem(modbusType).toString());
+            mBinding.setModbusFactor("0");
             switch (getPositionFromAtxt(1, getStringValue(mBinding.modBusTypeTie), modBusTypeArr)) {
                 case "0":
                     typeOfValueArr = new String[]{"Fluorescence", "Turbidity"};
@@ -239,6 +269,7 @@ public class FragmentInputSensorModbus extends Fragment implements DataReceiveCa
                 case "2":
                     typeOfValueArr = new String[]{"Corrosion rate", "Pitting rate"};
                     modbusValue = modbusValue - 3;
+                    mBinding.setModbusFactor("1");
                     break;
                 case "3":
                     typeOfValueArr = new String[]{"Tagged Polymer"};
@@ -286,7 +317,7 @@ public class FragmentInputSensorModbus extends Fragment implements DataReceiveCa
                         mBinding.modBusSensorTypeTie.setText(mBinding.modBusSensorTypeTie.getAdapter().getItem(Integer.parseInt(data[4])).toString());
                         mBinding.modbusSequenceNumberTie.setText(mBinding.modbusSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[5])).toString());
                         mBinding.modBusTypeTie.setText(mBinding.modBusTypeTie.getAdapter().getItem(Integer.parseInt(data[6])).toString());
-
+                        mBinding.setModbusFactor("0");
                         int typeOfValueRead = 0;
                         switch (Integer.parseInt(data[6])) {
                             case 0:
@@ -297,6 +328,7 @@ public class FragmentInputSensorModbus extends Fragment implements DataReceiveCa
                             case 2:
                                 typeOfValueArr = new String[]{"Corrosion rate", "Pitting rate"};
                                 typeOfValueRead = Integer.parseInt(data[7]) - 3;
+                                mBinding.setModbusFactor("1");
                                 break;
                             case 3:
                                 typeOfValueArr = new String[]{"Tagged Polymer"};
@@ -330,8 +362,9 @@ public class FragmentInputSensorModbus extends Fragment implements DataReceiveCa
                         mBinding.modbusAlarmHighIsc.setText(data[16].substring(4, 6));
                         mBinding.modBusCalibrationRequiredAlarmTie.setText(data[17]);
                         mBinding.modBusResetCalibrationTie.setText(mBinding.modBusResetCalibrationTie.getAdapter().getItem(Integer.parseInt(data[18])).toString());
-                        initAdapter();
 
+                        initAdapter();
+                        mBinding.modBusAlloyFactor.setText(data[19]);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

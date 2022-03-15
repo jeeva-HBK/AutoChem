@@ -1128,8 +1128,9 @@ public class ApiService implements DataReceiveCallback {
                     responseTabId = "08";
                     responseTabData = diagnosticsDataOne + "#" + diagnosticsDataTwo + "#" + diagnosticsDataThree + "#" +
                             diagnosticsDataFour + "#" + diagnosticsDataFive + "#" + diagnosticsDataSix;
-                    dataObj = new JSONObject();
                     try {
+                        finalArr = new JSONArray();
+                        dataObj = new JSONObject();
                         dataObj.put("INPUTNO", "");
                         dataObj.put("REQ", responseTabData);
                         dataObj.put("NAME_LABEL", "");
@@ -1142,6 +1143,7 @@ public class ApiService implements DataReceiveCallback {
                         finalArr.put(dataObj);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        nack();
                     }
 
                     break;

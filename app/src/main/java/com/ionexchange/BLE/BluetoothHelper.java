@@ -384,6 +384,7 @@ public class BluetoothHelper implements SerialListener {
                         }
                     } else if (splitData[0].equals("1")) { // KeepAlivePackets
                         lastKeepAliveData = "{*" + mData.substring(4);
+                        //keepAlive
                         Log.e("keepAlive <-", lastKeepAliveData);
                         KeepAlive.getInstance().processKeepAlive(lastKeepAliveData, ApplicationClass.mContext);
                     }

@@ -3,6 +3,7 @@ package com.ionexchange.Fragments.Configuration.VirtualConfig;
 import static com.ionexchange.Activity.BaseActivity.dismissProgress;
 import static com.ionexchange.Activity.BaseActivity.showProgress;
 import static com.ionexchange.Others.ApplicationClass.calculationArr;
+import static com.ionexchange.Others.ApplicationClass.flowTypeArr;
 import static com.ionexchange.Others.ApplicationClass.formDigits;
 import static com.ionexchange.Others.ApplicationClass.getStringValue;
 import static com.ionexchange.Others.ApplicationClass.inputTypeArr;
@@ -71,7 +72,6 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
     String[] inputNames;
     private static final String TAG = "FragmentVirtualSensor_c";
     String writePacket;
-    String[] flowTypeArr = {"Flow Rate", "Totalized Volume"};
     String sensor1Value = "";
     String sensor2Value = "";
 
