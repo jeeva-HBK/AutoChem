@@ -584,7 +584,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     /*analogValue*/
     private void sendAnalogValue() {
         String u_minvalue, u_maxvalue, analog_mode = "I";
-        if (inputType.equalsIgnoreCase("ORP") || inputType.equals("Temperature")) {
+        if (inputType.equalsIgnoreCase("Analog Input") || inputType.equalsIgnoreCase("ORP") || inputType.equals("Temperature")) {
             u_minvalue = getDecimalValue(mBinding.analogMinValueTBtn, mBinding.analogMinValueEdtOsc, sensorLength, mBinding.analogMinValueDeciOsc, 2);
             u_maxvalue = getDecimalValue(mBinding.analogMaxValueTBtn, mBinding.analogMaxValueEdtOsc, sensorLength, mBinding.analogMaxValueDeciOsc, 2);
         } else {
@@ -616,7 +616,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     /*PID*/
     private void sendPID() {
         String u_setPoint, u_safetyMin, u_safetyMax, u_inputMin, u_inputMax;
-        if (inputType.equalsIgnoreCase("ORP") || inputType.equals("Temperature")) {
+        if (inputType.equalsIgnoreCase("Analog Input") || inputType.equalsIgnoreCase("ORP") || inputType.equals("Temperature")) {
             u_setPoint = getDecimalValue(mBinding.pidSetpointvalueTBtn, mBinding.pidSetPointEdtOsc, sensorLength, mBinding.pidSetPointDeciOsc, 2);
             u_safetyMin = getDecimalValue(mBinding.pidSafetyMinvalueTBtn, mBinding.pidSafetyMinEdtOsc, sensorLength, mBinding.pidSafetyMinDeciOsc, 2);
             u_safetyMax = getDecimalValue(mBinding.pidSafetyMaxvalueTBtn, mBinding.pidSafetyMaxEdtOsc, sensorLength, mBinding.pidSafetyMaxDeciOsc, 2);
@@ -660,7 +660,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     /*OnOff*/
     private void sendOnOFf() {
         String u_setPoint, u_safetyMin, u_safetyMax, hystersis;
-        if (inputType.equalsIgnoreCase("ORP") || inputType.equals("Temperature")) {
+        if (inputType.equalsIgnoreCase("Analog Input") || inputType.equalsIgnoreCase("ORP") || inputType.equals("Temperature")) {
             u_setPoint = getDecimalValue(mBinding.sensorSetpointvalueTBtn, mBinding.sensorSetPointEdtOsc, sensorLength, mBinding.sensorSetPointDeciOsc, 2);
             u_safetyMin = getDecimalValue(mBinding.sensorSafetyMinTBtn, mBinding.sensorSafetyMinEdtOsc, sensorLength, mBinding.sensorSafetyMinDeciOsc, 2);
             u_safetyMax = getDecimalValue(mBinding.sensorSafetyMaxTBtn, mBinding.sensorSafetyMaxEdtOsc, sensorLength, mBinding.sensorSafetyMaxDeciOsc, 2);
@@ -1107,7 +1107,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                         mBinding.sensorLinkInputSensorAtxtOsc.setText(mBinding.sensorLinkInputSensorAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) - 33).toString());
                                     }
                                     setMaxLength();
-                                    if (inputType.equalsIgnoreCase("ORP") || inputType.equalsIgnoreCase("Temperature")) {
+                                    if (inputType.equalsIgnoreCase("Analog Input") ||  inputType.equalsIgnoreCase("ORP") || inputType.equalsIgnoreCase("Temperature")) {
                                         mBinding.sensorSetpointvalueTBtn.setChecked((splitData[10].substring(0, 1)).equals("+"));
                                         mBinding.sensorSetPointEdtOsc.setText(splitData[10].substring(1, sensorLength + 1));
                                         mBinding.sensorSetPointDeciOsc.setText(splitData[10].substring(sensorLength + 2, sensorLength + 4));
@@ -1145,7 +1145,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                         mBinding.pidLinkInputAtxtOsc.setText(mBinding.pidLinkInputAtxtOsc.getAdapter().getItem(Integer.parseInt(splitData[8]) - 33).toString());
                                     }
                                     setMaxLengthPID();
-                                    if (inputType.equalsIgnoreCase("ORP") || inputType.equalsIgnoreCase("Temperature")) {
+                                    if (inputType.equalsIgnoreCase("Analog Input") || inputType.equalsIgnoreCase("ORP") || inputType.equalsIgnoreCase("Temperature")) {
                                         mBinding.pidSetpointvalueTBtn.setChecked((splitData[10].substring(0, 1)).equals("+"));
                                         mBinding.pidSetPointEdtOsc.setText(splitData[10].substring(1, sensorLength + 1));
                                         mBinding.pidSetPointDeciOsc.setText(splitData[10].substring(sensorLength + 2, sensorLength + 4));
@@ -1244,7 +1244,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                                     mBinding.analogMaxMaEdtOsc.setText(splitData[9].substring(0, 2));
                                     mBinding.analogMaxMaDeciOsc.setText(splitData[9].substring(3, 5));
                                     setMaxLengthAnalog();
-                                    if (inputType.equalsIgnoreCase("ORP") || inputType.equalsIgnoreCase("Temperature")) {
+                                    if (inputType.equalsIgnoreCase("Analog Input") || inputType.equalsIgnoreCase("ORP") || inputType.equalsIgnoreCase("Temperature")) {
                                         mBinding.analogMinValueTBtn.setChecked((splitData[10].substring(0, 1)).equals("+"));
                                         mBinding.analogMinValueEdtOsc.setText(splitData[10].substring(1, sensorLength + 1));
                                         mBinding.analogMinValueDeciOsc.setText(splitData[10].substring(sensorLength + 2, sensorLength + 4));
@@ -1329,6 +1329,10 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             case "Flow/Water Meter":
                 sensorLength = 10;
                 break;
+            case "Analog Input":
+                sensorLength = 6;
+                sensorLayoutVisibility(true);
+                break;
             default:
                 sensorLength = 2;
                 break;
@@ -1342,7 +1346,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
     void setMaxLengthPID() {
         String[] sensorLink = mBinding.pidLinkInputAtxtOsc.getText().toString().split("-");
         String[] inputhardwareNo = sensorLink[1].split("\\(");
-        if (Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")) < 18) {
+        if (Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")) < 26) {
             inputType = inputDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
         } else {
             inputType = virtualDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
@@ -1380,6 +1384,10 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
             case "Flow/Water Meter":
                 sensorLength = 10;
                 break;
+            case "Analog Input":
+                sensorLength = 6;
+                sensorPidLayoutVisibility(true);
+                break;
             default:
                 sensorLength = 2;
                 break;
@@ -1395,7 +1403,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
         String[] sensorLink = mBinding.analogLinkInputAtxtOsc.getText().toString().split("-");
         if(!sensorLink[0].equals("Output")) {
             String[] inputhardwareNo = sensorLink[1].split("\\(");
-            if (Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")) < 18) {
+            if (Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")) < 26) {
                 inputType = inputDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
             } else {
                 inputType = virtualDAO.getInputType(Integer.parseInt(inputhardwareNo[0].replaceAll("\\s", "")));
@@ -1431,6 +1439,10 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                 break;
             case "Flow/Water Meter":
                 sensorLength = 10;
+                break;
+            case "Analog Input":
+                sensorLength = 6;
+                sensorAnalogLayoutVisibility(true);
                 break;
             default:
                 sensorLength = 2;
@@ -1913,7 +1925,7 @@ public class FragmentOutput_Config extends Fragment implements DataReceiveCallba
                             mBinding.modeOsATXT.getText().toString().equalsIgnoreCase("Test")))) {
                 linkInputSensor = toString(mBinding.analogLinkInputAtxtOsc);
             }
-            if (inputType.equalsIgnoreCase("ORP") || inputType.equalsIgnoreCase("Temperature")) {
+            if (inputType.equalsIgnoreCase("Analog Input") || inputType.equalsIgnoreCase("ORP") || inputType.equalsIgnoreCase("Temperature")) {
                 tbtn = true;
             }
             if (mBinding.funtionModeOsATXT.getText().toString().equalsIgnoreCase("Sensor")) {

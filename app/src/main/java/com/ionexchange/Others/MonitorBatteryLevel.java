@@ -37,7 +37,7 @@ public class MonitorBatteryLevel extends BroadcastReceiver implements DataReceiv
             }
         }
 
-        if (level == 95 || level == 96) {
+        if (level == 95 || level == 96 || level == 97 || level == 98 || level == 99 || level == 100) {
             mAppClass.sendPacket(this, DEVICE_PASSWORD + SPILT_CHAR +
                     WRITE_PACKET + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + CHARGE_CONTROL_PACKET + SPILT_CHAR +
                     "0"

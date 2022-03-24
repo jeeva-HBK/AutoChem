@@ -124,6 +124,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     public static void showProgress() {
         msBinding.progressCircular.setVisibility(View.VISIBLE);
+        msBinding.progressBar.setVisibility(View.VISIBLE);
         baseActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         canGoBack = false;
@@ -132,6 +133,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     public static void dismissProgress() {
         Log.e(TAG, "Config-dismissProgress: ");
         msBinding.progressCircular.setVisibility(View.GONE);
+        msBinding.progressBar.setVisibility(View.GONE);
         /* msBinding.progressBar.loop(false);
         msBinding.progressBar.pauseAnimation();
         msBinding.progressBar.clearAnimation();

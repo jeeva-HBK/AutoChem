@@ -607,7 +607,6 @@ public class ApiService implements DataReceiveCallback {
             ApplicationClass.getInstance().sendPacket(new DataReceiveCallback() {
                 @Override
                 public void OnDataReceive(String data) {
-
                     responseTabId = "04";
                     try {
                         String[] splitData = jsonObject.getString("REQ").

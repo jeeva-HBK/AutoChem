@@ -17,14 +17,23 @@
             android:focusable="false"
             android:gravity="center"
             android:visibility="gone">
-
-            <com.airbnb.lottie.LottieAnimationView
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerInParent="true"
+                app:trackColor="@color/primary"
+                app:indicatorColor="@color/white"
+                app:indicatorSize="75dp"
+                app:trackThickness="8dp"
+                android:indeterminate="true"
+                />
+           <!-- <com.airbnb.lottie.LottieAnimationView
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_centerInParent="true"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
-                app:lottie_rawRes="@raw/progress" />
+                app:lottie_rawRes="@raw/progress" />-->
 
         </RelativeLayout>
 

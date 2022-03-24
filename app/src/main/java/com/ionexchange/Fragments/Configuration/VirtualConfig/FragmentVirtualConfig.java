@@ -367,7 +367,8 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
 
     private String getTBtnValue(AutoCompleteTextView sensorType, ToggleButton tBtn) {
         String TbtnValue = "";
-        if (toString(sensorType).equalsIgnoreCase("ORP") ||
+        if (toString(sensorType).equalsIgnoreCase("Analog Input") ||
+                toString(sensorType).equalsIgnoreCase("ORP") ||
                 toString(sensorType).equalsIgnoreCase("Temperature")) {
             TbtnValue = tBtn.isChecked() ? "+" : "-";
         }
@@ -488,6 +489,10 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
                 break;
             case "Flow/Water Meter":
                 sensorLength = 10;
+                break;
+            case "Analog Input":
+                sensorLength = 6;
+                sensorLayoutVisibility(true);
                 break;
             default:
                 sensorLength = 2;
@@ -813,7 +818,7 @@ public class FragmentVirtualConfig extends Fragment implements DataReceiveCallba
     }
     void virtualEntity() {
         String subValue1 , subValue2;
-        if (toString(0, mBinding.sensor1TypeATXT).equals("ORP") || toString(0, mBinding.sensor1TypeATXT).equals("Temperature")) {
+        if (toString(0, mBinding.sensor1TypeATXT).equals("Analog Input") || toString(0, mBinding.sensor1TypeATXT).equals("ORP") || toString(0, mBinding.sensor1TypeATXT).equals("Temperature")) {
             subValue1 = (mBinding.lowAlarmTBtn.isChecked()?"+":"-") + toString(0, mBinding.lowAlarmViEDT) + "." + toString(2, mBinding.lowAlarmViDec);
             subValue2 = (mBinding.highAlarmTBtn.isChecked()?"+":"-") + toString(0, mBinding.highAlarmViEDT)  + "." + toString(2, mBinding.highAlarmDec);
         } else  {

@@ -159,9 +159,9 @@ public class KeepAlive implements DataReceiveCallback {
                             alarmArr[Integer.parseInt(data[5])],
                             ApplicationClass.getCurrentTime(),
                             ApplicationClass.getCurrentDate(), "1");
-                    List<AlarmLogEntity> outputEntryList = new ArrayList<>();
-                    outputEntryList.add(alarmLogEntity);
-                    updateToAlarmDb(outputEntryList);
+                    List<AlarmLogEntity> alarmEntryList = new ArrayList<>();
+                    alarmEntryList.add(alarmLogEntity);
+                    updateToAlarmDb(alarmEntryList);
                 } else {
                     // sendPacket("CRC"+SPILT_CHAR+"01"+SPILT_CHAR+"03"+SPILT_CHAR+"1"+SPILT_CHAR);
                 }
@@ -193,9 +193,9 @@ public class KeepAlive implements DataReceiveCallback {
                             alarmArr[Integer.parseInt(data[5])],
                             ApplicationClass.getCurrentTime(),
                             ApplicationClass.getCurrentDate(), "0");
-                    List<AlarmLogEntity> outputEntryList = new ArrayList<>();
-                    outputEntryList.add(alarmLogEntity);
-                    updateToAlarmDb(outputEntryList);
+                    List<AlarmLogEntity> alarmEntryList = new ArrayList<>();
+                    alarmEntryList.add(alarmLogEntity);
+                    updateToAlarmDb(alarmEntryList);
                 }
             }
         }
@@ -255,19 +255,20 @@ public class KeepAlive implements DataReceiveCallback {
                     while (i < 57) {
                         if (data[i + 3].length() > 2) {
                             if (data[i + 3].substring(0, 2).equals("01")) {
-                                if (data[i + 3].split("\\.")[1].length() >= 1) {
-                                    trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
-                                            data[i + 3].split("\\.")[0].substring(2) + "." + data[i + 3].split("\\.")[1].substring(0, 2),
-                                            ApplicationClass.getCurrentTrendFormatDate(), ApplicationClass.getCurrentTime(), maxRow);
+                                if(!data[i+3].equals("010")) {
+                                    if (data[i + 3].split("\\.")[1].length() >= 1) {
+                                        trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
+                                                data[i + 3].split("\\.")[0].substring(2) + "." + data[i + 3].split("\\.")[1].substring(0, 2),
+                                                ApplicationClass.getCurrentTrendFormatDate(), ApplicationClass.getCurrentTime(), maxRow);
+                                    } else {
+                                        trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2), data[i + 3],
+                                                ApplicationClass.getCurrentTrendFormatDate(), ApplicationClass.getCurrentTime(), maxRow);
+                                    }
                                 } else {
-                                    trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2), data[i + 3],
+                                    trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2), "0",
                                             ApplicationClass.getCurrentTrendFormatDate(), ApplicationClass.getCurrentTime(), maxRow);
                                 }
-                            } else if (Integer.parseInt(data[i + 3].substring(0, 2)) <= 33) {
-                                trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
-                                        data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentTrendFormatDate(),
-                                        ApplicationClass.getCurrentTime(), maxRow);
-                            } else if (Integer.parseInt(data[i + 3].substring(0, 2)) > 49) {
+                            } else {
                                 trendEntity(trendDao.getLastSno() + 1, data[i + 3].substring(0, 2),
                                         data[i + 3].substring(2, data[i + 3].length()), ApplicationClass.getCurrentTrendFormatDate(),
                                         ApplicationClass.getCurrentTime(), maxRow);

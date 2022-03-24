@@ -714,7 +714,7 @@ public class ApplicationClass extends Application {
                     int analogType = j < 7 ? 0 : 1;
                     sequenceNo = j;
                     labelName = "Analog" + j;
-                    writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$06$0$" + j + "$" + analogType + "$0$Analog " + j + "$0$04.00$20.00$000$04.00$20.00$000$0$2*}";
+                    writePacket = "{*1234$0$0$04$" + formDigits(2, Integer.toString(i)) + "$06$0$" + j + "$" + analogType + "$0$Analog " + j + "$0$+000004.00$+000020.00$000$+000004.00$+000020.00$000$0$2*}";
                     j++;
                     if (i == 25) {
                         j = 1;

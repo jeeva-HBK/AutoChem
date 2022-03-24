@@ -178,11 +178,13 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
             case "Flow/Water Meter":
                 sensorLength = 10;
                 break;
-
             case "Modbus Sensor":
                 sensorLength = 3;
                 break;
-
+            case "Analog Input":
+                sensorLength = 6;
+                sensorLayoutVisibility(true);
+                break;
             default:
                 sensorLength = 2;
                 break;
@@ -259,7 +261,8 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
 
     void sendData(int sensorStatus) {
         showProgress();
-        if ((getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr).equals("2")) ||
+        if ((getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr).equals("0")) ||
+                (getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr).equals("2")) ||
                 (getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr).equals("3"))) {
             writePacket = DEVICE_PASSWORD + SPILT_CHAR + CONN_TYPE + SPILT_CHAR + WRITE_PACKET + SPILT_CHAR +
                     PCK_INPUT_SENSOR_CONFIG + SPILT_CHAR +
@@ -407,7 +410,7 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
 
                         mBinding.analogTypeTie.setText(mBinding.analogTypeTie.getAdapter().getItem(Integer.parseInt(data[5])).toString());
                         setMaxLength();
-                        if (data[5].equals("2") || data[5].equals("3")) {
+                        if (data[5].equals("0") || data[5].equals("2") || data[5].equals("3")) {
                             mBinding.analogRow21Isc.setVisibility(View.GONE);
                             sequenceNo = data[6];
                             mBinding.analogSequenceNumberTie.setText(mBinding.analogSequenceNumberTie.getAdapter().getItem(Integer.parseInt(data[6])).toString() + " " + analog_type);
@@ -614,7 +617,8 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
             case 0:
             case 1:
                 InputConfigurationEntity entityUpdate;
-                if ((getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr).equals("2")) ||
+                if ((getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr).equals("0")) ||
+                        (getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr).equals("2")) ||
                         (getPositionFromAtxt(1, getStringValue(mBinding.analogTypeTie), analogInputArr).equals("3"))) {
                     entityUpdate = new InputConfigurationEntity
                             (Integer.parseInt(getStringValue(2, mBinding.analogInputNumberTie)),
@@ -624,7 +628,6 @@ public class FragmentInputSensorAnalog extends Fragment implements DataReceiveCa
                                     (mBinding.analogLowAlarmTBtn.isChecked() ? "+" : "-") + mBinding.analogAlarmLowTie.getText().toString() + "." + getStringValue(2,mBinding.lowAlarmMinValueIsc),
                                     (mBinding.analogHighAlarmTBtn.isChecked() ? "+" : "-") + mBinding.analogHighLowTie.getText().toString() + "." +  getStringValue(2,mBinding.highAlarmMinValueIsc),
                                     getStringValue(mBinding.analogUnitMeasurementTie), "N/A", 1,STARTPACKET + writePacket + ENDPACKET);
-                    // todo
                 } else {
                     entityUpdate = new InputConfigurationEntity
                             (Integer.parseInt(getStringValue(2, mBinding.analogInputNumberTie)),
