@@ -16,6 +16,7 @@ import static com.ionexchange.Singleton.SharedPref.pref_SITELOCATION;
 import static com.ionexchange.Singleton.SharedPref.pref_SITENAME;
 import static com.ionexchange.Singleton.SharedPref.pref_USERLOGINID;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
@@ -205,7 +207,9 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
         mBinding.duHours.setText(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
         mBinding.duMM.setText(new SimpleDateFormat("mm").format(Calendar.getInstance().getTime()));
         mBinding.duSS.setText(new SimpleDateFormat("ss").format(Calendar.getInstance().getTime()));
-        mBinding.duNN.setText(new SimpleDateFormat("W").format(Calendar.getInstance().getTime()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mBinding.duNN.setText(new SimpleDateFormat("u").format(Calendar.getInstance().getTime()));
+        }
         mBinding.duDD.setText(new SimpleDateFormat("dd").format(Calendar.getInstance().getTime()));
         mBinding.dumonth.setText(new SimpleDateFormat("MM").format(Calendar.getInstance().getTime()));
         mBinding.duYYYY.setText(new SimpleDateFormat("yy").format(Calendar.getInstance().getTime()));
@@ -313,7 +317,9 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
                         mBinding.duHours.setText(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
                         mBinding.duMM.setText(new SimpleDateFormat("mm").format(Calendar.getInstance().getTime()));
                         mBinding.duSS.setText(new SimpleDateFormat("ss").format(Calendar.getInstance().getTime()));
-                        mBinding.duNN.setText(new SimpleDateFormat("W").format(Calendar.getInstance().getTime()));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            mBinding.duNN.setText(new SimpleDateFormat("u").format(Calendar.getInstance().getTime()));
+                        }
                         mBinding.duDD.setText(new SimpleDateFormat("dd").format(Calendar.getInstance().getTime()));
                         mBinding.dumonth.setText(new SimpleDateFormat("MM").format(Calendar.getInstance().getTime()));
                         mBinding.duYYYY.setText(new SimpleDateFormat("yy").format(Calendar.getInstance().getTime()));
@@ -325,6 +331,8 @@ public class FragmentSiteSettings_Config extends Fragment implements DataReceive
                     if (splitData[2].equals(RES_SUCCESS)) {
                         mAppClass.showSnackBar(getContext(), "Write Success");
                         new EventLogDemo("0", "Site", "General settings changed by #", SharedPref.read(pref_USERLOGINID, ""), getContext());
+                        mAppClass.showSnackBar(getContext(), "Reading data from device");
+                        readData();
                     } else if (splitData[2].equals(RES_FAILED)) {
                         mAppClass.showSnackBar(getContext(), "Write Failed");
                     }

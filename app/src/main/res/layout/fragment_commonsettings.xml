@@ -411,6 +411,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:hint="MM"
+                    android:gravity="center"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:enabled="false"

@@ -77,8 +77,7 @@
             app:layout_constraintEnd_toStartOf="@+id/trendToDateTil"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/trendChartTypeTil"
-            >
+            app:layout_constraintTop_toBottomOf="@+id/trendChartTypeTil">
 
             <AutoCompleteTextView
                 android:id="@+id/trendFromDateTie"
@@ -101,8 +100,7 @@
             app:layout_constraintEnd_toStartOf="@+id/filterbutton"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/trendFromDateTil"
-            app:layout_constraintTop_toBottomOf="@+id/trendChartTypeTil"
-            >
+            app:layout_constraintTop_toBottomOf="@+id/trendChartTypeTil">
 
             <AutoCompleteTextView
                 android:id="@+id/trendToDateTie"
@@ -122,8 +120,8 @@
             android:text="GET"
             app:layout_constraintBottom_toBottomOf="@+id/trendToDateTil"
             app:layout_constraintEnd_toEndOf="@+id/trendSensorTwoTil"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/trendToDateTil" />
+            app:layout_constraintStart_toEndOf="@+id/trendToDateTil"
+            app:layout_constraintTop_toTopOf="@+id/trendToDateTil" />
 
         <!--Line CHART-->
         <com.github.mikephil.charting.charts.LineChart

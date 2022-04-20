@@ -151,7 +151,7 @@ public class ApplicationClass extends Application {
             interlockChannel = {"None", "Digital Input - 1", "Digital Input - 2", "Digital Input - 3", "Digital Input - 4", "Digital Input - 5", "Digital Input - 6", "Digital Input - 7", "Digital Input - 8", "Tank Level - 1", "Tank Level - 2", "Tank Level - 3", "Tank Level - 4", "Tank Level - 5", "Tank Level - 6", "Tank Level - 7", "Tank Level - 8"},
 
     functionMode,
-            fMode = {"Disable", "Inhibitor", "sensor", "Analog","Manual"},
+            fMode = {"Disable", "Inhibitor", "sensor", "Analog", "Manual"},
             modeInhibitor = {"Continuous", "Bleed/Blow Down", "Water Meter/Biocide"},
             modeSensor = {"On/Off", "PID", "Fuzzy"}, modeAnalog = {"Disable", "Probe", "Test", "Pump Status", "Dosing"},
             flowMeters = {"Flow Meter 1", "Flow Meter 2", "Flow Meter 3", "Flow Meter 4", "Flow Meter 5", "Flow Meter 6", "Flow Meter 7", "Flow Meter 8"},
@@ -183,7 +183,7 @@ public class ApplicationClass extends Application {
             "DI Alarm", "Flow Verify Alarm", "Lockout Alarm", "Low Range Alarm(Virtual Input)", "High Range Alarm(Virtual Input)", "Diagnostic Sweep"},
 
     rateUnitArr = {"Min", "Hour", "Day", "Month"}, flowTypeArr = {"Flow Rate", "Totalized Volume"},
-    FlowanalogType = {"Analog - 1", "Analog - 2", "Analog - 3", "Analog - 4", "Analog - 5", "Analog - 6", "Analog - 7", "Analog - 8"};
+            FlowanalogType = {"Analog - 1", "Analog - 2", "Analog - 3", "Analog - 4", "Analog - 5", "Analog - 6", "Analog - 7", "Analog - 8"};
 
     /* Static Variables */
     public static String mIPAddress = "", TabletIPAddress = "", Packet, Acknowledge;
@@ -212,12 +212,11 @@ public class ApplicationClass extends Application {
     public static RequestQueue requestQueue;
 
     //public final static String baseURL = "http://192.168.1.82/WaterIOT.API/api/";
-     public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
+    public final static String baseURL = "http://192.168.1.56/WaterIOT.API/api/";
     // public final static String baseURL = "http://192.168.1.52/WaterIOT.API/api/";
 
-     //public final static String baseURL = "http://183.82.35.93/Water.API/api/";
-     //public final static String baseURL = "http://192.168.1.10/Water.API/api/";
-
+    //public final static String baseURL = "http://183.82.35.93/Water.API/api/";
+    //public final static String baseURL = "http://192.168.1.10/Water.API/api/";
 
 
     public static ObservableBoolean triggerWebService = new ObservableBoolean(false);
@@ -228,6 +227,7 @@ public class ApplicationClass extends Application {
     public static String lastKeepAliveData = "", trendDataCollector = "",
             inputKeepAliveData = "", outputKeepAliveData = "", alertKeepAliveData = "";
     static ApplicationClass mAppclass;
+    MonitorBatteryLevel monitorBatteryLevel = new MonitorBatteryLevel();
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -260,7 +260,6 @@ public class ApplicationClass extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         initDatabase();
         triggerWebService.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
@@ -287,10 +286,10 @@ public class ApplicationClass extends Application {
                 ApiService.getInstance(getApplicationContext());
                 KeepAlive.getInstance();
 
-                SharedPref.write(pref_SITEID, SharedPref.read(pref_SITEID,"SITE_0001"));
-                SharedPref.write(pref_SITENAME, SharedPref.read(pref_SITENAME,"WT_IOT"));
-                SharedPref.write(pref_SITELOCATION, SharedPref.read(pref_SITELOCATION,"NA"));
-                SharedPref.write(pref_CONTROLLERPASSWORD, SharedPref.read(pref_CONTROLLERPASSWORD,"1234"));
+                SharedPref.write(pref_SITEID, SharedPref.read(pref_SITEID, "SITE_0001"));
+                SharedPref.write(pref_SITENAME, SharedPref.read(pref_SITENAME, "WT_IOT"));
+                SharedPref.write(pref_SITELOCATION, SharedPref.read(pref_SITELOCATION, "NA"));
+                SharedPref.write(pref_CONTROLLERPASSWORD, SharedPref.read(pref_CONTROLLERPASSWORD, "1234"));
                 SharedPref.write(pref_CONTROLLERISACTIVE, true);
             }
 
@@ -399,12 +398,12 @@ public class ApplicationClass extends Application {
     public void registerBatteryReceiver() {
         IntentFilter intentFilter = new IntentFilter(ACTION_BATTERY_CHANGED);
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
-        mContext.registerReceiver(new MonitorBatteryLevel(), intentFilter);
+        mContext.registerReceiver(monitorBatteryLevel, intentFilter);
     }
 
     public void unregisterBatteryReceiver() {
         try {
-            mContext.unregisterReceiver(new MonitorBatteryLevel());
+            mContext.unregisterReceiver(monitorBatteryLevel);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -639,7 +638,7 @@ public class ApplicationClass extends Application {
         /*Input_DB*/
         inputDAO = DB.inputConfigurationDao();
         if (inputDAO.getInputConfigurationEntityList().isEmpty()) {
-            String sensorType = "SENSOR", writePacket = "", sequenceName = "",labelName = "N/A";
+            String sensorType = "SENSOR", writePacket = "", sequenceName = "", labelName = "N/A";
             int signalType = 0, sequenceNo = 1;
             int j = 1;
             for (int i = 1; i < 50; i++) {
@@ -905,7 +904,7 @@ public class ApplicationClass extends Application {
             trendDAO.deleteTrendDao();
             initDatabase();
         } else {
-         return false;
+            return false;
         }
         return true;
     }
@@ -1007,14 +1006,14 @@ public class ApplicationClass extends Application {
 
     public static String lessThanAWeek() {
         Calendar cal = new GregorianCalendar();
-        cal.add(Calendar.DAY_OF_MONTH, - 6);
+        cal.add(Calendar.DAY_OF_MONTH, -6);
         Date sevenDaysAgo = cal.getTime();
         return ApplicationClass.formatDate(sevenDaysAgo);
     }
 
     public static String lessThanTwoWeek() {
         Calendar cal = new GregorianCalendar();
-        cal.add(Calendar.DAY_OF_MONTH, - 13);
+        cal.add(Calendar.DAY_OF_MONTH, -13);
         Date sevenDaysAgo = cal.getTime();
         return ApplicationClass.formatDate(sevenDaysAgo);
     }
@@ -1039,7 +1038,7 @@ public class ApplicationClass extends Application {
                 public void run() {
                     try {
                         String currentDBPath = getDatabasePath(DB_NAME).getAbsolutePath();
-                        String backupDBPath =  "ion_exchange_db.db";
+                        String backupDBPath = "ion_exchange_db.db";
                         File currentDB = new File(currentDBPath);
                         File backupDB = new File(sd, backupDBPath);
 
@@ -1077,7 +1076,7 @@ public class ApplicationClass extends Application {
                 public void run() {
                     try {
                         String currentDBPath = getDatabasePath(DB_NAME).getAbsolutePath();
-                        String backupDBPath = Environment.getExternalStorageDirectory().getPath( ) + "ion_exchange_db.db";
+                        String backupDBPath = Environment.getExternalStorageDirectory().getPath() + "ion_exchange_db.db";
                         File currentDB = new File(currentDBPath);
                         File backupDB = new File(sd, backupDBPath);
 
