@@ -90,6 +90,7 @@ public class FragmentSensorDetails extends Fragment {
             maxValue = "Max Value", openMsg = "Open Message", closeMsg = "Close Message", interLock = "Interlock", alarm = "Alarm", totalTime = "Total Time",
             resetTotalTime = "Reset Total Time";
     String[] activateChannalsList;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -190,7 +191,7 @@ public class FragmentSensorDetails extends Fragment {
         });
     }
 
-    public static void clickMainScreenBtn(){
+    public static void clickMainScreenBtn() {
         mainScreenBtn.performClick();
     }
 
@@ -315,14 +316,14 @@ public class FragmentSensorDetails extends Fragment {
                         tempMap.put("Input Type", getValueFromArr(splitData[8], inputTypeArr));
                         if (Integer.parseInt(splitData[7]) >= 26) {
                             tempMap.put("Flow 1 Type", getValueFromArr(splitData[9], flowTypeArr));
-                            getVirtualCommonParamatersDetails(splitData,10,tempMap);
+                            getVirtualCommonParamatersDetails(splitData, 10, tempMap);
                         } else {
-                            getVirtualCommonParamatersDetails(splitData,9,tempMap);
+                            getVirtualCommonParamatersDetails(splitData, 9, tempMap);
                         }
                     } else if (splitData[6].equals("1")) {
                         tempMap.put("Input 1 Constant Value", splitData[7]);
                         tempMap.put("Input Type", getValueFromArr(splitData[8], inputTypeArr));
-                        getVirtualCommonParamatersDetails(splitData,9,tempMap);
+                        getVirtualCommonParamatersDetails(splitData, 9, tempMap);
                     }
 
                    /* tempMap.put("Input 2 Type", splitData[9].equals("0") ? "Physical" : "Constant");
@@ -373,7 +374,7 @@ public class FragmentSensorDetails extends Fragment {
         return finalSensorParamList.get(0);
     }
 
-    void getVirtualCommonParamatersDetails(String[] splitData,int splitValue,LinkedHashMap<String, String> tempMap){
+    void getVirtualCommonParamatersDetails(String[] splitData, int splitValue, LinkedHashMap<String, String> tempMap) {
         int lowRange, highRange, lowAlarm, highAlarm, smoothingFactor, calcualtion, virtualUnit;
         tempMap.put("Input 2 Type", splitData[splitValue].equals("0") ? "Physical" : "Constant");
         if (splitData[splitValue].equalsIgnoreCase("1")) {
@@ -385,7 +386,7 @@ public class FragmentSensorDetails extends Fragment {
             calcualtion = splitValue + 8;
             virtualUnit = splitValue + 9;
             tempMap.put("Input 2 Constant", splitData[splitValue + 1]);
-        } else{
+        } else {
             if (Integer.parseInt(splitData[splitValue + 1]) >= 26) {
                 lowRange = splitValue + 4;
                 highRange = splitValue + 5;
@@ -413,11 +414,12 @@ public class FragmentSensorDetails extends Fragment {
         tempMap.put("Calculation", getValueFromArr(splitData[calcualtion], calculationArr));
         tempMap.put("Unit", splitData[virtualUnit]);
     }
+
     private String getInputName(String splitData) {
         return ApplicationClass.DB.inputConfigurationDao().getSensorType(Integer.parseInt(splitData));
     }
 
-    private void getinterlockArray(){
+    private void getinterlockArray() {
         List<OutputConfigurationEntity> outputNameList = outputDAO.getOutputHardWareNoConfigurationEntityList(1, 14);
         String[] outputNames = new String[14];
         if (!outputNameList.isEmpty()) {
@@ -430,6 +432,7 @@ public class FragmentSensorDetails extends Fragment {
         activateChannalsList = (String[]) digitalinputlist.toArray(new String[0]);
 
     }
+
     private List<String[]> formOutputMap(String[] splitData) {
         LinkedHashMap<String, String> tempMap = new LinkedHashMap<>();
         tempMap.put("OutPut Number", splitData[3]);
@@ -442,10 +445,9 @@ public class FragmentSensorDetails extends Fragment {
             tempMap.put("Output Label", splitData[5]);
             int interlockChannelPos = Integer.parseInt(splitData[6]);
             int setInterlockChannelPos = interlockChannelPos;
-            if(interlockChannelPos == 0) {
+            if (interlockChannelPos == 0) {
                 tempMap.put("Interlock channel", getValueFromArr(interlockChannelPos + "", activateChannalsList));
-            }
-            else if (interlockChannelPos >= 34) {
+            } else if (interlockChannelPos >= 34) {
                 setInterlockChannelPos = interlockChannelPos - 33;
                 tempMap.put("Interlock channel", getValueFromArr(setInterlockChannelPos + "", activateChannalsList));
             } else {
@@ -454,7 +456,7 @@ public class FragmentSensorDetails extends Fragment {
             }
             int activiateChannelPos = Integer.parseInt(splitData[7]);
             int setActiivateChannelPos = activiateChannelPos;
-            if(activiateChannelPos == 0) {
+            if (activiateChannelPos == 0) {
                 tempMap.put("Activate channel", getValueFromArr(interlockChannelPos + "", activateChannalsList));
             } else if (activiateChannelPos >= 34) {
                 setActiivateChannelPos = activiateChannelPos - 33;
@@ -490,10 +492,9 @@ public class FragmentSensorDetails extends Fragment {
             tempMap.put("Output Label", splitData[5]);
             int interlockChannelPos = Integer.parseInt(splitData[6]);
             int setInterlockChannelPos = interlockChannelPos;
-            if(interlockChannelPos == 0) {
+            if (interlockChannelPos == 0) {
                 tempMap.put("Interlock channel", getValueFromArr(interlockChannelPos + "", activateChannalsList));
-            }
-            else if (interlockChannelPos >= 34) {
+            } else if (interlockChannelPos >= 34) {
                 setInterlockChannelPos = interlockChannelPos - 33;
                 tempMap.put("Interlock channel", getValueFromArr(setInterlockChannelPos + "", activateChannalsList));
             } else {
@@ -502,7 +503,7 @@ public class FragmentSensorDetails extends Fragment {
             }
             int activiateChannelPos = Integer.parseInt(splitData[7]);
             int setActiivateChannelPos = activiateChannelPos;
-            if(activiateChannelPos == 0) {
+            if (activiateChannelPos == 0) {
                 tempMap.put("Activate channel", getValueFromArr(activiateChannelPos + "", activateChannalsList));
             } else if (activiateChannelPos >= 34) {
                 setActiivateChannelPos = activiateChannelPos - 33;
@@ -516,7 +517,7 @@ public class FragmentSensorDetails extends Fragment {
                     tempMap.put("Set Point", splitData[10]);
                     tempMap.put("Dose Type", getValueFromArr(splitData[11], doseTypeArr));
                     if (Integer.parseInt(splitData[8]) < 26) {
-                        tempMap.put("Link Input Sensor", getValueFromArr((Integer.parseInt(splitData[8]) - 1) + "" , getSensorInputArray()));
+                        tempMap.put("Link Input Sensor", getValueFromArr((Integer.parseInt(splitData[8]) - 1) + "", getSensorInputArray()));
                     } else {
                         tempMap.put("Link Input Sensor", getValueFromArr((Integer.parseInt(splitData[8]) - 33) + "", getSensorInputArray()));
                     }
@@ -527,7 +528,7 @@ public class FragmentSensorDetails extends Fragment {
                     tempMap.put("Safety Min", splitData[16]);
                 } else if (splitData[9].equals("1")) { // PID
                     if (Integer.parseInt(splitData[8]) < 26) {
-                        tempMap.put("Link Input Sensor", getValueFromArr((Integer.parseInt(splitData[8]) - 1) + "" , getSensorInputArray()));
+                        tempMap.put("Link Input Sensor", getValueFromArr((Integer.parseInt(splitData[8]) - 1) + "", getSensorInputArray()));
                     } else {
                         tempMap.put("Link Input Sensor", getValueFromArr((Integer.parseInt(splitData[8]) - 33) + "", getSensorInputArray()));
                     }
@@ -575,6 +576,7 @@ public class FragmentSensorDetails extends Fragment {
         finalSensorParamList = splitIntoParts(convertMap(tempMap), pageMax);
         return finalSensorParamList.get(0);
     }
+
     private String[] getAnalogInputArray() {
         WaterTreatmentDb DB = WaterTreatmentDb.getDatabase(getContext());
         InputConfigurationDao DAO = DB.inputConfigurationDao();
@@ -607,6 +609,7 @@ public class FragmentSensorDetails extends Fragment {
         String[] analogInputList = (String[]) analoginputlist.toArray(new String[0]);
         return analogInputList;
     }
+
     private String[] getSensorInputArray() {
         WaterTreatmentDb DB = WaterTreatmentDb.getDatabase(getContext());
         InputConfigurationDao DAO = DB.inputConfigurationDao();
@@ -848,18 +851,36 @@ public class FragmentSensorDetails extends Fragment {
         tempMap.put(inNumber, splitData[3]);
         tempMap.put(inpuType, getValueFromArr(splitData[4], inputTypeArr));
         tempMap.put(assigned, getValueFromArr(splitData[5], analogInputArr));
-        tempMap.put(seqNumber, splitData[6]);
-        tempMap.put(analogType, (splitData[7].equals("0") ? "4-20mA" : "0-10V"));
-        tempMap.put(sensorActivation, getValueFromArr(splitData[8],sensorActivationArr));
-        tempMap.put(inputLabel, splitData[9]);
-        tempMap.put(unitOfMeasurement, (splitData[10].equals("0") ? "mA" : "V"));
-        tempMap.put(minValue, splitData[11]);
-        tempMap.put(maxValue, splitData[12]);
-        tempMap.put(smoothingFactor, splitData[13]);
-        tempMap.put(alarmLow, splitData[14]);
-        tempMap.put(alarmHigh, splitData[15]);
-        tempMap.put(calibrationRequiredAlarm, splitData[16]);
-        tempMap.put(resetCalibration, getValueFromArr(splitData[17], resetCalibrationArr));
+        if (splitData[5].equals("8")) {
+            tempMap.put("Modbus Type", getValueFromArr(splitData[6], modBusTypeArr));
+            tempMap.put("Type of Value can calibrate", getValueFromArr(splitData[7], typeOfValueRead));
+            tempMap.put(seqNumber, splitData[8]);
+            tempMap.put(analogType, (splitData[9].equals("0") ? "4-20mA" : "0-10V"));
+            tempMap.put(sensorActivation, getValueFromArr(splitData[10], sensorActivationArr));
+            tempMap.put(inputLabel, splitData[11]);
+            tempMap.put(unitOfMeasurement, (splitData[12].equals("0") ? "mA" : "V"));
+            tempMap.put(minValue, splitData[13]);
+            tempMap.put(maxValue, splitData[14]);
+            tempMap.put(smoothingFactor, splitData[15]);
+            tempMap.put(alarmLow, splitData[16]);
+            tempMap.put(alarmHigh, splitData[17]);
+            tempMap.put(calibrationRequiredAlarm, splitData[18]);
+            tempMap.put(resetCalibration, getValueFromArr(splitData[19], resetCalibrationArr));
+        } else {
+            tempMap.put(seqNumber, splitData[6]);
+            tempMap.put(analogType, (splitData[7].equals("0") ? "4-20mA" : "0-10V"));
+            tempMap.put(sensorActivation, getValueFromArr(splitData[8], sensorActivationArr));
+            tempMap.put(inputLabel, splitData[9]);
+            tempMap.put(unitOfMeasurement, (splitData[10].equals("0") ? "mA" : "V"));
+            tempMap.put(minValue, splitData[11]);
+            tempMap.put(maxValue, splitData[12]);
+            tempMap.put(smoothingFactor, splitData[13]);
+            tempMap.put(alarmLow, splitData[14]);
+            tempMap.put(alarmHigh, splitData[15]);
+            tempMap.put(calibrationRequiredAlarm, splitData[16]);
+            tempMap.put(resetCalibration, getValueFromArr(splitData[17], resetCalibrationArr));
+        }
+
 
         switch (userType) {
             case 1:
@@ -883,7 +904,7 @@ public class FragmentSensorDetails extends Fragment {
             tempMap.put(inNumber, splitData[3]);
             tempMap.put(inpuType, getValueFromArr(splitData[4], inputTypeArr));
             tempMap.put(seqNumber, splitData[5]);
-            tempMap.put(sensorActivation, getValueFromArr(splitData[6],sensorActivationArr));
+            tempMap.put(sensorActivation, getValueFromArr(splitData[6], sensorActivationArr));
             tempMap.put(inputLabel, splitData[7]);
             tempMap.put(openMsg, splitData[8]);
             tempMap.put(closeMsg, splitData[9]);
@@ -915,7 +936,7 @@ public class FragmentSensorDetails extends Fragment {
             tempMap.put(inNumber, splitData[3]);
             tempMap.put(inpuType, getValueFromArr(splitData[4], inputTypeArr));
             tempMap.put(seqNumber, splitData[5]);
-            tempMap.put(sensorActivation, getValueFromArr(splitData[6],sensorActivationArr));
+            tempMap.put(sensorActivation, getValueFromArr(splitData[6], sensorActivationArr));
             tempMap.put(inputLabel, splitData[7]);
             tempMap.put(openMsg, splitData[8]);
             tempMap.put(closeMsg, splitData[9]);
@@ -948,21 +969,21 @@ public class FragmentSensorDetails extends Fragment {
             //tempMap.put(seqNumber, splitData[5]);
             tempMap.put("modbusType", getValueFromArr(splitData[6], modBusTypeArr));
             tempMap.put("typeOfValueRead", getValueFromArr(splitData[7], typeOfValueRead));
-            tempMap.put(sensorActivation, getValueFromArr(splitData[8],sensorActivationArr));
+            tempMap.put(sensorActivation, getValueFromArr(splitData[8], sensorActivationArr));
             tempMap.put(inputLabel, splitData[9]);
             tempMap.put(unitOfMeasurement, getValueFromArr(splitData[10], modBusUnitArr));
             tempMap.put(minValue, splitData[11]);
             tempMap.put(maxValue, splitData[12]);
             tempMap.put("Diagnostic Sweep", splitData[13].charAt(0) == '0' ? "Disable" : "Enable");
             if (splitData[13].charAt(0) == '1') {
-                tempMap.put("Diagnostic Time",splitData[13].substring(1));
+                tempMap.put("Diagnostic Time", splitData[13].substring(1));
             }
-            tempMap.put(smoothingFactor,splitData[14]);
+            tempMap.put(smoothingFactor, splitData[14]);
             tempMap.put(alarmLow, splitData[15]);
             tempMap.put(alarmHigh, splitData[16]);
             tempMap.put(calibrationRequiredAlarm, splitData[17]);
             tempMap.put(resetCalibration, splitData[18].equals("0") ? "No Time" : "Reset Time");
-            if(splitData[6].equals("1") || splitData[6].equals("2")){
+            if (splitData[6].equals("1") || splitData[6].equals("2")) {
                 tempMap.put("Alloy coefficient factor", splitData[19]);
             }
         } catch (Exception e) {
@@ -994,7 +1015,7 @@ public class FragmentSensorDetails extends Fragment {
             tempMap.put(sensorActivation, getValueFromArr(splitData[8], sensorActivationArr));
             tempMap.put(inputLabel, splitData[9]);
             tempMap.put("Flow Unit", getValueFromArr(splitData[10], flowUnitArr));
-            tempMap.put("Rate Unit", getValueFromArr(splitData[11],rateUnitArr));
+            tempMap.put("Rate Unit", getValueFromArr(splitData[11], rateUnitArr));
             tempMap.put("Flow Meter Max", splitData[12]);
             tempMap.put("Flow Meter Min", splitData[13]);
             tempMap.put(smoothingFactor, splitData[14]);
@@ -1023,7 +1044,7 @@ public class FragmentSensorDetails extends Fragment {
             tempMap.put(sensorActivation, getValueFromArr(splitData[7], sensorActivationArr));
             tempMap.put(inputLabel, splitData[8]);
             tempMap.put("Flow Unit", getValueFromArr(splitData[9], flowUnitArr));
-            tempMap.put("Rate Unit", getValueFromArr(splitData[10],rateUnitArr));
+            tempMap.put("Rate Unit", getValueFromArr(splitData[10], rateUnitArr));
             tempMap.put("K-Factor", splitData[11]);
             tempMap.put("Totalizer Alarm", splitData[12]);
             tempMap.put("Reset Flow Total", splitData[13].equals("0") ? "No Reset" : "Reset");
@@ -1037,7 +1058,7 @@ public class FragmentSensorDetails extends Fragment {
             tempMap.put(inputLabel, splitData[8]);
             tempMap.put("Flow Unit", getValueFromArr(splitData[9], flowUnitArr));
             tempMap.put("Volume/Contactor", splitData[10]);
-            tempMap.put("Rate Unit", getValueFromArr(splitData[11],rateUnitArr));
+            tempMap.put("Rate Unit", getValueFromArr(splitData[11], rateUnitArr));
             tempMap.put("Total Alarm Mode", splitData[12].equals("0") ? "Interlock" : "Maintain");
             tempMap.put("Flow Alarm Mode", getValueFromArr(splitData[13], flowAlarmMode));
             tempMap.put("Flow Alarm Delay", splitData[14]);
